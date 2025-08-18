@@ -1,0 +1,174 @@
+/* EolithicEngine
+ * Copyright 2025 Patrick Derosby
+ * Released under the zlib License.
+ * See LICENSE for details.
+ */
+
+#include "CvarNames.h"
+
+//public
+const char* CVARS_ENGINE_NAME = "name";
+const char* CVARS_ENGINE_VERSION = "version";
+const char* CVARS_ENGINE_DATE = "date";
+const char* CVARS_ENGINE_SAVE_NAME = "save_name";
+const char* CVARS_ENGINE_TILE_SIZE = "tile_size";
+const char* CVARS_ENGINE_INTERNAL_WIDTH = "internal_width";
+const char* CVARS_ENGINE_INTERNAL_HEIGHT = "internal_height";
+const char* CVARS_ENGINE_INTERNAL_RENDER_WIDTH = "internal_render_width";
+const char* CVARS_ENGINE_INTERNAL_RENDER_HEIGHT = "internal_render_height";
+const char* CVARS_ENGINE_SAVE_SLOTS = "save_slots";
+const char* CVARS_ENGINE_USE_SAVE_SETTINGS = "use_save_settings";
+const char* CVARS_ENGINE_DISABLE_POST_PROCESSING = "disable_post_processing";
+const char* CVARS_ENGINE_SAVE_ICON = "save_icon";
+const char* CVARS_ENGINE_SAVE_ICON_FLIP_SPEED = "save_icon_flip_speed";
+const char* CVARS_ENGINE_SAVE_ICON_TIME = "save_icon_time";
+const char* CVARS_ENGINE_SAVE_ICON_SCALE = "save_icon_scale";
+const char* CVARS_ENGINE_SAVE_ICON_OFFSET_X = "save_icon_offset_x";
+const char* CVARS_ENGINE_SAVE_ICON_OFFSET_Y = "save_icon_offset_y";
+const char* CVARS_ENGINE_AUTO_HIDE_MOUSE_TIME = "auto_hide_mouse_time";
+const char* CVARS_ENGINE_PROP_DISTANCE = "prop_distance";
+const char* CVARS_ENGINE_DEFAULT_MENU_FONT = "default_menu_font";
+const char* CVARS_ENGINE_DEFAULT_MENU_SELECT_SOUND = "default_menu_select_sound";
+const char* CVARS_ENGINE_DEFAULT_MENU_DENY_SOUND = "default_menu_deny_sound";
+const char* CVARS_ENGINE_DEFAULT_MENU_UP_SOUND = "default_menu_up_sound";
+const char* CVARS_ENGINE_DEFAULT_MENU_RIGHT_SOUND = "default_menu_right_sound";
+const char* CVARS_ENGINE_DEFAULT_MENU_DOWN_SOUND = "default_menu_down_sound";
+const char* CVARS_ENGINE_DEFAULT_MENU_LEFT_SOUND = "default_menu_left_sound";
+const char* CVARS_ENGINE_DEFAULT_MAP = "default_map";
+const char* CVARS_ENGINE_PAUSE_MENU_MAP = "pause_menu_map";
+const char* CVARS_ENGINE_PAUSE_MENU_ANCHOR = "pause_menu_anchor";
+const char* CVARS_ENGINE_DISABLE_SERVICE_ACHIEVEMENTS = "disable_service_achievements";
+const char* CVARS_ENGINE_DEFAULT_CHUNK_WIDTH = "default_chunk_width";
+const char* CVARS_ENGINE_DEFAULT_CHUNK_HEIGHT = "default_chunk_height";
+const char* CVARS_ENGINE_NUMBER_OF_DIFFICULTIES = "number_of_difficulties";
+const char* CVARS_ENGINE_CAMERA_DATA_NAME = "camera_data_name_";
+const char* CVARS_ENGINE_DATA_NAME = "data_name_";
+const char* CVARS_ENGINE_COLLISION_NAME = "collision_name_";
+const char* CVARS_ENGINE_DISABLE_ASSET_REFRESH = "disable_asset_refresh";
+const char* CVARS_ENGINE_CONTROLLER_RADIAL_DEADZONE = "controller_radial_deadzone";
+const char* CVARS_ENGINE_CONTROLLER_AXIAL_DEADZONE = "controller_axial_deadzone";
+const char* CVARS_ENGINE_CONTROLLER_OUTER_DEADZONE = "controller_outer_deadzone";
+const char* CVARS_ENGINE_CONTROLLER_ANALOG_TO_PRESS_THRESHOLD_FOR_STICKS = "controller_analog_to_press_threshold_for_sticks";
+const char* CVARS_ENGINE_CONTROLLER_ANALOG_TO_PRESS_THRESHOLD_FOR_TRIGGERS = "controller_analog_to_press_threshold_for_triggers";
+const char* CVARS_ENGINE_DECOMPRESS_DATS = "decompress_dats";
+const char* CVARS_ENGINE_FORCE_LOAD_DATS = "force_load_dats";
+const char* CVARS_ENGINE_DISABLE_REPLAYS = "disable_replays";
+const char* CVARS_ENGINE_QUICKSTART = "quickstart";
+const char* CVARS_ENGINE_MAX_BORDERS = "max_borders";
+const char* CVARS_ENGINE_DISABLE_MOUSE = "disable_mouse";
+const char* CVARS_ENGINE_DISABLE_CONTROLLER = "disable_controller";
+const char* CVARS_ENGINE_DISABLE_KEYBOARD = "disable_keyboard";
+const char* CVARS_ENGINE_DEFAULT_DIFFICULTY = "default_difficulty";
+const char* CVARS_ENGINE_SAVING_SAVES_DISABLED = "saving_saves_disabled";
+const char* CVARS_ENGINE_LOADING_SAVE_DATA_DISABLED = "loading_saves_disabled";
+const char* CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_WIDTH = "override_internal_window_mul_width";
+const char* CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_HEIGHT = "override_internal_window_mul_height";
+const char* CVARS_ENGINE_DEFAULT_ANCHOR = "default_anchor";
+const char* CVARS_ENGINE_OPTIONS_ANCHOR = "options_anchor";
+const char* CVARS_ENGINE_OPTIONS_ANCHOR_TWO = "options_anchor_two";
+const char* CVARS_ENGINE_OPTIONS_ANCHOR_THREE = "options_anchor_three";
+const char* CVARS_ENGINE_OPTIONS_ANCHOR_FOUR = "options_anchor_four";
+const char* CVARS_ENGINE_OPTIONS_ANCHOR_FIVE = "options_anchor_five";
+const char* CVARS_ENGINE_DISABLE_NORMAL_RECORDINGS = "disable_normal_recordings";
+const char* CVARS_ENGINE_DISABLE_PLAYER_BINDING_MIRRORING = "disable_player_binding_mirroring";
+const char* CVARS_ENGINE_DYNAMIC_SOUND_EFFECTS = "dynamic_sound_effects";
+const char* CVARS_ENGINE_DYNAMIC_MUSIC = "dynamic_music";
+const char* CVARS_ENGINE_DISABLE_LEADERBOARDS = "disable_leaderboards";
+const char* CVARS_ENGINE_CUTSCENE_INTL_TEXT_WORD_WRAP_WIDTH = "cutscene_intl_text_word_wrap_width";
+const char* CVARS_ENGINE_CUTSCENE_INTL_TEXT_SPEED_INCREASE = "cutscene_intl_text_speed_increase";
+const char* CVARS_ENGINE_INTERNAL_RESOLUTION_MUL_MAX_MIN = "internal_resolution_mul_max_min";
+const char* CVARS_ENGINE_RELY_ON_VSYNC = "rely_on_vsync";
+const char* CVARS_ENGINE_RECORDING_PLAYBACK_FAST_SPEED = "recording_playback_fast_speed";
+const char* CVARS_ENGINE_RECORDING_FPS_THRESHOLD = "recording_fps_threshold";
+const char* CVARS_ENGINE_SHOW_CONSOLE_NOTIFICATIONS = "show_console_notifications";
+const char* CVARS_ENGINE_LOGGER_LEVEL = "logger_level";
+const char* CVARS_ENGINE_ALLOW_RECORDINGS_IN_USER = "allow_recordings_in_user";
+const char* CVARS_ENGINE_ALLOW_RESET_SAVE_DATA = "allow_reset_save_data";
+const char* CVARS_ENGINE_SHOW_BUILD_DATE = "show_build_date";
+const char* CVARS_ENGINE_LOAD_ALL_MOVIES = "load_all_movies";
+
+//USER
+const char* CVARS_PREFIX_USER_CONFIG = "usr_";
+const char* CVARS_USER_WINDOW_SIZE_WIDTH = "usr_window_size_width";
+const char* CVARS_USER_WINDOW_SIZE_HEIGHT = "usr_window_size_height";
+const char* CVARS_USER_WINDOW_SIZE_MULTIPLE = "usr_window_size_multiple";
+const char* CVARS_USER_IS_FULLSCREEN = "usr_is_fullscreen";
+const char* CVARS_USER_IS_VSYNC = "usr_is_vsync";
+const char* CVARS_USER_IS_LINEAR_FILTER_ALLOWED = "usr_is_linear_filter_allowed";
+const char* CVARS_USER_IS_BORDER_FRAME_ON = "usr_is_border_frame_on";
+const char* CVARS_USER_DRAW_MODE = "usr_draw_mode";
+const char* CVARS_USER_BORDER_TYPE = "usr_border_type";
+const char* CVARS_USER_IS_FIXED_TIMESTEP_ENABLED = "usr_is_fixed_timestep_enabled";
+const char* CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE = "usr_internal_resolution_multiple";
+const char* CVARS_USER_CONTROLLER_TYPE = "usr_controller_type";
+const char* CVARS_USER_IS_RUMBLE_DISABLED = "usr_is_rumble_disabled";
+const char* CVARS_USER_IS_AUTO_HIDE_MOUSE = "usr_is_auto_hide_mouse";
+const char* CVARS_USER_VOLUME_MUSIC = "usr_volume_music";
+const char* CVARS_USER_VOLUME_SFX = "usr_volume_sfx";
+const char* CVARS_USER_VOLUME_MASTER = "usr_volume_master";
+const char* CVARS_USER_IS_MUTE_ON_FOCUS_LOSS = "usr_is_mute_on_focus_loss";
+const char* CVARS_USER_IS_WINDOW_RESIZABLE = "usr_is_window_resizable";
+const char* CVARS_USER_IS_PAUSE_ON_FOCUS_LOSS = "usr_is_pause_on_focus_loss";
+const char* CVARS_USER_IS_SHOWING_FPS = "usr_is_showing_fps";
+const char* CVARS_USER_IS_SHOWING_IN_GAME_TIMER = "usr_is_showing_in_game_timer";
+const char* CVARS_USER_IS_SCREENSHAKE_DISABLED = "usr_is_screenshake_disabled";
+const char* CVARS_USER_IS_BORDERLESS = "usr_is_borderless";
+const char* CVARS_USER_IS_TURBO_MODE = "usr_is_turbo_mode";
+const char* CVARS_USER_LANGUAGE = "usr_language";
+const char* CVARS_USER_IS_USING_ALT_FONT = "usr_is_using_alt_font";
+
+#if EDITOR
+//EDITOR
+const char* CVARS_PREFIX_EDITOR_CONFIG = "edt_";
+const char* CVARS_EDITOR_USE_MAGENTA = "edt_use_magenta";
+const char* CVARS_EDITOR_STRICT_CAMERA = "edt_strict_camera";
+const char* CVARS_EDITOR_COPY_COLLISION = "edt_copy_collision";
+const char* CVARS_EDITOR_COPY_TILES = "edt_copy_tiles";
+const char* CVARS_EDITOR_COPY_LAYER_ONLY = "edt_copy_layer_only";
+const char* CVARS_EDITOR_COPY_THINGS = "edt_copy_things";
+const char* CVARS_EDITOR_COPY_PROPS = "edt_copy_props";
+const char* CVARS_EDITOR_COPY_CAMERAS = "edt_copy_cameras";
+const char* CVARS_EDITOR_SHOW_COLLISION = "edt_show_collision";
+const char* CVARS_EDITOR_SHOW_LINES = "edt_show_lines";
+const char* CVARS_EDITOR_SHOW_TILES = "edt_show_tiles";
+const char* CVARS_EDITOR_SHOW_THINGS = "edt_show_things";
+const char* CVARS_EDITOR_SHOW_PROPS = "edt_show_props";
+const char* CVARS_EDITOR_SHOW_LAYER = "edt_show_layer_";
+
+const char* CVARS_EDITOR_SHOW_TILE_INFO = "edt_show_tile_info";
+const char* CVARS_EDITOR_SHOW_CAMERA = "edt_show_camera";
+const char* CVARS_EDITOR_SHOW_GAME = "edt_show_game";
+const char* CVARS_EDITOR_SUSPEND_GAME = "edt_suspend_game";
+const char* CVARS_EDITOR_SHOW_GRID = "edt_show_grid";
+const char* CVARS_EDITOR_USE_GAME_CAMERA = "edt_use_game_camera";
+const char* CVARS_EDITOR_AUTO_SAVE = "edt_auto_save";
+const char* CVARS_EDITOR_DELETE_COLLISION = "edt_delete_collision";
+const char* CVARS_EDITOR_DELETE_TILES = "edt_delete_tiles";
+const char* CVARS_EDITOR_DELETE_THINGS = "edt_delete_things";
+const char* CVARS_EDITOR_DELETE_PROPS = "edt_delete_props";
+const char* CVARS_EDITOR_META_MAP_EDIT_TILE_MODE = "edt_meta_map_edit_tile_mode";
+const char* CVARS_EDITOR_AUTO_TILER = "edt_auto_tiler";
+const char* CVARS_EDITOR_DRAW_SHOW_GRID = "edt_draw_show_grid";
+const char* CVARS_EDITOR_DRAW_GRID_BLACK = "edt_draw_grid_black";
+const char* CVARS_EDITOR_DRAW_SHOW_SELECT_RECTANGLE = "edt_draw_show_select_rectangle";
+const char* CVARS_EDITOR_DRAW_OPERATION = "edt_draw_operation";
+const char* CVARS_EDITOR_DRAW_BRUSH_SIZE = "edt_draw_brush_size";
+const char* CVARS_EDITOR_DRAW_MOVE_SPEED = "edt_draw_move_speed";
+const char* CVARS_EDITOR_DRAW_STAY_IN_TILE = "edt_draw_stay_in_tile";
+const char* CVARS_EDITOR_DRAW_COPY_FLIP_X = "edt_draw_copy_flip_x";
+const char* CVARS_EDITOR_DRAW_COPY_FLIP_Y = "edt_draw_copy_flip_y";
+const char* CVARS_EDITOR_DRAW_COPY_ROTATE = "edt_draw_copy_rotate";
+const char* CVARS_EDITOR_TILE_PICKER_SCALE = "edt_tile_picker_scale";
+const char* CVARS_EDITOR_CURRENT_LAYER = "edt_current_layer";
+const char* CVARS_EDITOR_IS_SINGLE_STATE_MODE = "edt_is_single_state_mode";
+const char* CVARS_EDITOR_IS_TILE_PICKER_LOCKED = "edt_is_tile_picker_locked";
+const char* CVARS_EDITOR_IS_ANIM_TILE_PICKER_LOCKED = "edt_is_anim_tile_picker_locked";
+const char* CVARS_EDITOR_ZOOM = "edt_zoom_";
+const char* CVARS_EDITOR_POSITION_X = "edt_position_x_";
+const char* CVARS_EDITOR_POSITION_Y = "edt_position_y_";
+const char* CVARS_EDITOR_PART_LINE_DISABLE_MULTITOUCH = "edt_line_disable_multitouch";
+const char* CVARS_EDITOR_PART_LINE_DO_NOT_SHOW_CAMERA = "edt_line_do_not_show_camera";
+const char* CVARS_EDITOR_PART_LINE_TOUCH_ALL_JUNCTIONS = "edt_line_touch_all_junctions";
+const char* CVARS_EDITOR_PART_LINE_FAST_LINE_MODE = "edt_line_fast_line_mode";
+const char* CVARS_EDITOR_SHOW_SINGLE_SELECTED_SQUARE = "edt_show_single_selected_square";
+#endif
