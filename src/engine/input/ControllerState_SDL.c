@@ -15,7 +15,7 @@
 
 #include "ControllerState.h"
 
-#include "../third_party/stb_ds.h"
+#include "../../third_party/stb_ds.h"
 #include "SDL3/SDL.h"
 #include "Buttons.h"
 #include "PlayerIndex.h"

@@ -13,7 +13,7 @@
 #include "LevelCameraData.h"
 #include "../math/Rectangle.h"
 #include "../render/DrawRectangle.h"
-#include "../utils/FixedChar255.h"
+#include "../utils/FixedChar260.h"
 #include "../utils/Macros.h"
 
 enum
@@ -34,7 +34,7 @@ typedef struct LevelData
 	DrawRectangle* _mDynamicManyRectangles;
 	char mLevelName[EE_FILENAME_MAX];
 	char mTilesetName[EE_FILENAME_MAX];
-	FixedChar255 mStringData[LEVEL_DATA_STRING_DATA_LENGTH];
+	FixedChar260 mStringData[LEVEL_DATA_STRING_DATA_LENGTH];
 	LayerData mLayerData[LEVEL_DATA_LAYER_DATA_LENGTH];
 	Tile** mDynamicTileData;
 	LevelCameraData mDynamicCameraData;

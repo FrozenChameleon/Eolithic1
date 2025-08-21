@@ -12,7 +12,12 @@
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
+static FixedChar260 _mSharedPathStringBuffer;
 
+FixedChar260* Utils_GetSharedStringBuffer()
+{
+	return &_mSharedPathStringBuffer;
+}
 uint64_t Utils_GetMallocRefs()
 {
 	return _mMallocRefs;

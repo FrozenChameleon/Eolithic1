@@ -8,7 +8,7 @@
 
 #include "Macros.h"
 
-#define FIXED_CHAR_260_LENGTH 260
+#define FIXED_CHAR_260_LENGTH EE_PATH_MAX
 
 typedef struct FixedChar260
 {

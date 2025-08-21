@@ -257,9 +257,9 @@ static void LoadShader(const char* shaderName, Effect* effect)
 {
 	//std::string strBasePath = OeFile::GetBasePath();
 	//std::string strEffectPath = OeFile::Combine(strBasePath, "data", shaderName);
-	char buffer[EE_PATH_MAX] = { 0 };
-	File_Combine3(buffer, EE_PATH_MAX, File_GetBasePath(), "data", "SHADER.fxc");
-	SDL_IOStream* effectFile = SDL_IOFromFile(buffer, "rb");
+	FixedChar260* sharedBuffer = Utils_GetSharedStringBuffer();
+	File_Combine3(sharedBuffer->mValue, UTILS_SHARED_STRING_BUFFER_LENGTH, File_GetBasePath(), "data", "SHADER.fxc");
+	SDL_IOStream* effectFile = SDL_IOFromFile(sharedBuffer->mValue, "rb");
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_END);
 	int64_t effectCodeLength = SDL_TellIO(effectFile);
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_SET);

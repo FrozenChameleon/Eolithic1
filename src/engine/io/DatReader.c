@@ -7,8 +7,10 @@
 #include "DatReader.h"
 
 #include "../utils/Utils.h"
-#include "../third_party/stb_ds.h"
+#include "../../third_party/stb_ds.h"
 #include "File.h"
+#include "../utils/Exception.h"
+#include "limits.h"
 
 static uint64_t _mRefs;
 
@@ -23,6 +25,12 @@ typedef struct DatReader
 	BufferReader* _mReader;
 } DatReader;
 
+static DatInfo* GetCurrentDatInfo(DatReader* dr)
+{
+	DatInfo* info = &dr->_mDynamicDatInfo[dr->_mCurrent];
+	return info;
+}
+
 FixedByteBuffer* DatReader_GetMemoryStream(DatReader* dr, int64_t length)
 {
 
@@ -36,40 +44,72 @@ bool DatReader_HasNext(const DatReader* dr)
 {
 	return (dr->_mCurrent < dr->_mCount);
 }
-FixedChar260 DatReader_NextFilePath(DatReader* dr)
+void DatReader_NextFilePath(DatReader* dr, FixedChar260* dst)
 {
+	memset(dst, 0, sizeof(FixedChar260));
+
 	int32_t length = BufferReader_ReadI32(dr->_mReader);
 	arrfree(dr->_mDynamicLastStrings);
 	dr->_mDynamicLastStrings = NULL;
 	for (int32_t i = 0; i < length; i += 1)
 	{
-		FixedChar260 charTemp;
+		FixedChar260 charTemp = { 0 };
 		BufferReader_ReadString(dr->_mReader, charTemp.mValue, FIXED_CHAR_260_LENGTH);
 		arrput(dr->_mDynamicLastStrings, charTemp);
 	}
-	FixedChar260 temp = { 0 };
+
 	int32_t len = arrlen(dr->_mDynamicLastStrings);
 	for (int i = 0; i < len; i += 1)
 	{
 		if (i == 0)
 		{
-			Utils_strlcpy(temp.mValue, dr->_mDynamicLastStrings[i].mValue, FIXED_CHAR_260_LENGTH);
+			Utils_strlcpy(dst, dr->_mDynamicLastStrings[i].mValue, FIXED_CHAR_260_LENGTH);
 		}
 		else
 		{
-			Utils_strlcat(temp.mValue, dr->_mDynamicLastStrings[i].mValue, FIXED_CHAR_260_LENGTH);
+			Utils_strlcat(dst, dr->_mDynamicLastStrings[i].mValue, FIXED_CHAR_260_LENGTH);
 		}
 		if (i < (len - 1))
 		{
-			File_AppendPathSeparator(temp.mValue, FIXED_CHAR_260_LENGTH);
+			File_AppendPathSeparator(dst, FIXED_CHAR_260_LENGTH);
 		}
 	}
-	dr->_mDynamicDatInfo[dr->_mCurrent].mPath = temp;
-	return temp;
+
+	DatInfo* currentInfo = GetCurrentDatInfo(dr);
+	currentInfo->mPath = *dst;
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 {
-
+	int64_t length = BufferReader_ReadI64(dr->_mReader);
+	int64_t currentActualPosition = BufferReader_Position(dr->_mReader);
+	DatInfo* currentInfo = GetCurrentDatInfo(dr);
+	currentInfo->mLength = length;
+	currentInfo->mPosition = currentActualPosition;
+	if (doNotReturnStream)
+	{
+		BufferReader_Seek(dr->_mReader, length, BUFFER_READER_SEEK_FROM_CURRENT);
+		dr->_mCurrent += 1;
+		return NULL;
+	}
+	else
+	{
+		if ((length < 0) || (length > INT_MAX))
+		{
+			Exception_Run("Invalid file size in dat!", false);
+		}
+		FixedByteBuffer* buffer = BufferReader_ReadBytes(dr->_mReader, length);
+		BufferReader* bufferToReturn = BufferReader_Create(buffer);
+		/*if (OeGlobals.IsDebugFileMode())
+		{
+			if (OeCvars.GetAsBool(OeCvars.ENGINE_DECOMPRESS_DATS))
+			{
+				Decompress(length, stream);
+				stream.Position = 0;
+			}
+		}*/
+		dr->_mCurrent += 1;
+		return bufferToReturn;
+	}
 }
 //std::shared_ptr<OeStream> DatReader_Find(const std::string& path);
 DatReader* DatReader_Create(const char* path)

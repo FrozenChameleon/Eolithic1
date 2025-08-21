@@ -8,7 +8,11 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "FixedChar260.h"
 
+#define UTILS_SHARED_STRING_BUFFER_LENGTH FIXED_CHAR_260_LENGTH
+
+FixedChar260* Utils_GetSharedStringBuffer();
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
 void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);

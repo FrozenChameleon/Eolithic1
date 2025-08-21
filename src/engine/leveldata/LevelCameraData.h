@@ -8,7 +8,7 @@
 
 #include "MetaMapChunk.h"
 #include "../math/PointRectangle.h"
-#include "../utils/FixedChar255.h"
+#include "../utils/FixedChar260.h"
 
 enum { LEVEL_CAMERA_DATA_STRING_DATA_LIMIT = 10 };
 
@@ -33,6 +33,6 @@ typedef struct LevelCameraData
 	int mNumberTransitionFrom;
 	bool mIsTransitionX;
 	bool mIsTransitionY;
-	FixedChar255 mStringData[LEVEL_CAMERA_DATA_STRING_DATA_LIMIT];
+	FixedChar260 mStringData[LEVEL_CAMERA_DATA_STRING_DATA_LIMIT];
 } LevelCameraData;
 

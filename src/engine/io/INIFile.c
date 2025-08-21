@@ -6,7 +6,7 @@
 
 #include "IniFile.h"
 
-#include "../third_party/stb_ds.h"
+#include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
 #include "BufferReader.h"
 #include "../io/File.h"

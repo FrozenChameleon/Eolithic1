@@ -6,7 +6,7 @@
 
 #include "AchievementHandler.h"
 
-#include "../third_party/stb_ds.h"
+#include "../../third_party/stb_ds.h"
 
 static int32_t _mCertifyCrawlingCounter;
 static bool _mIsUsingMask;

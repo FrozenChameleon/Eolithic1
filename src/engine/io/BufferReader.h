@@ -14,9 +14,9 @@ typedef struct BufferReader BufferReader;
 
 typedef enum SeekFrom
 {
-	SEEK_FROM_BEGIN = 0,
-	SEEK_FROM_CURRENT = 1,
-	SEEK_FROM_END = 2
+	BUFFER_READER_SEEK_FROM_BEGIN = 0,
+	BUFFER_READER_SEEK_FROM_CURRENT = 1,
+	BUFFER_READER_SEEK_FROM_END = 2
 } SeekFrom;
 
 FixedByteBuffer* BufferReader_ReadBytes(BufferReader* br, int64_t length);

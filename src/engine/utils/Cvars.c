@@ -7,7 +7,7 @@
 #include "Cvars.h"
 
 #include "stdio.h"
-#include "../third_party/stb_ds.h"
+#include "../../third_party/stb_ds.h"
 #include "Utils.h"
 #include "Macros.h"
 #include "../io/INIFile.h"

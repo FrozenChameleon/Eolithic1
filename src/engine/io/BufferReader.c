@@ -67,9 +67,9 @@ uint16_t BufferReader_ReadU16(BufferReader* br)
 int16_t BufferReader_ReadI16(BufferReader* br)
 {
 	uint16_t source = BufferReader_ReadU16(br);
-	int16_t dest;
-	Utils_memcpy(&dest, &source, sizeof(int16_t));
-	return dest;
+	int16_t dst;
+	Utils_memcpy(&dst, &source, sizeof(int16_t));
+	return dst;
 }
 uint32_t BufferReader_ReadU32(BufferReader* br)
 {
@@ -80,9 +80,9 @@ uint32_t BufferReader_ReadU32(BufferReader* br)
 int32_t BufferReader_ReadI32(BufferReader* br)
 {
 	uint32_t source = BufferReader_ReadU32(br);
-	int32_t dest;
-	Utils_memcpy(&dest, &source, sizeof(int32_t));
-	return dest;
+	int32_t dst;
+	Utils_memcpy(&dst, &source, sizeof(int32_t));
+	return dst;
 }
 uint64_t BufferReader_ReadU64(BufferReader* br)
 {
@@ -93,23 +93,23 @@ uint64_t BufferReader_ReadU64(BufferReader* br)
 int64_t BufferReader_ReadI64(BufferReader* br)
 {
 	uint64_t source = BufferReader_ReadU64(br);
-	int32_t dest;
-	Utils_memcpy(&dest, &source, sizeof(int64_t));
-	return dest;
+	int64_t dst;
+	Utils_memcpy(&dst, &source, sizeof(int64_t));
+	return dst;
 }
 float BufferReader_ReadSingle(BufferReader* br)
 {
 	uint32_t source = BufferReader_ReadU32(br);
-	float dest;
-	Utils_memcpy(&dest, &source, sizeof(float));
-	return dest;
+	float dst;
+	Utils_memcpy(&dst, &source, sizeof(float));
+	return dst;
 }
 double BufferReader_ReadDouble(BufferReader* br)
 {
 	uint64_t source = BufferReader_ReadU64(br);
-	double dest;
-	Utils_memcpy(&dest, &source, sizeof(double));
-	return dest;
+	double dst;
+	Utils_memcpy(&dst, &source, sizeof(double));
+	return dst;
 }
 uint8_t BufferReader_ReadJustTheStringLength(BufferReader* br)
 {

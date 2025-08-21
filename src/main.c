@@ -5,7 +5,7 @@
  */
 
 #define STB_DS_IMPLEMENTATION
-#include "engine/third_party/stb_ds.h"
+#include "third_party/stb_ds.h"
 
 #include "engine/core/Game.h"
 #include "engine/io/File.h"
@@ -19,14 +19,21 @@
 
 int main(int argc, char* args[])
 {
-	char pathBuffer[EE_PATH_MAX];
-	File_Combine2(pathBuffer, EE_PATH_MAX, "data", "engineconfig.bin");
-	Cvars_Read(pathBuffer);
-	File_Combine2(pathBuffer, EE_PATH_MAX, "data", "userconfig.bin");
-	Cvars_Read(pathBuffer);
-	File_Combine2(pathBuffer, EE_PATH_MAX, "data", "animtile.dat");
-	DatReader* datReader = DatReader_Create(pathBuffer);
-	FixedChar260 temp = DatReader_NextFilePath(datReader);
+	FixedChar260* sharedStringBuffer = Utils_GetSharedStringBuffer();
+	File_Combine2(sharedStringBuffer->mValue, UTILS_SHARED_STRING_BUFFER_LENGTH, "data", "engineconfig.bin");
+	Cvars_Read(sharedStringBuffer->mValue);
+	File_Combine2(sharedStringBuffer->mValue, EE_PATH_MAX, "data", "userconfig.bin");
+	Cvars_Read(sharedStringBuffer->mValue);
+	File_Combine2(sharedStringBuffer->mValue, EE_PATH_MAX, "data", "animtile.dat");
+	DatReader* dr = DatReader_Create(sharedStringBuffer->mValue);
+	FixedChar260 temp = { 0 };
+	while (DatReader_HasNext(dr))
+	{
+		DatReader_NextFilePath(dr, &temp);
+		BufferReader* br = DatReader_NextStream(dr, false);
+		BufferReader_Dispose(br, false);
+	}
+	DatReader_Dispose(dr);
 	int64_t cvarsLength = Cvars_Length();
 	uint64_t mallocRefs = Utils_GetMallocRefs();
 	Game_Run();
