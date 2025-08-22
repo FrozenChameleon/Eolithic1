@@ -8,9 +8,12 @@
 
 #include "stdint.h"
 #include "../utils/Macros.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct Resource
 {
-	ResourceID mID;
 	void* mData;
+	ResourceID mID;
+	FixedChar260 mPath;
+	FixedChar260 mFileNameWithoutExtension;
 } Resource;

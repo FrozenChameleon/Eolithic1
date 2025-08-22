@@ -6,9 +6,10 @@
 
 #pragma once
 
+#include "../utils/Macros.h"
 #include "Prop.h"
 #include "../math/Vector2.h"
-#include "../utils/Macros.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct PropInstance
 {
@@ -18,7 +19,7 @@ typedef struct PropInstance
 	float mRotation;
 	bool mFlipX;
 	bool mFlipY;
-	char mName[EE_FILENAME_MAX];
+	FixedChar260 mName;
 	Vector2 mOffset;
 	Vector2 mDrawOffset;
 } PropInstance;

@@ -9,10 +9,11 @@
 #include "../utils/Macros.h"
 #include "../math/Point.h"
 #include "../utils/StringPair.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct ThingInstance
 {
-	char mName[EE_FILENAME_MAX];
+	FixedChar260 mName;
 	Point* mDynamicNodes;
 	StringPair* mDynamicSettings;
 } ThingInstance;

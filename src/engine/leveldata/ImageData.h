@@ -6,11 +6,12 @@
 
 #pragma once
 
+#include "../utils/Macros.h"
 #include "stdint.h"
 #include "stdbool.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"
-#include "../utils/Macros.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct ImageData
 {
@@ -24,7 +25,7 @@ typedef struct ImageData
 	int mFlipSpeed;
 	int mDepth;
 	float mInitialRotation;
-	char mImage[EE_FILENAME_MAX];
+	FixedChar260 mImage;
 	int mScaler;
 } ImageData;
 

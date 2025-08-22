@@ -10,6 +10,7 @@
 #include "stdbool.h"
 #include "../render/Sheet.h"
 #include "../utils/Macros.h"
+#include "../utils/FixedChar260.h"
 
 typedef bool(*Achievement_ConditionFunc);
 
@@ -18,9 +19,9 @@ typedef struct Achievement
 	bool mIsCertified;
 	bool mIsHidden;
 	bool mIsUnlocked;
-	char mName[EE_FILENAME_MAX];
-	char mDescription[EE_FILENAME_MAX];
-	char mLockedDescription[EE_FILENAME_MAX];
+	FixedChar260 mName;
+	FixedChar260 mDescription;
+	FixedChar260 mLockedDescription;
 	bool (*mCondition)();
 	Sheet* mSheet;
 } Achievement;

@@ -6,17 +6,48 @@
 
 #include "Utils.h"
 
+#include "../../third_party/stb_ds.h"
 #include "SDL3/SDL.h"
 #include "stdlib.h"
 #include "float.h"
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
-static FixedChar260 _mSharedPathStringBuffer;
+static SharedFixedChar260** _mDynamicSharedStringBuffers;
 
-FixedChar260* Utils_GetSharedStringBuffer()
+SharedFixedChar260* Utils_GetSharedFixedChar260()
 {
-	return &_mSharedPathStringBuffer;
+	int32_t len = arrlen(_mDynamicSharedStringBuffers);
+	for (int i = 0; i < len; i += 1)
+	{
+		SharedFixedChar260* sharedStringBuffer = _mDynamicSharedStringBuffers[i];
+		if (!sharedStringBuffer->mIsInUse)
+		{
+			memset(&sharedStringBuffer->mBuffer, 0, FIXED_CHAR_260_LENGTH);
+			sharedStringBuffer->mIsInUse = true;
+			return sharedStringBuffer;
+		}
+	}
+
+	SharedFixedChar260* bufferToAdd = Utils_malloc(sizeof(SharedFixedChar260));
+	memset(bufferToAdd, 0, sizeof(SharedFixedChar260));
+	arrput(_mDynamicSharedStringBuffers, bufferToAdd);
+	bufferToAdd->mIsInUse = true;
+	return bufferToAdd;
+}
+int32_t Utils_GetAmountOfSharedFixedChar260InUse()
+{
+	int32_t counter = 0;
+	int32_t len = arrlen(_mDynamicSharedStringBuffers);
+	for (int i = 0; i < len; i += 1)
+	{
+		SharedFixedChar260* sharedStringBuffer = _mDynamicSharedStringBuffers[i];
+		if (sharedStringBuffer->mIsInUse)
+		{
+			counter += 1;
+		}
+	}
+	return counter;
 }
 uint64_t Utils_GetMallocRefs()
 {
@@ -119,4 +150,24 @@ void Utils_ResetArrayAsSingle(float* values, size_t len, float valueToSet)
 void Utils_ToggleFullscreenButton()
 {
 	//TODO
+}
+int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex)
+{
+	int32_t len = Utils_strnlen(strInThis, maxlen);
+	int32_t loc = -1;
+	for (int i = 0; i < len; i += 1)
+	{
+		if (strInThis[i] == findThis)
+		{
+			if (!findLastIndex)
+			{
+				return loc;
+			}
+			else
+			{
+				loc = i;
+			}
+		}
+	}
+	return loc;
 }

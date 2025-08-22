@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include "stdbool.h"
+#include "../utils/Macros.h"
 #include "../render/Animation.h"
 #include "../render/Sheet.h"
-#include "../utils/Macros.h"
+#include "../io/BufferReader.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct AnimTile
 {
@@ -25,10 +26,10 @@ typedef struct AnimTile
 	bool mIsFlipY;
 	int mFlipSpeed;
 	float mRotation;
-	char mTextureName[EE_FILENAME_MAX];
-	char mTilesetFilter[EE_FILENAME_MAX];
+	FixedChar260 mTextureName;
+	FixedChar260 mTilesetFilter;
 	bool mIsWrap;
-	char mWrapTextureName[EE_FILENAME_MAX];
+	FixedChar260 mWrapTextureName;
 	bool mIsWrapX;
 	int mWrapSpeedX;
 	bool mIsWrapY;
@@ -36,3 +37,5 @@ typedef struct AnimTile
 	int mWrapSpeedDelay;
 } AnimTile;
 
+void AnimTile_Read(AnimTile* atile, BufferReader* br);
+AnimTile* AnimTile_FromStream(BufferReader* br);

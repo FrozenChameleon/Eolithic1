@@ -10,10 +10,11 @@
 #include "stdbool.h"
 #include "../math/Point.h"
 #include "../utils/Macros.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct DrawTile
 {
-	char mAnimation[EE_FILENAME_MAX];
+	FixedChar260 mAnimation;
 	Point mPoint;
 	bool mFlipX;
 	bool mFlipY;

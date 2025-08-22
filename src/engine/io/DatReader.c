@@ -46,37 +46,37 @@ bool DatReader_HasNext(const DatReader* dr)
 }
 void DatReader_NextFilePath(DatReader* dr, FixedChar260* dst)
 {
-	memset(dst, 0, sizeof(FixedChar260));
-
 	int32_t length = BufferReader_ReadI32(dr->_mReader);
 	arrfree(dr->_mDynamicLastStrings);
 	dr->_mDynamicLastStrings = NULL;
 	for (int32_t i = 0; i < length; i += 1)
 	{
-		FixedChar260 charTemp = { 0 };
-		BufferReader_ReadString(dr->_mReader, charTemp.mValue, FIXED_CHAR_260_LENGTH);
-		arrput(dr->_mDynamicLastStrings, charTemp);
+		FixedChar260 temp = { 0 };
+		BufferReader_ReadString(dr->_mReader, temp.mValue, FIXED_CHAR_260_LENGTH);
+		arrput(dr->_mDynamicLastStrings, temp);
 	}
 
+	memset(dst, 0, sizeof(FixedChar260));
 	int32_t len = arrlen(dr->_mDynamicLastStrings);
 	for (int i = 0; i < len; i += 1)
 	{
+		FixedChar260* currentString = &dr->_mDynamicLastStrings[i].mValue;
 		if (i == 0)
 		{
-			Utils_strlcpy(dst, dr->_mDynamicLastStrings[i].mValue, FIXED_CHAR_260_LENGTH);
+			Utils_strlcpy(dst, currentString, FIXED_CHAR_260_LENGTH);
 		}
 		else
 		{
-			Utils_strlcat(dst, dr->_mDynamicLastStrings[i].mValue, FIXED_CHAR_260_LENGTH);
+			Utils_strlcat(dst, currentString, FIXED_CHAR_260_LENGTH);
 		}
 		if (i < (len - 1))
 		{
-			File_AppendPathSeparator(dst, FIXED_CHAR_260_LENGTH);
+			File_AppendPathSeparator(dst);
 		}
 	}
 
 	DatInfo* currentInfo = GetCurrentDatInfo(dr);
-	currentInfo->mPath = *dst;
+	Utils_strlcpy(&currentInfo->mPath, dst, FIXED_CHAR_260_LENGTH);
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 {

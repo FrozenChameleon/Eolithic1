@@ -27,7 +27,7 @@ typedef struct CvarData
 	char mValue[CVAR_CHAR_LIMIT];
 } CvarData;
 
-static struct { char* key; CvarData value; } *_mData = NULL;
+static struct { char* key; CvarData value; } *_mData;
 
 static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenSet)
 {

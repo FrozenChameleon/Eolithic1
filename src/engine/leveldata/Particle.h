@@ -6,9 +6,9 @@
 
 #pragma once
 
-#include "stdbool.h"
-#include "../math/Vector2.h"
 #include "../utils/Macros.h"
+#include "../math/Vector2.h"
+#include "../utils/FixedChar260.h"
 
 typedef struct Particle
 {
@@ -54,7 +54,7 @@ typedef struct Particle
 	int mCurveFluctuateIntervalMax;
 
 	int mTextureDepth;
-	char mTextureName[EE_FILENAME_MAX];
+	FixedChar260 mTextureName;
 	int mTextureFlipSpeed;
 	bool mTextureIsAnimation;
 	int mScaler;

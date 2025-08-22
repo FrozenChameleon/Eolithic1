@@ -20,9 +20,9 @@ void Achievement_Init(Achievement* achievement, bool (*condition)(), const char*
 	achievement->mIsCertified = false;
 	achievement->mIsHidden = isHidden;
 	achievement->mIsUnlocked = false;
-	Utils_strlcpy(achievement->mName, name, EE_FILENAME_MAX);
-	Utils_strlcpy(achievement->mDescription, description, EE_FILENAME_MAX);
-	Utils_strlcpy(achievement->mLockedDescription, lockedDescription, EE_FILENAME_MAX);
+	Utils_strlcpy(achievement->mName.mValue, name, FIXED_CHAR_260_LENGTH);
+	Utils_strlcpy(achievement->mDescription.mValue, description, FIXED_CHAR_260_LENGTH);
+	Utils_strlcpy(achievement->mLockedDescription.mValue, lockedDescription, FIXED_CHAR_260_LENGTH);
 	achievement->mCondition = condition;
 	achievement->mSheet = Sheet_GetDefaultSheet();
 	if (!Utils_StringEqualTo(image, ""))
@@ -68,5 +68,5 @@ void Achievement_CertifyAchievement(Achievement* achievement, int index)
 		return;
 	}
 
-	Service_HandleSetAchievement(index, achievement->mName);
+	Service_HandleSetAchievement(index, achievement->mName.mValue);
 }

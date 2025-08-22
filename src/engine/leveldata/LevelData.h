@@ -32,8 +32,8 @@ typedef struct LevelData
 	bool _mIsMetaMap;
 	MetaMap _mMetaMap;
 	DrawRectangle* _mDynamicManyRectangles;
-	char mLevelName[EE_FILENAME_MAX];
-	char mTilesetName[EE_FILENAME_MAX];
+	FixedChar260 mLevelName;
+	FixedChar260 mTilesetName;
 	FixedChar260 mStringData[LEVEL_DATA_STRING_DATA_LENGTH];
 	LayerData mLayerData[LEVEL_DATA_LAYER_DATA_LENGTH];
 	Tile** mDynamicTileData;
