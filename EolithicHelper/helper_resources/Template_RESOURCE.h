@@ -1,0 +1,18 @@
+/* EolithicEngine
+ * Copyright 2025 Patrick Derosby
+ * Released under the zlib License.
+ * See LICENSE for details.
+ */
+ 
+//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
+
+#pragma once
+
+#include "Resource.h"
+#include "../utils/Macros.h"
+#include "../io/BufferReader.h"
+%strIncludePath%
+
+Resource* %strResourceManager%_GetResource(const char* filenameWithoutExtension);
+%strResource%* %strResourceManager%_GetResourceData(const char* filenameWithoutExtension);
+Resource* %strResourceManager%_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

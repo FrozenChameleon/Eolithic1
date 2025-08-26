@@ -1,0 +1,18 @@
+/* EolithicEngine
+ * Copyright 2025 Patrick Derosby
+ * Released under the zlib License.
+ * See LICENSE for details.
+ */
+ 
+//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
+
+#pragma once
+
+#include "Resource.h"
+#include "../utils/Macros.h"
+#include "../io/BufferReader.h"
+#include "../leveldata/Particle.h"
+
+Resource* ParticleManager_GetResource(const char* filenameWithoutExtension);
+Particle* ParticleManager_GetResourceData(const char* filenameWithoutExtension);
+Resource* ParticleManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
