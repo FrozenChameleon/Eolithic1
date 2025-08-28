@@ -17,7 +17,7 @@
 
 typedef enum SoundState
 {
-	Playing = 0,
-	Paused = 1,
-	Stopped = 2
+	SOUNDSTATE_PLAYING = 0,
+	SOUNDSTATE_PAUSED = 1,
+	SOUNDSTATE_STOPPED = 2
 } SoundState;

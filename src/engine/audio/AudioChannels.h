@@ -15,8 +15,8 @@
 
 #pragma once
 
-enum AudioChannels
+typedef enum AudioChannels
 {
-	Mono = 1,
-	Stereo = 2
-};
+	AUDIOCHANNELS_MONO = 1,
+	AUDIOCHANNELS_STEREO = 2
+} AudioChannels;

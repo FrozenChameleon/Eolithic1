@@ -9,4 +9,4 @@
 #include "stdbool.h"
 #include "stdint.h"
 
-void Exception_Run(const char* message, bool exitTheGameNow);
+int32_t Exception_Run(const char* message, bool exitTheGameNow);

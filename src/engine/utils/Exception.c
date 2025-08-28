@@ -11,7 +11,7 @@
 #include "SDL3/SDL.h"
 #include "../core/Window.h"
 
-void Exception_Run(const char* message, bool exitTheGameNow)
+int32_t Exception_Run(const char* message, bool exitTheGameNow)
 {
 	Logger_LogError(message);
 	assert(0);
@@ -20,4 +20,5 @@ void Exception_Run(const char* message, bool exitTheGameNow)
 		SDL_ShowSimpleMessageBox(0, "Fatal Exception!", message, Window_GetWindowContext());
 		exit(1);
 	}
+	return 1;
 }

@@ -47,8 +47,7 @@ bool DatReader_HasNext(const DatReader* dr)
 void DatReader_NextFilePath(DatReader* dr, FixedChar260* dst)
 {
 	int32_t length = BufferReader_ReadI32(dr->_mReader);
-	arrfree(dr->_mDynamicLastStrings);
-	dr->_mDynamicLastStrings = NULL;
+	arrsetlen(dr->_mDynamicLastStrings, 0);
 	for (int32_t i = 0; i < length; i += 1)
 	{
 		FixedChar260 temp = { 0 };

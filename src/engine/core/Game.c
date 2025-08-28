@@ -22,6 +22,8 @@
 #include "../utils/Stopwatch.h"
 #include "../render/Renderer.h"
 #include "../input/Input.h"
+#include "../audio/SoundEffectInstance.h"
+#include "../utils/Exception.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -40,15 +42,19 @@ int32_t Game_Init()
 	initStatus = Window_Init();
 	if (initStatus < 0)
 	{
-		return 1;
-		//return OeException::RunException("Unable to init window!");
+		return Exception_Run("Unable to init window!", false);
 	}
 
 	initStatus = Renderer_Init(Window_GetWindowContext());
 	if (initStatus < 0)
 	{
-		return 1;
-		//return OeException::RunException("Unable to init platform renderer!");
+		return Exception_Run("Unable to init platform renderer!", false);
+	}
+
+	initStatus = SoundEffectInstance_InitAudio();
+	if (initStatus < 0)
+	{
+		return Exception_Run("Unable to init platform renderer!", false);
 	}
 
 	return initStatus;
@@ -57,8 +63,7 @@ int32_t Game_Run()
 {
 	if (Game_Init() < 0)
 	{
-		//return OeException::RunException("Unable to init!");
-		return 1;
+		return Exception_Run("Unable to init!", false);
 	}
 
 	Input_Init();

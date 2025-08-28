@@ -36,12 +36,12 @@ void ReadFourChar(BufferReader* br, char* sig)
 WaveFileData* WaveFileData_FromStream(BufferReader* br)
 {
 	// RIFF Signature
-	char tempSig[LENGTH_OF_SIG] = "XXXX";
+	char tempSig[LENGTH_OF_SIG + 1] = "XXXX";
 	ReadFourChar(br, tempSig);
 
 	char signature[LENGTH_OF_SIG];
 	Utils_memcpy(signature, tempSig, LENGTH_OF_SIG);
-	if (Utils_memcmp(signature, "RIFF", LENGTH_OF_SIG))
+	if (Utils_StringEqualTo(signature, "RIFF"))
 	{
 		Exception_Run("Specified stream is not a wave file.", false);
 		return NULL;
@@ -52,7 +52,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	ReadFourChar(br, tempSig);
 	char wformat[LENGTH_OF_SIG];
 	Utils_memcpy(wformat, tempSig, LENGTH_OF_SIG);
-	if (Utils_memcmp(wformat, "WAVE", LENGTH_OF_SIG))
+	if (Utils_StringEqualTo(wformat, "WAVE"))
 	{
 		Exception_Run("Specified stream is not a wave file.", false);
 		return NULL;
@@ -62,7 +62,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	ReadFourChar(br, tempSig);
 	char format_signature[LENGTH_OF_SIG];
 	Utils_memcpy(format_signature, tempSig, LENGTH_OF_SIG);
-	while (Utils_memcmp(format_signature, "fmt ", LENGTH_OF_SIG))
+	while (Utils_StringEqualTo(format_signature, "fmt "))
 	{
 		int32_t bytesToRead = BufferReader_ReadI32(br);
 		BufferReader_ReadBytes(br, bytesToRead);
@@ -91,13 +91,13 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	ReadFourChar(br, tempSig);
 	char data_signature[LENGTH_OF_SIG];
 	Utils_memcpy(data_signature, tempSig, LENGTH_OF_SIG);
-	while (Utils_memcmp(data_signature, "data", LENGTH_OF_SIG)) //ToLowerInvariant... normally
+	while (Utils_StringEqualTo(data_signature, "data")) //ToLowerInvariant... normally
 	{
 		int32_t bytesToRead = BufferReader_ReadI32(br);
 		ReadFourChar(br, tempSig);
 		Utils_memcpy(data_signature, tempSig, LENGTH_OF_SIG);
 	}
-	if (Utils_memcmp(data_signature, "data", LENGTH_OF_SIG))
+	if (Utils_StringEqualTo(data_signature, "data"))
 	{
 		Exception_Run("Specified wave file is not supported.", false);
 		return NULL;
@@ -115,7 +115,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 		char chunk_signature[LENGTH_OF_SIG];
 		Utils_memcpy(chunk_signature, tempSig, LENGTH_OF_SIG);
 		int32_t chunkDataSize = BufferReader_ReadI32(br);
-		if (Utils_memcmp(chunk_signature, "smpl", LENGTH_OF_SIG)) // "smpl", Sampler Chunk Found
+		if (Utils_StringEqualTo(chunk_signature, "smpl")) // "smpl", Sampler Chunk Found
 		{
 			BufferReader_ReadU32(br); // Manufacturer
 			BufferReader_ReadU32(br); // Product
