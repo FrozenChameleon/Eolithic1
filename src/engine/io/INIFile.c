@@ -15,7 +15,7 @@ static uint64_t _mRefs;
 
 typedef struct INIFile
 {
-	struct { char* key; char* value; } *mData;
+	struct { char* key; char* value; } *mStringHashMap;
 } IniFile;
 
 INIFile* INIFile_Create_From_Binary(const char* path)
@@ -23,7 +23,8 @@ INIFile* INIFile_Create_From_Binary(const char* path)
 	_mRefs += 1;
 
 	INIFile* ini = Utils_malloc(sizeof(INIFile));
-	ini->mData = NULL;
+	Utils_memset(ini, 0, sizeof(INIFile));
+	sh_new_arena(ini->mStringHashMap);
 	BufferReader* br = BufferReader_CreateFromPath(path);
 	while (BufferReader_HasNext(br))
 	{
@@ -31,7 +32,7 @@ INIFile* INIFile_Create_From_Binary(const char* path)
 		char* value = Utils_CreateStringBuffer(EE_PATH_MAX);
 		BufferReader_ReadString(br, key, EE_PATH_MAX);
 		BufferReader_ReadString(br, value, EE_PATH_MAX);
-		shput(ini->mData, key, value);
+		shput(ini->mStringHashMap, key, value);
 	}
 	BufferReader_Dispose(br, false);
 	return ini;
@@ -40,15 +41,15 @@ void INIFile_Dispose(INIFile* ini)
 {
 	_mRefs -= 1;
 
-	if (ini->mData != NULL)
+	if (ini->mStringHashMap != NULL)
 	{
 		int64_t len = INIFile_GetLength(ini);
 		for (int i = 0; i < len; i += 1)
 		{
-			Utils_FreeString(ini->mData[i].key);
-			Utils_FreeString(ini->mData[i].value);
+			Utils_FreeString(ini->mStringHashMap[i].key);
+			Utils_FreeString(ini->mStringHashMap[i].value);
 		}
-		shfree(ini->mData);
+		shfree(ini->mStringHashMap);
 	}
 
 	Utils_free(ini);
@@ -59,13 +60,13 @@ uint64_t INIFile_GetRefs()
 }
 int64_t INIFile_GetLength(INIFile* ini)
 {
-	return shlen(ini->mData);
+	return shlen(ini->mStringHashMap);
 }
 const char* INIFile_GetKey(INIFile* ini, int index)
 {
-	return ini->mData[index].key;
+	return ini->mStringHashMap[index].key;
 }
 const char* INIFile_GetValue(INIFile* ini, int index)
 {
-	return ini->mData[index].value;
+	return ini->mStringHashMap[index].value;
 }

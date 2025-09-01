@@ -33,3 +33,7 @@ AnimTile* AnimTile_FromStream(BufferReader* br)
 	AnimTile_Read(animTile, br);
 	return animTile;
 }
+void AnimTile_Dispose(AnimTile* atile)
+{
+	Utils_free(atile);
+}

@@ -17,6 +17,7 @@ namespace EolithicHelper
         private const string DIR_RESOURCES = "resources";
         private const string KEYWORD_INCLUDE_PATH = "%strIncludePath%";
         private const string KEYWORD_RESOURCE = "%strResource%";
+        private const string KEYWORD_RESOURCE_LOWER = "%strResource_lower%";
         private const string KEYWORD_RESOURCE_MANAGER = "%strResourceManager%";
 
         class Config
@@ -56,6 +57,7 @@ namespace EolithicHelper
             string contents = File.ReadAllText(fromPath);
             contents = contents.Replace(KEYWORD_INCLUDE_PATH, replaceForInclude);
             contents = contents.Replace(KEYWORD_RESOURCE, replaceForResource);
+            contents = contents.Replace(KEYWORD_RESOURCE_LOWER, replaceForResource.ToLowerInvariant());
             contents = contents.Replace(KEYWORD_RESOURCE_MANAGER, replaceForResourceManager);
             File.WriteAllText(toPath, contents);
             Console.WriteLine("Generated boiler plate for " + toPath);

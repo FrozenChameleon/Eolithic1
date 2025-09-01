@@ -26,3 +26,4 @@ typedef struct Prop
 } Prop;
 
 Prop* Prop_FromStream(BufferReader* br);
+void Prop_Dispose(Prop* prop);

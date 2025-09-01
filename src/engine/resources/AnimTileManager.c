@@ -10,16 +10,40 @@
 
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
+#include "../utils/Logger.h"
+#include "../io/File.h"
+#include "../io/DatReader.h"
 
 static int32_t _mResourceCounter;
-static struct { char* key; Resource* value; } *_mHashMap;
+static struct { char* key; Resource* value; } *_mStringHashMap;
+static bool _mHasInit;
+
+static void Init()
+{
+	if (_mHasInit)
+	{
+		return;
+	}
+
+	sh_new_arena(_mStringHashMap);
+
+	_mHasInit = true;
+}
 
 Resource* AnimTileManager_GetResource(const char* filenameWithoutExtension)
 {
-	return hmget(_mHashMap, filenameWithoutExtension);
+	//
+	Init();
+	//
+	
+	return shget(_mStringHashMap, filenameWithoutExtension);
 }
 AnimTile* AnimTileManager_GetResourceData(const char* filenameWithoutExtension)
 {
+	//
+	Init();
+	//
+	
 	Resource* resource = AnimTileManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
@@ -30,11 +54,82 @@ AnimTile* AnimTileManager_GetResourceData(const char* filenameWithoutExtension)
 }
 Resource* AnimTileManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
+	//
+	Init();
+	//
+
 	Resource* resource = Utils_malloc(sizeof(Resource));
 	Utils_strlcpy(&resource->mPath, path, FIXED_CHAR_260_LENGTH);
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
 	resource->mData = AnimTile_FromStream(br);
-	hmput(_mHashMap, filenameWithoutExtension, resource);
+	shput(_mStringHashMap, filenameWithoutExtension, resource);
+}
+const char* AnimTileManager_GetDatFileName()
+{
+	return "animtile.dat";
+}
+void AnimTileManager_LoadAllFromDat()
+{
+	//
+	Init();
+	//
+
+	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
+	File_Combine2(sharedStringBufferForPath, "data", AnimTileManager_GetDatFileName());
+	if (!File_Exists(sharedStringBufferForPath))
+	{
+		Logger_printf("Unable to load from dat: %s", sharedStringBufferForPath);
+		return;
+	}
+	
+	DatReader* dr = DatReader_Create(sharedStringBufferForPath);
+	while (DatReader_HasNext(dr))
+	{
+		DatReader_NextFilePath(dr, sharedStringBufferForPath);
+		File_GetFileName(sharedStringBufferForFileName, sharedStringBufferForPath);
+		File_GetFileNameWithoutExtension(sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		BufferReader* br = DatReader_NextStream(dr, false);
+		AnimTileManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		BufferReader_Dispose(br, false);
+	}
+	DatReader_Dispose(dr);
+	sharedStringBufferForPath->mIsInUse = false;
+	sharedStringBufferForFileName->mIsInUse = false;
+	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
+}
+void AnimTileManager_Dispose(const char* filenameWithoutExtension)
+{
+	//
+	Init();
+	//
+	
+	int32_t len = shlen(_mStringHashMap);
+	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	if (resource->mData != NULL)
+	{
+		AnimTile_Dispose(resource->mData);
+	}
+	Utils_free(resource);
+	shdel(_mStringHashMap, filenameWithoutExtension);
+}
+void AnimTileManager_DisposeAll()
+{
+	//
+	Init();
+	//
+	
+	int32_t len = shlen(_mStringHashMap);
+	for (int i = 0; i < len; i += 1)
+	{
+		AnimTileManager_Dispose(_mStringHashMap[i].key);
+	}
+
+	shfree(_mStringHashMap);
+	_mStringHashMap = NULL;
+	_mResourceCounter = 0;
+	_mHasInit = false;
 }

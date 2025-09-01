@@ -20,6 +20,7 @@ typedef struct SharedFixedChar260
 
 SharedFixedChar260* Utils_GetSharedFixedChar260();
 int32_t Utils_GetAmountOfSharedFixedChar260InUse();
+void Utils_FreeAllSharedFixedChar260();
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);

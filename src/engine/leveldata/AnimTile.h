@@ -39,3 +39,4 @@ typedef struct AnimTile
 
 void AnimTile_Read(AnimTile* atile, BufferReader* br);
 AnimTile* AnimTile_FromStream(BufferReader* br);
+void AnimTile_Dispose(AnimTile* atile);

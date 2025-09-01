@@ -14,3 +14,4 @@ typedef struct ShaderProgram
 } ShaderProgram;
 
 ShaderProgram* ShaderProgram_FromStream(BufferReader* br);
+void ShaderProgram_Dispose(ShaderProgram* sp);

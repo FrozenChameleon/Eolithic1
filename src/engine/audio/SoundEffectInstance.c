@@ -32,7 +32,7 @@ static FAudioSourceVoice* GetHandle(SoundEffectInstance* instance)
 	return (FAudioSourceVoice*)(instance->_mHandleStorage);
 }
 
-bool SoundEffectInstance_Init(SoundEffectInstance* sei, const char* name, WaveFileData* waveFileData)
+bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveFileData* waveFileData)
 {
 	if (waveFileData == NULL)
 	{
@@ -40,11 +40,11 @@ bool SoundEffectInstance_Init(SoundEffectInstance* sei, const char* name, WaveFi
 		return false;
 	}
 
-	sei->_mHasInit = true;
+	Utils_memset(sei, 0, sizeof(SoundEffectInstance));
+
+	sei->_mHasSetup = true;
 	sei->_mName = name;
 	sei->_mLoopNumber = -1;
-
-	memset(sei, 0, sizeof(SoundEffectInstance));
 
 	SoundEffectInstance_SetIsLooped(sei, false);
 	sei->_mCurrentSample = 0;
@@ -95,13 +95,13 @@ bool SoundEffectInstance_Init(SoundEffectInstance* sei, const char* name, WaveFi
 
 	return true;
 }
-bool SoundEffectInstance_HasInit(const SoundEffectInstance* sei)
+bool SoundEffectInstance_HasSetup(const SoundEffectInstance* sei)
 {
-	return sei->_mHasInit;
+	return sei->_mHasSetup;
 }
 SoundState SoundEffectInstance_State(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return SOUNDSTATE_STOPPED;
 	}
@@ -110,7 +110,7 @@ SoundState SoundEffectInstance_State(const SoundEffectInstance* sei)
 }
 bool SoundEffectInstance_IsLooped(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return false;
 	}
@@ -119,7 +119,7 @@ bool SoundEffectInstance_IsLooped(const SoundEffectInstance* sei)
 }
 void SoundEffectInstance_SetIsLooped(SoundEffectInstance* sei, bool value)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -128,7 +128,7 @@ void SoundEffectInstance_SetIsLooped(SoundEffectInstance* sei, bool value)
 }
 void SoundEffectInstance_Play(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -173,7 +173,7 @@ void SoundEffectInstance_Play(SoundEffectInstance* sei)
 }
 void SoundEffectInstance_Pause(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -187,7 +187,7 @@ void SoundEffectInstance_Pause(SoundEffectInstance* sei)
 }
 void SoundEffectInstance_Stop(SoundEffectInstance* sei, bool immediate)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -216,7 +216,7 @@ void SoundEffectInstance_Stop(SoundEffectInstance* sei, bool immediate)
 }
 void SoundEffectInstance_Update(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -307,7 +307,7 @@ void SoundEffectInstance_Update(SoundEffectInstance* sei)
 }
 void SoundEffectInstance_Dispose(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit || sei->_mIsDisposed)
+	if (!sei->_mHasSetup || sei->_mIsDisposed)
 	{
 		return;
 	}
@@ -318,7 +318,7 @@ void SoundEffectInstance_Dispose(SoundEffectInstance* sei)
 }
 int32_t SoundEffectInstance_GetLoopNumber(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return 0;
 	}
@@ -327,7 +327,7 @@ int32_t SoundEffectInstance_GetLoopNumber(const SoundEffectInstance* sei)
 }
 void SoundEffectInstance_SetLoopNumber(SoundEffectInstance* sei, int value)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -336,7 +336,7 @@ void SoundEffectInstance_SetLoopNumber(SoundEffectInstance* sei, int value)
 }
 const char* SoundEffectInstance_GetName(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return NULL;
 	}
@@ -345,7 +345,7 @@ const char* SoundEffectInstance_GetName(const SoundEffectInstance* sei)
 }
 uint64_t SoundEffectInstance_GetFramePlayed(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return 0;
 	}
@@ -354,7 +354,7 @@ uint64_t SoundEffectInstance_GetFramePlayed(const SoundEffectInstance* sei)
 }
 void SoundEffectInstance_Resume(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -380,7 +380,7 @@ void SoundEffectInstance_Resume(SoundEffectInstance* sei)
 }
 float SoundEffectInstance_GetVolume(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return 0;
 	}
@@ -389,7 +389,7 @@ float SoundEffectInstance_GetVolume(const SoundEffectInstance* sei)
 }
 void SoundEffectInstance_SetVolume(SoundEffectInstance* sei, float value)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -407,7 +407,7 @@ void SoundEffectInstance_SetVolume(SoundEffectInstance* sei, float value)
 }
 void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -435,7 +435,7 @@ void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei)
 }
 void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -450,7 +450,7 @@ void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 }
 void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, int amountOfSamples)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -494,7 +494,7 @@ void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, in
 }
 void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer, int32_t bufferLength)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return;
 	}
@@ -527,7 +527,7 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 }
 int32_t SoundEffectInstance_GetSampleSize(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return 0;
 	}
@@ -536,7 +536,7 @@ int32_t SoundEffectInstance_GetSampleSize(const SoundEffectInstance* sei)
 }
 int32_t SoundEffectInstance_GetTotalSamples(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return 0;
 	}
@@ -545,7 +545,7 @@ int32_t SoundEffectInstance_GetTotalSamples(const SoundEffectInstance* sei)
 }
 int32_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
 {
-	if (!sei->_mHasInit)
+	if (!sei->_mHasSetup)
 	{
 		return 0;
 	}

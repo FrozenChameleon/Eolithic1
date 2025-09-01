@@ -16,3 +16,7 @@
 Resource* %strResourceManager%_GetResource(const char* filenameWithoutExtension);
 %strResource%* %strResourceManager%_GetResourceData(const char* filenameWithoutExtension);
 Resource* %strResourceManager%_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
+const char* %strResourceManager%_GetDatFileName();
+void %strResourceManager%_LoadAllFromDat();
+void %strResourceManager%_Dispose(const char* filenameWithoutExtension);
+void %strResourceManager%_DisposeAll();

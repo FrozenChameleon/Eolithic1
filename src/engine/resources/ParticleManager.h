@@ -16,3 +16,7 @@
 Resource* ParticleManager_GetResource(const char* filenameWithoutExtension);
 Particle* ParticleManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* ParticleManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
+const char* ParticleManager_GetDatFileName();
+void ParticleManager_LoadAllFromDat();
+void ParticleManager_Dispose(const char* filenameWithoutExtension);
+void ParticleManager_DisposeAll();

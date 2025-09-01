@@ -16,3 +16,7 @@
 Resource* AnimTileManager_GetResource(const char* filenameWithoutExtension);
 AnimTile* AnimTileManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* AnimTileManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
+const char* AnimTileManager_GetDatFileName();
+void AnimTileManager_LoadAllFromDat();
+void AnimTileManager_Dispose(const char* filenameWithoutExtension);
+void AnimTileManager_DisposeAll();

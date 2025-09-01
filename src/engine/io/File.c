@@ -138,7 +138,7 @@ static void INTERNAL_File_Combine10(FixedChar260* dst, const char* path1, const 
 
 static void File_CombineHelper(FixedChar260* dst, const char* path1)
 {
-	memset(dst, 0, FIXED_CHAR_260_LENGTH);
+	Utils_memset(dst, 0, FIXED_CHAR_260_LENGTH);
 	Utils_strlcpy(dst, path1, FIXED_CHAR_260_LENGTH);
 }
 void File_Combine2(FixedChar260* dst, const char* path1, const char* path2)
@@ -198,7 +198,7 @@ static void File_GetFileNameHelper(FixedChar260* dst, const FixedChar260* path, 
 		return;
 	}
 
-	memset(dst, 0, FIXED_CHAR_260_LENGTH);
+	Utils_memset(dst, 0, FIXED_CHAR_260_LENGTH);
 
 	int32_t counter = 0;
 	int32_t len = Utils_strnlen(path, FIXED_CHAR_260_LENGTH);

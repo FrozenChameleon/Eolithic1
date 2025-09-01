@@ -22,8 +22,8 @@ typedef struct MusicInstance
 	SoundEffectInstance _mCurrentMusicInstance;
 } MusicInstance;
 
-void MusicInstance_HandleFadeIn(float musicVolume);
-void MusicInstance_HandleFadeOut(float musicVolume);
+void MusicInstance_HandleFadeIn(MusicInstance* mi, float musicVolume);
+void MusicInstance_HandleFadeOut(MusicInstance* mi, float musicVolume);
 
 enum MusicInstanceState
 {
@@ -33,21 +33,21 @@ enum MusicInstanceState
 	STATE_COMPLETE = 3
 };
 
-void MusicInstance_Init();
+void MusicInstance_Init(MusicInstance* mi);
 
-bool MusicInstance_IsLooped();
-void MusicInstance_SetIsLooped(bool value);
-const char* MusicInstance_CurrentTrack();
-const char* MusicInstance_PreviousTrack();
-void MusicInstance_Play(const char* nextTrack, bool isLooping, bool isUsingForcedVolume, float forcedVolume);
-float MusicInstance_GetMusicVolume();
-void MusicInstance_Stop();
-void MusicInstance_Pause();
-void MusicInstance_Resume();
-void MusicInstance_Update();
-void MusicInstance_SetupQueuedFadeIn(int fadeInTime);
-void MusicInstance_SetupFadeIn(int fadeInTime);
-void MusicInstance_SetupFadeOut(const char* nextTrack, int fadeOutTime);
-bool MusicInstance_IsFadingOut();
-void MusicInstance_ClearTrackNames();
-bool MusicInstance_IsPlaying();
+bool MusicInstance_IsLooped(MusicInstance* mi);
+void MusicInstance_SetIsLooped(MusicInstance* mi, bool value);
+const char* MusicInstance_CurrentTrack(MusicInstance* mi);
+const char* MusicInstance_PreviousTrack(MusicInstance* mi);
+void MusicInstance_Play(MusicInstance* mi, const char* nextTrack, bool isLooping, bool isUsingForcedVolume, float forcedVolume);
+float MusicInstance_GetMusicVolume(MusicInstance* mi);
+void MusicInstance_Stop(MusicInstance* mi);
+void MusicInstance_Pause(MusicInstance* mi);
+void MusicInstance_Resume(MusicInstance* mi);
+void MusicInstance_Update(MusicInstance* mi);
+void MusicInstance_SetupQueuedFadeIn(MusicInstance* mi, int fadeInTime);
+void MusicInstance_SetupFadeIn(MusicInstance* mi, int fadeInTime);
+void MusicInstance_SetupFadeOut(MusicInstance* mi, const char* nextTrack, int fadeOutTime);
+bool MusicInstance_IsFadingOut(MusicInstance* mi);
+void MusicInstance_ClearTrackNames(MusicInstance* mi);
+bool MusicInstance_IsPlaying(MusicInstance* mi);

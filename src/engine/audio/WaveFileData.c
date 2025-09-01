@@ -17,7 +17,7 @@
 #include "../utils/Utils.h"
 #include "../utils/Exception.h"
 
-#define LENGTH_OF_SIG 4
+#define LENGTH_OF_SIG 5
 
 void ReadFourChar(BufferReader* br, char* sig)
 {
@@ -25,23 +25,19 @@ void ReadFourChar(BufferReader* br, char* sig)
 	sig[1] = 'X';
 	sig[2] = 'X';
 	sig[3] = 'X';
+	sig[4] = '\0';
 
-	for (int i = 0; i < LENGTH_OF_SIG; i += 1)
+	for (int i = 0; i < 4; i += 1)
 	{
-		uint8_t c = BufferReader_ReadU8(br);
-		sig[i] = c;
+		sig[i] = BufferReader_ReadU8(br);
 	}
 }
 
 WaveFileData* WaveFileData_FromStream(BufferReader* br)
 {
-	// RIFF Signature
-	char tempSig[LENGTH_OF_SIG + 1] = "XXXX";
-	ReadFourChar(br, tempSig);
-
 	char signature[LENGTH_OF_SIG];
-	Utils_memcpy(signature, tempSig, LENGTH_OF_SIG);
-	if (Utils_StringEqualTo(signature, "RIFF"))
+	ReadFourChar(br, signature);
+	if (!Utils_StringEqualTo(signature, "RIFF"))
 	{
 		Exception_Run("Specified stream is not a wave file.", false);
 		return NULL;
@@ -49,25 +45,22 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	
 	BufferReader_ReadU32(br); // Riff Chunk Size
 
-	ReadFourChar(br, tempSig);
 	char wformat[LENGTH_OF_SIG];
-	Utils_memcpy(wformat, tempSig, LENGTH_OF_SIG);
-	if (Utils_StringEqualTo(wformat, "WAVE"))
+	ReadFourChar(br, wformat);
+	if (!Utils_StringEqualTo(wformat, "WAVE"))
 	{
 		Exception_Run("Specified stream is not a wave file.", false);
 		return NULL;
 	}
 
 	// WAVE Header
-	ReadFourChar(br, tempSig);
 	char format_signature[LENGTH_OF_SIG];
-	Utils_memcpy(format_signature, tempSig, LENGTH_OF_SIG);
-	while (Utils_StringEqualTo(format_signature, "fmt "))
+	ReadFourChar(br, format_signature);
+	while (!Utils_StringEqualTo(format_signature, "fmt "))
 	{
 		int32_t bytesToRead = BufferReader_ReadI32(br);
-		BufferReader_ReadBytes(br, bytesToRead);
-		ReadFourChar(br, tempSig);
-		Utils_memcpy(format_signature, tempSig, LENGTH_OF_SIG);
+		BufferReader_Seek(br, bytesToRead, BUFFER_READER_SEEK_FROM_CURRENT);
+		ReadFourChar(br, format_signature);
 	}
 
 	int format_chunk_size = BufferReader_ReadI32(br);
@@ -84,20 +77,18 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	// Reads residual bytes
 	if (format_chunk_size > 16)
 	{
-		BufferReader_ReadBytes(br, format_chunk_size - 16);
+		BufferReader_Seek(br, format_chunk_size - 16, BUFFER_READER_SEEK_FROM_CURRENT);
 	}
 
 	// data Signature
-	ReadFourChar(br, tempSig);
 	char data_signature[LENGTH_OF_SIG];
-	Utils_memcpy(data_signature, tempSig, LENGTH_OF_SIG);
-	while (Utils_StringEqualTo(data_signature, "data")) //ToLowerInvariant... normally
+	ReadFourChar(br, data_signature);
+	while (!Utils_StringEqualTo(data_signature, "data")) //ToLowerInvariant... normally
 	{
 		int32_t bytesToRead = BufferReader_ReadI32(br);
-		ReadFourChar(br, tempSig);
-		Utils_memcpy(data_signature, tempSig, LENGTH_OF_SIG);
+		ReadFourChar(br, data_signature);
 	}
-	if (Utils_StringEqualTo(data_signature, "data"))
+	if (!Utils_StringEqualTo(data_signature, "data"))
 	{
 		Exception_Run("Specified wave file is not supported.", false);
 		return NULL;
@@ -110,10 +101,8 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	while (BufferReader_HasNext(br))
 	{
 		//char chunkIDChars[4];
-		ReadFourChar(br, tempSig);
-
 		char chunk_signature[LENGTH_OF_SIG];
-		Utils_memcpy(chunk_signature, tempSig, LENGTH_OF_SIG);
+		ReadFourChar(br, chunk_signature);
 		int32_t chunkDataSize = BufferReader_ReadI32(br);
 		if (Utils_StringEqualTo(chunk_signature, "smpl")) // "smpl", Sampler Chunk Found
 		{
@@ -145,15 +134,25 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 
 			if (samplerData != 0) // Read Sampler Data if it exists
 			{
-				BufferReader_ReadBytes(br, samplerData);
+				BufferReader_Seek(br, samplerData, BUFFER_READER_SEEK_FROM_CURRENT);
 			}
 		}
 		else // Read unwanted chunk data and try again
 		{
-			BufferReader_ReadBytes(br, chunkDataSize);
+			BufferReader_Seek(br, chunkDataSize, BUFFER_READER_SEEK_FROM_CURRENT);
 		}
 	}
 	// End scan
 
 	return waveData;
+}
+void WaveFileData_Dispose(WaveFileData* waveFileData)
+{
+	if (waveFileData->mWaveData != NULL)
+	{
+		FixedByteBuffer_Dispose(waveFileData->mWaveData);
+		waveFileData->mWaveData = NULL;
+	}
+
+	Utils_free(waveFileData);
 }

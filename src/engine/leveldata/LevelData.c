@@ -5,8 +5,13 @@
  */
 
 #include "LevelData.h"
+#include "../utils/Utils.h"
 
 LevelData* LevelData_FromStream(BufferReader* br)
 {
 	return NULL;
+}
+void LevelData_Dispose(LevelData* ld)
+{
+	Utils_free(ld);
 }

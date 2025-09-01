@@ -42,3 +42,4 @@ typedef struct LevelData
 } LevelData;
 
 LevelData* LevelData_FromStream(BufferReader* br);
+void LevelData_Dispose(LevelData* ld);

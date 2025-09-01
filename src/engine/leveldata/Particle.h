@@ -67,3 +67,4 @@ typedef struct Particle
 } Particle;
 
 Particle* Particle_FromStream(BufferReader* br);
+void Particle_Dispose(Particle* particle);

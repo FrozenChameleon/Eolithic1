@@ -24,6 +24,7 @@
 #include "../input/Input.h"
 #include "../audio/SoundEffectInstance.h"
 #include "../utils/Exception.h"
+#include "../audio/Music.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -66,7 +67,10 @@ int32_t Game_Run()
 		return Exception_Run("Unable to init!", false);
 	}
 
+	Music_Init();
 	Input_Init();
+
+	Music_PlayMusic("new00", true, true, false, 0, false, 0);
 
 	uint64_t oldTicks = Stopwatch_GetTicks();
 	bool isDone = false;
@@ -99,6 +103,7 @@ int32_t Game_Run()
 		}
 		Game_PollEvents();
 		Input_Update(false);
+		Music_Tick();
 		bool tester1 = Input_IsLeftMouseReleased();
 		bool tester2 = Input_IsDeleteReleased();
 		if (tester1)

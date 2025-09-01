@@ -15,6 +15,7 @@
 #define EE_PATH_MAX 260
 #define EE_FILENAME_MAX 255
 #define EE_NOT_SET "NOT_SET"
+#define EE_STR_NOTHING ""
 
 typedef int32_t Entity;
 typedef int32_t ResourceID;

@@ -41,3 +41,4 @@ typedef struct WaveFileData
 
 void ReadFourChar(BufferReader* br, char* sig);
 WaveFileData* WaveFileData_FromStream(BufferReader* br);
+void WaveFileData_Dispose(WaveFileData* waveFileData);

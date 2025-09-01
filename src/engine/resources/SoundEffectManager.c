@@ -6,7 +6,7 @@
  
 //THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
 
-#include "PropManager.h"
+#include "SoundEffectManager.h"
 
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
@@ -30,7 +30,7 @@ static void Init()
 	_mHasInit = true;
 }
 
-Resource* PropManager_GetResource(const char* filenameWithoutExtension)
+Resource* SoundEffectManager_GetResource(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -38,21 +38,21 @@ Resource* PropManager_GetResource(const char* filenameWithoutExtension)
 	
 	return shget(_mStringHashMap, filenameWithoutExtension);
 }
-Prop* PropManager_GetResourceData(const char* filenameWithoutExtension)
+SoundEffect* SoundEffectManager_GetResourceData(const char* filenameWithoutExtension)
 {
 	//
 	Init();
 	//
 	
-	Resource* resource = PropManager_GetResource(filenameWithoutExtension);
+	Resource* resource = SoundEffectManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		return NULL;
 	}
 
-	return (Prop*)resource->mData;
+	return (SoundEffect*)resource->mData;
 }
-Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
+Resource* SoundEffectManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
 	//
 	Init();
@@ -63,14 +63,14 @@ Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, con
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = Prop_FromStream(br);
+	resource->mData = SoundEffect_FromStream(br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
-const char* PropManager_GetDatFileName()
+const char* SoundEffectManager_GetDatFileName()
 {
-	return "prop.dat";
+	return "soundeffect.dat";
 }
-void PropManager_LoadAllFromDat()
+void SoundEffectManager_LoadAllFromDat()
 {
 	//
 	Init();
@@ -79,7 +79,7 @@ void PropManager_LoadAllFromDat()
 	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
 	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
 	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
-	File_Combine2(sharedStringBufferForPath, "data", PropManager_GetDatFileName());
+	File_Combine2(sharedStringBufferForPath, "data", SoundEffectManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
 		Logger_printf("Unable to load from dat: %s", sharedStringBufferForPath);
@@ -93,7 +93,7 @@ void PropManager_LoadAllFromDat()
 		File_GetFileName(sharedStringBufferForFileName, sharedStringBufferForPath);
 		File_GetFileNameWithoutExtension(sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
 		BufferReader* br = DatReader_NextStream(dr, false);
-		PropManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		SoundEffectManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
@@ -101,7 +101,7 @@ void PropManager_LoadAllFromDat()
 	sharedStringBufferForFileName->mIsInUse = false;
 	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
 }
-void PropManager_Dispose(const char* filenameWithoutExtension)
+void SoundEffectManager_Dispose(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -111,12 +111,12 @@ void PropManager_Dispose(const char* filenameWithoutExtension)
 	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
-		Prop_Dispose(resource->mData);
+		SoundEffect_Dispose(resource->mData);
 	}
 	Utils_free(resource);
 	shdel(_mStringHashMap, filenameWithoutExtension);
 }
-void PropManager_DisposeAll()
+void SoundEffectManager_DisposeAll()
 {
 	//
 	Init();
@@ -125,7 +125,7 @@ void PropManager_DisposeAll()
 	int32_t len = shlen(_mStringHashMap);
 	for (int i = 0; i < len; i += 1)
 	{
-		PropManager_Dispose(_mStringHashMap[i].key);
+		SoundEffectManager_Dispose(_mStringHashMap[i].key);
 	}
 
 	shfree(_mStringHashMap);

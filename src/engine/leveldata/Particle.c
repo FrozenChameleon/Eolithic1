@@ -5,8 +5,14 @@
  */
 
 #include "Particle.h"
+#include "../utils/Utils.h"
 
 Particle* Particle_FromStream(BufferReader* br)
 {
 	return NULL;
+}
+
+void Particle_Dispose(Particle* particle)
+{
+	Utils_free(particle);
 }

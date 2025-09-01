@@ -16,3 +16,7 @@
 Resource* LevelDataManager_GetResource(const char* filenameWithoutExtension);
 LevelData* LevelDataManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* LevelDataManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
+const char* LevelDataManager_GetDatFileName();
+void LevelDataManager_LoadAllFromDat();
+void LevelDataManager_Dispose(const char* filenameWithoutExtension);
+void LevelDataManager_DisposeAll();

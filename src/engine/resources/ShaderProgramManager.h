@@ -16,3 +16,7 @@
 Resource* ShaderProgramManager_GetResource(const char* filenameWithoutExtension);
 ShaderProgram* ShaderProgramManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* ShaderProgramManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
+const char* ShaderProgramManager_GetDatFileName();
+void ShaderProgramManager_LoadAllFromDat();
+void ShaderProgramManager_Dispose(const char* filenameWithoutExtension);
+void ShaderProgramManager_DisposeAll();

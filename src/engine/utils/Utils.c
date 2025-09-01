@@ -23,14 +23,14 @@ SharedFixedChar260* Utils_GetSharedFixedChar260()
 		SharedFixedChar260* sharedStringBuffer = _mDynamicSharedStringBuffers[i];
 		if (!sharedStringBuffer->mIsInUse)
 		{
-			memset(&sharedStringBuffer->mBuffer, 0, FIXED_CHAR_260_LENGTH);
+			Utils_memset(&sharedStringBuffer->mBuffer, 0, FIXED_CHAR_260_LENGTH);
 			sharedStringBuffer->mIsInUse = true;
 			return sharedStringBuffer;
 		}
 	}
 
 	SharedFixedChar260* bufferToAdd = Utils_malloc(sizeof(SharedFixedChar260));
-	memset(bufferToAdd, 0, sizeof(SharedFixedChar260));
+	Utils_memset(bufferToAdd, 0, sizeof(SharedFixedChar260));
 	arrput(_mDynamicSharedStringBuffers, bufferToAdd);
 	bufferToAdd->mIsInUse = true;
 	return bufferToAdd;
@@ -48,6 +48,15 @@ int32_t Utils_GetAmountOfSharedFixedChar260InUse()
 		}
 	}
 	return counter;
+}
+void Utils_FreeAllSharedFixedChar260()
+{
+	int32_t len = arrlen(_mDynamicSharedStringBuffers);
+	for (int i = 0; i < len; i += 1)
+	{
+		Utils_free(_mDynamicSharedStringBuffers[i]);
+	}
+	arrfree(_mDynamicSharedStringBuffers);
 }
 uint64_t Utils_GetMallocRefs()
 {
@@ -101,7 +110,22 @@ int32_t Utils_ParseInt(const char* str)
 }
 bool Utils_StringEqualTo(const char* str1, const char* str2)
 {
-	return (SDL_strcmp(str1, str2) == 0);
+	if ((str1 == NULL) && (str2 == NULL))
+	{
+		return true;
+	}
+	else if ((str1 != NULL) && (str2 == NULL))
+	{
+		return false;
+	}
+	else if ((str1 == NULL) && (str2 != NULL))
+	{
+		return false;
+	}
+	else
+	{
+		return (SDL_strcmp(str1, str2) == 0);
+	}
 }
 int32_t Utils_IntToString(int32_t value, char* buffer, size_t maxlen)
 {

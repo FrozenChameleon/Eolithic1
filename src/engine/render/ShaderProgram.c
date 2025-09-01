@@ -5,8 +5,14 @@
  */
 
 #include "ShaderProgram.h"
+#include "../utils/Utils.h"
 
 ShaderProgram* ShaderProgram_FromStream(BufferReader* br)
 {
 	return NULL;
+}
+
+void ShaderProgram_Dispose(ShaderProgram* sp)
+{
+	Utils_free(sp);
 }

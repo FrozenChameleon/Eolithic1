@@ -6,7 +6,7 @@
  
 //THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
 
-#include "PropManager.h"
+#include "MusicManager.h"
 
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
@@ -30,7 +30,7 @@ static void Init()
 	_mHasInit = true;
 }
 
-Resource* PropManager_GetResource(const char* filenameWithoutExtension)
+Resource* MusicManager_GetResource(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -38,21 +38,21 @@ Resource* PropManager_GetResource(const char* filenameWithoutExtension)
 	
 	return shget(_mStringHashMap, filenameWithoutExtension);
 }
-Prop* PropManager_GetResourceData(const char* filenameWithoutExtension)
+Music* MusicManager_GetResourceData(const char* filenameWithoutExtension)
 {
 	//
 	Init();
 	//
 	
-	Resource* resource = PropManager_GetResource(filenameWithoutExtension);
+	Resource* resource = MusicManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		return NULL;
 	}
 
-	return (Prop*)resource->mData;
+	return (Music*)resource->mData;
 }
-Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
+Resource* MusicManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
 	//
 	Init();
@@ -63,14 +63,14 @@ Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, con
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = Prop_FromStream(br);
+	resource->mData = Music_FromStream(br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
-const char* PropManager_GetDatFileName()
+const char* MusicManager_GetDatFileName()
 {
-	return "prop.dat";
+	return "music.dat";
 }
-void PropManager_LoadAllFromDat()
+void MusicManager_LoadAllFromDat()
 {
 	//
 	Init();
@@ -79,7 +79,7 @@ void PropManager_LoadAllFromDat()
 	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
 	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
 	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
-	File_Combine2(sharedStringBufferForPath, "data", PropManager_GetDatFileName());
+	File_Combine2(sharedStringBufferForPath, "data", MusicManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
 		Logger_printf("Unable to load from dat: %s", sharedStringBufferForPath);
@@ -93,7 +93,7 @@ void PropManager_LoadAllFromDat()
 		File_GetFileName(sharedStringBufferForFileName, sharedStringBufferForPath);
 		File_GetFileNameWithoutExtension(sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
 		BufferReader* br = DatReader_NextStream(dr, false);
-		PropManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		MusicManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
@@ -101,7 +101,7 @@ void PropManager_LoadAllFromDat()
 	sharedStringBufferForFileName->mIsInUse = false;
 	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
 }
-void PropManager_Dispose(const char* filenameWithoutExtension)
+void MusicManager_Dispose(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -111,12 +111,12 @@ void PropManager_Dispose(const char* filenameWithoutExtension)
 	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
-		Prop_Dispose(resource->mData);
+		Music_Dispose(resource->mData);
 	}
 	Utils_free(resource);
 	shdel(_mStringHashMap, filenameWithoutExtension);
 }
-void PropManager_DisposeAll()
+void MusicManager_DisposeAll()
 {
 	//
 	Init();
@@ -125,7 +125,7 @@ void PropManager_DisposeAll()
 	int32_t len = shlen(_mStringHashMap);
 	for (int i = 0; i < len; i += 1)
 	{
-		PropManager_Dispose(_mStringHashMap[i].key);
+		MusicManager_Dispose(_mStringHashMap[i].key);
 	}
 
 	shfree(_mStringHashMap);

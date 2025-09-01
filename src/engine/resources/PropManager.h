@@ -16,3 +16,7 @@
 Resource* PropManager_GetResource(const char* filenameWithoutExtension);
 Prop* PropManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);
+const char* PropManager_GetDatFileName();
+void PropManager_LoadAllFromDat();
+void PropManager_Dispose(const char* filenameWithoutExtension);
+void PropManager_DisposeAll();

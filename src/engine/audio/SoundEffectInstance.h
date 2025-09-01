@@ -25,7 +25,7 @@ typedef struct SoundEffectInstance
 {
 	uint64_t _mFramePlayed;
 	int _mLoopNumber;
-	bool _mHasInit;
+	bool _mHasSetup;
 	int _mCurrentSample;
 	bool _mIsMusic;
 	bool _mIsLooped;
@@ -45,8 +45,8 @@ typedef struct SoundEffectInstance
 	void* _mFormatStorage;
 } SoundEffectInstance;
 
-bool SoundEffectInstance_Init(SoundEffectInstance* sei, const char* name, WaveFileData* waveFileData);
-bool SoundEffectInstance_HasInit(const SoundEffectInstance* sei);
+bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveFileData* waveFileData);
+bool SoundEffectInstance_HasSetup(const SoundEffectInstance* sei);
 int32_t SoundEffectInstance_GetLoopNumber(const SoundEffectInstance* sei);
 void SoundEffectInstance_SetLoopNumber(SoundEffectInstance* sei, int value);
 const char* SoundEffectInstance_GetName(const SoundEffectInstance* sei);
