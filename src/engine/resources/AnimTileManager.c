@@ -36,7 +36,14 @@ Resource* AnimTileManager_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	return shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	if (resource == NULL)
+	{
+		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
+		return NULL;
+	}
+	
+	return resource;
 }
 AnimTile* AnimTileManager_GetResourceData(const char* filenameWithoutExtension)
 {
@@ -47,6 +54,7 @@ AnimTile* AnimTileManager_GetResourceData(const char* filenameWithoutExtension)
 	Resource* resource = AnimTileManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
+		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 

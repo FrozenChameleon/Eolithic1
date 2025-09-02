@@ -36,7 +36,14 @@ Resource* ParticleManager_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	return shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	if (resource == NULL)
+	{
+		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
+		return NULL;
+	}
+	
+	return resource;
 }
 Particle* ParticleManager_GetResourceData(const char* filenameWithoutExtension)
 {
@@ -47,6 +54,7 @@ Particle* ParticleManager_GetResourceData(const char* filenameWithoutExtension)
 	Resource* resource = ParticleManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
+		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 

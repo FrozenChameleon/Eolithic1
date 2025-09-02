@@ -36,7 +36,14 @@ Resource* %strResourceManager%_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	return shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	if (resource == NULL)
+	{
+		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
+		return NULL;
+	}
+	
+	return resource;
 }
 %strResource%* %strResourceManager%_GetResourceData(const char* filenameWithoutExtension)
 {
@@ -47,6 +54,7 @@ Resource* %strResourceManager%_GetResource(const char* filenameWithoutExtension)
 	Resource* resource = %strResourceManager%_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
+		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 

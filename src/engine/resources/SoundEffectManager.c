@@ -36,7 +36,14 @@ Resource* SoundEffectManager_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	return shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	if (resource == NULL)
+	{
+		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
+		return NULL;
+	}
+	
+	return resource;
 }
 SoundEffect* SoundEffectManager_GetResourceData(const char* filenameWithoutExtension)
 {
@@ -47,6 +54,7 @@ SoundEffect* SoundEffectManager_GetResourceData(const char* filenameWithoutExten
 	Resource* resource = SoundEffectManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
+		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 

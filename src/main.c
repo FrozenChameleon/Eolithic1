@@ -24,6 +24,7 @@
 int main(int argc, char* args[])
 {
 	MusicManager_LoadAllFromDat();
+	SoundEffectManager_LoadAllFromDat();
 
 	//MusicManager_DisposeAll();
 	//SoundEffectManager_LoadAllFromDat();

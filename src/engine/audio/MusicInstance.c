@@ -128,7 +128,7 @@ float MusicInstance_GetMusicVolume(MusicInstance* mi)
 }
 void MusicInstance_Stop(MusicInstance* mi)
 {
-	SoundEffectInstance_Stop(&mi->_mCurrentMusicInstance, false);
+	SoundEffectInstance_Stop(&mi->_mCurrentMusicInstance);
 }
 void MusicInstance_Pause(MusicInstance* mi)
 {

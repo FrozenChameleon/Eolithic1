@@ -17,8 +17,8 @@ typedef struct SoundEffect
 	WaveFileData* _mWaveFileData;
 } SoundEffect;
 
-//extern uint64_t DEFAULT_SOUND_PLAYBACK_TIME_BUFFER;
-
+uint64_t SoundEffect_GetDefaultSoundPlaybackTimeBuffer();
+void SoundEffect_SetDefaultSoundPlaybackTimeBuffer(uint64_t value);
 void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t time);
 void SoundEffect_SetSfxMuted(bool value);
 uint64_t SoundEffect_GetCurrentFrame();
@@ -30,7 +30,7 @@ void SoundEffect_StopAllPausedSounds();
 void SoundEffect_StopSound(const char* sound);
 void SoundEffect_StopAllSounds();
 void SoundEffect_PlaySound(const char* sound);
-void SoundEffect_PlaySound(const char* sound, float forcedVolume);
+void SoundEffect_PlaySoundWithForcedVolume(const char* sound, float forcedVolume);
 void SoundEffect_LoopSound(const char* sound, int loopNumber);
 float SoundEffect_GetVolumeHelper(const char* cvar, const char* name, VolumeData* volumeData);
 const char* SoundEffect_GetExtension();

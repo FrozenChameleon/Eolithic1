@@ -46,7 +46,7 @@ typedef struct SoundEffectInstance
 } SoundEffectInstance;
 
 bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveFileData* waveFileData);
-bool SoundEffectInstance_HasSetup(const SoundEffectInstance* sei);
+bool SoundEffectInstance_IsSetup(const SoundEffectInstance* sei);
 int32_t SoundEffectInstance_GetLoopNumber(const SoundEffectInstance* sei);
 void SoundEffectInstance_SetLoopNumber(SoundEffectInstance* sei, int value);
 const char* SoundEffectInstance_GetName(const SoundEffectInstance* sei);
@@ -59,7 +59,7 @@ bool SoundEffectInstance_IsLooped(const SoundEffectInstance* sei);
 void SoundEffectInstance_SetIsLooped(SoundEffectInstance* sei, bool value);
 void SoundEffectInstance_Play(SoundEffectInstance* sei);
 void SoundEffectInstance_Pause(SoundEffectInstance* sei);
-void SoundEffectInstance_Stop(SoundEffectInstance* sei, bool immediate);
+void SoundEffectInstance_Stop(SoundEffectInstance* sei);
 void SoundEffectInstance_Update(SoundEffectInstance* sei);
 void SoundEffectInstance_Dispose(SoundEffectInstance* sei);
 void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei);

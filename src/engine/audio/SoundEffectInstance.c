@@ -14,6 +14,7 @@
   */
 
 #include "SoundEffectInstance.h"
+
 #include "FAudio.h"
 #include "../utils/Logger.h"
 #include "../utils/Exception.h"
@@ -95,7 +96,7 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 
 	return true;
 }
-bool SoundEffectInstance_HasSetup(const SoundEffectInstance* sei)
+bool SoundEffectInstance_IsSetup(const SoundEffectInstance* sei)
 {
 	return sei->_mHasSetup;
 }
@@ -185,7 +186,7 @@ void SoundEffectInstance_Pause(SoundEffectInstance* sei)
 		sei->_mInternalState = SOUNDSTATE_PAUSED;
 	}
 }
-void SoundEffectInstance_Stop(SoundEffectInstance* sei, bool immediate)
+void SoundEffectInstance_Stop(SoundEffectInstance* sei)
 {
 	if (!sei->_mHasSetup)
 	{
@@ -199,20 +200,13 @@ void SoundEffectInstance_Stop(SoundEffectInstance* sei, bool immediate)
 		return;
 	}
 
-	if (immediate)
-	{
-		FAudioSourceVoice_Stop(handle, 0, 0);
-		FAudioSourceVoice_FlushSourceBuffers(handle);
-		FAudioVoice_DestroyVoice(handle);
-		handle = NULL;
-		sei->_mHandleStorage = NULL;
-		sei->_mInternalState = SOUNDSTATE_STOPPED;
-		SoundEffectInstance_ClearBuffers(sei);
-	}
-	else
-	{
-		Exception_Run("InvalidOperationException", false);
-	}
+	FAudioSourceVoice_Stop(handle, 0, 0);
+	FAudioSourceVoice_FlushSourceBuffers(handle);
+	FAudioVoice_DestroyVoice(handle);
+	handle = NULL;
+	sei->_mHandleStorage = NULL;
+	sei->_mInternalState = SOUNDSTATE_STOPPED;
+	SoundEffectInstance_ClearBuffers(sei);
 }
 void SoundEffectInstance_Update(SoundEffectInstance* sei)
 {
@@ -267,13 +261,14 @@ void SoundEffectInstance_Update(SoundEffectInstance* sei)
 
 	if (!SoundEffectInstance_IsLooped(sei))
 	{
-		if ((isReverse && (sei->_mCurrentSample == 0)) || (!isReverse && (sei->_mCurrentSample == totalSamples - 1)))
+		if ((isReverse && (sei->_mCurrentSample == 0)) || 
+			(!isReverse && (sei->_mCurrentSample == (totalSamples - 1))))
 		{
 			if (SoundEffectInstance_PendingBufferCount(sei) == 0)
 			{
 				if (sei->_mInternalState == SOUNDSTATE_PLAYING)
 				{
-					SoundEffectInstance_Stop(sei, false);
+					SoundEffectInstance_Stop(sei);
 				}
 			}
 			return;
@@ -312,7 +307,7 @@ void SoundEffectInstance_Dispose(SoundEffectInstance* sei)
 		return;
 	}
 
-	SoundEffectInstance_Stop(sei, true);
+	SoundEffectInstance_Stop(sei);
 	//TODO DISPOSE OF sei->FORMAT HERE???? MEMORY LEAK
 	sei->_mIsDisposed = true;
 }
@@ -464,7 +459,8 @@ void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, in
 	int byteCount = 0;
 	for (int i = 0; i < amountOfSamples; i += 1)
 	{
-		if ((isReverse && (sei->_mCurrentSample > 0)) || (!isReverse && sei->_mCurrentSample < (totalSamples - 1)))
+		if ((isReverse && (sei->_mCurrentSample > 0)) || 
+			(!isReverse && sei->_mCurrentSample < (totalSamples - 1)))
 		{
 			for (int j = 0; j < sampleSize; j += 1)
 			{
