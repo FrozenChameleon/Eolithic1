@@ -23,6 +23,13 @@
 
 int main(int argc, char* args[])
 {
+	SharedFixedChar260* path = Utils_GetSharedFixedChar260();
+	File_Combine2(path, "data", "engineconfig.bin");
+	Cvars_Read(path);
+	File_Combine2(path, "data", "userconfig.bin");
+	Cvars_Read(path);
+	path->mIsInUse = false;
+
 	MusicManager_LoadAllFromDat();
 	SoundEffectManager_LoadAllFromDat();
 

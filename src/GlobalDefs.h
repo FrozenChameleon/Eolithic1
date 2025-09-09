@@ -1,0 +1,15 @@
+#pragma once
+
+#include "SharedDefs.h"
+
+#define GLOBAL_DEF_USE_TT_FONT_FOR_LEADERBOARD_USER_NAMES
+//#define GLOBAL_DEF_DISABLE_CHEAT_CODES
+#define GLOBAL_DEF_REPLAY_INTERVAL 4
+
+//#define GLOBAL_DEF_RUMBLE_MUL 0.5
+
+#if !EDITOR
+
+#define GLOBAL_DEF_DISABLE_ALL_LOGGING
+
+#endif

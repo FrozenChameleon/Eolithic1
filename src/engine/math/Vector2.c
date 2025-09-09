@@ -107,8 +107,13 @@ Vector2 Vector2_Div(Vector2 value1, Vector2 value2)
 }
 Vector2 Vector2_Zero()
 {
-	Vector2 temp = { 0 };
-	return temp;
+	Vector2 vec = { 0 };
+	return vec;
+}
+Vector2 Vector2_One()
+{
+	Vector2 vec = { 1, 1 };
+	return vec;
 }
 Vector2 Vector2_MulSingle(Vector2 value1, float value2)
 {

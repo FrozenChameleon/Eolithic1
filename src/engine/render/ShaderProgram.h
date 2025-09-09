@@ -8,9 +8,16 @@
 
 #include "../io/BufferReader.h"
 
+#define SHADER_PROGRAM_MAX_REPLACE_LENGTH 24
+
 typedef struct ShaderProgram
 {
-	int mDummy;
+	const char* mName;
+	uint32_t mIsTotalWhiteHitFlash;
+	uint32_t mShaderType;
+	uint32_t mMultiColorReplaceLength;
+	uint8_t mMultiColorReplace[SHADER_PROGRAM_MAX_REPLACE_LENGTH];
+	uint8_t mMultiColorReplaceAlpha;
 } ShaderProgram;
 
 ShaderProgram* ShaderProgram_FromStream(BufferReader* br);

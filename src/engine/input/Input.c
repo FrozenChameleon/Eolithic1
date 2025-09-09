@@ -16,7 +16,7 @@
 //#include "OeInputBindings.h"
 #include "../core/Game.h"
 #include "../service/Service.h"
-//#include "../components/OeComCamera.h"
+//#include "../components/Camera.h"
 #include "../utils/Cvars.h"
 //#include "../globals/OeGlobals.h"
 //#include "../render/OeRenderer.h"
@@ -337,7 +337,7 @@ InputAction* Input_GetPlayerAction(int32_t playerNumber, const char* name)
 {
 	return InputPlayer_GetAction(&_mPlayers[playerNumber], name);
 }
-//Vector2 GetCameraAdjustedMouse(const OeComCamera* camera);
+//Vector2 GetCameraAdjustedMouse(const Camera* camera);
 bool Input_JustScrolledUp()
 {
 	return MouseState_JustScrolledUp();
@@ -382,9 +382,9 @@ float Input_GetScaledMouseForRetroScreenY()
 {
 	return Input_GetScaledMouseForRetroScreen().X;
 }
-//Vector2 GetCameraAdjustedMouseForRetroScreen(const OeComCamera* camera);
-//float GetCameraAdjustedMouseForRetroScreenX(const OeComCamera* camera);
-//float GetCameraAdjustedMouseForRetroScreenY(const OeComCamera* camera);
+//Vector2 GetCameraAdjustedMouseForRetroScreen(const Camera* camera);
+//float GetCameraAdjustedMouseForRetroScreenX(const Camera* camera);
+//float GetCameraAdjustedMouseForRetroScreenY(const Camera* camera);
 bool Input_MouseHasChangedPosition()
 {
 	if ((Input_GetDifferenceMouseX() == 0) && (Input_GetDifferenceMouseY() == 0))

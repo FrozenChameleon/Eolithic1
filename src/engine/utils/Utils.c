@@ -10,6 +10,9 @@
 #include "SDL3/SDL.h"
 #include "stdlib.h"
 #include "float.h"
+#include "../math/Math.h"
+#include "Cvars.h"
+#include "../render/Renderer.h"
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
@@ -198,4 +201,49 @@ int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen,
 		}
 	}
 	return loc;
+}
+double Utils_GetNormalStepLength()
+{
+	return MATH_TICK_60HZ;
+}
+double Utils_GetInterpolated(double delta, float current, float last)
+{
+	float diff = current - last;
+	double mul = delta / Utils_GetNormalStepLength();
+	return last + (diff * mul);
+}
+Rectangle Utils_GetInternalRectangle()
+{
+	Rectangle rect = { 0, 0, Utils_GetInternalWidth(), Utils_GetInternalHeight() };
+	return rect;
+}
+Rectangle Utils_GetInternalRenderRectangle()
+{
+	Rectangle rect = { 0, 0, Utils_GetInternalRenderWidth(), Utils_GetInternalRenderHeight() };
+	return rect;
+}
+int Utils_GetInternalWidth()
+{
+	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
+}
+int Utils_GetInternalHeight()
+{
+	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
+}
+int Utils_GetInternalRenderWidth()
+{
+	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
+}
+int Utils_GetInternalRenderHeight()
+{
+	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
+}
+float Utils_GetCurrentHardwareRatio()
+{
+	Rectangle rect = Renderer_GetDrawableSize();
+	return (float)(rect.Width) / (float)(rect.Height);
+}
+float Utils_GetCurrentInternalRatio()
+{
+	return (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH)) / (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT));
 }

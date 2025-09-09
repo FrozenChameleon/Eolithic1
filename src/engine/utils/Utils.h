@@ -9,6 +9,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "FixedChar260.h"
+#include "../math/Rectangle.h"
 
 typedef struct SharedFixedChar260
 {
@@ -45,3 +46,13 @@ void Utils_ResetArrayAsInt32(int32_t* values, size_t len, int32_t valueToSet);
 void Utils_ResetArrayAsSingle(float* values, size_t len, float valueToSet);
 void Utils_ToggleFullscreenButton();
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex);
+double Utils_GetNormalStepLength();
+double Utils_GetInterpolated(double delta, float current, float last);
+Rectangle Utils_GetInternalRectangle();
+Rectangle Utils_GetInternalRenderRectangle();
+int Utils_GetInternalWidth();
+int Utils_GetInternalHeight();
+int Utils_GetInternalRenderWidth();
+int Utils_GetInternalRenderHeight();
+float Utils_GetCurrentHardwareRatio();
+float Utils_GetCurrentInternalRatio();

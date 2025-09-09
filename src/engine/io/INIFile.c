@@ -43,13 +43,8 @@ void INIFile_Dispose(INIFile* ini)
 
 	if (ini->mStringHashMap != NULL)
 	{
-		int64_t len = INIFile_GetLength(ini);
-		for (int i = 0; i < len; i += 1)
-		{
-			Utils_FreeString(ini->mStringHashMap[i].key);
-			Utils_FreeString(ini->mStringHashMap[i].value);
-		}
 		shfree(ini->mStringHashMap);
+		//TODO MEMLEAK?
 	}
 
 	Utils_free(ini);

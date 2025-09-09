@@ -1,0 +1,9 @@
+#pragma once
+
+typedef enum SpriteEffects
+{
+	SPRITEEFFECTS_NONE = 0,
+	SPRITEEFFECTS_FLIPHORIZONTALLY = 1,
+	SPRITEEFFECTS_FLIPVERTICALLY = 2
+} SpriteEffects;
+

@@ -40,5 +40,6 @@ Vector2 Vector2_Sub(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Mul(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Div(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Zero();
+Vector2 Vector2_One();
 Vector2 Vector2_MulSingle(Vector2 value1, float value2);
 Vector2 Vector2_DivSingle(Vector2 value1, float value2);

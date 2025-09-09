@@ -135,3 +135,51 @@ double Math_atan2(double y, double x)
 {
 	return SDL_atan2(y, x);
 }
+int32_t Math_MinInt32(int32_t valueA, int32_t valueB)
+{
+	if (valueA > valueB)
+	{
+		return valueB;
+	}
+	return valueA;
+}
+float Math_MinSingle(float valueA, float valueB)
+{
+	if (valueA > valueB)
+	{
+		return valueB;
+	}
+	return valueA;
+}
+double Math_MinDouble(double valueA, double valueB)
+{
+	if (valueA > valueB)
+	{
+		return valueB;
+	}
+	return valueA;
+}
+int32_t Math_MaxInt32(int32_t valueA, int32_t valueB)
+{
+	if (valueA < valueB)
+	{
+		return valueB;
+	}
+	return valueA;
+}
+float Math_MaxSingle(float valueA, float valueB)
+{
+	if (valueA < valueB)
+	{
+		return valueB;
+	}
+	return valueA;
+}
+double Math_MaxDouble(double valueA, double valueB)
+{
+	if (valueA < valueB)
+	{
+		return valueB;
+	}
+	return valueA;
+}
