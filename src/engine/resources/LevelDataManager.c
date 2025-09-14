@@ -71,7 +71,7 @@ Resource* LevelDataManager_LoadAssetFromStreamAndCreateResource(BufferReader* br
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = LevelData_FromStream(br);
+	resource->mData = LevelData_FromStream(path, filenameWithoutExtension, br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
 const char* LevelDataManager_GetDatFileName()
@@ -84,9 +84,9 @@ void LevelDataManager_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBufferForPath, "data", LevelDataManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
@@ -105,9 +105,9 @@ void LevelDataManager_LoadAllFromDat()
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
-	sharedStringBufferForPath->mIsInUse = false;
-	sharedStringBufferForFileName->mIsInUse = false;
-	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
 }
 void LevelDataManager_Dispose(const char* filenameWithoutExtension)
 {
@@ -140,4 +140,16 @@ void LevelDataManager_DisposeAll()
 	_mStringHashMap = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
+}
+int LevelDataManager_Length()
+{
+	return shlen(_mStringHashMap);
+}
+Resource* LevelDataManager_GetResourceByIndex(int index)
+{
+	return _mStringHashMap[index].value;
+}
+LevelData* LevelDataManager_GetResourceDataByIndex(int index)
+{
+	return (LevelData*)_mStringHashMap[index].value->mData;
 }

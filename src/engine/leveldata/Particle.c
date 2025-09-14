@@ -7,7 +7,7 @@
 #include "Particle.h"
 #include "../utils/Utils.h"
 
-Particle* Particle_FromStream(BufferReader* br)
+Particle* Particle_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	return NULL;
 }

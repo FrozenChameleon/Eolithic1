@@ -7,7 +7,7 @@
 #include "Prop.h"
 #include "../utils/Utils.h"
 
-Prop* Prop_FromStream(BufferReader* br)
+Prop* Prop_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	return NULL;
 }

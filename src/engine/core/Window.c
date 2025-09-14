@@ -6,19 +6,27 @@
 
 #include "Window.h"
 
-#include <SDL3/SDL.h>
-#include "../math/Rectangle.h"
-#include "../service/Service.h"
 #include "../utils/Cvars.h"
+#include "SDL3/SDL.h"
 #include "../utils/Logger.h"
+#include "../globals/Globals.h"
+#include "../audio/SoundEffectInstance.h"
+#include "../render/Texture.h"
+#include "../render/Renderer.h"
+#include "../input/ControllerState.h"
+#include "Game.h"
+#include "../service/Service.h"
 #if RENDER_FNA3D
 #include <FNA3D.h>
 #endif
+#include "../../DebugDefs.h"
+#include "../io/File.h"
+#include "../utils/Utils.h"
 
 static bool _mHasWindowInit;
 static bool _mHasLoadedIcon;
 static bool _mIsWindowActive;
-static SDL_Window* _mWindowContext = NULL;
+static SDL_Window* _mWindowContext;
 
 static uint32_t GetWindowFlagForFullscreen()
 {
@@ -42,6 +50,9 @@ static uint32_t GetWindowFlagForFullscreen()
 	useFullscreen = true;
 #endif
 
+	//TODO REMOVE THIS C99
+	return SDL_WINDOW_RESIZABLE;
+
 	if (useFullscreen)
 	{
 		return SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN;
@@ -54,19 +65,23 @@ static uint32_t GetWindowFlagForFullscreen()
 
 static Rectangle GetProposedWindowBounds()
 {
+	Rectangle returnRect = { 0 };
+
 	Rectangle forcedWindowSize = Service_PlatformGetForcedWindowSize();
 	if (!Rectangle_IsEmpty(&forcedWindowSize))
 	{
-		Rectangle temp = { 0, 0, forcedWindowSize.Width, forcedWindowSize.Height };
-		return temp;
+		returnRect.Width = forcedWindowSize.Width;
+		returnRect.Height = forcedWindowSize.Height;
+		return returnRect;
 	}
 
 	int windowSizeWidthFromCvar = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
 	int windowSizeHeightFromCvar = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT);
 	if ((windowSizeWidthFromCvar > 0) && (windowSizeHeightFromCvar > 0)) //Fixed resolutions from CVAR
 	{
-		Rectangle temp = { 0, 0, windowSizeWidthFromCvar, windowSizeHeightFromCvar };
-		return temp;
+		returnRect.Width = windowSizeWidthFromCvar;
+		returnRect.Height = windowSizeHeightFromCvar;
+		return returnRect;
 	}
 	else //Scaler resolutions from CVAR
 	{
@@ -77,11 +92,13 @@ static Rectangle GetProposedWindowBounds()
 			windowMul = DEBUG_DEF_FORCED_WINDOW_MUL;
 		}
 #endif
-		Rectangle temp = { 0, 0, Cvars_GetAsInt("internal_render_width") * windowMul, Cvars_GetAsInt("internal_render_height") * windowMul };
+		returnRect.Width = Cvars_GetAsInt("internal_render_width") * windowMul;
+		returnRect.Height = Cvars_GetAsInt("internal_render_height") * windowMul;
+		return returnRect;
 	}
 }
 
-int32_t Window_Init()
+int Window_Init()
 {
 	if (_mHasWindowInit)
 	{
@@ -91,20 +108,17 @@ int32_t Window_Init()
 
 	_mIsWindowActive = true;
 
-	const char* gameName = "Hello World!";
-	//std::string gameName = Cvars_Get("name");
+	const char* gameName = Cvars_Get("name");
 
-	SDL_WindowFlags flags = SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
-	//uint32_t flags = GetWindowFlagForFullscreen();
-	//flags = flags | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
+	uint32_t flags = GetWindowFlagForFullscreen();
+	flags = flags | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
 #if RENDER_FNA3D
 	//SDL_SetHint("FNA3D_FORCE_DRIVER", "OpenGL");
 	//SDL_SetHint("FNA3D_OPENGL_FORCE_CORE_PROFILE", "1");
 	flags = flags | FNA3D_PrepareWindowAttributes();
 #endif
 
-	//Rectangle proposedWindowBounds = GetProposedWindowBounds();
-	Rectangle proposedWindowBounds = { 0, 0, 1440, 810 };
+	Rectangle proposedWindowBounds = GetProposedWindowBounds();
 	_mWindowContext = SDL_CreateWindow(gameName, proposedWindowBounds.Width, proposedWindowBounds.Height, flags);
 
 	_mHasWindowInit = true;
@@ -117,9 +131,87 @@ int32_t Window_Init()
 
 	return 0;
 }
+bool Window_IsFullscreen()
+{
+	return Cvars_GetAsBool(CVARS_USER_IS_FULLSCREEN);
+}
+void Window_UpdateFullscreen()
+{
+	Rectangle proposedWindowBounds = GetProposedWindowBounds();
+	SDL_SetWindowSize(_mWindowContext, proposedWindowBounds.Width, proposedWindowBounds.Height);
+	SDL_SetWindowFullscreen(_mWindowContext, GetWindowFlagForFullscreen());
+}
+void Window_SetWindowPositionToCentered()
+{
+	SDL_SetWindowPosition(_mWindowContext, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
 void* Window_GetWindowContext()
 {
 	return _mWindowContext;
+}
+void Window_Dispose()
+{
+	SDL_DestroyWindow(_mWindowContext);
+	_mWindowContext = NULL;
+}
+bool Window_IsTheMouseVisible()
+{
+	return SDL_CursorVisible();
+}
+void Window_SetTheMouseVisible(bool isVisible)
+{
+	if (isVisible)
+	{
+		SDL_ShowCursor();
+	}
+	else
+	{
+		SDL_HideCursor();
+	}
+}
+Rectangle Window_GetWindowSize()
+{
+	Rectangle rect = Rectangle_Empty();
+	SDL_GetWindowSize(_mWindowContext, &rect.Width, &rect.Height);
+	return rect;
+}
+Rectangle Window_GetDisplayBounds()
+{
+	Rectangle returnRect = { 0 };
+	SDL_Rect displayBounds = { 0 };
+	int success = SDL_GetDisplayBounds(0, &displayBounds);
+	if (success < 0)
+	{
+		Logger_LogInformation("Unable to get display bounds");
+		returnRect.Width = 1280;
+		returnRect.Height = 720;
+		return returnRect;
+	}
+	returnRect.X = displayBounds.x;
+	returnRect.Y = displayBounds.y;
+	returnRect.Width = displayBounds.w;
+	returnRect.Height = displayBounds.h;
+	return returnRect;
+}
+void Window_GetAllDisplayModeBounds(Rectangle* displayModeBounds)
+{
+	//TODO C99
+	/*
+	displayModeBounds.clear();
+	int numDisplayModes = SDL_GetNumDisplayModes(0);
+	if (numDisplayModes < 0)
+	{
+		Logger_LogInformation("Unable to get num display modes");
+		return;
+	}
+
+	for (int i = 0; i < numDisplayModes; i += 1)
+	{
+		SDL_DisplayMode displayMode = SDL_DisplayMode();
+		SDL_GetDisplayMode(0, i, &displayMode);
+		displayModeBounds.push_back(Rectangle(0, 0, displayMode.w, displayMode.h));
+	}
+	*/
 }
 bool Window_IsWindowActive()
 {
@@ -129,7 +221,37 @@ void Window_SetWindowActive(bool value)
 {
 	_mIsWindowActive = value;
 }
-bool Window_IsFullscreen()
+void Window_LoadIcon()
 {
-	return false;
+	if (_mHasLoadedIcon)
+	{
+		Logger_LogWarning("Window icon has already been loaded");
+		return;
+	}
+
+	_mHasLoadedIcon = true;
+
+	if (!Service_PlatformShouldLoadWindowIcon())
+	{
+		Logger_LogWarning("Platform does not load window icon");
+		return;
+	}
+
+	const char* gameName = Cvars_Get(CVARS_ENGINE_NAME);
+	SharedFixedChar260* sharedPath = Utils_CreateSharedFixedChar260();
+	File_Combine2(sharedPath, File_GetBasePath(), gameName);
+	Utils_strlcat(sharedPath, ".bmp", FIXED_CHAR_260_LENGTH);
+	SDL_Surface* icon = SDL_LoadBMP(sharedPath);
+	Utils_DisposeSharedFixedChar260(sharedPath);
+
+	if (icon == NULL)
+	{
+		Logger_LogWarning("Failed to load window icon");
+		return;
+	}
+
+	SDL_SetWindowIcon(_mWindowContext, icon);
+	SDL_DestroySurface(icon);
+
+	Logger_LogWarning("Successfully loaded window icon");
 }

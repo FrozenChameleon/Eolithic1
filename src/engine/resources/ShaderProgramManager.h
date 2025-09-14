@@ -20,3 +20,6 @@ const char* ShaderProgramManager_GetDatFileName();
 void ShaderProgramManager_LoadAllFromDat();
 void ShaderProgramManager_Dispose(const char* filenameWithoutExtension);
 void ShaderProgramManager_DisposeAll();
+int ShaderProgramManager_Length();
+Resource* ShaderProgramManager_GetResourceByIndex(int index);
+ShaderProgram* ShaderProgramManager_GetResourceDataByIndex(int index);

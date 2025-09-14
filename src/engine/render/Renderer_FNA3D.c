@@ -20,7 +20,7 @@
 #include "../service/Service.h"
 #include "../core/Game.h"
 #include "../utils/Cvars.h"
-#include "../render/Texture2D.h"
+#include "../render/Texture.h"
 #include "../utils/Utils.h"
 #include "../leveldata/DrawTile.h"
 #include "../leveldata/Tile.h"
@@ -96,7 +96,7 @@ static FNA3D_Texture* _mLastUsedTexture;
 static BlendState _mLastUsedBlendState = BLENDSTATE_INVALID;
 //
 static FNA3D_RenderTargetBinding _mOffscreenTargetBinding;
-static Texture2D _mOffscreenTarget;
+static Texture _mOffscreenTarget;
 static bool _mIsDrawingFromOffscreenTarget;
 static bool _mIsDrawingToOffscreenTarget;
 static Rectangle _mVirtualBufferBounds;
@@ -599,7 +599,7 @@ static void NextBatch(bool keepDrawState)
 		_mCurrentDrawBatch.mDrawState = drawState;
 	}
 }
-void Renderer_DrawTtText(Texture2D* texture, const float* verts, const float* tcoords, const unsigned int* colors, int nverts)
+void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int nverts)
 {
 	NextBatch(false);
 
@@ -637,7 +637,7 @@ static void CheckBatchSize(bool keepState)
 		NextBatch(true);
 	}
 }
-void Renderer_DrawVertexPositionColorTexture4(Texture2D* texture, const VertexPositionColorTexture4* sprite)
+void Renderer_DrawVertexPositionColorTexture4(Texture* texture, const VertexPositionColorTexture4* sprite)
 {
 	FNA3D_Texture* fnTexture = (FNA3D_Texture*)(texture->mTextureData);
 
@@ -657,7 +657,7 @@ void Renderer_DrawVertexPositionColorTexture4(Texture2D* texture, const VertexPo
 
 	Renderer_SetupVerticesFromVPCT4(_mVertexBuffer.mVertices, pos, sprite);
 }
-Texture2D* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
+Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
 {
 	SDL_IOStream* rwops = SDL_IOFromMem(FixedByteBuffer_GetBuffer(blob), FixedByteBuffer_GetLength(blob));
 
@@ -668,7 +668,7 @@ Texture2D* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
 
 	SDL_CloseIO(rwops);
 
-	Texture2D* tex = Renderer_GetNewTextureData(path, w, h, false);
+	Texture* tex = Renderer_GetNewTextureData(path, w, h, false);
 
 	FNA3D_Texture* texture = (FNA3D_Texture*)tex->mTextureData;
 
@@ -678,7 +678,7 @@ Texture2D* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
 
 	return tex;
 }
-Texture2D* Renderer_GetNewTextureData(const char* path, int width, int height, bool clearTexture)
+Texture* Renderer_GetNewTextureData(const char* path, int width, int height, bool clearTexture)
 {
 	InvalidateNextSetupRenderState();
 
@@ -693,15 +693,16 @@ Texture2D* Renderer_GetNewTextureData(const char* path, int width, int height, b
 		Utils_free(clearData);
 	}
 
-	Texture2D* tex = Utils_malloc(sizeof(Texture2D));
-	tex->mPath = path;
+	Texture* tex = Utils_malloc(sizeof(Texture));
+	memset(tex, 0, sizeof(Texture));
+	Utils_strlcpy(tex->mPath.mValue, path, FIXED_CHAR_260_LENGTH);
 	tex->mBounds.Width = width;
 	tex->mBounds.Height = height;
 	tex->mTextureData = texture;
 
 	return tex;
 }
-void Renderer_UpdateTextureData(Texture2D* texture, int x, int y, int w, int h, int level, void* data, int dataLength)
+void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, int level, void* data, int dataLength)
 {
 	InvalidateNextSetupRenderState();
 
@@ -709,7 +710,7 @@ void Renderer_UpdateTextureData(Texture2D* texture, int x, int y, int w, int h, 
 }
 static Effect LoadShader(Effect* effect, const char* shaderName)
 {
-	SharedFixedChar260* path = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* path = Utils_CreateSharedFixedChar260();
 	File_Combine3(path, File_GetBasePath(), "data", shaderName);
 	SDL_IOStream* effectFile = SDL_IOFromFile(path, "rb");
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_END);

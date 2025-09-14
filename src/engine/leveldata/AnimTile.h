@@ -38,5 +38,5 @@ typedef struct AnimTile
 } AnimTile;
 
 void AnimTile_Read(AnimTile* atile, BufferReader* br);
-AnimTile* AnimTile_FromStream(BufferReader* br);
+AnimTile* AnimTile_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void AnimTile_Dispose(AnimTile* atile);

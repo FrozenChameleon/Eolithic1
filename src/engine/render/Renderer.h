@@ -24,7 +24,7 @@
 #include "../math/Rectangle.h"
 #include "../math/Vector2.h"
 #include "../math/Matrix.h"
-#include "../render/Texture2D.h"
+#include "../render/Texture.h"
 #include "../render/ShaderProgram.h"
 #include "SpriteSortMode.h"
 #include "BlendState.h"
@@ -131,9 +131,9 @@ void Renderer_INTERNAL_SetCurrentDepth(int value);
 int Renderer_INTERNAL_GetCurrentDepth();
 Rectangle Renderer_GetWantedBackBufferBounds();
 int Renderer_Init(void* deviceWindowHandle);
-Texture2D* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob);
-Texture2D* Renderer_GetNewTextureData(const char* path, int width, int height, bool clearTexture);
-void Renderer_UpdateTextureData(Texture2D* texture, int x, int y, int w, int h, int level, void* data, int dataLength);
+Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob);
+Texture* Renderer_GetNewTextureData(const char* path, int width, int height, bool clearTexture);
+void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, int level, void* data, int dataLength);
 SpriteEffects Renderer_GetEffects(bool flipX, bool flipY);
 int Renderer_ImageRead(void* context, char* data, int size);
 void Renderer_ImageSkip(void* context, int n);
@@ -151,23 +151,23 @@ void Renderer_LogError(const char* msg);
 void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color fontColor, int pos, const float* verts, const float* tcoords, const unsigned int* colors, int nverts);
 const TtFontState* GetTtFontState();
 void Renderer_SetupTtFontState(const TtFontState* fontState);
-void Renderer_DrawTtText(Texture2D* texture, const float* verts, const float* tcoords, const unsigned int* colors, int nverts);
+void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int nverts);
 void Renderer_SetupVerticesFromVPCT4(VertexPositionColorTexture* vertices, int pos, const VertexPositionColorTexture4* sprite);
-void Renderer_DrawVertexPositionColorTexture4(Texture2D* texture, const VertexPositionColorTexture4* sprite);
-void Renderer_GenerateVertexInfo(Texture2D* texture, float sourceX, float sourceY, float sourceW, float sourceH,
+void Renderer_DrawVertexPositionColorTexture4(Texture* texture, const VertexPositionColorTexture4* sprite);
+void Renderer_GenerateVertexInfo(Texture* texture, float sourceX, float sourceY, float sourceW, float sourceH,
 	float destinationX, float destinationY, float destinationW, float destinationH,
 	Color color, float originX, float originY, float rotationSin, float rotationCos, float depth, uint8_t effects);
-void Renderer_PushSprite(Texture2D* texture, float sourceX, float sourceY, float sourceW, float sourceH,
+void Renderer_PushSprite(Texture* texture, float sourceX, float sourceY, float sourceW, float sourceH,
 	float destinationX, float destinationY, float destinationW, float destinationH,
 	Color color, float originX, float originY, float rotationSin, float rotationCos, float depth, uint8_t effects);
-void Renderer_Draw9(Texture2D* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
+void Renderer_Draw9(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
 	Vector2 scale, SpriteEffects effects, float layerDepth);
-void Renderer_Draw99(Texture2D* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
+void Renderer_Draw99(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
 	Vector2 origin, float scale, SpriteEffects effects, float layerDepth);
-void Renderer_Draw3(Texture2D* texture, Rectangle destinationRectangle, Color color);
-void Renderer_Draw8(Texture2D* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
+void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Color color);
+void Renderer_Draw8(Texture* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
 	float rotation, Vector2 origin, SpriteEffects effects, float layerDepth);
-void Renderer_Draw4(Texture2D* texture, Vector2 position, Rectangle sourceRectangle, Color color);
+void Renderer_Draw4(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color);
 void Renderer_DrawSheet(DrawInstance* draw, double delta);
 void Renderer_DrawManyRectangles(DrawInstance* draw);
 Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* font, const char* text, Color color, Vector2 position);

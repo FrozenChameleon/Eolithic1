@@ -102,7 +102,7 @@ static bool IsDisabledPermanently()
 	return Globals_IsAudioDisabledPermanently();
 }
 
-SoundEffect* SoundEffect_FromStream(BufferReader* br)
+SoundEffect* SoundEffect_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	SoundEffect* sfx = Utils_malloc(sizeof(SoundEffect));
 	sfx->_mWaveFileData = WaveFileData_FromStream(br);;

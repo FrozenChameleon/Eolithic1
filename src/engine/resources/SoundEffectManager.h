@@ -20,3 +20,6 @@ const char* SoundEffectManager_GetDatFileName();
 void SoundEffectManager_LoadAllFromDat();
 void SoundEffectManager_Dispose(const char* filenameWithoutExtension);
 void SoundEffectManager_DisposeAll();
+int SoundEffectManager_Length();
+Resource* SoundEffectManager_GetResourceByIndex(int index);
+SoundEffect* SoundEffectManager_GetResourceDataByIndex(int index);

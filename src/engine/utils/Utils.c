@@ -18,7 +18,7 @@ static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
 static SharedFixedChar260** _mDynamicSharedStringBuffers;
 
-SharedFixedChar260* Utils_GetSharedFixedChar260()
+SharedFixedChar260* Utils_CreateSharedFixedChar260()
 {
 	int32_t len = arrlen(_mDynamicSharedStringBuffers);
 	for (int i = 0; i < len; i += 1)
@@ -37,6 +37,10 @@ SharedFixedChar260* Utils_GetSharedFixedChar260()
 	arrput(_mDynamicSharedStringBuffers, bufferToAdd);
 	bufferToAdd->mIsInUse = true;
 	return bufferToAdd;
+}
+void Utils_DisposeSharedFixedChar260(SharedFixedChar260* sfc)
+{
+	sfc->mIsInUse = false;
 }
 int32_t Utils_GetAmountOfSharedFixedChar260InUse()
 {
@@ -246,4 +250,32 @@ float Utils_GetCurrentHardwareRatio()
 float Utils_GetCurrentInternalRatio()
 {
 	return (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH)) / (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT));
+}
+StringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
+{
+	StringArray* sa = StringArray_Create();
+
+	SharedFixedChar260* shared = Utils_CreateSharedFixedChar260();
+
+	size_t len = Utils_strnlen(str, maxlen);
+	int counter = 0;
+	for (int i = 0; i < (len + 1); i += 1) //Add +1 to len because...
+	{
+		if ((str[i] == delim) || (i == len)) //We need to make sure we get the stuff at the end...
+		{
+			shared->mBuffer.mValue[counter] = '\0';
+			StringArray_Add(sa, shared);
+			Utils_memset(shared->mBuffer.mValue, 0, FIXED_CHAR_260_LENGTH);
+			counter = 0;
+		}
+		else
+		{
+			shared->mBuffer.mValue[counter] = str[i];
+			counter += 1;
+		}
+	}
+
+	Utils_DisposeSharedFixedChar260(shared);
+
+	return sa;
 }

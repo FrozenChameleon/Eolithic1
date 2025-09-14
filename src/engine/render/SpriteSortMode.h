@@ -2,10 +2,10 @@
 
 typedef enum SpriteSortMode
 {
-	Deferred = 0,
-	Immediate = 1,
-	Texture = 2,
-	BackToFront = 3,
-	FrontToBack = 4
+	SPRITESORTMODE_DEFERRED = 0,
+	SPRITESORTMODE_IMMEDIATE = 1,
+	SPRITESORTMODE_TEXTURE = 2,
+	SPRITESORTMODE_BACKTOFRONT = 3,
+	SPRITESORTMODE_FRONTTOBACK = 4
 } SpriteSortMode;
 

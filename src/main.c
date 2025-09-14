@@ -20,19 +20,24 @@
 #include "engine/audio/Music.h"
 #include "engine/audio/SoundEffectInstance.h"
 #include "engine/io/DatReader.h"
+#include "engine/core/Window.h"
+#include "engine/resources/TextureManager.h"
 
 int main(int argc, char* args[])
 {
-	SharedFixedChar260* path = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* path = Utils_CreateSharedFixedChar260();
 	File_Combine2(path, "data", "engineconfig.bin");
 	Cvars_Read(path);
 	File_Combine2(path, "data", "userconfig.bin");
 	Cvars_Read(path);
-	path->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(path);
+
+	Game_Init();
 
 	MusicManager_LoadAllFromDat();
 	SoundEffectManager_LoadAllFromDat();
-
+	TextureManager_LoadAllFromDat();
+	Sheet_BuildSheets();
 	//MusicManager_DisposeAll();
 	//SoundEffectManager_LoadAllFromDat();
 	//SoundEffectManager_DisposeAll();
@@ -41,6 +46,15 @@ int main(int argc, char* args[])
 	int32_t sharedFixedCharInUse = Utils_GetAmountOfSharedFixedChar260InUse();
 	int64_t cvarsLength = Cvars_Length();
 	uint64_t mallocRefs = Utils_GetMallocRefs();
+
+	StringArray* strings = Utils_SplitString("hello,,hello,", 260, ',');
+	int strlen = StringArray_Length(strings);
+	for (int i = 0; i < strlen; i += 1)
+	{
+		const char* strrr = StringArray_Get(strings, i);
+		int hello = 0;
+	}
+	StringArray_Dispose(strings);
 
 	Game_Run();
 

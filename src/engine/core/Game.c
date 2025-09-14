@@ -36,9 +36,15 @@ static bool _mIsFirstPollEvents = true;
 //static bool _mHasRunFatalExceptionRoutine = false;
 //static bool _mHasRunExitGameRoutine = false;
 static bool _mIsExitingGame;
+static bool _mHasInit;
 
 int32_t Game_Init()
 {
+	if (_mHasInit)
+	{
+		return;
+	}
+
 	int initStatus = 0;
 
 	initStatus = Window_Init();
@@ -59,6 +65,8 @@ int32_t Game_Init()
 		return Exception_Run("Unable to init platform renderer!", false);
 	}
 
+	_mHasInit = true;
+
 	return initStatus;
 }
 int32_t Game_Run()
@@ -68,6 +76,7 @@ int32_t Game_Run()
 		return Exception_Run("Unable to init!", false);
 	}
 
+	Window_LoadIcon();
 	Music_Init();
 	Input_Init();
 
@@ -107,6 +116,7 @@ int32_t Game_Run()
 		Input_Update(false);
 		Music_Tick();
 		SoundEffect_Tick();
+
 		bool tester1 = Input_IsLeftMouseReleased();
 		bool tester2 = Input_IsDeleteReleased();
 		counter += 1;

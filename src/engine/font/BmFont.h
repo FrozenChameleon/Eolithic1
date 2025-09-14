@@ -1,15 +1,16 @@
 #pragma once
 
 #include "BmFontDataChar.h"
-#include "../render/Texture2D.h"
+#include "BmFontData.h"
+#include "../render/Texture.h"
 
-typedef struct BmFontData BmFontData;
-
-struct BmFont
+typedef struct BmFont
 {
 	const char* _mFontName;
 	BmFontData* _mFontData;
-	Texture2D* _mFontTexture;
+	Texture* _mFontTexture;
 	struct { int key; BmFontDataChar value; }  _mFontCharHashMap;
-};
+} BmFont;
 
+void BmFont_Dispose(BmFont* bf);
+BmFont* BmFont_FromStream();

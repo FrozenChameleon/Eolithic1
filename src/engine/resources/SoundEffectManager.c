@@ -71,7 +71,7 @@ Resource* SoundEffectManager_LoadAssetFromStreamAndCreateResource(BufferReader* 
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = SoundEffect_FromStream(br);
+	resource->mData = SoundEffect_FromStream(path, filenameWithoutExtension, br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
 const char* SoundEffectManager_GetDatFileName()
@@ -84,9 +84,9 @@ void SoundEffectManager_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBufferForPath, "data", SoundEffectManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
@@ -105,9 +105,9 @@ void SoundEffectManager_LoadAllFromDat()
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
-	sharedStringBufferForPath->mIsInUse = false;
-	sharedStringBufferForFileName->mIsInUse = false;
-	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
 }
 void SoundEffectManager_Dispose(const char* filenameWithoutExtension)
 {
@@ -140,4 +140,16 @@ void SoundEffectManager_DisposeAll()
 	_mStringHashMap = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
+}
+int SoundEffectManager_Length()
+{
+	return shlen(_mStringHashMap);
+}
+Resource* SoundEffectManager_GetResourceByIndex(int index)
+{
+	return _mStringHashMap[index].value;
+}
+SoundEffect* SoundEffectManager_GetResourceDataByIndex(int index)
+{
+	return (SoundEffect*)_mStringHashMap[index].value->mData;
 }

@@ -16,6 +16,7 @@ typedef struct BufferReader
 {
 	FixedByteBuffer* mBuffer;
 	SDL_IOStream* mIOStream;
+	FixedChar260 mPath;
 } BufferReader;
 
 FixedByteBuffer* BufferReader_ReadBytes(BufferReader* br, int64_t length)

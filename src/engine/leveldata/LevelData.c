@@ -7,7 +7,7 @@
 #include "LevelData.h"
 #include "../utils/Utils.h"
 
-LevelData* LevelData_FromStream(BufferReader* br)
+LevelData* LevelData_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	return NULL;
 }

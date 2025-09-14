@@ -41,5 +41,5 @@ typedef struct LevelData
 	Line mDynamicLines;
 } LevelData;
 
-LevelData* LevelData_FromStream(BufferReader* br);
+LevelData* LevelData_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void LevelData_Dispose(LevelData* ld);

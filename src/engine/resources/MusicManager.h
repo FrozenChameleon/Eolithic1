@@ -20,3 +20,6 @@ const char* MusicManager_GetDatFileName();
 void MusicManager_LoadAllFromDat();
 void MusicManager_Dispose(const char* filenameWithoutExtension);
 void MusicManager_DisposeAll();
+int MusicManager_Length();
+Resource* MusicManager_GetResourceByIndex(int index);
+Music* MusicManager_GetResourceDataByIndex(int index);

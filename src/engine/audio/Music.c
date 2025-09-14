@@ -65,7 +65,7 @@ bool Music_IsPlaying()
 
 	MusicInstance_IsPlaying(&_mCurrentMusic);
 }
-Music* Music_FromStream(BufferReader* br)
+Music* Music_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	Music* music = Utils_malloc(sizeof(Music));
 	music->_mWaveFileData = WaveFileData_FromStream(br);

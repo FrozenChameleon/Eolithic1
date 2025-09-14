@@ -19,3 +19,5 @@ typedef struct Sheet
 
 Sheet* Sheet_GetDefaultSheet();
 Sheet* Sheet_GetSheet();
+void Sheet_BuildSheets();
+bool Sheet_HasSheet(const char* name);

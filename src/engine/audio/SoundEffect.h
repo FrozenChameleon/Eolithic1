@@ -35,5 +35,5 @@ void SoundEffect_LoopSound(const char* sound, int loopNumber);
 float SoundEffect_GetVolumeHelper(const char* cvar, const char* name, VolumeData* volumeData);
 const char* SoundEffect_GetExtension();
 const char* SoundEffect_GetDirectories();
-SoundEffect* SoundEffect_FromStream(BufferReader* br);
+SoundEffect* SoundEffect_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void SoundEffect_Dispose(SoundEffect* music);

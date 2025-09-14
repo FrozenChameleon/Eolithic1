@@ -26,7 +26,7 @@ void AnimTile_Read(AnimTile* atile, BufferReader* br)
 	atile->mWrapSpeedDelay = BufferReader_ReadI32(br);
 }
 
-AnimTile* AnimTile_FromStream(BufferReader* br)
+AnimTile* AnimTile_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	AnimTile* animTile = Utils_malloc(sizeof(AnimTile));
 	Utils_memset(animTile, 0, sizeof(AnimTile));

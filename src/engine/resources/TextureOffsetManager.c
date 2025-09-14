@@ -6,7 +6,7 @@
  
 //THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
 
-#include "MusicManager.h"
+#include "TextureOffsetManager.h"
 
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
@@ -30,7 +30,7 @@ static void Init()
 	_mHasInit = true;
 }
 
-Resource* MusicManager_GetResource(const char* filenameWithoutExtension)
+Resource* TextureOffsetManager_GetResource(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -45,22 +45,22 @@ Resource* MusicManager_GetResource(const char* filenameWithoutExtension)
 	
 	return resource;
 }
-Music* MusicManager_GetResourceData(const char* filenameWithoutExtension)
+TextureOffset* TextureOffsetManager_GetResourceData(const char* filenameWithoutExtension)
 {
 	//
 	Init();
 	//
 	
-	Resource* resource = MusicManager_GetResource(filenameWithoutExtension);
+	Resource* resource = TextureOffsetManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 
-	return (Music*)resource->mData;
+	return (TextureOffset*)resource->mData;
 }
-Resource* MusicManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
+Resource* TextureOffsetManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
 	//
 	Init();
@@ -71,14 +71,14 @@ Resource* MusicManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, co
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = Music_FromStream(path, filenameWithoutExtension, br);
+	resource->mData = TextureOffset_FromStream(path, filenameWithoutExtension, br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
-const char* MusicManager_GetDatFileName()
+const char* TextureOffsetManager_GetDatFileName()
 {
-	return "music.dat";
+	return "textureoffset.dat";
 }
-void MusicManager_LoadAllFromDat()
+void TextureOffsetManager_LoadAllFromDat()
 {
 	//
 	Init();
@@ -87,7 +87,7 @@ void MusicManager_LoadAllFromDat()
 	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
 	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
 	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
-	File_Combine2(sharedStringBufferForPath, "data", MusicManager_GetDatFileName());
+	File_Combine2(sharedStringBufferForPath, "data", TextureOffsetManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
 		Logger_printf("Unable to load from dat: %s", sharedStringBufferForPath);
@@ -101,7 +101,7 @@ void MusicManager_LoadAllFromDat()
 		File_GetFileName(sharedStringBufferForFileName, sharedStringBufferForPath);
 		File_GetFileNameWithoutExtension(sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
 		BufferReader* br = DatReader_NextStream(dr, false);
-		MusicManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		TextureOffsetManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
@@ -109,7 +109,7 @@ void MusicManager_LoadAllFromDat()
 	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
 	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
 }
-void MusicManager_Dispose(const char* filenameWithoutExtension)
+void TextureOffsetManager_Dispose(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -119,12 +119,12 @@ void MusicManager_Dispose(const char* filenameWithoutExtension)
 	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
-		Music_Dispose(resource->mData);
+		TextureOffset_Dispose(resource->mData);
 	}
 	Utils_free(resource);
 	shdel(_mStringHashMap, filenameWithoutExtension);
 }
-void MusicManager_DisposeAll()
+void TextureOffsetManager_DisposeAll()
 {
 	//
 	Init();
@@ -133,7 +133,7 @@ void MusicManager_DisposeAll()
 	int32_t len = shlen(_mStringHashMap);
 	for (int i = 0; i < len; i += 1)
 	{
-		MusicManager_Dispose(_mStringHashMap[i].key);
+		TextureOffsetManager_Dispose(_mStringHashMap[i].key);
 	}
 
 	shfree(_mStringHashMap);
@@ -141,15 +141,15 @@ void MusicManager_DisposeAll()
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
-int MusicManager_Length()
+int TextureOffsetManager_Length()
 {
 	return shlen(_mStringHashMap);
 }
-Resource* MusicManager_GetResourceByIndex(int index)
+Resource* TextureOffsetManager_GetResourceByIndex(int index)
 {
 	return _mStringHashMap[index].value;
 }
-Music* MusicManager_GetResourceDataByIndex(int index)
+TextureOffset* TextureOffsetManager_GetResourceDataByIndex(int index)
 {
-	return (Music*)_mStringHashMap[index].value->mData;
+	return (TextureOffset*)_mStringHashMap[index].value->mData;
 }

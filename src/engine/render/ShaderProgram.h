@@ -20,5 +20,5 @@ typedef struct ShaderProgram
 	uint8_t mMultiColorReplaceAlpha;
 } ShaderProgram;
 
-ShaderProgram* ShaderProgram_FromStream(BufferReader* br);
+ShaderProgram* ShaderProgram_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void ShaderProgram_Dispose(ShaderProgram* sp);

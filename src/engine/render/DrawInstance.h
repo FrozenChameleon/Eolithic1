@@ -35,7 +35,7 @@ typedef struct DrawInstance
 	Rectangle mDestinationRectangle;
 	Rectangle mSourceRectangle;
 	Color mColor;
-	Texture2D* mTexture;
+	Texture* mTexture;
 	BmFont* mFont;
 	ShaderProgram* mShaderProgram;
 	BlendState mBlendState;

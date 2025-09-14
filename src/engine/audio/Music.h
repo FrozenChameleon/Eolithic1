@@ -35,5 +35,5 @@ void Music_FadeOutMusic(int fadeOutTime);
 void Music_Tick();
 float Music_GetVolumeForMusic(const char* name);
 bool Music_IsPlaying();
-Music* Music_FromStream(BufferReader* br);
+Music* Music_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void Music_Dispose(Music* music);

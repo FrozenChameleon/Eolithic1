@@ -71,7 +71,7 @@ Resource* ShaderProgramManager_LoadAssetFromStreamAndCreateResource(BufferReader
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = ShaderProgram_FromStream(br);
+	resource->mData = ShaderProgram_FromStream(path, filenameWithoutExtension, br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
 const char* ShaderProgramManager_GetDatFileName()
@@ -84,9 +84,9 @@ void ShaderProgramManager_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBufferForPath, "data", ShaderProgramManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
@@ -105,9 +105,9 @@ void ShaderProgramManager_LoadAllFromDat()
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
-	sharedStringBufferForPath->mIsInUse = false;
-	sharedStringBufferForFileName->mIsInUse = false;
-	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
 }
 void ShaderProgramManager_Dispose(const char* filenameWithoutExtension)
 {
@@ -140,4 +140,16 @@ void ShaderProgramManager_DisposeAll()
 	_mStringHashMap = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
+}
+int ShaderProgramManager_Length()
+{
+	return shlen(_mStringHashMap);
+}
+Resource* ShaderProgramManager_GetResourceByIndex(int index)
+{
+	return _mStringHashMap[index].value;
+}
+ShaderProgram* ShaderProgramManager_GetResourceDataByIndex(int index)
+{
+	return (ShaderProgram*)_mStringHashMap[index].value->mData;
 }

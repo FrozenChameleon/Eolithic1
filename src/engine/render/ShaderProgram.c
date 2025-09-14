@@ -7,7 +7,7 @@
 #include "ShaderProgram.h"
 #include "../utils/Utils.h"
 
-ShaderProgram* ShaderProgram_FromStream(BufferReader* br)
+ShaderProgram* ShaderProgram_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	return NULL;
 }

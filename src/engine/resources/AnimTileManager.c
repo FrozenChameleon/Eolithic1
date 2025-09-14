@@ -71,7 +71,7 @@ Resource* AnimTileManager_LoadAssetFromStreamAndCreateResource(BufferReader* br,
 	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = AnimTile_FromStream(br);
+	resource->mData = AnimTile_FromStream(path, filenameWithoutExtension, br);
 	shput(_mStringHashMap, filenameWithoutExtension, resource);
 }
 const char* AnimTileManager_GetDatFileName()
@@ -84,9 +84,9 @@ void AnimTileManager_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBufferForPath, "data", AnimTileManager_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
@@ -105,9 +105,9 @@ void AnimTileManager_LoadAllFromDat()
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
-	sharedStringBufferForPath->mIsInUse = false;
-	sharedStringBufferForFileName->mIsInUse = false;
-	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
 }
 void AnimTileManager_Dispose(const char* filenameWithoutExtension)
 {
@@ -140,4 +140,16 @@ void AnimTileManager_DisposeAll()
 	_mStringHashMap = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
+}
+int AnimTileManager_Length()
+{
+	return shlen(_mStringHashMap);
+}
+Resource* AnimTileManager_GetResourceByIndex(int index)
+{
+	return _mStringHashMap[index].value;
+}
+AnimTile* AnimTileManager_GetResourceDataByIndex(int index)
+{
+	return (AnimTile*)_mStringHashMap[index].value->mData;
 }

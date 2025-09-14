@@ -18,7 +18,7 @@
 #include "RendererMacros.h"
 #include "SDL3/SDL.h"
 #include "../utils/Cvars.h"
-#include "../render/Texture2D.h"
+#include "../render/Texture.h"
 #include "../math/Math.h"
 #include "../math/MathHelper.h"
 #include "../font/BmFont.h"
@@ -186,7 +186,7 @@ void Renderer_SetupVerticesFromVPCT4(VertexPositionColorTexture* vertices, int p
 	vertices[pos + 2].Color = sprite->Color2;
 	vertices[pos + 3].Color = sprite->Color3;
 }
-void Renderer_GenerateVertexInfo(Texture2D* texture, float sourceX, float sourceY, float sourceW, float sourceH,
+void Renderer_GenerateVertexInfo(Texture* texture, float sourceX, float sourceY, float sourceW, float sourceH,
 	float destinationX, float destinationY, float destinationW, float destinationH,
 	Color color, float originX, float originY, float rotationSin, float rotationCos, float depth, uint8_t effects)
 {
@@ -274,7 +274,7 @@ void Renderer_GenerateVertexInfo(Texture2D* texture, float sourceX, float source
 
 	Renderer_DrawVertexPositionColorTexture4(texture, &sprite);
 }
-void Renderer_PushSprite(Texture2D* texture, float sourceX, float sourceY, float sourceW, float sourceH,
+void Renderer_PushSprite(Texture* texture, float sourceX, float sourceY, float sourceW, float sourceH,
 	float destinationX, float destinationY, float destinationW, float destinationH,
 	Color color, float originX, float originY, float rotationSin, float rotationCos, float depth, uint8_t effects)
 {
@@ -296,7 +296,7 @@ void Renderer_PushSprite(Texture2D* texture, float sourceX, float sourceY, float
 		effects
 	);
 }
-void Renderer_Draw9(Texture2D* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
+void Renderer_Draw9(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
 	Vector2 scale, SpriteEffects effects, float layerDepth
 )
 {
@@ -333,7 +333,7 @@ void Renderer_Draw9(Texture2D* texture, Vector2 position, Rectangle sourceRectan
 		(uint8_t)(effects & (SpriteEffects)0x03)
 	);
 }
-void Renderer_Draw99(Texture2D* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
+void Renderer_Draw99(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
 	Vector2 origin, float scale, SpriteEffects effects, float layerDepth
 ) {
 	float sourceX, sourceY, sourceW, sourceH;
@@ -372,7 +372,7 @@ void Renderer_Draw99(Texture2D* texture, Vector2 position, Rectangle sourceRecta
 		(uint8_t)(effects & (SpriteEffects)0x03)
 	);
 }
-void Renderer_Draw3(Texture2D* texture, Rectangle destinationRectangle, Color color)
+void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Color color)
 {
 	Renderer_PushSprite(
 		texture,
@@ -393,7 +393,7 @@ void Renderer_Draw3(Texture2D* texture, Rectangle destinationRectangle, Color co
 		0
 	);
 }
-void Renderer_Draw8(Texture2D* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
+void Renderer_Draw8(Texture* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
 	float rotation, Vector2 origin, SpriteEffects effects, float layerDepth
 ) {
 	float sourceX, sourceY, sourceW, sourceH;
@@ -429,7 +429,7 @@ void Renderer_Draw8(Texture2D* texture, Rectangle destinationRectangle, Rectangl
 	);
 }
 void Renderer_Draw4(
-	Texture2D* texture,
+	Texture* texture,
 	Vector2 position,
 	Rectangle sourceRectangle,
 	Color color
@@ -466,7 +466,7 @@ void Renderer_Draw4(
 void Renderer_DrawSheet(DrawInstance* draw, double delta)
 {
 	SpriteEffects effects = Renderer_GetEffects(draw->mFlipX, draw->mFlipY);
-	Texture2D* sheetTex = draw->mTexture;
+	Texture* sheetTex = draw->mTexture;
 	if (!draw->mIsRectangle)
 	{
 		if (!draw->mIsInterpolated)
@@ -509,7 +509,7 @@ Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* font, const char* text
 {
 	return Rectangle_Empty();
 	/*
-	Texture2D* tex = font->GetFontTexture();
+	Texture* tex = font->GetFontTexture();
 	if (tex == nullptr)
 	{
 		return Rectangle::Empty;

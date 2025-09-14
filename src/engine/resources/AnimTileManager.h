@@ -20,3 +20,6 @@ const char* AnimTileManager_GetDatFileName();
 void AnimTileManager_LoadAllFromDat();
 void AnimTileManager_Dispose(const char* filenameWithoutExtension);
 void AnimTileManager_DisposeAll();
+int AnimTileManager_Length();
+Resource* AnimTileManager_GetResourceByIndex(int index);
+AnimTile* AnimTileManager_GetResourceDataByIndex(int index);

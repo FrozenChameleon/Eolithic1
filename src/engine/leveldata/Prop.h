@@ -25,5 +25,5 @@ typedef struct Prop
 	FixedChar260 mTilesetFilter;
 } Prop;
 
-Prop* Prop_FromStream(BufferReader* br);
+Prop* Prop_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void Prop_Dispose(Prop* prop);

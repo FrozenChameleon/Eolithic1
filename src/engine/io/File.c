@@ -21,10 +21,10 @@ static const char* _mPrefPath;
 
 FixedByteBuffer* File_ReadAll(const char* path)
 {
-	SharedFixedChar260* sharedStringBuffer = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBuffer = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBuffer, File_GetBasePath(), path);
 	SDL_IOStream* rwops = SDL_IOFromFile(sharedStringBuffer, "rb");
-	sharedStringBuffer->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBuffer);
 	if (rwops == NULL)
 	{
 		return NULL;
@@ -41,10 +41,10 @@ FixedByteBuffer* File_ReadAll(const char* path)
 }
 bool File_Exists(const char* path)
 {
-	SharedFixedChar260* sharedStringBuffer = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBuffer = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBuffer, File_GetBasePath(), path);
 	SDL_IOStream* file = SDL_IOFromFile(sharedStringBuffer, "r");
-	sharedStringBuffer->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBuffer);
 	if (file != NULL)
 	{
 		SDL_CloseIO(file);
