@@ -23,7 +23,7 @@ bool Camera_IsHorizontalTube(const Camera* camera)
 }
 bool Camera_IsCameraAtTargetPosition(const Camera* camera)
 {
-	if (Vector2_EqualTo(camera->mLastDifference, Vector2_Zero()))
+	if (Vector2_EqualTo(camera->mLastDifference, Vector2_Zero))
 	{
 		return true;
 	}

@@ -10,6 +10,8 @@
 #include "../utils/Utils.h"
 #include "../../third_party/stb_ds.h"
 #include "../resources/TextureManager.h"
+#include "../resources/TextureOffsetManager.h"
+#include "../globals/Globals.h"
 
 #define DEBUG_SHEET_NAME "DEBUG_ERROR_777"
 
@@ -45,11 +47,11 @@ Sheet* Sheet_GetDefaultSheet()
 
 	return _mDummy;
 }
-Sheet* Sheet_GetSheet()
+Sheet* Sheet_GetSheet(const char* name)
 {
 	Init();
 
-	return _mDummy;
+	return shget(_mStringHashMap, name);
 }
 void Sheet_BuildSheets()
 {
@@ -58,8 +60,8 @@ void Sheet_BuildSheets()
 
 	Init();
 
-	int len = TextureManager_Length();
-	for (int i = 0; i < len; i += 1)
+	int textureManLen = TextureManager_Length();
+	for (int i = 0; i < textureManLen; i += 1)
 	{
 		Resource* resource = TextureManager_GetResourceByIndex(i);
 		if (resource->mData == NULL)
@@ -69,29 +71,42 @@ void Sheet_BuildSheets()
 
 		Sheet* sheet = Utils_malloc(sizeof(Sheet));
 		InitSheet(sheet);
+		sheet->mUnderlyingTextureName = resource->mFileNameWithoutExtension;
+		sheet->mSheetName = sheet->mUnderlyingTextureName;
 		sheet->mTextureResource = resource->mData;
-		sheet->mSheetName = &resource->mPath.mValue;
+		sheet->mRectangle = ((Texture*)sheet->mTextureResource)->mBounds;
 		arrput(_mDynamicSheetList, sheet);
 		shput(_mStringHashMap, &resource->mPath, sheet);
 	}
 
-	/*
-	if (!OeGlobals::IsDebugFileMode() || OeGlobals::DEBUG_ENGINE_FORCE_LOAD_DATS)
+	if (!Globals_IsDebugFileMode() || GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS)
 	{
-		const std::vector<std::string>& listOfTextureOffsetNames = OeResourceManagers::TextureOffsetManager.GetKeyList();
-		for (int i = 0; i < listOfTextureOffsetNames.size(); i += 1)
+		int textureOffsetLen = TextureOffsetManager_Length();
+		for (int i = 0; i < textureOffsetLen; i += 1)
 		{
-			const std::vector<OeTextureOffsetInfo>& offsets = OeResourceManagers::TextureOffsetManager.GetResourceData(listOfTextureOffsetNames[i])->GetTextureOffsets();
-			for (int j = 0; j < offsets.size(); j += 1)
+			Resource* resource = TextureOffsetManager_GetResourceByIndex(i);
+			if (resource->mData == NULL)
 			{
-				const OeTextureOffsetInfo* info = &offsets[j];
-				OeSheet* sheet = new OeSheet(info->mPath, info->mVirtualName, info->mRect);
-				_mSheetList.push_back(sheet);
-				_mSheets[sheet->mSheetName] = sheet;
+				continue;
 			}
+
+			TextureOffset* texOffset = (TextureOffset*)resource->mData;
+			int infoLen = arrlen(texOffset->_mDynamicOffsets);
+			for (int i = 0; i < infoLen; i += 1)
+			{
+				TextureOffsetInfo* info = &texOffset->_mDynamicOffsets[i];
+				Sheet* sheet = Utils_malloc(sizeof(Sheet));
+				InitSheet(sheet);
+				sheet->mSheetName = info->mVirtualName;
+				sheet->mUnderlyingTextureName = info->mFilenameWithoutExtension;
+				sheet->mRectangle = info->mRect;
+				sheet->mTextureResource = TextureManager_GetResource(info->mFilenameWithoutExtension);
+				arrput(_mDynamicSheetList, sheet);
+				shput(_mStringHashMap, sheet->mSheetName, sheet);
+			}
+
 		}
 	}
-	*/
 }
 bool Sheet_HasSheet(const char* name)
 {

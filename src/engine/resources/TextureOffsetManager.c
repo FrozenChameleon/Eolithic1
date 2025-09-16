@@ -13,6 +13,7 @@
 #include "../utils/Logger.h"
 #include "../io/File.h"
 #include "../io/DatReader.h"
+#include "../utils/IStrings.h"
 
 static int32_t _mResourceCounter;
 static struct { char* key; Resource* value; } *_mStringHashMap;
@@ -67,12 +68,13 @@ Resource* TextureOffsetManager_LoadAssetFromStreamAndCreateResource(BufferReader
 	//
 
 	Resource* resource = Utils_malloc(sizeof(Resource));
-	Utils_strlcpy(&resource->mPath, path, FIXED_CHAR_260_LENGTH);
-	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
+	Utils_memset(resource, 0, sizeof(Resource));
+	resource->mPath = IStrings_GlobalGet(path);
+	resource->mFileNameWithoutExtension = IStrings_GlobalGet(filenameWithoutExtension);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = TextureOffset_FromStream(path, filenameWithoutExtension, br);
-	shput(_mStringHashMap, filenameWithoutExtension, resource);
+	resource->mData = TextureOffset_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
+	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
 }
 const char* TextureOffsetManager_GetDatFileName()
 {

@@ -10,7 +10,7 @@
 #include "stdbool.h"
 #include "FixedChar260.h"
 #include "../math/Rectangle.h"
-#include "StringArray.h"
+#include "IStringArray.h"
 
 typedef struct SharedFixedChar260
 {
@@ -31,6 +31,7 @@ void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);
 void Utils_memset(void* _Dst, int _Val, size_t _Size);
 void* Utils_malloc(size_t size);
 void Utils_free(void* mem);
+size_t Utils_strlen(const char* str);
 size_t Utils_strnlen(const char* str, size_t maxlen);
 size_t Utils_strlcpy(char* dst, const char* src, size_t maxlen);
 size_t Utils_strlcat(char* dst, const char* src, size_t maxlen);
@@ -58,4 +59,4 @@ int Utils_GetInternalRenderWidth();
 int Utils_GetInternalRenderHeight();
 float Utils_GetCurrentHardwareRatio();
 float Utils_GetCurrentInternalRatio();
-StringArray* Utils_SplitString(const char* str, size_t maxlen, char delim);
+IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim);

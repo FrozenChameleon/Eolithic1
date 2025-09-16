@@ -22,6 +22,8 @@
 #include "engine/io/DatReader.h"
 #include "engine/core/Window.h"
 #include "engine/resources/TextureManager.h"
+#include "engine/resources/TextureOffsetManager.h"
+#include "engine/utils/IStrings.h"
 
 int main(int argc, char* args[])
 {
@@ -34,9 +36,11 @@ int main(int argc, char* args[])
 
 	Game_Init();
 
+	AnimTileManager_LoadAllFromDat();
 	MusicManager_LoadAllFromDat();
 	SoundEffectManager_LoadAllFromDat();
 	TextureManager_LoadAllFromDat();
+	TextureOffsetManager_LoadAllFromDat();
 	Sheet_BuildSheets();
 	//MusicManager_DisposeAll();
 	//SoundEffectManager_LoadAllFromDat();
@@ -47,14 +51,16 @@ int main(int argc, char* args[])
 	int64_t cvarsLength = Cvars_Length();
 	uint64_t mallocRefs = Utils_GetMallocRefs();
 
-	StringArray* strings = Utils_SplitString("hello,,hello,", 260, ',');
-	int strlen = StringArray_Length(strings);
+	IStringArray* strings = Utils_SplitString("hello,,hello,", 260, ',');
+	int strlen = IStringArray_Length(strings);
 	for (int i = 0; i < strlen; i += 1)
 	{
-		const char* strrr = StringArray_Get(strings, i);
+		const char* strrr = IStringArray_Get(strings, i);
 		int hello = 0;
 	}
-	StringArray_Dispose(strings);
+	IStringArray_Dispose(strings);
+
+	size_t globalLen = IStrings_GlobalLength();
 
 	Game_Run();
 

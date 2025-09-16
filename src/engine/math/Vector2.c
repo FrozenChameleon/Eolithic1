@@ -18,6 +18,16 @@
 #include "MathHelper.h"
 #include "Math.h"
 
+const Vector2 Vector2_Zero = { 0, 0 };
+const Vector2 Vector2_One = { 1, 1 };
+
+Vector2 Vector2_Create(float x, float y)
+{
+	Vector2 vec;
+	vec.X = x;
+	vec.Y = y;
+	return vec;
+}
 void Vector2_Init(Vector2* value, float x, float y)
 {
 	value->X = x;
@@ -104,16 +114,6 @@ Vector2 Vector2_Div(Vector2 value1, Vector2 value2)
 	temp.X = (value1.X / value2.X);
 	temp.Y = (value1.Y / value2.Y);
 	return temp;
-}
-Vector2 Vector2_Zero()
-{
-	Vector2 vec = { 0 };
-	return vec;
-}
-Vector2 Vector2_One()
-{
-	Vector2 vec = { 1, 1 };
-	return vec;
 }
 Vector2 Vector2_MulSingle(Vector2 value1, float value2)
 {

@@ -18,6 +18,6 @@ typedef struct Sheet
 } Sheet;
 
 Sheet* Sheet_GetDefaultSheet();
-Sheet* Sheet_GetSheet();
+Sheet* Sheet_GetSheet(const char* name);
 void Sheet_BuildSheets();
 bool Sheet_HasSheet(const char* name);

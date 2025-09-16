@@ -214,7 +214,7 @@ void Body_CommitOnNextUpdateMove(Body* body)
 	if (!body->mIsDisabled && !body->mIsStatic)
 	{
 		Vector2_AddAssign(&body->mPhysicsVelocity, body->mPhysicsQueuedVelocity);
-		body->mPhysicsQueuedVelocity = Vector2_Zero();
+		body->mPhysicsQueuedVelocity = Vector2_Zero;
 	}
 }
 void Body_ForceVelocity(Body* body, Vector2 pixelVelocity)

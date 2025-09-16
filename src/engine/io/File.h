@@ -11,6 +11,8 @@
 #include "FixedByteBuffer.h"
 #include "../utils/Macros.h"
 #include "../utils/FixedChar260.h"
+#include "BufferReader.h"
+#include "../utils/IStringArray.h"
 
 void File_AppendPathSeparator(FixedChar260* dst);
 FixedByteBuffer* File_ReadAll(const char* path);
@@ -33,3 +35,4 @@ void File_Combine10(FixedChar260* dst, const char* path1, const char* path2, con
 
 void File_GetFileName(FixedChar260* dst, const FixedChar260* path);
 void File_GetFileNameWithoutExtension(FixedChar260* dst, const FixedChar260* path);
+IStringArray* File_ReadAllToStrings(BufferReader* br);

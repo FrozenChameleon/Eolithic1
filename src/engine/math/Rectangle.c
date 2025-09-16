@@ -15,6 +15,14 @@
 
 #include "Rectangle.h"
 
+Rectangle Rectangle_Create(int x, int y, int width, int height)
+{
+	Rectangle rect;
+	rect.X = x;
+	rect.Y = y;
+	rect.Width = width;
+	rect.Height = height;
+}
 void Rectangle_Init(Rectangle* value, int x, int y, int width, int height)
 {
 	value->X = x;
@@ -22,7 +30,6 @@ void Rectangle_Init(Rectangle* value, int x, int y, int width, int height)
 	value->Width = width;
 	value->Height = height;
 }
-
 bool Rectangle_EqualTo(const Rectangle* value1, const Rectangle* value2)
 {
 	return (value1->X == value2->X) && (value1->Y == value2->Y) && (value1->Width == value2->Width) && (value1->Height == value2->Height);

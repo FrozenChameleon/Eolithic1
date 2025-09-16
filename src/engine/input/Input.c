@@ -73,7 +73,7 @@ static Vector2 ProcessStickRadialDeadzone(Vector2 stick, float radialDeadzone)
 {
 	if (Vector2_Length(stick) < radialDeadzone)
 	{
-		return Vector2_Zero();
+		return Vector2_Zero;
 	}
 	else
 	{
@@ -372,7 +372,7 @@ Point Input_GetMouse()
 Vector2 Input_GetScaledMouseForRetroScreen()
 {
 	//TODOC99
-	return Vector2_Zero();
+	return Vector2_Zero;
 }
 float Input_GetScaledMouseForRetroScreenX()
 {
@@ -500,9 +500,9 @@ Vector2 Input_ProcessStickDeadzones(Vector2 stick, float radialDeadzone, float a
 {
 	stick = ProcessStickRadialDeadzone(stick, radialDeadzone);
 	stick = ProcessStickAxialDeadzone(stick, axialDeadzone);
-	if (Vector2_EqualTo(stick, Vector2_Zero()))
+	if (Vector2_EqualTo(stick, Vector2_Zero))
 	{
-		return Vector2_Zero();
+		return Vector2_Zero;
 	}
 
 	if (IsStickBeyondOuterDeadzone(stick, outerDeadzone))

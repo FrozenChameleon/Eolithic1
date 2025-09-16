@@ -1,39 +1,46 @@
 #include "TextureOffset.h"
 
+#include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
+#include "../io/File.h"
+#include "../utils/IStrings.h"
 
 TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	TextureOffset* textureOffset = Utils_malloc(sizeof(TextureOffset));
 	Utils_memset(textureOffset, 0, sizeof(TextureOffset));
 
-	/*
-	std::vector<std::string> strTextures = {};
-	OeFile::ReadFileToStrings(stream, strTextures);
+	IStringArray* lines = File_ReadAllToStrings(br);
+	size_t linesLen = IStringArray_Length(lines);
 
-	for (int i = 0; i < strTextures.size(); i++)
+	for (int i = 0; i < linesLen; i += 1)
 	{
-		std::vector<std::string> strSplits = {};
-		OeUtils::StringSplit(' ', strTextures[i], strSplits);
-		if (strSplits.size() != 6)
+		const char* line = IStringArray_Get(lines, i);
+		IStringArray* spaceSplit = Utils_SplitString(line, Utils_strlen(line), ' ');
+		size_t spaceSplitLen = IStringArray_Length(spaceSplit);
+		if (spaceSplitLen != 6)
 		{
+			IStringArray_Dispose(spaceSplit);
 			continue;
 		}
 
 		Rectangle rect;
-		rect.X = OeUtils::ParseInt(strSplits[2]);
-		rect.Y = OeUtils::ParseInt(strSplits[3]);
-		rect.Width = OeUtils::ParseInt(strSplits[4]);
-		rect.Height = OeUtils::ParseInt(strSplits[5]);
+		rect.X = Utils_ParseInt(IStringArray_Get(spaceSplit, 2));
+		rect.Y = Utils_ParseInt(IStringArray_Get(spaceSplit, 3));
+		rect.Width = Utils_ParseInt(IStringArray_Get(spaceSplit, 4));
+		rect.Height = Utils_ParseInt(IStringArray_Get(spaceSplit, 5));
 
-		OeTextureOffsetInfo info = OeTextureOffsetInfo();
+		TextureOffsetInfo info = { 0 };
 		info.mRect = rect;
 		info.mPath = path;
-		info.mVirtualName = strSplits[0];
+		info.mVirtualName = IStrings_GlobalGet(IStringArray_Get(spaceSplit, 0));
+		info.mFilenameWithoutExtension = filenameWithoutExtension;
 
-		textureOffset->_mOffsets.push_back(info);
+		arrput(textureOffset->_mDynamicOffsets, info);
+		IStringArray_Dispose(spaceSplit);
 	}
-	*/
+
+	IStringArray_Dispose(lines);
 
 	return textureOffset;
 }

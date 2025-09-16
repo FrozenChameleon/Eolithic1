@@ -1,10 +1,12 @@
 #pragma once
 
+#include "../utils/Macros.h"
 #include "../math/Rectangle.h"
 
 typedef struct TextureOffsetInfo
 {
 	Rectangle mRect;
-	const char* mPath;
-	const char* mVirtualName;
+	IString mPath;
+	IString mVirtualName;
+	IString mFilenameWithoutExtension;
 } TextureOffsetInfo;

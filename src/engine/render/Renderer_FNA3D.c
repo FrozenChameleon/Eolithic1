@@ -254,7 +254,7 @@ void Renderer_AfterRender()
 		Renderer_UpdateScissor();
 
 		Renderer_INTERNAL_SetCurrentShaderProgram(NULL);
-		Renderer_INTERNAL_SetCurrentCameraPosition(Vector2_Zero());
+		Renderer_INTERNAL_SetCurrentCameraPosition(Vector2_Zero);
 		Renderer_INTERNAL_SetCurrentBlendState(BLENDSTATE_NONPREMULTIPLIED);
 		Renderer_INTERNAL_SetCurrentDepth(100);
 
@@ -407,7 +407,7 @@ static void ApplyMultiColorReplaceShader(Effect* multi, ShaderProgram* shaderPro
 }
 static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendStateToUse, FNA3D_Texture* texture, ShaderProgram* shaderProgram)
 {
-	Matrix transformMatrix;
+	Matrix transformMatrix = { 0 };
 	double widthForTf;
 	double heightForTf;
 	if (_mIsDrawingFromOffscreenTarget)
@@ -432,15 +432,21 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		widthForTf = _mInternalWidthRender;
 		heightForTf = _mInternalHeightRender;
 
-		Vector3 matrixTranslationValue = { -cameraPos.X, -cameraPos.Y, 0 };
+		//Vector3 matrixTranslationValue = { -cameraPos.X, -cameraPos.Y, 0 };
+		Vector3 matrixTranslationValue = { 0, 0, 0 };
 		Matrix matrixTranslation = Matrix_CreateTranslation(matrixTranslationValue);
 
-		Vector3 matrixScaleValue = { scale.X, scale.Y, 1.0f };
+		//Vector3 matrixScaleValue = { scale.X, scale.Y, 1.0f };
+		Vector3 matrixScaleValue = { 1.0f,  1.0f, 1.0f };
 		Matrix matrixScale = Matrix_CreateScale(matrixScaleValue);
 
-		Matrix matrixWorld = Matrix_CreateTranslation(_mInternalWorldTranslation);
+		Vector3 matrixWorldValue = { 0, 0, 0 };
+		//Matrix matrixWorld = Matrix_CreateTranslation(_mInternalWorldTranslation);
+		Matrix matrixWorld = Matrix_CreateTranslation(matrixWorldValue);
 
 		transformMatrix = Matrix_Mul(&matrixTranslation, Matrix_Mul(&matrixScale, matrixWorld));
+
+		transformMatrix = Matrix_Identity(); //TODO C99 PUT THIS BACk.
 	}
 
 	// Inlined CreateOrthographicOffCenter * transformMatrix
@@ -566,7 +572,7 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 }
 static void DrawTheBatch(DrawBatch drawBatch)
 {
-	SetupRenderState(drawBatch.mDrawState.mCameraPosition, Vector2_One(), drawBatch.mDrawState.mBlendState, drawBatch.mDrawState.mTexture, drawBatch.mDrawState.mShaderProgram);
+	SetupRenderState(drawBatch.mDrawState.mCameraPosition, Vector2_One, drawBatch.mDrawState.mBlendState, drawBatch.mDrawState.mTexture, drawBatch.mDrawState.mShaderProgram);
 
 	VertexBufferInstance* vbInstance = &_mVertexBuffer;
 
@@ -577,7 +583,7 @@ static void DrawTheBatch(DrawBatch drawBatch)
 	FNA3D_DrawIndexedPrimitives(_mDeviceContext, FNA3D_PRIMITIVETYPE_TRIANGLELIST, 0, 0,
 		drawBatch.mLength, 0, drawBatch.mLength / 2, _mIndexBuffer, FNA3D_INDEXELEMENTSIZE_16BIT);
 
-	_mBatchNumber++;
+	_mBatchNumber += 1;
 }
 static void NextBatch(bool keepDrawState)
 {
@@ -708,7 +714,7 @@ void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, in
 
 	FNA3D_SetTextureData2D(_mDeviceContext, (FNA3D_Texture*)(texture->mTextureData), x, y, w, h, level, data, dataLength);
 }
-static Effect LoadShader(Effect* effect, const char* shaderName)
+static void LoadShader(Effect* effect, const char* shaderName)
 {
 	SharedFixedChar260* path = Utils_CreateSharedFixedChar260();
 	File_Combine3(path, File_GetBasePath(), "data", shaderName);
@@ -935,7 +941,7 @@ void Renderer_UpdateViewport()
 void Renderer_UpdateScissor()
 {
 	Rectangle backBufferBounds = GetCurrentBufferBounds();
-	FNA3D_Rect scissor;
+	FNA3D_Rect scissor = { 0 };
 	scissor.x = backBufferBounds.X;
 	scissor.y = backBufferBounds.Y;
 	scissor.w = backBufferBounds.Width;

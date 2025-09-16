@@ -9,6 +9,7 @@
 #include "SDL3/SDL.h"
 #include "../utils/Utils.h"
 #include "../utils/Macros.h"
+#include "../utils/Exception.h"
 
 #ifdef _WIN32
 #define PATH_SEPARATOR '\\'
@@ -18,6 +19,9 @@
 
 static const char* _mBasePath;
 static const char* _mPrefPath;
+
+#define LARGE_CHAR_BUFFER_LEN 8192
+static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
 FixedByteBuffer* File_ReadAll(const char* path)
 {
@@ -224,4 +228,39 @@ void File_GetFileName(FixedChar260* dst, const FixedChar260* path)
 void File_GetFileNameWithoutExtension(FixedChar260* dst, const FixedChar260* path)
 {
 	File_GetFileNameHelper(dst, path, true);
+}
+IStringArray* File_ReadAllToStrings(BufferReader* br)
+{
+	uint64_t len = BufferReader_GetSize(br);
+	uint8_t* bufferData = BufferReader_GetBufferData(br);
+	IStringArray* sa = IStringArray_Create();
+	int counter = 0;
+	for (int i = 0; i < (len + 1); i += 1) //Add +1 to len because...
+	{
+		if (counter >= LARGE_CHAR_BUFFER_LEN)
+		{
+			Exception_Run("Buffer overflow in read all strings...", false);
+			return sa;
+		}
+
+		char c = bufferData[i];
+		if (c == '\r')
+		{
+			continue;
+		}
+
+		if ((c == '\n') || (i == len)) //We need to make sure we get the stuff at the end...
+		{
+			_mLargeCharBuffer[counter] = '\0';
+			IStringArray_Add(sa, _mLargeCharBuffer);
+			memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
+			counter = 0;
+		}
+		else
+		{
+			_mLargeCharBuffer[counter] = c;
+			counter += 1;
+		}
+	}
+	return sa;
 }

@@ -180,7 +180,7 @@ bool Service_PlatformDisablesDepthBufferForRender()
 }
 bool Service_PlatformRequiresOffscreenTargetForRender()
 {
-	return true;
+	return false;
 }
 bool Service_PlatformCanShowWebsites()
 {

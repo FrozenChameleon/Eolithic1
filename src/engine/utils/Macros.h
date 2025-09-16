@@ -19,3 +19,4 @@
 
 typedef int32_t Entity;
 typedef int32_t ResourceID;
+typedef const char* IString;

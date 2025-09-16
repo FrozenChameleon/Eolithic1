@@ -26,6 +26,7 @@
 #include "../utils/Exception.h"
 #include "../audio/Music.h"
 #include "../audio/SoundEffect.h"
+#include "../render/Sheet.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -58,6 +59,8 @@ int32_t Game_Init()
 	{
 		return Exception_Run("Unable to init platform renderer!", false);
 	}
+	Renderer_InitSpriteBatch();
+	Renderer_ApplyChanges();
 
 	initStatus = SoundEffectInstance_InitAudio();
 	if (initStatus < 0)
@@ -116,6 +119,9 @@ int32_t Game_Run()
 		Input_Update(false);
 		Music_Tick();
 		SoundEffect_Tick();
+
+		Renderer_SetupRenderState();
+		Renderer_Render(1 / 60.0);
 
 		bool tester1 = Input_IsLeftMouseReleased();
 		bool tester2 = Input_IsDeleteReleased();

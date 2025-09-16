@@ -5,6 +5,8 @@
 #include "../math/Vector2.h"
 #include "../math/Rectangle.h"
 #include "../render/DrawRectangle.h"
+#include "../font/BmFont.h"
+#include "../leveldata/Tile.h"
 
 typedef struct DrawInstance
 {
@@ -43,4 +45,4 @@ typedef struct DrawInstance
 	Rectangle mTileDataBounds;
 	DrawRectangle* mManyRectangles;
 	bool mDoNotReplaceFont;
-};
+} DrawInstance;

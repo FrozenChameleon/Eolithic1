@@ -27,6 +27,7 @@ typedef struct Rectangle
 	int32_t Height;
 } Rectangle;
 
+Rectangle Rectangle_Create(int x, int y, int width, int height);
 void Rectangle_Init(Rectangle* value, int x, int y, int width, int height);
 bool Rectangle_EqualTo(const Rectangle* value1, const Rectangle* value2);
 bool Rectangle_NotEqual(const Rectangle* value1, const Rectangle* value2);

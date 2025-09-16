@@ -15,6 +15,8 @@
 
 #include "Renderer.h"
 
+#include "../utils/Logger.h"
+#include "RenderStream.h"
 #include "RendererMacros.h"
 #include "SDL3/SDL.h"
 #include "../utils/Cvars.h"
@@ -67,15 +69,33 @@ static uint16_t _mIndexBufferData[MAX_INDICES];
 
 static int _mCurrentDepth;
 static Vector2 _mCurrentCameraPosition;
-BlendState _mCurrentBlendState;
-ShaderProgram* _mCurrentShaderProgram;
-ShaderProgram* _mGlobalShaderProgram;
+static BlendState _mCurrentBlendState;
+static ShaderProgram* _mCurrentShaderProgram;
+static ShaderProgram* _mGlobalShaderProgram;
+
+static bool _mHasInitSpriteBatch;
+static SpriteBatch _mOrangeSpriteBatch;
+static SpriteBatch _mOrangeSpriteBatchHud;
+static SpriteBatch _mOrangeSpriteBatchFinal;
 
 static float GetCurrentDepthForRender()
 {
 	return (1.0f - ((float)(_mCurrentDepth) / 200.0f)); //Max layers is 200
 }
 
+int Renderer_InitSpriteBatch()
+{
+	if (_mHasInitSpriteBatch)
+	{
+		return;
+	}
+
+	SpriteBatch_Init(&_mOrangeSpriteBatch);
+	SpriteBatch_Init(&_mOrangeSpriteBatchHud);
+	SpriteBatch_Init(&_mOrangeSpriteBatchFinal);
+
+	_mHasInitSpriteBatch = false;
+}
 void Renderer_SetGlobalShaderProgram(ShaderProgram* value)
 {
 	_mGlobalShaderProgram = value;
@@ -463,7 +483,7 @@ void Renderer_Draw4(
 		0
 	);
 }
-void Renderer_DrawSheet(DrawInstance* draw, double delta)
+void Renderer_DrawSheet(RenderCommandSheet* draw, double delta)
 {
 	SpriteEffects effects = Renderer_GetEffects(draw->mFlipX, draw->mFlipY);
 	Texture* sheetTex = draw->mTexture;
@@ -484,7 +504,7 @@ void Renderer_DrawSheet(DrawInstance* draw, double delta)
 	}
 	else
 	{
-		Renderer_Draw8(sheetTex, draw->mDestinationRectangle, draw->mSourceRectangle, draw->mColor, draw->mRotation, Vector2_Zero(), effects, draw->mDepth);
+		Renderer_Draw8(sheetTex, draw->mDestinationRectangle, draw->mSourceRectangle, draw->mColor, draw->mRotation, Vector2_Zero, effects, draw->mDepth);
 	}
 }
 void Renderer_DrawManyRectangles(DrawInstance* draw)
@@ -495,7 +515,7 @@ void Renderer_DrawManyRectangles(DrawInstance* draw)
 	for (int i = 0; i < manyRectangles.size(); i += 1)
 	{
 		Draw(draw->mTexture, manyRectangles[i].mRectangle,
-			draw->mSourceRectangle, manyRectangles[i].mColor, 0, Vector2_Zero(), SpriteEffects_None, draw->mDepth);
+			draw->mSourceRectangle, manyRectangles[i].mColor, 0, Vector2_Zero, SpriteEffects_None, draw->mDepth);
 	}
 	*/
 }
@@ -565,7 +585,7 @@ void Renderer_DrawString(DrawInstance* draw, double delta)
 	/*
 	const std::string& strToDraw = *draw->mString;
 
-	Vector2 offset = Vector2_Zero();
+	Vector2 offset = Vector2_Zero;
 
 	if (draw->mAlignmentX == OeAlign::CENTER || draw->mAlignmentX == OeAlign::RIGHT ||
 		draw->mAlignmentY == OeAlign::CENTER || draw->mAlignmentY == OeAlign::BOTTOM)
@@ -699,79 +719,86 @@ void Renderer_DrawTiles(DrawInstance* draw)
 	}
 	*/
 }
-static void DrawTheInstance(DrawInstance* draw, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
+static uint64_t DrawTheInstance(uint8_t* buffer, uint64_t position, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
-	/*
-	_mCurrentBlendState = draw->mBlendState;
-	if (draw->mShaderProgram != nullptr)
+	_mCurrentBlendState = BLENDSTATE_NONPREMULTIPLIED;
+	_mCurrentShaderProgram = _mGlobalShaderProgram;
+
+	uint8_t drawType = *(buffer + position);
+	uint64_t sizeToReturn = 0;
+	switch (drawType)
 	{
-		_mCurrentShaderProgram = draw->mShaderProgram;
+	case RENDERER_TYPE_SHEET:
+	{
+		sizeToReturn = sizeof(RenderCommandSheet);
+		if (drawSheet)
+		{
+			RenderCommandSheet* commandSheet = (RenderCommandSheet*)(buffer + position);
+			_mCurrentBlendState = (BlendState)commandSheet->mBlendState;
+			if (commandSheet->mShaderProgram != NULL)
+			{
+				_mCurrentShaderProgram = commandSheet->mShaderProgram;
+			}
+			int32_t passes = commandSheet->mExtraPasses + 1;
+			for (int32_t i = 0; i < passes; i += 1)
+			{
+				Renderer_DrawSheet(commandSheet, delta);
+			}
+		}
 	}
-	else
+	break;
+	/*
+	case RENDERER_TYPE_MANY_RECTANGLE:
 	{
-		_mCurrentShaderProgram = _mGlobalShaderProgram;
+		sizeToReturn = sizeof(RenderCommandManyRectangle);
+		if (drawManyRectangle)
+		{
+			OeRenderer::DrawManyRectangles((OeRenderCommandManyRectangle*)(buffer + position));
+		}
+	}
+	break;
+	case RENDERER_TYPE_STRING:
+	{
+		sizeToReturn = sizeof(RenderCommandString);
+		if (drawString)
+		{
+			OeRenderer::DrawString((OeRenderCommandString*)(buffer + position), delta);
+		}
+	}
+	break;
+	case RENDERER_TYPE_TILE_LAYER:
+	{
+		sizeToReturn = sizeof(RenderCommandTileLayer);
+		if (drawTileLayer)
+		{
+			OeRenderer::DrawTiles((OeRenderCommandTileLayer*)(buffer + position));
+		}
+	}
+	break;
+	*/
 	}
 
-	int passes = draw->mExtraPasses + 1;
-	for (int i = 0; i < passes; i += 1)
-	{
-		switch (draw->mType)
-		{
-		case Renderer_TYPE_SHEET:
-		{
-			if (drawSheet)
-			{
-				Renderer_DrawSheet(draw, delta);
-			}
-		}
-		break;
-		case Renderer_TYPE_MANY_RECTANGLE:
-		{
-			if (drawManyRectangle)
-			{
-				Renderer_DrawManyRectangles(draw);
-			}
-		}
-		break;
-		case Renderer_TYPE_STRING:
-		{
-			if (drawString)
-			{
-				Renderer_DrawString(draw, delta);
-			}
-		}
-		break;
-		case Renderer_TYPE_TILE_LAYER:
-		{
-			if (drawTileLayer)
-			{
-				Renderer_DrawTiles(draw);
-			}
-		}
-		break;
-		}
-	}
-	*/
+	return sizeToReturn;
 }
-/*
-static void DrawTheDepth(int depth, std::vector<DrawInstance>& drawLayer, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
+static void DrawTheDepth(int32_t depth, RenderStream* drawLayer, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
 	_mCurrentDepth = depth;
-	for (int i = 0; i < drawLayer.size(); i += 1)
+	uint64_t currentPosition = 0;
+	uint64_t endPosition = DynamicByteBuffer_GetLength(drawLayer->_mBuffer);
+	uint8_t* buffer = DynamicByteBuffer_GetBuffer(drawLayer->_mBuffer);
+	while (currentPosition < endPosition)
 	{
-		DrawTheInstance(&drawLayer[i], delta, drawSheet, drawManyRectangle, drawString, drawTileLayer);
+		uint64_t sizeOfCommand = DrawTheInstance(buffer, currentPosition, delta, drawSheet, drawManyRectangle, drawString, drawTileLayer);
+		currentPosition += sizeOfCommand;
 	}
 }
-*/
-/*
-static void DrawEverythingForwards(std::vector<std::vector<DrawInstance>>& draws, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
+static void DrawEverythingForwards(RenderStream* draws, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
-	for (int i = 0; i < draws.size(); i += 1)
+	for (int32_t i = 0; i < SPRITEBATCH_RENDER_STREAMS_LEN; i += 1)
 	{
-		DrawTheDepth(i, draws[i], delta, drawSheet, drawManyRectangle, drawString, drawTileLayer);
+		DrawTheDepth(i, &draws[i], delta, drawSheet, drawManyRectangle, drawString, drawTileLayer);
 	}
 }
-*/
 /*
 static void DrawEverythingBackwards(std::vector<std::vector<DrawInstance>>& draws, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
@@ -783,18 +810,20 @@ static void DrawEverythingBackwards(std::vector<std::vector<DrawInstance>>& draw
 */
 void Renderer_Commit(SpriteBatch* render, Vector2 cameraOffset, double delta)
 {
-	/*
 	_mCurrentCameraPosition = cameraOffset;
-	_mCurrentBlendState = BlendState::NonPremultiplied;
-	_mCurrentShaderProgram = nullptr;
+	_mCurrentBlendState = BLENDSTATE_NONPREMULTIPLIED;
+	_mCurrentShaderProgram = NULL;
 
-	std::vector<std::vector<DrawInstance>>& draws = render->GetDraws();
+	RenderStream* draws = render->_mRenderStreams;
+	//std::vector<std::vector<OeDrawInstance>>& draws = render->GetDraws();
 
-	BeforeCommit();
+	Renderer_BeforeCommit();
 
 	bool drawTileLayer = true;
 
-	if (!Service_PlatformDisablesDepthBufferForRender())
+	/*
+	*
+	if (!OeService::PlatformDisablesDepthBufferForRender())
 	{
 		EnableDepthBufferWrite();
 
@@ -807,9 +836,11 @@ void Renderer_Commit(SpriteBatch* render, Vector2 cameraOffset, double delta)
 	}
 
 	DrawEverythingForwards(draws, delta, true, true, true, drawTileLayer);
-
-	AfterCommit();
 	*/
+
+	DrawEverythingForwards(draws, delta, true, true, true, drawTileLayer);
+
+	Renderer_AfterCommit();
 }
 void Renderer_LogInfo(const char* msg)
 {
@@ -1015,14 +1046,16 @@ Rectangle Renderer_GetScreenBounds()
 }
 void Renderer_SetupCommit(double delta)
 {
-	/*
 	FPSTool_Update(&_mFpsToolDraw, delta);
 
+	//TODO C99
+	/*
 	if (GameLoader_IsLoading())
 	{
-		Renderer_Commit(&_mOrangeSpriteBatchDrawHud, Vector2_Zero(), 1);
+		Renderer_Commit(&_mOrangeSpriteBatchHud, Vector2_Zero, 1);
 		return;
 	}
+	*/
 
 	double stepLength = Utils_GetNormalStepLength();
 	double drawDelta;
@@ -1034,15 +1067,26 @@ void Renderer_SetupCommit(double delta)
 	{
 		drawDelta = GameUpdater_GetDeltaAccumulator();
 	}
-	Camera* camera = GameStateManager_GetCurrentRenderCamera();
-	Vector2 cam = Camera_GetInterpCameraAsVector2(camera, drawDelta);
-	Vector2 hud = { camera->mWorldWidth / 2, camera->mWorldHeight / 2 };
-	Renderer_Commit(&_mOrangeSpriteBatch, cam, drawDelta);
-	Renderer_Commit(&_mOrangeSpriteBatchDrawHud, hud, drawDelta);
-	*/
+	//Camera* camera = GameStateManager_GetCurrentRenderCamera();
+	//Vector2 cam = Camera_GetInterpCameraAsVector2(camera, drawDelta);
+	//Vector2 hud = { camera->mWorldWidth / 2, camera->mWorldHeight / 2 };
+	//Renderer_Commit(&_mOrangeSpriteBatch, cam, drawDelta); //TODO C99
+	Vector2 hud = { 640, 360 };
+	Renderer_Commit(&_mOrangeSpriteBatchHud, hud, drawDelta);
 }
 void Renderer_SetupRenderState()
 {
+	SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
+	Sheet* sheet = Sheet_GetSheet("monsterEyeShootCatchUp_00");
+	for (int i = 0; i < 1; i += 1)
+	{
+		Vector2 position;
+		position.X = 25 * i;
+		position.Y = 0;
+		SpriteBatch_Draw(&_mOrangeSpriteBatchHud, sheet->mTextureResource->mData, Color_White, 0, NULL,
+			position, sheet->mRectangle, Vector2_One, 0, false, false, Vector2_Zero);
+	}
+
 	/*
 	if (GameLoader_IsLoading())
 	{

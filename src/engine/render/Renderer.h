@@ -30,10 +30,9 @@
 #include "BlendState.h"
 #include "SpriteEffects.h"
 #include "../io/FixedByteBuffer.h"
-
-typedef struct BmFont BmFont;
-typedef struct SpriteBatch SpriteBatch;
-typedef struct DrawInstance DrawInstance;
+#include "SpriteBatch.h"
+#include "DrawInstance.h"
+#include "../font/BmFont.h"
 
 typedef struct TtFontState
 {
@@ -131,6 +130,7 @@ void Renderer_INTERNAL_SetCurrentDepth(int value);
 int Renderer_INTERNAL_GetCurrentDepth();
 Rectangle Renderer_GetWantedBackBufferBounds();
 int Renderer_Init(void* deviceWindowHandle);
+int Renderer_InitSpriteBatch();
 Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob);
 Texture* Renderer_GetNewTextureData(const char* path, int width, int height, bool clearTexture);
 void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, int level, void* data, int dataLength);

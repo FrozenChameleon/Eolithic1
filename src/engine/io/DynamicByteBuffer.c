@@ -34,6 +34,14 @@ static void CheckLength(DynamicByteBuffer* dbb, uint64_t size)
 	dbb->mCapacity = newCapacity;
 }
 
+void* DynamicByteBuffer_GetUninitializedMemoryBlock(DynamicByteBuffer* dbb, uint64_t memoryBlockLength)
+{
+	CheckLength(dbb, memoryBlockLength);
+	void* memoryBlockStart = dbb->mBuffer + dbb->mLength;
+	dbb->mLength += memoryBlockLength;
+	return memoryBlockStart;
+}
+
 void DynamicByteBuffer_WriteUInt8(DynamicByteBuffer* dbb, uint8_t value)
 {
 	uint64_t size = sizeof(uint8_t);
@@ -62,6 +70,10 @@ uint8_t* DynamicByteBuffer_GetBuffer(const DynamicByteBuffer* dbb)
 uint64_t DynamicByteBuffer_GetLength(const DynamicByteBuffer* dbb)
 {
 	return dbb->mLength;
+}
+void DynamicByteBuffer_SetLength(DynamicByteBuffer* dbb, uint64_t value)
+{
+	dbb->mLength = value;
 }
 FixedByteBuffer* DynamicByteBuffer_ConvertToFixedByteBufferAndDispose(DynamicByteBuffer* dbb)
 {
