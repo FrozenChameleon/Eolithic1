@@ -24,6 +24,7 @@
 #include "engine/resources/TextureManager.h"
 #include "engine/resources/TextureOffsetManager.h"
 #include "engine/utils/IStrings.h"
+#include "engine/gamestate/packs/ComponentPack_Camera.h"
 
 int main(int argc, char* args[])
 {
@@ -61,6 +62,16 @@ int main(int argc, char* args[])
 	IStringArray_Dispose(strings);
 
 	size_t globalLen = IStrings_GlobalLength();
+
+	ComponentPack_Camera pack = { 0 };
+	ComponentPack_Camera_Init(&pack, 4);
+	for (int i = 0; i < 10000; i += 1)
+	{
+		ComponentPack_Camera_Set(&pack, i + 1);
+		Camera* cam = ComponentPack_Camera_GetFirstSetComponent(&pack);
+		Entity entTest = ComponentPack_Camera_GetFirstSetEntity(&pack);
+		int tester = 0;
+	}
 
 	Game_Run();
 

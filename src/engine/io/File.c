@@ -243,23 +243,35 @@ IStringArray* File_ReadAllToStrings(BufferReader* br)
 			return sa;
 		}
 
-		char c = bufferData[i];
-		if (c == '\r')
+		bool isAtEndOfString = false;
+		if (i == len) //We need to make sure we get the stuff at the end...
 		{
-			continue;
-		}
-
-		if ((c == '\n') || (i == len)) //We need to make sure we get the stuff at the end...
-		{
-			_mLargeCharBuffer[counter] = '\0';
-			IStringArray_Add(sa, _mLargeCharBuffer);
-			memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
-			counter = 0;
+			isAtEndOfString = true;
 		}
 		else
 		{
-			_mLargeCharBuffer[counter] = c;
-			counter += 1;
+			char c = bufferData[i];
+			if (c == '\r')
+			{
+				continue;
+			}
+			if (c == '\n')
+			{
+				isAtEndOfString = true;
+			}
+			else
+			{
+				_mLargeCharBuffer[counter] = c;
+				counter += 1;
+			}
+		}
+
+		if (isAtEndOfString)
+		{
+			_mLargeCharBuffer[counter] = '\0';
+			IStringArray_Add(sa, _mLargeCharBuffer);
+			Utils_memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
+			counter = 0;
 		}
 	}
 	return sa;
