@@ -24,7 +24,8 @@
 #include "engine/resources/TextureManager.h"
 #include "engine/resources/TextureOffsetManager.h"
 #include "engine/utils/IStrings.h"
-#include "engine/gamestate/packs/ComponentPack_Camera.h"
+#include "engine/gamestate/ComponentPack.h"
+#include "engine/gamestate/GameStateData.h"
 
 int main(int argc, char* args[])
 {
@@ -63,14 +64,28 @@ int main(int argc, char* args[])
 
 	size_t globalLen = IStrings_GlobalLength();
 
-	ComponentPack_Camera pack = { 0 };
-	ComponentPack_Camera_Init(&pack, 4);
+	GameStateData* gsd = Utils_malloc(sizeof(GameStateData));
+	GameStateData_Init(gsd);
+
+	ComponentPack* genericPack = GameStateData_GetComponentPack(gsd, C_Camera);
 	for (int i = 0; i < 10000; i += 1)
 	{
-		ComponentPack_Camera_Set(&pack, i + 1);
-		Camera* cam = ComponentPack_Camera_GetFirstSetComponent(&pack);
-		Entity entTest = ComponentPack_Camera_GetFirstSetEntity(&pack);
+		Entity entityNumber = (i + 1);
+		ComponentPack_Set(genericPack, entityNumber);
+		Camera* cam = ComponentPack_GetComponent(genericPack, entityNumber);
+		cam->mHingeGateLeft = i;
+		cam->mHingeGateRight = i * 2;
+		int loc = ComponentPack_GetEntityLocation(genericPack, entityNumber);
 		int tester = 0;
+	}
+
+	for (int i = 0; i < 10000; i += 1)
+	{
+		Entity entityNumber = (i + 1);
+		Camera* cam = ComponentPack_GetComponent(genericPack, entityNumber);
+		cam->mHingeGateLeft = i;
+		cam->mHingeGateRight = i * 2;
+		int loc = ComponentPack_GetEntityLocation(genericPack, entityNumber);
 	}
 
 	Game_Run();
