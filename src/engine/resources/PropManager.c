@@ -75,6 +75,7 @@ Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, con
 	_mResourceCounter += 1;
 	resource->mData = Prop_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* PropManager_GetDatFileName()
 {

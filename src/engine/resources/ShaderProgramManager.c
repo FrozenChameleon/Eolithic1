@@ -75,6 +75,7 @@ Resource* ShaderProgramManager_LoadAssetFromStreamAndCreateResource(BufferReader
 	_mResourceCounter += 1;
 	resource->mData = ShaderProgram_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* ShaderProgramManager_GetDatFileName()
 {

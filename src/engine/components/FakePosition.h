@@ -2,8 +2,7 @@
 
 #include "../math/Vector2.h"
 
-struct FakePosition
+typedef struct FakePosition
 {
 	Vector2 mFakePosition;
-};
-
+} FakePosition;

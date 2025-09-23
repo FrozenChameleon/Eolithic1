@@ -2,8 +2,8 @@
 
 #include "../math/Point.h"
 
-struct GridPosition
+typedef struct GridPosition
 {
 	Point mGridPosition;
-};
+} GridPosition;
 

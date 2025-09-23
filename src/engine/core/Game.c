@@ -43,7 +43,7 @@ int32_t Game_Init()
 {
 	if (_mHasInit)
 	{
-		return;
+		return 0;
 	}
 
 	int initStatus = 0;

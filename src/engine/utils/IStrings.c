@@ -66,7 +66,7 @@ void IStrings_GlobalDispose()
 {
 	InitGlobal();
 
-	IStringArray_Dispose(_mGlobal);
+	IStrings_Dispose(_mGlobal);
 	_mGlobal = NULL;
 	_mHasInitGlobal = false;
 }

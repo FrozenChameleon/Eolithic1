@@ -75,6 +75,7 @@ Resource* BmFontManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, c
 	_mResourceCounter += 1;
 	resource->mData = BmFont_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* BmFontManager_GetDatFileName()
 {

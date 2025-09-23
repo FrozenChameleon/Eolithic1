@@ -75,6 +75,7 @@ Resource* SoundEffectManager_LoadAssetFromStreamAndCreateResource(BufferReader* 
 	_mResourceCounter += 1;
 	resource->mData = SoundEffect_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* SoundEffectManager_GetDatFileName()
 {

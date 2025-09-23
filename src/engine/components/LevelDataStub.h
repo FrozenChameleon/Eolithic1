@@ -1,7 +1,6 @@
 #pragma once
 
-struct LevelDataStub final
+typedef struct LevelDataStub
 {
 	const char* mLevelName;
-};
-
+} LevelDataStub;

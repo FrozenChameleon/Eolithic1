@@ -75,6 +75,7 @@ Resource* ParticleManager_LoadAssetFromStreamAndCreateResource(BufferReader* br,
 	_mResourceCounter += 1;
 	resource->mData = Particle_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* ParticleManager_GetDatFileName()
 {

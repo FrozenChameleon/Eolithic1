@@ -63,7 +63,7 @@ bool Music_IsPlaying()
 		return false;
 	}
 
-	MusicInstance_IsPlaying(&_mCurrentMusic);
+	return MusicInstance_IsPlaying(&_mCurrentMusic);
 }
 Music* Music_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {

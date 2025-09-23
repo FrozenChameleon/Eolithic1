@@ -2,8 +2,7 @@
 
 #include "../math/Vector2.h"
 
-struct InitialPosition
+typedef struct InitialPosition
 {
 	Vector2 mInitialPosition;
-};
-
+} InitialPosition;

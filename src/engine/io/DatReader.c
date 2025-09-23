@@ -33,7 +33,7 @@ static DatInfo* GetCurrentDatInfo(DatReader* dr)
 
 FixedByteBuffer* DatReader_GetMemoryStream(DatReader* dr, int64_t length)
 {
-
+	return NULL;
 }
 
 bool DatReader_HasInit(const DatReader* dr)

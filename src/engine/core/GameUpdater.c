@@ -62,6 +62,7 @@ static void Tick()
 }
 static bool IsPaused()
 {
+	return false;
 }
 static void UpdateLoop(double delta)
 {

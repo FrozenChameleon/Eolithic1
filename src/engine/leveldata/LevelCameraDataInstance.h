@@ -13,5 +13,5 @@ typedef struct LevelCameraDataInstance
 	bool mIsComplete;
 	bool mIsCompletePermanently;
 	LevelCameraData mData;
-};
+} LevelCameraDataInstance;
 

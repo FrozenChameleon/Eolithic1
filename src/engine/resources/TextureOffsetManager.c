@@ -75,6 +75,7 @@ Resource* TextureOffsetManager_LoadAssetFromStreamAndCreateResource(BufferReader
 	_mResourceCounter += 1;
 	resource->mData = TextureOffset_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* TextureOffsetManager_GetDatFileName()
 {

@@ -65,10 +65,10 @@ int main(int argc, char* args[])
 	size_t globalLen = IStrings_GlobalLength();
 
 	GameStateData* gsd = Utils_malloc(sizeof(GameStateData));
-	GameStateData_Init(gsd);
+	GameStateData_Ctor(gsd);
 
 	ComponentPack* genericPack = GameStateData_GetComponentPack(gsd, C_Camera);
-	for (int i = 0; i < 10000; i += 1)
+	for (int i = 0; i < 100; i += 1)
 	{
 		Entity entityNumber = (i + 1);
 		ComponentPack_Set(genericPack, entityNumber);
@@ -79,7 +79,7 @@ int main(int argc, char* args[])
 		int tester = 0;
 	}
 
-	for (int i = 0; i < 10000; i += 1)
+	for (int i = 0; i < 100; i += 1)
 	{
 		Entity entityNumber = (i + 1);
 		Camera* cam = ComponentPack_GetComponent(genericPack, entityNumber);

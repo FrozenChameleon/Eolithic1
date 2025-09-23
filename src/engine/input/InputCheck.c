@@ -17,7 +17,7 @@
 
 float InputCheck_CorrectAnalogForDirection(int direction, float value)
 {
-	int32_t sig = Math_SignumInt32(value);
+	int32_t sig = Math_SignumSingle(value);
 	if (((direction == -1) && (sig == 1)) || ((direction == 1) && (sig == -1)))
 	{
 		return 0;

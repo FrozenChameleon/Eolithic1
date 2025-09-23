@@ -273,18 +273,18 @@ void ComponentPack_UnsetAll(ComponentPack* pack)
 	}
 	pack->_mLength = 0;
 }
-void ComponentPack_CopyTo(ComponentPack* pack, ComponentPack* to)
+void ComponentPack_CopyTo(ComponentPack* from, ComponentPack* to)
 {
-	to->_mLength = pack->_mLength;
-	to->_mMaximumCapacity = pack->_mMaximumCapacity;
+	to->_mLength = from->_mLength;
+	to->_mMaximumCapacity = from->_mMaximumCapacity;
 
-	if (pack->_mCapacity != to->_mCapacity) //Mismatch?
+	if (from->_mCapacity != to->_mCapacity) //Mismatch?
 	{
-		ResizePack(to, pack->_mCapacity);
+		ResizePack(to, from->_mCapacity);
 	}
 
-	Utils_memcpy(to->Entities, pack->Entities, pack->_mCapacity);  //Copy all entity data!
-	Utils_memcpy(to->Components, pack->Components, pack->_mLength); //Only copy active length of components...
+	Utils_memcpy(to->Entities, from->Entities, from->_mCapacity);  //Copy all entity data!
+	Utils_memcpy(to->Components, from->Components, from->_mLength); //Only copy active length of components...
 }
 ComponentPack* ComponentPack_CreateCopy(ComponentPack* pack)
 {

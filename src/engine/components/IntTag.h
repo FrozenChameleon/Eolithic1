@@ -1,7 +1,6 @@
 #pragma once
 
-struct IntTag
+typedef struct IntTag
 {
 	int mTag;
-};
-
+} IntTag;

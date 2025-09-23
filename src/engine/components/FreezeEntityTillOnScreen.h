@@ -2,10 +2,10 @@
 
 #include "../math/Rectangle.h"
 
-struct FreezeEntityTillOnScreen
+typedef struct FreezeEntityTillOnScreen
 {
 	Rectangle mRectangle;
 	bool mFacesPlayer;
 	bool mIsFacingFlipped;
-};
+} FreezeEntityTillOnScreen;
 

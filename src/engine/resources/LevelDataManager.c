@@ -75,6 +75,7 @@ Resource* LevelDataManager_LoadAssetFromStreamAndCreateResource(BufferReader* br
 	_mResourceCounter += 1;
 	resource->mData = LevelData_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* LevelDataManager_GetDatFileName()
 {

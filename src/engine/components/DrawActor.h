@@ -5,7 +5,7 @@
 
 struct OeShaderProgram;
 
-struct DrawActor
+typedef struct DrawActor
 {
 	int mExtraPasses;
 	int mDefaultDrawState;
@@ -25,5 +25,5 @@ struct DrawActor
 	Vector2 mOffset;
 	Color mTintColor;
 	OeShaderProgram* mShaderProgram;
-};
+} DrawActor;
 

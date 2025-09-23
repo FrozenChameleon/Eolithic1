@@ -2,7 +2,7 @@
 
 #include "stdint.h"
 
-struct DrawLineOfSight final
+typedef struct DrawLineOfSight
 {
 	uint8_t mDummy;
-};
+} DrawLineOfSight;

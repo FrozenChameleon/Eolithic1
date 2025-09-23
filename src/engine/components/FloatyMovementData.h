@@ -1,8 +1,8 @@
 #pragma once
 
-struct FloatyMovementData
+typedef struct FloatyMovementData
 {
 	bool mWasUsed;
 	float mCurrentSpeed;
-};
+} FloatyMovementData;
 

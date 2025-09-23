@@ -75,6 +75,7 @@ Resource* TextureManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, 
 	_mResourceCounter += 1;
 	resource->mData = Texture_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* TextureManager_GetDatFileName()
 {

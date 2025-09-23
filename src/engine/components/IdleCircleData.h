@@ -1,7 +1,7 @@
 #pragma once
 
-struct IdleCircleData
+typedef struct IdleCircleData
 {
 	int mIdleDegree;
-};
+} IdleCircleData;
 

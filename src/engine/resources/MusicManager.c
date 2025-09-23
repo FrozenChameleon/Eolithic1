@@ -75,6 +75,7 @@ Resource* MusicManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, co
 	_mResourceCounter += 1;
 	resource->mData = Music_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* MusicManager_GetDatFileName()
 {
