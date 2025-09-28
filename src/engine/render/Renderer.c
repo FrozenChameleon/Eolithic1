@@ -87,7 +87,7 @@ int Renderer_InitSpriteBatch()
 {
 	if (_mHasInitSpriteBatch)
 	{
-		return;
+		return 0;
 	}
 
 	SpriteBatch_Init(&_mOrangeSpriteBatch);
@@ -95,6 +95,8 @@ int Renderer_InitSpriteBatch()
 	SpriteBatch_Init(&_mOrangeSpriteBatchFinal);
 
 	_mHasInitSpriteBatch = false;
+
+	return 0;
 }
 void Renderer_SetGlobalShaderProgram(ShaderProgram* value)
 {

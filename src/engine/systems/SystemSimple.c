@@ -132,12 +132,15 @@ static void ReceiveBroadcast(void* sys, int type, int packet1, int packet2, int 
 	}
 }
 
-System* SystemSimple_CreateSystemSimple(ComponentType ctype, void (*setupSystem)())
+SystemSimple* SystemSimple_CreateSystemSimple(ComponentType ctype)
 {
 	SystemSimple* ss = Utils_malloc(sizeof(SystemSimple));
 	Utils_memset(ss, 0, sizeof(SystemSimple));
 	ss->_mType = ctype;
-
+	return ss;
+}
+System* SystemSimple_CreateSystem(SystemSimple* ss)
+{
 	System* sys = Utils_malloc(sizeof(System));
 	Utils_memset(sys, 0, sizeof(System));
 	sys->_mData = ss;
@@ -149,6 +152,5 @@ System* SystemSimple_CreateSystemSimple(ComponentType ctype, void (*setupSystem)
 	sys->_mDrawDebugHud = DrawDebugHud;
 	sys->_mUpdateLastRenderPosition = UpdateLastRenderPosition;
 	sys->_mReceiveBroadcast = ReceiveBroadcast;
-
 	return sys;
 }

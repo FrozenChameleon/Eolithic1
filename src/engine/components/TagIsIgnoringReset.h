@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsIgnoringReset
+typedef struct TagIsIgnoringReset
 {
 	uint8_t mDummy;
-};
+} TagIsIgnoringReset;
 

@@ -1,7 +1,7 @@
 #pragma once
 
-struct StunFrames final
+typedef struct StunFrames
 {
 	int mTag;
-};
+} StunFrames;
 

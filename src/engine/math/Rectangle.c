@@ -22,6 +22,7 @@ Rectangle Rectangle_Create(int x, int y, int width, int height)
 	rect.Y = y;
 	rect.Width = width;
 	rect.Height = height;
+	return rect;
 }
 void Rectangle_Init(Rectangle* value, int x, int y, int width, int height)
 {

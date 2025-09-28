@@ -2,8 +2,7 @@
 
 #include "stdint.h"
 
-struct OeTagIsExtraBody
+typedef struct TagIsExtraBody
 {
 	uint8_t mDummy;
-};
-
+} TagIsExtraBody;

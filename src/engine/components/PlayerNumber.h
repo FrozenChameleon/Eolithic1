@@ -1,7 +1,7 @@
 #pragma once
 
-struct PlayerNumber
+typedef struct PlayerNumber
 {
 	int mTag;
-};
+} PlayerNumber;
 

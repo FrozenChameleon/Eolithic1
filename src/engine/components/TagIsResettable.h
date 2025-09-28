@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsResettable
+typedef struct TagIsResettable
 {
 	uint8_t mDummy;
-};
+} TagIsResettable;
 

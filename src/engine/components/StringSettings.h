@@ -2,8 +2,8 @@
 
 #include "../utils/StringPair.h"
 
-struct StringSettings final
+typedef struct StringSettings
 {
 	StringPair* mSettings;
-};
+} StringSettings;
 

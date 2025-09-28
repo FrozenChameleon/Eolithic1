@@ -2,8 +2,7 @@
 
 #include "stdint.h"
 
-struct OeTagIsPauseScene
+typedef struct TagIsPauseScene
 {
 	uint8_t mDummy;
-};
-
+} TagIsPauseScene;

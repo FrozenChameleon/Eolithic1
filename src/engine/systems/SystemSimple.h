@@ -24,4 +24,5 @@ typedef struct SystemSimple
 	void (*_mSetupSystem)();
 } SystemSimple;
 
-System* SystemSimple_CreateSystemSimple(ComponentType ctype, void (*setupSystem)());
+SystemSimple* SystemSimple_CreateSystemSimple(ComponentType ctype);
+System* SystemSimple_CreateSystem(SystemSimple* ss);

@@ -1,10 +1,11 @@
 #pragma once
 
 #include "../utils/Timer.h"
+#include "../render/Sheet.h"
 
-struct OeSheet;
+typedef struct Sheet Sheet;
 
-struct SpecialNdDeathEffect
+typedef struct SpecialNdDeathEffect
 {
 	int mParticleDirectionX[3];
 	int mParticleDirectionY[3];
@@ -14,7 +15,7 @@ struct SpecialNdDeathEffect
 	float mInitialPositionY;
 	float mSectionWidth;
 	float mSectionHeight;
-	OeSheet* mSheetReference;
+	Sheet* mSheetReference;
 	Timer mTimer;
-};
+} SpecialNdDeathEffect;
 

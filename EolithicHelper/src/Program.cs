@@ -26,12 +26,16 @@ namespace EolithicHelper
         {
         }
 
-        static void Main(string[] args)
+        static void PrintHelpLines()
         {
             Console.WriteLine("Welcome to Eolithic Helper!");
             Console.WriteLine("[C] - Generate Components Boilerplate From " + FILE_COMPONENTS);
             Console.WriteLine("[R] - Generate Resource Boilerplate From " + FILE_RESOURCE);
             Console.WriteLine("[P] - Exit");
+        }
+        static void Main(string[] args)
+        {
+            PrintHelpLines();
 
             Loop();
         }
@@ -73,23 +77,25 @@ namespace EolithicHelper
             int counter = 0;
             string[] componentFileContents = File.ReadAllLines(pathForFileComponents);
 
-            string gameStateDataHelperString = "";
-            gameStateDataHelperString += "\n";
-            gameStateDataHelperString += "#define GSD_INITIAL_SIZE 4\n";
-            gameStateDataHelperString += "\n";
-            gameStateDataHelperString += "void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)\n";
-            gameStateDataHelperString += "{\n";
+            List<string> gameStateDataHelperList = new List<string>();
+            gameStateDataHelperList.Add("\n");
+            gameStateDataHelperList.Add("#define GSD_INITIAL_SIZE 4\n");
+            gameStateDataHelperList.Add("\n");
+            gameStateDataHelperList.Add("void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)\n");
+            gameStateDataHelperList.Add("{\n");
 
-            string componentTypeString = "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n";
-            componentTypeString += "#pragma once\n";
-            componentTypeString += "\n";
-            componentTypeString += "#define COMPONENT_TYPE_LEN " + componentFileContents.Length + "\n";
-            componentTypeString += "\n";
-            componentTypeString += "typedef enum ComponentType\n";
-            componentTypeString += "{\n";
+            List<string> componentTypeList = new List<string>();
+            componentTypeList.Add( "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n");
+            componentTypeList.Add("#pragma once\n");
+            componentTypeList.Add("\n");
+            componentTypeList.Add("REPLACEME");
+            componentTypeList.Add("\n");
+            componentTypeList.Add("typedef enum ComponentType\n");
+            componentTypeList.Add("{\n");
 
             string includeThese = "";
 
+            int componentTypeLen = 0;
             foreach (string component in componentFileContents)
             {
                 string fileWithStruct = FindFileWithStruct(component);
@@ -100,7 +106,14 @@ namespace EolithicHelper
                 }
 
                 string fileLocation = fileWithStruct.Replace('\\', '/');
-                fileLocation = fileLocation.Replace("src/engine/", "../");
+                if(fileLocation.StartsWith("src/game/"))
+                {
+                    fileLocation = fileLocation.Replace("src/game/", "../../game/");
+                }
+                else
+                {
+                    fileLocation = fileLocation.Replace("src/engine/", "../");
+                }
                 includeThese += "#include " + '"' + fileLocation + '"' + '\n';
 
                 Console.WriteLine("Found " + component + " at " + fileWithStruct);
@@ -109,50 +122,46 @@ namespace EolithicHelper
 
                 string componentEnumName = "C_" + component;
 
-                gameStateDataHelperString += "    " + "ComponentPack_Init(&gsd->mComponentPacks[" + componentEnumName + "], sizeof(" + component + "), GSD_INITIAL_SIZE);\n";
+                gameStateDataHelperList.Add("    " + "ComponentPack_Init(&gsd->mComponentPacks[" + componentEnumName + "], sizeof(" + component + "), GSD_INITIAL_SIZE);\n");
 
-                componentTypeString += "    " + componentEnumName + " = " + counter + ",\n";
+                componentTypeList.Add("    " + componentEnumName + " = " + counter + ",\n");
 
                 counter += 1;
-
-                /*
-                string replaceResourceManager = components + "Manager";
-
-                string pathToRemoveFromFileWithStruct = Path.Combine(DIR_SRC, DIR_ENGINE);
-                string replaceIncludePath = fileWithStruct.Replace(pathToRemoveFromFileWithStruct, "");
-                replaceIncludePath = "../" + replaceIncludePath;
-                replaceIncludePath = replaceIncludePath.Replace("\\", "/");
-                replaceIncludePath = replaceIncludePath.Replace("//", "/");
-                replaceIncludePath = "#include " + '"' + replaceIncludePath + '"';
-
-                string resourceManagerPathForHeader = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_RESOURCES, replaceResourceManager + ".h");
-                WriteTemplate(Path.Combine(DIR_HELPER_RESOURCES, FILE_TEMPLATE_RESOURCE_HEADER),
-                    resourceManagerPathForHeader, replaceIncludePath, components, replaceResourceManager);
-
-                string resourceManagerPathForDefinition = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_RESOURCES, replaceResourceManager + ".c");
-                WriteTemplate(Path.Combine(DIR_HELPER_RESOURCES, FILE_TEMPLATE_RESOURCE_DEFINITIONS),
-                    resourceManagerPathForDefinition, replaceIncludePath, components, replaceResourceManager);
-                */
+                componentTypeLen += 1;
             }
 
-            gameStateDataHelperString += "}\n";
-            gameStateDataHelperString = ("//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n#include \"GameStateDataHelper.h\"\n#include \"ComponentType.h\"\n\n" + includeThese + gameStateDataHelperString);
+            componentTypeList[3] = "#define COMPONENT_TYPE_LEN " + componentTypeLen + "\n";
 
-            componentTypeString += "} ComponentType;\n";
+            gameStateDataHelperList.Add("}\n");
+            gameStateDataHelperList.Insert(0, "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n#include \"GameStateDataHelper.h\"\n#include \"ComponentType.h\"\n\n" + includeThese);
+
+            componentTypeList.Add("} ComponentType;\n");
 
             {
                 string componentTypePath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "ComponentType.h");
+                string componentTypeString = "";
+                for(int i = 0; i < componentTypeList.Count; i += 1)
+                {
+                    componentTypeString += componentTypeList[i];
+                }
                 File.WriteAllText(componentTypePath, componentTypeString);
                 Console.WriteLine("Wrote component types to: " + componentTypePath);
             }
 
             {
                 string gameStateDataHelperPath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "GameStateDataHelper.c");
+                string gameStateDataHelperString = "";
+                for (int i = 0; i < gameStateDataHelperList.Count; i += 1)
+                {
+                    gameStateDataHelperString += gameStateDataHelperList[i];
+                }
                 File.WriteAllText(gameStateDataHelperPath, gameStateDataHelperString);
                 Console.WriteLine("Wrote game state data helper to: " + gameStateDataHelperPath);
             }
 
             Console.WriteLine("Completed creating component boiler plate!");
+
+            PrintHelpLines();
         }
         static void WriteTemplate(string fromPath, string toPath, string replaceForInclude, string replaceForResource, string replaceForResourceManager)
         {
@@ -205,6 +214,8 @@ namespace EolithicHelper
             }
 
             Console.WriteLine("Completed creating resource boiler plate!");
+
+            PrintHelpLines();
         }
         static string FindFileWithStructHelper(string path, string findThisStruct)
         {

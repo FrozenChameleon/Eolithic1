@@ -1,7 +1,7 @@
 #pragma once
 
-struct Step
+typedef struct Step
 {
 	int mStep;
-};
+} Step;
 

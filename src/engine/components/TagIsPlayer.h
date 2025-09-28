@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsPlayer
+typedef struct TagIsPlayer
 {
 	uint8_t mDummy;
-};
+} TagIsPlayer;
 

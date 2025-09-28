@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct TagIsBlockingLineOfSight
+typedef struct TagIsBlockingLineOfSight
 {
 	uint8_t mDummy;
-};
+} TagIsBlockingLineOfSight;
 

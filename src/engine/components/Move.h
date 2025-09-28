@@ -1,7 +1,7 @@
 #pragma once
 
-struct Move
+typedef struct Move
 {
 	int mMove;
-};
+} Move;
 

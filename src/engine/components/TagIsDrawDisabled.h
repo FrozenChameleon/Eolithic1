@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsDrawDisabled
+typedef struct TagIsDrawDisabled
 {
 	uint8_t mDummy;
-};
+} TagIsDrawDisabled;
 

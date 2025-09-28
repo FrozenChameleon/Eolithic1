@@ -1,7 +1,7 @@
 #pragma once
 
-struct LevelFrameCounter
+typedef struct LevelFrameCounter
 {
 	int mCounter;
-};
+} LevelFrameCounter;
 

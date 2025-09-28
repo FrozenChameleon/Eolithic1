@@ -1,7 +1,7 @@
 #pragma once
 
-struct ParentNumber
+typedef struct ParentNumber
 {
 	int mTag;
-};
+} ParentNumber;
 

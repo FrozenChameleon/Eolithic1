@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsComplete
+typedef struct TagIsComplete
 {
 	uint8_t mDummy;
-};
+} TagIsComplete;
 

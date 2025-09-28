@@ -2,8 +2,7 @@
 
 #include "../math/Vector2.h"
 #include "../render/Color.h"
-
-struct OeShaderProgram;
+#include "../render/ShaderProgram.h"
 
 typedef struct DrawActor
 {
@@ -24,6 +23,6 @@ typedef struct DrawActor
 	Vector2 mScale;
 	Vector2 mOffset;
 	Color mTintColor;
-	OeShaderProgram* mShaderProgram;
+	ShaderProgram* mShaderProgram;
 } DrawActor;
 

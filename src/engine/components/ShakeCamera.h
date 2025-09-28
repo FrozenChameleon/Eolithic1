@@ -2,12 +2,11 @@
 
 #include "../utils/Timer.h"
 
-struct ShakeCamera
+typedef struct ShakeCamera
 {
 	int mMinX;
 	int mMaxX;
 	int mMinY;
 	int mMaxY;
 	Timer mTimer;
-};
-
+} ShakeCamera;

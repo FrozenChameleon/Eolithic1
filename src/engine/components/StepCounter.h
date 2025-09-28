@@ -1,7 +1,7 @@
 #pragma once
 
-struct StringPairStepCounter
+typedef struct StepCounter
 {
 	int mCounter;
-};
+} StepCounter;
 

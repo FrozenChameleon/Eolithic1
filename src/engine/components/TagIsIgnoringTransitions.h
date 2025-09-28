@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsIgnoringTransitions
+typedef struct TagIsIgnoringTransitions
 {
 	uint8_t mDummy;
-};
+} TagIsIgnoringTransitions;
 

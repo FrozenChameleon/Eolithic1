@@ -2,10 +2,9 @@
 
 #include "../leveldata/LevelCameraDataInstance.h"
 
-struct SceneCameraData final
+typedef struct SceneCameraData
 {
 	LevelCameraDataInstance* mLastCamera;
 	//std::vector<LevelCameraDataInstance> mCameraData;
 	LevelCameraDataInstance* mCameraData;
-};
-
+} SceneCameraData;

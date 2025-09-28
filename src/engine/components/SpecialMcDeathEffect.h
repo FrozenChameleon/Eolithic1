@@ -3,9 +3,9 @@
 #include "../math/Vector2.h"
 #include "../utils/Timer.h"
 
-struct OeSheet;
+typedef struct Sheet Sheet;
 
-struct SpecialMcDeathEffect
+typedef struct SpecialMcDeathEffect
 {
 	int mDisplayType;
 	int mCounter;
@@ -18,10 +18,10 @@ struct SpecialMcDeathEffect
 	Vector2 mLastPositionTwo;
 	Vector2 mInitialPosition;
 	Timer mTimer;
-	OeSheet* mSheetReference;
-	OeSheet* mSheetUpperLeft;
-	OeSheet* mSheetUpperRight;
-	OeSheet* mSheetLowerRight;
-	OeSheet* mSheetLowerLeft;
-};
+	Sheet* mSheetReference;
+	Sheet* mSheetUpperLeft;
+	Sheet* mSheetUpperRight;
+	Sheet* mSheetLowerRight;
+	Sheet* mSheetLowerLeft;
+} SpecialMcDeathEffect;
 

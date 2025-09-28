@@ -2,8 +2,8 @@
 
 #include "../utils/Timer.h"
 
-struct StepTimer final
+typedef struct StepTimer
 {
 	Timer mTimer;
-};
+} StepTimer;
 

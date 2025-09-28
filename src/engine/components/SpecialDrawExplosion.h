@@ -3,9 +3,9 @@
 #include "../math/Vector2.h"
 #include "../utils/Timer.h"
 
-struct Sheet;
+typedef struct Sheet Sheet;
 
-struct SpecialDrawExplosion final
+typedef struct SpecialDrawExplosion
 {
 	int mCounter;
 	Vector2 mInitialPosition;
@@ -18,5 +18,5 @@ struct SpecialDrawExplosion final
 	int mSides[3]; //Was booleans...
 	Sheet* mSheetReference;
 	Timer mTimer;
-};
+} SpecialDrawExplosion;
 

@@ -4,7 +4,7 @@
 
 #define MOVE_GETTER_MAX_LEN 20
 
-struct MoveGetter
+typedef struct MoveGetter
 {
 	int mLastMove;
 	int mMovesCounter;
@@ -19,7 +19,7 @@ struct MoveGetter
 	bool mDebugDoNotUseMoveForcedByTool;
 	const char* mDebugName;
 	Point mDebugFirstWindowPosition;
-};
+} MoveGetter;
 
 void MoveGetter_Setup(MoveGetter* mg, const char* name, int movesToRemember);
 void MoveGetter_SetAsFixedOrder(MoveGetter* mg, const int* order);

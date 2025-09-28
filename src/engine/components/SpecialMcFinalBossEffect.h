@@ -3,9 +3,8 @@
 #include "../render/Animation.h"
 #include "../math/Point.h"
 #include "../math/Vector2.h"
-#include <string>
 
-struct SpecialMcFinalBossEffect final
+typedef struct SpecialMcFinalBossEffect
 {
 	int mLineCounter;
 	Point mRandomOffset;
@@ -18,5 +17,5 @@ struct SpecialMcFinalBossEffect final
 	bool mDisableShaking;
 	int mBloodCutoff;
 	int mForcedDirection;
-};
+} SpecialMcFinalBossEffect;
 

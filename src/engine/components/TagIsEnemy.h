@@ -2,8 +2,7 @@
 
 #include "stdint.h"
 
-struct OeTagIsEnemy
+typedef struct TagIsEnemy
 {
 	uint8_t mDummy;
-};
-
+} TagIsEnemy;

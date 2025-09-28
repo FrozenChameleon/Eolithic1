@@ -1,7 +1,7 @@
 #pragma once
 
-struct Name
+typedef struct Name
 {
 	const char* mName;
-};
+} Name;
 

@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct OeTagIsUpdateDisabled
+typedef struct TagIsUpdateDisabled
 {
 	uint8_t mDummy;
-};
+} TagIsUpdateDisabled;
 

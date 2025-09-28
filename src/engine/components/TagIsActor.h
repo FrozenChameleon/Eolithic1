@@ -2,8 +2,8 @@
 
 #include "stdint.h"
 
-struct TagIsActor
+typedef struct TagIsActor
 {
 	uint8_t mDummy;
-};
+} TagIsActor;
 
