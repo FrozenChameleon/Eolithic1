@@ -24,6 +24,7 @@ typedef struct Point
 	int32_t Y;
 } Point;
 
+Point Point_Create(int x, int y);
 void Point_Init(Point* point, int x, int y);
 Point Point_Zero();
 bool Point_EqualTo(Point value1, Point value2);

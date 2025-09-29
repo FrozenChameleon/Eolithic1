@@ -81,8 +81,10 @@
 #include "../../game/CrWipeCircleData.h"
 #include "../../game/CrWipeLinearData.h"
 #include "../collision/Body.h"
+#include "../collision/CollisionEngine.h"
 #include "../components/BounceData.h"
 #include "../components/Camera.h"
+#include "../components/CollisionImprintData.h"
 #include "../components/DrawActor.h"
 #include "../components/FakePosition.h"
 #include "../components/FloatyMovementData.h"
@@ -205,8 +207,10 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_CrWipeCircleData], sizeof(CrWipeCircleData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrWipeLinearData], sizeof(CrWipeLinearData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_Body], sizeof(Body), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CollisionEngine], sizeof(CollisionEngine), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_BounceData], sizeof(BounceData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_Camera], sizeof(Camera), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CollisionImprintData], sizeof(CollisionImprintData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_DrawActor], sizeof(DrawActor), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_FakePosition], sizeof(FakePosition), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_FloatyMovementData], sizeof(FloatyMovementData), GSD_INITIAL_SIZE);

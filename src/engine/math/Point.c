@@ -15,6 +15,13 @@
 
 #include "Point.h"
 
+Point Point_Create(int x, int y)
+{
+	Point point;
+	point.X = x;
+	point.Y = y;
+	return point;
+}
 void Point_Init(Point* point, int x, int y)
 {
 	point->X = x;
