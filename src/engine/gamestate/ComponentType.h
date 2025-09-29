@@ -2,7 +2,7 @@
 
 #pragma once
 
-#define COMPONENT_TYPE_LEN 105
+#define COMPONENT_TYPE_LEN 119
 
 typedef enum ComponentType
 {
@@ -102,13 +102,27 @@ typedef enum ComponentType
     C_SpecialMcDeathEffect = 93,
     C_SpecialMcFinalBossEffect = 94,
     C_Step = 95,
-    C_StepTimer = 96,
-    C_StringSettings = 97,
-    C_ParticleInstance = 98,
-    C_TagIsActor = 99,
-    C_TagIsComplete = 100,
-    C_TagIsDrawDisabled = 101,
-    C_TagIsInPlay = 102,
-    C_TagIsPlayer = 103,
-    C_TagIsUpdateDisabled = 104,
+    C_StepCounter = 96,
+    C_StepTimer = 97,
+    C_StringSettings = 98,
+    C_ParticleInstance = 99,
+    C_TagIsActor = 100,
+    C_TagIsComplete = 101,
+    C_TagIsDrawDisabled = 102,
+    C_TagIsInPlay = 103,
+    C_TagIsPlayer = 104,
+    C_TagIsUpdateDisabled = 105,
+    C_SceneCameraData = 106,
+    C_TagIsBlockingLineOfSight = 107,
+    C_MoveGetter = 108,
+    C_NodeMovingKit = 109,
+    C_HitFlashKit = 110,
+    C_MirrorEffect = 111,
+    C_Move = 112,
+    C_TagIsIgnoringTransitions = 113,
+    C_TagIsExtraBody = 114,
+    C_TagIsEnemy = 115,
+    C_StunFrames = 116,
+    C_Random32 = 117,
+    C_IntTag = 118,
 } ComponentType;

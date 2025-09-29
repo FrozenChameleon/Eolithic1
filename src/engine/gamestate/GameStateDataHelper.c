@@ -99,6 +99,7 @@
 #include "../components/SpecialMcDeathEffect.h"
 #include "../components/SpecialMcFinalBossEffect.h"
 #include "../components/Step.h"
+#include "../components/StepCounter.h"
 #include "../components/StepTimer.h"
 #include "../components/StringSettings.h"
 #include "../leveldata/ParticleInstance.h"
@@ -108,6 +109,19 @@
 #include "../components/TagIsInPlay.h"
 #include "../components/TagIsPlayer.h"
 #include "../components/TagIsUpdateDisabled.h"
+#include "../components/SceneCameraData.h"
+#include "../components/TagIsBlockingLineOfSight.h"
+#include "../components/MoveGetter.h"
+#include "../components/NodeMovingKit.h"
+#include "../components/HitFlashKit.h"
+#include "../components/MirrorEffect.h"
+#include "../components/Move.h"
+#include "../components/TagIsIgnoringTransitions.h"
+#include "../components/TagIsExtraBody.h"
+#include "../components/TagIsEnemy.h"
+#include "../components/StunFrames.h"
+#include "../math/Random32.h"
+#include "../components/IntTag.h"
 
 #define GSD_INITIAL_SIZE 4
 
@@ -209,6 +223,7 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_SpecialMcDeathEffect], sizeof(SpecialMcDeathEffect), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_SpecialMcFinalBossEffect], sizeof(SpecialMcFinalBossEffect), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_Step], sizeof(Step), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_StepCounter], sizeof(StepCounter), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_StepTimer], sizeof(StepTimer), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_StringSettings], sizeof(StringSettings), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_ParticleInstance], sizeof(ParticleInstance), GSD_INITIAL_SIZE);
@@ -218,4 +233,17 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_TagIsInPlay], sizeof(TagIsInPlay), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_TagIsPlayer], sizeof(TagIsPlayer), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_TagIsUpdateDisabled], sizeof(TagIsUpdateDisabled), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_SceneCameraData], sizeof(SceneCameraData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_TagIsBlockingLineOfSight], sizeof(TagIsBlockingLineOfSight), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_MoveGetter], sizeof(MoveGetter), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_NodeMovingKit], sizeof(NodeMovingKit), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_HitFlashKit], sizeof(HitFlashKit), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_MirrorEffect], sizeof(MirrorEffect), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_Move], sizeof(Move), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_TagIsIgnoringTransitions], sizeof(TagIsIgnoringTransitions), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_TagIsExtraBody], sizeof(TagIsExtraBody), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_TagIsEnemy], sizeof(TagIsEnemy), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_StunFrames], sizeof(StunFrames), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_Random32], sizeof(Random32), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_IntTag], sizeof(IntTag), GSD_INITIAL_SIZE);
 }

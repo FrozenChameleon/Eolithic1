@@ -46,7 +46,7 @@ bool Has_Players();
 Entity Get_FirstPlayer();
 Entity Get_Player();
 Entity Get_ClosestPlayer(float x, float y);
-Entity Get_Player(int number);
+Entity Get_Player2(int number);
 LevelCameraDataInstance* Get_CameraDataInstances();
 SceneCameraData* Get_SceneCameraData();
 //private
@@ -74,7 +74,7 @@ Entity Do_BuildThingFromData(int i, int j, ThingInstance* data);
 void Do_FlipGameState(int nextState);
 void Do_FlipGameStateBack();
 Entity Do_BuildNewEntity();
-Entity Do_BuildNewEntity(const char* name);
+Entity Do_BuildNewEntityWithName(const char* name);
 void Do_FreezeEntityTillOnScreen(Entity entity);
 void Do_FreezeEntityTillOnScreen2(Entity entity, bool facesPlayer, bool isFacingFlipped);
 void Do_TurnOnMirrorEffect(Entity entity);
@@ -134,7 +134,7 @@ MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int depth);
 void Do_SetRotate(Entity entity, float value);
 void Do_Rotate(Entity entity, float value);
 void DeprecatedDo_SetTag(Entity entity, int whatever, int whatever2);
-void Do_ImprintTiles(Entity entity, float x, float y, int type, int amountX, int amountY);
+
 void Do_IdleCircle(Entity entity, float radius, bool useX, bool useY, int idleDegreeIncrease);
 void Do_SetAsUsingBulletCollisionEngine(Entity entity);
 bool Do_FloatyMoveSomewhere(Entity entity, float destX, float destY, float speedAccel, float speedLimit);
@@ -222,6 +222,7 @@ void Do_DestroyParticlesByName(const char* name);
 void Do_ImprintTile1(Vector2 position, int type);
 void Do_ImprintTile2(Vector2 position, int type, int offsetX, int offsetY);
 void Do_ImprintTile3(Vector2 position, int type, int width, int height);
+void Do_ImprintTiles(Entity entity, float x, float y, int type, int amountX, int amountY);
 void Do_ImprintTiles4(Vector2 position, int type, int width, int height, int offsetX, int offsetY);
 void Do_ImprintTile5(int type, float x, float y);
 void Do_ImprintTile6(int type, float x, float y, int offsetX, int offsetY);
@@ -255,8 +256,8 @@ void Do_PauseAllSounds(int priority);
 void Do_ResumeAllSounds(int priority);
 void Do_StopAllSounds();
 void Do_PlaySound(const char* name);
-void Do_PlaySound2(const char* name, float forcedVolume);
-void Do_StopSound3(const char* name);
+void Do_PlaySoundWithForcedVolume(const char* name, float forcedVolume);
+void Do_StopSound(const char* name);
 void Do_PauseMusic(int priority);
 void Do_ResumeMusic(int priority);
 void Do_StopMusic();
@@ -283,10 +284,10 @@ void Do_SetHitFlashByModulo(Entity entity, int value, int target);
 void Do_SetHitFlashByModulo2(Entity entity, int value, int target, int source);
 void Do_SetHitFlashByModuloOverHalf(Entity entity, int value);
 void Do_SetHitFlashByModuloOverHalf2(Entity entity, int value, int source);
-bool Do_MoveSomewhere(Entity entity, Point target, float speed);
-bool Do_MoveSomewhere2(Entity entity, Vector2 target, float speed);
-bool Do_MoveSomewhere3(Entity entity, float targetX, float targetY, float speed);
-bool Do_MoveSomewhere4(Vector2* moveThis, Vector2 target, float speed);
+bool Do_MoveSomewhereByPoint(Entity entity, Point target, float speed);
+bool Do_MoveSomewhereByVector(Entity entity, Vector2 target, float speed);
+bool Do_MoveSomewhere(Entity entity, float targetX, float targetY, float speed);
+bool Do_MoveSomewhereToVector(Vector2* moveThis, Vector2 target, float speed);
 void Do_SetImage(Entity entity, int state, int phase);
 void Do_SetImage2(Entity entity, int state, int phase, bool carry);
 void Do_SetImageForced(Entity entity, int state, int phase);
@@ -294,12 +295,12 @@ void Do_SetImageForced2(Entity entity, int state, int phase, bool carry);
 Entity Do_AddAnimation(Entity entity, float x, float y, int timeLimit, const char* name);
 void Do_RestrictOnSides(Entity entity);
 void Do_SetColor(Entity entity, Color color);
-void Do_Move(Entity entity, Point move, float speed);
-void Do_Move2(Entity entity, Vector2 move, float speed);
-void Do_Move3(Entity entity, float x, float y, float speed);
-void Do_Move4(Entity entity, Point move);
-void Do_Move5(Entity entity, Vector2 move);
-void Do_Move6(Entity entity, float x, float y);
+void Do_MoveByPoint(Entity entity, Point move, float speed);
+void Do_MoveByVector(Entity entity, Vector2 move, float speed);
+void Do_Move(Entity entity, float x, float y, float speed);
+void Do_MoveByPointAbsolute(Entity entity, Point move);
+void Do_MoveByVectorAbsolute(Entity entity, Vector2 move);
+void Do_MoveAbsolute(Entity entity, float x, float y);
 void Do_MoveAtAngle(Entity entity, double angle, float speed);
 void Do_AddBrDeathEffect(Entity entity, int state, int phase);
 void Do_AddNdDeathEffect(Entity entity, int state, int phase);
@@ -611,45 +612,17 @@ bool Is_DrawDisabled(Entity entity);
 void* Get_Component(ComponentType ctype, Entity entity);
 void* Do_InitComponent(ComponentType ctype, Entity entity);
 Entity Get_ChildByComponent(ComponentType ctype, Entity entity);
+void Do_SetBoolTag(ComponentType ctype, Entity entity, bool value);
+void Do_RemoveComponent(ComponentType ctype, Entity entity);
+bool Is_ComponentPackPresent(ComponentType ctype);
+bool Is_ComponentPresent(ComponentType ctype, Entity entity);
+ComponentPack* Get_ComponentPack(ComponentType ctype);
+Entity Get_FirstSetEntity(ComponentType ctype);
+void* Get_FirstSetComponent(ComponentType ctype);
+bool Is_AnyEntityInPack(ComponentType ctype);
+void* TryGet_Component(ComponentType ctype, Entity entity, bool* wasSuccessful);
+void* TryGet_FirstSetComponent(ComponentType ctype, bool* wasSuccessful);
 /*
-bool Is_ComponentPackPresent()
-{
-	return Get_ActiveGameState()->IsComponentPackPresent<T>();
-}
-bool Is_ComponentPresent(Entity entity)
-{
-	return Get_ActiveGameState()->HasComponent<T>(entity);
-}
-OeComponentPack<T>* Get_ComponentPack()
-{
-	return Get_ActiveGameState()->GetComponentPack<T>();
-}
-Entity Get_FirstSetEntity()
-{
-	return Get_ActiveGameState()->GetFirstSetEntity<T>();
-}
-void* Get_FirstSetComponent()
-{
-	return Get_ActiveGameState()->GetFirstSetComponent<T>();
-}
-
-
-void Do_RemoveComponent(Entity entity)
-{
-	Get_ActiveGameState()->Unset<T>(entity);
-}
-void Do_SetBoolTag(Entity entity, bool value)
-{
-	if (value)
-	{
-		Get_Component<T>(entity);
-	}
-	else
-	{
-		Do_RemoveComponent<T>(entity);
-	}
-}
-
 Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool useY, bool useInitial)
 {
 	std::vector<Entity> entitiesInPlay = Get_ActiveGameState()->GetEntitiesInPlay();
@@ -865,16 +838,5 @@ Entity Get_ClosestThingWithComponent(Entity entity, bool checkOnScreen,
 
 	return Entity::Nothing;
 }
-bool Is_AnyEntityInPack()
-{
-	return Get_ComponentPack<T>()->IsAnyEntityInPack();
-}
-void* TryGet_Component(Entity entity, bool* wasSuccessful)
-{
-	return Get_ActiveGameState()->TryGetComponent<T>(entity, wasSuccessful);
-}
-void* TryGet_FirstSetComponent(bool* wasSuccessful)
-{
-	return Get_ActiveGameState()->TryGetFirstSetComponent<T>(wasSuccessful);
-}
+
 //*/

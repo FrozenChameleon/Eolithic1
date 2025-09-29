@@ -31,6 +31,7 @@ void* ComponentPack_GetFirstSetComponent(ComponentPack* pack );
 Entity ComponentPack_GetFirstSetEntity(ComponentPack* pack);
 void* ComponentPack_GetComponentExclusive(ComponentPack* pack, Entity entity, bool isNotExclusive);
 void* ComponentPack_GetComponent(ComponentPack* pack, Entity entity);
+void* ComponentPack_GetComponentAtIndex(ComponentPack* pack, int index);
 void* ComponentPack_SetExclusive(ComponentPack* pack, Entity entity, bool isNotExclusive);
 void* ComponentPack_Set(ComponentPack* pack, Entity entity);
 void ComponentPack_Unset(ComponentPack* pack, int entityNumber);

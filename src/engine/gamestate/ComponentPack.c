@@ -181,7 +181,10 @@ void* ComponentPack_GetComponent(ComponentPack* pack, Entity entity)
 {
 	return ComponentPack_GetComponentExclusive(pack, entity, false);
 }
-
+void* ComponentPack_GetComponentAtIndex(ComponentPack* pack, int index)
+{
+	return pack->Components + (index * pack->mComponentSizeInBytes);
+}
 void* ComponentPack_SetExclusive(ComponentPack* pack, Entity entity, bool isNotExclusive)
 {
 	if (entity == ENTITY_NOTHING)
