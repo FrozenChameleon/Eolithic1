@@ -30,6 +30,7 @@ int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);
 void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);
 void Utils_memset(void* _Dst, int _Val, size_t _Size);
 void* Utils_malloc(size_t size);
+void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);
 size_t Utils_strlen(const char* str);
 size_t Utils_strnlen(const char* str, size_t maxlen);

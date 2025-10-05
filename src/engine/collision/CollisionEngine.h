@@ -15,8 +15,8 @@ typedef struct CollisionEngine
 	std::vector<std::shared_ptr<OePathNode>> mTempNodes;
 	std::vector<std::shared_ptr<OePathNode>> mOpenNodes;
 	std::vector<std::shared_ptr<OePathNode>> mClosedNodes;*/
-	DrawRectangle* mDebugNodeRectangles;
-	DrawRectangle* mDebugManyRectangles;
+	DrawRectangle* mDynamicDebugNodeRectangles;
+	DrawRectangle* mDynamicDebugManyRectangles;
 	Rectangle mCollisionGridSize;
 } CollisionEngine;
 

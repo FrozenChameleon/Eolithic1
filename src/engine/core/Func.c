@@ -794,13 +794,13 @@ Timer* Get_StepTimer(Entity entity)
 	return &data->mTimer;
 }
 
-bool Do_UpdateStepTimer(Entity entity, const char* tuning)
+bool Do_UpdateStepTimer2(Entity entity, const char* tuning)
 {
 	return false;
 	//TODOC99return Do_UpdateStepTimer2(entity, Get_TuningAsInt(entity, tuning));
 }
 
-bool Do_UpdateStepTimer2(Entity entity, int limit)
+bool Do_UpdateStepTimer(Entity entity, int limit)
 {
 	StepTimer* data = Get_Component(C_StepTimer, entity);
 	data->mTimer.mLimit = limit;

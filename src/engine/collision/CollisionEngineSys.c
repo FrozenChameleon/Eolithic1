@@ -14,6 +14,7 @@
 #include "../../GlobalDefs.h"
 #include "../utils/Logger.h"
 #include "../globals/ObjectTypes.h"
+#include "../../third_party/stb_ds.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -30,7 +31,7 @@ static const Color mDebugColorActive = { 0, 255, 0, 191 };
 static const Color mDebugColorTouched = { 127, 0, 127, 191 };
 static const Color mDebugColor = { 128, 128, 128, 127 };
 static const Color mDebugGridColor = { 255, 0, 0, 51 };
-static int* _mBodies;
+static int* _mDynamicBodies;
 
 static bool _mCornerChecks[CORNER_CHECKS_LEN];
 static ComponentPack* _mBodyPack;
@@ -87,8 +88,6 @@ void CollisionEngineSys_CollisionHelper(Body* body, int myDirectionX, int myDire
 }
 void CollisionEngineSys_ResolveWithOtherBodies(CollisionEngine* data, Body* bodyOne, bool isVertical)
 {
-	//TODO C99
-	/*
 	if (bodyOne->mIgnoreBodies || bodyOne->mIgnoreAllCollision || bodyOne->mIsDisabled || bodyOne->mIsStatic || !IsBodyUnderResolveLimit(bodyOne))
 	{
 		return;
@@ -96,21 +95,22 @@ void CollisionEngineSys_ResolveWithOtherBodies(CollisionEngine* data, Body* body
 
 	bodyOne->mInternalResolverCounter += 1;
 
-	for (int i = 0; i < _mBodies.size(); i += 1)
+	ptrdiff_t bodiesLen = arrlen(_mDynamicBodies);
+	for (int i = 0; i < bodiesLen; i += 1)
 	{
-		Body* bodyTwo = &_mBodyPack->Components[_mBodies[i]];
+		Body* bodyTwo = &_mBodyPack->Components[_mDynamicBodies[i]];
 
 		if (CollisionEngineSys_IsCollisionValid(bodyOne, bodyTwo, isVertical)) // Basic checks, ending with collision detection callback code.
 		{
 			bool pushed = false;
 
-			if (ResolvePush(data, bodyOne, bodyTwo, isVertical))
+			if (CollisionEngineSys_ResolvePush(data, bodyOne, bodyTwo, isVertical))
 			{
 				pushed = true;
 			}
 			else
 			{
-				if (ResolvePush(data, bodyTwo, bodyOne, isVertical))
+				if (CollisionEngineSys_ResolvePush(data, bodyTwo, bodyOne, isVertical))
 				{
 					pushed = true;
 				}
@@ -123,7 +123,6 @@ void CollisionEngineSys_ResolveWithOtherBodies(CollisionEngine* data, Body* body
 			}
 		}
 	}
-	*/
 }
 bool CollisionEngineSys_ResolvePush(CollisionEngine* data, Body* pushingBody, Body* pushedBody, bool isVertical)
 {
@@ -347,29 +346,27 @@ void CollisionEngineSys_CopyCollisionGridFromPristine(CollisionEngine* data)
 }
 void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 {
-	//TODO C99
-	/*
 	_mImprintPack = Get_ComponentPack(C_CollisionImprintData);
 	_mBodyPack = Get_ComponentPack(C_Body);
 
 	// Prepare collision grid
 	CollisionEngineSys_CopyCollisionGridFromPristine(data);
 	PackIterator iter = PackIterator_Begin;
-	while (_mImprintPack->Next(&iter))
+	while (ComponentPack_Next(_mImprintPack, &iter))
 	{
 		CollisionEngineSys_ImprintToCollisionGridHelper(data, &_mImprintPack->Components[iter.mIndex]);
 	}
 	//
 
 	// House keeping
-	iter = OePackIterator_Begin();
-	while (_mBodyPack->Next(&iter))
+	iter = PackIterator_Begin;
+	while (ComponentPack_Next(_mBodyPack, &iter))
 	{
 		Body* body = &_mBodyPack->Components[iter.mIndex];
 		if (!body->mIsDisabled)
 		{
 			CollisionEngineSys_HandleBodiesHousekeepingHelper(data, body);
-			_mBodies.push_back(iter.mIndex);
+			arrput(_mDynamicBodies, iter.mIndex);
 		}
 	}
 	//
@@ -378,21 +375,23 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 
 	CollisionEngineSys_Step(data, false); // Step X
 
-	for (int i = 0; i < _mBodies.size(); i += 1)
+	ptrdiff_t bodiesLen = arrlen(_mDynamicBodies);
+	for (int i = 0; i < bodiesLen; i += 1)
 	{
-		_mBodyPack->Components[_mBodies[i]].mPhysicsVelocity = Vector2_Zero;
+		Body* body = ComponentPack_GetComponentAtIndex(_mBodyPack, _mDynamicBodies[i]);
+		body->mPhysicsVelocity = Vector2_Zero;
 	}
 
-	data->mDebugManyRectangles.clear();
+	arrsetlen(data->mDynamicDebugManyRectangles, 0);
 
 #if EDITOR
 	DebugGenerateDebugRectangles(data);
 #endif
 
-	_mBodies.clear();
+	arrsetlen(_mDynamicBodies, 0);
 	Utils_ResetArrayAsBool(_mCornerChecks, CORNER_CHECKS_LEN, false);
 	_mImprintPack = NULL;
-	_mBodyPack = NULL;*/
+	_mBodyPack = NULL;
 }
 bool CollisionEngineSys_PushBody(CollisionEngine* data, bool isBakedCollision, bool isVertical, Body* body, const Rectangle* otherPhysicsRectangle)
 {
@@ -666,22 +665,18 @@ void CollisionEngineSys_RemoveAllCollisionImprints()
 }
 void CollisionEngineSys_ImprintToCollisionGrid(CollisionEngine* data, float pixelX, float pixelY, int width, int height, int type)
 {
-	//TODO 
-	/*
-	Entity collisionEntity = Get_ActiveGameState()->GetFirstSetEntity<CollisionEngine>();
-	ComponentPack<CollisionImprintData>* imprintPack = Get_ComponentPack<CollisionImprintData>();
-	Point point = GetCollisionGridPosition(pixelX, pixelY);
-	CollisionImprintData* imprintData = imprintPack->Set(collisionEntity, true);
+	Entity collisionEntity = Get_FirstSetEntity(C_CollisionEngine);
+	ComponentPack* imprintPack = Get_ComponentPack(C_CollisionImprintData);
+	Point point = CollisionEngineSys_GetCollisionGridPosition(pixelX, pixelY);
+	CollisionImprintData* imprintData = ComponentPack_SetExclusive(imprintPack, collisionEntity, true);
 	imprintData->mPosition = point;
 	imprintData->mWidth = width;
 	imprintData->mHeight = height;
 	imprintData->mType = type;
-	ImprintToCollisionGridHelper(data, imprintData);
-	*/
+	CollisionEngineSys_ImprintToCollisionGridHelper(data, imprintData);
 }
 void CollisionEngineSys_ImprintChunkToCollisionGridWithSolid(CollisionEngine* data, MetaMapChunk* chunk)
 {
-	//TODO LATER
 	//Point position = chunk->GetRealPosition();
 	//ImprintToCollisionGrid(data, position.X, position.Y, chunk.GetTilesWidth(), chunk.GetTilesHeight(), OeObjectTypes.SOLID);
 }
@@ -1226,37 +1221,35 @@ void CollisionEngineSys_HandleBodiesHousekeepingHelper(CollisionEngine* data, Bo
 }
 void CollisionEngineSys_Step(CollisionEngine* data, bool isVertical)
 {
-	//TODO C99
-	/*
-	for (int i = 0; i < _mBodies.size(); i += 1) // First move and test high priority bodies....
+	ptrdiff_t bodiesLen = arrlen(_mDynamicBodies);
+	for (int i = 0; i < bodiesLen; i += 1) // First move and test high priority bodies....
 	{
-		Body* body = &_mBodyPack->Components[_mBodies[i]];
+		Body* body = &_mBodyPack->Components[_mDynamicBodies[i]];
 
 		if (body->mIsHighPriorityBody)
 		{
-			ApplyBodyVelocity(data, body, isVertical);
+			CollisionEngineSys_ApplyBodyVelocity(data, body, isVertical);
 
-			ResolveWithOtherBodies(data, body, isVertical);
+			CollisionEngineSys_ResolveWithOtherBodies(data, body, isVertical);
 		}
 	}
 
-	for (int i = 0; i < _mBodies.size(); i += 1) // Move for the step, do initial collision check with baked collision.
+	for (int i = 0; i < bodiesLen; i += 1) // Move for the step, do initial collision check with baked collision.
 	{
-		Body* body = &_mBodyPack->Components[_mBodies[i]];
+		Body* body = &_mBodyPack->Components[_mDynamicBodies[i]];
 
 		if (!body->mIsHighPriorityBody)
 		{
-			ApplyBodyVelocity(data, body, isVertical);
+			CollisionEngineSys_ApplyBodyVelocity(data, body, isVertical);
 		}
 
-		ResolveWithBakedCollision(data, body, isVertical);
+		CollisionEngineSys_ResolveWithBakedCollision(data, body, isVertical);
 	}
 
-	for (int i = 0; i < _mBodies.size(); i += 1) // After collision... now test normal thing rectangles.
+	for (int i = 0; i < bodiesLen; i += 1) // After collision... now test normal thing rectangles.
 	{
-		ResolveWithOtherBodies(data, &_mBodyPack->Components[_mBodies[i]], isVertical);
+		CollisionEngineSys_ResolveWithOtherBodies(data, &_mBodyPack->Components[_mDynamicBodies[i]], isVertical);
 	}
-	*/
 }
 void CollisionEngineSys_ResolveWithBakedCollision(CollisionEngine* data, Body* body, bool vertical)
 {

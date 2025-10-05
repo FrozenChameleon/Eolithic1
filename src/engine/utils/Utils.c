@@ -93,6 +93,11 @@ void* Utils_malloc(size_t size)
 	_mMallocRefs += 1;
 	return SDL_malloc(size);
 }
+void* Utils_calloc(size_t nmemb, size_t size)
+{
+	_mMallocRefs += 1;
+	return SDL_calloc(nmemb, size);
+}
 void Utils_free(void* mem)
 {
 	_mMallocRefs -= 1;
