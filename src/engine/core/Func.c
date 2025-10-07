@@ -1584,11 +1584,11 @@ void Do_DestroyParticlesByName(const char* name)
 	}
 	*/
 }
-/*
-void Do_ImprintTile1(Vector2 position, int type)
+void Do_ImprintTile(Vector2 position, int type)
 {
-	Do_ImprintTile(position, type, 0, 0);
+	//TODO C99 Do_ImprintTile(position, type, 0, 0);
 }
+/*
 void Do_ImprintTile2(Vector2 position, int type, int offsetX, int offsetY)
 {
 	//CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), position.X + offsetX, position.Y + offsetY, 1, 1, type);
@@ -3466,6 +3466,14 @@ int Get_StringSettingAsInt(Entity entity, const char* setting)
 	int number = Utils_TryParseInt(Get_StringSettingAsString(entity, setting));
 	return number;*/
 }
+bool Get_StringSettingAsBooleanByChar(Entity entity, const char* setting)
+{
+	return false;
+}
+float Get_StringSettingAsFloat(Entity entity, const char* setting)
+{
+	return 0;
+}
 /*
 bool Get_StringSettingAsBooleanByChar(Entity entity, const char* setting)
 {
@@ -3501,6 +3509,10 @@ bool Get_StringSettingAsBoolean(Entity entity, const char* setting)
 	}
 }
 */
+bool Get_StringSettingAsBoolean(Entity entity, const char* setting)
+{
+	return false;
+}
 double Get_VectorFromRadianAngleX(double radianAngle)
 {
 	return 0;
@@ -4161,7 +4173,12 @@ bool Is_FlipX(Entity entity)
 bool Is_FlipY(Entity entity)
 {
 	return Get_DrawActor(entity)->mIsFlipY;
-}/*
+}
+bool Is_NearCollisionLowerRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck)
+{
+	return false;
+}
+/*
 bool Is_NearCollisionLowerRight(Entity entity, int xDirection, int yDirection, std_vector<int> collisionToCheck)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
@@ -4212,6 +4229,10 @@ bool Is_NearCollisionUpperLeft(Entity entity, int xDirection, int yDirection, st
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), rect.Left(), rect.Top(), xDirection, yDirection, collisionToCheck);
 }
 */
+bool Is_NearCollisionLowerLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck)
+{
+	return false;
+}
 bool Is_LineOfSight(float x1, float y1, float x2, float y2, bool respectOneWays)
 {
 	return false;

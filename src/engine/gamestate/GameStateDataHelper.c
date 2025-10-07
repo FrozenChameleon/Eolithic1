@@ -23,6 +23,7 @@
 #include "../../game/thing/CrThingObjectFlameData.h"
 #include "../../game/components/CrTagIsJellyfishShield.h"
 #include "../../game/thing/CrThingEnemyAnchorManData.h"
+#include "../../game/thing/CrThingEnemyBoneMummyData.h"
 #include "../../game/thing/CrThingEnemyCrabData.h"
 #include "../../game/thing/CrThingEnemyDeathBallData.h"
 #include "../../game/thing/CrThingEnemyFastDogData.h"
@@ -40,11 +41,14 @@
 #include "../../game/thing/CrThingEnemyNewBossShipLaserData.h"
 #include "../../game/thing/CrThingEnemyNewBossSquidData.h"
 #include "../../game/thing/CrThingEnemySinewaveData.h"
+#include "../../game/thing/CrThingEnemyStarfishData.h"
 #include "../../game/thing/CrThingObjectAnchorData.h"
 #include "../../game/thing/CrThingObjectArrowData.h"
+#include "../../game/thing/CrThingObjectArrowShooterData.h"
 #include "../../game/thing/CrThingObjectBubbleData.h"
 #include "../../game/thing/CrThingObjectBubbleSpawnerData.h"
 #include "../../game/thing/CrThingObjectCatStatueData.h"
+#include "../../game/thing/CrThingObjectCoinData.h"
 #include "../../game/thing/CrThingObjectCrumblePlatformData.h"
 #include "../../game/thing/CrThingObjectDemonData.h"
 #include "../../game/thing/CrThingObjectDemonHeartData.h"
@@ -149,6 +153,7 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_CrSharedFlameData], sizeof(CrSharedFlameData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrTagIsJellyfishShield], sizeof(CrTagIsJellyfishShield), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyAnchorManData], sizeof(CrThingEnemyAnchorManData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyBoneMummyData], sizeof(CrThingEnemyBoneMummyData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyCrabData], sizeof(CrThingEnemyCrabData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyDeathBallData], sizeof(CrThingEnemyDeathBallData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyFastDogData], sizeof(CrThingEnemyFastDogData), GSD_INITIAL_SIZE);
@@ -166,11 +171,14 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossShipLaserData], sizeof(CrThingEnemyNewBossShipLaserData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossSquidData], sizeof(CrThingEnemyNewBossSquidData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemySinewaveData], sizeof(CrThingEnemySinewaveData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyStarfishData], sizeof(CrThingEnemyStarfishData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectAnchorData], sizeof(CrThingObjectAnchorData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectArrowData], sizeof(CrThingObjectArrowData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectArrowShooterData], sizeof(CrThingObjectArrowShooterData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectBubbleData], sizeof(CrThingObjectBubbleData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectBubbleSpawnerData], sizeof(CrThingObjectBubbleSpawnerData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectCatStatueData], sizeof(CrThingObjectCatStatueData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectCoinData], sizeof(CrThingObjectCoinData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectCrumblePlatformData], sizeof(CrThingObjectCrumblePlatformData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectDemonData], sizeof(CrThingObjectDemonData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingObjectDemonHeartData], sizeof(CrThingObjectDemonHeartData), GSD_INITIAL_SIZE);

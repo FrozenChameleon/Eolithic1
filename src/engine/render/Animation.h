@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../utils/Timer.h"
+#include "../render/Sheet.h"
 
 typedef struct Animation
 {
@@ -22,3 +23,7 @@ typedef struct Animation
 	Timer mFlipTimer;
 	//std::vector<OeSheet*>* mSheets;
 } Animation;
+
+void Animation_Init(Animation* anim, const char* whatever, int whatever2);
+void Animation_Update(Animation* anim);
+Sheet* Animation_GetCurrentSheet(Animation* anim);

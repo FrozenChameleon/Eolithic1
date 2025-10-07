@@ -70,7 +70,7 @@ void Body_FlipBody(Body* body)
 	body->mPhysicsWidth = body->mPhysicsHeight;
 	body->mPhysicsHeight = temp;
 }
-void Body_MoveByVector2(Body* body, Vector2 pixelMovement)
+void Body_MoveByVector(Body* body, Vector2 pixelMovement)
 {
 	Body_Move(body, pixelMovement.X, pixelMovement.Y);
 }
@@ -171,7 +171,7 @@ void Body_ForcePositionY(Body* body, float pixelY)
 	body->mPhysicsLastRenderPosition.Y = body->mPhysicsPosition.Y;
 	body->mPhysicsLastLogicalPosition.Y = body->mPhysicsPosition.Y;
 }
-void Body_ForceMoveByVector2(Body* body, Vector2 pixelMovement)
+void Body_ForceMoveByVector(Body* body, Vector2 pixelMovement)
 {
 	Body_ForceMove(body, pixelMovement.X, pixelMovement.Y);
 }
@@ -196,7 +196,7 @@ Vector2 Body_GetLastRenderPosition(Body* body)
 {
 	return Vector2_DivSingle(body->mPhysicsLastRenderPosition, BODY_PHYSICS_SCALER);
 }
-void Body_QueueMoveByVector2(Body* body, Vector2 movement)
+void Body_QueueMoveByVector(Body* body, Vector2 movement)
 {
 	Body_QueueMove(body, movement.X, movement.Y);
 }

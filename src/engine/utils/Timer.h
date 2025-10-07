@@ -16,6 +16,7 @@ typedef struct Timer
 	int32_t mLimit;
 } Timer;
 
+Timer Timer_Create(int limit);
 void Timer_Init(Timer* timer, int limit);
 float Timer_GetPercentage(const Timer* timer);
 float Timer_GetInversePercentage(const Timer* timer);

@@ -219,7 +219,7 @@ void Do_AddParticles2(const char* name, float absoluteX, float absoluteY, int am
 void Do_AddParticles3(const char* name, Vector2 absolutePos, int amount, int rangeX, int rangeY);
 void Do_AddParticles4(const char* name, float absoluteX, float absoluteY, int amount, int rangeX, int rangeY);
 void Do_DestroyParticlesByName(const char* name);
-void Do_ImprintTile1(Vector2 position, int type);
+void Do_ImprintTile(Vector2 position, int type);
 void Do_ImprintTile2(Vector2 position, int type, int offsetX, int offsetY);
 void Do_ImprintTile3(Vector2 position, int type, int width, int height);
 void Do_ImprintTiles(Entity entity, float x, float y, int type, int amountX, int amountY);

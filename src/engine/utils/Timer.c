@@ -8,6 +8,13 @@
 
 #include "Utils.h"
 
+Timer Timer_Create(int limit)
+{
+	Timer timer;
+	timer.mCurrent = 0;
+	timer.mLimit = limit;
+	return timer;
+}
 void Timer_Init(Timer* timer, int limit)
 {
 	Utils_memset(timer, 0, sizeof(Timer));
