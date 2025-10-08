@@ -25,3 +25,5 @@ typedef struct System
 	System_UpdateLastRenderPositionFunc _mUpdateLastRenderPosition;
 	System_ReceiveBroadcastFunc _mReceiveBroadcast;
 } System;
+
+System* System_CreateSystem();

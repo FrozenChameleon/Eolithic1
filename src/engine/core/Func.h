@@ -622,6 +622,8 @@ void* Get_FirstSetComponent(ComponentType ctype);
 bool Is_AnyEntityInPack(ComponentType ctype);
 void* TryGet_Component(ComponentType ctype, Entity entity, bool* wasSuccessful);
 void* TryGet_FirstSetComponent(ComponentType ctype, bool* wasSuccessful);
+Entity Get_DummyEntityUniqueToPack(ComponentType ctype, const char* name);
+Entity Get_DummyEntityUniqueToPack2(ComponentPack* pack, const char* name);
 /*
 Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool useY, bool useInitial)
 {
@@ -649,19 +651,7 @@ Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool
 	}
 	return Entity::Nothing;
 }
-Entity Get_DummyEntityUniqueToPack(OeComponentPack<T>* pack, const char* name)
-{
-	if (!pack->IsAnyEntityInPack())
-	{
-		Entity entity = Get_ActiveGameState()->BuildNewEntity();
-		Do_SetName(entity, name);
-		return entity;
-	}
-	else
-	{
-		return pack->GetFirstSetEntity();
-	}
-}
+
 void Do_RemoveUniqueDummyEntity(OeComponentPack<T>* pack)
 {
 	if (pack->IsAnyEntityInPack())
@@ -673,10 +663,7 @@ void Do_RemoveUniqueDummyEntity()
 {
 	Do_RemoveUniqueDummyEntity(Get_ComponentPack<T>());
 }
-Entity Get_DummyEntityUniqueToPack(const char* name)
-{
-	return Get_DummyEntityUniqueToPack(Get_ComponentPack<T>(), name);
-}
+
 void Do_RemoveAndInitComponent(Entity entity)
 {
 	Do_RemoveComponent<T>(entity);

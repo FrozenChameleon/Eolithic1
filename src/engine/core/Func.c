@@ -4495,3 +4495,20 @@ void* TryGet_FirstSetComponent(ComponentType ctype, bool* wasSuccessful)
 {
 	return GameStateManager_TryGetFirstSetComponent(ctype, wasSuccessful);
 }
+Entity Get_DummyEntityUniqueToPack(ComponentType ctype, const char* name)
+{
+	return Get_DummyEntityUniqueToPack2(Get_ComponentPack(ctype), name);
+}
+Entity Get_DummyEntityUniqueToPack2(ComponentPack* pack, const char* name)
+{
+	if (!ComponentPack_IsAnyEntityInPack(pack))
+	{
+		Entity entity = Do_BuildNewEntity();
+		Do_SetName(entity, name);
+		return entity;
+	}
+	else
+	{
+		return ComponentPack_GetFirstSetEntity(pack);
+	}
+}

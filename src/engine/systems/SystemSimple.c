@@ -140,7 +140,7 @@ SystemSimple* SystemSimple_CreateSystemSimple(ComponentType ctype)
 }
 System* SystemSimple_CreateSystem(SystemSimple* ss)
 {
-	System* sys = Utils_calloc(1, sizeof(System));
+	System* sys = System_CreateSystem();
 	sys->_mData = ss;
 	//sys->_mInitStringSettingsHere = InitStringSetting;
 	sys->_mInit = Init;
