@@ -4512,3 +4512,40 @@ Entity Get_DummyEntityUniqueToPack2(ComponentPack* pack, const char* name)
 		return ComponentPack_GetFirstSetEntity(pack);
 	}
 }
+void Do_RemoveUniqueDummyEntity(ComponentType ctype)
+{
+	Do_RemoveUniqueDummyEntity2(Get_ComponentPack(ctype));
+}
+void Do_RemoveUniqueDummyEntity2(ComponentPack* pack)
+{
+	if (ComponentPack_IsAnyEntityInPack(pack))
+	{
+		GameState_RemoveEntity(Get_ActiveGameState(), ComponentPack_GetFirstSetEntity(pack));
+	}
+}
+int Get_AmountOfMyChildrenWithComponent(ComponentType ctype, Entity entity)
+{
+	return 0;
+	//TODO C99
+	//std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);
+	//return search->mList.size();
+}
+void Do_DestroyChildrenWithComponent(ComponentType ctype, Entity entity)
+{
+	Do_DestroyChildrenWithComponent2(ctype, entity, "");
+}
+void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const char* particle)
+{
+	//TODO C99
+	/*
+	std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);
+	for (int i = 0; i < search->mList.size(); i += 1)
+	{
+		Entity target = search->mList[i];
+		if (particle != "")
+		{
+			Do_AddParticle(particle, Get_Position(target));
+		}
+		Do_SetComplete(target);
+	}*/
+}

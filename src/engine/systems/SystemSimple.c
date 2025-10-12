@@ -132,7 +132,7 @@ static void ReceiveBroadcast(void* sys, int type, int packet1, int packet2, int 
 	}
 }
 
-SystemSimple* SystemSimple_CreateSystemSimple(ComponentType ctype)
+SystemSimple* SystemSimple_Create(ComponentType ctype)
 {
 	SystemSimple* ss = Utils_calloc(1, sizeof(SystemSimple));
 	ss->_mType = ctype;
@@ -140,7 +140,7 @@ SystemSimple* SystemSimple_CreateSystemSimple(ComponentType ctype)
 }
 System* SystemSimple_CreateSystem(SystemSimple* ss)
 {
-	System* sys = System_CreateSystem();
+	System* sys = System_Create();
 	sys->_mData = ss;
 	//sys->_mInitStringSettingsHere = InitStringSetting;
 	sys->_mInit = Init;

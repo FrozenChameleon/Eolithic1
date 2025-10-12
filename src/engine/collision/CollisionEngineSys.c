@@ -98,7 +98,7 @@ void CollisionEngineSys_ResolveWithOtherBodies(CollisionEngine* data, Body* body
 	ptrdiff_t bodiesLen = arrlen(_mDynamicBodies);
 	for (int i = 0; i < bodiesLen; i += 1)
 	{
-		Body* bodyTwo = &_mBodyPack->Components[_mDynamicBodies[i]];
+		Body* bodyTwo = ComponentPack_GetComponentAtIndex(_mBodyPack, _mDynamicBodies[i]);
 
 		if (CollisionEngineSys_IsCollisionValid(bodyOne, bodyTwo, isVertical)) // Basic checks, ending with collision detection callback code.
 		{
@@ -354,7 +354,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(_mImprintPack, &iter))
 	{
-		CollisionEngineSys_ImprintToCollisionGridHelper(data, &_mImprintPack->Components[iter.mIndex]);
+		CollisionEngineSys_ImprintToCollisionGridHelper(data, ComponentPack_GetComponentAtIndex(_mImprintPack, iter.mIndex));
 	}
 	//
 
@@ -362,7 +362,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 	iter = PackIterator_Begin;
 	while (ComponentPack_Next(_mBodyPack, &iter))
 	{
-		Body* body = &_mBodyPack->Components[iter.mIndex];
+		Body* body = ComponentPack_GetComponentAtIndex(_mBodyPack, iter.mIndex);
 		if (!body->mIsDisabled)
 		{
 			CollisionEngineSys_HandleBodiesHousekeepingHelper(data, body);
@@ -400,10 +400,10 @@ bool CollisionEngineSys_PushBody(CollisionEngine* data, bool isBakedCollision, b
 
 	Rectangle myPhysicsRectangle = Body_GetPhysicsRect(body);
 
-	int rightDif = Rectangle_Left(&otherPhysicsRectangle) - Rectangle_Right(&myPhysicsRectangle) - 1; // Get minimums.
-	int leftDif = Rectangle_Right(&otherPhysicsRectangle) - Rectangle_Left(&myPhysicsRectangle) + 1;
-	int bottomDif = Rectangle_Top(&otherPhysicsRectangle) - Rectangle_Bottom(&myPhysicsRectangle) - 1;
-	int topDif = Rectangle_Bottom(&otherPhysicsRectangle) - Rectangle_Top(&myPhysicsRectangle) + 1;
+	int32_t rightDif = Rectangle_Left(otherPhysicsRectangle) - Rectangle_Right(&myPhysicsRectangle) - 1; // Get minimums.
+	int32_t leftDif = Rectangle_Right(otherPhysicsRectangle) - Rectangle_Left(&myPhysicsRectangle) + 1;
+	int32_t bottomDif = Rectangle_Top(otherPhysicsRectangle) - Rectangle_Bottom(&myPhysicsRectangle) - 1;
+	int32_t topDif = Rectangle_Bottom(otherPhysicsRectangle) - Rectangle_Top(&myPhysicsRectangle) + 1;
 
 	if (Math_abs(topDif) < Math_abs(bottomDif)) // Find minimum.
 	{
@@ -889,6 +889,7 @@ bool CollisionEngineSys_HasLineOfSight(CollisionEngine* data, float x1, float y1
 }
 bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, SpriteBatch* spriteBatch, float x1, float y1, float x2, float y2, bool respectOneWays)
 {
+	return false;
 	//TODO
 	/*
 	int directionX = x2 - x1 > 0 ? 1 : -1;
@@ -1224,7 +1225,7 @@ void CollisionEngineSys_Step(CollisionEngine* data, bool isVertical)
 	ptrdiff_t bodiesLen = arrlen(_mDynamicBodies);
 	for (int i = 0; i < bodiesLen; i += 1) // First move and test high priority bodies....
 	{
-		Body* body = &_mBodyPack->Components[_mDynamicBodies[i]];
+		Body* body = ComponentPack_GetComponentAtIndex(_mBodyPack, _mDynamicBodies[i]);
 
 		if (body->mIsHighPriorityBody)
 		{
@@ -1236,7 +1237,7 @@ void CollisionEngineSys_Step(CollisionEngine* data, bool isVertical)
 
 	for (int i = 0; i < bodiesLen; i += 1) // Move for the step, do initial collision check with baked collision.
 	{
-		Body* body = &_mBodyPack->Components[_mDynamicBodies[i]];
+		Body* body = ComponentPack_GetComponentAtIndex(_mBodyPack, _mDynamicBodies[i]);
 
 		if (!body->mIsHighPriorityBody)
 		{
@@ -1248,7 +1249,7 @@ void CollisionEngineSys_Step(CollisionEngine* data, bool isVertical)
 
 	for (int i = 0; i < bodiesLen; i += 1) // After collision... now test normal thing rectangles.
 	{
-		CollisionEngineSys_ResolveWithOtherBodies(data, &_mBodyPack->Components[_mDynamicBodies[i]], isVertical);
+		CollisionEngineSys_ResolveWithOtherBodies(data, ComponentPack_GetComponentAtIndex(_mBodyPack, _mDynamicBodies[i]), isVertical);
 	}
 }
 void CollisionEngineSys_ResolveWithBakedCollision(CollisionEngine* data, Body* body, bool vertical)

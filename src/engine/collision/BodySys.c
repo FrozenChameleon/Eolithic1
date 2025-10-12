@@ -39,7 +39,7 @@ static void UpdateLastRenderPositionRoutine(Body* data)
 
 System* BodySys_CreateSystem()
 {
-	SystemSimple* ss = SystemSimple_CreateSystemSimple(C_CrThingEnemyAnchorManData);
+	SystemSimple* ss = SystemSimple_Create(C_Body);
 	ss->_mInitRoutine = InitRoutine;
 	ss->_mUpdateRoutine = UpdateRoutine;
 	ss->_mUpdateLastRenderPositionRoutine = UpdateLastRenderPositionRoutine;

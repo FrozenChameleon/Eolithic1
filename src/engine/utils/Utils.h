@@ -61,3 +61,5 @@ int Utils_GetInternalRenderHeight();
 float Utils_GetCurrentHardwareRatio();
 float Utils_GetCurrentInternalRatio();
 IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim);
+char Utils_GetCharFromNumber(int val);
+int Utils_Get1DArrayPosFor2DArray(int i, int j, int width);

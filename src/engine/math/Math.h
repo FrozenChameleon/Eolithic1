@@ -8,6 +8,8 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "Point.h"
+#include "Vector2.h"
 
 extern const double MATH_TICK_15HZ;
 extern const double MATH_TICK_30HZ;
@@ -41,3 +43,9 @@ double Math_MinDouble(double valueA, double valueB);
 int32_t Math_MaxInt32(int32_t valueA, int32_t valueB);
 float Math_MaxSingle(float valueA, float valueB);
 double Math_MaxDouble(double valueA, double valueB);
+int Math_GetDistanceInt32(int32_t x1, int32_t x2);
+float Math_GetDistanceSingle(float x1, float x2);
+double Math_GetDistanceDouble(double x1, double x2);
+double Math_GetDistanceEuclideanPoint(Point begin, Point end);
+double Math_GetDistanceEuclideanVector2(Vector2 begin, Vector2 end);
+double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2);

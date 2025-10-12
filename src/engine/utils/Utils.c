@@ -287,3 +287,40 @@ IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
 
 	return sa;
 }
+
+char Utils_GetCharFromNumber(int val)
+{
+	if (val == -1)
+	{
+		return ' ';
+	}
+
+	switch (val)
+	{
+	case 0:
+		return '0';
+	case 1:
+		return '1';
+	case 2:
+		return '2';
+	case 3:
+		return '3';
+	case 4:
+		return '4';
+	case 5:
+		return '5';
+	case 6:
+		return '6';
+	case 7:
+		return '7';
+	case 8:
+		return '8';
+	case 9:
+		return '9';
+	}
+	return '0';
+}
+int Utils_Get1DArrayPosFor2DArray(int i, int j, int width)
+{
+	return i + (j * width);
+}

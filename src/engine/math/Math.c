@@ -183,3 +183,29 @@ double Math_MaxDouble(double valueA, double valueB)
 	}
 	return valueA;
 }
+int Math_GetDistanceInt32(int32_t x1, int32_t x2)
+{
+	return Math_abs(x1 - x2);
+}
+float Math_GetDistanceSingle(float x1, float x2)
+{
+	return Math_fabsf(x1 - x2);
+}
+double Math_GetDistanceDouble(double x1, double x2)
+{
+	return Math_fabs(x1 - x2);
+}
+double Math_GetDistanceEuclideanPoint(Point begin, Point end)
+{
+	return Math_GetDistanceEuclideanSingle(begin.X, begin.Y, end.X, end.Y);
+}
+double Math_GetDistanceEuclideanVector2(Vector2 begin, Vector2 end)
+{
+	return Math_GetDistanceEuclideanSingle(begin.X, begin.Y, end.X, end.Y);
+}
+double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2)
+{
+	float x_dis = Math_fabsf(x1 - x2);
+	float y_dis = Math_fabsf(y1 - y2);
+	return Math_sqrt((x_dis * x_dis) + (y_dis * y_dis));
+}

@@ -26,4 +26,4 @@ typedef struct System
 	System_ReceiveBroadcastFunc _mReceiveBroadcast;
 } System;
 
-System* System_CreateSystem();
+System* System_Create();

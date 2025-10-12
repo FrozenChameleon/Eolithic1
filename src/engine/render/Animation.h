@@ -25,5 +25,7 @@ typedef struct Animation
 } Animation;
 
 void Animation_Init(Animation* anim, const char* whatever, int whatever2);
-void Animation_Update(Animation* anim);
+bool Animation_Update(Animation* anim);
 Sheet* Animation_GetCurrentSheet(Animation* anim);
+void Animation_ResetAnimation(Animation* anim);
+const char* Animation_GetCurrentSheetName();

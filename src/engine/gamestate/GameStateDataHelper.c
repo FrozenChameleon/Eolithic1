@@ -32,6 +32,7 @@
 #include "../../game/thing/CrThingEnemyHookManData.h"
 #include "../../game/thing/CrThingEnemyMagicianData.h"
 #include "../../game/thing/CrThingEnemyNewBossDemonData.h"
+#include "../../game/thing/CrThingEnemyNewBossEyeData.h"
 #include "../../game/thing/CrThingEnemyNewBossFinalData.h"
 #include "../../game/thing/CrThingEnemyNewBossJellyData.h"
 #include "../../game/thing/CrThingEnemyNewBossMonsterData.h"
@@ -80,6 +81,8 @@
 #include "../../game/thing/CrThingPlayerMuteMeleeData.h"
 #include "../../game/thing/CrThingTriggerBroadcastData.h"
 #include "../../game/thing/CrThingTriggerCheckpointData.h"
+#include "../../game/thing/CrThingTriggerGravityData.h"
+#include "../../game/thing/CrThingTriggerLevelCompleteData.h"
 #include "../../game/thing/CrThingTriggerPlaySoundData.h"
 #include "../../game/thing/CrThingTriggerSinwaveData.h"
 #include "../../game/CrWipeCircleData.h"
@@ -162,6 +165,7 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyHookManData], sizeof(CrThingEnemyHookManData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyMagicianData], sizeof(CrThingEnemyMagicianData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossDemonData], sizeof(CrThingEnemyNewBossDemonData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossEyeData], sizeof(CrThingEnemyNewBossEyeData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossFinalData], sizeof(CrThingEnemyNewBossFinalData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossJellyData], sizeof(CrThingEnemyNewBossJellyData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyNewBossMonsterData], sizeof(CrThingEnemyNewBossMonsterData), GSD_INITIAL_SIZE);
@@ -210,6 +214,8 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingPlayerMuteMeleeData], sizeof(CrThingPlayerMuteMeleeData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingTriggerBroadcastData], sizeof(CrThingTriggerBroadcastData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingTriggerCheckpointData], sizeof(CrThingTriggerCheckpointData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingTriggerGravityData], sizeof(CrThingTriggerGravityData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrThingTriggerLevelCompleteData], sizeof(CrThingTriggerLevelCompleteData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingTriggerPlaySoundData], sizeof(CrThingTriggerPlaySoundData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingTriggerSinwaveData], sizeof(CrThingTriggerSinwaveData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrWipeCircleData], sizeof(CrWipeCircleData), GSD_INITIAL_SIZE);

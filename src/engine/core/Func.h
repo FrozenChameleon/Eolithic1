@@ -624,6 +624,11 @@ void* TryGet_Component(ComponentType ctype, Entity entity, bool* wasSuccessful);
 void* TryGet_FirstSetComponent(ComponentType ctype, bool* wasSuccessful);
 Entity Get_DummyEntityUniqueToPack(ComponentType ctype, const char* name);
 Entity Get_DummyEntityUniqueToPack2(ComponentPack* pack, const char* name);
+void Do_RemoveUniqueDummyEntity(ComponentType ctype);
+void Do_RemoveUniqueDummyEntity2(ComponentPack* pack);
+int Get_AmountOfMyChildrenWithComponent(ComponentType ctype, Entity entity);
+void Do_DestroyChildrenWithComponent(ComponentType ctype, Entity entity);
+void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const char* particle);
 /*
 Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool useY, bool useInitial)
 {
@@ -652,17 +657,7 @@ Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool
 	return Entity::Nothing;
 }
 
-void Do_RemoveUniqueDummyEntity(OeComponentPack<T>* pack)
-{
-	if (pack->IsAnyEntityInPack())
-	{
-		Get_ActiveGameState()->RemoveEntity(pack->GetFirstSetEntity());
-	}
-}
-void Do_RemoveUniqueDummyEntity()
-{
-	Do_RemoveUniqueDummyEntity(Get_ComponentPack<T>());
-}
+
 
 void Do_RemoveAndInitComponent(Entity entity)
 {
@@ -702,23 +697,7 @@ std::shared_ptr<EntitySearch> Do_SearchForEntitiesWithComponent()
 {
 	return Do_SearchForEntitiesWithComponent<T>(false);
 }
-void Do_DestroyChildrenWithComponent(Entity entity)
-{
-	Do_DestroyChildrenWithComponent<T>(entity, "");
-}
-void Do_DestroyChildrenWithComponent(Entity entity, const char* particle)
-{
-	std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);
-	for (int i = 0; i < search->mList.size(); i += 1)
-	{
-		Entity target = search->mList[i];
-		if (particle != "")
-		{
-			Do_AddParticle(particle, Get_Position(target));
-		}
-		Do_SetComplete(target);
-	}
-}
+
 void Do_DestroyEntitiesWithComponent(const char* particle)
 {
 	std::shared_ptr<EntitySearch> search = Do_SearchForEntitiesWithComponent<T>();
@@ -750,11 +729,7 @@ int Get_AmountOfEntitiesWithComponent()
 	std::shared_ptr<EntitySearch> search = Do_SearchForEntitiesWithComponent<T>();
 	return search->mList.size();
 }
-int Get_AmountOfMyChildrenWithComponent(Entity entity)
-{
-	std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);
-	return search->mList.size();
-}
+
 Entity Get_ChildByComponent(Entity entity, int number)
 {
 	std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);

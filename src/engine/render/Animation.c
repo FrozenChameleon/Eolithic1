@@ -10,11 +10,19 @@ void Animation_Init(Animation* anim, const char* whatever, int whatever2)
 {
 
 }
-void Animation_Update(Animation* anim)
+bool Animation_Update(Animation* anim)
+{
+	return false;
+}
+Sheet* Animation_GetCurrentSheet(Animation* anim)
+{
+	return NULL;
+}
+void Animation_ResetAnimation(Animation* anim)
 {
 
 }
-Sheet* Animation_GetCurrentSheet(Animation* anim)
+const char* Animation_GetCurrentSheetName()
 {
 	return NULL;
 }

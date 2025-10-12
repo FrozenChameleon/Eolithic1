@@ -97,3 +97,4 @@ void GameHelper_AddStrings();
 //void GameHelper_AddDefaultThingSettings(std::vector<OeStringPair>& pairs);
 //const std::vector<std::string>& GameHelper_GetAllTheRecordings();
 //void GameHelper_BakedCollisionCheck(float x, float y, int collisionToCheck, OeBody* bodyRef, bool vertical, OeCollisionCheckData* data);
+void* GameHelper_CreateGameSaveData();
