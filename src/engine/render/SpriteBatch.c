@@ -64,7 +64,7 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	command->mScale = scale;
 	command->mRotation = rotation;
 	command->mSourceRectangle = sourceRectangle;
-	command->mDestinationRectangle = Rectangle_Empty();
+	command->mDestinationRectangle = Rectangle_Empty;
 	command->mTexture = texture;
 	command->mShaderProgram = program;
 

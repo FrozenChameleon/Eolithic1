@@ -27,11 +27,8 @@ void Point_Init(Point* point, int x, int y)
 	point->X = x;
 	point->Y = y;
 }
-Point Point_Zero()
-{
-	Point point = { 0 };
-	return point;
-}
+
+const Point Point_Zero = { 0 };
 
 bool Point_EqualTo(Point value1, Point value2)
 {

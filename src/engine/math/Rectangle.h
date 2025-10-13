@@ -27,6 +27,8 @@ typedef struct Rectangle
 	int32_t Height;
 } Rectangle;
 
+const extern Rectangle Rectangle_Empty;
+
 Rectangle Rectangle_Create(int x, int y, int width, int height);
 void Rectangle_Init(Rectangle* value, int x, int y, int width, int height);
 bool Rectangle_EqualTo(const Rectangle* value1, const Rectangle* value2);
@@ -42,4 +44,3 @@ bool Rectangle_Contains(const Rectangle* value, int x, int y);
 bool Rectangle_ContainsPoint(const Rectangle* value1, Point value2);
 bool Rectangle_ContainsRectangle(const Rectangle* value1, const Rectangle* value2);
 bool Rectangle_IsEmpty(const Rectangle* value);
-Rectangle Rectangle_Empty();

@@ -72,11 +72,11 @@ bool Service_PlatformUsesLocalStorageForSaveData()
 }
 Rectangle Service_PlatformGetForcedBackBufferSize()
 {
-	return Rectangle_Empty();
+	return Rectangle_Empty;
 }
 Rectangle Service_PlatformGetForcedWindowSize()
 {
-	return Rectangle_Empty();
+	return Rectangle_Empty;
 }
 bool Service_PlatformForcesVsync()
 {

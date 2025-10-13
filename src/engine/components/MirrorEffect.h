@@ -14,5 +14,5 @@ typedef struct MirrorEffect
 	float mListRotations[3];
 } MirrorEffect;
 
-void MirrorEffect_SetOn();
-void MirrorEffect_SetOff();
+void MirrorEffect_SetOn(MirrorEffect* me);
+void MirrorEffect_SetOff(MirrorEffect* me);

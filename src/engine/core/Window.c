@@ -171,7 +171,7 @@ void Window_SetTheMouseVisible(bool isVisible)
 }
 Rectangle Window_GetWindowSize()
 {
-	Rectangle rect = Rectangle_Empty();
+	Rectangle rect = Rectangle_Empty;
 	SDL_GetWindowSize(_mWindowContext, &rect.Width, &rect.Height);
 	return rect;
 }

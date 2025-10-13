@@ -20,6 +20,7 @@
 #include "../../game/CrEffectFloodData.h"
 #include "../../game/CrEffectWindData.h"
 #include "../../game/CrModePlayMovieData.h"
+#include "../../game/CrModePressStartMuteData.h"
 #include "../../game/thing/CrThingObjectFlameData.h"
 #include "../../game/components/CrTagIsJellyfishShield.h"
 #include "../../game/thing/CrThingEnemyAnchorManData.h"
@@ -131,6 +132,7 @@
 #include "../components/StunFrames.h"
 #include "../math/Random32.h"
 #include "../components/IntTag.h"
+#include "../components/DrawLineOfSight.h"
 
 #define GSD_INITIAL_SIZE 4
 
@@ -153,6 +155,7 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_CrEffectFloodData], sizeof(CrEffectFloodData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrEffectWindData], sizeof(CrEffectWindData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrModePlayMovieData], sizeof(CrModePlayMovieData), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_CrModePressStartMuteData], sizeof(CrModePressStartMuteData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrSharedFlameData], sizeof(CrSharedFlameData), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrTagIsJellyfishShield], sizeof(CrTagIsJellyfishShield), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_CrThingEnemyAnchorManData], sizeof(CrThingEnemyAnchorManData), GSD_INITIAL_SIZE);
@@ -264,4 +267,5 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_StunFrames], sizeof(StunFrames), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_Random32], sizeof(Random32), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_IntTag], sizeof(IntTag), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_DrawLineOfSight], sizeof(DrawLineOfSight), GSD_INITIAL_SIZE);
 }

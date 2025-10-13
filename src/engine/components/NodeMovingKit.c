@@ -1,11 +1,9 @@
 #include "NodeMovingKit.h"
 
+#include "../core/Func.h"
+#include "../math/Math.h"
+
 /*
-#include "../core/OeFunc.h"
-#include "../math/OeMath.h"
-
-using namespace OeFunc;
-
 void OeComNodeMovingKit::Setup(OeEntity owner, int type, bool moveContacts)
 {
 	mType = type;

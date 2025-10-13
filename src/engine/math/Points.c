@@ -58,7 +58,7 @@ Point Points_GetEightWay(int direction)
 	case POINTS_EIGHTWAY_UPLEFT:
 		return Points_UpLeft;
 	default:
-		return Point_Zero();
+		return Point_Zero;
 	}
 }
 Point Points_GetFourWay(int direction)
@@ -74,7 +74,7 @@ Point Points_GetFourWay(int direction)
 	case POINTS_FOURWAY_LEFT:
 		return Points_Left;
 	default:
-		return Point_Zero();
+		return Point_Zero;
 	}
 }
 void Points_Rotate(Point* point, int degree)

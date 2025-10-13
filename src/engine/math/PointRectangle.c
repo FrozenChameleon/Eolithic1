@@ -10,7 +10,7 @@
 
 bool PointRectangle_IsEmpty(PointRectangle* prect)
 {
-	if (Point_EqualTo(prect->mPointOne, Point_Zero()) && Point_EqualTo(prect->mPointTwo, Point_Zero()))
+	if (Point_EqualTo(prect->mPointOne, Point_Zero) && Point_EqualTo(prect->mPointTwo, Point_Zero))
 	{
 		return true;
 	}

@@ -37,7 +37,7 @@ static void InitSheet(Sheet* sheet)
 
 	sheet->mSheetName = EE_STR_NOTHING;
 	sheet->mUnderlyingTextureName = EE_STR_NOTHING;
-	sheet->mRectangle = Rectangle_Empty();
+	sheet->mRectangle = Rectangle_Empty;
 	sheet->mTextureResource = NULL;
 }
 

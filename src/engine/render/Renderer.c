@@ -529,7 +529,7 @@ static BmFont* GetBmFont(const char* font)
 }
 Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* font, const char* text, Color color, Vector2 position)
 {
-	return Rectangle_Empty();
+	return Rectangle_Empty;
 	/*
 	Texture* tex = font->GetFontTexture();
 	if (tex == nullptr)

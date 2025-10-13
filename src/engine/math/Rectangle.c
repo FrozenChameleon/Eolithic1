@@ -15,6 +15,8 @@
 
 #include "Rectangle.h"
 
+const Rectangle Rectangle_Empty = { 0 };
+
 Rectangle Rectangle_Create(int x, int y, int width, int height)
 {
 	Rectangle rect;
@@ -103,9 +105,4 @@ bool Rectangle_IsEmpty(const Rectangle* value)
 		(value->Height == 0) &&
 		(value->X == 0) &&
 		(value->Y == 0));
-}
-Rectangle Rectangle_Empty()
-{
-	Rectangle tempRect = { 0 };
-	return tempRect;
 }

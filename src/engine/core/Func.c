@@ -50,7 +50,7 @@
 #include "../math/Vectors.h"
 #include "../utils/Cvars.h"
 #include "../render/SpriteBatch.h"
-//#include "../render/DrawTool.h"
+#include "../render/DrawTool.h"
 #include "../render/Animation.h"
 #include "../leveldata/ParticleInstance.h"
 //#include "../globals/Colors.h"
@@ -1518,7 +1518,7 @@ ParticleInstance* Do_AddParticle4(const char* name, float absoluteX, float absol
 }
 Point Get_RandomPointInBounds(Point bounds, bool wrapped, Random32* random)
 {
-	Point pointToReturn = Point_Zero();
+	Point pointToReturn = Point_Zero;
 	if (bounds.X != 0)
 	{
 		int valueX = Random32_NextInt(random, bounds.X);
@@ -2382,7 +2382,7 @@ CollisionEngine* Get_CollisionEngine()
 }
 Point Get_Node(Entity entity, int i)
 {
-	return Point_Zero();
+	return Point_Zero;
 	/*
 	std_vector<Point>& nodes = Get_GridNodes(entity);
 	if (nodes.size() == 0)
@@ -2398,7 +2398,7 @@ Point Get_Node(Entity entity, int i)
 }
 Point Get_NodeAsGrid(Entity entity, int i)
 {
-	return Point_Zero();
+	return Point_Zero;
 	/*
 	std_vector<Point>& nodes = Get_GridNodes(entity);
 	if (nodes.size() == 0) //TODO 2024 THIS NEEDS SAFETY
@@ -2626,7 +2626,7 @@ Point Get_GridPosition(Entity entity)
 	GridPosition* component = TryGet_Component(C_GridPosition, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
-		return Point_Zero();
+		return Point_Zero;
 	}
 	else
 	{
@@ -3394,7 +3394,7 @@ int Get_Height(Entity entity)
 }
 Point Get_BodyCollisionGridPosition(Entity entity)
 {
-	return Point_Zero();
+	return Point_Zero;
 	//Vector2 position = Body_GetPosition(Get_Body(entity));
 	//return CollisionEngineSys_GetCollisionGridPosition(position.X, position.Y);
 }
@@ -3964,7 +3964,7 @@ bool Is_IntersectingCamera2(Camera* camera, int posX, int posY, int width, int h
 }
 Rectangle Get_LevelBoundsRectangle()
 {
-	return Rectangle_Empty();
+	return Rectangle_Empty;
 	//TODO C99return Get_LevelData()->GetLevelBoundsRectangle();
 }
 bool Is_InLevelBounds(Entity entity)

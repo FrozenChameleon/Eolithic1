@@ -29,7 +29,7 @@ void MouseData_CopyFrom(MouseData* md, const MouseData* otherData)
 }
 void MouseData_Clear(MouseData* md)
 {
-	md->_mMousePosition = Point_Zero();
+	md->_mMousePosition = Point_Zero;
 	md->_mScrollWheelValue = 0;
 	MouseData_ClearOnlyButtonData(md);
 }
