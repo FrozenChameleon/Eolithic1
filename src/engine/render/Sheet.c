@@ -76,7 +76,7 @@ void Sheet_BuildSheets()
 		sheet->mTextureResource = resource->mData;
 		sheet->mRectangle = ((Texture*)sheet->mTextureResource)->mBounds;
 		arrput(_mDynamicSheetList, sheet);
-		shput(_mStringHashMap, &resource->mPath, sheet);
+		shput(_mStringHashMap, resource->mPath, sheet);
 	}
 
 	if (!Globals_IsDebugFileMode() || GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS)
@@ -112,5 +112,21 @@ bool Sheet_HasSheet(const char* name)
 {
 	Init();
 
-	return shgeti(_mStringHashMap, name);
+	ptrdiff_t index = shgeti(_mStringHashMap, name);
+	if (index < 0)
+	{
+		return false;
+	}
+	return true;
+}
+IStringArray* Sheet_CreateListOfSheetNames()
+{
+	IStringArray* sa = IStringArray_Create();
+	ptrdiff_t len = shlen(_mStringHashMap);
+	for (int i = 0; i < len; i += 1)
+	{
+		const char* sheetName = _mStringHashMap[i].value->mSheetName;
+		IStringArray_Add(sa, sheetName);
+	}
+	return sa;
 }

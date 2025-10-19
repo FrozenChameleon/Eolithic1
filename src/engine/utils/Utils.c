@@ -324,3 +324,30 @@ int Utils_Get1DArrayPosFor2DArray(int i, int j, int width)
 {
 	return i + (j * width);
 }
+bool Utils_CharIsDigit(char c)
+{
+	switch (c)
+	{
+	case '1':
+		return true;
+	case '2':
+		return true;
+	case '3':
+		return true;
+	case '4':
+		return true;
+	case '5':
+		return true;
+	case '6':
+		return true;
+	case '7':
+		return true;
+	case '8':
+		return true;
+	case '9':
+		return true;
+	case '0':
+		return true;
+	}
+	return false;
+}

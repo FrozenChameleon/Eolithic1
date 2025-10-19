@@ -85,6 +85,7 @@ int32_t Game_Run()
 
 	Music_PlayMusic("new00", true, true, false, 0, false, 0);
 
+	bool ranAnimationTest = false;
 	uint64_t counter = 0;
 	uint64_t oldTicks = Stopwatch_GetTicks();
 	bool isDone = false;
@@ -137,6 +138,12 @@ int32_t Game_Run()
 		if (tester2)
 		{
 			int hello2 = 0;
+		}
+
+		if (!ranAnimationTest)
+		{
+			Animation_DebugTest();
+			ranAnimationTest = true;
 		}
 		//Update(delta);
 		//if (!OeService::SuppressDrawing())

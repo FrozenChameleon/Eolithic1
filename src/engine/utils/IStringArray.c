@@ -9,14 +9,13 @@ static uint64_t _mRefs;
 typedef struct IStringArray
 {
 	IStrings* mStrings;
-	struct { int32_t key; IString value; } *mHashMap;
+	struct { int64_t key; IString value; } *mHashMap;
 } IStringArray;
 
 IStringArray* IStringArray_Create()
 {
 	_mRefs += 1;
-	IStringArray* sa = Utils_malloc(sizeof(IStringArray));
-	memset(sa, 0, sizeof(IStringArray));
+	IStringArray* sa = Utils_calloc(1, sizeof(IStringArray));
 	sa->mStrings = IStrings_Create();
 	return sa;
 }
@@ -30,10 +29,10 @@ void IStringArray_Dispose(IStringArray* sa)
 void IStringArray_Add(IStringArray* sa, const char* str)
 {
 	IString internedString = IStrings_Get(sa->mStrings, str);
-	int32_t len = (int32_t)hmlen(sa->mHashMap);
+	int64_t len = hmlen(sa->mHashMap);
 	hmput(sa->mHashMap, len, internedString);
 }
-size_t IStringArray_Length(IStringArray* sa)
+int64_t IStringArray_Length(IStringArray* sa)
 {
 	return hmlen(sa->mHashMap);
 }

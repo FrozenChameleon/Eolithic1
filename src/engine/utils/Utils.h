@@ -10,7 +10,8 @@
 #include "stdbool.h"
 #include "FixedChar260.h"
 #include "../math/Rectangle.h"
-#include "IStringArray.h"
+
+typedef struct IStringArray IStringArray;
 
 typedef struct SharedFixedChar260
 {
@@ -63,3 +64,4 @@ float Utils_GetCurrentInternalRatio();
 IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim);
 char Utils_GetCharFromNumber(int val);
 int Utils_Get1DArrayPosFor2DArray(int i, int j, int width);
+bool Utils_CharIsDigit(char c);

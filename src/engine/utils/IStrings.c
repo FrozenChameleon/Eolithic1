@@ -27,8 +27,7 @@ static void InitGlobal()
 IStrings* IStrings_Create()
 {
 	_mRefs += 1;
-	IStrings* is = Utils_malloc(sizeof(IStrings));
-	memset(is, 0, sizeof(IStrings));
+	IStrings* is = Utils_calloc(1, sizeof(IStrings));
 	sh_new_arena(is->mStringHashMap);
 	return is;
 }

@@ -8,6 +8,7 @@
 
 #include "../resources/Resource.h"
 #include "../math/Rectangle.h"
+#include "../utils/IStringArray.h"
 
 typedef struct Sheet
 {
@@ -21,3 +22,4 @@ Sheet* Sheet_GetDefaultSheet();
 Sheet* Sheet_GetSheet(const char* name);
 void Sheet_BuildSheets();
 bool Sheet_HasSheet(const char* name);
+IStringArray* Sheet_CreateListOfSheetNames();

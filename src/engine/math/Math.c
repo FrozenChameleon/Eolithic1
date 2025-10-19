@@ -209,3 +209,7 @@ double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2)
 	float y_dis = Math_fabsf(y1 - y2);
 	return Math_sqrt((x_dis * x_dis) + (y_dis * y_dis));
 }
+double Math_pow(double x, double y)
+{
+	return SDL_pow(x, y);
+}

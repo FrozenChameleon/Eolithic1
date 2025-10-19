@@ -49,3 +49,4 @@ double Math_GetDistanceDouble(double x1, double x2);
 double Math_GetDistanceEuclideanPoint(Point begin, Point end);
 double Math_GetDistanceEuclideanVector2(Vector2 begin, Vector2 end);
 double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2);
+double Math_pow(double x, double y);

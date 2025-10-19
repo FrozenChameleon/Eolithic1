@@ -54,7 +54,7 @@ int main(int argc, char* args[])
 	uint64_t mallocRefs = Utils_GetMallocRefs();
 
 	IStringArray* strings = Utils_SplitString("hello,,hello,", 260, ',');
-	int strlen = IStringArray_Length(strings);
+	int64_t strlen = IStringArray_Length(strings);
 	for (int i = 0; i < strlen; i += 1)
 	{
 		const char* strrr = IStringArray_Get(strings, i);
