@@ -16,7 +16,7 @@
 #include "../utils/IStrings.h"
 
 static int32_t _mResourceCounter;
-static struct { char* key; Resource* value; } *_mStringHashMap;
+static struct { char* key; Resource* value; } *sh_resources;
 static bool _mHasInit;
 
 static void Init()
@@ -26,7 +26,7 @@ static void Init()
 		return;
 	}
 
-	sh_new_arena(_mStringHashMap);
+	sh_new_arena(sh_resources);
 
 	_mHasInit = true;
 }
@@ -37,7 +37,7 @@ Resource* ParticleManager_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
@@ -74,7 +74,7 @@ Resource* ParticleManager_LoadAssetFromStreamAndCreateResource(BufferReader* br,
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
 	resource->mData = Particle_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
-	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	shput(sh_resources, resource->mFileNameWithoutExtension, resource);
 	return resource;
 }
 const char* ParticleManager_GetDatFileName()
@@ -118,14 +118,14 @@ void ParticleManager_Dispose(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	int32_t len = shlen(_mStringHashMap);
-	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	int32_t len = shlen(sh_resources);
+	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
 		Particle_Dispose(resource->mData);
 	}
 	Utils_free(resource);
-	shdel(_mStringHashMap, filenameWithoutExtension);
+	shdel(sh_resources, filenameWithoutExtension);
 }
 void ParticleManager_DisposeAll()
 {
@@ -133,26 +133,26 @@ void ParticleManager_DisposeAll()
 	Init();
 	//
 	
-	int32_t len = shlen(_mStringHashMap);
+	int32_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
-		ParticleManager_Dispose(_mStringHashMap[i].key);
+		ParticleManager_Dispose(sh_resources[i].key);
 	}
 
-	shfree(_mStringHashMap);
-	_mStringHashMap = NULL;
+	shfree(sh_resources);
+	sh_resources = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
 int ParticleManager_Length()
 {
-	return shlen(_mStringHashMap);
+	return shlen(sh_resources);
 }
 Resource* ParticleManager_GetResourceByIndex(int index)
 {
-	return _mStringHashMap[index].value;
+	return sh_resources[index].value;
 }
 Particle* ParticleManager_GetResourceDataByIndex(int index)
 {
-	return (Particle*)_mStringHashMap[index].value->mData;
+	return (Particle*)sh_resources[index].value->mData;
 }

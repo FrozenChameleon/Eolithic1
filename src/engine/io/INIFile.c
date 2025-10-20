@@ -15,7 +15,7 @@ static uint64_t _mRefs;
 
 typedef struct INIFile
 {
-	struct { char* key; char* value; } *mStringHashMap;
+	struct { char* key; char* value; } *sh_values;
 } IniFile;
 
 INIFile* INIFile_Create_From_Binary(const char* path)
@@ -24,7 +24,7 @@ INIFile* INIFile_Create_From_Binary(const char* path)
 
 	INIFile* ini = Utils_malloc(sizeof(INIFile));
 	Utils_memset(ini, 0, sizeof(INIFile));
-	sh_new_arena(ini->mStringHashMap);
+	sh_new_arena(ini->sh_values);
 	BufferReader* br = BufferReader_CreateFromPath(path);
 	while (BufferReader_HasNext(br))
 	{
@@ -32,7 +32,7 @@ INIFile* INIFile_Create_From_Binary(const char* path)
 		char* value = Utils_CreateStringBuffer(EE_PATH_MAX);
 		BufferReader_ReadString(br, key, EE_PATH_MAX);
 		BufferReader_ReadString(br, value, EE_PATH_MAX);
-		shput(ini->mStringHashMap, key, value);
+		shput(ini->sh_values, key, value);
 	}
 	BufferReader_Dispose(br, false);
 	return ini;
@@ -41,9 +41,9 @@ void INIFile_Dispose(INIFile* ini)
 {
 	_mRefs -= 1;
 
-	if (ini->mStringHashMap != NULL)
+	if (ini->sh_values != NULL)
 	{
-		shfree(ini->mStringHashMap);
+		shfree(ini->sh_values);
 		//TODO MEMLEAK?
 	}
 
@@ -55,13 +55,13 @@ uint64_t INIFile_GetRefs()
 }
 int64_t INIFile_GetLength(INIFile* ini)
 {
-	return shlen(ini->mStringHashMap);
+	return shlen(ini->sh_values);
 }
 const char* INIFile_GetKey(INIFile* ini, int index)
 {
-	return ini->mStringHashMap[index].key;
+	return ini->sh_values[index].key;
 }
 const char* INIFile_GetValue(INIFile* ini, int index)
 {
-	return ini->mStringHashMap[index].value;
+	return ini->sh_values[index].value;
 }

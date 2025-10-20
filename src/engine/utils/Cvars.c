@@ -27,13 +27,13 @@ typedef struct CvarData
 	char mValue[CVAR_CHAR_LIMIT];
 } CvarData;
 
-static struct { char* key; CvarData value; } *_mStringHashMap;
+static struct { char* key; CvarData value; } *sh_cvars;
 static bool _mHasInit;
 
 static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenSet)
 {
-	int64_t len = shlen(_mStringHashMap);
-	int64_t index = shgeti(_mStringHashMap, key);
+	int64_t len = shlen(sh_cvars);
+	int64_t index = shgeti(sh_cvars, key);
 	if (index == -1)
 	{
 		CvarData cvar = { 0 };
@@ -42,9 +42,9 @@ static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenS
 		cvar.mDoNotRefreshCachedNumber = false;
 		Utils_strlcpy(cvar.mKey, key, CVAR_CHAR_LIMIT);
 		Utils_strlcpy(cvar.mValue, valueIfCvarHasNotBeenSet, CVAR_CHAR_LIMIT);
-		shput(_mStringHashMap, key, cvar);
+		shput(sh_cvars, key, cvar);
 	}
-	return &shgetp(_mStringHashMap, key)->value;
+	return &shgetp(sh_cvars, key)->value;
 }
 static void SetupCvarForSet(CvarData* cvar, const char* key)
 {
@@ -61,7 +61,7 @@ static void Init()
 		return;
 	}
 
-	sh_new_arena(_mStringHashMap);
+	sh_new_arena(sh_cvars);
 
 	_mHasInit = true;
 }
@@ -191,7 +191,7 @@ int64_t Cvars_Length()
 	Init();
 	//
 
-	return shlen(_mStringHashMap);
+	return shlen(sh_cvars);
 }
 void Cvars_SaveUserConfig()
 {

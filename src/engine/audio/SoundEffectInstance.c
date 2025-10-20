@@ -232,8 +232,8 @@ void SoundEffectInstance_Update(SoundEffectInstance* sei)
 		);
 		while (SoundEffectInstance_PendingBufferCount(sei) > state.BuffersQueued)
 		{
-			Utils_free(sei->_mDynamicQueuedBuffers[0]);
-			arrdel(sei->_mDynamicQueuedBuffers, 0);
+			Utils_free(sei->arr_queued_buffers[0]);
+			arrdel(sei->arr_queued_buffers, 0);
 		}
 	}
 
@@ -410,11 +410,11 @@ void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei)
 	FAudioWaveFormatEx* format = GetFormat(sei);
 	FAudioSourceVoice* handle = GetHandle(sei);
 	FAudioBuffer buffer = { 0 };
-	int32_t len = arrlen(sei->_mDynamicQueuedBuffers);
+	int32_t len = arrlen(sei->arr_queued_buffers);
 	for (int i = 0; i < len; i += 1)
 	{
-		buffer.AudioBytes = sei->_mDynamicQueuedSizes[i];
-		buffer.pAudioData = sei->_mDynamicQueuedBuffers[i];
+		buffer.AudioBytes = sei->arr_queued_sizes[i];
+		buffer.pAudioData = sei->arr_queued_buffers[i];
 		buffer.PlayLength = (
 			buffer.AudioBytes /
 			(uint32_t)sei->_mChannels /
@@ -426,7 +426,7 @@ void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei)
 			NULL
 		);
 	}
-	arrsetlen(sei->_mDynamicQueuedSizes, 0);
+	arrsetlen(sei->arr_queued_sizes, 0);
 }
 void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 {
@@ -435,13 +435,13 @@ void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 		return;
 	}
 
-	int32_t len = arrlen(sei->_mDynamicQueuedBuffers);
+	int32_t len = arrlen(sei->arr_queued_buffers);
 	for (int i = 0; i < len; i += 1)
 	{
-		Utils_free(sei->_mDynamicQueuedBuffers[i]);
+		Utils_free(sei->arr_queued_buffers[i]);
 	}
-	arrsetlen(sei->_mDynamicQueuedBuffers, 0);
-	arrsetlen(sei->_mDynamicQueuedSizes, 0);
+	arrsetlen(sei->arr_queued_buffers, 0);
+	arrsetlen(sei->arr_queued_sizes, 0);
 }
 void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, int amountOfSamples)
 {
@@ -498,7 +498,7 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 	uint8_t* next = Utils_malloc(sizeof(uint8_t) * bufferLength);
 	Utils_memcpy(next, buffer, sizeof(uint8_t) * bufferLength);
 
-	arrput(sei->_mDynamicQueuedBuffers, next);
+	arrput(sei->arr_queued_buffers, next);
 
 	if (sei->_mInternalState != SOUNDSTATE_STOPPED)
 	{
@@ -518,7 +518,7 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 	}
 	else
 	{
-		arrput(sei->_mDynamicQueuedSizes, (uint32_t)bufferLength);
+		arrput(sei->arr_queued_sizes, (uint32_t)bufferLength);
 	}
 }
 int32_t SoundEffectInstance_GetSampleSize(const SoundEffectInstance* sei)
@@ -546,7 +546,7 @@ int32_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
 		return 0;
 	}
 
-	return arrlen(sei->_mDynamicQueuedBuffers);
+	return arrlen(sei->arr_queued_buffers);
 }
 int32_t SoundEffectInstance_InitAudio()
 {

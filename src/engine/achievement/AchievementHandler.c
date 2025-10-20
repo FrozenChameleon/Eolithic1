@@ -12,7 +12,7 @@ static int32_t _mCertifyCrawlingCounter;
 static bool _mIsUsingMask;
 static bool _mIsNotFirstUpdate;
 static bool _mIsUpdateSuppressed;
-static Achievement* _mDynamicAchievements;
+static Achievement* arr_achievements;
 
 void AchievementHandler_SetIsUpdateSuppressed(bool value)
 {
@@ -23,7 +23,7 @@ void AchievementHandler_DebugUnlockNextAchievement()
 	int32_t len = AchievementHandler_GetAchievementsLength();
 	for (int32_t i = 0; i < len; i += 1)
 	{
-		Achievement* achievement = &_mDynamicAchievements[i];
+		Achievement* achievement = &arr_achievements[i];
 		if (!achievement->mIsUnlocked)
 		{
 			Achievement_UnlockAchievement(false, achievement, i);
@@ -41,15 +41,15 @@ void AchievementHandler_Update()
 }
 Achievement* AchievementHandler_GetAchievements()
 {
-	return _mDynamicAchievements;
+	return arr_achievements;
 }
 Achievement* AchievementHandler_GetAchievement(int32_t i)
 {
-	return &_mDynamicAchievements[i];
+	return &arr_achievements[i];
 }
 int32_t AchievementHandler_GetAchievementsLength()
 {
-	return arrlen(_mDynamicAchievements);
+	return arrlen(arr_achievements);
 }
 int32_t AchievementHandler_GetAmountOfAchievements()
 {
@@ -68,14 +68,14 @@ void AchievementHandler_AddAchievement(bool isHidden, const char* name, const ch
 	}
 	Achievement achievement;
 	Achievement_Init(&achievement, condition, name, description, lockedDescription, image, isHidden);
-	arrput(_mDynamicAchievements, achievement);
+	arrput(arr_achievements, achievement);
 }
 void AchievementHandler_Reset()
 {
 	int32_t len = AchievementHandler_GetAchievementsLength();
 	for (int32_t i = 0; i < len; i += 1)
 	{
-		_mDynamicAchievements[i].mIsUnlocked = false;
+		arr_achievements[i].mIsUnlocked = false;
 	}
 }
 int32_t AchievementHandler_GetAmountOfAchievementsComplete()
@@ -85,7 +85,7 @@ int32_t AchievementHandler_GetAmountOfAchievementsComplete()
 	int32_t len = AchievementHandler_GetAchievementsLength();
 	for (int32_t i = 0; i < len; i += 1)
 	{
-		if (_mDynamicAchievements[i].mIsUnlocked)
+		if (arr_achievements[i].mIsUnlocked)
 		{
 			currentAchievementsDone += 1;
 		}

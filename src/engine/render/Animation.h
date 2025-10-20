@@ -6,14 +6,16 @@
 
 #pragma once
 
+#include "../utils/Macros.h"
 #include "../utils/Timer.h"
 #include "../render/Sheet.h"
+#include "../utils/FixedArray.h"
 
 typedef struct Animation
 {
-	int mAnimationLoopPoint;
-	int mInitialFlipTimerLimit;
-	int mSheetsLen;
+	int32_t mAnimationLoopPoint;
+	int32_t mInitialFlipTimerLimit;
+	int32_t mSheetsLen;
 	bool mIsSuppressed;
 	bool mIsAnimationComplete;
 	bool mIsLoopingDisabled;
@@ -22,22 +24,22 @@ typedef struct Animation
 	bool mIsUpdateDisabled;
 	Timer mFrameTimer;
 	Timer mFlipTimer;
-	Sheet* mSheets;
+	Sheet** mSheets;
 } Animation;
 
 void Animation_DebugTest();
 
-void Animation_Init(Animation* data, const char* spriteSheet, int flipTimer);
-void Animation_Init2(Animation* data, Sheet* sheets, int sheetsLen, int flipTimer);
+void Animation_Init(Animation* data, const char* spriteSheet, int32_t flipTimer);
+void Animation_Init2(Animation* data, Sheet** sheets, int32_t sheetsLen, int32_t flipTimer);
 
 const char* Animation_GetCurrentSheetName(Animation* data);
 bool Animation_Update(Animation* data);
 void Animation_ResetAnimation(Animation* data);
 Sheet* Animation_GetCurrentSheet(Animation* data);
-int Animation_DigitsAtEnd(const char* sheetName, int sheetNameLength);
+int32_t Animation_DigitsAtEnd(const char* sheetName, int32_t sheetNameLength);
 void Animation_CheckForAnimation(const char* textureName);
 void Animation_BuildAnimations();
-void Animation_AddToAnimationMap(const char* baseName, const char* sheetName, int frames, int digits);
-void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char* baseName, int frames, int digits);
+void Animation_AddToAnimationMap(const char* baseName, const char* sheetName, int32_t frames, int32_t digits);
+void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char* baseName, int32_t frames, int32_t digits);
 const char* Animation_GetConvertedName(const char* baseName);
-const char** Animation_GetAnimationSheets(const char* animation);
+FixedArray Animation_GetAnimationSheets(const char* animation);

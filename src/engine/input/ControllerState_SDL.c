@@ -32,7 +32,7 @@
 //static std::vector<OeInputAction> _mDummyAction;
 //static const std::string _mGlyphDummy = STR_NOTHING;
 static SDL_Gamepad* INTERNAL_devices[DEVICES_ARRAY_LENGTH];
-static struct { int32_t key; int32_t value; } *INTERNAL_instanceList = NULL; //Map of SDL device # to internal devices array index ^
+static struct { int32_t key; int32_t value; } *hm_INTERNAL_instanceList = NULL; //Map of SDL device # to internal devices array index ^
 
 static SDL_Gamepad* GetDevice(PlayerIndex index)
 {
@@ -189,7 +189,7 @@ int32_t ControllerState_AddControllerInstance(ControllerState* cs, int32_t dev)
 	// Pair up the instance ID to the player index.
 	// FIXME: Remove check after 2.0.4? -flibit
 	SDL_JoystickID thisInstance = SDL_GetJoystickID(thisJoystick);
-	int64_t thisInstanceIndex = hmgeti(INTERNAL_instanceList, thisInstance);
+	int64_t thisInstanceIndex = hmgeti(hm_INTERNAL_instanceList, thisInstance);
 	if (thisInstanceIndex != -1)
 	{
 		// Duplicate? Usually this is OSX being dumb, but...?
@@ -198,7 +198,7 @@ int32_t ControllerState_AddControllerInstance(ControllerState* cs, int32_t dev)
 		return -1;
 	}
 
-	hmput(INTERNAL_instanceList, thisInstance, which);
+	hmput(hm_INTERNAL_instanceList, thisInstance, which);
 
 	Logger_printf("Added device #%d, %s", which, SDL_GetGamepadName(INTERNAL_devices[which]));
 
@@ -210,12 +210,12 @@ int32_t ControllerState_RemoveControllerInstance(ControllerState* cs, int32_t de
 
 	int output = -1;
 
-	int64_t instanceListLen = hmlen(INTERNAL_instanceList);
+	int64_t instanceListLen = hmlen(hm_INTERNAL_instanceList);
 	for (int i = 0; i < instanceListLen; i += 1)
 	{
-		if (INTERNAL_instanceList->key == dev)
+		if (hm_INTERNAL_instanceList->key == dev)
 		{
-			output = INTERNAL_instanceList->value;
+			output = hm_INTERNAL_instanceList->value;
 			break;
 		}
 	}
@@ -229,7 +229,7 @@ int32_t ControllerState_RemoveControllerInstance(ControllerState* cs, int32_t de
 
 	Logger_printf("Removed Device #%d, %s", output, SDL_GetGamepadName(INTERNAL_devices[output]));
 
-	hmdel(INTERNAL_instanceList, dev);
+	hmdel(hm_INTERNAL_instanceList, dev);
 	SDL_CloseGamepad(INTERNAL_devices[output]);
 	INTERNAL_devices[output] = NULL;
 

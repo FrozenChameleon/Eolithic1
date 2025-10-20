@@ -16,8 +16,8 @@
 #define DEBUG_SHEET_NAME "DEBUG_ERROR_777"
 
 static Sheet* _mDummy;
-static struct { const char* key; Sheet* value; } *_mStringHashMap;
-static Sheet** _mDynamicSheetList;
+static struct { const char* key; Sheet* value; } *sh_sheet_map;
+static Sheet** arr_sheet_list;
 static bool _mHasInit;
 
 static void Init()
@@ -27,7 +27,7 @@ static void Init()
 		return;
 	}
 
-	sh_new_arena(_mStringHashMap);
+	sh_new_arena(sh_sheet_map);
 
 	_mHasInit = true;
 }
@@ -51,12 +51,12 @@ Sheet* Sheet_GetSheet(const char* name)
 {
 	Init();
 
-	return shget(_mStringHashMap, name);
+	return shget(sh_sheet_map, name);
 }
 void Sheet_BuildSheets()
 {
-	arrsetlen(_mDynamicSheetList, 0);
-	shfree(_mStringHashMap);
+	arrsetlen(arr_sheet_list, 0);
+	shfree(sh_sheet_map);
 
 	Init();
 
@@ -75,8 +75,8 @@ void Sheet_BuildSheets()
 		sheet->mSheetName = sheet->mUnderlyingTextureName;
 		sheet->mTextureResource = resource->mData;
 		sheet->mRectangle = ((Texture*)sheet->mTextureResource)->mBounds;
-		arrput(_mDynamicSheetList, sheet);
-		shput(_mStringHashMap, resource->mPath, sheet);
+		arrput(arr_sheet_list, sheet);
+		shput(sh_sheet_map, resource->mPath, sheet);
 	}
 
 	if (!Globals_IsDebugFileMode() || GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS)
@@ -91,18 +91,18 @@ void Sheet_BuildSheets()
 			}
 
 			TextureOffset* texOffset = (TextureOffset*)resource->mData;
-			int infoLen = arrlen(texOffset->_mDynamicOffsets);
+			int64_t infoLen = arrlen(texOffset->arr_offsets);
 			for (int i = 0; i < infoLen; i += 1)
 			{
-				TextureOffsetInfo* info = &texOffset->_mDynamicOffsets[i];
+				TextureOffsetInfo* info = &texOffset->arr_offsets[i];
 				Sheet* sheet = Utils_malloc(sizeof(Sheet));
 				InitSheet(sheet);
 				sheet->mSheetName = info->mVirtualName;
 				sheet->mUnderlyingTextureName = info->mFilenameWithoutExtension;
 				sheet->mRectangle = info->mRect;
 				sheet->mTextureResource = TextureManager_GetResource(info->mFilenameWithoutExtension);
-				arrput(_mDynamicSheetList, sheet);
-				shput(_mStringHashMap, sheet->mSheetName, sheet);
+				arrput(arr_sheet_list, sheet);
+				shput(sh_sheet_map, sheet->mSheetName, sheet);
 			}
 
 		}
@@ -112,7 +112,7 @@ bool Sheet_HasSheet(const char* name)
 {
 	Init();
 
-	ptrdiff_t index = shgeti(_mStringHashMap, name);
+	ptrdiff_t index = shgeti(sh_sheet_map, name);
 	if (index < 0)
 	{
 		return false;
@@ -122,10 +122,10 @@ bool Sheet_HasSheet(const char* name)
 IStringArray* Sheet_CreateListOfSheetNames()
 {
 	IStringArray* sa = IStringArray_Create();
-	ptrdiff_t len = shlen(_mStringHashMap);
+	ptrdiff_t len = shlen(sh_sheet_map);
 	for (int i = 0; i < len; i += 1)
 	{
-		const char* sheetName = _mStringHashMap[i].value->mSheetName;
+		const char* sheetName = sh_sheet_map[i].value->mSheetName;
 		IStringArray_Add(sa, sheetName);
 	}
 	return sa;

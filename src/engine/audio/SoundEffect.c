@@ -31,7 +31,7 @@ static bool _mLoopStatus[SFX_INSTANCE_LIMIT];
 static uint64_t _mCurrentFrame;
 static VolumeData _mVolumeData;
 static bool _mIsSfxMuted;
-static SoundEffectPlaybackTimeBuffer* _mDynamicSoundEffectPlaybackTimeBuffer;
+static SoundEffectPlaybackTimeBuffer* arr_sound_effect_playback_time_buffer;
 
 static float GetVolumeForSoundEffect(const char* sound)
 {
@@ -45,10 +45,10 @@ static float GetVolumeForSoundEffect(const char* sound)
 }
 static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 {
-	int32_t len = arrlen(_mDynamicSoundEffectPlaybackTimeBuffer);
+	int32_t len = arrlen(arr_sound_effect_playback_time_buffer);
 	for (int i = 0; i < len; i += 1)
 	{
-		SoundEffectPlaybackTimeBuffer* temp = &_mDynamicSoundEffectPlaybackTimeBuffer[i];
+		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
 		if (temp->mName == name)
 		{
 			return temp->mTime;
@@ -125,10 +125,10 @@ void SoundEffect_SetDefaultSoundPlaybackTimeBuffer(uint64_t value)
 }
 void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t time)
 {
-	int32_t len = arrlen(_mDynamicSoundEffectPlaybackTimeBuffer);
+	int32_t len = arrlen(arr_sound_effect_playback_time_buffer);
 	for (int i = 0; i < len; i += 1)
 	{
-		SoundEffectPlaybackTimeBuffer* temp = &_mDynamicSoundEffectPlaybackTimeBuffer[i];
+		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
 		if (temp->mName == name)
 		{
 			temp->mTime = time;
@@ -139,7 +139,7 @@ void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t 
 	SoundEffectPlaybackTimeBuffer newBuffer = { 0 };
 	newBuffer.mName = name;
 	newBuffer.mTime = time;
-	arrput(_mDynamicSoundEffectPlaybackTimeBuffer, newBuffer);
+	arrput(arr_sound_effect_playback_time_buffer, newBuffer);
 }
 void SoundEffect_SetSfxMuted(bool value)
 {

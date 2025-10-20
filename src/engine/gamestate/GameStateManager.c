@@ -17,25 +17,25 @@ static int32_t _mNextGameState;
 static uint64_t _mTicksSinceMapLoad;
 static const char* _mMapToLoad;
 static bool _mJustChangedGameStateThisFrame;
-static System* _mGlobalSystems;
-static System* _mStateSystems;
+static System* arr_global_systems;
+static System* arr_state_systems;
 static GameState _mGameState;
 
 int32_t GameStateManager_GetGlobalSystemsLen()
 {
-	return arrlen(_mGlobalSystems);
+	return arrlen(arr_global_systems);
 }
 System* GameStateManager_GetGlobalSystems()
 {
-	return _mGlobalSystems;
+	return arr_global_systems;
 }
 int32_t GameStateManager_GetStateSystemsLen()
 {
-	return arrlen(_mStateSystems);
+	return arrlen(arr_state_systems);
 }
 System* GameStateManager_GetStateSystems()
 {
-	return _mStateSystems;
+	return arr_state_systems;
 }
 GameState* GameStateManager_GetGameState()
 {

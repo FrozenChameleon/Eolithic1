@@ -13,9 +13,10 @@
 #include "../utils/Logger.h"
 #include "../io/File.h"
 #include "../io/DatReader.h"
+#include "../utils/IStrings.h"
 
 static int32_t _mResourceCounter;
-static struct { char* key; Resource* value; } *_mStringHashMap;
+static struct { char* key; Resource* value; } *sh_resources;
 static bool _mHasInit;
 
 static void Init()
@@ -25,7 +26,7 @@ static void Init()
 		return;
 	}
 
-	sh_new_arena(_mStringHashMap);
+	sh_new_arena(sh_resources);
 
 	_mHasInit = true;
 }
@@ -36,7 +37,7 @@ Resource* %strResourceManager%_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
@@ -67,12 +68,14 @@ Resource* %strResourceManager%_LoadAssetFromStreamAndCreateResource(BufferReader
 	//
 
 	Resource* resource = Utils_malloc(sizeof(Resource));
-	Utils_strlcpy(&resource->mPath, path, FIXED_CHAR_260_LENGTH);
-	Utils_strlcpy(&resource->mFileNameWithoutExtension, filenameWithoutExtension, FIXED_CHAR_260_LENGTH);
+	Utils_memset(resource, 0, sizeof(Resource));
+	resource->mPath = IStrings_GlobalGet(path);
+	resource->mFileNameWithoutExtension = IStrings_GlobalGet(filenameWithoutExtension);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = %strResource%_FromStream(br);
-	shput(_mStringHashMap, filenameWithoutExtension, resource);
+	resource->mData = %strResource%_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
+	shput(sh_resources, resource->mFileNameWithoutExtension, resource);
+	return resource;
 }
 const char* %strResourceManager%_GetDatFileName()
 {
@@ -84,9 +87,9 @@ void %strResourceManager%_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_GetSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_GetSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
+	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
 	File_Combine2(sharedStringBufferForPath, "data", %strResourceManager%_GetDatFileName());
 	if (!File_Exists(sharedStringBufferForPath))
 	{
@@ -105,9 +108,9 @@ void %strResourceManager%_LoadAllFromDat()
 		BufferReader_Dispose(br, false);
 	}
 	DatReader_Dispose(dr);
-	sharedStringBufferForPath->mIsInUse = false;
-	sharedStringBufferForFileName->mIsInUse = false;
-	sharedStringBufferForFileNameWithoutExtension->mIsInUse = false;
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
+	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
 }
 void %strResourceManager%_Dispose(const char* filenameWithoutExtension)
 {
@@ -115,14 +118,14 @@ void %strResourceManager%_Dispose(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	int32_t len = shlen(_mStringHashMap);
-	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	int32_t len = shlen(sh_resources);
+	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
 		%strResource%_Dispose(resource->mData);
 	}
 	Utils_free(resource);
-	shdel(_mStringHashMap, filenameWithoutExtension);
+	shdel(sh_resources, filenameWithoutExtension);
 }
 void %strResourceManager%_DisposeAll()
 {
@@ -130,14 +133,26 @@ void %strResourceManager%_DisposeAll()
 	Init();
 	//
 	
-	int32_t len = shlen(_mStringHashMap);
+	int32_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
-		%strResourceManager%_Dispose(_mStringHashMap[i].key);
+		%strResourceManager%_Dispose(sh_resources[i].key);
 	}
 
-	shfree(_mStringHashMap);
-	_mStringHashMap = NULL;
+	shfree(sh_resources);
+	sh_resources = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
+}
+int %strResourceManager%_Length()
+{
+	return shlen(sh_resources);
+}
+Resource* %strResourceManager%_GetResourceByIndex(int index)
+{
+	return sh_resources[index].value;
+}
+%strResource%* %strResourceManager%_GetResourceDataByIndex(int index)
+{
+	return (%strResource%*)sh_resources[index].value->mData;
 }

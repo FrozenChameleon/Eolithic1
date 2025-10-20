@@ -20,14 +20,14 @@ typedef struct DatReader
 	int _mCount;
 	bool _mHasInit;
 	FixedChar260 _mPath;
-	DatInfo* _mDynamicDatInfo;
-	FixedChar260* _mDynamicLastStrings;
+	DatInfo* arr_dat_info;
+	FixedChar260* arr_last_strings;
 	BufferReader* _mReader;
 } DatReader;
 
 static DatInfo* GetCurrentDatInfo(DatReader* dr)
 {
-	DatInfo* info = &dr->_mDynamicDatInfo[dr->_mCurrent];
+	DatInfo* info = &dr->arr_dat_info[dr->_mCurrent];
 	return info;
 }
 
@@ -47,19 +47,19 @@ bool DatReader_HasNext(const DatReader* dr)
 void DatReader_NextFilePath(DatReader* dr, FixedChar260* dst)
 {
 	int32_t length = BufferReader_ReadI32(dr->_mReader);
-	arrsetlen(dr->_mDynamicLastStrings, 0);
+	arrsetlen(dr->arr_last_strings, 0);
 	for (int32_t i = 0; i < length; i += 1)
 	{
 		FixedChar260 temp = { 0 };
 		BufferReader_ReadString(dr->_mReader, temp.mValue, FIXED_CHAR_260_LENGTH);
-		arrput(dr->_mDynamicLastStrings, temp);
+		arrput(dr->arr_last_strings, temp);
 	}
 
 	memset(dst, 0, sizeof(FixedChar260));
-	int32_t len = arrlen(dr->_mDynamicLastStrings);
+	int32_t len = arrlen(dr->arr_last_strings);
 	for (int i = 0; i < len; i += 1)
 	{
-		FixedChar260* currentString = &dr->_mDynamicLastStrings[i].mValue;
+		FixedChar260* currentString = &dr->arr_last_strings[i].mValue;
 		if (i == 0)
 		{
 			Utils_strlcpy(dst, currentString, FIXED_CHAR_260_LENGTH);
@@ -126,10 +126,10 @@ DatReader* DatReader_Create(const char* path)
 	for (int i = 0; i < dr->_mCount; i += 1)
 	{
 		DatInfo temp = { 0 };
-		arrput(dr->_mDynamicDatInfo, temp);
+		arrput(dr->arr_dat_info, temp);
 	}
 
-	int32_t len = arrlen(dr->_mDynamicDatInfo);
+	int32_t len = arrlen(dr->arr_dat_info);
 
 	dr->_mHasInit = true;
 

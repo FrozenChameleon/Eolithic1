@@ -117,3 +117,17 @@ TagIsDrawDisabled
 TagIsInPlay
 TagIsPlayer
 TagIsUpdateDisabled
+SceneCameraData
+TagIsBlockingLineOfSight
+MoveGetter
+NodeMovingKit
+HitFlashKit
+MirrorEffect
+Move
+TagIsIgnoringTransitions
+TagIsExtraBody
+TagIsEnemy
+StunFrames
+Random32
+IntTag
+DrawLineOfSight

@@ -9,7 +9,7 @@ static uint64_t _mRefs;
 typedef struct IStringArray
 {
 	IStrings* mStrings;
-	struct { int64_t key; IString value; } *mHashMap;
+	struct { int64_t key; IString value; } *hm_values;
 } IStringArray;
 
 IStringArray* IStringArray_Create()
@@ -22,23 +22,23 @@ IStringArray* IStringArray_Create()
 void IStringArray_Dispose(IStringArray* sa)
 {
 	_mRefs -= 1;
-	hmfree(sa->mHashMap);
+	hmfree(sa->hm_values);
 	IStrings_Dispose(sa->mStrings);
 	Utils_free(sa);
 }
 void IStringArray_Add(IStringArray* sa, const char* str)
 {
 	IString internedString = IStrings_Get(sa->mStrings, str);
-	int64_t len = hmlen(sa->mHashMap);
-	hmput(sa->mHashMap, len, internedString);
+	int64_t len = hmlen(sa->hm_values);
+	hmput(sa->hm_values, len, internedString);
 }
 int64_t IStringArray_Length(IStringArray* sa)
 {
-	return hmlen(sa->mHashMap);
+	return hmlen(sa->hm_values);
 }
 IString IStringArray_Get(IStringArray* sa, int32_t index)
 {
-	return sa->mHashMap[index].value;
+	return sa->hm_values[index].value;
 }
 uint64_t IStringArray_GetRefs()
 {

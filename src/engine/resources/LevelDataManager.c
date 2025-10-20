@@ -16,7 +16,7 @@
 #include "../utils/IStrings.h"
 
 static int32_t _mResourceCounter;
-static struct { char* key; Resource* value; } *_mStringHashMap;
+static struct { char* key; Resource* value; } *sh_resources;
 static bool _mHasInit;
 
 static void Init()
@@ -26,7 +26,7 @@ static void Init()
 		return;
 	}
 
-	sh_new_arena(_mStringHashMap);
+	sh_new_arena(sh_resources);
 
 	_mHasInit = true;
 }
@@ -37,7 +37,7 @@ Resource* LevelDataManager_GetResource(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
@@ -74,7 +74,7 @@ Resource* LevelDataManager_LoadAssetFromStreamAndCreateResource(BufferReader* br
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
 	resource->mData = LevelData_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
-	shput(_mStringHashMap, resource->mFileNameWithoutExtension, resource);
+	shput(sh_resources, resource->mFileNameWithoutExtension, resource);
 	return resource;
 }
 const char* LevelDataManager_GetDatFileName()
@@ -118,14 +118,14 @@ void LevelDataManager_Dispose(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	int32_t len = shlen(_mStringHashMap);
-	Resource* resource = shget(_mStringHashMap, filenameWithoutExtension);
+	int32_t len = shlen(sh_resources);
+	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
 		LevelData_Dispose(resource->mData);
 	}
 	Utils_free(resource);
-	shdel(_mStringHashMap, filenameWithoutExtension);
+	shdel(sh_resources, filenameWithoutExtension);
 }
 void LevelDataManager_DisposeAll()
 {
@@ -133,26 +133,26 @@ void LevelDataManager_DisposeAll()
 	Init();
 	//
 	
-	int32_t len = shlen(_mStringHashMap);
+	int32_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
-		LevelDataManager_Dispose(_mStringHashMap[i].key);
+		LevelDataManager_Dispose(sh_resources[i].key);
 	}
 
-	shfree(_mStringHashMap);
-	_mStringHashMap = NULL;
+	shfree(sh_resources);
+	sh_resources = NULL;
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
 int LevelDataManager_Length()
 {
-	return shlen(_mStringHashMap);
+	return shlen(sh_resources);
 }
 Resource* LevelDataManager_GetResourceByIndex(int index)
 {
-	return _mStringHashMap[index].value;
+	return sh_resources[index].value;
 }
 LevelData* LevelDataManager_GetResourceDataByIndex(int index)
 {
-	return (LevelData*)_mStringHashMap[index].value->mData;
+	return (LevelData*)sh_resources[index].value->mData;
 }

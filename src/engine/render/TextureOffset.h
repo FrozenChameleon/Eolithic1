@@ -6,7 +6,7 @@
 
 typedef struct TextureOffset
 {
-	TextureOffsetInfo* _mDynamicOffsets;
+	TextureOffsetInfo* arr_offsets;
 } TextureOffset;
 
 TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);

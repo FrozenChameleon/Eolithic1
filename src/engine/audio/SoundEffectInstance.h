@@ -39,8 +39,8 @@ typedef struct SoundEffectInstance
 	SoundState _mInternalState;
 	float _mInternalVolume;
 	bool _mHasStarted;
-	uint8_t** _mDynamicQueuedBuffers;
-	uint32_t* _mDynamicQueuedSizes;
+	uint8_t** arr_queued_buffers;
+	uint32_t* arr_queued_sizes;
 	void* _mHandleStorage;
 	void* _mFormatStorage;
 } SoundEffectInstance;

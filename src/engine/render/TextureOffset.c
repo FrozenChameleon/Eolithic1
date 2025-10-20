@@ -36,7 +36,7 @@ TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWi
 		info.mVirtualName = IStrings_GlobalGet(IStringArray_Get(spaceSplit, 0));
 		info.mFilenameWithoutExtension = filenameWithoutExtension;
 
-		arrput(textureOffset->_mDynamicOffsets, info);
+		arrput(textureOffset->arr_offsets, info);
 		IStringArray_Dispose(spaceSplit);
 	}
 

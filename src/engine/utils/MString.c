@@ -36,8 +36,8 @@ MString* MString_AddAssignChar(MString* thisWillBeDisposed, char c)
 {
 	MString* stringToReturn = MString_CreateEmpty(thisWillBeDisposed->capacity + 1);
 	Utils_strlcpy(stringToReturn->str, thisWillBeDisposed->str, thisWillBeDisposed->len + 1);
-	stringToReturn->str[thisWillBeDisposed->len - 1] = c;
-	stringToReturn->str[thisWillBeDisposed->len] = '\0';
+	stringToReturn->str[thisWillBeDisposed->len] = c;
+	stringToReturn->str[thisWillBeDisposed->len + 1] = '\0';
 	stringToReturn->len = thisWillBeDisposed->len + 1;
 	MString_Dispose(thisWillBeDisposed);
 	return stringToReturn;
