@@ -36,7 +36,7 @@
 #include "../core/Game.h"
 #include "../service/Service.h"
 #include "../utils/FpsTool.h"
-//#include "../core/GameLoader.h"
+#include "../core/GameLoader.h"
 #include "../core/GameUpdater.h"
 //#include "../gamestate/GameStateManager.h"
 #include "../components/Camera.h"
@@ -1078,15 +1078,18 @@ void Renderer_SetupCommit(double delta)
 }
 void Renderer_SetupRenderState()
 {
-	SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
-	Sheet* sheet = Sheet_GetSheet("monsterEyeShootCatchUp_00");
-	for (int i = 0; i < 1; i += 1)
+	if (!GameLoader_IsLoading())
 	{
-		Vector2 position;
-		position.X = 25 * i;
-		position.Y = 0;
-		SpriteBatch_Draw(&_mOrangeSpriteBatchHud, sheet->mTextureResource->mData, Color_White, 0, NULL,
-			position, sheet->mRectangle, Vector2_One, 0, false, false, Vector2_Zero);
+		SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
+		Sheet* sheet = Sheet_GetSheet("monsterEyeShootCatchUp_00");
+		for (int i = 0; i < 1; i += 1)
+		{
+			Vector2 position;
+			position.X = 25 * i;
+			position.Y = 0;
+			SpriteBatch_Draw(&_mOrangeSpriteBatchHud, sheet->mTextureResource->mData, Color_White, 0, NULL,
+				position, sheet->mRectangle, Vector2_One, 0, false, false, Vector2_Zero);
+		}
 	}
 
 	/*

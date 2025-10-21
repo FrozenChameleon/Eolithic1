@@ -15,7 +15,6 @@
 #include "../audio/Music.h"
 #include "../utils/Utils.h"
 #include "../utils/Logger.h"
-//#include "../resources/ResourceManagers.h"
 #include "../audio/VolumeData.h"
 #include "../utils/Timer.h"
 #include "../render/SpriteBatch.h"
@@ -23,6 +22,16 @@
 #include "../render/DrawTool.h"
 #include "../utils/Cvars.h"
 #include "../service/Service.h"
+#include "../resources/AnimTileManager.h"
+#include "../resources/BmFontManager.h"
+#include "../resources/LevelDataManager.h"
+#include "../resources/MusicManager.h"
+#include "../resources/ParticleManager.h"
+#include "../resources/PropManager.h"
+#include "../resources/ShaderProgramManager.h"
+#include "../resources/SoundEffectManager.h"
+#include "../resources/TextureManager.h"
+#include "../resources/TextureOffsetManager.h"
 
 enum
 {
@@ -40,11 +49,11 @@ enum Step
 
 typedef bool (*JobFunc)();
 
-static int _mFps = 0;
-static int _mStep = STEP_LOADING;
-static int _mPreloaderGraphicFrame = 0;
-static double _mDeltaAccumulator = 0;
-static double _mFlipDeltaAccumulator = 0;
+static int _mFps;
+static int _mStep;
+static int _mPreloaderGraphicFrame;
+static double _mDeltaAccumulator;
+static double _mFlipDeltaAccumulator;
 static bool _mIsFirstFrame = true;
 static bool _mIsLoading = true;
 static Timer _mBlinkTimer = { 0, 60 };
@@ -64,12 +73,10 @@ static void DisposeTextures()
 }
 static void UpdateLoadingJob()
 {
-	/*
 	if (arr_loading_jobs[0]())
 	{
-		arr_loading_jobs.erase(arr_loading_jobs.begin());
+		arrdel(arr_loading_jobs, 0);
 	}
-	*/
 }
 static void FinishLoading()
 {
@@ -91,13 +98,11 @@ static void FinishLoading()
 }
 static void QuickStart()
 {
-	/*
-	while (arr_loading_jobs.size() > 0)
+	while (arrlen(arr_loading_jobs) > 0)
 	{
 		UpdateLoadingJob();
 	}
 	FinishLoading();
-	*/
 }
 static void LoadTextures()
 {
@@ -136,8 +141,8 @@ static void LoadTextures()
 }
 static bool LoadStart()
 {
-	//GameHelper_CreateGlobalSystems(GameStateManager_GlobalSystems);
-	//GameHelper_CreateStateSystems(GameStateManager_StateSystems);
+	GameHelper_CreateGlobalSystems();
+	GameHelper_CreateStateSystems();
 	/*for (int i = 0; i < GameStateManager_StateSystems.size(); i += 1)
 	{
 		GameStateManager_StateSystems[i]->InitStringSettingsHere();
@@ -152,8 +157,17 @@ static bool LoadStart()
 }
 static bool LoadResources()
 {
-	return false;
-	//TODO C99 return ResourceManagers_LoadManagers();
+	AnimTileManager_LoadAllFromDat();
+	BmFontManager_LoadAllFromDat();
+	LevelDataManager_LoadAllFromDat();
+	MusicManager_LoadAllFromDat();
+	ParticleManager_LoadAllFromDat();
+	PropManager_LoadAllFromDat();
+	ShaderProgramManager_LoadAllFromDat();
+	SoundEffectManager_LoadAllFromDat();
+	TextureManager_LoadAllFromDat();
+	TextureOffsetManager_LoadAllFromDat();
+	return true;
 }
 static bool LoadAfterResources()
 {
@@ -226,8 +240,7 @@ static void StepLoading(double delta)
 {
 	UpdatePreloaderGraphic(delta);
 
-	/*
-	if (arr_loading_jobs.size() > 0)
+	if (arrlen(arr_loading_jobs) > 0)
 	{
 		UpdateLoadingJob();
 	}
@@ -246,7 +259,7 @@ static void StepLoading(double delta)
 			Logger_LogInformation("It is the first load, testing frame rate");
 			_mStep = STEP_TEST_FPS;
 		}
-	}*/
+	}
 }
 static void StepTestFPS(double delta)
 {

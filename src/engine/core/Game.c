@@ -27,6 +27,12 @@
 #include "../audio/Music.h"
 #include "../audio/SoundEffect.h"
 #include "../render/Sheet.h"
+#include "../core/GameLoader.h"
+#include "../service/Service.h"
+#include "ServiceHelper.h"
+#include "../utils/Cvars.h"
+#include "GameUpdater.h"
+#include "../globals/Globals.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -38,6 +44,32 @@ static bool _mIsFirstPollEvents = true;
 //static bool _mHasRunExitGameRoutine = false;
 static bool _mIsExitingGame;
 static bool _mHasInit;
+
+static bool IsFixedTimeStep()
+{
+	if (GameLoader_IsLoading())
+	{
+		return false;
+	}
+
+	if (Service_PlatformForcesRelyOnVsync() || Cvars_GetAsBool(CVARS_ENGINE_RELY_ON_VSYNC))
+	{
+		return false;
+	}
+
+#if EDITOR
+	if (OeGlobals_IsDebugGameSpeedSet())
+	{
+		return false;
+	}
+	if (OeGameUpdater_IsDebugAutoSpeedOn())
+	{
+		return false;
+	}
+#endif
+
+	return Cvars_GetAsBool(CVARS_USER_IS_FIXED_TIMESTEP_ENABLED);
+}
 
 int32_t Game_Init()
 {
@@ -76,31 +108,21 @@ int32_t Game_Run()
 {
 	if (Game_Init() < 0)
 	{
-		return Exception_Run("Unable to init!", false);
+		return Exception_Run("Unable to init!", true);
 	}
 
-	Window_LoadIcon();
-	Music_Init();
-	Input_Init();
-
-	Music_PlayMusic("new00", true, true, false, 0, false, 0);
-
-	bool ranAnimationTest = false;
-	uint64_t counter = 0;
 	uint64_t oldTicks = Stopwatch_GetTicks();
 	bool isDone = false;
 	double deltaLeftover = 0;
 	while (!isDone)
 	{
-		//bool isFixedTimeStep = IsFixedTimeStep();
-		bool isFixedTimeStep = true;
+		bool isFixedTimeStep = IsFixedTimeStep();
 		double delta = deltaLeftover;
 		deltaLeftover = 0;
 		do
 		{
 			uint64_t newTicks = Stopwatch_GetTicks();
-			double elapsedTime = Stopwatch_GetElapsedSeconds(oldTicks, newTicks);
-			delta += elapsedTime;
+			delta += Stopwatch_GetElapsedSeconds(oldTicks, newTicks);
 			oldTicks = newTicks;
 		} while ((delta < FIXED_TIME_STEP_TICK) && isFixedTimeStep);
 		if (isFixedTimeStep)
@@ -117,45 +139,17 @@ int32_t Game_Run()
 			deltaLeftover = MAX_TIME_STEP;
 		}
 		Game_PollEvents();
-		Input_Update(false);
-		Music_Tick();
-		SoundEffect_Tick();
-
-		Renderer_SetupRenderState();
-		Renderer_Render(1 / 60.0);
-
-		bool tester1 = Input_IsLeftMouseReleased();
-		bool tester2 = Input_IsDeleteReleased();
-		counter += 1;
-		if (counter % 180 == 0)
+		Game_Update(delta);
+		if (!Service_SuppressDrawing())
 		{
-			SoundEffect_PlaySound("newWarp");
+			//Game_Draw(delta);
 		}
-		if (tester1)
-		{
-			int hello = 0;
-		}
-		if (tester2)
-		{
-			int hello2 = 0;
-		}
-
-		if (!ranAnimationTest)
-		{
-			Animation_DebugTest();
-			ranAnimationTest = true;
-		}
-		//Update(delta);
-		//if (!OeService::SuppressDrawing())
-		//{
-		//	Draw(delta);
-	//	}
 		if (!isDone)
 		{
 			isDone = Game_IsExitingGame();
 		}
 	}
-	//Dispose();
+	Game_Dispose();
 	return 0;
 }
 void Game_PollEvents() //Derived from FNA
@@ -166,15 +160,15 @@ void Game_PollEvents() //Derived from FNA
 		if (e.type == SDL_EVENT_MOUSE_WHEEL)
 		{
 			// 120 units per notch. Because reasons.
-			//OeMouseState::INTERNAL_SetScrollWheelValue(e.wheel.y * 120);
+			//OeMouseState_INTERNAL_SetScrollWheelValue(e.wheel.y * 120);
 		}
 		if (e.type ==  SDL_EVENT_GAMEPAD_ADDED)
 		{
-			//OeControllerState::AddControllerInstance(e.cdevice.which);
+			//OeControllerState_AddControllerInstance(e.cdevice.which);
 		}
 		else if (e.type == SDL_EVENT_GAMEPAD_REMOVED)
 		{
-			//OeControllerState::RemoveControllerInstance(e.cdevice.which);
+			//OeControllerState_RemoveControllerInstance(e.cdevice.which);
 		}
 		else if (e.type == SDL_EVENT_WINDOW_FOCUS_GAINED) // Various Window Events...
 		{
@@ -184,8 +178,8 @@ void Game_PollEvents() //Derived from FNA
 			if (videoDriver == "x11")
 			{
 				// If we alt-tab away, we lose the 'fullscreen desktop' flag on some WMs
-				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow::GetWindowContext()),
-			//		OeWindow::IsFullscreen() ? SDL_WindowFlags::SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()),
+			//		OeWindow_IsFullscreen() ? SDL_WindowFlags_SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 			}
 
 			// Disable the screensaver when we're back.
@@ -193,12 +187,12 @@ void Game_PollEvents() //Derived from FNA
 		}
 		else if (e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
 		{
-			//OeWindow::SetWindowActive(false);
+			//OeWindow_SetWindowActive(false);
 
 			const char* videoDriver = SDL_GetCurrentVideoDriver();
 			if (videoDriver == "x11")
 			{
-				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow::GetWindowContext()), 0);
+				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()), 0);
 			}
 
 			// Give the screensaver back, we're not that important now.
@@ -236,4 +230,71 @@ bool Game_IsActive()
 {
 	//TODO C99
 	return true;
+}
+
+void Game_Update(double gameTime)
+{
+	//WILLNOTDO 06262023 (EDITOR)
+	/*
+#if EDITOR
+	if (_mWasGuiDrawMissed)
+	{
+		OeGui.AfterLayout();
+	}
+	OeGui.BeforeLayout(gameTime);
+	_mWasGuiDrawMissed = true;
+#endif
+*/
+
+	double delta = gameTime;
+
+	if (!Globals_IsExceptionUnsafe())
+	{
+		//try
+		//{
+		Game_UpdateHelper(delta);
+		//}
+		//catch (...)
+		//{
+		//HandleFatalException("Fatal exception in update!");
+		//}
+	}
+	else
+	{
+		Game_UpdateHelper(delta);
+	}
+
+	//WILLNOTDO 06262023 2023
+	/*
+#if EDITOR
+	if (OeGui.IsAnythingHovered())
+	{
+		OeInput.BlockMKBInputForFrames(10);
+	}
+#endif
+*/
+}
+
+void Game_UpdateHelper(double delta)
+{
+	ServiceHelper_Update(delta);
+
+	if (GameLoader_IsLoading())
+	{
+		GameLoader_Update(delta);
+		Renderer_SetupRenderState();
+	}
+
+	if (!GameLoader_IsLoading())
+	{
+		GameUpdater_Update(delta);
+		Renderer_SetupRenderState(); //TODO REMOVE THIS
+		Renderer_Render(1 / 60.0); //TODO REMOVE THIS
+	}
+}
+
+void Game_Dispose()
+{
+	Window_Dispose();
+	SDL_Quit();
 }

@@ -257,7 +257,7 @@ void Animation_CheckForAnimation(const char* textureName)
 	for (int32_t i = 0; i < animationInfoLen; i += 1)
 	{
 		AnimationInfo* existingInfo = &arr_animation_info[i];
-		if (Utils_StringEqualTo(existingInfo->mBaseName, baseName->str))
+		if (Utils_StringEqualTo(existingInfo->mBaseName, baseName->text))
 		{
 			if (isStart)
 			{
@@ -272,7 +272,7 @@ void Animation_CheckForAnimation(const char* textureName)
 	AnimationInfo newInfo = { 0 };
 	newInfo.mSheetName = IStrings_GlobalGet(sheetName);
 
-	newInfo.mBaseName = IStrings_GlobalGet(baseName->str);
+	newInfo.mBaseName = IStrings_GlobalGet(baseName->text);
 	newInfo.mNumberOfDigits = numberOfDigits;
 	newInfo.mFrames += 1;
 	if (isStart)
@@ -345,12 +345,12 @@ void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char*
 			for (int32_t j = 0; j < digits; j += 1)
 			{
 				int32_t number = currentNumber / place;
-				stringBuilder->str[stringBuilder->len - digits + j] = Animation_GetNumber(number);
+				stringBuilder->text[stringBuilder->len - digits + j] = Animation_GetNumber(number);
 				currentNumber -= number * place;
 				place /= 10;
 			}
 		} while (place != 0);
-		IStringArray_Add(listToAddTo, stringBuilder->str);
+		IStringArray_Add(listToAddTo, stringBuilder->text);
 	}
 
 	MString_Dispose(stringBuilder);

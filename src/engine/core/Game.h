@@ -24,3 +24,6 @@ void Game_PollEvents();
 bool Game_IsExitingGame();
 void Game_Exit();
 bool Game_IsActive();
+void Game_Update(double gameTime);
+void Game_UpdateHelper(double delta);
+void Game_Dispose();

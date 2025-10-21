@@ -169,3 +169,15 @@ void GameHelper_CreateGameStates()
 {
 
 }
+
+//GameSaveData* GameHelper_CreateGameSaveData();
+//void GameHelper_InitGameState(const std::string& levelToLoad);
+void GameHelper_CreateStateSystems()
+{
+
+}
+
+void GameHelper_CreateGlobalSystems()
+{
+
+}

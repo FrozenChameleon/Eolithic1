@@ -141,7 +141,7 @@ MString* BufferReader_ReadStringToMString(BufferReader* br)
 	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
 	int32_t newStrCapacity = newStringLength + 1;
 	MString* strToReturn = MString_CreateEmpty(newStrCapacity);
-	BufferReader_ReadJustTheStringData(br, newStringLength, strToReturn->str, newStrCapacity);
+	BufferReader_ReadJustTheStringData(br, newStringLength, strToReturn->text, newStrCapacity);
 	return strToReturn;
 }
 bool BufferReader_HasNext(BufferReader* br)

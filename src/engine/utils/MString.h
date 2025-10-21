@@ -5,7 +5,7 @@
 
 typedef struct MString
 {
-	char* str;
+	char* text;
 	int32_t len;
 	int32_t capacity;
 } MString;

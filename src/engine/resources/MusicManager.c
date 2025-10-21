@@ -88,20 +88,20 @@ void MusicManager_LoadAllFromDat()
 	//
 
 	MString* path = File_Combine2("data", MusicManager_GetDatFileName());
-	if (!File_Exists(path->str))
+	if (!File_Exists(path->text))
 	{
-		Logger_printf("Unable to load from dat: %s", path->str);
+		Logger_printf("Unable to load from dat: %s\n", path->text);
 		return;
 	}
 	
-	DatReader* dr = DatReader_Create(path->str);
+	DatReader* dr = DatReader_Create(path->text);
 	while (DatReader_HasNext(dr))
 	{
 		MString* nextPath = DatReader_NextFilePath(dr);
-		MString* fileName = File_GetFileName(nextPath->str);
-		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(nextPath->str);
+		MString* fileName = File_GetFileName(nextPath->text);
+		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(nextPath->text);
 		BufferReader* br = DatReader_NextStream(dr, false);
-		MusicManager_LoadAssetFromStreamAndCreateResource(br, fileNameWithoutExtension->str, path->str);
+		MusicManager_LoadAssetFromStreamAndCreateResource(br, fileNameWithoutExtension->text, path->text);
 		BufferReader_Dispose(br, false);
 		MString_Dispose(nextPath);
 		MString_Dispose(fileName);
