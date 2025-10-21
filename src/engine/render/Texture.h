@@ -8,11 +8,11 @@
 
 #include "../math/Rectangle.h"
 #include "../io/BufferReader.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct Texture
 {
-	FixedChar260 mPath;
+	MString* mPath;
 	void* mTextureData;
 	//void* mSurfaceData;
 	Rectangle mBounds;

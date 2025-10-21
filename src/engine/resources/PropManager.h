@@ -20,6 +20,6 @@ const char* PropManager_GetDatFileName();
 void PropManager_LoadAllFromDat();
 void PropManager_Dispose(const char* filenameWithoutExtension);
 void PropManager_DisposeAll();
-int PropManager_Length();
+int64_t PropManager_Length();
 Resource* PropManager_GetResourceByIndex(int index);
 Prop* PropManager_GetResourceDataByIndex(int index);

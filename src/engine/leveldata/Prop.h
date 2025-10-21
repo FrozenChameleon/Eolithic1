@@ -11,6 +11,7 @@
 #include "../render/Animation.h"
 #include "../render/Sheet.h"
 #include "../io/BufferReader.h"
+#include "../utils/MString.h"
 
 typedef struct Prop
 {
@@ -21,8 +22,8 @@ typedef struct Prop
 	int mScaler;
 	int mFlipSpeed;
 	bool mIsAnimation;
-	FixedChar260 mTextureName;
-	FixedChar260 mTilesetFilter;
+	MString* mTextureName;
+	MString* mTilesetFilter;
 } Prop;
 
 Prop* Prop_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);

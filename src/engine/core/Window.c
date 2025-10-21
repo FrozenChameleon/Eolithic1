@@ -238,11 +238,10 @@ void Window_LoadIcon()
 	}
 
 	const char* gameName = Cvars_Get(CVARS_ENGINE_NAME);
-	SharedFixedChar260* sharedPath = Utils_CreateSharedFixedChar260();
-	File_Combine2(sharedPath, File_GetBasePath(), gameName);
-	Utils_strlcat(sharedPath, ".bmp", FIXED_CHAR_260_LENGTH);
-	SDL_Surface* icon = SDL_LoadBMP(sharedPath);
-	Utils_DisposeSharedFixedChar260(sharedPath);
+	MString* sharedPath = File_Combine2(File_GetBasePath(), gameName);
+	MString_AddAssignString(&sharedPath, ".bmp");
+	SDL_Surface* icon = SDL_LoadBMP(sharedPath->str);
+	MString_Dispose(sharedPath);
 
 	if (icon == NULL)
 	{

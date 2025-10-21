@@ -87,30 +87,29 @@ void SoundEffectManager_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
-	File_Combine2(sharedStringBufferForPath, "data", SoundEffectManager_GetDatFileName());
-	if (!File_Exists(sharedStringBufferForPath))
+	MString* path = File_Combine2("data", SoundEffectManager_GetDatFileName());
+	if (!File_Exists(path->str))
 	{
-		Logger_printf("Unable to load from dat: %s", sharedStringBufferForPath);
+		Logger_printf("Unable to load from dat: %s", path->str);
 		return;
 	}
 	
-	DatReader* dr = DatReader_Create(sharedStringBufferForPath);
+	DatReader* dr = DatReader_Create(path->str);
 	while (DatReader_HasNext(dr))
 	{
-		DatReader_NextFilePath(dr, sharedStringBufferForPath);
-		File_GetFileName(sharedStringBufferForFileName, sharedStringBufferForPath);
-		File_GetFileNameWithoutExtension(sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		MString* nextPath = DatReader_NextFilePath(dr);
+		MString* fileName = File_GetFileName(nextPath->str);
+		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(nextPath->str);
 		BufferReader* br = DatReader_NextStream(dr, false);
-		SoundEffectManager_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		SoundEffectManager_LoadAssetFromStreamAndCreateResource(br, fileNameWithoutExtension->str, path->str);
 		BufferReader_Dispose(br, false);
+		MString_Dispose(nextPath);
+		MString_Dispose(fileName);
+		MString_Dispose(fileNameWithoutExtension);
 	}
+
 	DatReader_Dispose(dr);
-	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
-	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
-	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
+	MString_Dispose(path);
 }
 void SoundEffectManager_Dispose(const char* filenameWithoutExtension)
 {
@@ -144,7 +143,7 @@ void SoundEffectManager_DisposeAll()
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
-int SoundEffectManager_Length()
+int64_t SoundEffectManager_Length()
 {
 	return shlen(sh_resources);
 }

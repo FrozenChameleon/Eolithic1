@@ -16,58 +16,10 @@
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
-static SharedFixedChar260** arr_shared_string_buffers;
 
 #define LARGE_CHAR_BUFFER_LEN 8192
 static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
-SharedFixedChar260* Utils_CreateSharedFixedChar260()
-{
-	int32_t len = arrlen(arr_shared_string_buffers);
-	for (int i = 0; i < len; i += 1)
-	{
-		SharedFixedChar260* sharedStringBuffer = arr_shared_string_buffers[i];
-		if (!sharedStringBuffer->mIsInUse)
-		{
-			Utils_memset(&sharedStringBuffer->mBuffer, 0, FIXED_CHAR_260_LENGTH);
-			sharedStringBuffer->mIsInUse = true;
-			return sharedStringBuffer;
-		}
-	}
-
-	SharedFixedChar260* bufferToAdd = Utils_malloc(sizeof(SharedFixedChar260));
-	Utils_memset(bufferToAdd, 0, sizeof(SharedFixedChar260));
-	arrput(arr_shared_string_buffers, bufferToAdd);
-	bufferToAdd->mIsInUse = true;
-	return bufferToAdd;
-}
-void Utils_DisposeSharedFixedChar260(SharedFixedChar260* sfc)
-{
-	sfc->mIsInUse = false;
-}
-int32_t Utils_GetAmountOfSharedFixedChar260InUse()
-{
-	int32_t counter = 0;
-	int32_t len = arrlen(arr_shared_string_buffers);
-	for (int i = 0; i < len; i += 1)
-	{
-		SharedFixedChar260* sharedStringBuffer = arr_shared_string_buffers[i];
-		if (sharedStringBuffer->mIsInUse)
-		{
-			counter += 1;
-		}
-	}
-	return counter;
-}
-void Utils_FreeAllSharedFixedChar260()
-{
-	int32_t len = arrlen(arr_shared_string_buffers);
-	for (int i = 0; i < len; i += 1)
-	{
-		Utils_free(arr_shared_string_buffers[i]);
-	}
-	arrfree(arr_shared_string_buffers);
-}
 uint64_t Utils_GetMallocRefs()
 {
 	return _mMallocRefs;
@@ -275,7 +227,7 @@ IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
 		{
 			_mLargeCharBuffer[counter] = '\0';
 			IStringArray_Add(sa, _mLargeCharBuffer);
-			Utils_memset(_mLargeCharBuffer, 0, FIXED_CHAR_260_LENGTH);
+			Utils_memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
 			counter = 0;
 		}
 		else

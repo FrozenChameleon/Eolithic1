@@ -26,33 +26,66 @@ MString* MString_CreateEmpty(int32_t size)
 {
 	_mRefs += 1;
 
-	MString* mstring = Utils_malloc(sizeof(MString));
+	MString* mstring = Utils_calloc(1, sizeof(MString));
 	mstring->str = Utils_calloc(1, size);
 	mstring->len = 0;
 	mstring->capacity = size;
 	return mstring;
 }
-MString* MString_AddAssignChar(MString* thisWillBeDisposed, char c)
+void MString_AddAssignChar(MString** str, char addThisChar)
 {
-	MString* stringToReturn = MString_CreateEmpty(thisWillBeDisposed->capacity + 1);
-	Utils_strlcpy(stringToReturn->str, thisWillBeDisposed->str, thisWillBeDisposed->len + 1);
-	stringToReturn->str[thisWillBeDisposed->len] = c;
-	stringToReturn->str[thisWillBeDisposed->len + 1] = '\0';
-	stringToReturn->len = thisWillBeDisposed->len + 1;
-	MString_Dispose(thisWillBeDisposed);
-	return stringToReturn;
+	MString* oldStr = *str;
+	size_t newLen = oldStr->len + 1;
+	size_t newCapacity = newLen + 1;
+	MString* newStr = MString_CreateEmpty(newCapacity);
+	Utils_strlcpy(newStr->str, oldStr->str, oldStr->len + 1);
+	newStr->str[newLen - 1] = addThisChar;
+	newStr->str[newLen] = '\0';
+	newStr->len = (int32_t)newLen;
+	MString_Dispose(oldStr);
+	*str = newStr;
 }
-void MString_Dispose(MString* cstr)
+void MString_AddAssignString(MString** str, const char* addThisStr)
 {
-	if (cstr == NULL)
+	MString* oldStr = *str;
+	size_t addThisStrLen = Utils_strlen(addThisStr);
+	size_t newLen = oldStr->len + addThisStrLen;
+	size_t newCapacity = newLen + 1;
+	MString* newStr = MString_CreateEmpty((int32_t)newCapacity);
+	Utils_strlcpy(newStr->str, oldStr->str, oldStr->len + 1);
+	Utils_strlcpy(newStr->str + oldStr->len, addThisStr, addThisStrLen + 1);
+	newStr->len = (int32_t)newLen;
+	newStr->str[newLen] = '\0';
+	MString_Dispose(oldStr);
+	*str = newStr;
+}
+MString* MString_Truncate(MString* str, int newLength)
+{
+	if (newLength >= str->len)
+	{
+		return;
+	}
+
+	for (int i = 0; i < str->capacity; i += 1)
+	{
+		if (i >= newLength)
+		{
+			str->str[i] = '\0';
+		}
+	}
+	str->len = newLength;
+}
+void MString_Dispose(MString* str)
+{
+	if (str == NULL)
 	{
 		return;
 	}
 
 	_mRefs -= 1;
 
-	Utils_free(cstr->str);
-	Utils_free(cstr);
+	Utils_free(str->str);
+	Utils_free(str);
 }
 
 uint64_t MString_GetRefs()

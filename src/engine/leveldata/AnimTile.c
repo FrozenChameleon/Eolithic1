@@ -15,10 +15,10 @@ void AnimTile_Read(AnimTile* atile, BufferReader* br)
 	atile->mIsFlipY = BufferReader_ReadBoolean(br);
 	atile->mFlipSpeed = BufferReader_ReadI32(br);
 	atile->mRotation = BufferReader_ReadSingle(br);
-	BufferReader_ReadString(br, atile->mTextureName.mValue, FIXED_CHAR_260_LENGTH);
-	BufferReader_ReadString(br, atile->mTilesetFilter.mValue, FIXED_CHAR_260_LENGTH);
+	atile->mTextureName = BufferReader_ReadStringToMString(br);
+	atile->mTilesetFilter = BufferReader_ReadStringToMString(br);
 	atile->mIsWrap = BufferReader_ReadBoolean(br);
-	BufferReader_ReadString(br, atile->mWrapTextureName.mValue, FIXED_CHAR_260_LENGTH);
+	atile->mWrapTextureName = BufferReader_ReadStringToMString(br);
 	atile->mIsWrapX = BufferReader_ReadBoolean(br);
 	atile->mWrapSpeedX = BufferReader_ReadI32(br);
 	atile->mIsWrapY = BufferReader_ReadBoolean(br);

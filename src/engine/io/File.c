@@ -25,10 +25,9 @@ static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
 FixedByteBuffer* File_ReadAll(const char* path)
 {
-	SharedFixedChar260* sharedStringBuffer = Utils_CreateSharedFixedChar260();
-	File_Combine2(sharedStringBuffer, File_GetBasePath(), path);
-	SDL_IOStream* rwops = SDL_IOFromFile(sharedStringBuffer, "rb");
-	Utils_DisposeSharedFixedChar260(sharedStringBuffer);
+	MString* sharedStringBuffer = File_Combine2(File_GetBasePath(), path);
+	SDL_IOStream* rwops = SDL_IOFromFile(sharedStringBuffer->str, "rb");
+	MString_Dispose(sharedStringBuffer);
 	if (rwops == NULL)
 	{
 		return NULL;
@@ -45,10 +44,9 @@ FixedByteBuffer* File_ReadAll(const char* path)
 }
 bool File_Exists(const char* path)
 {
-	SharedFixedChar260* sharedStringBuffer = Utils_CreateSharedFixedChar260();
-	File_Combine2(sharedStringBuffer, File_GetBasePath(), path);
-	SDL_IOStream* file = SDL_IOFromFile(sharedStringBuffer, "r");
-	Utils_DisposeSharedFixedChar260(sharedStringBuffer);
+	MString* sharedStringBuffer = File_Combine2(File_GetBasePath(), path);
+	SDL_IOStream* file = SDL_IOFromFile(sharedStringBuffer->str, "r");
+	MString_Dispose(sharedStringBuffer);
 	if (file != NULL)
 	{
 		SDL_CloseIO(file);
@@ -77,157 +75,46 @@ const char* File_GetPrefPath()
 
 	return _mPrefPath;
 }
-void File_AppendPathSeparator(FixedChar260* dst)
+void File_AppendPathSeparator(MString** str)
 {
-	size_t dstLen = Utils_strnlen(dst, FIXED_CHAR_260_LENGTH);
-	if (dst->mValue[dstLen - 1] != PATH_SEPARATOR)
-	{
-		if ((dstLen + 1) > FIXED_CHAR_260_LENGTH)
-		{
-			return;
-		}
-		dst->mValue[dstLen] = PATH_SEPARATOR;
-		dst->mValue[dstLen + 1] = '\0';
-	}
+	MString_AddAssignChar(str, PATH_SEPARATOR);
 }
 
-static void INTERNAL_File_Combine2(FixedChar260* dst, const char* path1, const char* path2)
+static MString* File_GetFileNameHelper(const char* path, bool removeTheExtension)
 {
-	File_AppendPathSeparator(dst);
-	Utils_strlcat(dst, path2, FIXED_CHAR_260_LENGTH);
-}
-static void INTERNAL_File_Combine3(FixedChar260* dst, const char* path1, const char* path2, const char* path3)
-{
-	INTERNAL_File_Combine2(dst, path1, path2);
-	INTERNAL_File_Combine2(dst, dst, path3);
-}
-static void INTERNAL_File_Combine4(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4)
-{
-	INTERNAL_File_Combine3(dst, path1, path2, path3);
-	INTERNAL_File_Combine2(dst, dst, path4);
-}
-static void INTERNAL_File_Combine5(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5)
-{
-	INTERNAL_File_Combine4(dst, path1, path2, path3, path4);
-	INTERNAL_File_Combine2(dst, dst, path5);
-}
-static void INTERNAL_File_Combine6(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6)
-{
-	INTERNAL_File_Combine5(dst, path1, path2, path3, path4, path5);
-	INTERNAL_File_Combine2(dst, dst, path6);
-}
-static void INTERNAL_File_Combine7(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7)
-{
-	INTERNAL_File_Combine6(dst, path1, path2, path3, path4, path5, path6);
-	INTERNAL_File_Combine2(dst, dst, path7);
-}
-static void INTERNAL_File_Combine8(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8)
-{
-	INTERNAL_File_Combine7(dst, path1, path2, path3, path4, path5, path6, path7);
-	INTERNAL_File_Combine2(dst, dst, path8);
-}
-static void INTERNAL_File_Combine9(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8, const char* path9)
-{
-	INTERNAL_File_Combine8(dst, path1, path2, path3, path4, path5, path6, path7, path8);
-	INTERNAL_File_Combine2(dst, dst, path9);
-}
-static void INTERNAL_File_Combine10(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8, const char* path9, const char* path10)
-{
-	INTERNAL_File_Combine9(dst, path1, path2, path3, path4, path5, path6, path7, path8, path9);
-	INTERNAL_File_Combine2(dst, dst, path10);
-}
-
-static void File_CombineHelper(FixedChar260* dst, const char* path1)
-{
-	Utils_memset(dst, 0, FIXED_CHAR_260_LENGTH);
-	Utils_strlcpy(dst, path1, FIXED_CHAR_260_LENGTH);
-}
-void File_Combine2(FixedChar260* dst, const char* path1, const char* path2)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine2(dst, path1, path2);
-}
-void File_Combine3(FixedChar260* dst, const char* path1, const char* path2, const char* path3)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine3(dst, path1, path2, path3);
-}
-void File_Combine4(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine4(dst, path1, path2, path3, path4);
-}
-void File_Combine5(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine5(dst, path1, path2, path3, path4, path5);
-}
-void File_Combine6(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine6(dst, path1, path2, path3, path4, path5, path6);
-}
-void File_Combine7(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine7(dst, path1, path2, path3, path4, path5, path6, path7);
-}
-void File_Combine8(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine8(dst, path1, path2, path3, path4, path5, path6, path7, path8);
-}
-void File_Combine9(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8, const char* path9)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine9(dst, path1, path2, path3, path4, path5, path6, path7, path8, path9);
-}
-void File_Combine10(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8, const char* path9, const char* path10)
-{
-	File_CombineHelper(dst, path1);
-	INTERNAL_File_Combine10(dst, path1, path2, path3, path4, path5, path6, path7, path8, path9, path10);
-}
-
-static void File_GetFileNameHelper(FixedChar260* dst, const FixedChar260* path, bool removeTheExtension)
-{
-	int32_t loc = Utils_StringIndexOf(PATH_SEPARATOR, path, FIXED_CHAR_260_LENGTH, true);
+	int32_t len = Utils_strlen(path);
+	int32_t loc = Utils_StringIndexOf(PATH_SEPARATOR, path, len + 1, true);
 	if (loc == -1)
 	{
 		return;
 	}
 
-	Utils_memset(dst, 0, FIXED_CHAR_260_LENGTH);
+	MString* returnStr = MString_CreateEmpty(len + 1);
 
 	int32_t counter = 0;
-	int32_t len = Utils_strnlen(path, FIXED_CHAR_260_LENGTH);
 	for (int i = (loc + 1); i < len; i += 1)
 	{
 		if (removeTheExtension)
 		{
-			if (path->mValue[i] == '.')
+			if (path[i] == '.')
 			{
 				break;
 			}
 		}
-		dst->mValue[counter] = path->mValue[i];
+		returnStr->str[counter] = path[i];
 		counter += 1;
 	}
 
-	dst->mValue[counter + 1] = '\0';
+	returnStr->str[counter + 1] = '\0';
+	return returnStr;
 }
-void File_GetFileName(FixedChar260* dst, const FixedChar260* path)
+MString* File_GetFileName(const char* path)
 {
-	File_GetFileNameHelper(dst, path, false);
+	return File_GetFileNameHelper(path, false);
 }
-void File_GetFileNameWithoutExtension(FixedChar260* dst, const FixedChar260* path)
+MString* File_GetFileNameWithoutExtension(const char* path)
 {
-	File_GetFileNameHelper(dst, path, true);
+	return 	File_GetFileNameHelper(path, true);
 }
 IStringArray* File_ReadAllToStrings(BufferReader* br)
 {
@@ -275,4 +162,69 @@ IStringArray* File_ReadAllToStrings(BufferReader* br)
 		}
 	}
 	return sa;
+}
+
+static void CombineHelper(MString** str, const char* addedPath)
+{
+	MString* newStr = *str;
+	MString_AddAssignChar(&newStr, PATH_SEPARATOR);
+	MString_AddAssignString(&newStr, addedPath);
+	*str = newStr;
+}
+MString* File_Combine2(const char* path1, const char* path2)
+{
+	MString* str = MString_Create(path1);
+	CombineHelper(&str, path2);
+	return str;
+}
+MString* File_Combine3(const char* path1, const char* path2, const char* path3)
+{
+	MString* str = File_Combine2(path1, path2);
+	CombineHelper(&str, path3);
+	return str;
+}
+MString* File_Combine4(const char* path1, const char* path2, const char* path3, const char* path4)
+{
+	MString* str = File_Combine3(path1, path2, path3);
+	CombineHelper(&str, path4);
+	return str;
+}
+MString* File_Combine5(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5)
+{
+	MString* str = File_Combine4(path1, path2, path3, path4);
+	CombineHelper(&str, path5);
+	return str;
+}
+MString* File_Combine6(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6)
+{
+	MString* str = File_Combine5(path1, path2, path3, path4, path5);
+	CombineHelper(&str, path6);
+	return str;
+}
+MString* File_Combine7(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7)
+{
+	MString* str = File_Combine6(path1, path2, path3, path4, path5, path6);
+	CombineHelper(&str, path7);
+	return str;
+}
+MString* File_Combine8(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+	const char* path8)
+{
+	MString* str = File_Combine7(path1, path2, path3, path4, path5, path6, path7);
+	CombineHelper(&str, path8);
+	return str;
+}
+MString* File_Combine9(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+	const char* path8, const char* path9)
+{
+	MString* str = File_Combine8(path1, path2, path3, path4, path5, path6, path7, path8);
+	CombineHelper(&str, path9);
+	return str;
+}
+MString* File_Combine10(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+	const char* path8, const char* path9, const char* path10)
+{
+	MString* str = File_Combine9(path1, path2, path3, path4, path5, path6, path7, path8, path9);
+	CombineHelper(&str, path10);
+	return str;
 }

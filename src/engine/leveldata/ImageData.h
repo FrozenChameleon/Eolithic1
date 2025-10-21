@@ -11,7 +11,7 @@
 #include "stdbool.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct ImageData
 {
@@ -25,7 +25,7 @@ typedef struct ImageData
 	int mFlipSpeed;
 	int mDepth;
 	float mInitialRotation;
-	FixedChar260 mImage;
+	MString* mImage;
 	int mScaler;
 } ImageData;
 

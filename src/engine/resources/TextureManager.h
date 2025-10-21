@@ -20,6 +20,6 @@ const char* TextureManager_GetDatFileName();
 void TextureManager_LoadAllFromDat();
 void TextureManager_Dispose(const char* filenameWithoutExtension);
 void TextureManager_DisposeAll();
-int TextureManager_Length();
+int64_t TextureManager_Length();
 Resource* TextureManager_GetResourceByIndex(int index);
 Texture* TextureManager_GetResourceDataByIndex(int index);

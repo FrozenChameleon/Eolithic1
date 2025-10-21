@@ -702,7 +702,7 @@ Texture* Renderer_GetNewTextureData(const char* path, int width, int height, boo
 
 	Texture* tex = Utils_malloc(sizeof(Texture));
 	memset(tex, 0, sizeof(Texture));
-	Utils_strlcpy(tex->mPath.mValue, path, FIXED_CHAR_260_LENGTH);
+	tex->mPath = MString_Create(path);
 	tex->mBounds.Width = width;
 	tex->mBounds.Height = height;
 	tex->mTextureData = texture;
@@ -717,9 +717,10 @@ void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, in
 }
 static void LoadShader(Effect* effect, const char* shaderName)
 {
-	SharedFixedChar260* path = Utils_CreateSharedFixedChar260();
-	File_Combine3(path, File_GetBasePath(), "data", shaderName);
-	SDL_IOStream* effectFile = SDL_IOFromFile(path, "rb");
+	MString* path = File_Combine3(File_GetBasePath(), "data", shaderName);
+	SDL_IOStream* effectFile = SDL_IOFromFile(path->str, "rb");
+	MString_Dispose(path);
+
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_END);
 	int64_t effectCodeLength = SDL_TellIO(effectFile);
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_SET);

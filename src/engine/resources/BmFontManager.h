@@ -20,6 +20,6 @@ const char* BmFontManager_GetDatFileName();
 void BmFontManager_LoadAllFromDat();
 void BmFontManager_Dispose(const char* filenameWithoutExtension);
 void BmFontManager_DisposeAll();
-int BmFontManager_Length();
+int64_t BmFontManager_Length();
 Resource* BmFontManager_GetResourceByIndex(int index);
 BmFont* BmFontManager_GetResourceDataByIndex(int index);

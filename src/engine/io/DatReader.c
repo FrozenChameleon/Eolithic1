@@ -19,9 +19,9 @@ typedef struct DatReader
 	int _mCurrent;
 	int _mCount;
 	bool _mHasInit;
-	FixedChar260 _mPath;
+	MString* _mPath;
 	DatInfo* arr_dat_info;
-	FixedChar260* arr_last_strings;
+	MString** arr_last_strings;
 	BufferReader* _mReader;
 } DatReader;
 
@@ -44,38 +44,35 @@ bool DatReader_HasNext(const DatReader* dr)
 {
 	return (dr->_mCurrent < dr->_mCount);
 }
-void DatReader_NextFilePath(DatReader* dr, FixedChar260* dst)
+MString* DatReader_NextFilePath(DatReader* dr)
 {
-	int32_t length = BufferReader_ReadI32(dr->_mReader);
+	for (int32_t i = 0; i < arrlen(dr->arr_last_strings); i += 1)
+	{
+		MString_Dispose(dr->arr_last_strings[i]);
+	}
 	arrsetlen(dr->arr_last_strings, 0);
+
+	int32_t length = BufferReader_ReadI32(dr->_mReader);
 	for (int32_t i = 0; i < length; i += 1)
 	{
-		FixedChar260 temp = { 0 };
-		BufferReader_ReadString(dr->_mReader, temp.mValue, FIXED_CHAR_260_LENGTH);
+		MString* temp = BufferReader_ReadStringToMString(dr->_mReader);
 		arrput(dr->arr_last_strings, temp);
 	}
 
-	memset(dst, 0, sizeof(FixedChar260));
-	int32_t len = arrlen(dr->arr_last_strings);
+	MString* strToReturn = MString_Create("");
+	int64_t len = arrlen(dr->arr_last_strings);
 	for (int i = 0; i < len; i += 1)
 	{
-		FixedChar260* currentString = &dr->arr_last_strings[i].mValue;
-		if (i == 0)
-		{
-			Utils_strlcpy(dst, currentString, FIXED_CHAR_260_LENGTH);
-		}
-		else
-		{
-			Utils_strlcat(dst, currentString, FIXED_CHAR_260_LENGTH);
-		}
+		MString_AddAssignString(&strToReturn, dr->arr_last_strings[i]->str);
 		if (i < (len - 1))
 		{
-			File_AppendPathSeparator(dst);
+			File_AppendPathSeparator(&strToReturn);
 		}
 	}
 
 	DatInfo* currentInfo = GetCurrentDatInfo(dr);
-	Utils_strlcpy(&currentInfo->mPath, dst, FIXED_CHAR_260_LENGTH);
+	currentInfo->mPath = MString_Create(strToReturn->str);
+	return strToReturn;
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 {
@@ -115,11 +112,10 @@ DatReader* DatReader_Create(const char* path)
 {
 	_mRefs += 1;
 
-	DatReader* dr = Utils_malloc(sizeof(DatReader));
-	Utils_memset(dr, 0, sizeof(DatReader));
+	DatReader* dr = Utils_calloc(1, sizeof(DatReader));
 
 	dr->_mReader = BufferReader_CreateFromPath(path);
-	Utils_strlcpy(dr->_mPath.mValue, path, FIXED_CHAR_260_LENGTH);
+	dr->_mPath = MString_Create(path);
 	
 	int version = BufferReader_ReadI32(dr->_mReader);
 	dr->_mCount = BufferReader_ReadI32(dr->_mReader);
@@ -128,8 +124,6 @@ DatReader* DatReader_Create(const char* path)
 		DatInfo temp = { 0 };
 		arrput(dr->arr_dat_info, temp);
 	}
-
-	int32_t len = arrlen(dr->arr_dat_info);
 
 	dr->_mHasInit = true;
 

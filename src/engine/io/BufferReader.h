@@ -9,6 +9,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "FixedByteBuffer.h"
+#include "../utils/MString.h"
 
 typedef struct BufferReader BufferReader;
 
@@ -39,6 +40,7 @@ double BufferReader_ReadDouble(BufferReader* br);
 uint8_t BufferReader_ReadJustTheStringLength(BufferReader* br);
 void BufferReader_ReadJustTheStringData(BufferReader* br, uint8_t stringLength, char* dst, size_t maxlen);
 void BufferReader_ReadString(BufferReader* br, char* dst, size_t maxlen);
+MString* BufferReader_ReadStringToMString(BufferReader* br);
 bool BufferReader_HasNext(BufferReader* br);
 BufferReader* BufferReader_Create(FixedByteBuffer* fbb);
 BufferReader* BufferReader_CreateFromPath(const char* path);

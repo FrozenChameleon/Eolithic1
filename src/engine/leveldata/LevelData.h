@@ -13,7 +13,7 @@
 #include "LevelCameraData.h"
 #include "../math/Rectangle.h"
 #include "../render/DrawRectangle.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 #include "../utils/Macros.h"
 
 enum
@@ -32,9 +32,9 @@ typedef struct LevelData
 	bool _mIsMetaMap;
 	MetaMap _mMetaMap;
 	DrawRectangle* _mDynamicManyRectangles;
-	FixedChar260 mLevelName;
-	FixedChar260 mTilesetName;
-	FixedChar260 mStringData[LEVEL_DATA_STRING_DATA_LENGTH];
+	MString* mLevelName;
+	MString* mTilesetName;
+	MString* mStringData[LEVEL_DATA_STRING_DATA_LENGTH];
 	LayerData mLayerData[LEVEL_DATA_LAYER_DATA_LENGTH];
 	Tile** mDynamicTileData;
 	LevelCameraData mDynamicCameraData;

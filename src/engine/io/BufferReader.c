@@ -16,7 +16,6 @@ typedef struct BufferReader
 {
 	FixedByteBuffer* mBuffer;
 	SDL_IOStream* mIOStream;
-	FixedChar260 mPath;
 } BufferReader;
 
 FixedByteBuffer* BufferReader_ReadBytes(BufferReader* br, int64_t length)
@@ -136,6 +135,14 @@ void BufferReader_ReadString(BufferReader* br, char* dst, size_t maxlen)
 {
 	uint8_t stringLength = BufferReader_ReadJustTheStringLength(br);
 	BufferReader_ReadJustTheStringData(br, stringLength, dst, maxlen);
+}
+MString* BufferReader_ReadStringToMString(BufferReader* br)
+{
+	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
+	int32_t newStrCapacity = newStringLength + 1;
+	MString* strToReturn = MString_CreateEmpty(newStrCapacity);
+	BufferReader_ReadJustTheStringData(br, newStringLength, strToReturn->str, newStrCapacity);
+	return strToReturn;
 }
 bool BufferReader_HasNext(BufferReader* br)
 {

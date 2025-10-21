@@ -9,11 +9,11 @@
 #include "../utils/Macros.h"
 #include "../math/Point.h"
 #include "../utils/StringPair.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct ThingInstance
 {
-	FixedChar260 mName;
+	MString* mName;
 	Point* mDynamicNodes;
 	StringPair* mDynamicSettings;
 } ThingInstance;

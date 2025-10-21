@@ -8,7 +8,7 @@
 
 #include "stdint.h"
 #include "../utils/Macros.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct Resource
 {

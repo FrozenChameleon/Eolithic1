@@ -20,6 +20,6 @@ const char* TextureOffsetManager_GetDatFileName();
 void TextureOffsetManager_LoadAllFromDat();
 void TextureOffsetManager_Dispose(const char* filenameWithoutExtension);
 void TextureOffsetManager_DisposeAll();
-int TextureOffsetManager_Length();
+int64_t TextureOffsetManager_Length();
 Resource* TextureOffsetManager_GetResourceByIndex(int index);
 TextureOffset* TextureOffsetManager_GetResourceDataByIndex(int index);

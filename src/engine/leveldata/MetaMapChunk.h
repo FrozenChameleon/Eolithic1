@@ -10,6 +10,7 @@
 #include "../resources/Resource.h"
 #include "../render/Color.h"
 #include "../utils/Macros.h"
+#include "../utils/MString.h"
 
 typedef struct MetaMapChunk
 {
@@ -17,6 +18,6 @@ typedef struct MetaMapChunk
 	Resource* _mLevelDataResource;
 	int mMyId;
 	Color mColor;
-	FixedChar260 mFileName;
+	MString* mFileName;
 } MetaMapChunk;
 

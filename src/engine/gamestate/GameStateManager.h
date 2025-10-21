@@ -38,7 +38,7 @@ void GameStateManager_DrawDebugHud(SpriteBatch* spriteBatch);
 void GameStateManager_InitDefaultNormalState();
 void GameStateManager_InitDefaultPauseState();
 void GameStateManager_SetGameState(int value);
-void GameStateManager_SetGameStateForceNow(int value, bool forceNow);
+void GameStateManager_SetGameState2(int value, bool forceNow);
 void GameStateManager_DebugDrawInfoHelper(int* counter, SpriteBatch* spriteBatch, const char* text);
 InputPlayer* GameStateManager_GetPlayerInput(Entity thing);
 Camera* GameStateManager_GetCurrentRenderCamera();

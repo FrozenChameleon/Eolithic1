@@ -331,8 +331,7 @@ void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char*
 
 	for (int32_t i = 0; i < digits; i += 1)
 	{
-		stringBuilder = MString_AddAssignChar(stringBuilder, '0');
-		int hellll = 0;
+		MString_AddAssignChar(&stringBuilder, '0');
 	}
 
 	for (int32_t i = 0; i < frames; i += 1)

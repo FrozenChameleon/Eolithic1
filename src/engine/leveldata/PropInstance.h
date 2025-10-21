@@ -9,7 +9,7 @@
 #include "../utils/Macros.h"
 #include "Prop.h"
 #include "../math/Vector2.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct PropInstance
 {
@@ -19,7 +19,7 @@ typedef struct PropInstance
 	float mRotation;
 	bool mFlipX;
 	bool mFlipY;
-	FixedChar260 mName;
+	MString* mName;
 	Vector2 mOffset;
 	Vector2 mDrawOffset;
 } PropInstance;

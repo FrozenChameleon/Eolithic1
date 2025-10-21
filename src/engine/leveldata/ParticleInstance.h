@@ -14,6 +14,7 @@
 #include "Particle.h"
 #include "../render/Sheet.h"
 #include "../render/ShaderProgram.h"
+#include "../utils/MString.h"
 
 typedef struct ParticleInstance
 {
@@ -26,7 +27,7 @@ typedef struct ParticleInstance
 	bool mFlipX;
 	bool mFlipY;
 	bool mIsComplete;
-	FixedChar260 mName;
+	MString* mName;
 	Point mAttachedThingOffset;
 	Point mInfluencedDirection;
 	Vector2 mCurveMaximum;

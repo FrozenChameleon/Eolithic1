@@ -10,7 +10,7 @@
 #include "stdbool.h"
 #include "../render/Sheet.h"
 #include "../utils/Macros.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef bool(*Achievement_ConditionFunc);
 
@@ -19,9 +19,9 @@ typedef struct Achievement
 	bool mIsCertified;
 	bool mIsHidden;
 	bool mIsUnlocked;
-	FixedChar260 mName;
-	FixedChar260 mDescription;
-	FixedChar260 mLockedDescription;
+	MString* mName;
+	MString* mDescription;
+	MString* mLockedDescription;
 	bool (*mCondition)();
 	Sheet* mSheet;
 } Achievement;

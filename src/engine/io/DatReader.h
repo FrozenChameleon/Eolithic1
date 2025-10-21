@@ -7,7 +7,7 @@
 #pragma once
 
 #include "DatInfo.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 #include "BufferReader.h"
 
 typedef struct DatReader DatReader;
@@ -15,7 +15,7 @@ typedef struct DatReader DatReader;
 FixedByteBuffer* DatReader_GetMemoryStream(DatReader* dr, int64_t length);
 bool DatReader_HasInit(const DatReader* dr);
 bool DatReader_HasNext(const DatReader* dr);
-void DatReader_NextFilePath(DatReader* dr, FixedChar260* dst);
+MString* DatReader_NextFilePath(DatReader* dr);
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream);
 //std::shared_ptr<OeStream> DatReader_Find(const std::string& path);
 DatReader* DatReader_Create(const char* path);

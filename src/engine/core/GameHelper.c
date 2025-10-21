@@ -164,3 +164,8 @@ void GameHelper_DrawDebugHudGlobalSystems(SpriteBatch* spriteBatch)
 {
 	//REMOVEME
 }
+
+void GameHelper_CreateGameStates()
+{
+
+}

@@ -20,6 +20,6 @@ const char* LevelDataManager_GetDatFileName();
 void LevelDataManager_LoadAllFromDat();
 void LevelDataManager_Dispose(const char* filenameWithoutExtension);
 void LevelDataManager_DisposeAll();
-int LevelDataManager_Length();
+int64_t LevelDataManager_Length();
 Resource* LevelDataManager_GetResourceByIndex(int index);
 LevelData* LevelDataManager_GetResourceDataByIndex(int index);

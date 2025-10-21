@@ -8,7 +8,7 @@
 
 #include "../utils/Macros.h"
 #include "../math/Vector2.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 #include "../io/BufferReader.h"
 
 typedef struct Particle
@@ -55,7 +55,7 @@ typedef struct Particle
 	int mCurveFluctuateIntervalMax;
 
 	int mTextureDepth;
-	FixedChar260 mTextureName;
+	MString* mTextureName;
 	int mTextureFlipSpeed;
 	bool mTextureIsAnimation;
 	int mScaler;

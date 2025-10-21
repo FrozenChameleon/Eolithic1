@@ -20,6 +20,6 @@ const char* ParticleManager_GetDatFileName();
 void ParticleManager_LoadAllFromDat();
 void ParticleManager_Dispose(const char* filenameWithoutExtension);
 void ParticleManager_DisposeAll();
-int ParticleManager_Length();
+int64_t ParticleManager_Length();
 Resource* ParticleManager_GetResourceByIndex(int index);
 Particle* ParticleManager_GetResourceDataByIndex(int index);

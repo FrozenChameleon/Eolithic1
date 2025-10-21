@@ -6,11 +6,11 @@
 
 #pragma once
 
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct DatInfo
 {
-	FixedChar260 mPath;
+	MString* mPath;
 	int64_t mLength;
 	int64_t mPosition;
 } DatInfo;

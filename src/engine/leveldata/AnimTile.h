@@ -10,7 +10,7 @@
 #include "../render/Animation.h"
 #include "../render/Sheet.h"
 #include "../io/BufferReader.h"
-#include "../utils/FixedChar260.h"
+#include "../utils/MString.h"
 
 typedef struct AnimTile
 {
@@ -26,10 +26,10 @@ typedef struct AnimTile
 	bool mIsFlipY;
 	int mFlipSpeed;
 	float mRotation;
-	FixedChar260 mTextureName;
-	FixedChar260 mTilesetFilter;
+	MString* mTextureName;
+	MString* mTilesetFilter;
 	bool mIsWrap;
-	FixedChar260 mWrapTextureName;
+	MString* mWrapTextureName;
 	bool mIsWrapX;
 	int mWrapSpeedX;
 	bool mIsWrapY;

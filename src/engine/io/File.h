@@ -10,29 +10,29 @@
 #include "stdint.h"
 #include "FixedByteBuffer.h"
 #include "../utils/Macros.h"
-#include "../utils/FixedChar260.h"
 #include "BufferReader.h"
 #include "../utils/IStringArray.h"
+#include "../utils/MString.h"
 
-void File_AppendPathSeparator(FixedChar260* dst);
+void File_AppendPathSeparator(MString** str);
 FixedByteBuffer* File_ReadAll(const char* path);
 bool File_Exists(const char* path);
 const char* File_GetBasePath();
 const char* File_GetPrefPath();
 
-void File_Combine2(FixedChar260* dst, const char* path1, const char* path2);
-void File_Combine3(FixedChar260* dst, const char* path1, const char* path2, const char* path3);
-void File_Combine4(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4);
-void File_Combine5(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5);
-void File_Combine6(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6);
-void File_Combine7(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7);
-void File_Combine8(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8);
-void File_Combine9(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8, const char* path9);
-void File_Combine10(FixedChar260* dst, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
-	const char* path8, const char* path9, const char* path10);
-
-void File_GetFileName(FixedChar260* dst, const FixedChar260* path);
-void File_GetFileNameWithoutExtension(FixedChar260* dst, const FixedChar260* path);
+MString* File_GetFileName(const char* path);
+MString* File_GetFileNameWithoutExtension(const char* path);
 IStringArray* File_ReadAllToStrings(BufferReader* br);
+
+MString* File_Combine2(const char* path1, const char* path2);
+MString* File_Combine3(const char* path1, const char* path2, const char* path3);
+MString* File_Combine4(const char* path1, const char* path2, const char* path3, const char* path4);
+MString* File_Combine5(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5);
+MString* File_Combine6(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6);
+MString* File_Combine7(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7);
+MString* File_Combine8(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+	const char* path8);
+MString* File_Combine9(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+	const char* path8, const char* path9);
+MString* File_Combine10(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+	const char* path8, const char* path9, const char* path10);

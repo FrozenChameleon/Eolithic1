@@ -89,9 +89,9 @@ void GameStateManager_InitDefaultPauseState()
 }
 void GameStateManager_SetGameState(int value)
 {
-	GameStateManager_SetGameStateForceNow(value, false);
+	GameStateManager_SetGameState2(value, false);
 }
-void GameStateManager_SetGameStateForceNow(int value, bool forceNow)
+void GameStateManager_SetGameState2(int value, bool forceNow)
 {
 	_mNextGameState = value;
 	if (forceNow)

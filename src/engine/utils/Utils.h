@@ -8,23 +8,12 @@
 
 #include "stdint.h"
 #include "stdbool.h"
-#include "FixedChar260.h"
 #include "../math/Rectangle.h"
 
 typedef struct IStringArray IStringArray;
 
-typedef struct SharedFixedChar260
-{
-	FixedChar260 mBuffer;
-	bool mIsInUse;
-} SharedFixedChar260;
-
 #define UTILS_SHARED_STRING_BUFFER_LENGTH FIXED_CHAR_260_LENGTH
 
-SharedFixedChar260* Utils_CreateSharedFixedChar260();
-void Utils_DisposeSharedFixedChar260(SharedFixedChar260* sfc);
-int32_t Utils_GetAmountOfSharedFixedChar260InUse();
-void Utils_FreeAllSharedFixedChar260();
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);

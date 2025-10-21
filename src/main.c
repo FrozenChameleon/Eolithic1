@@ -26,15 +26,24 @@
 #include "engine/utils/IStrings.h"
 #include "engine/gamestate/ComponentPack.h"
 #include "engine/gamestate/GameStateData.h"
+#include "engine/utils/MString.h"
 
 int main(int argc, char* args[])
 {
-	SharedFixedChar260* path = Utils_CreateSharedFixedChar260();
-	File_Combine2(path, "data", "engineconfig.bin");
-	Cvars_Read(path);
-	File_Combine2(path, "data", "userconfig.bin");
-	Cvars_Read(path);
-	Utils_DisposeSharedFixedChar260(path);
+	MString* test = MString_Create("HELLOOOOO");
+	MString_AddAssignChar(&test, 'A');
+	MString_AddAssignChar(&test, 'B');
+	MString_AddAssignChar(&test, 'C');
+	MString_AddAssignString(&test, "HELLO");
+	MString_Dispose(test);
+
+	MString* test2 = File_Combine2("data", "engineconfig.bin");
+	Cvars_Read(test2->str);
+	MString_Dispose(test2);
+
+	MString* test3 = File_Combine2("data", "userconfig.bin");
+	Cvars_Read(test3->str);
+	MString_Dispose(test3);
 
 	Game_Init();
 
@@ -47,9 +56,7 @@ int main(int argc, char* args[])
 	//MusicManager_DisposeAll();
 	//SoundEffectManager_LoadAllFromDat();
 	//SoundEffectManager_DisposeAll();
-	//Utils_FreeAllSharedFixedChar260();
 
-	int32_t sharedFixedCharInUse = Utils_GetAmountOfSharedFixedChar260InUse();
 	int64_t cvarsLength = Cvars_Length();
 	uint64_t mallocRefs = Utils_GetMallocRefs();
 
