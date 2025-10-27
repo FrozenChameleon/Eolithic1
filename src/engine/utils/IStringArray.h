@@ -6,6 +6,7 @@
 typedef struct IStringArray IStringArray;
 
 IStringArray* IStringArray_Create();
+void IStringArray_Clear(IStringArray* sa);
 void IStringArray_Dispose(IStringArray* sa);
 void IStringArray_Add(IStringArray* sa, const char* str);
 int64_t IStringArray_Length(IStringArray* sa);

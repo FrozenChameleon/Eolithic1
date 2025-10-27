@@ -2,9 +2,16 @@
 
 #include "Utils.h"
 #include "Logger.h"
+#include "Macros.h"
 
 static uint64_t _mRefs;
 
+static char _mTempBuffer[EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE];
+
+static void ClearTempBuffer()
+{
+	Utils_memset(_mTempBuffer, 0, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE * sizeof(char));
+}
 MString* MString_CreateFromSubString(const char* str, int32_t startIndex, int32_t length)
 {
 	MString* mstring = MString_Create(str);
@@ -32,8 +39,46 @@ MString* MString_CreateEmpty(int32_t size)
 	mstring->capacity = size;
 	return mstring;
 }
+static void FixNullString(MString** str)
+{
+	if (*str != NULL)
+	{
+		return;
+	}
+
+	*str = MString_Create("");
+}
+void MString_Assign(MString** str, const char* toThis)
+{
+	FixNullString(str);
+
+	MString* oldStr = *str;
+	MString* newStr = MString_Create(toThis);
+	MString_Dispose(oldStr);
+	*str = newStr;
+}
+void MString_AddAssignInt(MString** str, int32_t addThisInt)
+{
+	ClearTempBuffer();
+	Utils_IntToString(addThisInt, _mTempBuffer, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE);
+	MString_AddAssignString(str, _mTempBuffer);
+}
+void MString_AddAssignSingle(MString** str, float addThisSingle)
+{
+	ClearTempBuffer();
+	Utils_FloatToString(addThisSingle, _mTempBuffer, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE);
+	MString_AddAssignString(str, _mTempBuffer);
+}
+void MString_AddAssignDouble(MString** str, double addThisDouble)
+{
+	ClearTempBuffer();
+	Utils_DoubleToString(addThisDouble, _mTempBuffer, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE);
+	MString_AddAssignString(str, _mTempBuffer);
+}
 void MString_AddAssignChar(MString** str, char addThisChar)
 {
+	FixNullString(str);
+
 	MString* oldStr = *str;
 	size_t newLen = oldStr->len + 1;
 	size_t newCapacity = newLen + 1;
@@ -47,6 +92,8 @@ void MString_AddAssignChar(MString** str, char addThisChar)
 }
 void MString_AddAssignString(MString** str, const char* addThisStr)
 {
+	FixNullString(str);
+
 	MString* oldStr = *str;
 	size_t addThisStrLen = Utils_strlen(addThisStr);
 	size_t newLen = oldStr->len + addThisStrLen;
@@ -59,21 +106,25 @@ void MString_AddAssignString(MString** str, const char* addThisStr)
 	MString_Dispose(oldStr);
 	*str = newStr;
 }
-MString* MString_Truncate(MString* str, int newLength)
+void MString_Truncate(MString** str, int newLength)
 {
-	if (newLength >= str->len)
+	FixNullString(str);
+
+	MString* actualStr = *str;
+
+	if (newLength >= actualStr->len)
 	{
 		return;
 	}
 
-	for (int i = 0; i < str->capacity; i += 1)
+	for (int i = 0; i < actualStr->capacity; i += 1)
 	{
 		if (i >= newLength)
 		{
-			str->text[i] = '\0';
+			actualStr->text[i] = '\0';
 		}
 	}
-	str->len = newLength;
+	actualStr->len = newLength;
 }
 void MString_Dispose(MString* str)
 {

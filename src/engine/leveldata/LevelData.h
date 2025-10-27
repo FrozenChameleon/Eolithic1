@@ -38,7 +38,7 @@ typedef struct LevelData
 	LayerData mLayerData[LEVEL_DATA_LAYER_DATA_LENGTH];
 	Tile** mDynamicTileData;
 	LevelCameraData mDynamicCameraData;
-	Line mDynamicLines;
+	Line* mDynamicLines;
 } LevelData;
 
 LevelData* LevelData_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);

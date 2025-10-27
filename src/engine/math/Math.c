@@ -8,6 +8,7 @@
 
 #include "SDL3/SDL.h"
 #include "MathHelper.h"
+#include "../utils/Logger.h"
 
 #define VALUE_OF_PI 3.14159265358979323846
 
@@ -212,4 +213,60 @@ double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2)
 double Math_pow(double x, double y)
 {
 	return SDL_pow(x, y);
+}
+int Math_ClampInt(int value, int lowerBound, int upperBound)
+{
+	value = Math_MinInt32(value, upperBound);
+	value = Math_MaxInt32(value, lowerBound);
+	return value;
+}
+float Math_ClampSingle(float value, float lowerBound, float upperBound)
+{
+	value = Math_MinSingle(value, upperBound);
+	value = Math_MaxSingle(value, lowerBound);
+	return value;
+}
+float Math_GetSlope(float x1, float y1, float x2, float y2)
+{
+	float rise = y1 - y2;
+	float run = x1 - x2;
+	if (run == 0) //Undefined slope
+	{
+		Logger_LogError("Undefined slope!");
+	}
+	float m = rise / run;
+	return m;
+}
+float Math_GetIntercept(float x, float y, float slope)
+{
+	float b = (slope * x) - y;
+	return -b;
+}
+float Math_GetSlopeInterceptXPoint(Point begin, Point end, float y)
+{
+	return Math_GetSlopeInterceptX(begin.X, begin.Y, end.X, end.Y, y);
+}
+float Math_GetSlopeInterceptXVector2(Vector2 begin, Vector2 end, float y)
+{
+	return Math_GetSlopeInterceptX(begin.X, begin.Y, end.X, end.Y, y);
+}
+float Math_GetSlopeInterceptX(float x1, float y1, float x2, float y2, float y)
+{
+	float m = Math_GetSlope(x1, y1, x2, y2);
+	float b = Math_GetIntercept(x1, y1, m);
+	return (y / m) - (b / m);
+}
+float Math_GetSlopeInterceptYPoint(Point begin, Point end, float x)
+{
+	return Math_GetSlopeInterceptY(begin.X, begin.Y, end.X, end.Y, x);
+}
+float Math_GetSlopeInterceptYVector2(Vector2 begin, Vector2 end, float x)
+{
+	return Math_GetSlopeInterceptY(begin.X, begin.Y, end.X, end.Y, x);
+}
+float Math_GetSlopeInterceptY(float x1, float y1, float x2, float y2, float x)
+{
+	float m = Math_GetSlope(x1, y1, x2, y2);
+	float b = Math_GetIntercept(x1, y1, m);
+	return (m * x) + b;
 }

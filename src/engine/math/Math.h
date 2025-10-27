@@ -50,3 +50,14 @@ double Math_GetDistanceEuclideanPoint(Point begin, Point end);
 double Math_GetDistanceEuclideanVector2(Vector2 begin, Vector2 end);
 double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2);
 double Math_pow(double x, double y);
+int Math_ClampInt(int value, int lowerBound, int upperBound);
+float Math_ClampSingle(float value, float lowerBound, float upperBound);
+
+float Math_GetSlope(float x1, float y1, float x2, float y2);
+float Math_GetIntercept(float x, float y, float slope);
+float Math_GetSlopeInterceptXPoint(Point begin, Point end, float y);
+float Math_GetSlopeInterceptXVector2(Vector2 begin, Vector2 end, float y);
+float Math_GetSlopeInterceptX(float x1, float y1, float x2, float y2, float y);
+float Math_GetSlopeInterceptYPoint(Point begin, Point end, float x);
+float Math_GetSlopeInterceptYVector2(Vector2 begin, Vector2 end, float x);
+float Math_GetSlopeInterceptY(float x1, float y1, float x2, float y2, float x);

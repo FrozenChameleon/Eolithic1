@@ -25,9 +25,11 @@ enum GameStateManagerGameState
 //extern std::vector<OeGameState*> GameStates;
 
 int32_t GameStateManager_GetGlobalSystemsLen();
-System* GameStateManager_GetGlobalSystems();
+System** GameStateManager_GetGlobalSystems();
+void GameStateManager_AddGlobalSystem(System* sys);
 int32_t GameStateManager_GetStateSystemsLen();
-System* GameStateManager_GetStateSystems();
+System** GameStateManager_GetStateSystems();
+void GameStateManager_AddStateSystem(System* sys);
 GameState* GameStateManager_GetGameState();
 //GameState* GameStateManager_ActiveGameStateForRenderCamera();
 void GameStateManager_UpdateLastRenderPosition();

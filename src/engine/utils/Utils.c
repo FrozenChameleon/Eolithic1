@@ -303,3 +303,15 @@ bool Utils_CharIsDigit(char c)
 	}
 	return false;
 }
+bool Utils_ArrContainsInt(int* arr_values, int containsThis)
+{
+	int64_t len = arrlen(arr_values);
+	for (int i = 0; i < len; i += 1)
+	{
+		if (arr_values[i] == containsThis)
+		{
+			return true;
+		}
+	}
+	return false;
+}

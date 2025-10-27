@@ -1,14 +1,33 @@
-#pragma once
+﻿#pragma once
 
 #include "../utils/Macros.h"
+#include "../input/InputAction.h"
+#include "../resources/Resource.h"
+#include "../utils/StringPair.h"
+#include "../systems/System.h"
+#include "../collision/Body.h"
+#include "../collision/CollisionCheckData.h"
+#include "../components/Camera.h"
+#include "../gamestate/GameStateData.h"
 
-typedef struct GameStateData GameStateData;
+typedef struct IntIntPair
+{
+	int key;
+	int value;
+} IntIntPair;
+
+typedef struct CharIntPair
+{
+	char* key;
+	int value;
+} CharIntPair;
+
 typedef struct SpriteBatch SpriteBatch;
-typedef struct ThingInstance ThingInstance;
 typedef struct LevelData LevelData;
-typedef struct Resource Resource;
-typedef struct Camera Camera;
-typedef struct Body Body;
+typedef struct BufferWriter BufferWriter;
+typedef struct BufferReader BufferReader;
+typedef struct ThingInstance ThingInstance;
+typedef struct IStringArray IStringArray;
 
 //supposed to be protected
 void GameHelper_DoDefaultSetupThingInstanceSettings(ThingInstance* instance, bool ignoreWarnings);
@@ -16,7 +35,7 @@ Resource* GameHelper_GetDefaultLevelDataResource();
 LevelData* GameHelper_GetDefaultLevelData();
 void GameHelper_UpdateLastRenderPositionNormally();
 Camera* GameHelper_GetDefaultCameraForRender();
-//void GameHelper_AddSound(std::vector<OeStringPair>& list, const std::string& key, const std::string& value);
+StringPair* GameHelper_AddSound(StringPair* arr_list, const char* key, const char* value);
 float GameHelper_GetDefaultPostGameBrightness();
 void GameHelper_UpdateGlobalSystemsNormally();
 void GameHelper_DrawGlobalSystemsNormally(SpriteBatch* spriteBatch);
@@ -27,25 +46,25 @@ void GameHelper_DrawStateSystemsNormally(SpriteBatch* spriteBatch);
 void GameHelper_DrawHudStateSystemsNormally(SpriteBatch* spriteBatch);
 void GameHelper_DrawDebugHudStateSystemsNormally(SpriteBatch* spriteBatch);
 void GameHelper_CreateDefaultGameStates();
-//void GameHelper_CreateGameStateDataHelper(OeGameStateData* gameStateData, std::unordered_map<std::string, int>& sizes);
-//void GameHelper_CreateDefaultGlobalSystems(std::vector<OeSystem*>& systems);
-//void GameHelper_CreateDefaultBindings(std::vector<std::string>& strings, std::vector<OeInputAction>& input);
+void GameHelper_CreateGameStateDataHelper(GameStateData* gameStateData, CharIntPair* sizes);
+void GameHelper_CreateDefaultGlobalSystems();
+void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input);
 void GameHelper_AddStringsHelper();
 
 //supposed to be public
 enum
 {
-	COMPONENT_SCAN_RANGE = 1000
+	GAMEHELPER_COMPONENT_SCAN_RANGE = 1000
 };
 
-extern const float GAME_HELPER_DEFAULT_GRAVITY_DECELERATION;
-extern const float GAME_HELPER_DEFAULT_GRAVITY_DECELERATION_MAX;
-extern const int GAME_HELPER_DEFAULT_MOVING_PLATFORM_LEEWAY;
+extern const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION;
+extern const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION_MAX;
+extern const int GAMEHELPER_DEFAULT_MOVING_PLATFORM_LEEWAY;
 
-extern int GAME_HELPER_PLATFORM_UP;
-extern int GAME_HELPER_PLATFORM_DOWN;
-extern int GAME_HELPER_PLATFORM_RIGHT;
-extern int GAME_HELPER_PLATFORM_LEFT;
+extern int GAMEHELPER_PLATFORM_UP;
+extern int GAMEHELPER_PLATFORM_DOWN;
+extern int GAMEHELPER_PLATFORM_RIGHT;
+extern int GAMEHELPER_PLATFORM_LEFT;
 
 #if EDITOR
 void GameHelper_OnDebugFastResetPlusMove();
@@ -53,8 +72,8 @@ void GameHelper_OnDebugFastResetPlusMove();
 void GameHelper_Initialize();
 void GameHelper_OnLoadingStart();
 void GameHelper_OnLoadingAfterResources();
-//void GameHelper_WriteSessionData(std::shared_ptr<OeIniWriter> writer);
-//void GameHelper_ReadSessionData(std::shared_ptr<OeIniReader> reader);
+void GameHelper_WriteSessionData(BufferWriter* writer);
+void GameHelper_ReadSessionData(BufferReader* reader);
 void GameHelper_SetupThingInstanceSettings(ThingInstance* instance, bool ignoreWarnings);
 Resource* GameHelper_GetLevelDataResource();
 LevelData* GameHelper_GetLevelData();
@@ -76,25 +95,24 @@ void GameHelper_DrawHudStateSystems(SpriteBatch* spriteBatch);
 void GameHelper_DrawDebugHudStateSystems(SpriteBatch* spriteBatch);
 void GameHelper_CreateGameStates();
 GameStateData* GameHelper_CreateGameStateData(const char* name);
-//GameSaveData* GameHelper_CreateGameSaveData();
-//void GameHelper_InitGameState(const std::string& levelToLoad);
+void* GameHelper_CreateGameSaveData();
+void GameHelper_InitGameState(const char* levelToLoad);
 void GameHelper_CreateStateSystems();
 void GameHelper_CreateGlobalSystems();
 void GameHelper_InitPoolsForEngine();
 void GameHelper_InitPoolsForGame();
 float GameHelper_GetGravityDecelerationMax();
 float GameHelper_GetGravityDeceleration();
-//std::type_index GameHelper_BuildControllerComponent(int number, OeEntity entity);
-//std::vector<std::string> GameHelper_GetControllerComponentStringArray();
-//std::unordered_map<int, int> GameHelper_GetControllerComponentTypeMap();
+ComponentType GameHelper_BuildControllerComponent(int number, Entity entity);
+IStringArray* GameHelper_GetControllerComponentStringArray();
+IntIntPair* GameHelper_GetControllerComponentTypeMap();
 void GameHelper_SetupPlatformTypes();
 bool GameHelper_IsCollisionSolidForLineOfSight(int collision);
 bool GameHelper_IsCollisionSolidForPathFinding(int collision, int currentX, int currentY, int newX, int newY);
-//void GameHelper_DefaultBindings(std::vector<std::string>& strings, std::vector<OeInputAction>& input);
-//void GameHelper_SetupMusicAndSfxList(std::vector<OeStringPair>& music, std::vector<OeStringPair>& sfx);
+void GameHelper_DefaultBindings(IStringArray* strings, InputAction* input);
+void GameHelper_SetupMusicAndSfxList(StringPair* music, StringPair* sfx);
 const char* GameHelper_ReturnInputDisplayMask(const char* displayName);
 void GameHelper_AddStrings();
-//void GameHelper_AddDefaultThingSettings(std::vector<OeStringPair>& pairs);
-//const std::vector<std::string>& GameHelper_GetAllTheRecordings();
-//void GameHelper_BakedCollisionCheck(float x, float y, int collisionToCheck, OeBody* bodyRef, bool vertical, OeCollisionCheckData* data);
-void* GameHelper_CreateGameSaveData();
+void GameHelper_AddDefaultThingSettings(StringPair* pairs);
+IStringArray* GameHelper_GetAllTheRecordings();
+void GameHelper_BakedCollisionCheck(float x, float y, int collisionToCheck, Body* bodyRef, bool vertical, CollisionCheckData* data);

@@ -12,8 +12,6 @@
 
 typedef struct IStringArray IStringArray;
 
-#define UTILS_SHARED_STRING_BUFFER_LENGTH FIXED_CHAR_260_LENGTH
-
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);
@@ -54,3 +52,4 @@ IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim);
 char Utils_GetCharFromNumber(int val);
 int Utils_Get1DArrayPosFor2DArray(int i, int j, int width);
 bool Utils_CharIsDigit(char c);
+bool Utils_ArrContainsInt(int* arr_values, int containsThis);

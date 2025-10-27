@@ -26,6 +26,11 @@ void IStringArray_Dispose(IStringArray* sa)
 	IStrings_Dispose(sa->mStrings);
 	Utils_free(sa);
 }
+void IStringArray_Clear(IStringArray* sa)
+{
+	hmfree(sa->hm_values);
+	sa->hm_values = NULL;
+}
 void IStringArray_Add(IStringArray* sa, const char* str)
 {
 	IString internedString = IStrings_Get(sa->mStrings, str);
