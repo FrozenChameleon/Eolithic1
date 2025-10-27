@@ -12,6 +12,16 @@ static void ClearTempBuffer()
 {
 	Utils_memset(_mTempBuffer, 0, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE * sizeof(char));
 }
+static void FixNullString(MString** str)
+{
+	if (*str != NULL)
+	{
+		return;
+	}
+
+	*str = MString_Create("");
+}
+
 MString* MString_CreateFromSubString(const char* str, int32_t startIndex, int32_t length)
 {
 	MString* mstring = MString_Create(str);
@@ -38,15 +48,6 @@ MString* MString_CreateEmpty(int32_t size)
 	mstring->len = 0;
 	mstring->capacity = size;
 	return mstring;
-}
-static void FixNullString(MString** str)
-{
-	if (*str != NULL)
-	{
-		return;
-	}
-
-	*str = MString_Create("");
 }
 void MString_Assign(MString** str, const char* toThis)
 {
@@ -138,7 +139,14 @@ void MString_Dispose(MString* str)
 	Utils_free(str->text);
 	Utils_free(str);
 }
-
+bool MString_EqualToChar(MString* str, const char* otherStr)
+{
+	return Utils_StringEqualTo(str->text, otherStr);
+}
+bool MString_EqualTo(MString* str, MString* otherStr)
+{
+	return Utils_StringEqualTo(str->text, otherStr->text);
+}
 uint64_t MString_GetRefs()
 {
 	return _mRefs;

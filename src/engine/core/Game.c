@@ -33,6 +33,7 @@
 #include "../utils/Cvars.h"
 #include "GameUpdater.h"
 #include "../globals/Globals.h"
+#include "../utils/Utils.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -99,6 +100,20 @@ int32_t Game_Init()
 	{
 		return Exception_Run("Unable to init platform renderer!", false);
 	}
+
+
+	//Old "Initialize"
+	//WILLNOTDO 06262023
+	/*
+	OeServiceHelper::Init();
+	OeAutoPool.Init();
+	OePool.Init();
+	OeFunc.Init();
+	OeRecordingTool.Init();
+	OeTilesetOffset.Init();
+	OeMusic.Init();
+	*/
+	Input_Init();
 
 	_mHasInit = true;
 

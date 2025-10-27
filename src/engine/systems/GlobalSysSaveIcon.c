@@ -68,5 +68,5 @@ static void DrawHud(SpriteBatch* spriteBatch)
 
 System* GlobalSysSaveIcon_CreateSystem()
 {
-
+	return System_Create();
 }

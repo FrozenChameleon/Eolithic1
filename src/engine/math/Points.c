@@ -1,8 +1,10 @@
-#include "limits.h"
 #include "Points.h"
+
+#include "limits.h"
 #include "Math.h"
 #include "../utils/Utils.h"
 #include "../../GlobalDefs.h"
+#include "../io/BufferReader.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -448,12 +450,13 @@ void Points_Write(Point point, std::shared_ptr<OeIniWriter> writer)
 	writer->WriteInt32(point.X);
 	writer->WriteInt32(point.Y);
 }
-void Points_Read(Point* point, std::shared_ptr<OeIniReader> reader)
-{
-	point->X = reader->ReadInt32();
-	point->Y = reader->ReadInt32();
-}
+
 */
+void Points_Read(Point* point, BufferReader* reader)
+{
+	point->X = BufferReader_ReadI32(reader);
+	point->Y = BufferReader_ReadI32(reader);
+}
 const char* Points_ToString(Point point) //FROM FNA
 {
 	return NULL;

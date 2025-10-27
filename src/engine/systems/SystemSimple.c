@@ -12,22 +12,25 @@ static void InitSystemSimple(SystemSimple* ss)
 		return;
 	}
 
-	ss->_mSetupSystem();
+	if (ss->_mSetupSystem != NULL)
+	{
+		ss->_mSetupSystem();
+	}
 
 	ss->_mHasBeenInit = true;
 }
 
-static void InitStringSetting(void* sys, const char* name, const char* value)
+static void InitStringSetting(System* sys, const char* name, const char* value)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 
 	//OeSystemFunc::InitStringSetting<T>(name, value);
 }
-static void Init(void* sys, ComponentType givenType, Entity owner)
+static void Init(System* sys, ComponentType givenType, Entity owner)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 	
 	InitSystemSimple(ss);
 
@@ -57,9 +60,9 @@ static void Init(void* sys, ComponentType givenType, Entity owner)
 		}
 	}
 }
-static void Update(void* sys)
+static void Update(System* sys)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 
@@ -76,9 +79,9 @@ static void Update(void* sys)
 		ss->_mAfterUpdateRoutine();
 	}
 }
-static void Draw(void* sys, SpriteBatch* spriteBatch)
+static void Draw(System* sys, SpriteBatch* spriteBatch)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 
@@ -87,9 +90,9 @@ static void Draw(void* sys, SpriteBatch* spriteBatch)
 		SystemFunc_DrawHelper(ss->_mType, ss->_mDrawRoutine, spriteBatch);
 	}
 }
-static void DrawHud(void* sys, SpriteBatch* spriteBatch)
+static void DrawHud(System* sys, SpriteBatch* spriteBatch)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 
@@ -98,9 +101,9 @@ static void DrawHud(void* sys, SpriteBatch* spriteBatch)
 		SystemFunc_DrawHudHelper(ss->_mType, ss->_mDrawHudRoutine, spriteBatch);
 	}
 }
-static void DrawDebugHud(void* sys, SpriteBatch* spriteBatch)
+static void DrawDebugHud(System* sys, SpriteBatch* spriteBatch)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 
@@ -109,9 +112,9 @@ static void DrawDebugHud(void* sys, SpriteBatch* spriteBatch)
 		SystemFunc_DrawDebugHudHelper(ss->_mType, ss->_mDrawDebugHudRoutine, spriteBatch);
 	}
 }
-static void UpdateLastRenderPosition(void* sys, GameState* gameState)
+static void UpdateLastRenderPosition(System* sys, GameState* gameState)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 
@@ -120,9 +123,9 @@ static void UpdateLastRenderPosition(void* sys, GameState* gameState)
 		SystemFunc_UpdateLastRenderPositionHelper(ss->_mType, gameState, ss->_mUpdateLastRenderPositionRoutine);
 	}
 }
-static void ReceiveBroadcast(void* sys, int type, int packet1, int packet2, int packet3)
+static void ReceiveBroadcast(System* sys, int type, int packet1, int packet2, int packet3)
 {
-	SystemSimple* ss = ((System*)sys)->_mData;
+	SystemSimple* ss = sys->_mData;
 
 	InitSystemSimple(ss);
 

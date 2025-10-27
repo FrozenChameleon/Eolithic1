@@ -3,7 +3,7 @@
 #include "../core/GameHelper.h"
 #include "../core/Func.h"
 
-static void InitRoutine(Entity owner, Body* data)
+void BodySys_InitRoutine(Entity owner, Body* data)
 {
 	data->mOwner = owner;
 	data->mMaxDeceleration = GameHelper_GetGravityDecelerationMax();
@@ -40,7 +40,7 @@ static void UpdateLastRenderPositionRoutine(Body* data)
 System* BodySys_CreateSystem()
 {
 	SystemSimple* ss = SystemSimple_Create(C_Body);
-	ss->_mInitRoutine = InitRoutine;
+	ss->_mInitRoutine = BodySys_InitRoutine;
 	ss->_mUpdateRoutine = UpdateRoutine;
 	ss->_mUpdateLastRenderPositionRoutine = UpdateLastRenderPositionRoutine;
 	return SystemSimple_CreateSystem(ss);

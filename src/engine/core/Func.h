@@ -629,6 +629,7 @@ void Do_RemoveUniqueDummyEntity2(ComponentPack* pack);
 int Get_AmountOfMyChildrenWithComponent(ComponentType ctype, Entity entity);
 void Do_DestroyChildrenWithComponent(ComponentType ctype, Entity entity);
 void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const char* particle);
+void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int index);
 /*
 Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool useY, bool useInitial)
 {
@@ -715,15 +716,7 @@ void Do_DestroyEntitiesWithComponent()
 {
 	Do_DestroyEntitiesWithComponent<T>("");
 }
-void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(OeComponentPack<T>* pack, int index)
-{
-	Entity dummyEntity = pack->Entities[index];
-	pack->UnsetAtIndex(index);
-	if (!pack->IsAnyEntityInPack())
-	{
-		Get_ActiveGameState()->RemoveEntity(dummyEntity);
-	}
-}
+
 int Get_AmountOfEntitiesWithComponent()
 {
 	std::shared_ptr<EntitySearch> search = Do_SearchForEntitiesWithComponent<T>();

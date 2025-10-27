@@ -21,4 +21,6 @@ void MString_AddAssignChar(MString** str, char addThisChar);
 void MString_AddAssignString(MString** str, const char* addThisStr);
 void MString_Truncate(MString** str, int newLength);
 void MString_Dispose(MString* str);
+bool MString_EqualToChar(MString* str, const char* otherStr);
+bool MString_EqualTo(MString* str, MString* otherStr);
 uint64_t MString_GetRefs();

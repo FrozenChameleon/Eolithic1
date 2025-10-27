@@ -61,10 +61,12 @@ void GameHelper_UpdateLastRenderPositionNormally()
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
+	GameState* gameState = GameStateManager_GetGameState();
+
 	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
 		System* currentSystem = stateSystems[i];
-		currentSystem->_mUpdateLastRenderPosition(currentSystem, GameStateManager_GetGameState());
+		currentSystem->_mUpdateLastRenderPosition(currentSystem, gameState);
 	}
 }
 Camera* GameHelper_GetDefaultCameraForRender()
@@ -242,22 +244,22 @@ void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input)
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_Y, BUTTONS_Y);
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_LB, BUTTONS_LeftShoulder);
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_RB, BUTTONS_RightShoulder);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LT, INPUT_CHECK_AXIS_LEFT_TRIGGER, 1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RT, INPUT_CHECK_AXIS_RIGHT_TRIGGER, -1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LT, INPUTCHECK_AXIS_LEFT_TRIGGER, 1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RT, INPUTCHECK_AXIS_RIGHT_TRIGGER, -1);
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_LS, BUTTONS_LeftStick);
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_RS, BUTTONS_RightStick);
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_START, BUTTONS_Start);
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_SELECT, BUTTONS_Back);
 
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_LEFT, INPUT_CHECK_AXIS_LEFT_STICK_X, -1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_RIGHT, INPUT_CHECK_AXIS_LEFT_STICK_X, 1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_UP, INPUT_CHECK_AXIS_LEFT_STICK_Y, 1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_DOWN, INPUT_CHECK_AXIS_LEFT_STICK_Y, -1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_LEFT, INPUTCHECK_AXIS_LEFT_STICK_X, -1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_RIGHT, INPUTCHECK_AXIS_LEFT_STICK_X, 1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_UP, INPUTCHECK_AXIS_LEFT_STICK_Y, 1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_LS_DOWN, INPUTCHECK_AXIS_LEFT_STICK_Y, -1);
 
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_LEFT, INPUT_CHECK_AXIS_RIGHT_STICK_X, -1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_RIGHT, INPUT_CHECK_AXIS_RIGHT_STICK_X, 1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_UP, INPUT_CHECK_AXIS_RIGHT_STICK_Y, -1);
-		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_DOWN, INPUT_CHECK_AXIS_RIGHT_STICK_Y, 1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_LEFT, INPUTCHECK_AXIS_RIGHT_STICK_X, -1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_RIGHT, INPUTCHECK_AXIS_RIGHT_STICK_X, 1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_UP, INPUTCHECK_AXIS_RIGHT_STICK_Y, -1);
+		InputBindings_SetupAxis(data, 1, s, ACTIONLIST_GAME_RS_DOWN, INPUTCHECK_AXIS_RIGHT_STICK_Y, 1);
 
 		InputBindings_SetupButton(data, 2, s, ACTIONLIST_GAME_DIGITAL_LEFT, BUTTONS_DPadLeft);
 		InputBindings_SetupButton(data, 2, s, ACTIONLIST_GAME_DIGITAL_RIGHT, BUTTONS_DPadRight);

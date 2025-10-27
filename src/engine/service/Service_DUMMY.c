@@ -234,3 +234,18 @@ void Service_HandleSetAchievement(int index, const char* name)
 {
 
 }
+
+void Service_SetLeaderboardAmountOfRowsToRetrieve(int value)
+{
+
+}
+
+void Service_SetAchievementMap(int* value)
+{
+
+}
+
+void Service_CheckLeaderboardSendStatus()
+{
+
+}

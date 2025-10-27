@@ -308,14 +308,14 @@ static void ContinueReadSession(bool isFirst)
 		if (_mReaderData.mPerLevelData.mLowestFps <= threshold)
 		{
 			Logger_LogInformation("Low FPS for:");
-			Logger_LogInformation(_mLastReadRecordingFilename);
+			Logger_LogInformation(_mLastReadRecordingFilename->text);
 #ifndef DEBUG_DEF_DISABLE_LOW_FPS_READOUT_IN_RECORDING_TOOL
 			if (!IsSoakTesting())
 			{
 				if (IStringArray_Length(_mDisplayReadout) < READOUT_LIMIT_FOR_LOW_FPS)
 				{
 					MString* tempString = MString_Create("Low FPS: ");
-					MString_AddAssignString(&tempString, _mLastReadRecordingFilename);
+					MString_AddAssignString(&tempString, _mLastReadRecordingFilename->text);
 					MString_AddAssignString(&tempString, ", FPS: ");
 					MString_AddAssignInt(&tempString, _mReaderData.mPerLevelData.mLowestFps);
 					IStringArray_Add(_mDisplayReadout, tempString->text);
@@ -342,7 +342,7 @@ static void ContinueReadSession(bool isFirst)
 			MString_AddAssignString(&tempString2, _mLastReadRecordingFilename->text);
 			IStringArray_Add(_mDisplayReadout, tempString2->text);
 			Logger_LogInformation("Session success miss for:");
-			Logger_LogInformation(_mLastReadRecordingFilename);
+			Logger_LogInformation(_mLastReadRecordingFilename->text);
 			MString_Dispose(tempString);
 			MString_Dispose(tempString2);
 		}
@@ -763,7 +763,7 @@ void RecordingTool_SetupWriteSession(int priority, const char* mapToLoad)
 
 	_mCurrentPriority = priority;
 	_mToolState = TOOL_STATE_WRITING;
-	_mHeaderData.mLevelFileName = mapToLoad;
+	MString_Assign(&_mHeaderData.mLevelFileName, mapToLoad);
 
 	WriteHeader();
 }
@@ -810,10 +810,10 @@ bool RecordingTool_LoadNextRecordingIfAtEndOfRecording(bool isMapLoad)
 
 	_mToolState = TOOL_STATE_READING;
 	Read(_mReaderData.mCurrentRecording);
-	GameStateManager_LoadMap(_mHeaderData.mLevelFileName);
+	GameStateManager_LoadMap(_mHeaderData.mLevelFileName->text);
 	_mReaderData.mIsReadyForNext = false;
 	Logger_LogInformation("Reading recording has begun for:");
-	Logger_LogInformation(_mHeaderData.mLevelFileName);
+	Logger_LogInformation(_mHeaderData.mLevelFileName->text);
 	return true;
 }
 void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int priority, bool goFast)

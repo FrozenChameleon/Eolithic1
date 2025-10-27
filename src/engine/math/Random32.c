@@ -43,7 +43,7 @@ int32_t Random32_NextInt(Random32* data, int givenMaxValue)
 {
 	return (int32_t)(givenMaxValue * Random32_NextDouble(data));
 }
-float Random32_NextSingle(Random32* data)
+float Random32_NextFloat(Random32* data)
 {
 	return (float)Random32_NextDouble(data);
 }

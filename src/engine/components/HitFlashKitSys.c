@@ -43,7 +43,7 @@ void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data)
 	{
 		Do_SetShader(owner, data->mState, _mShaderProgram);
 	}
-	if (OeTimer_Update(&data->mHitFlashTimer))
+	if (Timer_Update(&data->mHitFlashTimer))
 	{
 		data->mShowHitFlash = false;
 		if (data->mState == -1)

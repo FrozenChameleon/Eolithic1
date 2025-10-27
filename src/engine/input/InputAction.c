@@ -48,7 +48,7 @@ static void Update(InputAction* action, InputPlayer* input)
 
 		if (INPUT_FLAG_IS_ON_MENU)
 		{
-			if (check->mType == INPUT_CHECK_TYPE_MOUSEBUTTON)
+			if (check->mType == INPUTCHECK_TYPE_MOUSEBUTTON)
 			{
 				continue;
 			}

@@ -77,3 +77,6 @@ bool Service_AreLeaderboardDisabled();
 void Service_DisableLeaderboards();
 bool Service_HasSignedIn();
 void Service_HandleSetAchievement(int index, const char* name);
+void Service_SetLeaderboardAmountOfRowsToRetrieve(int value);
+void Service_SetAchievementMap(int* value);
+void Service_CheckLeaderboardSendStatus();

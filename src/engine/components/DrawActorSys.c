@@ -542,3 +542,14 @@ void OeComDrawActorSys::DrawInterpolated(OeEntity owner, OeComDrawActor* data, O
 	}
 }
 */
+
+void DrawActorSys_UpdateRoutine(Entity owner, DrawActor* data)
+{
+
+}
+
+System* DrawActorSys_CreateSystem()
+{
+	//TODO C99
+	return System_Create();
+}

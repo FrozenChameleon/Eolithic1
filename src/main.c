@@ -8,25 +8,9 @@
 #include "third_party/stb_ds.h"
 
 #include "engine/core/Game.h"
-#include "engine/io/File.h"
-#include "engine/io/BufferReader.h"
-#include "engine/utils/Utils.h"
-#include "engine/io/INIFile.h"
 #include "engine/utils/Cvars.h"
-#include "engine/utils/Logger.h"
-#include "engine/resources/AnimTileManager.h"
-#include "engine/resources/MusicManager.h"
-#include "engine/resources/SoundEffectManager.h"
-#include "engine/audio/Music.h"
-#include "engine/audio/SoundEffectInstance.h"
-#include "engine/io/DatReader.h"
-#include "engine/core/Window.h"
-#include "engine/resources/TextureManager.h"
-#include "engine/resources/TextureOffsetManager.h"
-#include "engine/utils/IStrings.h"
-#include "engine/gamestate/ComponentPack.h"
-#include "engine/gamestate/GameStateData.h"
 #include "engine/utils/MString.h"
+#include "engine/io/File.h"
 
 int main(int argc, char* args[])
 {

@@ -315,3 +315,8 @@ bool Utils_ArrContainsInt(int* arr_values, int containsThis)
 	}
 	return false;
 }
+bool Utils_StringContains(const char* str, const char* containsThis)
+{
+	//TODO C99
+	return false;
+}

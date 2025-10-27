@@ -4,19 +4,20 @@
 #include "../core/GameHelper.h"
 #include "../utils/Logger.h"
 #include "../utils/Utils.h"
-//TODO C99 #include "../resources/ResourceManagers.h"
+#include "../utils/IStringMap.h"
+#include "../../third_party/stb_ds.h"
 
-struct MappingInfo
+typedef struct MappingInfo
 {
 	const char* mKey;
 	bool mDoNotReplace;
-};
+} MappingInfo;
 
-//static std_vector<std_string> _mOrderedKeys;
-//static std_unordered_map<std_string, std_string> _mMap;
-//static std_vector<MappingInfo> _mInfoMap;
+static IStringMap* _mMap;
+static MappingInfo* arr_info_list;
 
 static bool _mHasInit;
+static char _mTemp[10];
 
 void Strings_Init()
 {
@@ -24,6 +25,8 @@ void Strings_Init()
 	{
 		return;
 	}
+
+	_mMap = IStringMap_Create();
 
 	GameHelper_AddStrings();
 
@@ -47,7 +50,12 @@ static const char* GetTextToReturn(const char* key, std_unordered_map<std_string
 
 const char* Strings_Get(const char* key)
 {
-	return NULL;
+	if (!IStringMap_Contains(_mMap, key))
+	{
+		return key;
+	}
+
+	return IStringMap_Get(_mMap, key);
 	/*
 if (OeGlobals.DEBUG_IS_GOD_MODE)
 {
@@ -87,31 +95,27 @@ return debugString;
 }
 void Strings_Add(const char* key, const char* val)
 {
-	//AddString(key, val, false);
+	Strings_AddDoNotReplace(key, val, false);
 }
 void Strings_AddDoNotReplace(const char* key, const char* val, bool doNotReplace)
 {
-	/*
-	if (_mMap.count(key))
+	if (IStringMap_Contains(_mMap, key))
 	{
-		OeLogger_LogError("String map already contains string");
+		Logger_LogError("String map already contains string");
 		return;
 	}
 
-	_mOrderedKeys.push_back(key);
-	_mMap[key] = val;
+	IStringMap_Add(_mMap, key, val);
 
 	if (doNotReplace)
 	{
-		MappingInfo info = MappingInfo();
+		MappingInfo info = { 0 };
 		info.mKey = key;
 		info.mDoNotReplace = true;
-		_mInfoMap.push_back(info);
+		arrput(arr_info_list, info);
 	}
-	*/
 }
 bool Strings_Contains(const char* key)
 {
-	return false;
-	//return _mMap.count(key);
+	return IStringMap_Contains(_mMap, key);
 }

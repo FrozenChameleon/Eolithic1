@@ -1,17 +1,11 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
-
-#pragma once
+﻿#pragma once
 
 #include "stdint.h"
 #include "stdbool.h"
 
 const char* GameUpdater_GetFpsString();
 float GameUpdater_GetAutoSpeedUpdateSpeed();
-int32_t GameUpdater_GetFPS();
+int GameUpdater_GetFPS();
 bool GameUpdater_IsInterpolated();
 void GameUpdater_Update(double delta);
 void GameUpdater_DebugReloadMap();

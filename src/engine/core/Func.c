@@ -69,6 +69,7 @@
 #include "../../GlobalDefs.h"
 #include "../gamestate/GameStateManager.h"
 #include "float.h"
+#include "../utils/Logger.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -204,8 +205,8 @@ Entity Get_Player2(int number)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		PlayerNumber* number = ComponentPack_GetComponentAtIndex(pack, iter.mIndex);
-		if (number->mTag == number)
+		PlayerNumber* playerNumber = ComponentPack_GetComponentAtIndex(pack, iter.mIndex);
+		if (playerNumber->mTag == number)
 		{
 			return iter.mEntity;
 		}
@@ -2698,8 +2699,7 @@ void Do_SetPlayerNumber(Entity entity, int playerNumber)
 }
 GameState* Get_ActiveGameState()
 {
-	return NULL;
-	//return OeGameStateManager_ActiveGameState();
+	return GameStateManager_GetGameState();
 }
 LevelData* Get_LevelData()
 {
@@ -4548,4 +4548,14 @@ void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const 
 		}
 		Do_SetComplete(target);
 	}*/
+}
+
+void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int index)
+{
+	Entity dummyEntity = pack->Entities[index];
+	ComponentPack_UnsetAtIndex(pack, index);
+	if (!ComponentPack_IsAnyEntityInPack(pack))
+	{
+		GameState_RemoveEntity(Get_ActiveGameState(), dummyEntity);
+	}
 }

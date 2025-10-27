@@ -12,9 +12,10 @@
 #include "../utils/Timer.h"
 #include "../render/Animation.h"
 #include "Particle.h"
-#include "../render/Sheet.h"
-#include "../render/ShaderProgram.h"
-#include "../utils/MString.h"
+
+typedef struct Sheet Sheet;
+typedef struct ShaderProgram ShaderProgram;
+typedef struct MString MString;
 
 typedef struct ParticleInstance
 {

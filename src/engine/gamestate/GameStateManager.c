@@ -43,6 +43,11 @@ System** GameStateManager_GetStateSystems()
 }
 void GameStateManager_AddStateSystem(System* sys)
 {
+	int len = arrlen(arr_state_systems);
+	if (len == 81 || len == 82 || len == 83)
+	{
+		int hello = 0;
+	}
 	arrput(arr_state_systems, sys);
 }
 GameState* GameStateManager_GetGameState()
@@ -144,12 +149,12 @@ void GameStateManager_DebugForceLoadMapNow(const char* map)
 }
 void GameStateManager_SetupLoadMap(const char* s)
 {
-	GameStateManager_SetGameState(GAME_STATE_MANAGER_GAME_STATE_NORMAL);
+	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
 	_mMapToLoad = s;
 }
 void GameStateManager_SetupReloadMap()
 {
-	GameStateManager_SetGameState(GAME_STATE_MANAGER_GAME_STATE_NORMAL);
+	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
 	_mMapToLoad = GameStateManager_GetCurrentFileName();
 }
 const char* GameStateManager_GetCurrentFileName()
@@ -223,11 +228,11 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 }
 bool GameStateManager_IsNormalState()
 {
-	return _mCurrentGameState == GAME_STATE_MANAGER_GAME_STATE_NORMAL;
+	return _mCurrentGameState == GAMESTATEMANAGER_GAME_STATE_NORMAL;
 }
 bool GameStateManager_IsPausedState()
 {
-	return _mCurrentGameState == GAME_STATE_MANAGER_GAME_STATE_PAUSED;
+	return _mCurrentGameState == GAMESTATEMANAGER_GAME_STATE_PAUSED;
 }
 void GameStateManager_HandleGameStateChange()
 {

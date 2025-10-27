@@ -334,12 +334,6 @@ void CollisionEngineSys_DisableDynamicGravity()
 {
 	_mIsDynamicGravityDisabled = true;
 }
-void CollisionEngineSys_SetupSystem()
-{
-	//_mUpdateRoutine = UpdateRoutine;
-	//_mInitRoutine = InitRoutine;
-	//_mDrawRoutine = DrawRoutine;
-}
 void CollisionEngineSys_CopyCollisionGridFromPristine(CollisionEngine* data)
 {
 	data->mCollisionGrid = data->mCollisionGridPristine;
@@ -1424,3 +1418,12 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 	//End Draw Tiles
 }
 #endif
+
+System* CollisionEngineSys_CreateSystem()
+{
+	SystemSimple* ss = SystemSimple_Create(C_CollisionEngine);
+	ss->_mUpdateRoutine = CollisionEngineSys_UpdateRoutine;
+	ss->_mInitRoutine = CollisionEngineSys_InitRoutine;
+	ss->_mDrawRoutine = CollisionEngineSys_DrawRoutine;
+	return SystemSimple_CreateSystem(ss);
+}

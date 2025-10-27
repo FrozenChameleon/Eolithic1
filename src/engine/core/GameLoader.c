@@ -90,7 +90,7 @@ static void FinishLoading()
 	*/
 #endif
 
-	GameStateManager_SetGameState2(GAME_STATE_MANAGER_GAME_STATE_NORMAL, true);
+	GameStateManager_SetGameState2(GAMESTATEMANAGER_GAME_STATE_NORMAL, true);
 
 	Globals_SetAsGameLoaded();
 

@@ -58,7 +58,7 @@ bool InputCheck_CheckTypeAxis(InputCheck* data)
 }
 bool InputCheck_IsAxisTriggers(InputCheck* data)
 {
-	return (data->mAxis == INPUT_CHECK_AXIS_LEFT_TRIGGER) || (data->mAxis == INPUT_CHECK_AXIS_RIGHT_TRIGGER);
+	return (data->mAxis == INPUTCHECK_AXIS_LEFT_TRIGGER) || (data->mAxis == INPUTCHECK_AXIS_RIGHT_TRIGGER);
 }
 bool InputCheck_CheckTypeButton(InputPlayer* playerInput, InputCheck* data)
 {
@@ -142,7 +142,7 @@ const char* InputCheck_GetNameTypeAxis(InputCheck* data)
 {
 	switch (data->mAxis)
 	{
-	case INPUT_CHECK_AXIS_LEFT_STICK_X:
+	case INPUTCHECK_AXIS_LEFT_STICK_X:
 		if (data->mAxisDirection >= 0)
 		{
 			return "LS_RIGHT";
@@ -151,7 +151,7 @@ const char* InputCheck_GetNameTypeAxis(InputCheck* data)
 		{
 			return "LS_LEFT";
 		}
-	case INPUT_CHECK_AXIS_LEFT_STICK_Y:
+	case INPUTCHECK_AXIS_LEFT_STICK_Y:
 		if (data->mAxisDirection >= 0)
 		{
 			return "LS_UP";
@@ -160,7 +160,7 @@ const char* InputCheck_GetNameTypeAxis(InputCheck* data)
 		{
 			return "LS_DOWN";
 		}
-	case INPUT_CHECK_AXIS_RIGHT_STICK_X:
+	case INPUTCHECK_AXIS_RIGHT_STICK_X:
 		if (data->mAxisDirection >= 0)
 		{
 			return "RS_RIGHT";
@@ -169,7 +169,7 @@ const char* InputCheck_GetNameTypeAxis(InputCheck* data)
 		{
 			return "RS_LEFT";
 		}
-	case INPUT_CHECK_AXIS_RIGHT_STICK_Y:
+	case INPUTCHECK_AXIS_RIGHT_STICK_Y:
 		if (data->mAxisDirection >= 0)
 		{
 			return "RS_UP";
@@ -178,9 +178,9 @@ const char* InputCheck_GetNameTypeAxis(InputCheck* data)
 		{
 			return "RS_DOWN";
 		}
-	case INPUT_CHECK_AXIS_LEFT_TRIGGER:
+	case INPUTCHECK_AXIS_LEFT_TRIGGER:
 		return "LT";
-	case INPUT_CHECK_AXIS_RIGHT_TRIGGER:
+	case INPUTCHECK_AXIS_RIGHT_TRIGGER:
 		return "RT";
 	}
 	return "";
@@ -304,19 +304,19 @@ const char* InputCheck_GetGlyphStringTypeKey(InputCheck* data)
 //const char* ToString();
 bool InputCheck_IsDummy(InputCheck* data)
 {
-	return data->mType == INPUT_CHECK_TYPE_DUMMY;
+	return data->mType == INPUTCHECK_TYPE_DUMMY;
 }
 bool InputCheck_Check(InputPlayer* playerInput, InputCheck* data)
 {
 	switch (data->mType)
 	{
-	case INPUT_CHECK_TYPE_KEY:
+	case INPUTCHECK_TYPE_KEY:
 		return InputCheck_CheckTypeKey(playerInput, data);
-	case INPUT_CHECK_TYPE_MOUSEBUTTON:
+	case INPUTCHECK_TYPE_MOUSEBUTTON:
 		return InputCheck_CheckTypeMouseButton(playerInput, data);
-	case INPUT_CHECK_TYPE_BUTTON:
+	case INPUTCHECK_TYPE_BUTTON:
 		return InputCheck_CheckTypeButton(playerInput, data);
-	case INPUT_CHECK_TYPE_AXIS:
+	case INPUTCHECK_TYPE_AXIS:
 		return InputCheck_CheckTypeAxis(data);
 	}
 	return false;
@@ -325,7 +325,7 @@ void InputCheck_UpdateAnalogValue(InputPlayer* playerInput, InputCheck* data)
 {
 	data->mAnalogValue = 0;
 
-	if (data->mType != INPUT_CHECK_TYPE_AXIS)
+	if (data->mType != INPUTCHECK_TYPE_AXIS)
 	{
 		return;
 	}
@@ -348,7 +348,7 @@ void InputCheck_UpdateAnalogValue(InputPlayer* playerInput, InputCheck* data)
 }
 bool InputCheck_IsAnalog(InputCheck* data)
 {
-	if (data->mType == INPUT_CHECK_TYPE_AXIS)
+	if (data->mType == INPUTCHECK_TYPE_AXIS)
 	{
 		return true;
 	}
@@ -374,7 +374,7 @@ const char* InputCheck_GetName(InputCheck* data)
 //void Read(InputCheck* data, const char* begin, std::shared_ptr<OeIniReader> reader);
 bool InputCheck_IsGlyphImage(InputCheck* data)
 {
-	if ((data->mType == INPUT_CHECK_TYPE_AXIS) || (data->mType == INPUT_CHECK_TYPE_BUTTON))
+	if ((data->mType == INPUTCHECK_TYPE_AXIS) || (data->mType == INPUTCHECK_TYPE_BUTTON))
 	{
 		return true;
 	}
@@ -382,7 +382,7 @@ bool InputCheck_IsGlyphImage(InputCheck* data)
 }
 bool InputCheck_IsController(InputCheck* data)
 {
-	if ((data->mType == INPUT_CHECK_TYPE_AXIS) || (data->mType == INPUT_CHECK_TYPE_BUTTON))
+	if ((data->mType == INPUTCHECK_TYPE_AXIS) || (data->mType == INPUTCHECK_TYPE_BUTTON))
 	{
 		return true;
 	}
@@ -392,13 +392,13 @@ const char* InputCheck_GetGlyphString(InputCheck* data)
 {
 	switch (data->mType)
 	{
-	case INPUT_CHECK_TYPE_KEY:
+	case INPUTCHECK_TYPE_KEY:
 		return InputCheck_GetGlyphStringTypeKey(data);
-	case INPUT_CHECK_TYPE_MOUSEBUTTON:
+	case INPUTCHECK_TYPE_MOUSEBUTTON:
 		return InputCheck_GetNameTypeMouseButton(data);
-	case INPUT_CHECK_TYPE_BUTTON:
+	case INPUTCHECK_TYPE_BUTTON:
 		return InputCheck_GetGlyphStringForController(InputCheck_GetNameTypeButton(data));
-	case INPUT_CHECK_TYPE_AXIS:
+	case INPUTCHECK_TYPE_AXIS:
 		return InputCheck_GetGlyphStringForController(InputCheck_GetNameTypeAxis(data));
 	}
 	return "";
@@ -411,28 +411,28 @@ const char* InputCheck_GetGlyphStringForController(const char* value)
 InputCheck InputCheck_CreateCheckKey(int key)
 {
 	InputCheck tempCheck = { 0 };
-	tempCheck.mType = INPUT_CHECK_TYPE_KEY;
+	tempCheck.mType = INPUTCHECK_TYPE_KEY;
 	tempCheck.mKey = key;
 	return tempCheck;
 }
 InputCheck InputCheck_CreateCheckMouseButton(int mouseButton)
 {
 	InputCheck tempCheck = { 0 };
-	tempCheck.mType = INPUT_CHECK_TYPE_MOUSEBUTTON;
+	tempCheck.mType = INPUTCHECK_TYPE_MOUSEBUTTON;
 	tempCheck.mMouseButton = mouseButton;
 	return tempCheck;
 }
 InputCheck InputCheck_CreateCheckButton(int button)
 {
 	InputCheck tempCheck = { 0 };
-	tempCheck.mType = INPUT_CHECK_TYPE_BUTTON;
+	tempCheck.mType = INPUTCHECK_TYPE_BUTTON;
 	tempCheck.mButton = button;
 	return tempCheck;
 }
 InputCheck InputCheck_CreateCheckAxis(int axis, int direction)
 {
 	InputCheck tempCheck = { 0 };
-	tempCheck.mType = INPUT_CHECK_TYPE_AXIS;
+	tempCheck.mType = INPUTCHECK_TYPE_AXIS;
 	tempCheck.mAxis = axis;
 	tempCheck.mAxisDirection = direction;
 	return tempCheck;

@@ -20,7 +20,7 @@ bool CollisionEngineSys_IsPointSafe(CollisionEngine* data, int x, int y);
 bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float checkY, int directionX, int directionY, Body* body, bool isVertical);
 
 void CollisionEngineSys_DisableDynamicGravity();
-void CollisionEngineSys_SetupSystem();
+
 void CollisionEngineSys_CopyCollisionGridFromPristine(CollisionEngine* data);
 void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data);
 bool CollisionEngineSys_PushBody(CollisionEngine* data, bool isBakedCollision, bool isVertical, Body* body, const Rectangle* otherPhysicsRectangle);
@@ -104,3 +104,5 @@ void CollisionEngineSys_DebugDrawNodes(CollisionEngine* data)
 }
 void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data);
 #endif
+
+System* CollisionEngineSys_CreateSystem();

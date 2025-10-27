@@ -1,10 +1,11 @@
 #pragma once
 
+#include "DrawActor.h"
+#include "../systems/SystemSimple.h"
+
 /*
 #include "../collections/OeDictionary.h"
 #include <string>
-#include "../systems/OeSystemSimple.h"
-#include "OeComDrawActor.h"
 #include "../leveldata/OeImageData.h"
 #include "../render/OeDrawStateInfo.h"
 #include "../render/OeDrawRenderInfo.h"
@@ -51,3 +52,6 @@ public:
 	static void DrawInterpolated(OeEntity owner, OeComDrawActor* data, OeSpriteBatch* spriteBatch, Color color, Vector2 currentPosition, Vector2 lastPosition,
 		float rotation, Vector2 scale, int givenDepth);
 };*/
+
+void DrawActorSys_UpdateRoutine(Entity owner, DrawActor* data);
+System* DrawActorSys_CreateSystem();

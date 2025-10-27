@@ -8,6 +8,7 @@
 #include "../components/Camera.h"
 #include "../core/Func.h"
 #include "../render/DrawInstance.h"
+#include "../math/Random32.h"
 
 static float ReturnOppositeSign(float newValue, float oldValue)
 {
@@ -15,8 +16,8 @@ static float ReturnOppositeSign(float newValue, float oldValue)
 }
 static float ReturnSameSign(float newValue, float oldValue)
 {
-	int newSig = OeMath_Signum(newValue);
-	int oldSig = OeMath_Signum(oldValue);
+	int newSig = Math_SignumSingle(newValue);
+	int oldSig = Math_SignumSingle(oldValue);
 
 	if (newSig != oldSig)
 	{
@@ -137,7 +138,7 @@ static void HandleConstant(ParticleInstance* data)
 
 	if (data->mParticle->mConstantIsFluctuating)
 	{
-		if (OeTimer_Update(&data->mTimerConstantFluctuate))
+		if (Timer_Update(&data->mTimerConstantFluctuate))
 		{
 			SetConstantFluctuateTimeLimit(data);
 			GenerateNewConstant(data);
@@ -184,7 +185,7 @@ static void HandleCurve(ParticleInstance* data)
 
 	if (data->mParticle->mCurveIsFluctuating)
 	{
-		if (OeTimer_Update(&data->mTimerCurveFluctuate))
+		if (Timer_Update(&data->mTimerCurveFluctuate))
 		{
 			SetCurveFluctuateTimeLimit(data);
 
@@ -233,7 +234,7 @@ static int GetDepth(ParticleInstance* data)
 {
 	return data->mInfluencedDepth != -1 ? data->mInfluencedDepth : data->mParticle->mTextureDepth;
 }
-static void Setup(ParticleInstance* data, const char* name, Particle* particleData, float x, float y)
+void ParticleInstanceSys_Setup(ParticleInstance* data, const char* name, Particle* particleData, float x, float y)
 {
 	data->mInfluencedColor = COLOR_WHITE;
 	data->mInfluencedDepth = -1;
@@ -252,13 +253,13 @@ static void Setup(ParticleInstance* data, const char* name, Particle* particleDa
 
 	if (data->mParticle->mTextureIsAnimation)
 	{
-		OeAnimation_Init(&data->mAnimation, data->mParticle->mTextureName, data->mParticle->mTextureFlipSpeed);
+		Animation_Init(&data->mAnimation, data->mParticle->mTextureName, data->mParticle->mTextureFlipSpeed);
 		data->mAnimation.mAnimationLoopPoint = data->mParticle->mTextureLoopPoint;
 		data->mAnimation.mIsLoopingDisabled = data->mParticle->mTextureDoesAnimationStop;
 	}
 	else
 	{
-		data->mSheet = OeSheet_GetSheet(data->mParticle->mTextureName);
+		data->mSheet = Sheet_GetSheet(data->mParticle->mTextureName);
 	}
 
 	GenerateNewCurveMax(data);
@@ -296,7 +297,7 @@ static void Setup(ParticleInstance* data, const char* name, Particle* particleDa
 
 	UpdateLastRenderPositionRoutine(data);
 }
-static bool UpdateRoutine(ParticleInstance* data)
+bool ParticleInstanceSys_UpdateRoutine(ParticleInstance* data)
 {
 	HandleConstant(data);
 
@@ -311,7 +312,7 @@ static bool UpdateRoutine(ParticleInstance* data)
 
 		if (data->mCounter > data->mFlickerStart)
 		{
-			if (OeTimer_Update(&data->mTimerFlicker))
+			if (Timer_Update(&data->mTimerFlicker))
 			{
 				data->mIsFlickering = !data->mIsFlickering;
 			}
@@ -320,12 +321,12 @@ static bool UpdateRoutine(ParticleInstance* data)
 
 	if (data->mParticle->mTextureIsAnimation)
 	{
-		OeAnimation_Update(&data->mAnimation);
+		Animation_Update(&data->mAnimation);
 	}
 
 	if (data->mParticle->mMiscTTLMin != -1 && data->mParticle->mMiscTTLMax != -1)
 	{
-		if (OeTimer_Update(&data->mTimerTimeToLive))
+		if (Timer_Update(&data->mTimerTimeToLive))
 		{
 			data->mIsComplete = true;
 		}
@@ -338,17 +339,15 @@ static bool UpdateRoutine(ParticleInstance* data)
 
 static void Update(System* sys)
 {
-	/*
-	OeComponentPack<ParticleInstance>* pack = Get_ComponentPack<ParticleInstance>();
-	OePackIterator iter = OePackIterator_Begin();
-	while (pack->Next(&iter))
+	ComponentPack* pack = Get_ComponentPack(C_ParticleInstance);
+	PackIterator iter = PackIterator_Begin;
+	while (ComponentPack_Next(pack, &iter))
 	{
-		if (UpdateRoutine(&pack->Components[iter.mIndex]))
+		if (ParticleInstanceSys_UpdateRoutine(ComponentPack_GetComponentAtIndex(pack, iter.mIndex)))
 		{
 			Do_UnsetAtIndexAndRemoveDummyEntityIfLast(pack, iter.mIndex);
 		}
 	}
-	*/
 }
 static void UpdateLastRenderPosition(System* sys, GameState* gameState)
 {

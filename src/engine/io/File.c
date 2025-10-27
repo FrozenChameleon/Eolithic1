@@ -86,7 +86,7 @@ static MString* File_GetFileNameHelper(const char* path, bool removeTheExtension
 	int32_t loc = Utils_StringIndexOf(PATH_SEPARATOR, path, len + 1, true);
 	if (loc == -1)
 	{
-		return;
+		return NULL;
 	}
 
 	MString* returnStr = MString_CreateEmpty(len + 1);

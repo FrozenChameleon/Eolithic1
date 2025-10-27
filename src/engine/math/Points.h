@@ -6,6 +6,8 @@
 //#include "../utils/OeIniWriter.h"
 //#include <string>
 
+typedef struct BufferReader BufferReader;
+
 enum EightWay
 {
 	POINTS_EIGHTWAY_UP = 0,
@@ -77,5 +79,5 @@ bool Points_IsUpLeft(Point point);
 int Points_GetEightWayInt(Point point);
 void Points_SetFromDegree(Point* point, int degree);
 //void Write(Point point, std::shared_ptr<OeIniWriter> writer);
-//void Read(Point* point, std::shared_ptr<OeIniReader> reader);
+void Points_Read(Point* point, BufferReader* reader);
 const char* Points_ToString(Point point);
