@@ -107,7 +107,7 @@ void Camera_Resize(Camera* camera, int width, int height)
 	camera->mWorldWidth = width;
 	camera->mWorldHeight = height;
 }
-bool Camera_MoveCameraSomewhereByVector2(Camera* camera, bool immediate, Vector2 target, float speed)
+bool Camera_MoveCameraSomewhereVector2(Camera* camera, bool immediate, Vector2 target, float speed)
 {
 	return Camera_MoveCameraSomewhere(camera, immediate, target.X, target.Y, speed);
 }
@@ -274,7 +274,7 @@ int Camera_GetCenterY(const Camera* camera)
 }
 int Camera_GetX1Mul(const Camera* camera, float mul)
 {
-	return Math_MaxInt32((Camera_GetLeftMul(camera, mul) / TILE_SIZE) - 1, 0);
+	return Math_MaxInt((Camera_GetLeftMul(camera, mul) / TILE_SIZE) - 1, 0);
 }
 int Camera_GetX1(const Camera* camera)
 {
@@ -282,7 +282,7 @@ int Camera_GetX1(const Camera* camera)
 }
 int Camera_GetY1Mul(const Camera* camera, float mul)
 {
-	return Math_MaxInt32((Camera_GetTopMul(camera, mul) / TILE_SIZE) - 1, 0);
+	return Math_MaxInt((Camera_GetTopMul(camera, mul) / TILE_SIZE) - 1, 0);
 }
 int Camera_GetY1(const Camera* camera)
 {
@@ -290,7 +290,7 @@ int Camera_GetY1(const Camera* camera)
 }
 int Camera_GetX2Mul(const Camera* camera, int gridSizeX, float mul)
 {
-	return Math_MinInt32(Camera_GetX1Mul(camera, mul) + (Camera_GetWidthMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeX);
+	return Math_MinInt(Camera_GetX1Mul(camera, mul) + (Camera_GetWidthMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeX);
 }
 int Camera_GetX2(const Camera* camera, int gridSizeX)
 {
@@ -298,17 +298,17 @@ int Camera_GetX2(const Camera* camera, int gridSizeX)
 }
 int Camera_GetY2Mul(const Camera* camera, int gridSizeY, float mul)
 {
-	return Math_MinInt32(Camera_GetY1Mul(camera, mul) + (Camera_GetHeightMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeY);
+	return Math_MinInt(Camera_GetY1Mul(camera, mul) + (Camera_GetHeightMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeY);
 }
 int Camera_GetY2(const Camera* camera, int gridSizeY)
 {
 	return Camera_GetY2Mul(camera, gridSizeY, 1);
 }
-bool Camera_IntersectsCameraByRect(const Camera* camera, const Rectangle* rect)
+bool Camera_IntersectsCameraRect(const Camera* camera, const Rectangle* rect)
 {
 	return Camera_IntersectsCamera(camera, rect->X, rect->Y, rect->Width, rect->Height, 1);
 }
-bool Camera_IntersectsCameraByRectMul(const Camera* camera, const Rectangle* rect, float mul)
+bool Camera_IntersectsCameraRectMul(const Camera* camera, const Rectangle* rect, float mul)
 {
 	return Camera_IntersectsCamera(camera, rect->X, rect->Y, rect->Width, rect->Height, mul);
 }
@@ -336,7 +336,7 @@ void Camera_Move(Camera* camera, float x, float y)
 	camera->mTargetPosition.X += x;
 	camera->mTargetPosition.Y += y;
 }
-void Camera_MoveToByVector2(Camera* camera, Vector2 pos)
+void Camera_MoveToVector2(Camera* camera, Vector2 pos)
 {
 	Camera_MoveTo(camera, pos.X, pos.Y);
 }
@@ -353,11 +353,11 @@ void Camera_MoveToY(Camera* camera, float y)
 {
 	camera->mTargetPosition.Y = y;
 }
-void Camera_SetPositionByPoint(Camera* camera, Point pos)
+void Camera_SetPositionPoint(Camera* camera, Point pos)
 {
 	Camera_SetPosition(camera, pos.X, pos.Y);
 }
-void Camera_SetPositionByVector2(Camera* camera, Vector2 pos)
+void Camera_SetPositionVector2(Camera* camera, Vector2 pos)
 {
 	Camera_SetPosition(camera, pos.X, pos.Y);
 }

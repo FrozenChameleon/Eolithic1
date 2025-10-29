@@ -32,7 +32,7 @@ double Math_sqrt(double x)
 {
 	return SDL_sqrt(x);
 }
-int32_t Math_SignumInt32(int32_t value)
+int32_t Math_SignumInt(int32_t value)
 {
 	if (value > 0)
 	{
@@ -47,22 +47,7 @@ int32_t Math_SignumInt32(int32_t value)
 		return 0;
 	}
 }
-int32_t Math_SignumInt64(int64_t value)
-{
-	if (value > 0)
-	{
-		return 1;
-	}
-	else if (value < 0)
-	{
-		return -1;
-	}
-	else
-	{
-		return 0;
-	}
-}
-int32_t Math_SignumSingle(float value)
+int32_t Math_SignumFloat(float value)
 {
 	if (value > 0)
 	{
@@ -136,7 +121,7 @@ double Math_atan2(double y, double x)
 {
 	return SDL_atan2(y, x);
 }
-int32_t Math_MinInt32(int32_t valueA, int32_t valueB)
+int32_t Math_MinInt(int32_t valueA, int32_t valueB)
 {
 	if (valueA > valueB)
 	{
@@ -144,7 +129,7 @@ int32_t Math_MinInt32(int32_t valueA, int32_t valueB)
 	}
 	return valueA;
 }
-float Math_MinSingle(float valueA, float valueB)
+float Math_MinFloat(float valueA, float valueB)
 {
 	if (valueA > valueB)
 	{
@@ -160,7 +145,7 @@ double Math_MinDouble(double valueA, double valueB)
 	}
 	return valueA;
 }
-int32_t Math_MaxInt32(int32_t valueA, int32_t valueB)
+int32_t Math_MaxInt(int32_t valueA, int32_t valueB)
 {
 	if (valueA < valueB)
 	{
@@ -168,7 +153,7 @@ int32_t Math_MaxInt32(int32_t valueA, int32_t valueB)
 	}
 	return valueA;
 }
-float Math_MaxSingle(float valueA, float valueB)
+float Math_MaxFloat(float valueA, float valueB)
 {
 	if (valueA < valueB)
 	{
@@ -184,11 +169,11 @@ double Math_MaxDouble(double valueA, double valueB)
 	}
 	return valueA;
 }
-int Math_GetDistanceInt32(int32_t x1, int32_t x2)
+int Math_GetDistanceInt(int32_t x1, int32_t x2)
 {
 	return Math_abs(x1 - x2);
 }
-float Math_GetDistanceSingle(float x1, float x2)
+float Math_GetDistanceFloat(float x1, float x2)
 {
 	return Math_fabsf(x1 - x2);
 }
@@ -198,13 +183,13 @@ double Math_GetDistanceDouble(double x1, double x2)
 }
 double Math_GetDistanceEuclideanPoint(Point begin, Point end)
 {
-	return Math_GetDistanceEuclideanSingle(begin.X, begin.Y, end.X, end.Y);
+	return Math_GetDistanceEuclideanFloat(begin.X, begin.Y, end.X, end.Y);
 }
 double Math_GetDistanceEuclideanVector2(Vector2 begin, Vector2 end)
 {
-	return Math_GetDistanceEuclideanSingle(begin.X, begin.Y, end.X, end.Y);
+	return Math_GetDistanceEuclideanFloat(begin.X, begin.Y, end.X, end.Y);
 }
-double Math_GetDistanceEuclideanSingle(float x1, float y1, float x2, float y2)
+double Math_GetDistanceEuclideanFloat(float x1, float y1, float x2, float y2)
 {
 	float x_dis = Math_fabsf(x1 - x2);
 	float y_dis = Math_fabsf(y1 - y2);
@@ -216,14 +201,14 @@ double Math_pow(double x, double y)
 }
 int Math_ClampInt(int value, int lowerBound, int upperBound)
 {
-	value = Math_MinInt32(value, upperBound);
-	value = Math_MaxInt32(value, lowerBound);
+	value = Math_MinInt(value, upperBound);
+	value = Math_MaxInt(value, lowerBound);
 	return value;
 }
-float Math_ClampSingle(float value, float lowerBound, float upperBound)
+float Math_ClampFloat(float value, float lowerBound, float upperBound)
 {
-	value = Math_MinSingle(value, upperBound);
-	value = Math_MaxSingle(value, lowerBound);
+	value = Math_MinFloat(value, upperBound);
+	value = Math_MaxFloat(value, lowerBound);
 	return value;
 }
 float Math_GetSlope(float x1, float y1, float x2, float y2)

@@ -531,21 +531,21 @@ static void Read(const char* recordingFilenameWithoutExtension)
 			}
 			if (_mHeaderData.mUseLeftAxis)
 			{
-				playerData->mLeftAxis.X = BufferReader_ReadSingle(br);
-				playerData->mLeftAxis.Y = BufferReader_ReadSingle(br);
+				playerData->mLeftAxis.X = BufferReader_ReadFloat(br);
+				playerData->mLeftAxis.Y = BufferReader_ReadFloat(br);
 			}
 			if (_mHeaderData.mUseRightAxis)
 			{
-				playerData->mRightAxis.X = BufferReader_ReadSingle(br);
-				playerData->mRightAxis.Y = BufferReader_ReadSingle(br);
+				playerData->mRightAxis.X = BufferReader_ReadFloat(br);
+				playerData->mRightAxis.Y = BufferReader_ReadFloat(br);
 			}
 			if (_mHeaderData.mUseLeftTrigger)
 			{
-				playerData->mLeftTrigger = BufferReader_ReadSingle(br);
+				playerData->mLeftTrigger = BufferReader_ReadFloat(br);
 			}
 			if (_mHeaderData.mUseRightTrigger)
 			{
-				playerData->mRightTrigger = BufferReader_ReadSingle(br);
+				playerData->mRightTrigger = BufferReader_ReadFloat(br);
 			}
 		}
 	}

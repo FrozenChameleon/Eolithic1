@@ -198,13 +198,13 @@ void Line_CorrectPoints(Line* line)
 }
 bool Line_IsVertical(Line* line)
 {
-	return Math_GetDistanceInt32(line->mBegin.X, line->mEnd.X) < Math_GetDistanceInt32(line->mBegin.Y, line->mEnd.Y);
+	return Math_GetDistanceInt(line->mBegin.X, line->mEnd.X) < Math_GetDistanceInt(line->mBegin.Y, line->mEnd.Y);
 }
 int Line_GetReal(int point)
 {
 	return (point * TILE_SIZE) + HALF_TILE_SIZE;
 }
-Point Line_GetRealByPoint(Point point)
+Point Line_GetRealPoint(Point point)
 {
 	Point tileSize = Points_TileSize();
 	Point halfTileSize = Points_HalfTileSize();
@@ -215,11 +215,11 @@ Point Line_GetRealByPoint(Point point)
 }
 Point Line_GetRealBegin(Line* line)
 {
-	return Line_GetRealByPoint(line->mBegin);
+	return Line_GetRealPoint(line->mBegin);
 }
 Point Line_GetRealEnd(Line* line)
 {
-	return Line_GetRealByPoint(line->mEnd);
+	return Line_GetRealPoint(line->mEnd);
 }
 /*void Line_Write(Line* line, std_shared_ptr<OeIniWriter> writer)
 {
@@ -268,7 +268,7 @@ void Line_Read(int version, Line* line, std_shared_ptr<OeIniReader> reader)
 }*/
 Rectangle Line_GetTouchBounds(Line* line, int inflation)
 {
-	Rectangle rect = PointRectangle_GetRectangleByPoints(Line_GetRealBegin(line), Line_GetRealEnd(line));
+	Rectangle rect = PointRectangle_GetRectanglePoint(Line_GetRealBegin(line), Line_GetRealEnd(line));
 	Rectangle_Inflate(&rect, inflation, inflation);
 	return rect;
 }

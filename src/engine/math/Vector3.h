@@ -22,7 +22,7 @@ typedef struct Vector3
 	float Z;
 } Vector3;
 
-void Vector3_InitFromSingle(Vector3* vector, float value);
+void Vector3_InitFromFloat(Vector3* vector, float value);
 void Vector3_Init(Vector3* vector, float x, float y, float z);
 Vector3 Vector3_Normalize(const Vector3* value);
 Vector3 Vector3_Cross(const Vector3* vector1, const Vector3* vector2);

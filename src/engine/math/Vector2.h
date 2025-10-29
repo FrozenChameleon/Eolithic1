@@ -29,7 +29,7 @@ const extern Vector2 Vector2_One;
 
 Vector2 Vector2_Create(float x, float y);
 void Vector2_Init(Vector2* value, float x, float y);
-void Vector2_InitFromSingle(Vector2* value, float value2);
+void Vector2_InitFromFloat(Vector2* value, float value2);
 float Vector2_Distance(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Lerp(Vector2 value1, Vector2 value2, float amount);
 float Vector2_Length(Vector2 value);
@@ -43,5 +43,5 @@ Vector2 Vector2_Add(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Sub(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Mul(Vector2 value1, Vector2 value2);
 Vector2 Vector2_Div(Vector2 value1, Vector2 value2);
-Vector2 Vector2_MulSingle(Vector2 value1, float value2);
-Vector2 Vector2_DivSingle(Vector2 value1, float value2);
+Vector2 Vector2_MulFloat(Vector2 value1, float value2);
+Vector2 Vector2_DivFloat(Vector2 value1, float value2);

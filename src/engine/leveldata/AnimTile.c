@@ -14,7 +14,7 @@ void AnimTile_Read(AnimTile* atile, BufferReader* br)
 	atile->mIsFlipX = BufferReader_ReadBoolean(br);
 	atile->mIsFlipY = BufferReader_ReadBoolean(br);
 	atile->mFlipSpeed = BufferReader_ReadI32(br);
-	atile->mRotation = BufferReader_ReadSingle(br);
+	atile->mRotation = BufferReader_ReadFloat(br);
 	atile->mTextureName = BufferReader_ReadStringToMString(br);
 	atile->mTilesetFilter = BufferReader_ReadStringToMString(br);
 	atile->mIsWrap = BufferReader_ReadBoolean(br);

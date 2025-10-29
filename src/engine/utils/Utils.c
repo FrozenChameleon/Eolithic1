@@ -139,7 +139,7 @@ void Utils_ResetArrayAsInt32(int32_t* values, size_t len, int32_t valueToSet)
 		values[i] = 0;
 	}
 }
-void Utils_ResetArrayAsSingle(float* values, size_t len, float valueToSet)
+void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet)
 {
 	for (int i = 0; i < len; i += 1)
 	{

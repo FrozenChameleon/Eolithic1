@@ -617,7 +617,7 @@ void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoo
 	Vector2 scaler = { 1.0f / scaleFactor, 1.0f / scaleFactor };
 	Vector2 currentCameraPosition = Renderer_INTERNAL_GetCurrentCameraPosition();
 	Vector2 offsetPosition = Vector2_Sub(currentCameraPosition, fontState->mPosition);
-	Vector2 cameraPos = Vector2_MulSingle(offsetPosition, scaleFactor);
+	Vector2 cameraPos = Vector2_MulFloat(offsetPosition, scaleFactor);
 	SetupRenderState(cameraPos, scaler, BLENDSTATE_NONPREMULTIPLIED, (FNA3D_Texture*)(texture->mTextureData), Renderer_INTERNAL_GetCurrentShaderProgram());
 
 	Renderer_SetupVerticesForTtFont(_mVertexBuffer.mVertices, fontState->mColor, 0, verts, tcoords, colors, nverts);

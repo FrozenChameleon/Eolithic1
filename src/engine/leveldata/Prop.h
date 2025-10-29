@@ -1,17 +1,14 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
-
 #pragma once
 
-#include "stdbool.h"
-#include "stdint.h"
+#include "../math/Rectangle.h"
 #include "../render/Animation.h"
-#include "../render/Sheet.h"
-#include "../io/BufferReader.h"
-#include "../utils/MString.h"
+#include "../resources/Resource.h"
+
+typedef struct SpriteBatch SpriteBatch;
+typedef struct Sheet Sheet;
+typedef struct MString MString;
+typedef struct BufferWriter BufferWriter;
+typedef struct BufferReader BufferReader;
 
 typedef struct Prop
 {
@@ -26,5 +23,18 @@ typedef struct Prop
 	MString* mTilesetFilter;
 } Prop;
 
+void Prop_Init(Prop* p);
+Sheet* Prop_GetSheet(Prop* p);
+void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int depth, Point position, float scale, float rotation, bool flipX, bool flipY, bool showInfo);
+void Prop_UpdateResource(Prop* p);
+void Prop_LoadDrawing(Prop* p);
+Rectangle Prop_GetRectangle(Prop* p);
+const char* Prop_ToString(Prop* p);
+Animation* Prop_GetAnimation(Prop* p);
+Resource* Prop_CreateNewInstance(Prop* p);
+void Prop_WriteIni(Prop* p, BufferWriter* writer);
+void Prop_ReadIni(Prop* p, BufferReader* reader);
+Prop* Prop_CreateNew();
+IStringArray* Prop_GetDirectories();
 Prop* Prop_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void Prop_Dispose(Prop* prop);

@@ -35,9 +35,9 @@ void PointRectangle_CorrectPoints(PointRectangle* prect)
 // void PointRectangle_Read(OePointRectangle* prect, std::shared_ptr<OeIniReader> reader);
 Rectangle PointRectangle_GetRectangle(PointRectangle* prect)
 {
-	return PointRectangle_GetRectangleByPoints(prect->mPointOne, prect->mPointTwo);
+	return PointRectangle_GetRectanglePoint(prect->mPointOne, prect->mPointTwo);
 }
-Rectangle PointRectangle_GetRectangleByPoints(Point pointOne, Point pointTwo)
+Rectangle PointRectangle_GetRectanglePoint(Point pointOne, Point pointTwo)
 {
 	int diffX = pointTwo.X - pointOne.X;
 	int diffY = pointTwo.Y - pointOne.Y;

@@ -87,7 +87,7 @@ void CameraSys_UpdateCamera(Camera* data)
 	{
 		if (Math_fabsf(differenceX) > data->mHingeSpeedLimit.X)
 		{
-			differenceX = data->mHingeSpeedLimit.X * Math_SignumSingle(differenceX);
+			differenceX = data->mHingeSpeedLimit.X * Math_SignumFloat(differenceX);
 		}
 		if (data->mCurrentPosition.X + differenceX == data->mTargetPosition.X)
 		{
@@ -100,7 +100,7 @@ void CameraSys_UpdateCamera(Camera* data)
 	{
 		if (Math_fabsf(differenceY) > data->mHingeSpeedLimit.Y)
 		{
-			differenceY = data->mHingeSpeedLimit.Y * Math_SignumSingle(differenceY);
+			differenceY = data->mHingeSpeedLimit.Y * Math_SignumFloat(differenceY);
 		}
 		if (data->mCurrentPosition.Y + differenceY == data->mTargetPosition.Y)
 		{
@@ -110,14 +110,14 @@ void CameraSys_UpdateCamera(Camera* data)
 
 	if (differenceX != 0)
 	{
-		if (!data->mIsHingedCamera || Math_SignumSingle(differenceX) == Math_SignumInt32(data->mHingeDirection.X) || data->mHingeDualDirectionX)
+		if (!data->mIsHingedCamera || Math_SignumFloat(differenceX) == Math_SignumInt(data->mHingeDirection.X) || data->mHingeDualDirectionX)
 		{
 			data->mCurrentPosition.X += differenceX;
 		}
 	}
 	if (differenceY != 0)
 	{
-		if (!data->mIsHingedCamera || Math_SignumSingle(differenceY) == Math_SignumInt32(data->mHingeDirection.Y) || data->mHingeDualDirectionY)
+		if (!data->mIsHingedCamera || Math_SignumFloat(differenceY) == Math_SignumInt(data->mHingeDirection.Y) || data->mHingeDualDirectionY)
 		{
 			data->mCurrentPosition.Y += differenceY;
 		}

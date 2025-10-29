@@ -325,11 +325,11 @@ void Renderer_Draw9(Texture* texture, Vector2 position, Rectangle sourceRectangl
 	float sourceX, sourceY, sourceW, sourceH;
 	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
-	sourceW = Math_SignumInt32(sourceRectangle.Width) * Math_MaxSingle(
+	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
 		Math_abs((float)sourceRectangle.Width),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Width;
-	sourceH = Math_SignumInt32(sourceRectangle.Height) * Math_MaxSingle(
+	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
 		Math_abs((float)sourceRectangle.Height),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Height;
@@ -364,11 +364,11 @@ void Renderer_Draw99(Texture* texture, Vector2 position, Rectangle sourceRectang
 
 	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
-	sourceW = Math_SignumInt32(sourceRectangle.Width) * Math_MaxSingle(
+	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
 		Math_abs((float)sourceRectangle.Width),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Width;
-	sourceH = Math_SignumInt32(sourceRectangle.Height) * Math_MaxSingle(
+	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
 		Math_abs((float)sourceRectangle.Height),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Height;
@@ -422,11 +422,11 @@ void Renderer_Draw8(Texture* texture, Rectangle destinationRectangle, Rectangle 
 
 	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
-	sourceW = Math_SignumInt32(sourceRectangle.Width) * Math_MaxSingle(
+	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
 		Math_abs((float)sourceRectangle.Width),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Width;
-	sourceH = Math_SignumInt32(sourceRectangle.Height) * Math_MaxSingle(
+	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
 		Math_abs((float)sourceRectangle.Height),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Height;

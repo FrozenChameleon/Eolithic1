@@ -36,7 +36,7 @@ void DrawTile_Read(DrawTile* drawTile, int version, BufferReader* reader)
 	Points_Read(&drawTile->mPoint, reader);
 	drawTile->mFlipX = BufferReader_ReadBoolean(reader);
 	drawTile->mFlipY = BufferReader_ReadBoolean(reader);
-	drawTile->mRotation = BufferReader_ReadSingle(reader);
+	drawTile->mRotation = BufferReader_ReadFloat(reader);
 }
 void DrawTile_LoadSheet(DrawTile* drawTile, int x, int y)
 {

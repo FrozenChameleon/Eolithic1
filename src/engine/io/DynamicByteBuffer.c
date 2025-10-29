@@ -56,7 +56,7 @@ void DynamicByteBuffer_WriteInt32(DynamicByteBuffer* dbb, int32_t value)
 	Utils_memcpy(dbb->mBuffer + dbb->mLength, &value, size);
 	dbb->mLength += size;
 }
-void DynamicByteBuffer_WriteSingle(DynamicByteBuffer* dbb, float value)
+void DynamicByteBuffer_WriteFloat(DynamicByteBuffer* dbb, float value)
 {
 	uint64_t size = sizeof(float);
 	CheckLength(dbb, size);

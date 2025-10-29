@@ -99,7 +99,7 @@ void BufferWriter_WriteI64(BufferWriter* br)
 	Utils_memcpy(&dst, &source, sizeof(int64_t));
 	return dst;*/
 }
-void BufferWriter_WriteSingle(BufferWriter* br)
+void BufferWriter_WriteFloat(BufferWriter* br)
 {
 	/*
 	uint32_t source = BufferWriter_WriteU32(br);

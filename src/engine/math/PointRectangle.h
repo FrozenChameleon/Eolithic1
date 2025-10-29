@@ -20,7 +20,7 @@ void PointRectangle_CorrectPoints(PointRectangle* prect);
 // void PointRectangle_Write(OePointRectangle* prect, std::shared_ptr<OeIniWriter> writer);
 // void PointRectangle_Read(OePointRectangle* prect, std::shared_ptr<OeIniReader> reader);
 Rectangle PointRectangle_GetRectangle(PointRectangle* prect);
-Rectangle PointRectangle_GetRectangleByPoints(Point pointOne, Point pointTwo);
+Rectangle PointRectangle_GetRectanglePoint(Point pointOne, Point pointTwo);
 void PointRectangle_Add(PointRectangle* prect, int amountX, int amountY);
 // void PointRectangle_Draw(OePointRectangle* prect, OeSpriteBatch* spriteBatch, Color rectangleColor, bool isHollow);
 // void PointRectangle_Draw(OePointRectangle* prect, OeSpriteBatch* spriteBatch, Color rectangleColor, Color pointColor1, Color pointColor2, bool isHollow);

@@ -64,7 +64,7 @@ void MString_AddAssignInt(MString** str, int32_t addThisInt)
 	Utils_IntToString(addThisInt, _mTempBuffer, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE);
 	MString_AddAssignString(str, _mTempBuffer);
 }
-void MString_AddAssignSingle(MString** str, float addThisSingle)
+void MString_AddAssignFloat(MString** str, float addThisSingle)
 {
 	ClearTempBuffer();
 	Utils_FloatToString(addThisSingle, _mTempBuffer, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE);

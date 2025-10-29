@@ -5,3 +5,11 @@
  */
 
 #include "StringPair.h"
+
+#include "../io/BufferReader.h"
+
+void StringPair_Read(StringPair* pair, BufferReader* reader)
+{
+	pair->mKey = BufferReader_ReadStringToMString(reader);
+	pair->mValue = BufferReader_ReadStringToMString(reader);
+}

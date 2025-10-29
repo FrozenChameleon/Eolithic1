@@ -35,7 +35,7 @@ char* Utils_CreateStringCopy(const char* str);
 void Utils_FreeString(char* str);
 void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet);
 void Utils_ResetArrayAsInt32(int32_t* values, size_t len, int32_t valueToSet);
-void Utils_ResetArrayAsSingle(float* values, size_t len, float valueToSet);
+void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet);
 void Utils_ToggleFullscreenButton();
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex);
 double Utils_GetNormalStepLength();

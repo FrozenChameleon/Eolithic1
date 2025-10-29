@@ -16,8 +16,8 @@ static float ReturnOppositeSign(float newValue, float oldValue)
 }
 static float ReturnSameSign(float newValue, float oldValue)
 {
-	int newSig = Math_SignumSingle(newValue);
-	int oldSig = Math_SignumSingle(oldValue);
+	int newSig = Math_SignumFloat(newValue);
+	int oldSig = Math_SignumFloat(oldValue);
 
 	if (newSig != oldSig)
 	{

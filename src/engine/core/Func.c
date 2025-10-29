@@ -1043,8 +1043,8 @@ bool Do_FloatyMoveSomewhere2(Entity entity, float destX, float destY, float spee
 	{
 		data->mCurrentSpeed += speedAccel;
 	}
-	data->mCurrentSpeed = Math_MinSingle(data->mCurrentSpeed, speedLimit);
-	data->mCurrentSpeed = Math_MaxSingle(data->mCurrentSpeed, speedAccel);
+	data->mCurrentSpeed = Math_MinFloat(data->mCurrentSpeed, speedLimit);
+	data->mCurrentSpeed = Math_MaxFloat(data->mCurrentSpeed, speedAccel);
 	if (Do_MoveSomewhere(entity, destX, destY, data->mCurrentSpeed))
 	{
 		if (!doNotResetMovementAtEnd)
@@ -1077,7 +1077,7 @@ bool Do_FloatyMoveSomewhere3(float* currentSpeed, Vector2* moveThis, Vector2 des
 	}
 	*currentSpeed = Math_Min(*currentSpeed, speedLimit);
 	*currentSpeed = Math_Max(*currentSpeed, speedAccel);
-	if (Do_MoveSomewhereByVector(moveThis, destination, *currentSpeed))
+	if (Do_MoveSomewhereVector2(moveThis, destination, *currentSpeed))
 	{
 		if (!doNotResetMovementAtEnd)
 		{
@@ -1094,7 +1094,7 @@ void Do_FloatyMove(Entity entity, float directionX, float directionY, float spee
 	FloatyMovementData* data = Get_Component(C_FloatyMovementData, entity);
 	data->mWasUsed = true;
 	data->mCurrentSpeed += speedAccel;
-	data->mCurrentSpeed = Math_MinSingle(data->mCurrentSpeed, speedLimit);
+	data->mCurrentSpeed = Math_MinFloat(data->mCurrentSpeed, speedLimit);
 	Do_Move(entity, directionX, directionY, data->mCurrentSpeed);
 }
 
@@ -1420,7 +1420,7 @@ void Do_MoveCircle3(Entity entity, float degree, float degreeOffset, float radiu
 bool Do_MoveCircleAroundPosition(Entity entity, float degree, float degreeOffset, float radius, Vector2 position, float speed)
 {
 	Vector2 dest = Get_MoveCircleAroundPositionDestination(degree, degreeOffset, radius, position);
-	return Do_MoveSomewhereByVector(entity, dest, speed);
+	return Do_MoveSomewhereVector2(entity, dest, speed);
 }
 Vector2 Get_MoveCircleAroundPositionDestination(float degree, float degreeOffset, float radius, Vector2 position)
 {
@@ -1950,11 +1950,11 @@ void Do_SetHitFlashByModuloOverHalf2(Entity entity, int value, int source)
 		Do_SetShader(entity, NULL);
 	}
 }
-bool Do_MoveSomewhereByPoint(Entity entity, Point target, float speed)
+bool Do_MoveSomewherePoint(Entity entity, Point target, float speed)
 {
 	return Do_MoveSomewhere(entity, target.X, target.Y, speed);
 }
-bool Do_MoveSomewhereByVector(Entity entity, Vector2 target, float speed)
+bool Do_MoveSomewhereVector2(Entity entity, Vector2 target, float speed)
 {
 	return Do_MoveSomewhere(entity, target.X, target.Y, speed);
 }
@@ -2046,11 +2046,11 @@ void Do_SetColor(Entity entity, Color color)
 {
 	Get_DrawActor(entity)->mTintColor = color;
 }
-void Do_MoveByPoint(Entity entity, Point move, float speed)
+void Do_MovePoint(Entity entity, Point move, float speed)
 {
 	Do_Move(entity, move.X, move.Y, speed);
 }
-void Do_MoveByVector(Entity entity, Vector2 move, float speed)
+void Do_MoveVector2(Entity entity, Vector2 move, float speed)
 {
 	Do_Move(entity, move.X, move.Y, speed);
 }
@@ -2058,11 +2058,11 @@ void Do_Move(Entity entity, float x, float y, float speed)
 {
 	Do_MoveAbsolute(entity, x * speed, y * speed);
 }
-void Do_MoveByPointAbsolute(Entity entity, Point move)
+void Do_MovePointAbsolute(Entity entity, Point move)
 {
 	Do_MoveAbsolute(entity, move.X, move.Y);
 }
-void Do_MoveByVectorAbsolute(Entity entity, Vector2 move)
+void Do_MoveVector2Absolute(Entity entity, Vector2 move)
 {
 	Do_MoveAbsolute(entity, move.X, move.Y);
 }
@@ -3066,7 +3066,7 @@ const char* Get_TuningNameAsFloat(Entity entity, const char* dataName)
 */
 int Get_ClampedValueAsInt(int value, int limit)
 {
-	int signum = Math_SignumInt32(value);
+	int signum = Math_SignumInt(value);
 	int abs = Math_abs(value);
 	if (abs > limit)
 	{
@@ -3075,9 +3075,9 @@ int Get_ClampedValueAsInt(int value, int limit)
 	int returnValue = abs * signum;
 	return returnValue;
 }
-float Get_ClampedValueAsSingle(float value, float limit)
+float Get_ClampedValueAsFloat(float value, float limit)
 {
-	int signum = Math_SignumSingle(value);
+	int signum = Math_SignumFloat(value);
 	float abs = Math_fabsf(value);
 	if (abs > limit)
 	{
@@ -3960,7 +3960,7 @@ bool Is_IntersectingCamera2(Camera* camera, int posX, int posY, int width, int h
 		rect.X = posX;
 		rect.Y = posY;
 	}
-	return Camera_IntersectsCameraByRectMul(camera, &rect, mul);
+	return Camera_IntersectsCameraRectMul(camera, &rect, mul);
 }
 Rectangle Get_LevelBoundsRectangle()
 {
@@ -4124,16 +4124,16 @@ bool Is_OnScreen2(Entity entity, float mul)
 	else
 	{
 		Rectangle bodyRectangle = Body_GetRect(body);
-		return Camera_IntersectsCameraByRectMul(Get_Camera(), &bodyRectangle, mul);
+		return Camera_IntersectsCameraRectMul(Get_Camera(), &bodyRectangle, mul);
 	}
 }
 bool Is_OnScreen3(const Rectangle* rect)
 {
-	return Camera_IntersectsCameraByRectMul(Get_Camera(), rect, 1.0f);
+	return Camera_IntersectsCameraRectMul(Get_Camera(), rect, 1.0f);
 }
 bool Is_OnScreen4(const Rectangle* rect, float mul)
 {
-	return Camera_IntersectsCameraByRectMul(Get_Camera(), rect, mul);
+	return Camera_IntersectsCameraRectMul(Get_Camera(), rect, mul);
 }
 bool Is_OnScreen5(Vector2 pos)
 {

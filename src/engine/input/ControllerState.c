@@ -63,7 +63,7 @@ void ControllerData_Clear(ControllerData* cd)
 {
 	cd->_mIsConnected = false;
 	Utils_ResetArrayAsBool(cd->_mIsButtonPressed, BUTTONS_AMOUNT_OF_BUTTONS, false);
-	Utils_ResetArrayAsSingle(cd->_mAnalogData, AXES_AMOUNT_OF_AXIS, 0);
+	Utils_ResetArrayAsFloat(cd->_mAnalogData, AXES_AMOUNT_OF_AXIS, 0);
 }
 void ControllerData_CopyFrom(ControllerData* cd, const ControllerData* otherData)
 {
@@ -147,7 +147,7 @@ int32_t ControllerState_IsAnalogTapped(const ControllerState* cs, int32_t loc, f
 	float absThisValue = Math_fabsf(thisValue);
 	if ((absLastValue < threshold) && (absThisValue >= threshold))
 	{
-		return Math_SignumSingle(thisValue);
+		return Math_SignumFloat(thisValue);
 	}
 	else
 	{
@@ -161,7 +161,7 @@ int32_t ControllerState_IsAnalogReleased(const ControllerState* cs, int32_t loc,
 	float absThisValue = Math_fabsf(ControllerData_GetAnalogData(&cs->_mThisFrame, loc));
 	if ((absLastValue >= threshold) && (absThisValue < threshold))
 	{
-		return Math_SignumSingle(lastValue);
+		return Math_SignumFloat(lastValue);
 	}
 	else
 	{

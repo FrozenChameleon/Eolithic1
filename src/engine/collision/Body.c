@@ -70,7 +70,7 @@ void Body_FlipBody(Body* body)
 	body->mPhysicsWidth = body->mPhysicsHeight;
 	body->mPhysicsHeight = temp;
 }
-void Body_MoveByVector(Body* body, Vector2 pixelMovement)
+void Body_MoveVector2(Body* body, Vector2 pixelMovement)
 {
 	Body_Move(body, pixelMovement.X, pixelMovement.Y);
 }
@@ -84,7 +84,7 @@ void Body_Move(Body* body, float pixelX, float pixelY)
 }
 Vector2 Body_GetPosition(Body* body)
 {
-	return Vector2_DivSingle(body->mPhysicsPosition, BODY_PHYSICS_SCALER);
+	return Vector2_DivFloat(body->mPhysicsPosition, BODY_PHYSICS_SCALER);
 }
 Rectangle Body_GetRect(Body* body)
 {
@@ -133,7 +133,7 @@ int Body_GetOriginalHeight(Body* body)
 {
 	return body->mPhysicsOriginalHeight / BODY_PHYSICS_SCALER;
 }
-void Body_SetPositionByVector2(Body* body, Vector2 pixelMovement)
+void Body_SetPositionVector2(Body* body, Vector2 pixelMovement)
 {
 	Body_SetPosition(body, pixelMovement.X, pixelMovement.Y);
 }
@@ -150,7 +150,7 @@ void Body_SetPositionY(Body* body, float pixelY)
 {
 	body->mPhysicsPosition.Y = pixelY * BODY_PHYSICS_SCALER;
 }
-void Body_ForcePositionByVector2(Body* body, Vector2 pixelPosition)
+void Body_ForcePositionVector2(Body* body, Vector2 pixelPosition)
 {
 	Body_ForcePosition(body, pixelPosition.X, pixelPosition.Y);
 }
@@ -171,7 +171,7 @@ void Body_ForcePositionY(Body* body, float pixelY)
 	body->mPhysicsLastRenderPosition.Y = body->mPhysicsPosition.Y;
 	body->mPhysicsLastLogicalPosition.Y = body->mPhysicsPosition.Y;
 }
-void Body_ForceMoveByVector(Body* body, Vector2 pixelMovement)
+void Body_ForceMoveVector2(Body* body, Vector2 pixelMovement)
 {
 	Body_ForceMove(body, pixelMovement.X, pixelMovement.Y);
 }
@@ -194,9 +194,9 @@ void Body_ForceMoveY(Body* body, float pixelY)
 }
 Vector2 Body_GetLastRenderPosition(Body* body)
 {
-	return Vector2_DivSingle(body->mPhysicsLastRenderPosition, BODY_PHYSICS_SCALER);
+	return Vector2_DivFloat(body->mPhysicsLastRenderPosition, BODY_PHYSICS_SCALER);
 }
-void Body_QueueMoveByVector(Body* body, Vector2 movement)
+void Body_QueueMoveVector2(Body* body, Vector2 movement)
 {
 	Body_QueueMove(body, movement.X, movement.Y);
 }
@@ -207,7 +207,7 @@ void Body_QueueMove(Body* body, float pixelX, float pixelY)
 }
 Vector2 Body_GetQueuedVelocity(Body* body)
 {
-	return Vector2_DivSingle(body->mPhysicsQueuedVelocity, BODY_PHYSICS_SCALER);
+	return Vector2_DivFloat(body->mPhysicsQueuedVelocity, BODY_PHYSICS_SCALER);
 }
 void Body_CommitOnNextUpdateMove(Body* body)
 {
@@ -232,17 +232,17 @@ void Body_ForceVelocityY(Body* body, float pixelVelocityY)
 }
 Vector2 Body_GetVelocity(Body* body)
 {
-	return Vector2_DivSingle(body->mPhysicsVelocity, BODY_PHYSICS_SCALER);
+	return Vector2_DivFloat(body->mPhysicsVelocity, BODY_PHYSICS_SCALER);
 }
 void Body_UpdateLastDirection(Body* body)
 {
-	body->mLastDirection.X = Math_SignumSingle(body->mPhysicsVelocity.X);
-	body->mLastDirection.Y = Math_SignumSingle(body->mPhysicsVelocity.Y);
+	body->mLastDirection.X = Math_SignumFloat(body->mPhysicsVelocity.X);
+	body->mLastDirection.Y = Math_SignumFloat(body->mPhysicsVelocity.Y);
 }
 Vector2 Body_GetMovementDifference(Body* body)
 {
 	Vector2 difference = Vector2_Sub(body->mPhysicsPosition, body->mPhysicsLastLogicalPosition);
-	return Vector2_DivSingle(difference, BODY_PHYSICS_SCALER);
+	return Vector2_DivFloat(difference, BODY_PHYSICS_SCALER);
 }
 void Body_UpdateLastLogicalPositionToCurrent(Body* body)
 {
@@ -250,5 +250,5 @@ void Body_UpdateLastLogicalPositionToCurrent(Body* body)
 }
 Vector2 Body_GetLastLogicalPosition(Body* body)
 {
-	return Vector2_DivSingle(body->mPhysicsLastLogicalPosition, BODY_PHYSICS_SCALER);
+	return Vector2_DivFloat(body->mPhysicsLastLogicalPosition, BODY_PHYSICS_SCALER);
 }

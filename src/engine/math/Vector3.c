@@ -18,7 +18,7 @@
 #include "MathHelper.h"
 #include "Math.h"
 
-void Vector3_InitFromSingle(Vector3* vector, float value)
+void Vector3_InitFromFloat(Vector3* vector, float value)
 {
 	vector->X = value;
 	vector->Y = value;

@@ -44,7 +44,7 @@ Point Line_GetJunction(Line* line1, Line* line2);
 void Line_CorrectPoints(Line* line);
 bool Line_IsVertical(Line* line);
 int Line_GetReal(int point);
-Point Line_GetRealByPoint(Point point);
+Point Line_GetRealPoint(Point point);
 Point Line_GetRealBegin(Line* line);
 Point Line_GetRealEnd(Line* line);
 //void Write(Line* line, std::shared_ptr<OeIniWriter> writer);

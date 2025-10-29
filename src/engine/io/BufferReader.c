@@ -97,7 +97,7 @@ int64_t BufferReader_ReadI64(BufferReader* br)
 	Utils_memcpy(&dst, &source, sizeof(int64_t));
 	return dst;
 }
-float BufferReader_ReadSingle(BufferReader* br)
+float BufferReader_ReadFloat(BufferReader* br)
 {
 	uint32_t source = BufferReader_ReadU32(br);
 	float dst;

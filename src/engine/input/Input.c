@@ -515,7 +515,7 @@ Vector2 Input_ProcessStickDeadzones(Vector2 stick, float radialDeadzone, float a
 	Vector2_Normalize(&direction);
 	float stickLength = Vector2_Length(stick);
 	float range = 1 - radialDeadzone - outerDeadzone;
-	stick = Vector2_MulSingle(direction, ((stickLength - radialDeadzone) / range));
+	stick = Vector2_MulFloat(direction, ((stickLength - radialDeadzone) / range));
 
 	if (IsStickBeyondOuterDeadzone(stick, 0))
 	{

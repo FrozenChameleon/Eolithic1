@@ -8,11 +8,12 @@
 #include "../io/BufferWriter.h"
 #include "../utils/Utils.h"
 #include "../../GlobalDefs.h"
+#include "../../third_party/stb_ds.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
 
-void Tile_Init(Tile* tile)
+void Tile_Init(Tile* t)
 {
 	/*tile->mCollisionType = 0;
 	tile->mInstances = {};
@@ -22,8 +23,7 @@ void Tile_Init(Tile* tile)
 		DrawTile_Init(&tile->mDrawTiles[i]);
 	}*/
 }
-
-void Tile_Write(Tile* tile, BufferWriter* writer)
+void Tile_Write(Tile* t, BufferWriter* writer)
 {
 	/*
 	writer->WriteInt32(1); //
@@ -49,28 +49,28 @@ void Tile_Write(Tile* tile, BufferWriter* writer)
 	}
 	*/
 }
-void Tile_Read(Tile* tile, int version, BufferReader* reader)
+void Tile_Read(Tile* t, int version, BufferReader* reader)
 {
 	BufferReader_ReadI32(reader); //
 	BufferReader_ReadI32(reader); //Unused - Multi Array Collision
-	tile->mCollisionType = BufferReader_ReadI32(reader);
+	t->mCollisionType = BufferReader_ReadI32(reader);
 
 	int arrayDrawTilesSize = BufferReader_ReadI32(reader);
 	for (int i = 0; i < arrayDrawTilesSize; i += 1)
 	{
-		DrawTile_Read(&tile->mDrawTiles[i], version, reader);
+		DrawTile_Read(&t->mDrawTiles[i], version, reader);
 	}
 
 	int arrayThingDataSize = BufferReader_ReadI32(reader);
-	/*//TODO C99
 	for (int i = 0; i < arrayThingDataSize; i++)
 	{
-		ThingInstance instance = OeThingInstance();
-		instance.Read(version, reader);
-		mInstances.push_back(instance);
+		ThingInstance instance = { 0 };
+		ThingInstance_Read(&instance, version, reader);
+		arrput(t->arr_instances, instance);
 	}
 
-	int arrayPropDataSize = reader->BufferReader_ReadInt32();
+	int arrayPropDataSize = BufferReader_ReadI32(reader);
+	/*//TODO C99
 	for (int i = 0; i < arrayPropDataSize; i++)
 	{
 		PropInstance instance;
@@ -79,35 +79,35 @@ void Tile_Read(Tile* tile, int version, BufferReader* reader)
 		mProps.push_back(instance);
 	}*/
 }
-void Tile_DeleteCollision(Tile* tile)
+void Tile_DeleteCollision(Tile* t)
 {
-	tile->mCollisionType = 0;
+	t->mCollisionType = 0;
 }
-void Tile_DeleteDrawTiles(Tile* tile)
+void Tile_DeleteDrawTiles(Tile* t)
 {
 	for (int i = 0; i < DRAW_LAYER_LENGTH; i++)
 	{
-		Tile_DeleteDrawTiles2(tile, i);
+		Tile_DeleteDrawTiles2(t, i);
 	}
 }
-void Tile_DeleteDrawTiles2(Tile* tile, int layer)
+void Tile_DeleteDrawTiles2(Tile* t, int layer)
 {
 	//TODO C99 DrawTile_Init(&mDrawTiles[layer]);
 }
-void Tile_DeleteThings(Tile* tile)
+void Tile_DeleteThings(Tile* t)
 {
 	//TODO C99mInstances.clear();
 }
-void Tile_DeleteProps(Tile* tile)
+void Tile_DeleteProps(Tile* t)
 {
 	//TODO C99mProps.clear();
 }
-Tile* Tile_GetClone(Tile* tile)
+Tile* Tile_GetClone(Tile* t)
 {
 	return NULL;
 	//TODO C99 return GetClone(false);
 }
-Tile* Tile_GetClone2(Tile* tile, bool limited)
+Tile* Tile_GetClone2(Tile* t, bool limited)
 {
 	return NULL;
 	/*Tile newTile = Tile();
@@ -162,7 +162,7 @@ Tile* Tile_GetClone2(Tile* tile, bool limited)
 
 	return newTile;*/
 }
-bool Tile_IsEqualTo(Tile* tile, Tile* tile2)
+bool Tile_IsEqualTo(Tile* t, Tile* tile2)
 {
 	return false;
 	//WILLNOTDO 05152023
@@ -191,11 +191,11 @@ bool Tile_IsEqualTo(Tile* tile, Tile* tile2)
 
 	//return true;
 }
-void Tile_DrawThis(Tile* tile, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, LevelData* level, bool overrideDepth, Texture* wrapper)
+void Tile_DrawThis(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, LevelData* level, bool overrideDepth, Texture* wrapper)
 {
 	//WILLNOTDO 05152023
 }
-void Tile_DrawCollision(Tile* tile, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
+void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
 {
 	//TODO C99
 	/*if (tile->mCollisionType == 0)
@@ -213,31 +213,31 @@ void Tile_DrawCollision(Tile* tile, SpriteBatch* spriteBatch, const Camera* came
 	Color color = Utils_GetCollisionColor(mCollisionType);
 	DrawTool_DrawRectangle(spriteBatch, color, depth, rect, 0, false);*/
 }
-Rectangle Tile_GetCollisionRectangle(Tile* tile, int gridX, int gridY)
+Rectangle Tile_GetCollisionRectangle(Tile* t, int gridX, int gridY)
 {
 	int rectX = gridX * TILE_SIZE;
 	int rectY = gridY * TILE_SIZE;
 	int rectWidth = TILE_SIZE;
 	int rectHeight = TILE_SIZE;
-	if ((tile->mCollisionType == GAMEHELPER_PLATFORM_UP) || (tile->mCollisionType == GAMEHELPER_PLATFORM_DOWN))
+	if ((t->mCollisionType == GAMEHELPER_PLATFORM_UP) || (t->mCollisionType == GAMEHELPER_PLATFORM_DOWN))
 	{
 		rectHeight /= 2;
-		if (tile->mCollisionType == GAMEHELPER_PLATFORM_DOWN)
+		if (t->mCollisionType == GAMEHELPER_PLATFORM_DOWN)
 		{
 			rectY += HALF_TILE_SIZE;
 		}
 	}
-	if ((tile->mCollisionType == GAMEHELPER_PLATFORM_LEFT) || (tile->mCollisionType == GAMEHELPER_PLATFORM_RIGHT))
+	if ((t->mCollisionType == GAMEHELPER_PLATFORM_LEFT) || (t->mCollisionType == GAMEHELPER_PLATFORM_RIGHT))
 	{
 		rectWidth /= 2;
-		if (tile->mCollisionType == GAMEHELPER_PLATFORM_RIGHT)
+		if (t->mCollisionType == GAMEHELPER_PLATFORM_RIGHT)
 		{
 			rectX += HALF_TILE_SIZE;
 		}
 	}
 	return Rectangle_Create(rectX, rectY, rectWidth, rectHeight);
 }
-void Tile_DrawThings(Tile* tile, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
+void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
 {
 	/*if (mInstances.size() == 0)
 	{
@@ -257,11 +257,11 @@ void Tile_DrawThings(Tile* tile, SpriteBatch* spriteBatch, const Camera* camera,
 		}
 	}*/
 }
-void Tile_DrawProps(Tile* tile, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
+void Tile_DrawProps(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
 {
 	/*DrawProps(spriteBatch, camera, gridX, gridY, overrideDepth, false);*/
 }
-void Tile_DrawProps2(Tile* tile, SpriteBatch* spriteBatch, const  Camera* camera, int gridX, int gridY, bool overrideDepth, bool drawInfo)
+void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, int gridX, int gridY, bool overrideDepth, bool drawInfo)
 {
 	/*if (mProps.size() == 0)
 	{

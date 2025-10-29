@@ -15,13 +15,13 @@ static void Update(System* sys)
 	{
 		FreezeEntityTillOnScreen* freezeData = ComponentPack_GetComponentAtIndex(pack, iter.mIndex);
 		const Rectangle* freezeRect = &freezeData->mRectangle;
-		if (Camera_IntersectsCameraByRectMul(camera, freezeRect, CAMERA_EXTENDED_CAMERA))
+		if (Camera_IntersectsCameraRectMul(camera, freezeRect, CAMERA_EXTENDED_CAMERA))
 		{
 			if (freezeData->mFacesPlayer)
 			{
 				Do_FacePlayer(iter.mEntity, freezeData->mIsFacingFlipped);
 			}
-			if (Camera_IntersectsCameraByRect(camera, freezeRect))
+			if (Camera_IntersectsCameraRect(camera, freezeRect))
 			{
 				Do_SetBodyDisabled(iter.mEntity, false);
 				Do_SetUpdateDisabled(iter.mEntity, false);

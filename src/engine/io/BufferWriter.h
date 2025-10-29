@@ -27,7 +27,7 @@ void BufferWriter_WriteU32(BufferWriter* br);
 void BufferWriter_WriteI32(BufferWriter* br);
 void BufferWriter_WriteU64(BufferWriter* br);
 void BufferWriter_WriteI64(BufferWriter* br);
-void BufferWriter_WriteSingle(BufferWriter* br);
+void BufferWriter_WriteFloat(BufferWriter* br);
 void BufferWriter_WriteDouble(BufferWriter* br);
 void BufferWriter_WriteJustTheStringLength(BufferWriter* br);
 void BufferWriter_WriteJustTheStringData(BufferWriter* br, uint8_t stringLength, char* dst, size_t maxlen);

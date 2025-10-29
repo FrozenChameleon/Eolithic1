@@ -33,7 +33,7 @@ void Vector2_Init(Vector2* value, float x, float y)
 	value->X = x;
 	value->Y = y;
 }
-void Vector2_InitFromSingle(Vector2* value, float value2)
+void Vector2_InitFromFloat(Vector2* value, float value2)
 {
 	value->X = value2;
 	value->Y = value2;
@@ -115,13 +115,13 @@ Vector2 Vector2_Div(Vector2 value1, Vector2 value2)
 	temp.Y = (value1.Y / value2.Y);
 	return temp;
 }
-Vector2 Vector2_MulSingle(Vector2 value1, float value2)
+Vector2 Vector2_MulFloat(Vector2 value1, float value2)
 {
 	value1.X *= value2;
 	value1.Y *= value2;
 	return value1;
 }
-Vector2 Vector2_DivSingle(Vector2 value1, float value2)
+Vector2 Vector2_DivFloat(Vector2 value1, float value2)
 {
 	value1.X /= value2;
 	value1.Y /= value2;

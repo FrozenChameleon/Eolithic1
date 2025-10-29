@@ -12,3 +12,6 @@ typedef struct StringPair
 	const char* mValue;
 } StringPair;
 
+typedef struct BufferReader BufferReader;
+
+void StringPair_Read(StringPair* pair, BufferReader* reader);
