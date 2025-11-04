@@ -345,7 +345,7 @@ void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color colo
 }
 const char* ThingInstance_GetName(ThingInstance* ti)
 {
-	return ti->mName->text;
+	return MString_Text(ti->mName);
 }
 int ThingInstance_GetLeft(ThingInstance* ti, float positionX)
 {

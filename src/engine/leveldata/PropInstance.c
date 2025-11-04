@@ -5,3 +5,204 @@
  */
 
 #include "PropInstance.h"
+
+
+#include "../utils/Utils.h"
+#include "../render/SpriteBatch.h"
+#include "../io/BufferReader.h"
+#include "../io/BufferWriter.h"
+#include "../render/Sheet.h"
+#include "../math/Points.h"
+#include "../render/Color.h"
+#include "../render/DrawTool.h"
+#include "../resources/Resource.h"
+#include "../../GlobalDefs.h"
+#include "../resources/PropManager.h"
+
+#define TILE_SIZE GLOBAL_DEF_TILE_SIZE
+
+static Color SELECTBOX_COLOR = { 0, 0, 255, 76 };
+static Color SELECTBOX_COLOR_OFF = { 0, 255, 0, 153 };
+
+static Prop* GetThePropData(PropInstance* prop)
+{
+	if (prop->INTERNAL_mCachedPropData == NULL)
+	{
+		prop->INTERNAL_mCachedPropData = PropManager_GetResourceData(MString_Text(prop->mName));
+	}
+
+	return prop->INTERNAL_mCachedPropData;
+}
+
+void PropInstance_Init(PropInstance* prop)
+{
+	Utils_memset(prop, 0, sizeof(PropInstance));
+
+	prop->mDepth = 70;
+	prop->mScale = 1;
+	prop->mDrawOffset = Vector2_Zero;
+}
+void PropInstance_Write(PropInstance* prop, BufferWriter* writer)
+{
+	/*writer->WriteSingle(prop->mOffset.X);
+	writer->WriteSingle(prop->mOffset.Y);
+	writer->WriteSingle(prop->mScale);
+	writer->WriteInt32(prop->mDepth);
+	writer->WriteSingle(prop->mRotation);
+	writer->WriteSingle(prop->mDrawOffset.X);
+	writer->WriteSingle(prop->mDrawOffset.Y);
+	writer->WriteBoolean(prop->mFlipX);
+	writer->WriteBoolean(prop->mFlipY);
+	writer->WriteString(prop->mName);*/
+}
+void PropInstance_Read(PropInstance* prop, int version, BufferReader* reader)
+{
+	prop->mOffset.X = BufferReader_ReadFloat(reader);
+	prop->mOffset.Y = BufferReader_ReadFloat(reader);
+	prop->mScale = BufferReader_ReadFloat(reader);
+	prop->mDepth = BufferReader_ReadI32(reader);
+	prop->mRotation = BufferReader_ReadFloat(reader);
+	prop->mDrawOffset.X = BufferReader_ReadFloat(reader);
+	prop->mDrawOffset.Y = BufferReader_ReadFloat(reader);
+	prop->mFlipX = BufferReader_ReadBoolean(reader);
+	prop->mFlipY = BufferReader_ReadBoolean(reader);
+	prop->mName = BufferReader_ReadStringToMString(reader);
+}
+void PropInstance_Draw(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position)
+{
+	PropInstance_Draw3(prop, spriteBatch, prop->mDepth, position);
+}
+void PropInstance_Draw2(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position, bool drawInfo)
+{
+	PropInstance_Draw4(prop, spriteBatch, prop->mDepth, position, drawInfo);
+}
+void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position)
+{
+	PropInstance_Draw4(prop, spriteBatch, depth, position, false);
+}
+void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position, bool drawInfo)
+{
+	/*Prop* propData = GetThePropData(prop);
+
+	if (propData == NULL)
+	{
+		OeDrawTool::DrawRectangle(spriteBatch, OeColors::BLUE, 100, Rectangle((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), 0, false);
+	}
+	else
+	{
+		Vector2 temp;
+		if (!drawInfo)
+		{
+			temp = position + prop->mOffset + prop->mDrawOffset;
+		}
+		else
+		{
+			temp = position + prop->mOffset;
+		}
+		propData->Draw(spriteBatch, depth, OePoints::ToPoint(temp), prop->mScale, prop->mRotation, prop->mFlipX, prop->mFlipY, drawInfo);
+	}*/
+}
+Prop* PropInstance_GetPropData(PropInstance* prop)
+{
+	return GetThePropData(prop);
+}
+bool PropInstance_IsPropValid(PropInstance* prop)
+{
+	if (prop->mName == NULL)
+	{
+		return false;
+	}
+
+	if (GetThePropData(prop) == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
+Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position)
+{
+	/*Prop* propData = GetThePropData(prop);
+
+	Sheet* propSheet;
+	if (propData != nullptr)
+	{
+		propSheet = propData->GetSheet();
+	}
+	else
+	{
+		propSheet = nullptr;
+	}
+
+	int width;
+	int height;
+	if (propSheet != nullptr)
+	{
+		const Rectangle* rect = &propSheet->mRectangle;
+		width = static_cast<int>(rect->Width * propData->mScaler * prop->mScale);
+		height = static_cast<int>(rect->Height * propData->mScaler * prop->mScale);
+	}
+	else
+	{
+		width = TILE_SIZE;
+		height = TILE_SIZE;
+	}
+
+	return Rectangle(static_cast<int>(position.X + prop->mOffset.X),
+		static_cast<int>(position.Y + prop->mOffset.Y),
+		width, height);*/
+}
+bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
+{
+	return false;
+
+	/*OeProp* propData = GetThePropData(prop);
+	if (propData != nullptr)
+	{
+		//WILLNOTDO 05152023
+		//OeSheet* sheet = ref OeSheet.GetSheet(propData.mTextureName);
+		//OeTexture tex = sheet.mTextureResource.GetData();
+		//Texture2D texture = tex.GetTexture2D();
+		//Color[] colors1d = new Color[texture.Width * texture.Height];
+		//texture.GetData(colors1d);
+		//Color[, ] colors2d = new Color[texture.Width, texture.Height];
+		//for (int i = 0; i < texture.Width; i++)
+		//{
+		//	for (int j = 0; j < texture.Height; j++)
+		//	{
+		//		colors2d[i, j] = colors1d[i + j * texture.Width];
+		//	}
+		//}
+		//int targetX = relativeMouse.X / propData.mScaler;
+		//int targetY = relativeMouse.Y / propData.mScaler;
+		//if (prop->mFlipX)
+		//{
+		//	targetX = texture.Width - targetX;
+		//}
+		//if (prop->mFlipY)
+		//{
+		//	targetY = texture.Height - targetY;
+		//}
+		//targetX = OeMath.Min(targetX, texture.Width - 1);
+		//targetX = OeMath.Max(targetX, 0);
+		//targetY = OeMath.Min(targetY, texture.Height - 1);
+		//targetY = OeMath.Max(targetY, 0);
+		//if (colors2d[targetX, targetY].A != 0)
+		//{
+		//	return true;
+		//}
+	}
+	return false;*/
+}
+bool PropInstance_IsEqualTo(PropInstance* instance)
+{
+	return false;
+	/*if (instance->mOffset == mOffset && instance->mScale == mScale && instance->mDepth == mDepth &&
+		instance->mRotation == mRotation && instance->mDrawOffset == mDrawOffset && instance->mFlipX == mFlipX &&
+		instance->mFlipY == mFlipY && instance->mName == mName)
+	{
+		return true;
+	}
+
+	return false;*/
+}

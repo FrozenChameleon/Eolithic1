@@ -54,3 +54,4 @@ int Utils_Get1DArrayPosFor2DArray(int i, int j, int width);
 bool Utils_CharIsDigit(char c);
 bool Utils_ArrContainsInt(int* arr_values, int containsThis);
 bool Utils_StringContains(const char* str, const char* containsThis);
+bool Utils_StringEndsWith(const char* str, const char* endsWithThis);

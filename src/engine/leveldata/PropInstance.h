@@ -11,6 +11,10 @@
 #include "../math/Vector2.h"
 #include "../utils/MString.h"
 
+typedef struct BufferReader BufferReader;
+typedef struct BufferWriter BufferWriter;
+typedef struct SpriteBatch SpriteBatch;
+
 typedef struct PropInstance
 {
 	Prop* INTERNAL_mCachedPropData;
@@ -24,3 +28,15 @@ typedef struct PropInstance
 	Vector2 mDrawOffset;
 } PropInstance;
 
+void PropInstance_Init(PropInstance* prop);
+void PropInstance_Write(PropInstance* prop, BufferWriter* writer);
+void PropInstance_Read(PropInstance* prop, int version, BufferReader* reader);
+void PropInstance_Draw(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position);
+void PropInstance_Draw2(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position, bool drawInfo);
+void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position);
+void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position, bool drawInfo);
+Prop* PropInstance_GetPropData(PropInstance* prop);
+bool PropInstance_IsPropValid(PropInstance* prop);
+Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position);
+bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse);
+bool PropInstance_IsEqualTo(PropInstance* prop, PropInstance* instance);

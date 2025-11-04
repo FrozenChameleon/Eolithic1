@@ -88,20 +88,20 @@ void SoundEffectManager_LoadAllFromDat()
 	//
 
 	MString* path = File_Combine2("data", SoundEffectManager_GetDatFileName());
-	if (!File_Exists(path->text))
+	if (!File_Exists(MString_Text(path)))
 	{
-		Logger_printf("Unable to load from dat: %s\n", path->text);
+		Logger_printf("Unable to load from dat: %s\n", MString_Text(path));
 		return;
 	}
 	
-	DatReader* dr = DatReader_Create(path->text);
+	DatReader* dr = DatReader_Create(MString_Text(path));
 	while (DatReader_HasNext(dr))
 	{
 		MString* nextPath = DatReader_NextFilePath(dr);
-		MString* fileName = File_GetFileName(nextPath->text);
-		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(nextPath->text);
+		MString* fileName = File_GetFileName(MString_Text(nextPath));
+		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_Text(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
-		SoundEffectManager_LoadAssetFromStreamAndCreateResource(br, fileNameWithoutExtension->text, path->text);
+		SoundEffectManager_LoadAssetFromStreamAndCreateResource(br, MString_Text(fileNameWithoutExtension), MString_Text(path));
 		BufferReader_Dispose(br, false);
 		MString_Dispose(nextPath);
 		MString_Dispose(fileName);

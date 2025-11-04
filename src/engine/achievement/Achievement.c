@@ -68,5 +68,5 @@ void Achievement_CertifyAchievement(Achievement* achievement, int index)
 		return;
 	}
 
-	Service_HandleSetAchievement(index, achievement->mName->text);
+	Service_HandleSetAchievement(index, MString_Text(achievement->mName));
 }

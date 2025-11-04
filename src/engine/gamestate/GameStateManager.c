@@ -9,17 +9,32 @@
 #include "../globals/Globals.h"
 #include "../core/GameUpdater.h"
 #include "../utils/Logger.h"
+#include "../input/RecordingTool.h"
+#include "../utils/Utils.h"
 
 static int32_t _mUniqueMapSeed;
 static int32_t _mCurrentGameState;
 static int32_t _mCurrentGameStateForRenderCamera;
 static int32_t _mNextGameState;
 static uint64_t _mTicksSinceMapLoad;
-static const char* _mMapToLoad;
+static const char* _mMapToLoad = EE_STR_NOTHING;
 static bool _mJustChangedGameStateThisFrame;
 static System** arr_global_systems;
 static System** arr_state_systems;
 static GameState _mGameState;
+static bool _mHasRunCtor;
+
+void GameStateManager_Ctor()
+{
+	if (_mHasRunCtor)
+	{
+		return;
+	}
+
+	GameState_Ctor(&_mGameState, "WHATEVER", false);
+
+	_mHasRunCtor = true;
+}
 
 int32_t GameStateManager_GetGlobalSystemsLen()
 {
@@ -178,6 +193,19 @@ _mMapToLoad = filename;
 }
 void GameStateManager_LoadMap(const char* mapToLoad)
 {
+	if(mapToLoad == NULL)
+	{
+		Logger_LogWarning("Attempted to load NULL map!");
+		return;
+	}
+	else if (Utils_StringEqualTo(mapToLoad, EE_NOT_SET))
+	{
+		Logger_LogWarning("Attempted to load EMPTY STRING map!");
+		return;
+	}
+
+	Logger_printf("Attempting to load map: %s\n", mapToLoad);
+
 	Music_SetDoNotAllowUpdatesWhilePaused(false);
 
 	//TODO 2024, DISABLING THIS COMPLETELY FOR C++? 
@@ -223,7 +251,7 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 	Random32_SetSeed(Globals_GetSharedRandom(), (uint32_t)(GameUpdater_GetGlobalTicks()));
 #endif
 
-	Logger_printf("Map loaded: %s", mapToLoad);
+	Logger_printf("Map loaded: %s\n", mapToLoad);
 	GLOBALS_DEBUG_JUST_LOADED_MAP_NOTIFY_EDITOR = true;
 }
 bool GameStateManager_IsNormalState()
@@ -252,18 +280,16 @@ void GameStateManager_HandleGameStateChange()
 void GameStateManager_HandleLoadNextMap()
 {
 	bool isMapLoad = false;
-	if (_mMapToLoad != "")
+	if (!Utils_StringEqualTo(_mMapToLoad, EE_STR_NOTHING))
 	{
 		isMapLoad = true;
 	}
 
-	/*
-	if (OeRecordingTool::LoadNextRecordingIfAtEndOfRecording(isMapLoad))
+	if (RecordingTool_LoadNextRecordingIfAtEndOfRecording(isMapLoad))
 	{
-		_mMapToLoad = "";
+		_mMapToLoad = EE_STR_NOTHING;
 		return;
 	}
-	*/
 
 	if (!isMapLoad)
 	{
@@ -271,7 +297,7 @@ void GameStateManager_HandleLoadNextMap()
 	}
 
 	GameStateManager_LoadMap(_mMapToLoad);
-	_mMapToLoad = "";
+	_mMapToLoad = EE_STR_NOTHING;
 }
 bool GameStateManager_JustChangedGameStateThisFrame()
 {

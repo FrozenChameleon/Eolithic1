@@ -10,7 +10,7 @@
 
 InputCheck* InputChecks_Get(InputChecks* data, int index)
 {
-	if ((index >= 0) && (index < INPUT_CHECKS_LENGTH))
+	if ((index >= 0) && (index < INPUTCHECKS_LENGTH))
 	{
 		return &data->Checks[index];
 	}
@@ -21,7 +21,7 @@ InputCheck* InputChecks_Get(InputChecks* data, int index)
 
 void InputChecks_Set(InputChecks* data, int index, InputCheck check)
 {
-	if ((index >= 0) && (index < INPUT_CHECKS_LENGTH))
+	if ((index >= 0) && (index < INPUTCHECKS_LENGTH))
 	{
 		data->Checks[index] = check;
 		return;

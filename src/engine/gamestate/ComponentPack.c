@@ -102,6 +102,7 @@ bool ComponentPack_Next(ComponentPack* pack, PackIterator* iter)
 		{
 			iter->mIndex = iter->mSeekPosition;
 			iter->mEntity = pack->Entities[iter->mIndex];
+			iter->mComponent = ComponentPack_GetComponentAtIndex(pack, iter->mIndex);
 			iter->mSeekPosition += 1;
 			return true;
 		}

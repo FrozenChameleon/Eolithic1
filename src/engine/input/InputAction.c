@@ -11,7 +11,7 @@
 #include "../utils/Utils.h"
 #include "Input.h"
 
-static void ClearPolledInput(InputAction* action)
+void InputAction_ClearPolledInput(InputAction* action)
 {
 	action->mTimeHeld = 0;
 	action->mAnalogValue = 0;
@@ -25,13 +25,13 @@ static void ClearPolledInput(InputAction* action)
 	action->mIsCheckDoubleTap = false;
 	Timer_Reset(&action->mTimerDoubleTap);
 }
-static void Init(const char* name, InputAction* action)
+void InputAction_Init(const char* name, InputAction* action)
 {
 	Utils_memset(action, 0, sizeof(InputAction));
 	action->mName = name;
 	Timer_Init(&action->mTimerDoubleTap, INPUT_ACTION_DOUBLE_TAP_LENGTH);
 }
-static void Update(InputAction* action, InputPlayer* input)
+void InputAction_Update(InputAction* action, InputPlayer* input)
 {
 	action->mIsPressedLastFrame = action->mIsPressed;
 	action->mIsPressed = false;
@@ -40,7 +40,7 @@ static void Update(InputAction* action, InputPlayer* input)
 	action->mAnalogValue = 0;
 	action->mWasAnalog = false;
 
-	for (int i = 0; i < INPUT_CHECKS_LENGTH; i += 1)
+	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck* check = InputChecks_Get(&action->mChecks, i);
 
@@ -70,7 +70,7 @@ static void Update(InputAction* action, InputPlayer* input)
 		}
 	}
 
-	for (int i = 0; i < INPUT_CHECKS_LENGTH; i += 1)
+	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck* check = InputChecks_Get(&action->mChecks, i);
 		if (InputCheck_IsAnalog(check))

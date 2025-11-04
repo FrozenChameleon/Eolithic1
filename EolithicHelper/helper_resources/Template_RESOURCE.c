@@ -87,30 +87,29 @@ void %strResourceManager%_LoadAllFromDat()
 	Init();
 	//
 
-	SharedFixedChar260* sharedStringBufferForPath = Utils_CreateSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileName = Utils_CreateSharedFixedChar260();
-	SharedFixedChar260* sharedStringBufferForFileNameWithoutExtension = Utils_CreateSharedFixedChar260();
-	File_Combine2(sharedStringBufferForPath, "data", %strResourceManager%_GetDatFileName());
-	if (!File_Exists(sharedStringBufferForPath))
+	MString* path = File_Combine2("data", %strResourceManager%_GetDatFileName());
+	if (!File_Exists(MString_Text(path)))
 	{
-		Logger_printf("Unable to load from dat: %s", sharedStringBufferForPath);
+		Logger_printf("Unable to load from dat: %s\n", MString_Text(path));
 		return;
 	}
 	
-	DatReader* dr = DatReader_Create(sharedStringBufferForPath);
+	DatReader* dr = DatReader_Create(MString_Text(path));
 	while (DatReader_HasNext(dr))
 	{
-		DatReader_NextFilePath(dr, sharedStringBufferForPath);
-		File_GetFileName(sharedStringBufferForFileName, sharedStringBufferForPath);
-		File_GetFileNameWithoutExtension(sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		MString* nextPath = DatReader_NextFilePath(dr);
+		MString* fileName = File_GetFileName(MString_Text(nextPath));
+		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_Text(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
-		%strResourceManager%_LoadAssetFromStreamAndCreateResource(br, sharedStringBufferForFileNameWithoutExtension, sharedStringBufferForPath);
+		%strResourceManager%_LoadAssetFromStreamAndCreateResource(br, MString_Text(fileNameWithoutExtension), MString_Text(path));
 		BufferReader_Dispose(br, false);
+		MString_Dispose(nextPath);
+		MString_Dispose(fileName);
+		MString_Dispose(fileNameWithoutExtension);
 	}
+
 	DatReader_Dispose(dr);
-	Utils_DisposeSharedFixedChar260(sharedStringBufferForPath);
-	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileName);
-	Utils_DisposeSharedFixedChar260(sharedStringBufferForFileNameWithoutExtension);
+	MString_Dispose(path);
 }
 void %strResourceManager%_Dispose(const char* filenameWithoutExtension)
 {
@@ -144,7 +143,7 @@ void %strResourceManager%_DisposeAll()
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
-int %strResourceManager%_Length()
+int64_t %strResourceManager%_Length()
 {
 	return shlen(sh_resources);
 }

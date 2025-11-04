@@ -1,13 +1,12 @@
 #include "LevelDataStubFunc.h"
 
+#include "../resources/LevelDataManager.h"
+
 LevelData* LevelDataStubFunc_GetLevelData(const LevelDataStub* data)
 {
-	return NULL;
-//TODO C99	return GetLevelDataResource(data)->GetData();
+	return LevelDataStubFunc_GetLevelDataResource(data)->mData;
 }
-
 Resource* LevelDataStubFunc_GetLevelDataResource(const LevelDataStub* data)
 {
-	return NULL;
-	//TODO C99	return OeResourceManagers::LevelDataManager.GetResource(data->mLevelName.Get());
+	return LevelDataManager_GetResource(MString_Text(data->mLevelName));
 }

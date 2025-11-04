@@ -4,6 +4,13 @@
 #include "Logger.h"
 #include "Macros.h"
 
+typedef struct MString
+{
+	char* text;
+	int32_t len;
+	int32_t capacity;
+} MString;
+
 static uint64_t _mRefs;
 
 static char _mTempBuffer[EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE];
@@ -12,7 +19,7 @@ static void ClearTempBuffer()
 {
 	Utils_memset(_mTempBuffer, 0, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE * sizeof(char));
 }
-static void FixNullString(MString** str)
+static void CheckAndReplaceNullString(MString** str)
 {
 	if (*str != NULL)
 	{
@@ -49,9 +56,36 @@ MString* MString_CreateEmpty(int32_t size)
 	mstring->capacity = size;
 	return mstring;
 }
+char* MString_Text(MString* str)
+{
+	if (str == NULL)
+	{
+		return EE_NOT_SET;
+	}
+
+	return str->text;
+}
+int32_t MString_Length(MString* str)
+{
+	if (str == NULL)
+	{
+		return 0;
+	}
+
+	return str->len;
+}
+int32_t MString_Capacity(MString* str)
+{
+	if (str == NULL)
+	{
+		return 0;
+	}
+
+	return str->capacity;
+}
 void MString_Assign(MString** str, const char* toThis)
 {
-	FixNullString(str);
+	CheckAndReplaceNullString(str);
 
 	MString* oldStr = *str;
 	MString* newStr = MString_Create(toThis);
@@ -78,7 +112,7 @@ void MString_AddAssignDouble(MString** str, double addThisDouble)
 }
 void MString_AddAssignChar(MString** str, char addThisChar)
 {
-	FixNullString(str);
+	CheckAndReplaceNullString(str);
 
 	MString* oldStr = *str;
 	size_t newLen = oldStr->len + 1;
@@ -93,7 +127,7 @@ void MString_AddAssignChar(MString** str, char addThisChar)
 }
 void MString_AddAssignString(MString** str, const char* addThisStr)
 {
-	FixNullString(str);
+	CheckAndReplaceNullString(str);
 
 	MString* oldStr = *str;
 	size_t addThisStrLen = Utils_strlen(addThisStr);
@@ -109,7 +143,7 @@ void MString_AddAssignString(MString** str, const char* addThisStr)
 }
 void MString_Truncate(MString** str, int newLength)
 {
-	FixNullString(str);
+	CheckAndReplaceNullString(str);
 
 	MString* actualStr = *str;
 
@@ -139,11 +173,11 @@ void MString_Dispose(MString* str)
 	Utils_free(str->text);
 	Utils_free(str);
 }
-bool MString_EqualToChar(MString* str, const char* otherStr)
+bool MString_EqualToString(const MString* str, const char* otherStr)
 {
 	return Utils_StringEqualTo(str->text, otherStr);
 }
-bool MString_EqualTo(MString* str, MString* otherStr)
+bool MString_EqualTo(const MString* str, const MString* otherStr)
 {
 	return Utils_StringEqualTo(str->text, otherStr->text);
 }

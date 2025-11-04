@@ -7,6 +7,8 @@
 #include "PointRectangle.h"
 
 #include "../math/Math.h"
+#include "../math/Points.h"
+#include "../math/RectangleTools.h"
 
 bool PointRectangle_IsEmpty(PointRectangle* prect)
 {
@@ -32,7 +34,13 @@ void PointRectangle_CorrectPoints(PointRectangle* prect)
 	}
 }
 // void PointRectangle_Write(OePointRectangle* prect, std::shared_ptr<OeIniWriter> writer);
-// void PointRectangle_Read(OePointRectangle* prect, std::shared_ptr<OeIniReader> reader);
+void PointRectangle_Read(PointRectangle* prect, BufferReader* reader)
+{
+	Points_Read(&prect->mPointOne, reader);
+	Points_Read(&prect->mPointTwo, reader);
+	Rectangle dummy = { 0 }; //To maintain compatibility
+	RectangleTools_Read(&dummy, reader);
+}
 Rectangle PointRectangle_GetRectangle(PointRectangle* prect)
 {
 	return PointRectangle_GetRectanglePoint(prect->mPointOne, prect->mPointTwo);

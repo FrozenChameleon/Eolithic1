@@ -24,6 +24,7 @@ enum GameStateManagerGameState
 //extern std::vector<OeSystem*> StateSystems;
 //extern std::vector<OeGameState*> GameStates;
 
+void GameStateManager_Ctor();
 int32_t GameStateManager_GetGlobalSystemsLen();
 System** GameStateManager_GetGlobalSystems();
 void GameStateManager_AddGlobalSystem(System* sys);

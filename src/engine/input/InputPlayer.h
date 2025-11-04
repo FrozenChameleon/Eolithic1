@@ -20,28 +20,28 @@ typedef struct InputPlayer
 	int _mRumblePriority;
 	float _mRumbleLeftMotor;
 	float _mRumbleRightMotor;
-	InputAction _mActions[ACTION_LIST_LENGTH];
+	InputAction _mActions[ACTIONLIST_LENGTH];
 } InputPlayer;
 
 typedef enum InputPlayerDevice
 {
-	INPUT_PLAYER_CONTROLLER_ONE_DEVICE_NUMBER = 0,
-	INPUT_PLAYER_CONTROLLER_TWO_DEVICE_NUMBER = 1,
-	INPUT_PLAYER_CONTROLLER_THREE_DEVICE_NUMBER = 2,
-	INPUT_PLAYER_CONTROLLER_FOUR_DEVICE_NUMBER = 3,
-	INPUT_PLAYER_KEYBOARD_DEVICE_NUMBER = 9
+	INPUTPLAYER_CONTROLLER_ONE_DEVICE_NUMBER = 0,
+	INPUTPLAYER_CONTROLLER_TWO_DEVICE_NUMBER = 1,
+	INPUTPLAYER_CONTROLLER_THREE_DEVICE_NUMBER = 2,
+	INPUTPLAYER_CONTROLLER_FOUR_DEVICE_NUMBER = 3,
+	INPUTPLAYER_KEYBOARD_DEVICE_NUMBER = 9
 } InputPlayerDevice;
 
 typedef enum InputPlayerBlockMenu
 {
-	INPUT_PLAYER_BLOCK_MENU_INPUT_OFF = 0,
-	INPUT_PLAYER_BLOCK_MENU_INPUT_ALLOW_BACK = 1,
-	INPUT_PLAYER_BLOCK_MENU_INPUT_ALL = 2
+	INPUTPLAYER_BLOCK_MENU_INPUT_OFF = 0,
+	INPUTPLAYER_BLOCK_MENU_INPUT_ALLOW_BACK = 1,
+	INPUTPLAYER_BLOCK_MENU_INPUT_ALL = 2
 } InputPlayerBlockMenu;
 
-void InputPlayer_SetVibration(float leftMotor, float rightMotor);
-void InputPlayer_StopVibrating();
-InputAction* InputPlayer_GetCurrentActions();
+void InputPlayer_SetVibration(InputPlayer* ip, float leftMotor, float rightMotor);
+void InputPlayer_StopVibrating(InputPlayer* ip);
+InputAction* InputPlayer_GetCurrentActions(InputPlayer* ip);
 void InputPlayer_Init(InputPlayer* ip, int number);
 void InputPlayer_SetInputDevice(InputPlayer* ip, int newDeviceNumber);
 InputAction* InputPlayer_GetActionsForBindingsSync(InputPlayer* ip);

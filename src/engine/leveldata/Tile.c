@@ -70,14 +70,13 @@ void Tile_Read(Tile* t, int version, BufferReader* reader)
 	}
 
 	int arrayPropDataSize = BufferReader_ReadI32(reader);
-	/*//TODO C99
 	for (int i = 0; i < arrayPropDataSize; i++)
 	{
-		PropInstance instance;
+		PropInstance instance = { 0 };
 		PropInstance_Init(&instance);
 		PropInstance_Read(&instance, version, reader);
-		mProps.push_back(instance);
-	}*/
+		arrput(t->arr_props, instance);
+	}
 }
 void Tile_DeleteCollision(Tile* t)
 {

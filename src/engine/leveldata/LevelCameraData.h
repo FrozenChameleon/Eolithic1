@@ -10,9 +10,10 @@
 #include "../math/PointRectangle.h"
 #include "../utils/MString.h"
 
-enum { LEVEL_CAMERA_DATA_STRING_DATA_LIMIT = 10 };
+enum { LEVELCAMERADATA_STRING_DATA_LIMIT = 10 };
 
 typedef struct SpriteBatch SpriteBatch;
+typedef struct BufferReader BufferReader;
 
 typedef struct LevelCameraData
 {
@@ -28,14 +29,14 @@ typedef struct LevelCameraData
 	bool mIsRightFrozen;
 	bool mIsDownFrozen;
 	bool mIsLeftFrozen;
-	const char* mScript;
+	MString* mScript;
 	int mId;
 	bool mIsTransition;
 	int mNumberTransitionTo;
 	int mNumberTransitionFrom;
 	bool mIsTransitionX;
 	bool mIsTransitionY;
-	MString* mStringData[LEVEL_CAMERA_DATA_STRING_DATA_LIMIT];
+	MString* mStringData[LEVELCAMERADATA_STRING_DATA_LIMIT];
 } LevelCameraData;
 
 //void LevelCameraData_Ctor1();
@@ -48,7 +49,7 @@ bool LevelCameraData_HasBounds(LevelCameraData* lcd);
 PointRectangle* LevelCameraData_GetActiveBoundsPointRectangle(LevelCameraData* lcd);
 void LevelCameraData_Add(LevelCameraData* lcd, int amountX, int amountY);
 //void LevelCameraData_Write(LevelCameraData* lcd, std::shared_ptr<OeIniWriter> writer);
-//void LevelCameraData_Read(LevelCameraData* lcd, int version, std::shared_ptr<OeIniReader> reader);
+void LevelCameraData_Read(LevelCameraData* lcd, int version, BufferReader* reader);
 bool LevelCameraData_IsScriptSet(LevelCameraData* lcd);
 void LevelCameraData_Draw(LevelCameraData* lcd, SpriteBatch* spriteBatch, bool isSelected, bool drawBounds);
 const char* LevelCameraData_ToString(LevelCameraData* lcd);

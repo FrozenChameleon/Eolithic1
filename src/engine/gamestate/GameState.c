@@ -5,6 +5,7 @@
 #include "DebugRewindTester.h"
 #include "../utils/Utils.h"
 #include "../utils/Cvars.h"
+#include "../core/GameHelper.h"
 
 void GameState_SaveComponentSizesHelper(bool isBinary)
 {
@@ -124,7 +125,7 @@ void GameState_Update(GameState* gs)
 
 	if (gs->_mDisableRewindingPermanently || gs->_mDisableRewindTemporarily)
 	{
-		//TODO C99 OeGameHelper::UpdateStateSystems();
+		GameHelper_UpdateStateSystems();
 	}
 	else
 	{
@@ -132,7 +133,7 @@ void GameState_Update(GameState* gs)
 		bool isRewindingThisFrame = false;
 		if (!isRewindingThisFrame)
 		{
-			//TODO C99 OeGameHelper::UpdateStateSystems();
+			GameHelper_UpdateStateSystems();
 			gs->_mCurrentReplayFrame += 1;
 			if (gs->_mCurrentReplayFrame == 0) //Overflow check
 			{
@@ -216,7 +217,7 @@ void GameState_Load(GameState* gs, const char* levelDataToLoad)
 
 	GameStateData_Reset(&gs->_mData);
 
-	//TODO C99 OeGameHelper::InitGameState(levelDataToLoad);
+	GameHelper_InitGameState(levelDataToLoad);
 }
 Entity GameState_GetEntityInPlay(GameState* gs, int entityNumber)
 {

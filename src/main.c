@@ -11,16 +11,19 @@
 #include "engine/utils/Cvars.h"
 #include "engine/utils/MString.h"
 #include "engine/io/File.h"
+#include "engine/globals/Globals.h"
 
 int main(int argc, char* args[])
 {
 	MString* enginePath = File_Combine2("data", "engineconfig.bin");
-	Cvars_Read(enginePath->text);
+	Cvars_Read(MString_Text(enginePath));
 	MString_Dispose(enginePath);
 
 	MString* userPath = File_Combine2("data", "userconfig.bin");
-	Cvars_Read(userPath->text);
+	Cvars_Read(MString_Text(userPath));
 	MString_Dispose(userPath);
+
+	Globals_TurnOnAutoMode(true);
 
 	Game_Run();
 

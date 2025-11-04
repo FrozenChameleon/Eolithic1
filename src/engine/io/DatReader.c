@@ -63,7 +63,7 @@ MString* DatReader_NextFilePath(DatReader* dr)
 	int64_t len = arrlen(dr->arr_last_strings);
 	for (int i = 0; i < len; i += 1)
 	{
-		MString_AddAssignString(&strToReturn, dr->arr_last_strings[i]->text);
+		MString_AddAssignString(&strToReturn, MString_Text(dr->arr_last_strings[i]));
 		if (i < (len - 1))
 		{
 			File_AppendPathSeparator(&strToReturn);
@@ -71,7 +71,7 @@ MString* DatReader_NextFilePath(DatReader* dr)
 	}
 
 	DatInfo* currentInfo = GetCurrentDatInfo(dr);
-	currentInfo->mPath = MString_Create(strToReturn->text);
+	currentInfo->mPath = MString_Create(MString_Text(strToReturn));
 	return strToReturn;
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)

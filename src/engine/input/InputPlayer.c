@@ -1,29 +1,32 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
-
 #include "InputPlayer.h"
 
+#include "InputBindings.h"
+#include "ActionList.h"
+#include "Input.h"
 #include "../utils/Logger.h"
+#include "../core/GameUpdater.h"
+#include "../utils/Cvars.h"
+#include "ControllerState.h"
+#include "KeyboardState.h"
+#include "MouseState.h"
+#include "ControllerStates.h"
+#include "../../DebugDefs.h"
+#include "../service/Service.h"
+#include "../gamestate/GameStateManager.h"
+#include "../gamestate/GameState.h"
+#include "../utils/Utils.h"
+#include "InputAction.h"
 
-void InputPlayer_SetVibration(float leftMotor, float rightMotor)
+InputAction* InputPlayer_GetCurrentActions(InputPlayer* ip)
 {
-
+	//TODO C99
+	/*if (ControllerState_PlatformIsForcingCustomInputActions(ip->_mPlayerNumber))
+	{
+		return ControllerState_GetForcedCustomInputActions(ip->_mPlayerNumber);
+	}*/
+	return ip->_mActions;
 }
-void InputPlayer_StopVibrating()
-{
 
-}
-InputAction* InputPlayer_GetCurrentActions()
-{
-
-}
-void InputPlayer_Init(InputPlayer* ip, int number)
-{
-
-}
 void InputPlayer_SetInputDevice(InputPlayer* ip, int newDeviceNumber)
 {
 	if (newDeviceNumber == ip->_mInputDeviceNumber)
@@ -31,83 +34,247 @@ void InputPlayer_SetInputDevice(InputPlayer* ip, int newDeviceNumber)
 		return;
 	}
 
-	if ((ip->_mInputDeviceNumber == INPUT_PLAYER_CONTROLLER_ONE_DEVICE_NUMBER) || (ip->_mInputDeviceNumber == INPUT_PLAYER_CONTROLLER_TWO_DEVICE_NUMBER)
-		|| (ip->_mInputDeviceNumber == INPUT_PLAYER_CONTROLLER_THREE_DEVICE_NUMBER) || (ip->_mInputDeviceNumber == INPUT_PLAYER_CONTROLLER_FOUR_DEVICE_NUMBER))
+	if ((ip->_mInputDeviceNumber == INPUTPLAYER_CONTROLLER_ONE_DEVICE_NUMBER) || (ip->_mInputDeviceNumber == INPUTPLAYER_CONTROLLER_TWO_DEVICE_NUMBER)
+		|| (ip->_mInputDeviceNumber == INPUTPLAYER_CONTROLLER_THREE_DEVICE_NUMBER) || (ip->_mInputDeviceNumber == INPUTPLAYER_CONTROLLER_FOUR_DEVICE_NUMBER))
 	{
-		InputPlayer_StopVibrating();
+		InputPlayer_StopVibrating(ip);
 	}
 
 	if (ip->_mInputDeviceNumber == -1)
 	{
-		Logger_printf("Input device set for Player #%d, Device #%d", (ip->_mPlayerNumber + 1), newDeviceNumber);
+		//TODO C99 OeLogger_LogInformation("Input device set for Player #" + std_to_string((_mPlayerNumber + 1)) + ", Device #" + std_to_string((newDeviceNumber)));
 	}
 
 	ip->_mInputDeviceNumber = newDeviceNumber;
 }
+void InputPlayer_SetVibration(InputPlayer* ip, float leftMotor, float rightMotor)
+{
+	if (GameUpdater_IsDebugAutoSpeedOn() || Cvars_GetAsBool(CVARS_USER_IS_RUMBLE_DISABLED) || !InputPlayer_IsUsingController(ip))
+	{
+		return;
+	}
+
+	ControllerState* controller = InputPlayer_GetController(ip);
+	ControllerState_SetVibration(controller, leftMotor, rightMotor);
+}
+void InputPlayer_StopVibrating(InputPlayer* ip)
+{
+	if (!InputPlayer_IsUsingController(ip))
+	{
+		return;
+	}
+
+	ControllerState* controller = InputPlayer_GetController(ip);
+	ControllerState_SetVibration(controller, 0, 0);
+}
+
+void InputPlayer_Init(InputPlayer* ip, int number)
+{
+	Utils_memset(ip, 0, sizeof(InputPlayer));
+
+	ip->_mPlayerNumber = number;
+	//ip->_mIsBlockedForPlayerSelect = 0;
+	ip->_mInputDeviceNumber = -1;
+	//ip->_mCounterRumble = 0;
+	ip->_mRumblePriority = -1;
+	//ip->_mRumbleLeftMotor = 0;
+	//ip->_mRumbleRightMotor = 0;
+	//ip->_mActions = std_vector<InputAction>(OeActionList_GetArray().size());
+	for (int i = 0; i < ACTIONLIST_LENGTH; i += 1)
+	{
+		InputAction* currentAction = &ip->_mActions[i];
+		InputAction_Init(ActionList_GetAction(i), currentAction);
+	}
+}
+
 InputAction* InputPlayer_GetActionsForBindingsSync(InputPlayer* ip)
 {
-
+	return ip->_mActions;
 }
 int32_t InputPlayer_GetActionsLength(InputPlayer* ip)
 {
-	return ACTION_LIST_LENGTH;
+	return ACTIONLIST_LENGTH;
 }
 void InputPlayer_DetectInputDevice(InputPlayer* ip, bool isOnRelease)
 {
+	bool isKeyboardUsed;
+	if (isOnRelease)
+	{
+		isKeyboardUsed = KeyboardState_IsAnyKeyReleased() || MouseState_IsAnyButtonReleased();
+	}
+	else
+	{
+		isKeyboardUsed = KeyboardState_IsAnyKeyTapped() || MouseState_IsAnyButtonTapped();
+	}
+	if (isKeyboardUsed)
+	{
+		if (!Input_IsAnyPlayerUsingThisDeviceNumber(INPUTPLAYER_KEYBOARD_DEVICE_NUMBER))
+		{
+			InputPlayer_SetInputDevice(ip, INPUTPLAYER_KEYBOARD_DEVICE_NUMBER);
+			return;
+		}
+	}
 
+	int controllerNumber;
+	if (isOnRelease)
+	{
+		controllerNumber = ControllerStates_GetControllerNumberIfAnyButtonReleased();
+	}
+	else
+	{
+		controllerNumber = ControllerStates_GetControllerNumberIfAnyButtonTapped();
+	}
+	if (controllerNumber != -1)
+	{
+		if (!Input_IsAnyPlayerUsingThisDeviceNumber(controllerNumber))
+		{
+			InputPlayer_SetInputDevice(ip, controllerNumber);
+			return;
+		}
+	}
 }
 int InputPlayer_GetDeviceNumber(InputPlayer* ip)
 {
-
+	return ip->_mInputDeviceNumber;
 }
 bool InputPlayer_IsInputDeviceSet(InputPlayer* ip)
 {
-
+	return ip->_mInputDeviceNumber != -1;
 }
 void InputPlayer_RemoveInputDevice(InputPlayer* ip)
 {
+	if (ip->_mInputDeviceNumber == -1)
+	{
+		return;
+	}
 
+	//TODO C99 Logger_LogInformation("Input device removed for Player #" + std_to_string(_mPlayerNumber + 1) + ", Device #" + std_to_string(_mInputDeviceNumber));
+	InputPlayer_SetInputDevice(ip, -1);
 }
 bool InputPlayer_IsUsingController(InputPlayer* ip)
 {
-
+	if ((ip->_mInputDeviceNumber == -1) || (ip->_mInputDeviceNumber == INPUTPLAYER_KEYBOARD_DEVICE_NUMBER))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 bool InputPlayer_IsUsingKeyboard(InputPlayer* ip)
 {
-
+	return (ip->_mInputDeviceNumber == INPUTPLAYER_KEYBOARD_DEVICE_NUMBER);
 }
 void InputPlayer_ClearInput(InputPlayer* ip)
 {
-
+	InputAction* currentActions = InputPlayer_GetCurrentActions(ip);
+	for (int i = 0; i < ACTIONLIST_LENGTH; i++)
+	{
+		InputAction_ClearPolledInput(&currentActions[i]);
+	}
 }
 bool InputPlayer_IsPlayerPressingAnything(InputPlayer* ip)
 {
-
+	InputAction* currentActions = InputPlayer_GetCurrentActions(ip);
+	for (int i = 0; i < ACTIONLIST_LENGTH; i++)
+	{
+		InputAction* action = &currentActions[i];
+		for (int j = 0; j < INPUTCHECKS_LENGTH; j++)
+		{
+			if (action->mIsPressed)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
 }
 void InputPlayer_SetBlockMenuInput(InputPlayer* ip, int value)
 {
-
+	ip->_mIsBlockedForPlayerSelect = value;
 }
 void InputPlayer_Update(InputPlayer* ip)
 {
+	InputAction* currentActions = InputPlayer_GetCurrentActions(ip);
+	for (int i = 0; i < ACTIONLIST_LENGTH; i++)
+	{
+		InputAction_Update(&currentActions[i], ip);
+	}
 
+	if (ip->_mCounterRumble > 0)
+	{
+		ip->_mCounterRumble--;
+
+		if (ip->_mCounterRumble <= 0)
+		{
+			InputPlayer_StopVibrating(ip);
+			ip->_mCounterRumble = 0;
+			ip->_mRumblePriority = -1;
+		}
+		else
+		{
+			InputPlayer_SetVibration(ip, ip->_mRumbleLeftMotor, ip->_mRumbleRightMotor);
+		}
+	}
+
+	if (ip->_mIsBlockedForPlayerSelect != INPUTPLAYER_BLOCK_MENU_INPUT_OFF)
+	{
+		InputAction_ClearPolledInput(InputPlayer_GetAction(ip, ACTIONLIST_GAME_MENU_UP));
+		InputAction_ClearPolledInput(InputPlayer_GetAction(ip, ACTIONLIST_GAME_MENU_RIGHT));
+		InputAction_ClearPolledInput(InputPlayer_GetAction(ip, ACTIONLIST_GAME_MENU_DOWN));
+		InputAction_ClearPolledInput(InputPlayer_GetAction(ip, ACTIONLIST_GAME_MENU_LEFT));
+		InputAction_ClearPolledInput(InputPlayer_GetAction(ip, ACTIONLIST_GAME_MENU_SELECT));
+		if (ip->_mIsBlockedForPlayerSelect == INPUTPLAYER_BLOCK_MENU_INPUT_ALL)
+		{
+			InputAction_ClearPolledInput(InputPlayer_GetAction(ip, ACTIONLIST_GAME_MENU_BACK));
+		}
+	}
 }
 InputAction* InputPlayer_GetAction(InputPlayer* ip, const char* name)
 {
-
+	return InputBindings_GetActionFromArray(InputPlayer_GetCurrentActions(ip), name);
 }
 ControllerState* InputPlayer_GetController(InputPlayer* ip)
 {
-
+	return Input_GetController(ip->_mInputDeviceNumber);
 }
 void InputPlayer_Vibrate(InputPlayer* ip, int priority, int frames, float leftMotor, float rightMotor)
 {
+#ifdef DEBUG_DEF_DISABLE_RUMBLE
+	return;
+#endif
 
+	if (GameUpdater_IsDebugAutoSpeedOn() || Cvars_GetAsBool(CVARS_USER_IS_RUMBLE_DISABLED) || !InputPlayer_IsUsingController(ip)
+		|| (priority < ip->_mRumblePriority) || GameState_IsRewinding(GameStateManager_GetGameState()))
+	{
+		return;
+}
+
+	InputPlayer_SetVibration(ip, leftMotor, rightMotor);
+	ip->_mRumblePriority = priority;
+	ip->_mCounterRumble = frames;
+	ip->_mRumbleLeftMotor = leftMotor;
+	ip->_mRumbleRightMotor = rightMotor;
 }
 bool InputPlayer_MyControllerLostConnection(InputPlayer* ip)
 {
+	if (!InputPlayer_IsUsingController(ip))
+	{
+		return false;
+	}
 
+	ControllerState* controller = InputPlayer_GetController(ip);
+	if (ControllerState_ControllerConnectionWasLost(controller))
+	{
+		return true;
+	}
+
+	return false;
 }
 #if EDITOR
-//void DebugSetDevice(int deviceNumber);
+void InputPlayer_DebugSetDevice(int deviceNumber)
+{
+	_mInputDeviceNumber = deviceNumber;
+}
 #endif

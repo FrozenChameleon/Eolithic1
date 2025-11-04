@@ -33,11 +33,11 @@ enum
 	INPUT_ACTION_DOUBLE_TAP_LENGTH = 12
 };
 
-static void ClearPolledInput(InputAction* action);
-static void Init(const char* name, InputAction* action);
+void InputAction_ClearPolledInput(InputAction* action);
+void InputAction_Init(const char* name, InputAction* action);
 //static void Write(InputAction* action, const std::string& begin, std::shared_ptr<OeIniWriter> writer);
 //static void Read(InputAction* action, const std::string& begin, std::shared_ptr<OeIniReader> reader);
-static void Update(InputAction* action, InputPlayer* input);
+void InputAction_Update(InputAction* action, InputPlayer* input);
 //static void DrawCurrentGlyph(InputAction* action, OeSpriteBatch* spriteBatch, int depth, const std::string& font,
 //	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);
 //static void DrawCurrentGlyph(InputAction* action, OeSpriteBatch* spriteBatch, int depth, const std::string& font,

@@ -7,6 +7,7 @@
 //class OeIniWriter;
 //class OeIniReader;
 
+void GameSaveManager_Init();
 void* GameSaveManager_GetCurrentSaveData();
 void GameSaveManager_ResetSaveData();
 void GameSaveManager_Save();

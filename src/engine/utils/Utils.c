@@ -320,3 +320,8 @@ bool Utils_StringContains(const char* str, const char* containsThis)
 	//TODO C99
 	return false;
 }
+bool Utils_StringEndsWith(const char* str, const char* endsWithThis)
+{
+	//TODO C99
+	return false;
+}

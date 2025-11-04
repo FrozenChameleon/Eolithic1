@@ -17,7 +17,7 @@ typedef struct PlayerBindingData
 {
 	int32_t _mPlayerNumber;
 	bool _mHasLoaded;
-	InputAction _mBindings[ACTION_LIST_LENGTH];
+	InputAction _mBindings[ACTIONLIST_LENGTH];
 } PlayerBindingData;
 
 void PlayerBindingData_Init(int playerNumber);

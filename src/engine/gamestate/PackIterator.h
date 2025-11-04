@@ -5,6 +5,7 @@
 typedef struct PackIterator
 {
 	Entity mEntity;
+	void* mComponent;
 	int32_t mIndex;
 	int32_t mSeekPosition;
 } PackIterator;

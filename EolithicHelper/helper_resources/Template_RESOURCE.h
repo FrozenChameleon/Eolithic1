@@ -20,6 +20,6 @@ const char* %strResourceManager%_GetDatFileName();
 void %strResourceManager%_LoadAllFromDat();
 void %strResourceManager%_Dispose(const char* filenameWithoutExtension);
 void %strResourceManager%_DisposeAll();
-int %strResourceManager%_Length();
+int64_t %strResourceManager%_Length();
 Resource* %strResourceManager%_GetResourceByIndex(int index);
 %strResource%* %strResourceManager%_GetResourceDataByIndex(int index);

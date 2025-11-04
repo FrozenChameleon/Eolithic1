@@ -14,6 +14,7 @@
 #include "stdbool.h"
 
 typedef struct SpriteBatch SpriteBatch;
+typedef struct BufferReader BufferReader;
 
 typedef struct Line
 {
@@ -48,7 +49,7 @@ Point Line_GetRealPoint(Point point);
 Point Line_GetRealBegin(Line* line);
 Point Line_GetRealEnd(Line* line);
 //void Write(Line* line, std::shared_ptr<OeIniWriter> writer);
-//void Read(int version, Line* line, std::shared_ptr<OeIniReader> reader);
+void Line_Read(int version, Line* line, BufferReader* reader);
 Rectangle Line_GetTouchBounds(Line* line, int inflation);
 //std::string ToString();
 

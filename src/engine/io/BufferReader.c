@@ -111,6 +111,19 @@ double BufferReader_ReadDouble(BufferReader* br)
 	Utils_memcpy(&dst, &source, sizeof(double));
 	return dst;
 }
+int* BufferReader_ReadIntArray2D(BufferReader* br, int width, int height)
+{
+	int totalArrayLen = (width * height);
+	int* readToThis = Utils_malloc(totalArrayLen * sizeof(int));
+	for (int i = 0; i < width; i += 1)
+	{
+		for (int j = 0; j < height; j += 1)
+		{
+			readToThis[i + (j * width)] = BufferReader_ReadI32(br);
+		}
+	}
+	return readToThis;
+}
 uint8_t BufferReader_ReadJustTheStringLength(BufferReader* br)
 {
 	return BufferReader_ReadU8(br);
@@ -141,7 +154,7 @@ MString* BufferReader_ReadStringToMString(BufferReader* br)
 	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
 	int32_t newStrCapacity = newStringLength + 1;
 	MString* strToReturn = MString_CreateEmpty(newStrCapacity);
-	BufferReader_ReadJustTheStringData(br, newStringLength, strToReturn->text, newStrCapacity);
+	BufferReader_ReadJustTheStringData(br, newStringLength, MString_Text(strToReturn), newStrCapacity);
 	return strToReturn;
 }
 bool BufferReader_HasNext(BufferReader* br)

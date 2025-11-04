@@ -718,7 +718,7 @@ void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, in
 static void LoadShader(Effect* effect, const char* shaderName)
 {
 	MString* path = File_Combine3(File_GetBasePath(), "data", shaderName);
-	SDL_IOStream* effectFile = SDL_IOFromFile(path->text, "rb");
+	SDL_IOStream* effectFile = SDL_IOFromFile(MString_Text(path), "rb");
 	MString_Dispose(path);
 
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_END);

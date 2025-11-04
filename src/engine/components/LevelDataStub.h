@@ -1,6 +1,8 @@
 #pragma once
 
+#include "../utils/MString.h"
+
 typedef struct LevelDataStub
 {
-	const char* mLevelName;
+	MString* mLevelName;
 } LevelDataStub;

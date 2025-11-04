@@ -15,6 +15,7 @@
 #include "../utils/Utils.h"
 #include "../math/Math.h"
 #include "../../GlobalDefs.h"
+#include "../io/BufferReader.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -238,34 +239,34 @@ Point Line_GetRealEnd(Line* line)
 	writer->WriteBoolean(line->mOneWayLeft);
 	writer->WriteInt32(line->mOverrideSpeedFromPlayer);
 	writer->WriteInt32(line->mOverrideSpeedFromMinecart);
-}
-void Line_Read(int version, Line* line, std_shared_ptr<OeIniReader> reader)
+}*/
+void Line_Read(int version, Line* line, BufferReader* reader)
 {
-	OePoints_Read(&line->mBegin, reader);
-	OePoints_Read(&line->mEnd, reader);
-	line->mEnterDownOnly = reader->ReadBoolean();
-	line->mEnterLeftOnly = reader->ReadBoolean();
-	line->mEnterUpOnly = reader->ReadBoolean();
-	line->mEnterRightOnly = reader->ReadBoolean();
-	line->mIsGap = reader->ReadBoolean();
+	Points_Read(&line->mBegin, reader);
+	Points_Read(&line->mEnd, reader);
+	line->mEnterDownOnly = BufferReader_ReadBoolean(reader);
+	line->mEnterLeftOnly = BufferReader_ReadBoolean(reader);
+	line->mEnterUpOnly = BufferReader_ReadBoolean(reader);
+	line->mEnterRightOnly = BufferReader_ReadBoolean(reader);
+	line->mIsGap = BufferReader_ReadBoolean(reader);
 	if (version >= 6)
 	{
-		line->mIsFirstLine = reader->ReadBoolean();
-		line->mIsLastLine = reader->ReadBoolean();
+		line->mIsFirstLine = BufferReader_ReadBoolean(reader);
+		line->mIsLastLine = BufferReader_ReadBoolean(reader);
 	}
 	if (version >= 7)
 	{
-		line->mOneWayUp = reader->ReadBoolean();
-		line->mOneWayRight = reader->ReadBoolean();
-		line->mOneWayDown = reader->ReadBoolean();
-		line->mOneWayLeft = reader->ReadBoolean();
+		line->mOneWayUp = BufferReader_ReadBoolean(reader);
+		line->mOneWayRight = BufferReader_ReadBoolean(reader);
+		line->mOneWayDown = BufferReader_ReadBoolean(reader);
+		line->mOneWayLeft = BufferReader_ReadBoolean(reader);
 	}
 	if (version >= 8)
 	{
-		line->mOverrideSpeedFromPlayer = reader->ReadInt32();
-		line->mOverrideSpeedFromMinecart = reader->ReadInt32();
+		line->mOverrideSpeedFromPlayer = BufferReader_ReadI32(reader);
+		line->mOverrideSpeedFromMinecart = BufferReader_ReadI32(reader);
 	}
-}*/
+}
 Rectangle Line_GetTouchBounds(Line* line, int inflation)
 {
 	Rectangle rect = PointRectangle_GetRectanglePoint(Line_GetRealBegin(line), Line_GetRealEnd(line));

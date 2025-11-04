@@ -6,7 +6,7 @@
 
 #pragma once
 
-#define ACTION_LIST_LENGTH 30
+#define ACTIONLIST_LENGTH 30
 
 const char* ActionList_GetAction(int index);
 

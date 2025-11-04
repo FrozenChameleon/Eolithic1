@@ -16,6 +16,19 @@
 static void* _mData;
 static bool _mWasDataJustLoaded;
 static bool _mHasLoaded;
+static bool _mHasInit;
+
+void GameSaveManager_Init()
+{
+	if (_mHasInit)
+	{
+		return;
+	}
+
+	_mData = GameHelper_CreateGameSaveData();
+
+	_mHasInit = true;
+}
 
 //private
 /*
@@ -28,7 +41,7 @@ static std_shared_ptr<OeFixedByteBuffer> CreateBufferFromSaveData()
 */
 void* GameSaveManager_GetCurrentSaveData()
 {
-	return &_mData;
+	return _mData;
 }
 void GameSaveManager_ResetSaveData()
 {

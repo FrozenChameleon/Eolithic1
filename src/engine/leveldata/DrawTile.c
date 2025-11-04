@@ -86,7 +86,7 @@ Point DrawTile_GetCorrectPoint(DrawTile* drawTile)
 }
 bool DrawTile_IsZero(DrawTile* drawTile)
 {
-	if (MString_EqualToChar(drawTile->mAnimation, "") &&
+	if (MString_EqualToString(drawTile->mAnimation, "") &&
 		(drawTile->mPoint.X == -1) &&
 		(drawTile->mPoint.Y == -1))
 	{
@@ -96,7 +96,7 @@ bool DrawTile_IsZero(DrawTile* drawTile)
 }
 bool DrawTile_IsAnimation(DrawTile* drawTile)
 {
-	if (MString_EqualToChar(drawTile->mAnimation, ""))
+	if (MString_EqualToString(drawTile->mAnimation, ""))
 	{
 		return false;
 	}

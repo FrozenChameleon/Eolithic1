@@ -178,7 +178,7 @@ bool Has_Players()
 }
 Entity Get_FirstPlayer()
 {
-	return Get_Player(0);
+	return Get_Player2(0);
 }
 Entity Get_Player()
 {
@@ -2703,18 +2703,15 @@ GameState* Get_ActiveGameState()
 }
 LevelData* Get_LevelData()
 {
-	return NULL;
-	//return OeGameHelper_GetLevelData();
+	return GameHelper_GetLevelData();
 }
 Resource* Get_LevelDataResource()
 {
-	return NULL;
-	//return OeGameHelper_GetLevelDataResource();
+	return GameHelper_GetLevelDataResource();
 }
 const char* Get_LevelFileName()
 {
-	return NULL;
-	//TODOreturn Get_LevelDataResource()->GetName();
+	return Get_LevelDataResource()->mFileNameWithoutExtension;
 }
 Rectangle Get_BodyRectangle(Entity entity)
 {
