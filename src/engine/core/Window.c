@@ -240,8 +240,8 @@ void Window_LoadIcon()
 	const char* gameName = Cvars_Get(CVARS_ENGINE_NAME);
 	MString* sharedPath = File_Combine2(File_GetBasePath(), gameName);
 	MString_AddAssignString(&sharedPath, ".bmp");
-	SDL_Surface* icon = SDL_LoadBMP(MString_Text(sharedPath));
-	MString_Dispose(sharedPath);
+	SDL_Surface* icon = SDL_LoadBMP(MString_GetText(sharedPath));
+	MString_Dispose(&sharedPath);
 
 	if (icon == NULL)
 	{

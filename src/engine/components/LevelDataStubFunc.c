@@ -8,5 +8,5 @@ LevelData* LevelDataStubFunc_GetLevelData(const LevelDataStub* data)
 }
 Resource* LevelDataStubFunc_GetLevelDataResource(const LevelDataStub* data)
 {
-	return LevelDataManager_GetResource(MString_Text(data->mLevelName));
+	return LevelDataManager_GetResource(MString_GetText(data->mLevelName));
 }

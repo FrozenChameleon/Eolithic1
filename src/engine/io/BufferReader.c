@@ -149,12 +149,13 @@ void BufferReader_ReadString(BufferReader* br, char* dst, size_t maxlen)
 	uint8_t stringLength = BufferReader_ReadJustTheStringLength(br);
 	BufferReader_ReadJustTheStringData(br, stringLength, dst, maxlen);
 }
-MString* BufferReader_ReadStringToMString(BufferReader* br)
+MString* BufferReader_ReadMString(BufferReader* br)
 {
 	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
 	int32_t newStrCapacity = newStringLength + 1;
-	MString* strToReturn = MString_CreateEmpty(newStrCapacity);
-	BufferReader_ReadJustTheStringData(br, newStringLength, MString_Text(strToReturn), newStrCapacity);
+	MString* strToReturn = NULL;
+	MString_AssignEmpty(&strToReturn, newStrCapacity);
+	BufferReader_ReadJustTheStringData(br, newStringLength, MString_GetText(strToReturn), newStrCapacity);
 	return strToReturn;
 }
 bool BufferReader_HasNext(BufferReader* br)

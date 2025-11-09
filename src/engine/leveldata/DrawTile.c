@@ -32,7 +32,7 @@ void DrawTile_Write(DrawTile* drawTile, BufferWriter* writer)
 }
 void DrawTile_Read(DrawTile* drawTile, int version, BufferReader* reader)
 {
-	drawTile->mAnimation = BufferReader_ReadStringToMString(reader);
+	drawTile->mAnimation = BufferReader_ReadMString(reader);
 	Points_Read(&drawTile->mPoint, reader);
 	drawTile->mFlipX = BufferReader_ReadBoolean(reader);
 	drawTile->mFlipY = BufferReader_ReadBoolean(reader);

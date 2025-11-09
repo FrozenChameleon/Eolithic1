@@ -26,6 +26,10 @@ enum ServicePlatform
 	PLATFORM_N = 3
 };
 
+void Service_LeaderboardGoLeft();
+void Service_LeaderboardGoRight();
+bool Service_SignIn(bool whatever1, bool whatever2);
+bool Service_IsSigningIn();
 bool Service_PlatformForcesControllerOnPressStartScreen();
 bool Service_PlatformForcesControllerGlyphs();
 bool Service_PlatformForcesRelyOnVsync();

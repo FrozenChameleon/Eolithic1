@@ -15,10 +15,10 @@ void AnimTile_Read(AnimTile* atile, BufferReader* br)
 	atile->mIsFlipY = BufferReader_ReadBoolean(br);
 	atile->mFlipSpeed = BufferReader_ReadI32(br);
 	atile->mRotation = BufferReader_ReadFloat(br);
-	atile->mTextureName = BufferReader_ReadStringToMString(br);
-	atile->mTilesetFilter = BufferReader_ReadStringToMString(br);
+	atile->mTextureName = BufferReader_ReadMString(br);
+	atile->mTilesetFilter = BufferReader_ReadMString(br);
 	atile->mIsWrap = BufferReader_ReadBoolean(br);
-	atile->mWrapTextureName = BufferReader_ReadStringToMString(br);
+	atile->mWrapTextureName = BufferReader_ReadMString(br);
 	atile->mIsWrapX = BufferReader_ReadBoolean(br);
 	atile->mWrapSpeedX = BufferReader_ReadI32(br);
 	atile->mIsWrapY = BufferReader_ReadBoolean(br);
@@ -28,8 +28,7 @@ void AnimTile_Read(AnimTile* atile, BufferReader* br)
 
 AnimTile* AnimTile_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	AnimTile* animTile = Utils_malloc(sizeof(AnimTile));
-	Utils_memset(animTile, 0, sizeof(AnimTile));
+	AnimTile* animTile = Utils_calloc(1, sizeof(AnimTile));
 	AnimTile_Read(animTile, br);
 	return animTile;
 }

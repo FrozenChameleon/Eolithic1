@@ -10,6 +10,6 @@
 
 void StringPair_Read(StringPair* pair, BufferReader* reader)
 {
-	pair->mKey = BufferReader_ReadStringToMString(reader);
-	pair->mValue = BufferReader_ReadStringToMString(reader);
+	pair->mKey = BufferReader_ReadMString(reader);
+	pair->mValue = BufferReader_ReadMString(reader);
 }

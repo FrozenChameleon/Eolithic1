@@ -109,7 +109,7 @@ void ThingInstance_Read(ThingInstance* ti, int version, BufferReader* reader)
 	{
 		BufferReader_ReadI32(reader); //Unused - Thing Instance ID
 	}
-	ti->mName = BufferReader_ReadStringToMString(reader);
+	ti->mName = BufferReader_ReadMString(reader);
 	BufferReader_ReadFloat(reader); //Unused - Offset X
 	BufferReader_ReadFloat(reader); //Unused - Offset Y
 
@@ -345,7 +345,7 @@ void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color colo
 }
 const char* ThingInstance_GetName(ThingInstance* ti)
 {
-	return MString_Text(ti->mName);
+	return MString_GetText(ti->mName);
 }
 int ThingInstance_GetLeft(ThingInstance* ti, float positionX)
 {

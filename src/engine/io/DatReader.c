@@ -48,22 +48,23 @@ MString* DatReader_NextFilePath(DatReader* dr)
 {
 	for (int32_t i = 0; i < arrlen(dr->arr_last_strings); i += 1)
 	{
-		MString_Dispose(dr->arr_last_strings[i]);
+		MString_Dispose(&dr->arr_last_strings[i]);
 	}
 	arrsetlen(dr->arr_last_strings, 0);
 
 	int32_t length = BufferReader_ReadI32(dr->_mReader);
 	for (int32_t i = 0; i < length; i += 1)
 	{
-		MString* temp = BufferReader_ReadStringToMString(dr->_mReader);
+		MString* temp = BufferReader_ReadMString(dr->_mReader);
 		arrput(dr->arr_last_strings, temp);
 	}
 
-	MString* strToReturn = MString_Create("");
+	MString* strToReturn = NULL;
+	MString_Assign(&strToReturn, "");
 	int64_t len = arrlen(dr->arr_last_strings);
 	for (int i = 0; i < len; i += 1)
 	{
-		MString_AddAssignString(&strToReturn, MString_Text(dr->arr_last_strings[i]));
+		MString_AddAssignString(&strToReturn, MString_GetText(dr->arr_last_strings[i]));
 		if (i < (len - 1))
 		{
 			File_AppendPathSeparator(&strToReturn);
@@ -71,7 +72,7 @@ MString* DatReader_NextFilePath(DatReader* dr)
 	}
 
 	DatInfo* currentInfo = GetCurrentDatInfo(dr);
-	currentInfo->mPath = MString_Create(MString_Text(strToReturn));
+	MString_Assign(&currentInfo->mPath, MString_GetText(strToReturn));
 	return strToReturn;
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
@@ -115,7 +116,7 @@ DatReader* DatReader_Create(const char* path)
 	DatReader* dr = Utils_calloc(1, sizeof(DatReader));
 
 	dr->_mReader = BufferReader_CreateFromPath(path);
-	dr->_mPath = MString_Create(path);
+	MString_Assign(&dr->_mPath, path);
 	
 	int version = BufferReader_ReadI32(dr->_mReader);
 	dr->_mCount = BufferReader_ReadI32(dr->_mReader);

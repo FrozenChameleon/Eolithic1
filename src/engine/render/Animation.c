@@ -251,20 +251,22 @@ void Animation_CheckForAnimation(const char* textureName)
 		return;
 	}
 	
-	MString* baseName = MString_CreateFromSubString(sheetName, 0, nameLength - numberOfDigits); //We have our base name, time to find out how many frames there are.
+	MString* baseName = NULL;
+	MString_AssignSubString(&baseName, sheetName, 0, nameLength - numberOfDigits); //We have our base name, time to find out how many frames there are.
+
 	bool isStart = (lastDigit == '0');
 	ptrdiff_t animationInfoLen = arrlen(arr_animation_info);
 	for (int32_t i = 0; i < animationInfoLen; i += 1)
 	{
 		AnimationInfo* existingInfo = &arr_animation_info[i];
-		if (Utils_StringEqualTo(existingInfo->mBaseName, MString_Text(baseName)))
+		if (Utils_StringEqualTo(existingInfo->mBaseName, MString_GetText(baseName)))
 		{
 			if (isStart)
 			{
 				existingInfo->mHasStart = true;
 			}
 			existingInfo->mFrames += 1;
-			MString_Dispose(baseName);
+			MString_Dispose(&baseName);
 			return;
 		}
 	}
@@ -272,7 +274,7 @@ void Animation_CheckForAnimation(const char* textureName)
 	AnimationInfo newInfo = { 0 };
 	newInfo.mSheetName = IStrings_GlobalGet(sheetName);
 
-	newInfo.mBaseName = IStrings_GlobalGet(MString_Text(baseName));
+	newInfo.mBaseName = IStrings_GlobalGet(MString_GetText(baseName));
 	newInfo.mNumberOfDigits = numberOfDigits;
 	newInfo.mFrames += 1;
 	if (isStart)
@@ -281,7 +283,7 @@ void Animation_CheckForAnimation(const char* textureName)
 	}
 	arrput(arr_animation_info, newInfo);
 
-	MString_Dispose(baseName);
+	MString_Dispose(&baseName);
 }
 void Animation_BuildAnimations()
 {
@@ -327,7 +329,8 @@ void Animation_AddToAnimationMap(const char* baseName, const char* sheetName, in
 }
 void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char* baseName, int32_t frames, int32_t digits)
 {
-	MString* stringBuilder = MString_Create(baseName);
+	MString* stringBuilder = NULL;
+	MString_Assign(&stringBuilder, baseName);
 
 	for (int32_t i = 0; i < digits; i += 1)
 	{
@@ -345,17 +348,17 @@ void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char*
 			for (int32_t j = 0; j < digits; j += 1)
 			{
 				int32_t number = currentNumber / place;
-				char* stringBuilderText = MString_Text(stringBuilder);
-				int32_t stringBuilderLength = MString_Length(stringBuilder);
+				char* stringBuilderText = MString_GetText(stringBuilder);
+				int32_t stringBuilderLength = MString_GetLength(stringBuilder);
 				stringBuilderText[stringBuilderLength - digits + j] = Animation_GetNumber(number);
 				currentNumber -= number * place;
 				place /= 10;
 			}
 		} while (place != 0);
-		IStringArray_Add(listToAddTo, MString_Text(stringBuilder));
+		IStringArray_Add(listToAddTo, MString_GetText(stringBuilder));
 	}
 
-	MString_Dispose(stringBuilder);
+	MString_Dispose(&stringBuilder);
 }
 const char* Animation_GetConvertedName(const char* baseName)
 {

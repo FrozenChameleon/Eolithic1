@@ -26,6 +26,7 @@ size_t Utils_strlcpy(char* dst, const char* src, size_t maxlen);
 size_t Utils_strlcat(char* dst, const char* src, size_t maxlen);
 float Utils_ParseFloat(const char* str);
 int32_t Utils_ParseInt(const char* str);
+bool Utils_PointerEqualTo(void* ptr1, void* ptr2);
 bool Utils_StringEqualTo(const char* str1, const char* str2);
 int32_t Utils_IntToString(int32_t value, char* buffer, size_t maxlen);
 int32_t Utils_FloatToString(float value, char* buffer, size_t maxlen);

@@ -63,9 +63,9 @@ static void InitData()
 	}
 
 	_mData = Utils_calloc(60 * 60 * 60 * 3, sizeof(RecordingData)); //3 hours
-	_mDisplaySuccessCounterStr = MString_Create("");
-	_mDisplayFailureCounterStr = MString_Create("");
-	_mLastReadRecordingFilename = MString_Create("");
+	MString_Assign(&_mDisplaySuccessCounterStr, "");
+	MString_Assign(&_mDisplayFailureCounterStr, "");
+	MString_Assign(&_mLastReadRecordingFilename, "");
 	_mDisplayReadout = IStringArray_Create();
 }
 
@@ -308,18 +308,19 @@ static void ContinueReadSession(bool isFirst)
 		if (_mReaderData.mPerLevelData.mLowestFps <= threshold)
 		{
 			Logger_LogInformation("Low FPS for:");
-			Logger_LogInformation(MString_Text(_mLastReadRecordingFilename));
+			Logger_LogInformation(MString_GetText(_mLastReadRecordingFilename));
 #ifndef DEBUG_DEF_DISABLE_LOW_FPS_READOUT_IN_RECORDING_TOOL
 			if (!IsSoakTesting())
 			{
 				if (IStringArray_Length(_mDisplayReadout) < READOUT_LIMIT_FOR_LOW_FPS)
 				{
-					MString* tempString = MString_Create("Low FPS: ");
-					MString_AddAssignString(&tempString, MString_Text(_mLastReadRecordingFilename));
+					MString* tempString = NULL;
+					MString_Assign(&tempString, "Low FPS: ");
+					MString_AddAssignString(&tempString, MString_GetText(_mLastReadRecordingFilename));
 					MString_AddAssignString(&tempString, ", FPS: ");
 					MString_AddAssignInt(&tempString, _mReaderData.mPerLevelData.mLowestFps);
-					IStringArray_Add(_mDisplayReadout, MString_Text(tempString));
-					MString_Dispose(tempString);
+					IStringArray_Add(_mDisplayReadout, MString_GetText(tempString));
+					MString_Dispose(&tempString);
 				}
 			}
 #endif
@@ -327,24 +328,27 @@ static void ContinueReadSession(bool isFirst)
 		if (_mReaderData.mPerLevelData.mWasSessionSuccessCounterTicked)
 		{
 			_mDisplaySuccessCounter += 1;
-			MString* tempString = MString_Create("SUCCESS: ");
+			MString* tempString = NULL;
+			MString_Assign(&tempString, "SUCCESS: ");
 			MString_AddAssignInt(&tempString, _mDisplaySuccessCounter);
-			MString_Assign(&_mDisplaySuccessCounterStr, MString_Text(tempString));
+			MString_Assign(&_mDisplaySuccessCounterStr, MString_GetText(tempString));
 			_mReaderData.mPerLevelData.mWasSessionSuccessCounterTicked = false;
-			MString_Dispose(tempString);
+			MString_Dispose(&tempString);
 		}
 		else
 		{
 			_mDisplayFailureCounter += 1;
-			MString* tempString = MString_Create("FAILURE: ");
+			MString* tempString = NULL;
+			MString_Assign(&tempString, "FAILURE: ");
 			MString_AddAssignInt(&tempString, _mDisplayFailureCounter);
-			MString* tempString2 = MString_Create("FAIL: ");
-			MString_AddAssignString(&tempString2, MString_Text(_mLastReadRecordingFilename));
-			IStringArray_Add(_mDisplayReadout, MString_Text(tempString2));
+			MString* tempString2 = NULL;
+			MString_Assign(&tempString2, "FAIL: ");
+			MString_AddAssignString(&tempString2, MString_GetText(_mLastReadRecordingFilename));
+			IStringArray_Add(_mDisplayReadout, MString_GetText(tempString2));
 			Logger_LogInformation("Session success miss for:");
-			Logger_LogInformation(MString_Text(_mLastReadRecordingFilename));
-			MString_Dispose(tempString);
-			MString_Dispose(tempString2);
+			Logger_LogInformation(MString_GetText(_mLastReadRecordingFilename));
+			MString_Dispose(&tempString);
+			MString_Dispose(&tempString2);
 		}
 	}
 
@@ -380,15 +384,16 @@ static void ContinueReadSession(bool isFirst)
 	}
 
 	{
-		MString* tempString = MString_Create("SUCCESS:");
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "SUCCESS:");
 		MString_AddAssignInt(&tempString, _mDisplaySuccessCounter);
-		Logger_LogInformation(MString_Text(tempString));
+		Logger_LogInformation(MString_GetText(tempString));
 
 		MString_Assign(&tempString, "FAILURE:");
 		MString_AddAssignInt(&tempString, _mDisplayFailureCounter);
-		Logger_LogInformation(MString_Text(tempString));
+		Logger_LogInformation(MString_GetText(tempString));
 
-		MString_Dispose(tempString);
+		MString_Dispose(&tempString);
 	}
 
 	ResetAllData();
@@ -431,15 +436,14 @@ static void Read(const char* recordingFilenameWithoutExtension)
 	MString_Assign(&_mLastReadRecordingFilename, recordingFilenameWithoutExtension);
 	MString_AddAssignString(&_mLastReadRecordingFilename, ".bin");
 
-	MString* path = File_Combine3("data", "recordings", MString_Text(_mLastReadRecordingFilename));
-	BufferReader* br = BufferReader_CreateFromPath(MString_Text(path));
-	MString_Dispose(path);
-	path = NULL;
+	MString* path = File_Combine3("data", "recordings", MString_GetText(_mLastReadRecordingFilename));
+	BufferReader* br = BufferReader_CreateFromPath(MString_GetText(path));
+	MString_Dispose(&path);
 
 	GLOBALS_DEBUG_IS_GOD_MODE = BufferReader_ReadBoolean(br);
 	GameStateManager_SetUniqueMapSeed(BufferReader_ReadI32(br));
 	BufferReader_ReadI32(br); //TODO C99 OeTuning_SetCurrentDifficulty(BufferReader_ReadI32()); 
-	_mHeaderData.mLevelFileName = BufferReader_ReadStringToMString(br);
+	_mHeaderData.mLevelFileName = BufferReader_ReadMString(br);
 #ifndef GLOBAL_DEF_RECORDING_TOOL_DO_NOT_WRITE_SAVE_FILES
 	OeGameSaveManager_ResetAllDataAndReadAllForRecording(reader);
 #endif
@@ -553,7 +557,7 @@ static void Read(const char* recordingFilenameWithoutExtension)
 
 const char* RecordingTool_GetCurrentRecordingName()
 {
-	return MString_Text(_mLastReadRecordingFilename);
+	return MString_GetText(_mLastReadRecordingFilename);
 }
 bool RecordingTool_IsFromArgumentsPlaybackEnabled()
 {
@@ -735,7 +739,7 @@ void RecordingTool_SetupWriteSession(int priority, const char* mapToLoad)
 		return;
 	}
 
-	if (mapToLoad == "777") //Press start screen
+	if (Utils_StringEqualTo(mapToLoad, "777")) //Press start screen
 	{
 		return;
 	}
@@ -810,10 +814,10 @@ bool RecordingTool_LoadNextRecordingIfAtEndOfRecording(bool isMapLoad)
 
 	_mToolState = TOOL_STATE_READING;
 	Read(_mReaderData.mCurrentRecording);
-	GameStateManager_LoadMap(MString_Text(_mHeaderData.mLevelFileName));
+	GameStateManager_LoadMap(MString_GetText(_mHeaderData.mLevelFileName));
 	_mReaderData.mIsReadyForNext = false;
 	Logger_LogInformation("Reading recording has begun for:");
-	Logger_LogInformation(MString_Text(_mHeaderData.mLevelFileName));
+	Logger_LogInformation(MString_GetText(_mHeaderData.mLevelFileName));
 	return true;
 }
 void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int priority, bool goFast)
@@ -877,9 +881,10 @@ void RecordingTool_TickReadSessionSuccessCounter(int successNumber)
 {
 	if (_mToolState == TOOL_STATE_READING)
 	{
-		MString* tempString = MString_Create("Given success number is ");
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "Given success number is ");
 		MString_AddAssignInt(&tempString, successNumber);
-		Logger_LogInformation(MString_Text(tempString));
+		Logger_LogInformation(MString_GetText(tempString));
 
 		MString_Assign(&tempString, "Given success number is ");
 		MString_AddAssignInt(&tempString, _mHeaderData.mSuccessNumber);
@@ -893,7 +898,7 @@ void RecordingTool_TickReadSessionSuccessCounter(int successNumber)
 			Logger_LogInformation("Success number mismatch");
 		}
 
-		MString_Dispose(tempString);
+		MString_Dispose(&tempString);
 	}
 	else if (_mToolState == TOOL_STATE_WRITING)
 	{

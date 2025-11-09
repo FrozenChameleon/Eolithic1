@@ -28,7 +28,7 @@ static Prop* GetThePropData(PropInstance* prop)
 {
 	if (prop->INTERNAL_mCachedPropData == NULL)
 	{
-		prop->INTERNAL_mCachedPropData = PropManager_GetResourceData(MString_Text(prop->mName));
+		prop->INTERNAL_mCachedPropData = PropManager_GetResourceData(MString_GetText(prop->mName));
 	}
 
 	return prop->INTERNAL_mCachedPropData;
@@ -66,7 +66,7 @@ void PropInstance_Read(PropInstance* prop, int version, BufferReader* reader)
 	prop->mDrawOffset.Y = BufferReader_ReadFloat(reader);
 	prop->mFlipX = BufferReader_ReadBoolean(reader);
 	prop->mFlipY = BufferReader_ReadBoolean(reader);
-	prop->mName = BufferReader_ReadStringToMString(reader);
+	prop->mName = BufferReader_ReadMString(reader);
 }
 void PropInstance_Draw(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position)
 {
@@ -122,6 +122,7 @@ bool PropInstance_IsPropValid(PropInstance* prop)
 
 Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position)
 {
+	return Rectangle_Empty;
 	/*Prop* propData = GetThePropData(prop);
 
 	Sheet* propSheet;
@@ -194,7 +195,7 @@ bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
 	}
 	return false;*/
 }
-bool PropInstance_IsEqualTo(PropInstance* instance)
+bool PropInstance_IsEqualTo(PropInstance* prop, PropInstance* instance)
 {
 	return false;
 	/*if (instance->mOffset == mOffset && instance->mScale == mScale && instance->mDepth == mDepth &&

@@ -32,6 +32,7 @@
 #include "../resources/SoundEffectManager.h"
 #include "../resources/TextureManager.h"
 #include "../resources/TextureOffsetManager.h"
+#include "../resources/ThingSettingsManager.h"
 
 enum
 {
@@ -167,6 +168,7 @@ static bool LoadResources()
 	SoundEffectManager_LoadAllFromDat();
 	TextureManager_LoadAllFromDat();
 	TextureOffsetManager_LoadAllFromDat();
+	ThingSettingsManager_LoadAllFromDat();
 	return true;
 }
 static bool LoadAfterResources()

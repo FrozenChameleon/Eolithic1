@@ -62,6 +62,7 @@
 //#include "../gamesave/GameSaveManager.h"
 #include "../core/GameHelper.h"
 //#include "../utils/Tuning.h"
+#include "../leveldata/LevelData.h"
 #include "../globals/Directions.h"
 //#include "../leveldata/ThingSettings.h"
 //#include "../resources/ResourceManagers.h"
@@ -70,6 +71,7 @@
 #include "../gamestate/GameStateManager.h"
 #include "float.h"
 #include "../utils/Logger.h"
+#include "../../third_party/stb_ds.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -456,31 +458,33 @@ void Do_SetCompleteCameraDataToPermanentlyComplete()
 
 Vector2 Do_FindThingPositionInTileData(const char* name)
 {
-	return Vector2_Zero;
-	/*
-	OeLevelData* levelData = Get_LevelData();
-	int x2 = levelData->GetGridSizeWidth();
-	int y2 = levelData->GetGridSizeHeight();
-	for (int i = 0; i < x2; i++)
+	LevelData* levelData = Get_LevelData();
+	int x2 = LevelData_GetGridSizeWidth(levelData);
+	int y2 = LevelData_GetGridSizeHeight(levelData);
+	for (int i = 0; i < x2; i += 1)
 	{
-		for (int j = 0; j < y2; j++)
+		for (int j = 0; j < y2; j += 1)
 		{
-			std_vector<ThingInstance>& dataArray = levelData->GetTile(i, j)->mInstances;
-			for (int k = 0; k < dataArray.size(); k++)
+			Tile* tile = LevelData_GetTile(levelData, i, j);
+			ThingInstance* the_arr_instances = tile->arr_instances;
+			for (int k = 0; k < arrlen(the_arr_instances); k += 1)
 			{
-				ThingInstance* data = &dataArray[k];
-				if (data != NULL)
+				ThingInstance* thingInstance = &the_arr_instances[k];
+				if (thingInstance == NULL)
 				{
-					if (data->GetName() == name)
-					{
-						return Vector2(i * TILE_SIZE + HALF_TILE_SIZE, j * TILE_SIZE + HALF_TILE_SIZE);
-					}
+					continue;
+				}
+
+				const char* thingInstanceName = ThingInstance_GetName(thingInstance);
+				if (Utils_StringEqualTo(thingInstanceName, name))
+				{
+					return Vector2_Create(i * TILE_SIZE + HALF_TILE_SIZE, j * TILE_SIZE + HALF_TILE_SIZE);
 				}
 			}
 		}
 	}
+
 	return Vectors_NegativeOne;
-	*/
 }
 
 void Do_InitAllPermanentThings()

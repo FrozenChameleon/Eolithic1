@@ -81,13 +81,13 @@ void LevelData_ReadHeader(LevelData* ld, BufferReader* reader)
 
 	ld->_mIsMetaMap = BufferReader_ReadBoolean(reader); // <- Add these two to CometStriker/Mute Crimson+ for parity
 
-	ld->mLevelName = BufferReader_ReadStringToMString(reader);
-	ld->mTilesetName = BufferReader_ReadStringToMString(reader);
+	ld->mLevelName = BufferReader_ReadMString(reader);
+	ld->mTilesetName = BufferReader_ReadMString(reader);
 
 	int customDataSize = BufferReader_ReadI32(reader);
 	for (int i = 0; i < customDataSize; i++)
 	{
-		ld->mStringData[i] = BufferReader_ReadStringToMString(reader);
+		ld->mStringData[i] = BufferReader_ReadMString(reader);
 	}
 
 	BufferReader_ReadFloat(reader); //Unused - Player Position X
@@ -231,4 +231,25 @@ int LevelData_GetRealSizeY(LevelData* ld)
 int LevelData_GetTilePos1D(LevelData* ld, int i, int j)
 {
 	return i + (j * ld->_mGridSize.Width);
+}
+Tile* LevelData_GetTile(LevelData* ld, int x, int y)
+{
+	if (!LevelData_IsSafe(ld, x, y))
+	{
+		return NULL;
+	}
+
+	return ld->mTileData[LevelData_GetTilePos1D(ld, x, y)];
+}
+Tile* LevelData_GetTilePoint(LevelData* ld, Point p)
+{
+	return LevelData_GetTile(ld, p.X, p.Y);
+}
+bool LevelData_IsSafe(LevelData* ld, int x, int y)
+{
+	if ((x < 0) || (y < 0) || (x >= ld->_mGridSize.Width) || (y >= ld->_mGridSize.Height))
+	{
+		return false;
+	}
+	return true;
 }

@@ -26,8 +26,8 @@ static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 FixedByteBuffer* File_ReadAll(const char* path)
 {
 	MString* sharedStringBuffer = File_Combine2(File_GetBasePath(), path);
-	SDL_IOStream* rwops = SDL_IOFromFile(MString_Text(sharedStringBuffer), "rb");
-	MString_Dispose(sharedStringBuffer);
+	SDL_IOStream* rwops = SDL_IOFromFile(MString_GetText(sharedStringBuffer), "rb");
+	MString_Dispose(&sharedStringBuffer);
 	if (rwops == NULL)
 	{
 		return NULL;
@@ -45,8 +45,8 @@ FixedByteBuffer* File_ReadAll(const char* path)
 bool File_Exists(const char* path)
 {
 	MString* sharedStringBuffer = File_Combine2(File_GetBasePath(), path);
-	SDL_IOStream* file = SDL_IOFromFile(MString_Text(sharedStringBuffer), "r");
-	MString_Dispose(sharedStringBuffer);
+	SDL_IOStream* file = SDL_IOFromFile(MString_GetText(sharedStringBuffer), "r");
+	MString_Dispose(&sharedStringBuffer);
 	if (file != NULL)
 	{
 		SDL_CloseIO(file);
@@ -89,8 +89,9 @@ static MString* File_GetFileNameHelper(const char* path, bool removeTheExtension
 		return NULL;
 	}
 
-	MString* returnStr = MString_CreateEmpty(len + 1);
-	char* returnStrText = MString_Text(returnStr);
+	MString* returnStr = NULL;
+	MString_AssignEmpty(&returnStr, len + 1);
+	char* returnStrText = MString_GetText(returnStr);
 
 	int32_t counter = 0;
 	for (int i = (loc + 1); i < len; i += 1)
@@ -174,7 +175,8 @@ static void CombineHelper(MString** str, const char* addedPath)
 }
 MString* File_Combine2(const char* path1, const char* path2)
 {
-	MString* str = MString_Create(path1);
+	MString* str = NULL;
+	MString_Assign(&str, path1);
 	CombineHelper(&str, path2);
 	return str;
 }

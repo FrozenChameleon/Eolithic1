@@ -19,34 +19,8 @@ static void ClearTempBuffer()
 {
 	Utils_memset(_mTempBuffer, 0, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE * sizeof(char));
 }
-static void CheckAndReplaceNullString(MString** str)
-{
-	if (*str != NULL)
-	{
-		return;
-	}
 
-	*str = MString_Create("");
-}
-
-MString* MString_CreateFromSubString(const char* str, int32_t startIndex, int32_t length)
-{
-	MString* mstring = MString_Create(str);
-	Utils_memset(mstring->text, 0, mstring->capacity);
-	Utils_strlcpy(mstring->text, str + startIndex, length + 1);
-	mstring->len = length;
-	return mstring;
-}
-MString* MString_Create(const char* fromThisStr)
-{
-	int32_t strLen = Utils_strlen(fromThisStr);
-	MString* mstring = MString_CreateEmpty(strLen + 1);
-	Utils_strlcpy(mstring->text, fromThisStr, strLen + 1);
-	mstring->len = strLen;
-	mstring->capacity = strLen + 1;
-	return mstring;
-}
-MString* MString_CreateEmpty(int32_t size)
+static MString* MString_CreateEmpty(int32_t size)
 {
 	_mRefs += 1;
 
@@ -56,7 +30,48 @@ MString* MString_CreateEmpty(int32_t size)
 	mstring->capacity = size;
 	return mstring;
 }
-char* MString_Text(MString* str)
+static MString* MString_Create(const char* fromThisStr)
+{
+	int32_t strLen = Utils_strlen(fromThisStr);
+	MString* mstring = MString_CreateEmpty(strLen + 1);
+	Utils_strlcpy(mstring->text, fromThisStr, strLen + 1);
+	mstring->len = strLen;
+	mstring->capacity = strLen + 1;
+	return mstring;
+}
+static bool CheckDoublePointerSafetyForComparison(MString** str)
+{
+	if (str == NULL)
+	{
+		Logger_LogWarning("MString double pointer is not safe...");
+		return false;
+	}
+
+	if (*str == NULL)
+	{
+		Logger_LogWarning("MString pointer is not safe...");
+		return false;
+	}
+
+	return true;
+}
+static void CheckAndReplaceNullString(MString** str)
+{
+	if (str == NULL)
+	{
+		Logger_LogWarning("Handed NULL MString Double Pointer...");
+		return;
+	}
+
+	if (*str != NULL)
+	{
+		return;
+	}
+
+	*str = MString_Create("");
+}
+
+char* MString_GetText(const MString* str)
 {
 	if (str == NULL)
 	{
@@ -65,7 +80,7 @@ char* MString_Text(MString* str)
 
 	return str->text;
 }
-int32_t MString_Length(MString* str)
+int32_t MString_GetLength(const MString* str)
 {
 	if (str == NULL)
 	{
@@ -74,7 +89,7 @@ int32_t MString_Length(MString* str)
 
 	return str->len;
 }
-int32_t MString_Capacity(MString* str)
+int32_t MString_GetCapacity(const MString* str)
 {
 	if (str == NULL)
 	{
@@ -83,13 +98,42 @@ int32_t MString_Capacity(MString* str)
 
 	return str->capacity;
 }
+bool MString_EqualToString(const MString* str, const char* otherStr)
+{
+	return Utils_StringEqualTo(MString_GetText(str), otherStr);
+}
+bool MString_EqualTo(const MString* str, const MString* otherStr)
+{
+	return Utils_StringEqualTo(MString_GetText(str), MString_GetText(otherStr));
+}
 void MString_Assign(MString** str, const char* toThis)
 {
 	CheckAndReplaceNullString(str);
 
 	MString* oldStr = *str;
 	MString* newStr = MString_Create(toThis);
-	MString_Dispose(oldStr);
+	MString_Dispose(&oldStr);
+	*str = newStr;
+}
+void MString_AssignEmpty(MString** str, int32_t size)
+{
+	CheckAndReplaceNullString(str);
+
+	MString* oldStr = *str;
+	MString* newStr = MString_CreateEmpty(size);
+	MString_Dispose(&oldStr);
+	*str = newStr;
+}
+void MString_AssignSubString(MString** str, const char* fromThis, int32_t startIndex, int32_t length)
+{
+	CheckAndReplaceNullString(str);
+
+	MString* oldStr = *str;
+	MString* newStr = MString_Create(fromThis);
+	Utils_memset(newStr->text, 0, newStr->capacity);
+	Utils_strlcpy(newStr->text, fromThis + startIndex, length + 1);
+	newStr->len = length;
+	MString_Dispose(&oldStr);
 	*str = newStr;
 }
 void MString_AddAssignInt(MString** str, int32_t addThisInt)
@@ -122,7 +166,7 @@ void MString_AddAssignChar(MString** str, char addThisChar)
 	newStr->text[newLen - 1] = addThisChar;
 	newStr->text[newLen] = '\0';
 	newStr->len = (int32_t)newLen;
-	MString_Dispose(oldStr);
+	MString_Dispose(&oldStr);
 	*str = newStr;
 }
 void MString_AddAssignString(MString** str, const char* addThisStr)
@@ -138,7 +182,7 @@ void MString_AddAssignString(MString** str, const char* addThisStr)
 	Utils_strlcpy(newStr->text + oldStr->len, addThisStr, addThisStrLen + 1);
 	newStr->len = (int32_t)newLen;
 	newStr->text[newLen] = '\0';
-	MString_Dispose(oldStr);
+	MString_Dispose(&oldStr);
 	*str = newStr;
 }
 void MString_Truncate(MString** str, int newLength)
@@ -161,26 +205,21 @@ void MString_Truncate(MString** str, int newLength)
 	}
 	actualStr->len = newLength;
 }
-void MString_Dispose(MString* str)
+void MString_Dispose(MString** str)
 {
-	if (str == NULL)
+	if (!CheckDoublePointerSafetyForComparison(str))
 	{
 		return;
 	}
 
 	_mRefs -= 1;
 
-	Utils_free(str->text);
-	Utils_free(str);
+	Utils_free((*str)->text);
+	Utils_free((*str));
+	*str = NULL;
 }
-bool MString_EqualToString(const MString* str, const char* otherStr)
-{
-	return Utils_StringEqualTo(str->text, otherStr);
-}
-bool MString_EqualTo(const MString* str, const MString* otherStr)
-{
-	return Utils_StringEqualTo(str->text, otherStr->text);
-}
+
+
 uint64_t MString_GetRefs()
 {
 	return _mRefs;

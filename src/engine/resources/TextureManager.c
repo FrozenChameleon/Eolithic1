@@ -88,28 +88,28 @@ void TextureManager_LoadAllFromDat()
 	//
 
 	MString* path = File_Combine2("data", TextureManager_GetDatFileName());
-	if (!File_Exists(MString_Text(path)))
+	if (!File_Exists(MString_GetText(path)))
 	{
-		Logger_printf("Unable to load from dat: %s\n", MString_Text(path));
+		Logger_printf("Unable to load from dat: %s\n", MString_GetText(path));
 		return;
 	}
 	
-	DatReader* dr = DatReader_Create(MString_Text(path));
+	DatReader* dr = DatReader_Create(MString_GetText(path));
 	while (DatReader_HasNext(dr))
 	{
 		MString* nextPath = DatReader_NextFilePath(dr);
-		MString* fileName = File_GetFileName(MString_Text(nextPath));
-		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_Text(nextPath));
+		MString* fileName = File_GetFileName(MString_GetText(nextPath));
+		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_GetText(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
-		TextureManager_LoadAssetFromStreamAndCreateResource(br, MString_Text(fileNameWithoutExtension), MString_Text(path));
+		TextureManager_LoadAssetFromStreamAndCreateResource(br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
 		BufferReader_Dispose(br, false);
-		MString_Dispose(nextPath);
-		MString_Dispose(fileName);
-		MString_Dispose(fileNameWithoutExtension);
+		MString_Dispose(&nextPath);
+		MString_Dispose(&fileName);
+		MString_Dispose(&fileNameWithoutExtension);
 	}
 
 	DatReader_Dispose(dr);
-	MString_Dispose(path);
+	MString_Dispose(&path);
 }
 void TextureManager_Dispose(const char* filenameWithoutExtension)
 {

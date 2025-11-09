@@ -6,7 +6,7 @@
  
 //THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
 
-#include "AnimTileManager.h"
+#include "ThingSettingsManager.h"
 
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
@@ -31,7 +31,7 @@ static void Init()
 	_mHasInit = true;
 }
 
-Resource* AnimTileManager_GetResource(const char* filenameWithoutExtension)
+Resource* ThingSettingsManager_GetResource(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -46,22 +46,22 @@ Resource* AnimTileManager_GetResource(const char* filenameWithoutExtension)
 	
 	return resource;
 }
-AnimTile* AnimTileManager_GetResourceData(const char* filenameWithoutExtension)
+ThingSettings* ThingSettingsManager_GetResourceData(const char* filenameWithoutExtension)
 {
 	//
 	Init();
 	//
 	
-	Resource* resource = AnimTileManager_GetResource(filenameWithoutExtension);
+	Resource* resource = ThingSettingsManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 
-	return (AnimTile*)resource->mData;
+	return (ThingSettings*)resource->mData;
 }
-Resource* AnimTileManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
+Resource* ThingSettingsManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
 	//
 	Init();
@@ -73,21 +73,21 @@ Resource* AnimTileManager_LoadAssetFromStreamAndCreateResource(BufferReader* br,
 	resource->mFileNameWithoutExtension = IStrings_GlobalGet(filenameWithoutExtension);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = AnimTile_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
+	resource->mData = ThingSettings_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
 	shput(sh_resources, resource->mFileNameWithoutExtension, resource);
 	return resource;
 }
-const char* AnimTileManager_GetDatFileName()
+const char* ThingSettingsManager_GetDatFileName()
 {
-	return "animtile.dat";
+	return "thingsettings.dat";
 }
-void AnimTileManager_LoadAllFromDat()
+void ThingSettingsManager_LoadAllFromDat()
 {
 	//
 	Init();
 	//
 
-	MString* path = File_Combine2("data", AnimTileManager_GetDatFileName());
+	MString* path = File_Combine2("data", ThingSettingsManager_GetDatFileName());
 	if (!File_Exists(MString_GetText(path)))
 	{
 		Logger_printf("Unable to load from dat: %s\n", MString_GetText(path));
@@ -101,7 +101,7 @@ void AnimTileManager_LoadAllFromDat()
 		MString* fileName = File_GetFileName(MString_GetText(nextPath));
 		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_GetText(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
-		AnimTileManager_LoadAssetFromStreamAndCreateResource(br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
+		ThingSettingsManager_LoadAssetFromStreamAndCreateResource(br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
 		BufferReader_Dispose(br, false);
 		MString_Dispose(&nextPath);
 		MString_Dispose(&fileName);
@@ -111,7 +111,7 @@ void AnimTileManager_LoadAllFromDat()
 	DatReader_Dispose(dr);
 	MString_Dispose(&path);
 }
-void AnimTileManager_Dispose(const char* filenameWithoutExtension)
+void ThingSettingsManager_Dispose(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -121,12 +121,12 @@ void AnimTileManager_Dispose(const char* filenameWithoutExtension)
 	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
-		AnimTile_Dispose(resource->mData);
+		ThingSettings_Dispose(resource->mData);
 	}
 	Utils_free(resource);
 	shdel(sh_resources, filenameWithoutExtension);
 }
-void AnimTileManager_DisposeAll()
+void ThingSettingsManager_DisposeAll()
 {
 	//
 	Init();
@@ -135,7 +135,7 @@ void AnimTileManager_DisposeAll()
 	int32_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
-		AnimTileManager_Dispose(sh_resources[i].key);
+		ThingSettingsManager_Dispose(sh_resources[i].key);
 	}
 
 	shfree(sh_resources);
@@ -143,15 +143,15 @@ void AnimTileManager_DisposeAll()
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
-int64_t AnimTileManager_Length()
+int64_t ThingSettingsManager_Length()
 {
 	return shlen(sh_resources);
 }
-Resource* AnimTileManager_GetResourceByIndex(int index)
+Resource* ThingSettingsManager_GetResourceByIndex(int index)
 {
 	return sh_resources[index].value;
 }
-AnimTile* AnimTileManager_GetResourceDataByIndex(int index)
+ThingSettings* ThingSettingsManager_GetResourceDataByIndex(int index)
 {
-	return (AnimTile*)sh_resources[index].value->mData;
+	return (ThingSettings*)sh_resources[index].value->mData;
 }

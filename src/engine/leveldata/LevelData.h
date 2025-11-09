@@ -59,3 +59,6 @@ int LevelData_GetRealSizeHeight(LevelData* ld);
 int LevelData_GetRealSizeX(LevelData* ld);
 int LevelData_GetRealSizeY(LevelData* ld);
 int LevelData_GetTilePos1D(LevelData* ld, int i, int j);
+Tile* LevelData_GetTile(LevelData* ld, int x, int y);
+Tile* LevelData_GetTilePoint(LevelData* ld, Point p);
+bool LevelData_IsSafe(LevelData* ld, int x, int y);

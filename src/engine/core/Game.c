@@ -194,7 +194,7 @@ void Game_PollEvents() //Derived from FNA
 			//GameWindow_SetWindowActive(true);
 
 			const char* videoDriver = SDL_GetCurrentVideoDriver();
-			if (videoDriver == "x11")
+			if (Utils_StringEqualTo(videoDriver, "x11"))
 			{
 				// If we alt-tab away, we lose the 'fullscreen desktop' flag on some WMs
 				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()),
@@ -209,7 +209,7 @@ void Game_PollEvents() //Derived from FNA
 			//OeWindow_SetWindowActive(false);
 
 			const char* videoDriver = SDL_GetCurrentVideoDriver();
-			if (videoDriver == "x11")
+			if (Utils_StringEqualTo(videoDriver, "x11"))
 			{
 				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()), 0);
 			}

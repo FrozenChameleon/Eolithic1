@@ -146,8 +146,8 @@ void Prop_ReadIni(Prop* p, BufferReader* reader)
 	p->mScaler = BufferReader_ReadI32(reader);
 	p->mFlipSpeed = BufferReader_ReadI32(reader);
 	p->mIsAnimation = BufferReader_ReadBoolean(reader);
-	p->mTextureName = BufferReader_ReadStringToMString(reader);
-	p->mTilesetFilter = BufferReader_ReadStringToMString(reader);
+	p->mTextureName = BufferReader_ReadMString(reader);
+	p->mTilesetFilter = BufferReader_ReadMString(reader);
 }
 Prop* Prop_CreateNew(Prop* p)
 {

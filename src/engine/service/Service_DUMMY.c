@@ -125,6 +125,18 @@ bool Service_PlatformStopsPollingInputWhenGameIsNotActive()
 {
 	return false;
 }
+void Service_LeaderboardGoLeft()
+{
+
+}
+void Service_LeaderboardGoRight()
+{
+
+}
+bool Service_SignIn(bool whatever1, bool whatever2)
+{
+	return false;
+}
 bool Service_IsSigningIn()
 {
 	return false;
