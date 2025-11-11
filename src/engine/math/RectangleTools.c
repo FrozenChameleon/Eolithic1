@@ -1,5 +1,7 @@
 #include "RectangleTools.h"
 
+#include "../io/BufferReader.h"
+
 const Rectangle RectangleTools_NegativeOne = { -1, -1, 0, 0 };
 
 void RectangleTools_Write(Rectangle rectangle, BufferWriter* writer)

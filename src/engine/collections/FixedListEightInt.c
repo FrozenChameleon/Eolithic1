@@ -6,6 +6,7 @@
 
 #include "FixedListEightInt.h"
 
+#include "../utils/Utils.h"
 #include "../utils/Logger.h"
 
 void FixedListEightInt_AddAll(FixedListEightInt* from, FixedListEightInt* to)
@@ -21,11 +22,7 @@ int32_t FixedListEightInt_Count(const FixedListEightInt* flei)
 }
 void FixedListEightInt_Clear(FixedListEightInt* flei)
 {
-	for (int i = 0; i < flei->_mCount; i += 1)
-	{
-		flei->_mValues[i] = 0;
-	}
-	flei->_mCount = 0;
+	Utils_memset(flei, 0, sizeof(FixedListEightInt));
 }
 bool FixedListEightInt_Contains(const FixedListEightInt* flei, int32_t value)
 {
@@ -59,7 +56,6 @@ void FixedListEightInt_Set(FixedListEightInt* flei, int32_t i, int32_t value)
 	else
 	{
 		Logger_LogWarning("Fixed list eight int invalid set");
-		return;
 	}
 }
 void FixedListEightInt_Add(FixedListEightInt* flei, int32_t value)

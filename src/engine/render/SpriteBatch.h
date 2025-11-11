@@ -17,3 +17,4 @@ void SpriteBatch_Init(SpriteBatch* sb);
 void SpriteBatch_Clear(SpriteBatch* sb);
 RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int depth, ShaderProgram* program, Vector2 position,
 	Rectangle sourceRectangle, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin);
+RenderCommandManyRectangle* SpriteBatch_DrawManyRectangle(SpriteBatch* sb, int32_t depth, DrawRectangle* manyRectangles);

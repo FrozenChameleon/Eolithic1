@@ -56,53 +56,7 @@ void CollisionEngineSys_ApplyBodyVelocity(CollisionEngine* data, Body* body, boo
 void CollisionEngineSys_InitRoutine(Entity owner, CollisionEngine* data);
 void CollisionEngineSys_DrawRoutine(Entity owner, CollisionEngine* data, SpriteBatch* spriteBatch);
 void CollisionEngineSys_DrawTiles(GameState* scene);
-#if EDITOR
-void CollisionEngineSys_DebugDrawNodes(CollisionEngine* data)
-{
-	/*
-	int gridTileSize = TILE_SIZE;
-
-	data.mDebugNodeRectangles.Clear();
-
-	for (int i = 0; i < data.mClosedNodes.Count; i++)
-	{
-		OePathNode node = data.mClosedNodes[i];
-		data.mDebugNodeRectangles.Add(new OeDrawRectangle(OeColors.PURPLE, new Rectangle(node.mGridX * gridTileSize, node.mGridY * gridTileSize,
-			gridTileSize, gridTileSize)));
-	}
-
-	for (int i = 0; i < data.mOpenNodes.Count; i++)
-	{
-		OePathNode node = data.mOpenNodes[i];
-		data.mDebugNodeRectangles.Add(new OeDrawRectangle(OeColors.PINK, new Rectangle(node.mGridX * gridTileSize, node.mGridY * gridTileSize,
-			gridTileSize, gridTileSize)));
-	}
-
-	bool complete = false;
-	OePathNode currentNode = data.mLastNode;
-	if (data.mLastNode != null)
-	{
-		while (!complete)
-		{
-			if (currentNode.mParent == null)
-			{
-				data.mDebugNodeRectangles.Add(new OeDrawRectangle(OeColors.MUTE_DGRAY,
-					new Rectangle(currentNode.mGridX * gridTileSize, currentNode.mGridY * gridTileSize, gridTileSize,
-						gridTileSize)));
-				complete = true;
-			}
-			else
-			{
-				data.mDebugNodeRectangles.Add(new OeDrawRectangle(OeColors.CORNFLOWER_BLUE,
-					new Rectangle(currentNode.mGridX * gridTileSize, currentNode.mGridY * gridTileSize, gridTileSize,
-						gridTileSize)));
-				currentNode = currentNode.mParent;
-			}
-		}
-	}
-	*/
-}
+//void CollisionEngineSys_DebugDrawNodes(CollisionEngine* data);
 void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data);
-#endif
 
 System* CollisionEngineSys_CreateSystem();

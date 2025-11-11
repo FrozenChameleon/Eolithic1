@@ -10,6 +10,10 @@
 
 void StringPair_Read(StringPair* pair, BufferReader* reader)
 {
-	pair->mKey = BufferReader_ReadMString(reader);
-	pair->mValue = BufferReader_ReadMString(reader);
+	//TODO C99 MEMORY LEAK!!!!!
+	MString* key = BufferReader_ReadMString(reader);
+	MString* value = BufferReader_ReadMString(reader);
+
+	pair->mKey = MString_GetText(key);
+	pair->mValue = MString_GetText(value);
 }

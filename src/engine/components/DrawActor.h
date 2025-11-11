@@ -2,7 +2,8 @@
 
 #include "../math/Vector2.h"
 #include "../render/Color.h"
-#include "../render/ShaderProgram.h"
+
+typedef struct ShaderProgram ShaderProgram;
 
 typedef struct DrawActor
 {

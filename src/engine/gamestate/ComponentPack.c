@@ -15,7 +15,7 @@ static void ResizePack(ComponentPack* pack, int newCapacity)
 		pack->Entities = NULL;
 	}
 
-	void* newComponents = Utils_malloc(pack->mComponentSizeInBytes * newCapacity);
+	uint8_t* newComponents = Utils_malloc(pack->mComponentSizeInBytes * newCapacity);
 	if (pack->Components != NULL)
 	{
 		Utils_memcpy(newComponents, pack->Components, pack->mComponentSizeInBytes * pack->_mCapacity);
@@ -35,6 +35,8 @@ void ComponentPack_LogNothingEntityWarning(ComponentPack* pack)
 }
 void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int initialSize)
 {
+	initialSize = 1024; //TODO REMOVE THIS
+
 	Utils_memset(pack, 0, sizeof(ComponentPack));
 
 	pack->mComponentSizeInBytes = componentSizeInBytes;
@@ -209,23 +211,24 @@ void* ComponentPack_SetExclusive(ComponentPack* pack, Entity entity, bool isNotE
 		{
 			continue;
 		}
-
-		pack->Entities[i] = entity;
-		Utils_memset(pack->Components + (i * pack->mComponentSizeInBytes), 0, pack->mComponentSizeInBytes);
+	
 		if ((i + 1) > pack->_mLength)
 		{
 			pack->_mLength = (i + 1);
 		}
-		return pack->Components + (i * pack->mComponentSizeInBytes);
+		pack->Entities[i] = entity;
+		void* componentToReturn = ComponentPack_GetComponentAtIndex(pack, i);
+		Utils_memset(componentToReturn, 0, pack->mComponentSizeInBytes);
+		return componentToReturn;
 	}
 
 	if ((pack->_mMaximumCapacity > 0) && (pack->_mCapacity >= pack->_mMaximumCapacity))
 	{
-		Logger_LogInformation("Reached maximum capacity for pack: Camera");
+		Logger_LogInformation("Reached maximum capacity for pack: PUT SOMETHING HERE");
 		return &pack->_mDummy;
 	}
 
-	Logger_LogInformation("Component pack is expanding for pack: Camera");
+	Logger_LogInformation("Component pack is expanding for pack: PUT SOMETHING HERE");
 
 	ResizePack(pack, pack->_mCapacity * 2);
 

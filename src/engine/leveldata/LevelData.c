@@ -253,3 +253,25 @@ bool LevelData_IsSafe(LevelData* ld, int x, int y)
 	}
 	return true;
 }
+int32_t* LevelData_CreateCollisionArray(LevelData* ld)
+{
+	int32_t* collisionArray = LevelData_CreateEmptyCollisionArray(ld);
+	LevelData_ImprintToCollisionArray(ld, 0, 0, collisionArray);
+	return collisionArray;
+}
+int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld)
+{
+	return Utils_calloc(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t));
+}
+void LevelData_ImprintToCollisionArray(LevelData* ld, int x, int y, int32_t* collisionArray)
+{
+	int width = ld->_mGridSize.Width;
+	int height = ld->_mGridSize.Height;
+	for (int i = 0; i < width; i += 1)
+	{
+		for (int j = 0; j < height; j += 1)
+		{
+			collisionArray[LevelData_GetTilePos1D(ld, x + i, y + j)] = ld->mTileData[LevelData_GetTilePos1D(ld, i, j)]->mCollisionType;
+		}
+	}
+}

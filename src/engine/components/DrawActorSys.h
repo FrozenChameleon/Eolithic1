@@ -1,57 +1,48 @@
 #pragma once
 
-#include "DrawActor.h"
+#include "../leveldata/ThingSettings.h"
 #include "../systems/SystemSimple.h"
+#include "DrawActor.h"
+#include "../leveldata/ImageData.h"
+#include "../render/DrawStateInfo.h"
+#include "../render/DrawRenderInfo.h"
+#include "../gamestate/ComponentPack.h"
+#include "limits.h"
 
-/*
-#include "../collections/OeDictionary.h"
-#include <string>
-#include "../leveldata/OeImageData.h"
-#include "../render/OeDrawStateInfo.h"
-#include "../render/OeDrawRenderInfo.h"
-#include "../gamestate/OeComponentPack.h"
+typedef struct Animation Animation;
+typedef struct ImageDataInstance ImageDataInstance;
 
-class OeAnimation;
-class OeImageDataInstance;
-
-class OeComDrawActorSys final : public OeSystemSimple<OeComDrawActor>
+enum
 {
-public:
-	enum
-	{
-		NOTHING = INT_MIN
-	};
+	DRAWACTORSYS_NOTHING = INT_MIN
+};
 
-	void SetupSystem() override;
-	static void Setup(OeEntity owner, OeComDrawActor* data,
-		OeDictionary<std::string, OeDictionary<std::string, std::vector<OeImageData>>>& imageData, const std::string& defaultDrawState, const std::string& defaultDrawPhase);
-	static void CreateExplosionModules(OeEntity owner, int state, int phase, int time, int type);
-	static void InitRoutine(OeEntity owner, OeComDrawActor* data);
-	static void UpdateLastRenderPositionRoutine(OeComDrawActor* data);
-	static void BeforeUpdateRoutine();
-	static void UpdateRoutine(OeEntity owner, OeComDrawActor* data);
-	static OeDrawStateInfo* GetStateInfo(OeEntity owner, int state);
-	static void SetDepthOverride(OeEntity owner, int state, int value);
-	static void SetImageDataDepth(OeEntity owner, int state, int phase, int depth);
-	static void SetImageState(OeEntity owner, OeComDrawActor* data, int state, int phase);
-	static void SetImageState(OeEntity owner, OeComDrawActor* data, int state, int newPhase, bool carryAnimationState);
-	static void SetStateRotation(OeEntity owner, int state, float rotation);
-	static int GetCurrentPhase(OeEntity owner, int state);
-	static void SetNudge(OeEntity owner, int state, float x, float y);
-	static OeImageDataInstance* GetRender(OeEntity owner, int state, int phase, int index);
-	static int GetAnimationPosition(OeEntity owner, int state, int phase);
-	static OeAnimation* GetCurrentAnimation(OeEntity owner, int state);
-	static OeAnimation* GetAnimation(OeEntity owner, int state, int phase);
-	static OeImageDataInstance* GetCurrentImageDataRender(OeEntity owner, int state, int phase);
-	static void ResetCurrentAnimation(OeEntity owner, int state);
-	static void SetCurrentAnimationPosition(OeEntity owner, int state, int position);
-	static void SetAnimationPosition(OeEntity owner, int state, int phase, int position);
-	static void SetShaderProgram(OeEntity owner, int state, OeShaderProgram* shaderProgram);
-	static void UpdateRenders(OeEntity owner, OeComDrawActor* data, OeComponentPack<OeDrawStateInfo>* stateInfos, OeComponentPack<OeDrawRenderInfo>* renders);
-	static void DrawRoutine(OeEntity owner, OeComDrawActor* data, OeSpriteBatch* spriteBatch);
-	static void DrawInterpolated(OeEntity owner, OeComDrawActor* data, OeSpriteBatch* spriteBatch, Color color, Vector2 currentPosition, Vector2 lastPosition,
-		float rotation, Vector2 scale, int givenDepth);
-};*/
-
+//void SetupSystem() override;
+void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_graphics_data, const char* defaultDrawState, const char* defaultDrawPhase);
+void DrawActorSys_CreateExplosionModules(Entity owner, int state, int phase, int time, int type);
+void DrawActorSys_InitRoutine(Entity owner, DrawActor* data);
+void DrawActorSys_UpdateLastRenderPositionRoutine(DrawActor* data);
+void DrawActorSys_BeforeUpdateRoutine();
 void DrawActorSys_UpdateRoutine(Entity owner, DrawActor* data);
+DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int state);
+void DrawActorSys_SetDepthOverride(Entity owner, int state, int value);
+void DrawActorSys_SetImageDataDepth(Entity owner, int state, int phase, int depth);
+void DrawActorSys_SetImageState(Entity owner, DrawActor* data, int state, int phase);
+void DrawActorSys_SetImageState2(Entity owner, DrawActor* data, int state, int newPhase, bool carryAnimationState);
+void DrawActorSys_SetStateRotation(Entity owner, int state, float rotation);
+int DrawActorSys_GetCurrentPhase(Entity owner, int state);
+void DrawActorSys_SetNudge(Entity owner, int state, float x, float y);
+ImageDataInstance* DrawActorSys_GetRender(Entity owner, int state, int phase, int index);
+int DrawActorSys_GetAnimationPosition(Entity owner, int state, int phase);
+Animation* DrawActorSys_GetCurrentAnimation(Entity owner, int state);
+Animation* DrawActorSys_GetAnimation(Entity owner, int state, int phase);
+ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int state, int phase);
+void DrawActorSys_ResetCurrentAnimation(Entity owner, int state);
+void DrawActorSys_SetCurrentAnimationPosition(Entity owner, int state, int position);
+void DrawActorSys_SetAnimationPosition(Entity owner, int state, int phase, int position);
+void DrawActorSys_SetShaderProgram(Entity owner, int state, ShaderProgram* shaderProgram);
+void DrawActorSys_UpdateRenders(Entity owner, DrawActor* data, ComponentPack* stateInfos, ComponentPack* renders);
+void DrawActorSys_DrawRoutine(Entity owner, DrawActor* data, SpriteBatch* spriteBatch);
+void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* spriteBatch, Color color, Vector2 currentPosition, Vector2 lastPosition,
+	float rotation, Vector2 scale, int givenDepth);
 System* DrawActorSys_CreateSystem();

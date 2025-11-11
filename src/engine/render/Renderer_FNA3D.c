@@ -420,7 +420,7 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		Vector3 matrixTranslationValue = { -widthForTf / 2.0f, -heightForTf / 2.0f, 0 };
 		Matrix matrixTranslation = Matrix_CreateTranslation(matrixTranslationValue);
 
-		Vector3 matrixScaleValue = { 1.0f, 1.0f, 1.0f };
+		Vector3 matrixScaleValue = { scale.X, scale.Y, 1.0f };
 		Matrix matrixScale = Matrix_CreateScale(matrixScaleValue);
 
 		Vector3 matrixWorldValue = { widthForTf / 2.0f, heightForTf / 2.0f, 0 };
@@ -433,21 +433,17 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		widthForTf = _mInternalWidthRender;
 		heightForTf = _mInternalHeightRender;
 
-		//Vector3 matrixTranslationValue = { -cameraPos.X, -cameraPos.Y, 0 };
-		Vector3 matrixTranslationValue = { 0, 0, 0 };
+		Vector3 matrixTranslationValue = { -cameraPos.X, -cameraPos.Y, 0 };
 		Matrix matrixTranslation = Matrix_CreateTranslation(matrixTranslationValue);
 
-		//Vector3 matrixScaleValue = { scale.X, scale.Y, 1.0f };
-		Vector3 matrixScaleValue = { 1.0f,  1.0f, 1.0f };
+		Vector3 matrixScaleValue = { scale.X, scale.Y, 1.0f };
 		Matrix matrixScale = Matrix_CreateScale(matrixScaleValue);
 
-		Vector3 matrixWorldValue = { 0, 0, 0 };
-		//Matrix matrixWorld = Matrix_CreateTranslation(_mInternalWorldTranslation);
-		Matrix matrixWorld = Matrix_CreateTranslation(matrixWorldValue);
+		Matrix matrixWorld = Matrix_CreateTranslation(_mInternalWorldTranslation);
 
-		transformMatrix = Matrix_Mul(&matrixTranslation, Matrix_Mul(&matrixScale, matrixWorld));
+		transformMatrix = Matrix_Multiply(matrixTranslation, Matrix_Multiply(matrixScale, matrixWorld));
 
-		transformMatrix = Matrix_Identity(); //TODO C99 PUT THIS BACk.
+		//transformMatrix = Matrix_Identity(); //This will
 	}
 
 	// Inlined CreateOrthographicOffCenter * transformMatrix

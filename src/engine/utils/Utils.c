@@ -71,6 +71,17 @@ size_t Utils_strlcat(char* dst, const char* src, size_t maxlen)
 {
 	return SDL_strlcat(dst, src, maxlen);
 }
+bool Utils_ParseBooleanFromChar(const char* str)
+{
+	if ((str[0] == 'T') || (str[0] == 't'))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 float Utils_ParseFloat(const char* str)
 {
 	return (float)SDL_atof(str);
@@ -313,11 +324,39 @@ bool Utils_ArrContainsInt(int* arr_values, int containsThis)
 }
 bool Utils_StringContains(const char* str, const char* containsThis)
 {
-	//TODO C99
-	return false;
+	int len = Utils_strlen(str);
+	char* result = SDL_strnstr(str, containsThis, len);
+	if (result == NULL)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 bool Utils_StringEndsWith(const char* str, const char* endsWithThis)
 {
-	//TODO C99
-	return false;
+	size_t strLen = Utils_strlen(str);
+	size_t endsWithThisLen = Utils_strlen(endsWithThis);
+
+	if (strLen < endsWithThisLen)
+	{
+		return false;
+	}
+
+	int targetCounter = 0;
+	for (int i = (strLen - endsWithThisLen); i < strLen; i += 1)
+	{
+		if (str[i] != endsWithThis[targetCounter])
+		{
+			return false;
+		}
+		else
+		{
+			targetCounter += 1;
+		}
+	}
+
+	return true;
 }

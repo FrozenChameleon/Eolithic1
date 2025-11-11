@@ -98,11 +98,11 @@ void Prop_LoadDrawing(Prop* p)
 {
 	if (p->mIsAnimation)
 	{
-		Animation_Init(&p->_mAnimation, p->mTextureName, p->mFlipSpeed);
+		Animation_Init(&p->_mAnimation, MString_GetText(p->mTextureName), p->mFlipSpeed);
 	}
 	else
 	{
-		p->_mSheet = Sheet_GetSheet(p->mTextureName);
+		p->_mSheet = Sheet_GetSheet(MString_GetText(p->mTextureName));
 	}
 }
 Rectangle Prop_GetRectangle(Prop* p)
@@ -118,7 +118,7 @@ Rectangle Prop_GetRectangle(Prop* p)
 }
 const char* Prop_ToString(Prop* p)
 {
-	return p->mTextureName;
+	return MString_GetText(p->mTextureName);
 }
 Animation* Prop_GetAnimation(Prop* p)
 {

@@ -5,11 +5,14 @@ void RenderStream_Clear(RenderStream* rs)
 	DynamicByteBuffer_SetLength(rs->_mBuffer, 0);
 }
 //RenderCommandTileLayer* GetRenderCommandLayerUninitialized();
-//RenderCommandManyRectangle* GetRenderCommandManyRectangleUninitialized();
+RenderCommandManyRectangle* RenderStream_GetRenderCommandManyRectangleUninitialized(RenderStream* rs)
+{
+	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandManyRectangle));
+}
 //RenderCommandString* GetRenderCommandStringUninitialized();
 RenderCommandSheet* RenderStream_GetRenderCommandSheetUninitialized(RenderStream* rs)
 {
-	return (RenderCommandSheet*)DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandSheet));
+	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandSheet));
 }
 DynamicByteBuffer* RenderStream_GetBuffer(RenderStream* rs)
 {

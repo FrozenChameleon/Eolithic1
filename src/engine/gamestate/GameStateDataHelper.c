@@ -112,6 +112,8 @@
 #include "../components/StepCounter.h"
 #include "../components/StepTimer.h"
 #include "../components/StringSettings.h"
+#include "../render/DrawRenderInfo.h"
+#include "../render/DrawStateInfo.h"
 #include "../leveldata/ParticleInstance.h"
 #include "../components/TagIsActor.h"
 #include "../components/TagIsComplete.h"
@@ -247,6 +249,8 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_StepCounter], sizeof(StepCounter), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_StepTimer], sizeof(StepTimer), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_StringSettings], sizeof(StringSettings), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_DrawRenderInfo], sizeof(DrawRenderInfo), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_DrawStateInfo], sizeof(DrawStateInfo), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_ParticleInstance], sizeof(ParticleInstance), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_TagIsActor], sizeof(TagIsActor), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_TagIsComplete], sizeof(TagIsComplete), GSD_INITIAL_SIZE);

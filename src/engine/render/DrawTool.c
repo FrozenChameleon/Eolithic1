@@ -3,10 +3,9 @@
 #include "SpriteBatch.h"
 #include "../math/Math.h"
 #include "../math/Point.h"
-//#include "../resources/OeResource.h"
-//#include "../resources/OeResourceManagers.h"
+#include "../resources/TextureManager.h"
 
-//static OeResource<OeTexture*>* _mSinglePixel = nullptr;
+static Resource* _mSinglePixel;
 
 /*
 static OeBmFont* GetFont(std_string font)
@@ -16,18 +15,16 @@ static OeBmFont* GetFont(std_string font)
 
 Texture* DrawTool_GetSinglePixel()
 {
-	return NULL;
-	/*
-	if (_mSinglePixel == nullptr)
+	if (_mSinglePixel == NULL)
 	{
-		_mSinglePixel = OeResourceManagers_TextureManager.GetResource("one_by_one_pixel");
-		if (_mSinglePixel == nullptr)
+		_mSinglePixel = TextureManager_GetResource("one_by_one_pixel");
+		if (_mSinglePixel == NULL)
 		{
-			return nullptr;
+			return NULL;
 		}
 	}
 
-	return _mSinglePixel->GetData();*/
+	return _mSinglePixel->mData;
 }
 void DrawTool_DrawRectangle(SpriteBatch* spriteBatch, Color color, int depth, int x, int y, int width, int height, float rotation, bool isCenter)
 {

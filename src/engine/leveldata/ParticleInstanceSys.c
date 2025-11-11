@@ -10,10 +10,7 @@
 #include "../render/DrawInstance.h"
 #include "../math/Random32.h"
 
-static float ReturnOppositeSign(float newValue, float oldValue)
-{
-	return -ReturnSameSign(newValue, oldValue);
-}
+
 static float ReturnSameSign(float newValue, float oldValue)
 {
 	int newSig = Math_SignumFloat(newValue);
@@ -25,6 +22,10 @@ static float ReturnSameSign(float newValue, float oldValue)
 	}
 
 	return newValue;
+}
+static float ReturnOppositeSign(float newValue, float oldValue)
+{
+	return -ReturnSameSign(newValue, oldValue);
 }
 static int GetDirection()
 {
@@ -239,7 +240,7 @@ void ParticleInstanceSys_Setup(ParticleInstance* data, const char* name, Particl
 	data->mInfluencedColor = COLOR_WHITE;
 	data->mInfluencedDepth = -1;
 
-	data->mName = name;
+	MString_Assign(&data->mName, name);
 	data->mParticle = particleData;
 
 	data->mFlipX = false;
@@ -253,13 +254,13 @@ void ParticleInstanceSys_Setup(ParticleInstance* data, const char* name, Particl
 
 	if (data->mParticle->mTextureIsAnimation)
 	{
-		Animation_Init(&data->mAnimation, data->mParticle->mTextureName, data->mParticle->mTextureFlipSpeed);
+		Animation_Init(&data->mAnimation, MString_GetText(data->mParticle->mTextureName), data->mParticle->mTextureFlipSpeed);
 		data->mAnimation.mAnimationLoopPoint = data->mParticle->mTextureLoopPoint;
 		data->mAnimation.mIsLoopingDisabled = data->mParticle->mTextureDoesAnimationStop;
 	}
 	else
 	{
-		data->mSheet = Sheet_GetSheet(data->mParticle->mTextureName);
+		data->mSheet = Sheet_GetSheet(MString_GetText(data->mParticle->mTextureName));
 	}
 
 	GenerateNewCurveMax(data);

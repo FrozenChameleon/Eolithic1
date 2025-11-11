@@ -2,7 +2,7 @@
 
 #pragma once
 
-#define COMPONENT_TYPE_LEN 130
+#define COMPONENT_TYPE_LEN 132
 
 typedef enum ComponentType
 {
@@ -115,25 +115,27 @@ typedef enum ComponentType
     C_StepCounter = 106,
     C_StepTimer = 107,
     C_StringSettings = 108,
-    C_ParticleInstance = 109,
-    C_TagIsActor = 110,
-    C_TagIsComplete = 111,
-    C_TagIsDrawDisabled = 112,
-    C_TagIsInPlay = 113,
-    C_TagIsPlayer = 114,
-    C_TagIsUpdateDisabled = 115,
-    C_SceneCameraData = 116,
-    C_TagIsBlockingLineOfSight = 117,
-    C_MoveGetter = 118,
-    C_NodeMovingKit = 119,
-    C_HitFlashKit = 120,
-    C_MirrorEffect = 121,
-    C_Move = 122,
-    C_TagIsIgnoringTransitions = 123,
-    C_TagIsExtraBody = 124,
-    C_TagIsEnemy = 125,
-    C_StunFrames = 126,
-    C_Random32 = 127,
-    C_IntTag = 128,
-    C_DrawLineOfSight = 129,
+    C_DrawRenderInfo = 109,
+    C_DrawStateInfo = 110,
+    C_ParticleInstance = 111,
+    C_TagIsActor = 112,
+    C_TagIsComplete = 113,
+    C_TagIsDrawDisabled = 114,
+    C_TagIsInPlay = 115,
+    C_TagIsPlayer = 116,
+    C_TagIsUpdateDisabled = 117,
+    C_SceneCameraData = 118,
+    C_TagIsBlockingLineOfSight = 119,
+    C_MoveGetter = 120,
+    C_NodeMovingKit = 121,
+    C_HitFlashKit = 122,
+    C_MirrorEffect = 123,
+    C_Move = 124,
+    C_TagIsIgnoringTransitions = 125,
+    C_TagIsExtraBody = 126,
+    C_TagIsEnemy = 127,
+    C_StunFrames = 128,
+    C_Random32 = 129,
+    C_IntTag = 130,
+    C_DrawLineOfSight = 131,
 } ComponentType;

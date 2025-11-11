@@ -47,7 +47,11 @@
 //#include "../render/RenderTtFont.h"
 #include "../../DebugDefs.h"
 #include "../../GlobalDefs.h"
-#include "../../GlobalDefs.h"
+#include "../../third_party/stb_ds.h"
+#include "../collision/CollisionEngineSys.h"
+#include "../core/Func.h"
+#include "../gamestate/GameStateManager.h"
+#include "../render/DrawTool.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -509,9 +513,21 @@ void Renderer_DrawSheet(RenderCommandSheet* draw, double delta)
 		Renderer_Draw8(sheetTex, draw->mDestinationRectangle, draw->mSourceRectangle, draw->mColor, draw->mRotation, Vector2_Zero, effects, draw->mDepth);
 	}
 }
-void Renderer_DrawManyRectangles(DrawInstance* draw)
+void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw)
 {
-	/*
+	DrawRectangle* manyRectangles = draw->mManyRectangles;
+
+	Rectangle sourceRectangle = { 0, 0, 1, 1 };
+
+	ptrdiff_t len = arrlen(manyRectangles);
+	for (int32_t i = 0; i < len; i += 1)
+	{
+		Renderer_Draw8(draw->mTexture, manyRectangles[i].mRectangle,
+			sourceRectangle, manyRectangles[i].mColor, 0, Vector2_Zero, SPRITEEFFECTS_NONE, draw->mDepth);
+	}
+}
+/*void Renderer_DrawManyRectangles(DrawInstance* draw)
+{
 	const std::vector<OeDrawRectangle>& manyRectangles = *draw->mManyRectangles;
 
 	for (int i = 0; i < manyRectangles.size(); i += 1)
@@ -519,8 +535,7 @@ void Renderer_DrawManyRectangles(DrawInstance* draw)
 		Draw(draw->mTexture, manyRectangles[i].mRectangle,
 			draw->mSourceRectangle, manyRectangles[i].mColor, 0, Vector2_Zero, SpriteEffects_None, draw->mDepth);
 	}
-	*/
-}
+}*/
 static BmFont* GetBmFont(const char* font)
 {
 	return NULL;
@@ -749,16 +764,16 @@ static uint64_t DrawTheInstance(uint8_t* buffer, uint64_t position, double delta
 		}
 	}
 	break;
-	/*
 	case RENDERER_TYPE_MANY_RECTANGLE:
 	{
 		sizeToReturn = sizeof(RenderCommandManyRectangle);
 		if (drawManyRectangle)
 		{
-			OeRenderer::DrawManyRectangles((OeRenderCommandManyRectangle*)(buffer + position));
+			Renderer_DrawManyRectangles((RenderCommandManyRectangle*)(buffer + position));
 		}
 	}
 	break;
+	/*
 	case RENDERER_TYPE_STRING:
 	{
 		sizeToReturn = sizeof(RenderCommandString);
@@ -1046,18 +1061,18 @@ Rectangle Renderer_GetScreenBounds()
 {
 	return _mScreenBounds;
 }
+
+static float DEBUG_OFFSET = 0;
 void Renderer_SetupCommit(double delta)
 {
 	FPSTool_Update(&_mFpsToolDraw, delta);
 
 	//TODO C99
-	/*
 	if (GameLoader_IsLoading())
 	{
-		Renderer_Commit(&_mOrangeSpriteBatchHud, Vector2_Zero, 1);
+		//Renderer_Commit(&_mOrangeSpriteBatchHud, Vector2_Zero, 1);
 		return;
 	}
-	*/
 
 	double stepLength = Utils_GetNormalStepLength();
 	double drawDelta;
@@ -1069,18 +1084,45 @@ void Renderer_SetupCommit(double delta)
 	{
 		drawDelta = GameUpdater_GetDeltaAccumulator();
 	}
-	//Camera* camera = GameStateManager_GetCurrentRenderCamera();
-	//Vector2 cam = Camera_GetInterpCameraAsVector2(camera, drawDelta);
-	//Vector2 hud = { camera->mWorldWidth / 2, camera->mWorldHeight / 2 };
-	//Renderer_Commit(&_mOrangeSpriteBatch, cam, drawDelta); //TODO C99
-	Vector2 hud = { 640, 360 };
+
+	Camera* camera = GameStateManager_GetCurrentRenderCamera();
+	Vector2 cam = Camera_GetInterpCameraAsVector2(camera, drawDelta);
+	Vector2 hud = { camera->mWorldWidth / 2, camera->mWorldHeight / 2 };
+	Renderer_Commit(&_mOrangeSpriteBatch, cam, drawDelta);
+	
+	hud.X = 360 + DEBUG_OFFSET;
+	hud.Y = 640 + DEBUG_OFFSET;
 	Renderer_Commit(&_mOrangeSpriteBatchHud, hud, drawDelta);
+	DEBUG_OFFSET += 0.1f;
 }
+
 void Renderer_SetupRenderState()
 {
 	if (!GameLoader_IsLoading())
 	{
+		SpriteBatch_Clear(&_mOrangeSpriteBatch);
 		SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
+
+		if (Is_AnyEntityInPack(C_CollisionEngine)) //TODO REMOVE ALL THIS STUFF
+		{
+			CollisionEngineSys_DrawRoutine(Get_FirstSetEntity(C_CollisionEngine), Get_FirstSetComponent(C_CollisionEngine), &_mOrangeSpriteBatch);
+		}
+		
+		Texture* pixel = DrawTool_GetSinglePixel();
+		Rectangle sourceRect = { 0, 0, 1, 1 };
+		for (int i = 0; i < 50; i += 1)
+		{
+			for (int j = 0; j < 50; j += 1)
+			{
+				Vector2 position;
+				position.X = 8 * i;
+				position.Y = 8 * j;
+				//SpriteBatch_Draw(&_mOrangeSpriteBatchHud, pixel, COLOR_BLUE, 0, NULL,
+			//		position, sourceRect, Vector2_One, 0, false, false, Vector2_Zero);
+			}
+		}
+		
+
 		Sheet* sheet = Sheet_GetSheet("monsterEyeShootCatchUp_00");
 		for (int i = 0; i < 1; i += 1)
 		{

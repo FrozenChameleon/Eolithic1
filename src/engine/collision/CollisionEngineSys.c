@@ -1,13 +1,12 @@
 #include "CollisionEngineSys.h"
 
 #include "../render/Color.h"
-//#include "../globals/OeColors.h"
 #include "../core/GameHelper.h"
 #include "../core/Func.h"
 #include "../globals/ObjectTypes.h"
 #include "CollisionCheckData.h"
 #include "../leveldata/LevelData.h"
-//#include "../render/DrawTool.h"
+#include "../render/DrawTool.h"
 #include "../math/Math.h"
 #include "../utils/Utils.h"
 #include "../globals/Globals.h"
@@ -15,6 +14,7 @@
 #include "../utils/Logger.h"
 #include "../globals/ObjectTypes.h"
 #include "../../third_party/stb_ds.h"
+#include "../render/SpriteBatch.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -306,7 +306,7 @@ bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float ch
 
 				collisionCheckData.mCollisionToReport = collisionToCheck;
 
-				//TODO C99GameHelper_BakedCollisionCheck(tempX, tempY, collisionToCheck, body, isVertical, &collisionCheckData);
+				GameHelper_BakedCollisionCheck(tempX, tempY, collisionToCheck, body, isVertical, &collisionCheckData);
 
 				if (!collisionCheckData.mDisableCollision)
 				{
@@ -336,7 +336,7 @@ void CollisionEngineSys_DisableDynamicGravity()
 }
 void CollisionEngineSys_CopyCollisionGridFromPristine(CollisionEngine* data)
 {
-	data->mCollisionGrid = data->mCollisionGridPristine;
+	Utils_memcpy(data->mCollisionGrid, data->mCollisionGridPristine, sizeof(int32_t) * data->mCollisionGridSize.Width * data->mCollisionGridSize.Height);
 }
 void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 {
@@ -376,11 +376,9 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 		body->mPhysicsVelocity = Vector2_Zero;
 	}
 
-	arrsetlen(data->mDynamicDebugManyRectangles, 0);
+	arrsetlen(data->arr_debug_many_rectangles, 0);
 
-#if EDITOR
-	DebugGenerateDebugRectangles(data);
-#endif
+	CollisionEngineSys_DebugGenerateDebugRectangles(data);
 
 	arrsetlen(arr_bodies, 0);
 	Utils_ResetArrayAsBool(_mCornerChecks, CORNER_CHECKS_LEN, false);
@@ -711,32 +709,29 @@ int CollisionEngineSys_GetCollisionBitGrid(CollisionEngine* data, int x, int y)
 }
 void CollisionEngineSys_SetupCollisionGrid(CollisionEngine* data, LevelData* level)
 {
-	//TODO C99
-	/*
 	data->mCollisionGridSize.X = 0;
 	data->mCollisionGridSize.Y = 0;
-	data->mCollisionGridSize.Width = level->GetGridSizeWidth();
-	data->mCollisionGridSize.Height = level->GetGridSizeHeight();
+	data->mCollisionGridSize.Width = LevelData_GetGridSizeWidth(level);
+	data->mCollisionGridSize.Height = LevelData_GetGridSizeHeight(level);
 
-	if (level->IsMetaMap())
+	if (level->_mIsMetaMap)
 	{
-		data->mCollisionGridPristine = level->CreateEmptyCollisionArray();
-		data->mCollisionGrid = level->CreateEmptyCollisionArray();
+		data->mCollisionGridPristine = LevelData_CreateEmptyCollisionArray(level);
+		data->mCollisionGrid = LevelData_CreateEmptyCollisionArray(level);
 	}
 	else
 	{
-		data->mCollisionGridPristine = level->CreateCollisionArray();
-		data->mCollisionGrid = level->CreateEmptyCollisionArray();
-		CopyCollisionGridFromPristine(data);
+		data->mCollisionGridPristine = LevelData_CreateCollisionArray(level);
+		data->mCollisionGrid = LevelData_CreateEmptyCollisionArray(level);
+		CollisionEngineSys_CopyCollisionGridFromPristine(data);
 	}
-	*/
 }
 bool CollisionEngineSys_DoPlatformCollision(Body* platformBody, Body* thingBody)
 {
 	Vector2 velocity = Body_GetVelocity(thingBody);
 	Vector2 lastLogicalPosition = Body_GetLastLogicalPosition(thingBody);
 	float halfHeightOffset = Body_GetHeight(thingBody) / 2;
-	float leeway = 0;//TODOC99 GameHelper_GetMovingPlatformLeeway();
+	float leeway = GameHelper_GetMovingPlatformLeeway();
 	float heightCheck = lastLogicalPosition.Y + halfHeightOffset - leeway;
 	Rectangle bodyRectangle = Body_GetRect(platformBody);
 	float platformTop = Rectangle_Top(&bodyRectangle);
@@ -953,23 +948,19 @@ bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, Sprite
 }
 int CollisionEngineSys_GetPlatformDown()
 {
-	return 0;
-	//TODO C99return GameHelper_PLATFORM_DOWN;
+	return GAMEHELPER_PLATFORM_DOWN;
 }
 int CollisionEngineSys_GetPlatformLeft()
 {
-	return 0;
-	//TODO C99return GameHelper_PLATFORM_LEFT;
+	return GAMEHELPER_PLATFORM_LEFT;
 }
 int CollisionEngineSys_GetPlatformRight()
 {
-	return 0;
-	//TODO C99return GameHelper_PLATFORM_RIGHT;
+	return GAMEHELPER_PLATFORM_RIGHT;
 }
 int CollisionEngineSys_GetPlatformUp()
 {
-	return 0;
-	//TODO C99return GameHelper_PLATFORM_UP;
+	return GAMEHELPER_PLATFORM_UP;
 }
 Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPosition, bool disableDiagonals, float currentX, float currentY, float targetX, float targetY, int hardLimit)
 {
@@ -1342,49 +1333,58 @@ void CollisionEngineSys_InitRoutine(Entity owner, CollisionEngine* data)
 }
 void CollisionEngineSys_DrawRoutine(Entity owner, CollisionEngine* data, SpriteBatch* spriteBatch)
 {
-	//TODO C99spriteBatch->DrawManyRectangle(100, data->mDebugManyRectangles);
+	if (arrlen(data->arr_debug_many_rectangles) <= 0)
+	{
+		return;
+	}
+
+	SpriteBatch_DrawManyRectangle(spriteBatch, 100, data->arr_debug_many_rectangles);
 }
 void CollisionEngineSys_DrawTiles(GameState* scene)
 {
 
 }
-#if EDITOR
 void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 {
-	if (!OeGlobals_DEBUG_SHOW_INGAME_COLLISION || OeGlobals_DEBUG_IS_EDITOR_MODE)
+	if (!GLOBALS_DEBUG_SHOW_INGAME_COLLISION || GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
-		return;
+		//return;
 	}
 
-	for (int i = 0; i < _mBodies.size(); i += 1)
+	ptrdiff_t bodiesLen = arrlen(arr_bodies);
+	for (int i = 0; i < bodiesLen; i += 1)
 	{
-		Body* body = &_mBodyPack->Components[_mBodies[i]];
-		data->mDebugManyRectangles.push_back(OeDrawRectangle(body->mTouchedBody ? mDebugColorActive : mDebugColorTouched, Body_GetRect(body)));
+		Body* body = ComponentPack_GetComponentAtIndex(_mBodyPack, arr_bodies[i]);
+		Color drawColor = body->mTouchedBody ? mDebugColorActive : mDebugColorTouched;
+		DrawRectangle drawRect;
+		Rectangle bodyRect = Body_GetRect(body);
+		DrawRectangle_Init(&drawRect, drawColor, bodyRect);
+		arrput(data->arr_debug_many_rectangles, drawRect);
 	}
 
-	for (int i = 0; i < data->mDebugNodeRectangles.size(); i += 1)
-	{
+	//for (int i = 0; i < data->mDebugNodeRectangles.size(); i += 1)
+	//{
 		//mDebugManyRectangles.Add(mDebugNodeRectangles[i]); //Show node info
-	}
+	//}
 
 	//Draw Tiles
-	OeLevelData* levelData = Get_LevelData();
-	OeComCamera* camera = Get_Camera();
-	int x1 = OeComCamera_GetX1(camera);
-	int x2 = OeComCamera_GetX2(camera, levelData->GetGridSizeX());
-	int y1 = OeComCamera_GetY1(camera);
-	int y2 = OeComCamera_GetY2(camera, levelData->GetGridSizeY());
+	LevelData* levelData = Get_LevelData();
+	Camera* camera = Get_Camera();
+	int x1 = Camera_GetX1(camera);
+	int x2 = Camera_GetX2(camera, LevelData_GetGridSizeX(levelData));
+	int y1 = Camera_GetY1(camera);
+	int y2 = Camera_GetY2(camera, LevelData_GetGridSizeY(levelData));
 	for (int i = x1; i < x2; i += 1)
 	{
 		for (int j = y1; j < y2; j += 1)
 		{
 			int type = data->mCollisionGrid[GetTilePos1D(i, j, data)];
-			if (type == ObjectTypes_NOTHING)
+			if (type == OBJECTTYPES_NOTHING)
 			{
 				continue;
 			}
 
-			Color color = OeUtils_GetCollisionColor(type);
+			Color color = COLOR_BLUE; //TODOUtils_GetCollisionColor(type);
 
 			int rectX = i * TILE_SIZE;
 			int rectY = j * TILE_SIZE;
@@ -1393,8 +1393,8 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 
 			int halfTile = TILE_SIZE / 2;
 
-			int platformDown = GetPlatformDown();
-			if (type == GetPlatformUp() || type == platformDown)
+			int platformDown = CollisionEngineSys_GetPlatformDown();
+			if ((type == CollisionEngineSys_GetPlatformUp()) || (type == platformDown))
 			{
 				rectHeight /= 2;
 				if (type == platformDown)
@@ -1402,8 +1402,8 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 					rectY += halfTile;
 				}
 			}
-			int platformRight = GetPlatformDown();
-			if (type == GetPlatformLeft() || type == platformRight)
+			int platformRight = CollisionEngineSys_GetPlatformRight();
+			if ((type == CollisionEngineSys_GetPlatformLeft()) || (type == platformRight))
 			{
 				rectWidth /= 2;
 				if (type == platformRight)
@@ -1412,12 +1412,14 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 				}
 			}
 
-			data->mDebugManyRectangles.push_back(OeDrawRectangle(color, Rectangle(rectX, rectY, rectWidth, rectHeight)));
+			Rectangle tempRectangle = { rectX, rectY, rectWidth, rectHeight };
+			DrawRectangle tempDrawRectangle;
+			DrawRectangle_Init(&tempDrawRectangle, color, tempRectangle);
+			arrput(data->arr_debug_many_rectangles, tempDrawRectangle);
 		}
 	}
 	//End Draw Tiles
 }
-#endif
 
 System* CollisionEngineSys_CreateSystem()
 {

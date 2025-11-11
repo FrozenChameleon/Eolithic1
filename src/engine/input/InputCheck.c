@@ -67,11 +67,11 @@ bool InputCheck_CheckTypeButton(InputPlayer* playerInput, InputCheck* data)
 		return ControllerStates_IsButtonPressedOnAnyController(data->mButton);
 	}
 
-	if (!InputPlayer_IsUsingController(&playerInput))
+	if (!InputPlayer_IsUsingController(playerInput))
 	{
 		return false;
 	}
-	if (ControllerState_IsButtonPressed(InputPlayer_GetController(&playerInput), data->mButton))
+	if (ControllerState_IsButtonPressed(InputPlayer_GetController(playerInput), data->mButton))
 	{
 		return true;
 	}
@@ -92,7 +92,7 @@ bool InputCheck_CheckTypeMouseButton(InputPlayer* playerInput, InputCheck* data)
 
 	if (playerInput != NULL)
 	{
-		if (!InputPlayer_IsUsingKeyboard(&playerInput))
+		if (!InputPlayer_IsUsingKeyboard(playerInput))
 		{
 			return false;
 		}
@@ -125,7 +125,7 @@ bool InputCheck_CheckTypeKey(InputPlayer* playerInput, InputCheck* data)
 
 	if (playerInput != NULL)
 	{
-		if (!InputPlayer_IsUsingKeyboard(&playerInput))
+		if (!InputPlayer_IsUsingKeyboard(playerInput))
 		{
 			return false;
 		}
@@ -338,12 +338,12 @@ void InputCheck_UpdateAnalogValue(InputPlayer* playerInput, InputCheck* data)
 		return;
 	}
 
-	if (!InputPlayer_IsUsingController(&playerInput))
+	if (!InputPlayer_IsUsingController(playerInput))
 	{
 		return;
 	}
 
-	currentVal = ControllerState_GetAnalogData(InputPlayer_GetController(&playerInput), data->mAxis);
+	currentVal = ControllerState_GetAnalogData(InputPlayer_GetController(playerInput), data->mAxis);
 	data->mAnalogValue = Math_fabsf(InputCheck_CorrectAnalogForDirection(data->mAxisDirection, currentVal));
 }
 bool InputCheck_IsAnalog(InputCheck* data)

@@ -26,6 +26,7 @@ enum ServicePlatform
 	PLATFORM_N = 3
 };
 
+bool Service_PlatformDisablesKeyboardUse();
 void Service_LeaderboardGoLeft();
 void Service_LeaderboardGoRight();
 bool Service_SignIn(bool whatever1, bool whatever2);

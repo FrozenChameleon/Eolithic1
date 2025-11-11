@@ -6,6 +6,7 @@
 #include "../math/Rectangle.h"
 #include "../render/Texture.h"
 #include "../render/ShaderProgram.h"
+#include "../render/DrawRectangle.h"
 
 typedef struct RenderCommandSheet
 {
@@ -30,6 +31,15 @@ typedef struct RenderCommandSheet
 	ShaderProgram* mShaderProgram;
 } RenderCommandSheet;
 
+typedef struct RenderCommandManyRectangle
+{
+	uint8_t mType;
+	uint8_t mDepth;
+	uint16_t mPadding1;
+	DrawRectangle* mManyRectangles;
+	Texture* mTexture;
+} RenderCommandManyRectangle;
+
 /*
 struct OeRenderCommandString
 {
@@ -47,15 +57,6 @@ struct OeRenderCommandString
 	Color mColor;
 	OeBmFont* mFont;
 	std::string* mString;
-};
-
-struct OeRenderCommandManyRectangle
-{
-	uint8_t mType;
-	uint8_t mDepth;
-	uint16_t mPadding1;
-	std::vector<OeDrawRectangle>* mManyRectangles;
-	OeTexture* mTexture;
 };
 
 struct OeRenderCommandTileLayer

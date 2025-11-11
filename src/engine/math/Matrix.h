@@ -53,4 +53,4 @@ Matrix Matrix_CreateScale(Vector3 scales);
 void Matrix_CreateTranslationMut(Vector3 position, Matrix* result);
 Matrix Matrix_CreateTranslation(Vector3 position);
 Matrix Matrix_Multiply(Matrix matrix1, Matrix matrix2);
-Matrix Matrix_Mul(Matrix* matrix1, Matrix matrix2);
+Matrix Matrix_Mul(const Matrix* matrix1, Matrix matrix2);

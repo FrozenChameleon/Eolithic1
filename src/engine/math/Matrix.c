@@ -240,7 +240,7 @@ Matrix Matrix_Multiply(Matrix matrix1, Matrix matrix2)
 	matrix1.M44 = m44;
 	return matrix1;
 }
-Matrix Matrix_Mul(Matrix* matrix1, Matrix matrix2)
+Matrix Matrix_Mul(const Matrix* matrix1, Matrix matrix2)
 {
 	return Matrix_Multiply(*matrix1, matrix2);
 }

@@ -8,6 +8,8 @@
 
 #include "Utils.h"
 
+const Timer Timer_Zero;
+
 Timer Timer_Create(int limit)
 {
 	Timer timer;
@@ -91,9 +93,4 @@ void Timer_SetAsPercentOfLimit(Timer* timer, float percent)
 void Timer_InverseCurrent(Timer* timer)
 {
 	timer->mCurrent = timer->mLimit - timer->mCurrent;
-}
-Timer Timer_Zero()
-{
-	Timer timer = { 0 };
-	return timer;
 }

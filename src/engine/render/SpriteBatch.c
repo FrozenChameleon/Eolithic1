@@ -1,5 +1,6 @@
 #include "SpriteBatch.h"
 
+#include "../render/DrawTool.h"
 #include "../utils/Logger.h"
 #include "Renderer.h"
 
@@ -38,7 +39,8 @@ void SpriteBatch_Clear(SpriteBatch* sb)
 	}
 }
 
-RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int depth, ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
+RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int depth, ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, 
+	Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
 {
 	ClampDepth(&depth);
 
@@ -67,6 +69,19 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	command->mDestinationRectangle = Rectangle_Empty;
 	command->mTexture = texture;
 	command->mShaderProgram = program;
+
+	return command;
+}
+
+RenderCommandManyRectangle* SpriteBatch_DrawManyRectangle(SpriteBatch* sb, int32_t depth, DrawRectangle* manyRectangles)
+{
+	ClampDepth(&depth);
+
+	RenderCommandManyRectangle* command = RenderStream_GetRenderCommandManyRectangleUninitialized(&sb->_mRenderStreams[depth]);
+	command->mType = RENDERER_TYPE_MANY_RECTANGLE;
+	command->mDepth = depth;
+	command->mManyRectangles = manyRectangles;
+	command->mTexture = DrawTool_GetSinglePixel();
 
 	return command;
 }

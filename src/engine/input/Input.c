@@ -16,10 +16,10 @@
 //#include "OeInputBindings.h"
 #include "../core/Game.h"
 #include "../service/Service.h"
-//#include "../components/Camera.h"
+#include "../components/Camera.h"
 #include "../utils/Cvars.h"
-//#include "../globals/OeGlobals.h"
-//#include "../render/OeRenderer.h"
+#include "../globals/Globals.h"
+#include "../render/Renderer.h"
 #include "../utils/Logger.h"
 
 typedef struct DoubleClickData

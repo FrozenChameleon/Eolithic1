@@ -66,5 +66,6 @@ typedef struct Particle
 	int mPreviewInterval;
 } Particle;
 
+void Particle_Read(Particle* p, BufferReader* br);
 Particle* Particle_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
-void Particle_Dispose(Particle* particle);
+void Particle_Dispose(Particle* p);

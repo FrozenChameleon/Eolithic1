@@ -12,8 +12,8 @@
 #include "../components/Move.h"
 #include "../components/DrawActor.h"
 #include "../components/IntTag.h"
-//#include "../components/SpecialShakeCameraSys.h"
-//#include "../components/MoveGetterSys.h"
+#include "../components/SpecialShakeCameraSys.h"
+#include "../components/MoveGetterSys.h"
 #include "../components/PlayerNumber.h"
 #include "../components/MoveGetter.h"
 #include "../components/Name.h"
@@ -37,11 +37,11 @@
 #include "../components/TagIsBlockingLineOfSight.h"
 #include "../components/IdleCircleData.h"
 #include "../components/TagIsIgnoringTransitions.h"
-//#include "../components/DrawActorSys.h"
+#include "../components/DrawActorSys.h"
 #include "../components/ParentNumber.h"
 #include "../math/PointRectangle.h"
 #include "../leveldata/LevelCameraDataInstance.h"
-//#include "../collision/CollisionEngineSys.h"
+#include "../collision/CollisionEngineSys.h"
 //#include "../collections/Dictionary.h"
 #include "../utils/Utils.h"
 #include "../math/Math.h"
@@ -53,18 +53,18 @@
 #include "../render/DrawTool.h"
 #include "../render/Animation.h"
 #include "../leveldata/ParticleInstance.h"
-//#include "../globals/Colors.h"
+#include "../render/Color.h"
 #include "../globals/Globals.h"
 #include "../input/Input.h"
 #include "../input/InputPlayer.h"
 #include "../audio/SoundEffect.h"
 #include "../audio/Music.h"
-//#include "../gamesave/GameSaveManager.h"
+#include "../gamesave/GameSaveManager.h"
 #include "../core/GameHelper.h"
 //#include "../utils/Tuning.h"
 #include "../leveldata/LevelData.h"
 #include "../globals/Directions.h"
-//#include "../leveldata/ThingSettings.h"
+#include "../leveldata/ThingSettings.h"
 //#include "../resources/ResourceManagers.h"
 #include "../render/Renderer.h"
 #include "../../GlobalDefs.h"
@@ -72,6 +72,7 @@
 #include "float.h"
 #include "../utils/Logger.h"
 #include "../../third_party/stb_ds.h"
+#include "../resources/ThingSettingsManager.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -394,13 +395,12 @@ void Do_LoadCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCamer
 
 void Do_ResetCollisionGrid()
 {
-	/*
 	if (!Is_ComponentPackPresent(C_CollisionEngine))
 	{
 		return;
 	}
-	*/
-	//TODO C99 CollisionEngineSys_SetupCollisionGrid(Get_CollisionEngine(), Get_LevelData());
+
+	CollisionEngineSys_SetupCollisionGrid(Get_CollisionEngine(), Get_LevelData());
 }
 
 void Do_LoadCameraNumber(bool useAutoHingeCamera, bool forceCameraPosition, int number)
@@ -490,7 +490,7 @@ Vector2 Do_FindThingPositionInTileData(const char* name)
 void Do_InitAllPermanentThings()
 {
 	LevelData* levelData = Get_LevelData();
-	//TODO C99 Do_InitPermanentThingsByGridCoordinates(0, 0, LevelData_GetGridSizeWidth(levelData), LevelData_GetGridSizeHeight(levelData));
+	Do_InitPermanentThingsByGridCoordinates(0, 0, LevelData_GetGridSizeWidth(levelData), LevelData_GetGridSizeHeight(levelData));
 }
 
 void Do_InitPermanentThingsByRealCoordinates(float realX1, float realY1, float realX2, float realY2, bool startThings)
@@ -504,28 +504,24 @@ void Do_InitPermanentThingsByRealCoordinates(float realX1, float realY1, float r
 
 void Do_InitPermanentThingsByRoomBounds(LevelCameraDataInstance* instance, bool startThings)
 {
-	/*
-	PointRectangle* pointRect = instance->mData.GetActiveBoundsPointRectangle();
+	PointRectangle* pointRect = LevelCameraData_GetActiveBoundsPointRectangle(&instance->mData);
 	Do_InitPermanentThingsByRealCoordinates(pointRect->mPointOne.X, pointRect->mPointOne.Y, pointRect->mPointTwo.X, pointRect->mPointTwo.Y, startThings);
-	*/
 }
 
 void Do_InitPermanentThingsByGridCoordinates(int x1, int y1, int x2, int y2)
 {
-	/*
-	OeLevelData* levelData = Get_LevelData();
-	for (int i = x1; i < x2; i++)
+	LevelData* levelData = Get_LevelData();
+	for (int i = x1; i < x2; i += 1)
 	{
-		for (int j = y1; j < y2; j++)
+		for (int j = y1; j < y2; j += 1)
 		{
-			std_vector<ThingInstance>& dataArray = levelData->GetTile(i, j)->mInstances;
-			for (int k = 0; k < dataArray.size(); k++)
+			ThingInstance* arr_instances = LevelData_GetTile(levelData, i, j)->arr_instances;
+			for (int k = 0; k < arrlen(arr_instances); k += 1)
 			{
-				Do_BuildThingFromData(i, j, &dataArray[k]);
+				Do_BuildThingFromData(i, j, &arr_instances[k]);
 			}
 		}
 	}
-	*/
 }
 
 void Do_InitPermanentThingsByGridCoordinates2(int x, int y)
@@ -559,56 +555,66 @@ void Do_InitPermanentThingsByGridCoordinates3(int x, int y, const char* onlyWith
 //private
 Entity Do_BuildThingFromData(int i, int j, ThingInstance* data)
 {
-	return ENTITY_NOTHING;
-	/*
-	if (data != NULL)
+	if (data == NULL)
 	{
-		Point tempVec = Point();
-		bool buildThing = true;
-		if (data != NULL)
+		return ENTITY_NOTHING;
+	}
+
+	Point tempVec = { 0 };
+	bool buildThing = true;
+	/*if (data != NULL) //TODO C99
+	{
+		OeStringPair pairOffsetX = data->GetSetting(ThingInstance_SETTING_DTN_OFFSET_X);
+		if (pairOffsetX.mKey != STR_NOTHING)
 		{
-			OeStringPair pairOffsetX = data->GetSetting(ThingInstance_SETTING_DTN_OFFSET_X);
-			if (pairOffsetX.mKey != STR_NOTHING)
+			tempVec.X = Utils_TryParseDirection(pairOffsetX.mValue) * HALF_TILE_SIZE;
+			OeStringPair pairOffsetY = data->GetSetting(ThingInstance_SETTING_DTN_OFFSET_Y);
+			if (pairOffsetY.mKey != STR_NOTHING)
 			{
-				tempVec.X = Utils_TryParseDirection(pairOffsetX.mValue) * HALF_TILE_SIZE;
-				OeStringPair pairOffsetY = data->GetSetting(ThingInstance_SETTING_DTN_OFFSET_Y);
-				if (pairOffsetY.mKey != STR_NOTHING)
-				{
-					tempVec.Y = Utils_TryParseDirection(pairOffsetY.mValue) * HALF_TILE_SIZE;
-				}
-			}
-			OeStringPair pairDifficulty = OeStringPair_Empty;
-			switch (OeTuning_GetCurrentDifficulty())
-			{
-			case 0:
-				pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_EASY);
-				break;
-			case 1:
-				pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_NORMAL);
-				break;
-			case 2:
-				pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_HARD);
-				break;
-			case 3:
-				pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_VERY_HARD);
-				break;
-			}
-			if ((pairDifficulty.mKey != STR_NOTHING) && (pairDifficulty.mKey != Utils_NOT_SET))
-			{
-				buildThing = Utils_TryParseBooleanFromChar(pairDifficulty.mValue);
+				tempVec.Y = Utils_TryParseDirection(pairOffsetY.mValue) * HALF_TILE_SIZE;
 			}
 		}
-		tempVec.X += HALF_TILE_SIZE;
-		tempVec.Y += HALF_TILE_SIZE;
-		if (buildThing)
+		OeStringPair pairDifficulty = OeStringPair_Empty;
+		switch (OeTuning_GetCurrentDifficulty())
 		{
-			int initialPositionX = i * TILE_SIZE + tempVec.X;
-			int initialPositionY = j * TILE_SIZE + tempVec.Y;
-			Do_BuildActor(i, j, initialPositionX, initialPositionY, data, data->GetName());
+		case 0:
+			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_EASY);
+			break;
+		case 1:
+			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_NORMAL);
+			break;
+		case 2:
+			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_HARD);
+			break;
+		case 3:
+			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_VERY_HARD);
+			break;
+		}
+		if ((pairDifficulty.mKey != STR_NOTHING) && (pairDifficulty.mKey != Utils_NOT_SET))
+		{
+			buildThing = Utils_TryParseBooleanFromChar(pairDifficulty.mValue);
+		}
+	}*/
+	tempVec.X += HALF_TILE_SIZE;
+	tempVec.Y += HALF_TILE_SIZE;
+	if (buildThing)
+	{
+		int initialPositionX = (i * TILE_SIZE) + tempVec.X;
+		int initialPositionY = (j * TILE_SIZE) + tempVec.Y;
+		const char* thingName = ThingInstance_GetName(data);
+		if (Utils_StringEqualTo(thingName, "OBJECTACTOR_SPIKES"))// || Utils_StringEqualTo(thingName, "PAINTING")) //TODO - FIND THE PROBLEM ACTOR!
+		{
+			return Do_BuildActor5(i, j, initialPositionX, initialPositionY, data, thingName);
+		}
+		else
+		{
+			return ENTITY_NOTHING;
 		}
 	}
-	return ENTITY_NOTHING;
-	*/
+	else
+	{
+		return ENTITY_NOTHING;
+	}
 }
 
 //
@@ -790,7 +796,7 @@ bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityInc
 void Do_ResetStepTimer(Entity entity)
 {
 	StepTimer* data = Get_Component(C_StepTimer, entity);
-	data->mTimer = Timer_Zero();
+	data->mTimer = Timer_Zero;
 }
 
 Timer* Get_StepTimer(Entity entity)
@@ -1172,7 +1178,7 @@ void Do_ResetDepthOverride(Entity entity)
 
 void Do_SetDepthOverride2(Entity entity, int state, int value)
 {
-	//TODODrawActorSys_SetDepthOverride(entity, state, value);
+	DrawActorSys_SetDepthOverride(entity, state, value);
 }
 
 void Do_ResetDepthOverride2(Entity entity, int state)
@@ -1216,7 +1222,7 @@ void Do_SetShader(Entity entity, ShaderProgram* program)
 
 void Do_SetShader2(Entity entity, int state, ShaderProgram* program)
 {
-	//DrawActorSys_SetShaderProgram(entity, state, program);
+	DrawActorSys_SetShaderProgram(entity, state, program);
 }
 
 void Do_SetShaderAsWhiteFlash(Entity entity)
@@ -1329,7 +1335,7 @@ void Do_SetStunFrames(Entity entity, int value)
 
 void Do_SetStateRotation(Entity entity, int state, float rotation)
 {
-	//TODO C99 DrawActorSys_SetStateRotation(entity, state, rotation);
+	DrawActorSys_SetStateRotation(entity, state, rotation);
 }
 
 DrawActor* Get_DrawActor(Entity entity)
@@ -1349,12 +1355,10 @@ void Do_CopyGridNodesFromParent(Entity entity)
 {
 	//TODO C99Do_SetNodes(entity, Get_PointerToGridNodes(Get_ParentEntity(entity)));
 }
-/*
-void Do_SetStringSettings(Entity entity, std_vector<OeStringPair>* stringSettings)
+void Do_SetStringSettings(Entity entity, StringPair* stringSettings)
 {
-	Get_Component(C_StringSettings, entity)->mSettings = stringSettings;
+	((StringSettings*)Get_Component(C_StringSettings, entity))->mSettings = stringSettings;
 }
-*/
 void Do_SetComplete(Entity entity)
 {
 	Do_SetBoolTag(C_TagIsComplete, entity, true);
@@ -1489,7 +1493,7 @@ void Do_RandomShake2(Entity entity, int amount)
 }
 void Do_Shake(Entity entity, int state, int amountX, int amountY)
 {
-	//DrawActorSys_SetNudge(entity, state, amountX, amountY);
+	DrawActorSys_SetNudge(entity, state, amountX, amountY);
 }
 void Do_ClearShake(Entity entity)
 {
@@ -2012,23 +2016,23 @@ void Do_SetImage(Entity entity, int state, int phase)
 {
 	if (!Is_ImagePhaseTheSame(entity, state, phase))
 	{
-		//TODDo_SetImageForced(entity, state, phase);
+		Do_SetImageForced(entity, state, phase);
 	}
 }
 void Do_SetImage2(Entity entity, int state, int phase, bool carry)
 {
 	if (!Is_ImagePhaseTheSame(entity, state, phase))
 	{
-		//TODDo_SetImageForced(entity, state, phase, carry);
+		Do_SetImageForced2(entity, state, phase, carry);
 	}
 }
 void Do_SetImageForced(Entity entity, int state, int phase)
 {
-	//TODDo_SetImageForced(entity, state, phase, false);
+	Do_SetImageForced2(entity, state, phase, false);
 }
 void Do_SetImageForced2(Entity entity, int state, int phase, bool carry)
 {
-	//DrawActorSys_SetImageState(entity, Get_DrawActor(entity), state, phase, carry);
+	DrawActorSys_SetImageState2(entity, Get_DrawActor(entity), state, phase, carry);
 }
 Entity Do_AddAnimation(Entity entity, float x, float y, int timeLimit, const char* name)
 {
@@ -2356,7 +2360,7 @@ float Get_InterpolatedY(Entity entity, double delta)
 Vector2 Get_AdjustedMouse()
 {
 	return Vector2_Zero;
-	//TODO return Input_GetCameraAdjustedMouseForRetroScreen(Get_Camera());
+	// return Input_GetCameraAdjustedMouseForRetroScreen(Get_Camera());
 }
 float Get_AdjustedMouseX()
 {
@@ -2382,8 +2386,7 @@ Color Get_Color(Entity entity)
 }
 CollisionEngine* Get_CollisionEngine()
 {
-	return NULL;
-	//return Get_FirstSetComponent(C_CollisionEngine);
+	return Get_FirstSetComponent(C_CollisionEngine);
 }
 Point Get_Node(Entity entity, int i)
 {
@@ -2559,8 +2562,7 @@ Entity Get_ParentEntity(Entity entity)
 }
 Entity Get_Entity(int entityNumber)
 {
-	return 0;
-	//TODO return Get_ActiveGameState()->GetEntityInPlay(entityNumber);
+	return GameState_GetEntityInPlay(Get_ActiveGameState(), entityNumber);
 }
 int Get_ParentNumber(Entity entity)
 {
@@ -2640,8 +2642,7 @@ Point Get_GridPosition(Entity entity)
 }
 int Get_CurrentImagePhase(Entity entity, int state)
 {
-	return -1;
-	//TODO C99 return DrawActorSys_GetCurrentPhase(entity, state);
+	return DrawActorSys_GetCurrentPhase(entity, state);
 }
 Camera* Get_Camera()
 {
@@ -3254,13 +3255,11 @@ int Get_LengthUntilTiles(int x, int y, int directionX, int directionY, int outOf
 */
 Animation* Get_Animation(Entity entity, int state, int phase)
 {
-	return NULL;
-	//return DrawActorSys_GetAnimation(entity, state, phase);
+	return DrawActorSys_GetAnimation(entity, state, phase);
 }
 Animation* Get_CurrentAnimation(Entity entity, int state)
 {
-	return NULL;
-	//return DrawActorSys_GetCurrentAnimation(entity, state);
+	return DrawActorSys_GetCurrentAnimation(entity, state);
 }
 void Get_PointDirectionFromEightWayIntegerDirection(Point* point, int value)
 {
@@ -3421,86 +3420,70 @@ int Get_AmountOfMyChildren(Entity entity)
 }
 const char* Get_StringSettingAsString(Entity entity, const char* key)
 {
-	return NULL;
-	/*
-	std_vector<OeStringPair>& stringSettings = Get_StringSettings(entity);
-	if (stringSettings.size() == 0)
+	StringPair* stringSettings = Get_StringSettings(entity);
+	if (arrlen(stringSettings) == 0)
 	{
-		return STR_NOTHING;
+		return EE_STR_NOTHING;
 	}
 
-	for (int i = 0; i < stringSettings.size(); i++)
+	for (int i = 0; i < arrlen(stringSettings); i += 1)
 	{
-		OeStringPair* p = &stringSettings[i];
-		if (p->mKey == key)
+		StringPair* p = &stringSettings[i];
+		if (Utils_StringEqualTo(p->mKey, key))
 		{
 			return p->mValue;
 		}
 	}
 
 	return EE_STR_NOTHING;
-	*/
 }
-/*
-std_vector<OeStringPair>& Get_StringSettings(Entity entity)
+StringPair* Get_StringSettings(Entity entity)
 {
 	bool wasSuccessful;
-	StringSettings* component = TryGet_Component<StringSettings>(entity, &wasSuccessful);
+	StringSettings* component = TryGet_Component(C_StringSettings, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
-		return DUMMY_STRING_PAIRS;
+		return NULL;
 	}
 	else
 	{
-		std_vector<OeStringPair>* pairs = component->mSettings;
+		StringPair* pairs = component->mSettings;
 		if (pairs == NULL)
 		{
-			return DUMMY_STRING_PAIRS;
+			return NULL;
 		}
-		return *pairs;
+		return pairs;
 	}
 }
-*/
 int Get_StringSettingAsInt(Entity entity, const char* setting)
 {
-	return 0;/*
-	int number = Utils_TryParseInt(Get_StringSettingAsString(entity, setting));
-	return number;*/
+	return Utils_ParseInt(Get_StringSettingAsString(entity, setting));
 }
-bool Get_StringSettingAsBooleanByChar(Entity entity, const char* setting)
-{
-	return false;
-}
-float Get_StringSettingAsFloat(Entity entity, const char* setting)
-{
-	return 0;
-}
-/*
 bool Get_StringSettingAsBooleanByChar(Entity entity, const char* setting)
 {
 	const char* temp = Get_StringSettingAsString(entity, setting);
-	if (temp == EE_STR_NOTHING)
+	if (Utils_StringEqualTo(temp, EE_STR_NOTHING))
 	{
-		Logger_LogError("Missing char bool setting: " + setting);
+		Logger_LogError("Missing char bool setting: ");
+		Logger_LogError(setting);
 		return false;
 	}
-	return Utils_TryParseBooleanFromChar(temp);
+	return Utils_ParseBooleanFromChar(temp);
 }
-
 float Get_StringSettingAsFloat(Entity entity, const char* setting)
 {
-	float number = Utils_TryParseFloat(Get_StringSettingAsString(entity, setting));
-	return number;
+	return Utils_ParseFloat(Get_StringSettingAsString(entity, setting));
 }
 bool Get_StringSettingAsBoolean(Entity entity, const char* setting)
 {
-	std_string temp = Get_StringSettingAsString(entity, setting);
-	if (temp == STR_NOTHING)
+	const char* temp = Get_StringSettingAsString(entity, setting);
+	if (Utils_StringEqualTo(temp, EE_STR_NOTHING))
 	{
-		Logger_LogError("Missing bool setting: " + setting);
+		Logger_LogError("Missing bool setting: ");
+		Logger_LogError(setting);
 		return false;
 	}
-	if ((temp == "T") || (temp == "TRUE"))
+	if (Utils_StringEqualTo(temp, "T") || Utils_StringEqualTo(temp, "TRUE"))
 	{
 		return true;
 	}
@@ -3508,11 +3491,6 @@ bool Get_StringSettingAsBoolean(Entity entity, const char* setting)
 	{
 		return false;
 	}
-}
-*/
-bool Get_StringSettingAsBoolean(Entity entity, const char* setting)
-{
-	return false;
 }
 double Get_VectorFromRadianAngleX(double radianAngle)
 {
@@ -3837,19 +3815,17 @@ Entity Do_BuildActor5(int gridPositionX, int gridPositionY, float initialPositio
 }
 Entity Do_BuildActor6(int gridPositionX, int gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name, Entity parent)
 {
-	return 0;
-	//TODO C99
-	/*
-	OeThingSettings* settings = OeResourceManagers_ThingSettingsManager.GetResourceData(name);
+	ThingSettings* settings = ThingSettingsManager_GetResourceData(name);
 	if (settings == NULL)
 	{
-		Logger_LogError("Unable to build entity: " + name);
+		Logger_LogError("Unable to build entity:");
+		Logger_LogError(name);
 		return ENTITY_NOTHING;
 	}
 
-	Entity entity = Get_ActiveGameState()->BuildNewEntity();
+	Entity entity = GameState_BuildNewEntity(Get_ActiveGameState());
 
-	Do_SetBoolTag<OeTagIsActor>(entity, true);
+	Do_SetBoolTag(C_TagIsActor, entity, true);
 
 	Do_SetName(entity, name);
 
@@ -3866,20 +3842,20 @@ Entity Do_BuildActor6(int gridPositionX, int gridPositionY, float initialPositio
 
 	Do_SetPosition(entity, initialPositionX, initialPositionY);
 
-	std_vector<Point>* nodes;
-	std_vector<OeStringPair>* stringSettings;
+	Point* arr_nodes;
+	StringPair* arr_settings;
 	if (instanceData != NULL)
 	{
-		nodes = &instanceData->mNodes;
-		stringSettings = &instanceData->mSettings;
+		arr_nodes = instanceData->arr_nodes;
+		arr_settings = instanceData->arr_settings;
 	}
 	else
 	{
-		nodes = NULL;
-		stringSettings = NULL;
+		arr_nodes = NULL;
+		arr_settings = NULL;
 	}
-	Do_SetNodes(entity, nodes);
-	Do_SetStringSettings(entity, stringSettings);
+	//TODO C99 Do_SetNodes(entity, arr_nodes);
+	Do_SetStringSettings(entity, arr_settings);
 
 	if (settings->mHasCollision)
 	{
@@ -3888,17 +3864,17 @@ Entity Do_BuildActor6(int gridPositionX, int gridPositionY, float initialPositio
 
 	if (settings->mHasDrawing)
 	{
-		DrawActor* drawActor = Do_InitComponent<DrawActor>(entity);
-		DrawActorSys_Setup(entity, drawActor, settings->mMapGraphicsData, settings->mDefaultState, settings->mDefaultPhase);
+		DrawActor* drawActor = Do_InitComponent(C_DrawActor, entity);
+		DrawActorSys_Setup(entity, drawActor, settings->sh_graphics_data, 
+			MString_GetText(settings->mDefaultState), MString_GetText(settings->mDefaultPhase));
 	}
 
 	if (settings->mHasAI)
 	{
-		OeGameHelper_BuildControllerComponent(settings->mRoutineId, entity);
+		GameHelper_BuildControllerComponent(settings->mRoutineId, entity);
 	}
 
 	return entity;
-	*/
 }
 void Do_SetSeedFromInitialCoordinates(Entity entity, Random32* random)
 {

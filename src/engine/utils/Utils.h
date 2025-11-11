@@ -24,6 +24,7 @@ size_t Utils_strlen(const char* str);
 size_t Utils_strnlen(const char* str, size_t maxlen);
 size_t Utils_strlcpy(char* dst, const char* src, size_t maxlen);
 size_t Utils_strlcat(char* dst, const char* src, size_t maxlen);
+bool Utils_ParseBooleanFromChar(const char* str);
 float Utils_ParseFloat(const char* str);
 int32_t Utils_ParseInt(const char* str);
 bool Utils_PointerEqualTo(void* ptr1, void* ptr2);

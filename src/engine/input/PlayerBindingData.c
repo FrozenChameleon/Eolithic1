@@ -12,7 +12,7 @@ void PlayerBindingData_Init(int playerNumber)
 }
 const char* PlayerBindingData_GetFilePlayerPath()
 {
-
+	return NULL;
 }
 void PlayerBindingData_LogLoadSuccess()
 {
@@ -25,12 +25,12 @@ void PlayerBindingData_LogLoadFailure()
 //void PlayerBindingData_LoadFromStream(std::shared_ptr<OeIniReader> reader)
 FixedByteBuffer* PlayerBindingData_CreateBufferFromBindings()
 {
-
+	return NULL;
 }
 //void PlayerBindingData_ResetCertainBindingsToDefault(std::vector<std::string>& actions, int indexStart, int length);
 bool PlayerBindingData_DoBindingsExistFor(const char* action, int indexStart, int length)
 {
-
+	return false;
 }
 void PlayerBindingData_SetAsLoaded()
 {
@@ -38,7 +38,7 @@ void PlayerBindingData_SetAsLoaded()
 }
 InputAction* PlayerBindingData_GetBindings()
 {
-
+	return NULL;
 }
 void PlayerBindingData_ResetToDefault()
 {
@@ -46,7 +46,7 @@ void PlayerBindingData_ResetToDefault()
 }
 bool PlayerBindingData_HasLoaded()
 {
-
+	return false;
 }
 //void PlayerBindingData_Load();
 //void PlayerBindingData_Save();

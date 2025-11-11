@@ -10,7 +10,7 @@ typedef struct RenderStream
 
 void RenderStream_Clear(RenderStream* rs);
 //RenderCommandTileLayer* GetRenderCommandLayerUninitialized();
-//RenderCommandManyRectangle* GetRenderCommandManyRectangleUninitialized();
+RenderCommandManyRectangle* RenderStream_GetRenderCommandManyRectangleUninitialized(RenderStream* rs);
 //RenderCommandString* GetRenderCommandStringUninitialized();
 RenderCommandSheet* RenderStream_GetRenderCommandSheetUninitialized(RenderStream* rs);
 DynamicByteBuffer* RenderStream_GetBuffer(RenderStream* rs);

@@ -5,11 +5,11 @@
 #include "../utils/Logger.h"
 #include "GlobalSysLoggerNotifications.h"
 
-static void DrawHud(SpriteBatch* spriteBatch)
+static void DrawHud(System* sys, SpriteBatch* spriteBatch)
 {
 	//TODO C99 Logger_DrawHud(spriteBatch);
 }
-static void Update()
+static void Update(System* sys)
 {
 	//TODO C99 Logger_Update();
 };

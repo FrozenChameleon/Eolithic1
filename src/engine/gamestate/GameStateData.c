@@ -2,6 +2,7 @@
 
 #include "../utils/Utils.h"
 #include "GameStateDataHelper.h"
+#include "GameStateManager.h"
 
 static const int32_t ENTITY_COUNTER_MAX = 2000000000;
 
@@ -100,14 +101,13 @@ void* GameStateData_SetAndInit(GameStateData* gsd, ComponentType ctype, Entity e
 }
 void GameStateData_Init(GameStateData* gsd, ComponentType ctype, Entity entity)
 {
-	//TODO C99
-	/*
-	std::type_index componentType = std::type_index(typeid(T));
-	for (int i = 0; i < OeGameStateManager::StateSystems.size(); i++)
+	int len = GameStateManager_GetStateSystemsLen();
+	System** systems = GameStateManager_GetStateSystems();
+	for (int i = 0; i < len; i += 1)
 	{
-		OeGameStateManager::StateSystems[i]->Init(componentType, entity);
+		System* system = systems[i];
+		system->_mInit(system, ctype, entity);
 	}
-	*/
 }
 void GameStateData_Unset(GameStateData* gsd, ComponentType ctype, Entity entity)
 {

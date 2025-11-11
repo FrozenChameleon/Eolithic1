@@ -5,6 +5,7 @@
 #include "../io/File.h"
 //#include "../utils/OeIniReader.h"
 //#include "../utils/OeIniWriter.h"
+#include "../../third_party/stb_ds.h"
 
 //TODO C99 static const std::vector<std::string> THINGS_DIRECTORY = { OeFile::Combine("data", "things") };
 
@@ -89,6 +90,8 @@ void ThingSettings_Init(ThingSettings* ts)
 	MString_Assign(&ts->mDefaultState, "DEFAULT");
 	MString_Assign(&ts->mDefaultPhase, "DEFAULT");
 	MString_Assign(&ts->mPreviewSheet, EE_NOT_SET);
+
+	sh_new_arena(ts->sh_graphics_data);
 }
 
 void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
@@ -108,37 +111,42 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 	int stateCount = BufferReader_ReadI32(br);
 	for (int i = 0; i < stateCount; i += 1)
 	{
-		//std::string tempState = "state_" + std::to_string(i) + "_";
-
 		MString* key1 = BufferReader_ReadMString(br);
-		//std::string key1 = reader->ReadString(tempState + "name");
-		//mMapGraphicsData.Add(key1, OeDictionary<std::string, std::vector<OeImageData>>());
+
+		ThingGraphicsEntry* entry = NULL;
+		sh_new_arena(entry);
+
+		shput(ts->sh_graphics_data, MString_GetText(key1), entry);
 
 		int phaseCount = BufferReader_ReadI32(br);
 		for (int j = 0; j < phaseCount; j += 1)
 		{
-			//std::string tempPhase = tempState + "phase_" + std::to_string(j) + "_";
-			//std::string key2 = reader->ReadString(tempPhase + "name");
 			MString* key2 = BufferReader_ReadMString(br);
 
-			//std::vector<OeImageData> arrayOfImages = std::vector<OeImageData>();
+			ImageData* arr_images = NULL;
+		
 			int imageCount = BufferReader_ReadI32(br);
 			for (int k = 0; k < imageCount; k++)
 			{
 				ImageData data = { 0 };
-				//std::string tempImage = tempPhase + "image_" + std::to_string(k) + "_";
+				ImageData_Init(&data);
 				ImageData_Read(&data, br);
-				//arrayOfImages.push_back(data);
+				arrput(arr_images, data);
 			}
 
-			//mMapGraphicsData[key1].Add(key2, arrayOfImages);
+			shput(entry, MString_GetText(key2), arr_images);
+
+			MString_Dispose(&key2);
 		}
+
+		MString_Dispose(&key1);
 	}
 }
 
 ThingSettings* ThingSettings_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	ThingSettings* ts = Utils_calloc(1, sizeof(ThingSettings));
+	ThingSettings_Init(ts);
 	ThingSettings_Read(ts, br);
 	return ts;
 }

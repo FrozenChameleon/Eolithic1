@@ -6,17 +6,17 @@
 
 typedef struct CollisionEngine
 {
-	int mDefaultBodyPushAmount;
+	int32_t mDefaultBodyPushAmount;
 	bool mIsNullDividePlus;
 	Vector2 mFixedGravity;
-	int* mCollisionGridPristine;
-	int* mCollisionGrid;
+	int32_t* mCollisionGridPristine;
+	int32_t* mCollisionGrid;
 	/*std::shared_ptr<OePathNode> mLastNode;
 	std::vector<std::shared_ptr<OePathNode>> mTempNodes;
 	std::vector<std::shared_ptr<OePathNode>> mOpenNodes;
 	std::vector<std::shared_ptr<OePathNode>> mClosedNodes;*/
-	DrawRectangle* mDynamicDebugNodeRectangles;
-	DrawRectangle* mDynamicDebugManyRectangles;
+	DrawRectangle* arr_debug_node_rectangles;
+	DrawRectangle* arr_debug_many_rectangles;
 	Rectangle mCollisionGridSize;
 } CollisionEngine;
 

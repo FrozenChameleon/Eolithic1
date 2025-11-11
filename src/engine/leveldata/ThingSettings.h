@@ -12,6 +12,18 @@ enum
 	THING_SETTINGS_BINARY_VERSION = 3
 };
 
+typedef struct ThingGraphicsEntry
+{
+	char* key; 
+	ImageData* value; //THIS IS AN STB ARRAY, SHOULD BE ARR_VALUE
+} ThingGraphicsEntry;
+
+typedef struct ThingGraphicsData
+{
+	char* key;
+	ThingGraphicsEntry* value;
+} ThingGraphicsData;
+
 typedef struct ThingSettings
 {
 	int mRoutineId;
@@ -24,7 +36,7 @@ typedef struct ThingSettings
 	MString* mDefaultState;
 	MString* mDefaultPhase;
 	MString* mPreviewSheet;
-	//TODO C99 OeDictionary<std::string, OeDictionary<std::string, std::vector<OeImageData>>> mMapGraphicsData;
+	ThingGraphicsData* sh_graphics_data;
 } ThingSettings;
 
 void ThingSettings_Init(ThingSettings* ts);
