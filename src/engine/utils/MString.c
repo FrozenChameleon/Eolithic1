@@ -169,6 +169,10 @@ void MString_AddAssignChar(MString** str, char addThisChar)
 	MString_Dispose(&oldStr);
 	*str = newStr;
 }
+void MString_AddAssignMString(MString** str, const MString* addThisStr)
+{
+	MString_AddAssignString(str, MString_GetText(addThisStr));
+}
 void MString_AddAssignString(MString** str, const char* addThisStr)
 {
 	CheckAndReplaceNullString(str);

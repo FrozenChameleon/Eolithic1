@@ -1,217 +1,192 @@
 #include "OePhase.h"
 
-/*
-static bool _mHasInit;
+#include "../../third_party/stb_ds.h"
 
-static const std::string STR_DEFAULT = "DEFAULT";
-static std::vector<std::string> DRAW_PHASE_ARRAY;
-static std::unordered_map<std::string, int> DRAW_PHASE_MAP;
+static const char* STR_DEFAULT = "DEFAULT";
 
-const std::string& OePhase::GetDefaultPhase()
+static DrawPhaseMap* sh_draw_phase_map;
+
+DrawPhaseMap* OePhase_GetShDrawPhaseMap()
 {
-	return STR_DEFAULT;
-}
-
-const std::vector<std::string>& OePhase::GetDrawPhaseArray()
-{
-	return DRAW_PHASE_ARRAY;
-}
-
-std::unordered_map<std::string, int>& OePhase::GetDrawPhaseMap()
-{
-	return DRAW_PHASE_MAP;
-}
-
-void OePhase::Init()
-{
-	if (_mHasInit)
+	if (sh_draw_phase_map == NULL)
 	{
-		return;
+		sh_new_arena(sh_draw_phase_map);
+
+		shput(sh_draw_phase_map, STR_DEFAULT, OePhase_DEFAULT);
+		shput(sh_draw_phase_map, "STEP1", OePhase_STEP1);
+		shput(sh_draw_phase_map, "STEP2", OePhase_STEP2);
+		shput(sh_draw_phase_map, "STEP3", OePhase_STEP3);
+		shput(sh_draw_phase_map, "STEP4", OePhase_STEP4);
+		shput(sh_draw_phase_map, "STEP5", OePhase_STEP5);
+		shput(sh_draw_phase_map, "STEP6", OePhase_STEP6);
+		shput(sh_draw_phase_map, "STEP7", OePhase_STEP7);
+		shput(sh_draw_phase_map, "STEP8", OePhase_STEP8);
+		shput(sh_draw_phase_map, "STEP9", OePhase_STEP9);
+		shput(sh_draw_phase_map, "WALK", OePhase_WALK); //ORANGE
+		shput(sh_draw_phase_map, "BOOST", OePhase_BOOST);
+		shput(sh_draw_phase_map, "MELEE_GROUND", OePhase_MELEE_GROUND);
+		shput(sh_draw_phase_map, "MELEE_AIR", OePhase_MELEE_AIR);
+		shput(sh_draw_phase_map, "JUMP", OePhase_JUMP);
+		shput(sh_draw_phase_map, "ATTACK_GROUND", OePhase_ATTACK_GROUND);
+		shput(sh_draw_phase_map, "ATTACK_AIR", OePhase_ATTACK_AIR);
+		shput(sh_draw_phase_map, "DOUBLE_JUMP", OePhase_DOUBLE_JUMP);
+		shput(sh_draw_phase_map, "SLIDE", OePhase_SLIDE);
+		shput(sh_draw_phase_map, "FALLING", OePhase_FALLING);
+		shput(sh_draw_phase_map, "FALLING_SHOOT", OePhase_FALLING_SHOOT);
+		shput(sh_draw_phase_map, "STUNNED", OePhase_STUNNED);
+		shput(sh_draw_phase_map, "GROUND_SHOOT", OePhase_GROUND_SHOOT);
+		shput(sh_draw_phase_map, "JUMP_SHOOT", OePhase_JUMP_SHOOT);
+		shput(sh_draw_phase_map, "NUDGE", OePhase_NUDGE);
+		shput(sh_draw_phase_map, "NUDGE_SHOOT", OePhase_NUDGE_SHOOT);
+		shput(sh_draw_phase_map, "WALK_SHOOT", OePhase_WALK_SHOOT);
+		shput(sh_draw_phase_map, "DEATH", OePhase_DEATH);
+		shput(sh_draw_phase_map, "SLIDE_SHOOT", OePhase_SLIDE_SHOOT);
+		shput(sh_draw_phase_map, "IDLE2", OePhase_IDLE2);
+		shput(sh_draw_phase_map, "HANG", OePhase_HANG);
+		shput(sh_draw_phase_map, "HANG_SHOOT", OePhase_HANG_SHOOT);
+		shput(sh_draw_phase_map, "HANG_V", OePhase_HANG_V);
+		shput(sh_draw_phase_map, "HANG_V_SHOOT", OePhase_HANG_V_SHOOT);
+		shput(sh_draw_phase_map, "HANG_V_UP", OePhase_HANG_V_UP);
+		shput(sh_draw_phase_map, "HANG_V_UP_SHOOT", OePhase_HANG_V_UP_SHOOT);
+		shput(sh_draw_phase_map, "HANG_V_DOWN", OePhase_HANG_V_DOWN);
+		shput(sh_draw_phase_map, "HANG_V_DOWN_SHOOT", OePhase_HANG_V_DOWN_SHOOT);
+		shput(sh_draw_phase_map, "STAND", OePhase_STAND); //MUTE
+		shput(sh_draw_phase_map, "ATTACK", OePhase_ATTACK);
+		shput(sh_draw_phase_map, "RUNNING", OePhase_RUNNING);
+		shput(sh_draw_phase_map, "CLIMBING", OePhase_CLIMBING);
+		shput(sh_draw_phase_map, "HANGING", OePhase_HANGING);
+		shput(sh_draw_phase_map, "JUMPING", OePhase_JUMPING);
+		shput(sh_draw_phase_map, "HITCH", OePhase_HITCH);
+		shput(sh_draw_phase_map, "AIR_ATTACK", OePhase_AIR_ATTACK);
+		shput(sh_draw_phase_map, "HANGING_IDLE", OePhase_HANGING_IDLE);
+		shput(sh_draw_phase_map, "RESPAWN", OePhase_RESPAWN);
+		shput(sh_draw_phase_map, "WIND_RUN", OePhase_WIND_RUN);
+
+		shput(sh_draw_phase_map, "LEFT", OePhase_LEFT);
+		shput(sh_draw_phase_map, "RIGHT", OePhase_RIGHT);
+		shput(sh_draw_phase_map, "NEUTRAL", OePhase_NEUTRAL);
+
+		shput(sh_draw_phase_map, "CROUCH", OePhase_CROUCH);
+		shput(sh_draw_phase_map, "ATTACK_STANDING", OePhase_ATTACK_STANDING);
+		shput(sh_draw_phase_map, "ATTACK_CROUCHING", OePhase_ATTACK_CROUCHING);
+		shput(sh_draw_phase_map, "ATTACK_AIR_DOWNRIGHT", OePhase_ATTACK_AIR_DOWNRIGHT);
+		shput(sh_draw_phase_map, "ATTACK_AIR_RIGHT", OePhase_ATTACK_AIR_RIGHT);
+
+		//boss skeleton
+		shput(sh_draw_phase_map, "ATTACK_PRE_DASH", OePhase_ATTACK_PRE_DASH);
+		shput(sh_draw_phase_map, "ATTACK_DASH", OePhase_ATTACK_DASH);
+		shput(sh_draw_phase_map, "ATTACK_BACKSTEP", OePhase_ATTACK_BACKSTEP);
+		shput(sh_draw_phase_map, "ATTACK_PRE_CROSS_SLASH", OePhase_ATTACK_PRE_CROSS_SLASH);
+		shput(sh_draw_phase_map, "ATTACK_CROSS_SLASH", OePhase_ATTACK_CROSS_SLASH);
+		shput(sh_draw_phase_map, "ATTACK_LEAP", OePhase_ATTACK_LEAP);
+		shput(sh_draw_phase_map, "ATTACK_HOMING_BONE", OePhase_ATTACK_HOMING_BONE);
+		shput(sh_draw_phase_map, "ATTACK_BOUNCING_BONE", OePhase_ATTACK_BOUNCING_BONE);
+
+		//frog
+		shput(sh_draw_phase_map, "ATTACK_ACID", OePhase_ATTACK_ACID);
+		shput(sh_draw_phase_map, "ATTACK_BIG_BUBBLE", OePhase_ATTACK_BIG_BUBBLE);
+		shput(sh_draw_phase_map, "ATTACK_BIG_HOP", OePhase_ATTACK_BIG_HOP);
+		shput(sh_draw_phase_map, "ATTACK_ROLL", OePhase_ATTACK_ROLL);
+		shput(sh_draw_phase_map, "ATTACK_SHORT_HOP", OePhase_ATTACK_SHORT_HOP);
+		shput(sh_draw_phase_map, "ATTACK_SLAM", OePhase_ATTACK_SLAM);
+		shput(sh_draw_phase_map, "ATTACK_WALL", OePhase_ATTACK_WALL);
+		shput(sh_draw_phase_map, "ATTACK_WARP", OePhase_ATTACK_WARP);
+
+		//snake
+		shput(sh_draw_phase_map, "ATTACK_HORIZONTAL", OePhase_ATTACK_HORIZONTAL);
+		shput(sh_draw_phase_map, "ATTACK_VERTICAL", OePhase_ATTACK_VERTICAL);
+
+		shput(sh_draw_phase_map, "ATTACK_AIR_UPRIGHT", OePhase_ATTACK_AIR_UPRIGHT);
+		shput(sh_draw_phase_map, "ATTACK_AIR_UP", OePhase_ATTACK_AIR_UP);
+		shput(sh_draw_phase_map, "ATTACK_AIR_DOWN", OePhase_ATTACK_AIR_DOWN);
+		shput(sh_draw_phase_map, "ATTACK_STANDING_UP", OePhase_ATTACK_STANDING_UP);
+		shput(sh_draw_phase_map, "ATTACK_STANDING_UPRIGHT", OePhase_ATTACK_STANDING_UPRIGHT);
+
+		shput(sh_draw_phase_map, "FALLING_ALT", OePhase_FALLING_ALT);
+
+		shput(sh_draw_phase_map, "ATTACK_STANDING_SUBWEAPON", OePhase_ATTACK_STANDING_SUBWEAPON);
+
+		shput(sh_draw_phase_map, "ATTACK_STUN_STATE", OePhase_ATTACK_STUN_STATE);
+
+		shput(sh_draw_phase_map, "STEP10", OePhase_STEP10);
+		shput(sh_draw_phase_map, "STEP11", OePhase_STEP11);
+		shput(sh_draw_phase_map, "STEP12", OePhase_STEP12);
+		shput(sh_draw_phase_map, "STEP13", OePhase_STEP13);
+		shput(sh_draw_phase_map, "STEP14", OePhase_STEP14);
+		shput(sh_draw_phase_map, "STEP15", OePhase_STEP15);
+		shput(sh_draw_phase_map, "STEP16", OePhase_STEP16);
+		shput(sh_draw_phase_map, "STEP17", OePhase_STEP17);
+		shput(sh_draw_phase_map, "STEP18", OePhase_STEP18);
+		shput(sh_draw_phase_map, "STEP19", OePhase_STEP19);
+
+		shput(sh_draw_phase_map, "ROPE_CLIMB", OePhase_ROPE_CLIMB);
+		shput(sh_draw_phase_map, "ROPE_ATTACK", OePhase_ROPE_ATTACK);
+
+		shput(sh_draw_phase_map, "TAUNT", OePhase_TAUNT);
+		shput(sh_draw_phase_map, "DODGING", OePhase_DODGING);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_L_A", OePhase_MOVE_ATTACK_L_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_L_B", OePhase_MOVE_ATTACK_L_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_L_C", OePhase_MOVE_ATTACK_L_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_H_A", OePhase_MOVE_ATTACK_H_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_H_B", OePhase_MOVE_ATTACK_H_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_H_C", OePhase_MOVE_ATTACK_H_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_L_A", OePhase_MOVE_ATTACK_AIR_L_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_L_B", OePhase_MOVE_ATTACK_AIR_L_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_L_C", OePhase_MOVE_ATTACK_AIR_L_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_H_A", OePhase_MOVE_ATTACK_AIR_H_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_H_B", OePhase_MOVE_ATTACK_AIR_H_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_H_C", OePhase_MOVE_ATTACK_AIR_H_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_S1_A", OePhase_MOVE_ATTACK_S1_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_S1_B", OePhase_MOVE_ATTACK_S1_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_S1_C", OePhase_MOVE_ATTACK_S1_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_S2_A", OePhase_MOVE_ATTACK_S2_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_S2_B", OePhase_MOVE_ATTACK_S2_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_S2_C", OePhase_MOVE_ATTACK_S2_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_S1_A", OePhase_MOVE_ATTACK_AIR_S1_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_S1_B", OePhase_MOVE_ATTACK_AIR_S1_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_S1_C", OePhase_MOVE_ATTACK_AIR_S1_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_S2_A", OePhase_MOVE_ATTACK_AIR_S2_A);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_S2_B", OePhase_MOVE_ATTACK_AIR_S2_B);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_S2_C", OePhase_MOVE_ATTACK_AIR_S2_C);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_UP", OePhase_MOVE_ATTACK_UP);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SIDE", OePhase_MOVE_ATTACK_SIDE);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_DOWN", OePhase_MOVE_ATTACK_DOWN);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_UP", OePhase_MOVE_ATTACK_AIR_UP);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_SIDE", OePhase_MOVE_ATTACK_AIR_SIDE);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_AIR_DOWN", OePhase_MOVE_ATTACK_AIR_DOWN);
+
+		shput(sh_draw_phase_map, "DODGING_AIR", OePhase_DODGING_AIR);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_UP", OePhase_MOVE_ATTACK_SPECIAL_UP);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_SIDE", OePhase_MOVE_ATTACK_SPECIAL_SIDE);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_DOWN", OePhase_MOVE_ATTACK_SPECIAL_DOWN);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_NEUTRAL", OePhase_MOVE_ATTACK_SPECIAL_NEUTRAL);
+
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_AIR_UP", OePhase_MOVE_ATTACK_SPECIAL_AIR_UP);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_AIR_SIDE", OePhase_MOVE_ATTACK_SPECIAL_AIR_SIDE);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_AIR_DOWN", OePhase_MOVE_ATTACK_SPECIAL_AIR_DOWN);
+		shput(sh_draw_phase_map, "MOVE_ATTACK_SPECIAL_AIR_NEUTRAL", OePhase_MOVE_ATTACK_SPECIAL_AIR_NEUTRAL);
+
+		shput(sh_draw_phase_map, "MORE_LEFT", OePhase_MORE_LEFT);
+		shput(sh_draw_phase_map, "MORE_RIGHT", OePhase_MORE_RIGHT);
+
+		shput(sh_draw_phase_map, "INTRO", OePhase_INTRO);
+		shput(sh_draw_phase_map, "INTRO_FREEZE", OePhase_INTRO_FREEZE);
+
+		shput(sh_draw_phase_map, "DESPAWN", OePhase_DESPAWN);
+		shput(sh_draw_phase_map, "DESPAWN_SUPER", OePhase_DESPAWN_SUPER);
+		shput(sh_draw_phase_map, "DESPAWN_INVULN", OePhase_DESPAWN_INVULN);
 	}
 
-	DRAW_PHASE_MAP[STR_DEFAULT] = DEFAULT;
-	DRAW_PHASE_MAP["STEP1"] = STEP1;
-	DRAW_PHASE_MAP["STEP2"] = STEP2;
-	DRAW_PHASE_MAP["STEP3"] = STEP3;
-	DRAW_PHASE_MAP["STEP4"] = STEP4;
-	DRAW_PHASE_MAP["STEP5"] = STEP5;
-	DRAW_PHASE_MAP["STEP6"] = STEP6;
-	DRAW_PHASE_MAP["STEP7"] = STEP7;
-	DRAW_PHASE_MAP["STEP8"] = STEP8;
-	DRAW_PHASE_MAP["STEP9"] = STEP9;
-	DRAW_PHASE_MAP["WALK"] = WALK; //ORANGE
-	DRAW_PHASE_MAP["BOOST"] = BOOST;
-	DRAW_PHASE_MAP["MELEE_GROUND"] = MELEE_GROUND;
-	DRAW_PHASE_MAP["MELEE_AIR"] = MELEE_AIR;
-	DRAW_PHASE_MAP["JUMP"] = JUMP;
-	DRAW_PHASE_MAP["ATTACK_GROUND"] = ATTACK_GROUND;
-	DRAW_PHASE_MAP["ATTACK_AIR"] = ATTACK_AIR;
-	DRAW_PHASE_MAP["DOUBLE_JUMP"] = DOUBLE_JUMP;
-	DRAW_PHASE_MAP["SLIDE"] = SLIDE;
-	DRAW_PHASE_MAP["FALLING"] = FALLING;
-	DRAW_PHASE_MAP["FALLING_SHOOT"] = FALLING_SHOOT;
-	DRAW_PHASE_MAP["STUNNED"] = STUNNED;
-	DRAW_PHASE_MAP["GROUND_SHOOT"] = GROUND_SHOOT;
-	DRAW_PHASE_MAP["JUMP_SHOOT"] = JUMP_SHOOT;
-	DRAW_PHASE_MAP["NUDGE"] = NUDGE;
-	DRAW_PHASE_MAP["NUDGE_SHOOT"] = NUDGE_SHOOT;
-	DRAW_PHASE_MAP["WALK_SHOOT"] = WALK_SHOOT;
-	DRAW_PHASE_MAP["DEATH"] = DEATH;
-	DRAW_PHASE_MAP["SLIDE_SHOOT"] = SLIDE_SHOOT;
-	DRAW_PHASE_MAP["IDLE2"] = IDLE2;
-	DRAW_PHASE_MAP["HANG"] = HANG;
-	DRAW_PHASE_MAP["HANG_SHOOT"] = HANG_SHOOT;
-	DRAW_PHASE_MAP["HANG_V"] = HANG_V;
-	DRAW_PHASE_MAP["HANG_V_SHOOT"] = HANG_V_SHOOT;
-	DRAW_PHASE_MAP["HANG_V_UP"] = HANG_V_UP;
-	DRAW_PHASE_MAP["HANG_V_UP_SHOOT"] = HANG_V_UP_SHOOT;
-	DRAW_PHASE_MAP["HANG_V_DOWN"] = HANG_V_DOWN;
-	DRAW_PHASE_MAP["HANG_V_DOWN_SHOOT"] = HANG_V_DOWN_SHOOT;
-	DRAW_PHASE_MAP["STAND"] = STAND; //MUTE
-	DRAW_PHASE_MAP["ATTACK"] = ATTACK;
-	DRAW_PHASE_MAP["RUNNING"] = RUNNING;
-	DRAW_PHASE_MAP["CLIMBING"] = CLIMBING;
-	DRAW_PHASE_MAP["HANGING"] = HANGING;
-	DRAW_PHASE_MAP["JUMPING"] = JUMPING;
-	DRAW_PHASE_MAP["HITCH"] = HITCH;
-	DRAW_PHASE_MAP["AIR_ATTACK"] = AIR_ATTACK;
-	DRAW_PHASE_MAP["HANGING_IDLE"] = HANGING_IDLE;
-	DRAW_PHASE_MAP["RESPAWN"] = RESPAWN;
-	DRAW_PHASE_MAP["WIND_RUN"] = WIND_RUN;
-
-	DRAW_PHASE_MAP["LEFT"] = LEFT;
-	DRAW_PHASE_MAP["RIGHT"] = RIGHT;
-	DRAW_PHASE_MAP["NEUTRAL"] = NEUTRAL;
-
-	DRAW_PHASE_MAP["CROUCH"] = CROUCH;
-	DRAW_PHASE_MAP["ATTACK_STANDING"] = ATTACK_STANDING;
-	DRAW_PHASE_MAP["ATTACK_CROUCHING"] = ATTACK_CROUCHING;
-	DRAW_PHASE_MAP["ATTACK_AIR_DOWNRIGHT"] = ATTACK_AIR_DOWNRIGHT;
-	DRAW_PHASE_MAP["ATTACK_AIR_RIGHT"] = ATTACK_AIR_RIGHT;
-
-	//boss skeleton
-	DRAW_PHASE_MAP["ATTACK_PRE_DASH"] = ATTACK_PRE_DASH;
-	DRAW_PHASE_MAP["ATTACK_DASH"] = ATTACK_DASH;
-	DRAW_PHASE_MAP["ATTACK_BACKSTEP"] = ATTACK_BACKSTEP;
-	DRAW_PHASE_MAP["ATTACK_PRE_CROSS_SLASH"] = ATTACK_PRE_CROSS_SLASH;
-	DRAW_PHASE_MAP["ATTACK_CROSS_SLASH"] = ATTACK_CROSS_SLASH;
-	DRAW_PHASE_MAP["ATTACK_LEAP"] = ATTACK_LEAP;
-	DRAW_PHASE_MAP["ATTACK_HOMING_BONE"] = ATTACK_HOMING_BONE;
-	DRAW_PHASE_MAP["ATTACK_BOUNCING_BONE"] = ATTACK_BOUNCING_BONE;
-
-	//frog
-	DRAW_PHASE_MAP["ATTACK_ACID"] = ATTACK_ACID;
-	DRAW_PHASE_MAP["ATTACK_BIG_BUBBLE"] = ATTACK_BIG_BUBBLE;
-	DRAW_PHASE_MAP["ATTACK_BIG_HOP"] = ATTACK_BIG_HOP;
-	DRAW_PHASE_MAP["ATTACK_ROLL"] = ATTACK_ROLL;
-	DRAW_PHASE_MAP["ATTACK_SHORT_HOP"] = ATTACK_SHORT_HOP;
-	DRAW_PHASE_MAP["ATTACK_SLAM"] = ATTACK_SLAM;
-	DRAW_PHASE_MAP["ATTACK_WALL"] = ATTACK_WALL;
-	DRAW_PHASE_MAP["ATTACK_WARP"] = ATTACK_WARP;
-
-	//snake
-	DRAW_PHASE_MAP["ATTACK_HORIZONTAL"] = ATTACK_HORIZONTAL;
-	DRAW_PHASE_MAP["ATTACK_VERTICAL"] = ATTACK_VERTICAL;
-
-	DRAW_PHASE_MAP["ATTACK_AIR_UPRIGHT"] = ATTACK_AIR_UPRIGHT;
-	DRAW_PHASE_MAP["ATTACK_AIR_UP"] = ATTACK_AIR_UP;
-	DRAW_PHASE_MAP["ATTACK_AIR_DOWN"] = ATTACK_AIR_DOWN;
-	DRAW_PHASE_MAP["ATTACK_STANDING_UP"] = ATTACK_STANDING_UP;
-	DRAW_PHASE_MAP["ATTACK_STANDING_UPRIGHT"] = ATTACK_STANDING_UPRIGHT;
-
-	DRAW_PHASE_MAP["FALLING_ALT"] = FALLING_ALT;
-
-	DRAW_PHASE_MAP["ATTACK_STANDING_SUBWEAPON"] = ATTACK_STANDING_SUBWEAPON;
-
-	DRAW_PHASE_MAP["ATTACK_STUN_STATE"] = ATTACK_STUN_STATE;
-
-	DRAW_PHASE_MAP["STEP10"] = STEP10;
-	DRAW_PHASE_MAP["STEP11"] = STEP11;
-	DRAW_PHASE_MAP["STEP12"] = STEP12;
-	DRAW_PHASE_MAP["STEP13"] = STEP13;
-	DRAW_PHASE_MAP["STEP14"] = STEP14;
-	DRAW_PHASE_MAP["STEP15"] = STEP15;
-	DRAW_PHASE_MAP["STEP16"] = STEP16;
-	DRAW_PHASE_MAP["STEP17"] = STEP17;
-	DRAW_PHASE_MAP["STEP18"] = STEP18;
-	DRAW_PHASE_MAP["STEP19"] = STEP19;
-
-	DRAW_PHASE_MAP["ROPE_CLIMB"] = ROPE_CLIMB;
-	DRAW_PHASE_MAP["ROPE_ATTACK"] = ROPE_ATTACK;
-
-	DRAW_PHASE_MAP["TAUNT"] = TAUNT;
-	DRAW_PHASE_MAP["DODGING"] = DODGING;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_L_A"] = MOVE_ATTACK_L_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_L_B"] = MOVE_ATTACK_L_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_L_C"] = MOVE_ATTACK_L_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_H_A"] = MOVE_ATTACK_H_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_H_B"] = MOVE_ATTACK_H_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_H_C"] = MOVE_ATTACK_H_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_L_A"] = MOVE_ATTACK_AIR_L_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_L_B"] = MOVE_ATTACK_AIR_L_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_L_C"] = MOVE_ATTACK_AIR_L_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_H_A"] = MOVE_ATTACK_AIR_H_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_H_B"] = MOVE_ATTACK_AIR_H_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_H_C"] = MOVE_ATTACK_AIR_H_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_S1_A"] = MOVE_ATTACK_S1_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_S1_B"] = MOVE_ATTACK_S1_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_S1_C"] = MOVE_ATTACK_S1_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_S2_A"] = MOVE_ATTACK_S2_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_S2_B"] = MOVE_ATTACK_S2_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_S2_C"] = MOVE_ATTACK_S2_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_S1_A"] = MOVE_ATTACK_AIR_S1_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_S1_B"] = MOVE_ATTACK_AIR_S1_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_S1_C"] = MOVE_ATTACK_AIR_S1_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_S2_A"] = MOVE_ATTACK_AIR_S2_A;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_S2_B"] = MOVE_ATTACK_AIR_S2_B;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_S2_C"] = MOVE_ATTACK_AIR_S2_C;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_UP"] = MOVE_ATTACK_UP;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SIDE"] = MOVE_ATTACK_SIDE;
-	DRAW_PHASE_MAP["MOVE_ATTACK_DOWN"] = MOVE_ATTACK_DOWN;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_UP"] = MOVE_ATTACK_AIR_UP;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_SIDE"] = MOVE_ATTACK_AIR_SIDE;
-	DRAW_PHASE_MAP["MOVE_ATTACK_AIR_DOWN"] = MOVE_ATTACK_AIR_DOWN;
-
-	DRAW_PHASE_MAP["DODGING_AIR"] = DODGING_AIR;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_UP"] = MOVE_ATTACK_SPECIAL_UP;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_SIDE"] = MOVE_ATTACK_SPECIAL_SIDE;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_DOWN"] = MOVE_ATTACK_SPECIAL_DOWN;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_NEUTRAL"] = MOVE_ATTACK_SPECIAL_NEUTRAL;
-
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_AIR_UP"] = MOVE_ATTACK_SPECIAL_AIR_UP;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_AIR_SIDE"] = MOVE_ATTACK_SPECIAL_AIR_SIDE;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_AIR_DOWN"] = MOVE_ATTACK_SPECIAL_AIR_DOWN;
-	DRAW_PHASE_MAP["MOVE_ATTACK_SPECIAL_AIR_NEUTRAL"] = MOVE_ATTACK_SPECIAL_AIR_NEUTRAL;
-
-	DRAW_PHASE_MAP["MORE_LEFT"] = MORE_LEFT;
-	DRAW_PHASE_MAP["MORE_RIGHT"] = MORE_RIGHT;
-
-	DRAW_PHASE_MAP["INTRO"] = INTRO;
-	DRAW_PHASE_MAP["INTRO_FREEZE"] = INTRO_FREEZE;
-
-	DRAW_PHASE_MAP["DESPAWN"] = DESPAWN;
-	DRAW_PHASE_MAP["DESPAWN_SUPER"] = DESPAWN_SUPER;
-	DRAW_PHASE_MAP["DESPAWN_INVULN"] = DESPAWN_INVULN;
-
-	DRAW_PHASE_ARRAY = std::vector<std::string>();
-	for (auto it = DRAW_PHASE_MAP.begin(); it != DRAW_PHASE_MAP.end(); it++)
-	{
-		std::string phaseString = it->first;
-		DRAW_PHASE_ARRAY.push_back(phaseString);
-	}
-	//Note here that the intent is for these to be sorted alphabetically.
-
-	_mHasInit = true;
+	return sh_draw_phase_map;
 }
-*/

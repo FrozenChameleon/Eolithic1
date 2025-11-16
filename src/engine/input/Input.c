@@ -599,18 +599,18 @@ void Input_SetMasterRecordingState(int32_t state)
 #if EDITOR || CHEATS
 bool Input_IsKeyTapped(int32_t key)
 {
-
+	return KeyboardState_IsKeyTapped(key);
 }
 bool Input_IsKeyReleased(int32_t key)
 {
-
+	return KeyboardState_IsKeyReleased(key);
 }
 bool Input_IsKeyPressed(int32_t key)
 {
-
+	return KeyboardState_IsKeyPressed(key);
 }
 int32_t Input_GetKeyTimeHeld(int32_t key)
 {
-
+	return KeyboardState_GetTimeHeld(key);
 }
 #endif

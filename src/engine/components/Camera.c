@@ -38,10 +38,10 @@ Vector2 Camera_GetInterpCameraAsVector2(const Camera* camera, double delta)
 	y += (camera->mCurrentShake.Y * camera->mCurrentShakeMul);
 
 #if EDITOR
-	if (Cvars_GetAsBool(Cvars_EDITOR_STRICT_CAMERA))
+	if (Cvars_GetAsBool(CVARS_EDITOR_STRICT_CAMERA))
 	{
-		x = static_cast<int>(x);
-		y = static_cast<int>(y);
+		x = (int)(x);
+		y = (int)(y);
 	}
 #endif
 

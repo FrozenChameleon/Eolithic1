@@ -61,11 +61,11 @@ static bool IsFixedTimeStep()
 	}
 
 #if EDITOR
-	if (OeGlobals_IsDebugGameSpeedSet())
+	if (Globals_IsDebugGameSpeedSet())
 	{
 		return false;
 	}
-	if (OeGameUpdater_IsDebugAutoSpeedOn())
+	if (GameUpdater_IsDebugAutoSpeedOn())
 	{
 		return false;
 	}
@@ -135,6 +135,7 @@ int32_t Game_Run()
 	double deltaLeftover = 0;
 	while (!isDone)
 	{
+		Utils_FreeJustThisFrameMallocs();
 		bool isFixedTimeStep = IsFixedTimeStep();
 		double delta = deltaLeftover;
 		deltaLeftover = 0;

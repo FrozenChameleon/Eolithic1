@@ -125,12 +125,12 @@ const char* MenuFunc_GetCurrentSoundTestMusic()
 const char* MenuFunc_GetCurrentSoundTestMusicAsNumber()
 {
 	return NULL;
-#if EDITOR
-	if (OeGlobals_DEBUG_IS_GOD_MODE)
+/*#if EDITOR
+	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
 		return GetCurrentSoundTestMusic();
 	}
-#endif
+#endif*/
 	//TODO C99 return Utils_GetStringFromNumberWithZerosTens(SOUND_TEST_CURRENT_MUSIC);
 }
 const char* MenuFunc_GetCurrentSoundTestSfx()
@@ -141,12 +141,12 @@ const char* MenuFunc_GetCurrentSoundTestSfx()
 const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 {
 	return NULL;
-#if EDITOR
-	if (OeGlobals_DEBUG_IS_GOD_MODE)
+/*#if EDITOR
+	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
 		return GetCurrentSoundTestSfx();
 	}
-#endif
+#endif*/
 	//TODO C99 return OeUtils_GetStringFromNumberWithZerosHundreds(SOUND_TEST_CURRENT_SOUND);
 }
 const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2)

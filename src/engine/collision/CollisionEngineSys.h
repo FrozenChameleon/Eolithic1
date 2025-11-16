@@ -37,7 +37,8 @@ int CollisionEngineSys_GetCollisionBitGrid(CollisionEngine* data, int x, int y);
 void CollisionEngineSys_SetupCollisionGrid(CollisionEngine* data, LevelData* level);
 bool CollisionEngineSys_DoPlatformCollision(Body* platformBody, Body* thingBody);
 Point CollisionEngineSys_GetCollisionGridPosition(float x, float y);
-bool CollisionEngineSys_CheckSurroundingCollision(CollisionEngine* data, int bodyX, int bodyY, int xDirection, int yDirection, const int* collisionToCheck);
+bool CollisionEngineSys_CheckSurroundingCollision(CollisionEngine* data, int bodyX, int bodyY, int xDirection, int yDirection, 
+	const int* collisionToCheck, int collisionToCheckLen);
 bool CollisionEngineSys_IsRectIntersectsCollision(CollisionEngine* data, int x, int y, int width, int height);
 bool CollisionEngineSys_CheckFeetCollision(CollisionEngine* data, Body* body, bool checkLeft, bool checkRight, int offset, int collisionBit);
 bool CollisionEngineSys_HasLineOfSight(CollisionEngine* data, float x1, float y1, float x2, float y2, bool respectOneWays);

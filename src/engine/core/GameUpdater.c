@@ -81,30 +81,30 @@ static void Cheats()
 
 	if (Input_IsCtrlPressed())
 	{
-		if (Input_IsKeyTapped(Keys_NumPad0))
+		if (Input_IsKeyTapped(KEYS_NumPad0))
 		{
 			GameUpdater_CycleDebugShowInfo();
 		}
-		if (Input_IsKeyTapped(Keys_NumPad1))
+		if (Input_IsKeyTapped(KEYS_NumPad1))
 		{
 			SetDebugAutoSpeed(false);
-			OeGlobals_DEBUG_GAME_LOGIC_SPEED = OeGlobals_DEFAULT_DEBUG_GAME_LOGIC_SPEED;
-			OeLogger_LogInformation("Auto Speed: " + std_to_string(_mIsDebugAutoSpeedOn));
+			GLOBALS_DEBUG_GAME_LOGIC_SPEED = GLOBALS_DEFAULT_DEBUG_GAME_LOGIC_SPEED;
+			Logger_printf("Auto Speed: %i\n", _mIsDebugAutoSpeedOn);
 		}
-		if (Input_IsKeyTapped(Keys_NumPad2))
+		if (Input_IsKeyTapped(KEYS_NumPad2))
 		{
 			GameUpdater_ToggleDebugAutoSpeed();
-			OeLogger_LogInformation("Auto Speed: " + std_to_string(_mIsDebugAutoSpeedOn));
+			Logger_printf("Auto Speed: %i\n", _mIsDebugAutoSpeedOn);
 		}
-		if (Input_IsKeyTapped(Keys_NumPad3))
+		if (Input_IsKeyTapped(KEYS_NumPad3))
 		{
-			//WILLNOTDO 05152023 OeResourceManagers.SoundEffectManager.Dispose();
-			OeLogger_LogInformation("Reloaded Audio");
+			//WILLNOTDO 05152023 ResourceManagers.SoundEffectManager.Dispose();
+			Logger_LogInformation("Reloaded Audio");
 		}
-		if (Input_IsKeyTapped(Keys_NumPad4))
+		if (Input_IsKeyTapped(KEYS_NumPad4))
 		{
 			GameUpdater_DebugReloadGraphics();
-			OeLogger_LogInformation("Reloaded All Assets And Animations");
+			Logger_LogInformation("Reloaded All Assets And Animations");
 		}
 	}
 	else if (Input_IsShiftPressed())
@@ -112,17 +112,17 @@ static void Cheats()
 	}
 	else if (Input_IsAltPressed())
 	{
-		if (Input_IsKeyTapped(Keys_NumPad0))
+		if (Input_IsKeyTapped(KEYS_NumPad0))
 		{
-			OeGlobals_DebugSetRenderDisabled(!OeGlobals_DebugIsRenderDisabled());
-			OeLogger_LogInformation("Render Disabled: " + Utils_ToString(OeGlobals_DebugIsRenderDisabled()));
+			Globals_DebugSetRenderDisabled(!Globals_DebugIsRenderDisabled());
+			Logger_printf("Render Disabled: %i\n", Globals_DebugIsRenderDisabled());
 		}
 	}
 	else
 	{
-		if (Input_IsKeyTapped(Keys_NumPad0))
+		if (Input_IsKeyTapped(KEYS_NumPad0))
 		{
-			OeGlobals_ToggleGodMode();
+			Globals_ToggleGodMode();
 		}
 		int timeToStart = 60;
 		int timeInterval = 5;
@@ -131,109 +131,109 @@ static void Cheats()
 		{
 			timeGo = true;
 		}
-		if (Input_IsKeyPressed(Keys_NumPad1) && Input_IsKeyPressed(Keys_NumPad2))
+		if (Input_IsKeyPressed(KEYS_NumPad1) && Input_IsKeyPressed(KEYS_NumPad2))
 		{
-			if (OeGlobals_DEBUG_GAME_LOGIC_SPEED != 100)
+			if (GLOBALS_DEBUG_GAME_LOGIC_SPEED != 100)
 			{
 				SetDebugAutoSpeed(false);
-				OeGlobals_DEBUG_GAME_LOGIC_SPEED = 100;
-				OeLogger_LogInformation("Game Speed: " + std_to_string(OeGlobals_GetDebugGameSpeedAsMul()));
+				GLOBALS_DEBUG_GAME_LOGIC_SPEED = 100;
+				Logger_printf("Game Speed: %f\n", Globals_GetDebugGameSpeedAsMul());
 			}
 		}
-		else if (Input_IsKeyPressed(Keys_NumPad1))
+		else if (Input_IsKeyPressed(KEYS_NumPad1))
 		{
 			_mDebugTimeHeld += 1;
 			if (timeGo)
 			{
 				SetDebugAutoSpeed(false);
-				OeGlobals_DEBUG_GAME_LOGIC_SPEED -= 10;
-				if (OeGlobals_DEBUG_GAME_LOGIC_SPEED < 10)
+				GLOBALS_DEBUG_GAME_LOGIC_SPEED -= 10;
+				if (GLOBALS_DEBUG_GAME_LOGIC_SPEED < 10)
 				{
-					OeGlobals_DEBUG_GAME_LOGIC_SPEED = 10;
+					GLOBALS_DEBUG_GAME_LOGIC_SPEED = 10;
 				}
-				OeLogger_LogInformation("Game Speed: " + std_to_string(OeGlobals_GetDebugGameSpeedAsMul()));
+				Logger_printf("Game Speed: %f\n", Globals_GetDebugGameSpeedAsMul());
 			}
 		}
-		else if (Input_IsKeyPressed(Keys_NumPad2))
+		else if (Input_IsKeyPressed(KEYS_NumPad2))
 		{
 			_mDebugTimeHeld += 1;
 			if (timeGo)
 			{
 				SetDebugAutoSpeed(false);
-				OeGlobals_DEBUG_GAME_LOGIC_SPEED += 10;
-				OeLogger_LogInformation("Game Speed: " + std_to_string(OeGlobals_GetDebugGameSpeedAsMul()));
+				GLOBALS_DEBUG_GAME_LOGIC_SPEED += 10;
+				Logger_printf("Game Speed: %f\n", Globals_GetDebugGameSpeedAsMul());
 			}
 		}
 		else
 		{
 			_mDebugTimeHeld = 0;
 		}
-		if (Input_IsKeyTapped(Keys_NumPad3))
+		if (Input_IsKeyTapped(KEYS_NumPad3))
 		{
-			OeGlobals_DEBUG_IS_PAUSED = !OeGlobals_DEBUG_IS_PAUSED;
-			OeLogger_LogInformation("Is Paused: " + std_to_string(OeGlobals_DEBUG_IS_PAUSED));
+			GLOBALS_DEBUG_IS_PAUSED = !GLOBALS_DEBUG_IS_PAUSED;
+			Logger_printf("Is Paused: %i\n", GLOBALS_DEBUG_IS_PAUSED);
 			return;
 		}
 
-		if (Input_IsKeyTapped(Keys_NumPad5))
+		if (Input_IsKeyTapped(KEYS_NumPad5))
 		{
-			Cvars_FlipAsBool(Cvars_EDITOR_SHOW_PROPS);
-			OeLogger_LogInformation("Show Props: " + std_to_string(Cvars_GetAsBool(Cvars_EDITOR_SHOW_PROPS)));
+			Cvars_FlipAsBool(CVARS_EDITOR_SHOW_PROPS);
+			Logger_printf("Show Props: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_PROPS));
 		}
-		if (Input_IsKeyTapped(Keys_NumPad6))
+		if (Input_IsKeyTapped(KEYS_NumPad6))
 		{
-			Cvars_FlipAsBool(Cvars_EDITOR_SHOW_THINGS);
-			OeLogger_LogInformation("Show Things: " + std_to_string(Cvars_GetAsBool(Cvars_EDITOR_SHOW_THINGS)));
+			Cvars_FlipAsBool(CVARS_EDITOR_SHOW_THINGS);
+			Logger_printf("Show Things: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_THINGS));
 		}
-		if (Input_IsKeyTapped(Keys_NumPad7))
+		if (Input_IsKeyTapped(KEYS_NumPad7))
 		{
-			Cvars_FlipAsBool(Cvars_EDITOR_SHOW_TILES);
-			OeLogger_LogInformation("Show Tiles: " + std_to_string(Cvars_GetAsBool(Cvars_EDITOR_SHOW_TILES)));
+			Cvars_FlipAsBool(CVARS_EDITOR_SHOW_TILES);
+			Logger_printf("Show Tiles: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_TILES));
 		}
-		if (Input_IsKeyTapped(Keys_NumPad8))
+		if (Input_IsKeyTapped(KEYS_NumPad8))
 		{
-			if (OeGlobals_DEBUG_IS_EDITOR_MODE)
+			if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 			{
-				Cvars_FlipAsBool(Cvars_EDITOR_SHOW_COLLISION);
-				OeLogger_LogInformation("Show Editor Col: " + std_to_string(Cvars_GetAsBool(Cvars_EDITOR_SHOW_COLLISION)));
+				Cvars_FlipAsBool(CVARS_EDITOR_SHOW_COLLISION);
+				Logger_printf("Show Editor Col: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_COLLISION));
 			}
 			else
 			{
-				OeGlobals_DEBUG_SHOW_INGAME_COLLISION = !OeGlobals_DEBUG_SHOW_INGAME_COLLISION;
-				OeLogger_LogInformation("Show InGame Col: " + std_to_string(OeGlobals_DEBUG_SHOW_INGAME_COLLISION));
+				GLOBALS_DEBUG_SHOW_INGAME_COLLISION = !GLOBALS_DEBUG_SHOW_INGAME_COLLISION;
+				Logger_printf("Show InGame Col: %i\n", GLOBALS_DEBUG_SHOW_INGAME_COLLISION);
 			}
 		}
-		if (Input_IsKeyTapped(Keys_NumPad9))
+		if (Input_IsKeyTapped(KEYS_NumPad9))
 		{
-			OeGlobals_DEBUG_DISABLE_HUD = !OeGlobals_DEBUG_DISABLE_HUD;
-			OeLogger_LogInformation("Disable Hud: " + std_to_string(OeGlobals_DEBUG_DISABLE_HUD));
+			GLOBALS_DEBUG_DISABLE_HUD = !GLOBALS_DEBUG_DISABLE_HUD;
+			Logger_printf("Disable Hud: %i\n", GLOBALS_DEBUG_DISABLE_HUD);
 		}
-		if (Input_IsKeyTapped(Keys_F8))
+		if (Input_IsKeyTapped(KEYS_F8))
 		{
-			OeSoundEffect_StopAllSounds();
+			SoundEffect_StopAllSounds();
 			GameUpdater_DebugReloadMap();
 		}
-		if (Input_IsKeyTapped(Keys_F9))
+		if (Input_IsKeyTapped(KEYS_F9))
 		{
 			GameUpdater_DebugSaveMap();
 		}
-		if (Input_IsKeyTapped(Keys_F10))
+		if (Input_IsKeyTapped(KEYS_F10))
 		{
-			OeSoundEffect_StopAllSounds();
+			SoundEffect_StopAllSounds();
 			GameUpdater_FastReset();
 		}
-		if (Input_IsKeyTapped(Keys_F11))
+		if (Input_IsKeyTapped(KEYS_F11))
 		{
-			OeSoundEffect_StopAllSounds();
+			SoundEffect_StopAllSounds();
 			GameUpdater_FastResetPlusMove();
 		}
-		if (Input_IsKeyTapped(Keys_F12))
+		if (Input_IsKeyTapped(KEYS_F12))
 		{
 			//GameUpdater_ToggleEditor();
 		}
-		if (Input_IsKeyTapped(Keys_OemComma))
+		if (Input_IsKeyTapped(KEYS_OemComma))
 		{
-			Utils_ToggleNextUserLanguage(true);
+			//TODO C99 Utils_ToggleNextUserLanguage(true);
 		}
 	}
 }
@@ -282,49 +282,49 @@ static bool HandleDebugPauseAndStep()
 	}
 	*/
 
-	if (!OeGlobals_DEBUG_IS_PAUSED)
+	if (!GLOBALS_DEBUG_IS_PAUSED)
 	{
 		return false;
 	}
 
 	Input_Update(true);
 
-	if (Input_IsKeyTapped(Keys_NumPad4))
+	if (Input_IsKeyTapped(KEYS_NumPad4))
 	{
 		Tick();
 		Renderer_SetupRenderState();
-		OeLogger_LogInformation("Step");
+		Logger_LogInformation("Step");
 		return true;
 	}
 
-	if (Input_IsKeyTapped(Keys_OemComma))
+	if (Input_IsKeyTapped(KEYS_OemComma))
 	{
-		Utils_ToggleNextUserLanguage(true);
+		//TODO C99 Utils_ToggleNextUserLanguage(true);
 		return true;
 	}
 
-	if (Input_IsKeyTapped(Keys_OemPeriod))
+	if (Input_IsKeyTapped(KEYS_OemPeriod))
 	{
-		Utils_ToggleNextUserLanguage(true);
+		//TODO C99 Utils_ToggleNextUserLanguage(true);
 		Tick();
 		Renderer_SetupRenderState();
-		OeLogger_LogInformation("Step");
+		Logger_LogInformation("Step");
 		return true;
 	}
 
-	if (Input_GetPlayerAction(OeActionList_GAME_LS)->mIsTapped)
+	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_LS)->mIsTapped)
 	{
-		OeGameStateManager_ActiveGameState()->CreateDebugSaveState();
+		//TODO C99 GameStateManager_ActiveGameState()->CreateDebugSaveState();
 	}
 
-	if (Input_GetPlayerAction(OeActionList_GAME_RS)->mIsTapped)
+	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_RS)->mIsTapped)
 	{
-		OeGameStateManager_ActiveGameState()->UseDebugSaveState();
+		//TODO C99 GameStateManager_ActiveGameState()->UseDebugSaveState();
 	}
 
-	if (Input_GetPlayerAction(OeActionList_GAME_LB)->mIsTapped)
+	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_LB)->mIsTapped)
 	{
-		OeGameStateManager_ActiveGameState()->Rewind();
+		//TODO C99 GameStateManager_ActiveGameState()->Rewind();
 	}
 
 	Renderer_SetupRenderState();
@@ -482,9 +482,9 @@ static void UpdateLoop(double delta)
 	}
 
 #if EDITOR
-	if (!OeGlobals_DEBUG_IS_EDITOR_MODE && OeGlobals_IsDebugGameSpeedSet())
+	if (!GLOBALS_DEBUG_IS_EDITOR_MODE && Globals_IsDebugGameSpeedSet())
 	{
-		delta *= OeGlobals_GetDebugGameSpeedAsMul();
+		delta *= Globals_GetDebugGameSpeedAsMul();
 	}
 #endif
 
@@ -615,7 +615,7 @@ void GameUpdater_DebugSaveMap()
 	Get_LevelDataResource().SaveAsIni();
 	OeEditor.Save();
 	Do_PlaySound("editorSave", 1f);
-	OeLogger.LogInformation("Map Saved");
+	Logger.LogInformation("Map Saved");
 #endif
 */
 }
@@ -636,7 +636,7 @@ void GameUpdater_FastResetPlusMove()
 	OeGameStateManager.DebugForceReloadMapNow();
 	OeGameStateManager.SetGameState(OeGameStateManager.GAME_STATE_NORMAL);
 	OeGlobals_DEBUG_IS_EDITOR_MODE = false;
-	OeLogger.LogInformation("Map Reloaded (Fast+Move) [" + Get_LevelDataResource().GetPath() + "][" +
+	Logger.LogInformation("Map Reloaded (Fast+Move) [" + Get_LevelDataResource().GetPath() + "][" +
 		Get_LevelData().mLevelName + "]");
 	OeGame.GetHelper().OnDebugFastResetPlusMove();
 #endif
@@ -646,7 +646,7 @@ void GameUpdater_ToggleEditor()
 {
 	//WILLNOTDO 05152023
 	//OeGlobals_DEBUG_IS_EDITOR_MODE = !OeGlobals_DEBUG_IS_EDITOR_MODE;
-	//OeLogger.LogInformation("Editor Toggle");
+	//Logger.LogInformation("Editor Toggle");
 }
 void GameUpdater_ToggleDebugAutoSpeed()
 {
@@ -666,7 +666,7 @@ void GameUpdater_DebugReloadGraphics()
 		OeGlobals_DEBUG_IS_EDITOR_MODE = true;
 	}
 	OeGlobals_DEBUG_EDITOR_JUST_RELOADED_GRAPHICS = true;
-	OeLogger.LogInformation("Reloaded all graphics");
+	Logger.LogInformation("Reloaded all graphics");
 	*/
 }
 void GameUpdater_CycleDebugShowInfo()
@@ -678,7 +678,7 @@ void GameUpdater_CycleDebugShowInfo()
 	{
 		GLOBALS_DEBUG_SHOW_INFO = GAMESTATEMANAGER_DEBUG_INFO_SHOW_NOTHING;
 	}
-	OeLogger_LogInformation("Debug Info: " + std_to_string(OeGlobals_DEBUG_SHOW_INFO), true);*/
+	Logger_LogInformation("Debug Info: " + std_to_string(OeGlobals_DEBUG_SHOW_INFO), true);*/
 }
 uint64_t GameUpdater_GetGlobalTicks()
 {

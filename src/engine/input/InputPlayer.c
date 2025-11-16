@@ -42,7 +42,7 @@ void InputPlayer_SetInputDevice(InputPlayer* ip, int newDeviceNumber)
 
 	if (ip->_mInputDeviceNumber == -1)
 	{
-		//TODO C99 OeLogger_LogInformation("Input device set for Player #" + std_to_string((_mPlayerNumber + 1)) + ", Device #" + std_to_string((newDeviceNumber)));
+		//TODO C99 Logger_LogInformation("Input device set for Player #" + std_to_string((_mPlayerNumber + 1)) + ", Device #" + std_to_string((newDeviceNumber)));
 	}
 
 	ip->_mInputDeviceNumber = newDeviceNumber;
@@ -273,8 +273,8 @@ bool InputPlayer_MyControllerLostConnection(InputPlayer* ip)
 	return false;
 }
 #if EDITOR
-void InputPlayer_DebugSetDevice(int deviceNumber)
+void InputPlayer_DebugSetDevice(InputPlayer* ip, int deviceNumber)
 {
-	_mInputDeviceNumber = deviceNumber;
+	ip->_mInputDeviceNumber = deviceNumber;
 }
 #endif

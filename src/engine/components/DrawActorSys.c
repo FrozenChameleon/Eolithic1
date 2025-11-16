@@ -12,6 +12,7 @@
 #include "../components/TagIsUpdateDisabled.h"
 #include "../components/FakePosition.h"
 #include "../../GlobalDefs.h"
+#include "../../third_party/stb_ds.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -29,44 +30,47 @@ static ComponentPack* GetDrawRenderInfos()
 
 void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_graphics_data, const char* defaultDrawState, const char* defaultDrawPhase)
 {
-	/*std_unordered_map<std_string, int>& drawStateMap = OeState_GetDrawStateMap();
-	std_unordered_map<std_string, int>& drawPhaseMap = OePhase_GetDrawPhaseMap();
+	DrawStateMap* sh_draw_state_map = OeState_GetShDrawStateMap();
+	DrawPhaseMap* sh_draw_phase_map = OePhase_GetShDrawPhaseMap();
 
-	ComponentPack<DrawStateInfo>* stateInfos = GetDrawStateInfos();
-	ComponentPack<OeDrawRenderInfo>* renderInfos = GetDrawRenderInfos();
+	ComponentPack* stateInfos = GetDrawStateInfos(); //DrawStateInfo
+	ComponentPack* renderInfos = GetDrawRenderInfos(); //OeDrawRenderInfo
 
-	data->mDefaultDrawState = drawStateMap[defaultDrawState];
-	data->mDefaultDrawPhase = drawPhaseMap[defaultDrawPhase];
+	data->mDefaultDrawState = shget(sh_draw_state_map, defaultDrawState);
+	data->mDefaultDrawPhase = shget(sh_draw_phase_map, defaultDrawPhase);
 
-	const std_vector<std_string>& firstKeys = imageData.Keys;
-	for (int i = 0; i < firstKeys.size(); i += 1)
+	int DEBUG3 = shlen(sh_graphics_data);
+	for (int i = 0; i < shlen(sh_graphics_data); i += 1)
 	{
-		const std_string& stateString = firstKeys[i];
-		int state = drawStateMap[stateString];
+		const char* stateString = sh_graphics_data[i].key;
+		int state = shget(sh_draw_state_map, stateString);
 
-		DrawStateInfo* stateInfo = stateInfos->Set(owner, true);
+		DrawStateInfo* stateInfo = ComponentPack_Set2(stateInfos, owner, true);
 		stateInfo->mState = state;
-		stateInfo->mCurrentPhase = NOTHING;
+		stateInfo->mCurrentPhase = DRAWACTORSYS_NOTHING;
 		stateInfo->mDepth = -1;
 
-		const std_vector<std_string>& secondKeys = imageData[stateString].Keys;
-		for (int j = 0; j < secondKeys.size(); j += 1)
+		ThingGraphicsEntry* sh_thing_graphics_entries = sh_graphics_data[i].value;
+		int DEBUG2 = shlen(sh_thing_graphics_entries);
+		for (int j = 0; j < shlen(sh_thing_graphics_entries); j += 1)
 		{
-			const std_string& phaseString = secondKeys[j];
-			int phase = drawPhaseMap[phaseString];
+			const char* phaseString = sh_thing_graphics_entries[j].key;
+			int phase = shget(sh_draw_phase_map, phaseString);
 
-			std_vector<OeImageData>& images = imageData[stateString][phaseString];
-			for (int k = 0; k < images.size(); k += 1)
+			ImageData* arr_images = sh_thing_graphics_entries[j].value;
+			int DEBUG1 = arrlen(arr_images);
+			for (int k = 0; k < arrlen(arr_images); k += 1)
 			{
-				OeDrawRenderInfo* renderInfo = renderInfos->Set(owner, true);
+				DrawRenderInfo* renderInfo = ComponentPack_Set2(renderInfos, owner, true);
 				renderInfo->mState = state;
 				renderInfo->mPhase = phase;
-				renderInfo->mRender = ImageDataInstance(&images[k]);
+				ImageData* imageData = &arr_images[k];
+				ImageDataInstance_Init(&renderInfo->mRender, imageData);
 			}
 		}
 	}
 
-	SetImageState(owner, data, data->mDefaultDrawState, data->mDefaultDrawPhase);*/
+	DrawActorSys_SetImageState(owner, data, data->mDefaultDrawState, data->mDefaultDrawPhase);
 }
 void DrawActorSys_CreateExplosionModules(Entity owner, int state, int phase, int time, int type)
 {
@@ -184,7 +188,7 @@ DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int state)
 			}
 		}
 	}
-	//TODO C99 OeLogger_LogError("State Not Available: " + OeUtils_ToString(state) + " on " + Get_Name(owner));
+	//TODO C99 Logger_LogError("State Not Available: " + OeUtils_ToString(state) + " on " + Get_Name(owner));
 	return ComponentPack_GetComponentAtIndex(drawStateInfos, 0);
 }
 void DrawActorSys_SetDepthOverride(Entity owner, int state, int value)
@@ -348,7 +352,7 @@ Animation* DrawActorSys_GetAnimation(Entity owner, int state, int phase)
 			}
 		}
 	}
-	//TODO C99 OeLogger_LogError("Unable to get Animation: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
+	//TODO C99 Logger_LogError("Unable to get Animation: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
 	return &EmptyAnimation;
 }
 ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int state, int phase)
@@ -365,7 +369,7 @@ ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int stat
 			}
 		}
 	}
-	//TODO C99 OeLogger_LogError("Unable to get Image Data Render: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
+	//TODO C99 Logger_LogError("Unable to get Image Data Render: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
 	return &EmptyRender;
 }
 void DrawActorSys_ResetCurrentAnimation(Entity owner, int state)

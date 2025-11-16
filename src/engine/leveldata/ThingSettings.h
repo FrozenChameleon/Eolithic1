@@ -15,13 +15,13 @@ enum
 typedef struct ThingGraphicsEntry
 {
 	char* key; 
-	ImageData* value; //THIS IS AN STB ARRAY, SHOULD BE ARR_VALUE
+	ImageData* value; //THIS IS AN STB ARRAY, SHOULD BE ARR_
 } ThingGraphicsEntry;
 
 typedef struct ThingGraphicsData
 {
 	char* key;
-	ThingGraphicsEntry* value;
+	ThingGraphicsEntry* value; //THIS IS AN STB SHMAP, SHOULD BE SH_
 } ThingGraphicsData;
 
 typedef struct ThingSettings

@@ -78,7 +78,7 @@ void GameSaveManager_Load()
 	if (OeGlobals_IsLoadingUserDataDisabled())
 	{
 		_mHasLoaded = true;
-		OeLogger_LogInformation("Loading disabled");
+		Logger_LogInformation("Loading disabled");
 		return;
 	}
 
@@ -88,7 +88,7 @@ void GameSaveManager_Load()
 		_mHasLoaded = true;
 		if (request.mBuffer == nullptr)
 		{
-			OeLogger_LogInformation("Nothing to load");
+			Logger_LogInformation("Nothing to load");
 			return;
 		}
 		else
@@ -97,7 +97,7 @@ void GameSaveManager_Load()
 			std_shared_ptr<OeIniReader> reader = OeIniReader_CreateNewOeIniReader(true, OeStream_CreateNewStream(request.mBuffer));
 			_mData.Read(reader);
 			_mWasDataJustLoaded = true;
-			OeLogger_LogInformation("Read save data");
+			Logger_LogInformation("Read save data");
 			return;
 		}
 	}

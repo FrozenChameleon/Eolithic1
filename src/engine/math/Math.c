@@ -255,3 +255,15 @@ float Math_GetSlopeInterceptY(float x1, float y1, float x2, float y2, float x)
 	float b = Math_GetIntercept(x1, y1, m);
 	return (m * x) + b;
 }
+double Math_GetAngle(float x1, float y1, float x2, float y2)
+{
+	return Math_atan2(y2 - y1, x2 - x1);
+}
+double Math_GetVectorFromRadianAngleX(double radianAngle)
+{
+	return Math_cos(radianAngle);
+}
+double Math_GetVectorFromRadianAngleY(double radianAngle)
+{
+	return Math_sin(radianAngle);
+}

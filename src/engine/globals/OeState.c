@@ -1,56 +1,36 @@
 #include "OeState.h"
 
-/*
-static bool _mHasInit = false;
+#include "../../third_party/stb_ds.h"
+#include "../utils/Utils.h"
 
-const static std::string STR_DEFAULT = "DEFAULT";
-static std::vector<std::string> DRAW_STATE_ARRAY;
-static std::unordered_map<std::string, int> DRAW_STATE_MAP;
+static const char* STR_DEFAULT = "DEFAULT";
 
-const std::vector<std::string>& OeState::GetDrawStateArray()
+static DrawStateMap* sh_draw_state_map;
+
+DrawStateMap* OeState_GetShDrawStateMap()
 {
-	return DRAW_STATE_ARRAY;
-}
-std::unordered_map<std::string, int>& OeState::GetDrawStateMap()
-{
-	return DRAW_STATE_MAP;
-}
-const std::string& OeState::GetDefaultState()
-{
-	return STR_DEFAULT;
-}
-void OeState::Init()
-{
-	if (_mHasInit)
+	if (sh_draw_state_map == NULL)
 	{
-		return;
+		sh_new_arena(sh_draw_state_map);
+
+		shput(sh_draw_state_map, STR_DEFAULT, OeState_DEFAULT);
+		shput(sh_draw_state_map, "HEAD", OeState_HEAD);
+		shput(sh_draw_state_map, "SHOOT", OeState_SHOOT);
+		shput(sh_draw_state_map, "NEW", OeState_NEW);
+		shput(sh_draw_state_map, "TAGS", OeState_TAGS);
+		shput(sh_draw_state_map, "WHEELS", OeState_WHEELS);
+		shput(sh_draw_state_map, "WHEELFX", OeState_WHEELFX);
+		shput(sh_draw_state_map, "MUZZLE", OeState_MUZZLE);
+		shput(sh_draw_state_map, "STEP1", OeState_STEP1);
+		shput(sh_draw_state_map, "STEP2", OeState_STEP2);
+		shput(sh_draw_state_map, "STEP3", OeState_STEP3);
+		shput(sh_draw_state_map, "STEP4", OeState_STEP4);
+		shput(sh_draw_state_map, "STEP5", OeState_STEP5);
+		shput(sh_draw_state_map, "STEP6", OeState_STEP6);
+		shput(sh_draw_state_map, "STEP7", OeState_STEP7);
+		shput(sh_draw_state_map, "STEP8", OeState_STEP8);
+		shput(sh_draw_state_map, "STEP9", OeState_STEP9);
 	}
 
-	DRAW_STATE_MAP[STR_DEFAULT] = DEFAULT;
-	DRAW_STATE_MAP["HEAD"] = HEAD;
-	DRAW_STATE_MAP["SHOOT"] = SHOOT;
-	DRAW_STATE_MAP["NEW"] = NEW;
-	DRAW_STATE_MAP["TAGS"] = TAGS;
-	DRAW_STATE_MAP["WHEELS"] = WHEELS;
-	DRAW_STATE_MAP["WHEELFX"] = WHEELFX;
-	DRAW_STATE_MAP["MUZZLE"] = MUZZLE;
-	DRAW_STATE_MAP["STEP1"] = STEP1;
-	DRAW_STATE_MAP["STEP2"] = STEP2;
-	DRAW_STATE_MAP["STEP3"] = STEP3;
-	DRAW_STATE_MAP["STEP4"] = STEP4;
-	DRAW_STATE_MAP["STEP5"] = STEP5;
-	DRAW_STATE_MAP["STEP6"] = STEP6;
-	DRAW_STATE_MAP["STEP7"] = STEP7;
-	DRAW_STATE_MAP["STEP8"] = STEP8;
-	DRAW_STATE_MAP["STEP9"] = STEP9;
-
-	DRAW_STATE_ARRAY = std::vector<std::string>();
-	for (auto it = DRAW_STATE_MAP.begin(); it != DRAW_STATE_MAP.end(); it++)
-	{
-		std::string stateString = it->first;
-		DRAW_STATE_ARRAY.push_back(stateString);
-	}
-	//Note here that the intent is for these to be sorted alphabetically.
-
-	_mHasInit = true;
-}*/
+	return sh_draw_state_map;
+}

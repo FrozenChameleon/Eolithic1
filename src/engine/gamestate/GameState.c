@@ -3,9 +3,15 @@
 #include "GameStateManager.h"
 #include "ReplayDataManager.h"
 #include "DebugRewindTester.h"
+#include "../core/Func.h"
 #include "../utils/Utils.h"
 #include "../utils/Cvars.h"
 #include "../core/GameHelper.h"
+#include "../leveldata/Particle.h"
+#include "../resources/ParticleManager.h"
+#include "../leveldata/ParticleInstance.h"
+#include "../leveldata/ParticleInstanceSys.h"
+#include "../utils/Logger.h"
 
 void GameState_SaveComponentSizesHelper(bool isBinary)
 {
@@ -39,11 +45,11 @@ void GameState_Ctor(GameState* gs, const char* name, bool disableRewinding)
 	{
 		gs->_mReplayDataManager._mIsActive = true;
 	}
-#if EDITOR
+/*#if EDITOR
 	_mHasSavedDebugSaveState = false;
 	_mDebugSaveState = OeGameHelper::CreateGameStateData(name);
 	_mIsRewindLooping = false;
-#endif
+#endif*/
 }
 
 GameStateData* GameState_GetGameStateData(GameState* gs)
@@ -62,53 +68,47 @@ void GameState_SaveComponentSizes(GameState* gs)
 
 ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name, float x, float y)
 {
-	return NULL;
-	//TODO C99
-	/*
-	Particle* particleData = OeResourceManagers::ParticleManager.GetResourceData(name);
-	if (particleData == nullptr)
+	Particle* particleData = ParticleManager_GetResourceData(name);
+	if (particleData == NULL)
 	{
-		OeLogger::LogInformation("Particle missing " + name);
-		return &OeParticleInstance::Dummy;
+		Logger_LogInformation("Particle missing:");
+		Logger_LogInformation(name);
+		return ParticleInstance_Dummy();
 	}
 
-	OeComponentPack<OeParticleInstance>* pack = OeFunc::Get_ComponentPack<OeParticleInstance>();
-	pack->SetMaximumCapacity(GLOBAL_DEF_PARTICLE_LIMIT);
-	if (pack->Length() >= GLOBAL_DEF_PARTICLE_LIMIT)
+	ComponentPack* pack = Get_ComponentPack(C_ParticleInstance);
+	ComponentPack_SetMaximumCapacity(pack, GLOBAL_DEF_PARTICLE_LIMIT);
+	if (ComponentPack_Length(pack) >= GLOBAL_DEF_PARTICLE_LIMIT)
 	{
-		return pack->GetDummy();
+		return ComponentPack_GetDummy(pack);
 	}
-	OeEntity particleEntity = OeFunc::Get_DummyEntityUniqueToPack(pack, "Particle Instances");
-	OeParticleInstance* particleInstance = pack->Set(particleEntity, true);
-	OeParticleInstanceSys::Setup(particleInstance, name, particleData, x, y);
+	Entity particleEntity = Get_DummyEntityUniqueToPack2(pack, "Particle Instances");
+	ParticleInstance* particleInstance = ComponentPack_Set2(pack, particleEntity, true);
+	ParticleInstanceSys_Setup(particleInstance, name, particleData, x, y);
 	return particleInstance;
-	*/
 }
 
 void GameState_RemoveEntity(GameState* gs, Entity entity)
 {
 	GameStateData_RemoveEntity(&gs->_mData, entity);
 }
-
-Entity* GameState_GetEntitiesInPlay(GameState* gs)
+void GameState_FillListWithEntitiesInPlay(GameState* gs, EntitySearch* list)
 {
-	return NULL;
-	//TODO C99
-	/*
-	_mEntitiesInPlay.clear();
-	_mData->FillListWithEntitiesInPlay(_mEntitiesInPlay);
-	return _mEntitiesInPlay;
-	*/
+	GameStateData_FillListWithEntitiesInPlay(&gs->_mData, list);
+}
+int32_t GameState_GetAmountOfEntitiesInPlay(GameState* gs)
+{
+	return GameStateData_GetAmountOfEntitiesInPlay(&gs->_mData);
 }
 void GameState_Do_SendBroadcast(GameState* gs, int type, int packet1, int packet2, int packet3)
 {
-	//TODO C99
-	/*
-	for (int i = 0; i < OeGameStateManager::StateSystems.size(); i++)
+	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
+	System** stateSystems = GameStateManager_GetStateSystems();
+	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
-		OeGameStateManager::StateSystems[i]->ReceiveBroadcast(type, packet1, packet2, packet3);
+		System* currentSystem = stateSystems[i];
+		currentSystem->_mReceiveBroadcast(currentSystem, type, packet1, packet2, packet3);
 	}
-	*/
 }
 Entity GameState_BuildNewEntity(GameState* gs)
 {
@@ -210,7 +210,7 @@ void GameState_DrawDebugHud(GameState* gs, SpriteBatch* spriteBatch)
 void GameState_Load(GameState* gs, const char* levelDataToLoad)
 {
 #if EDITOR
-	_mIsRewindLooping = false;
+	gs->_mIsRewindLooping = false;
 #endif
 
 	GameState_ClearReplayCache(gs);

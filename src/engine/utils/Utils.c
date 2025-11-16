@@ -20,6 +20,8 @@ static uint64_t _mMallocRefs;
 #define LARGE_CHAR_BUFFER_LEN 8192
 static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
+void** arr_mallocs_just_this_frame;
+
 uint64_t Utils_GetMallocRefs()
 {
 	return _mMallocRefs;
@@ -39,6 +41,32 @@ void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size)
 void Utils_memset(void* _Dst, int _Val, size_t _Size)
 {
 	SDL_memset(_Dst, _Val, _Size);
+}
+void* Utils_mallocJustThisFrame(size_t size)
+{
+	void* mallocToReturn = Utils_malloc(size);
+
+	arrput(arr_mallocs_just_this_frame, mallocToReturn);
+
+	return mallocToReturn;
+}
+void* Utils_callocJustThisFrame(size_t nmemb, size_t size)
+{
+	void* callocToReturn = Utils_calloc(nmemb, size);
+
+	arrput(arr_mallocs_just_this_frame, callocToReturn);
+
+	return callocToReturn;
+}
+void Utils_FreeJustThisFrameMallocs()
+{
+	int64_t len = arrlen(arr_mallocs_just_this_frame);
+	for (int i = 0; i < len; i += 1)
+	{
+		Utils_free(arr_mallocs_just_this_frame[i]);
+		arr_mallocs_just_this_frame[i] = NULL;
+	}
+	arrsetlen(arr_mallocs_just_this_frame, 0);
 }
 void* Utils_malloc(size_t size)
 {

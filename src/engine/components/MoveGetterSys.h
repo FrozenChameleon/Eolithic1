@@ -5,7 +5,7 @@
 #include "OeComMoveGetter.h"
 #include "../systems/OeSystemSimple.h"
 #include "../math/OeRandom.h"
-#include "../utils/OeLogger.h"
+#include "../utils/Logger.h"
 #include "../utils/OeUtils.h"
 
 class OeComMoveGetterSys final : OeSystemSimple<OeComMoveGetter>

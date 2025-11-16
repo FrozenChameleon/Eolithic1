@@ -1,5 +1,6 @@
 #include "GameStateData.h"
 
+#include "../utils/Logger.h"
 #include "../utils/Utils.h"
 #include "GameStateDataHelper.h"
 #include "GameStateManager.h"
@@ -41,9 +42,29 @@ void GameStateData_RemoveEntity(GameStateData* gsd, Entity entity)
 		ComponentPack_Unset(&gsd->mComponentPacks[i], entity);
 	}
 }
-void GameStateData_FillListWithEntitiesInPlay(GameStateData* gsd, Entity* list)
+void GameStateData_FillListWithEntitiesInPlay(GameStateData* gsd, EntitySearch* list)
 {
-	//TODO C99
+	ComponentPack* pack = GameStateData_GetComponentPack(gsd, C_TagIsInPlay);
+	if (list->cap < pack->_mLength)
+	{
+		Logger_LogWarning("Not enough room to fill list with entities in play.");
+		return;
+	}
+
+	int counter = 0;
+	PackIterator iter = PackIterator_Begin;
+	while (ComponentPack_Next(pack, &iter))
+	{
+		list->entities[counter] = iter.mEntity;
+		counter += 1;
+	}
+
+	list->len = counter;
+}
+int32_t GameStateData_GetAmountOfEntitiesInPlay(GameStateData* gsd)
+{
+	ComponentPack* pack = GameStateData_GetComponentPack(gsd, C_TagIsInPlay);
+	return pack->_mLength;
 }
 Entity GameStateData_BuildNewEntity(GameStateData* gsd)
 {

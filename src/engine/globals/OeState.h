@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdint.h"
+
 typedef enum DrawState
 {
 	OeState_DEFAULT = 0,
@@ -20,6 +22,14 @@ typedef enum DrawState
 	OeState_STEP8 = 15,
 	OeState_STEP9 = 16,
 } DrawState;
+
+typedef struct DrawStateMap
+{
+	char* key;
+	int value;
+} DrawStateMap;
+
+DrawStateMap* OeState_GetShDrawStateMap();
 
 /*
 const std::vector<std::string>& OeState_GetDrawStateArray();

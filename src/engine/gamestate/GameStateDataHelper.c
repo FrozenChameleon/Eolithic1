@@ -103,6 +103,7 @@
 #include "../components/LevelDataStub.h"
 #include "../components/LevelFrameCounter.h"
 #include "../components/Name.h"
+#include "../components/Nodes.h"
 #include "../components/ParentNumber.h"
 #include "../components/PlayerNumber.h"
 #include "../components/ShakeCamera.h"
@@ -240,6 +241,7 @@ void GameStateDataHelper_InitAllComponentPacks(GameStateData* gsd)
     ComponentPack_Init(&gsd->mComponentPacks[C_LevelDataStub], sizeof(LevelDataStub), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_LevelFrameCounter], sizeof(LevelFrameCounter), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_Name], sizeof(Name), GSD_INITIAL_SIZE);
+    ComponentPack_Init(&gsd->mComponentPacks[C_Nodes], sizeof(Nodes), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_ParentNumber], sizeof(ParentNumber), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_PlayerNumber], sizeof(PlayerNumber), GSD_INITIAL_SIZE);
     ComponentPack_Init(&gsd->mComponentPacks[C_ShakeCamera], sizeof(ShakeCamera), GSD_INITIAL_SIZE);

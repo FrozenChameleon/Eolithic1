@@ -98,6 +98,7 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 {
 	BufferReader_ReadI32(br); //ID has been removed
 	ts->mRoutineId = BufferReader_ReadI32(br);
+
 	ts->mCollisionWidth = BufferReader_ReadI32(br);
 	ts->mCollisionHeight = BufferReader_ReadI32(br);
 	ts->mDoNotDispose = BufferReader_ReadBoolean(br);
@@ -116,17 +117,15 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 		ThingGraphicsEntry* entry = NULL;
 		sh_new_arena(entry);
 
-		shput(ts->sh_graphics_data, MString_GetText(key1), entry);
-
 		int phaseCount = BufferReader_ReadI32(br);
 		for (int j = 0; j < phaseCount; j += 1)
 		{
 			MString* key2 = BufferReader_ReadMString(br);
 
 			ImageData* arr_images = NULL;
-		
+
 			int imageCount = BufferReader_ReadI32(br);
-			for (int k = 0; k < imageCount; k++)
+			for (int k = 0; k < imageCount; k += 1)
 			{
 				ImageData data = { 0 };
 				ImageData_Init(&data);
@@ -138,6 +137,8 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 
 			MString_Dispose(&key2);
 		}
+
+		shput(ts->sh_graphics_data, MString_GetText(key1), entry);
 
 		MString_Dispose(&key1);
 	}

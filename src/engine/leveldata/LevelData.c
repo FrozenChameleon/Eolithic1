@@ -275,3 +275,7 @@ void LevelData_ImprintToCollisionArray(LevelData* ld, int x, int y, int32_t* col
 		}
 	}
 }
+Rectangle LevelData_GetLevelBoundsRectangle(LevelData* ld)
+{
+	return Rectangle_Create(0, 0, LevelData_GetRealSizeX(ld), LevelData_GetRealSizeY(ld));
+}

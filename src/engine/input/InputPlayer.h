@@ -61,5 +61,5 @@ ControllerState* InputPlayer_GetController(InputPlayer* ip);
 void InputPlayer_Vibrate(InputPlayer* ip, int priority, int frames, float leftMotor, float rightMotor);
 bool InputPlayer_MyControllerLostConnection(InputPlayer* ip);
 #if EDITOR
-//void DebugSetDevice(int deviceNumber);
+void InputPlayer_DebugSetDevice(InputPlayer* ip, int deviceNumber);
 #endif

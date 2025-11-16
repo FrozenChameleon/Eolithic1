@@ -40,7 +40,7 @@ int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 	{
 		if (counter == 100)
 		{
-			OeLogger::LogInformation(data->mDebugName + " ran out of moves, resetting queue");
+			Logger::LogInformation(data->mDebugName + " ran out of moves, resetting queue");
 			OeUtils::ResetArrayToNegativeOneAsInt(data->mLastMoves);
 		}
 		if (counter >= 1000)

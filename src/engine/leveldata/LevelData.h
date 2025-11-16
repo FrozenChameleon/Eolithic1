@@ -65,3 +65,4 @@ bool LevelData_IsSafe(LevelData* ld, int x, int y);
 int32_t* LevelData_CreateCollisionArray(LevelData* ld);
 int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld);
 void LevelData_ImprintToCollisionArray(LevelData* ld, int x, int y, int32_t* collisionArray);
+Rectangle LevelData_GetLevelBoundsRectangle(LevelData* ld);

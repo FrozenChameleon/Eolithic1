@@ -164,8 +164,16 @@ typedef enum DrawPhase
 	OePhase_DESPAWN_INVULN = 143
 } DrawPhase;
 
+typedef struct DrawPhaseMap
+{
+	char* key;
+	int value;
+} DrawPhaseMap;
+
+DrawPhaseMap* OePhase_GetShDrawPhaseMap();
+
 /*
 const std::string& GetDefaultPhase();
 const std::vector<std::string>& GetDrawPhaseArray();
-std::unordered_map<std::string, int>& GetDrawPhaseMap();
+
 void Init();*/

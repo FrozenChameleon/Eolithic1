@@ -22,7 +22,7 @@ typedef struct GameState
 	ReplayDataManager _mReplayDataManager;
 #if EDITOR
 	bool _mHasSavedDebugSaveState;
-	OeGameStateData _mDebugSaveState;
+	GameStateData _mDebugSaveState;
 	bool _mIsRewindLooping;
 #endif
 } GameState;
@@ -37,7 +37,8 @@ const char* GameState_GetName(GameState* gs);
 void GameState_SaveComponentSizes(GameState* gs);
 ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name, float x, float y);
 void GameState_RemoveEntity(GameState* gs, Entity entity);
-Entity* GameState_GetEntitiesInPlay(GameState* gs);
+void GameState_FillListWithEntitiesInPlay(GameState* gs, EntitySearch* list);
+int32_t GameState_GetAmountOfEntitiesInPlay(GameState* gs);
 void GameState_Do_SendBroadcast(GameState* gs, int type, int packet1, int packet2, int packet3);
 Entity GameState_BuildNewEntity(GameState* gs);
 void GameState_Update(GameState* gs);
@@ -74,9 +75,9 @@ void* GameState_GetFirstSetComponent(GameState* gs, ComponentType ctype);
 Entity GameState_GetFirstSetEntity(GameState* gs, ComponentType ctype);
 void* GameState_TryGetComponent(GameState* gs, ComponentType ctype, Entity entity, bool* wasSuccessful);
 void* GameState_TryGetFirstSetComponent(GameState* gs, ComponentType ctype, bool* wasSuccessful);
-#if EDITOR
+/*#if EDITOR
 bool GameState_HandleDebugRewindLooping(GameState* gs);
 bool GameState_HandleDebugSaveStates(GameState* gs);
 void GameState_CreateDebugSaveState(GameState* gs);
 void GameState_UseDebugSaveState(GameState* gs);
-#endif
+#endif*/

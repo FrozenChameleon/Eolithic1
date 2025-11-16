@@ -107,11 +107,11 @@ void GameStateManager_InitDefaultPauseState()
 		ActiveGameState.Load(OeCvars::Get(OeCvars::ENGINE_PAUSE_MENU_MAP));
 		OeEntity entity = ActiveGameState.BuildNewEntity();
 		OeFunc.Do_SetBoolTag<OeTagIsPauseScene>(entity, true);
-		OeLogger.LogInformation("Loaded pause menu map");
+		Logger.LogInformation("Loaded pause menu map");
 	}
 	else
 	{
-		OeLogger.LogInformation("No pause menu map present");
+		Logger.LogInformation("No pause menu map present");
 	}
 	*/
 }
@@ -221,11 +221,11 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 	{
 		std::string path = OeFile::Combine(OeLevelData::LEVEL_DATA_DIRECTORY[0], mapToLoad + ".bin");
 		OeResourceManagers.LevelDataManager.CreateResource(path, new OeLevelData());
-		OeLogger.LogError("Unable to load map " + mapToLoad + ", created new level resource in memory for " + path);
+		Logger.LogError("Unable to load map " + mapToLoad + ", created new level resource in memory for " + path);
 	}*/
 
 #if EDITOR
-	OeGlobals::DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD = OeCvars::GetAsBool(OeCvars::EDITOR_META_MAP_EDIT_TILE_MODE);
+	GLOBALS_DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD = Cvars_GetAsBool(CVARS_EDITOR_META_MAP_EDIT_TILE_MODE);
 	//WILLNOTDO 05152023 OeConsole.CloseConsole();
 #endif
 

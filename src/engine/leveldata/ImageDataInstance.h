@@ -18,3 +18,4 @@ typedef struct ImageDataInstance
 	bool mIsOriginSet;
 } ImageDataInstance;
 
+void ImageDataInstance_Init(ImageDataInstance* idi, ImageData* data);

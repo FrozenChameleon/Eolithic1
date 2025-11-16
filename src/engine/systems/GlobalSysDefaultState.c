@@ -39,7 +39,7 @@ static void DrawHud(System* sys, SpriteBatch* spriteBatch)
 static void Update(System* sys)
 {
 #if EDITOR
-	if (Globals_DEBUG_IS_EDITOR_MODE)
+	if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
 		//WILLNOTDO 06262023 (EDITOR) 2023 OeEditor.Update();
 	}

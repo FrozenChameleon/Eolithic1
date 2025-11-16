@@ -3,6 +3,7 @@
 #include "../utils/Macros.h"
 #include "ComponentType.h"
 #include "ComponentPack.h"
+#include "EntitySearch.h"
 
 #define GAME_STATE_DATA_INITIAL_ENTITY_NUMBER 1
 
@@ -17,7 +18,8 @@ ComponentPack* GameStateData_GetComponentPack(GameStateData* gsd, ComponentType 
 void GameStateData_Reset(GameStateData* gsd);
 Entity GameStateData_GetEntityInPlay(GameStateData* gsd, Entity entityNumber);
 void GameStateData_RemoveEntity(GameStateData* gsd, Entity entity);
-void GameStateData_FillListWithEntitiesInPlay(GameStateData* gsd, Entity* list);
+void GameStateData_FillListWithEntitiesInPlay(GameStateData* gsd, EntitySearch* list);
+int32_t GameStateData_GetAmountOfEntitiesInPlay(GameStateData* gsd);
 Entity GameStateData_BuildNewEntity(GameStateData* gsd);
 void GameStateData_CopyTo(GameStateData* from, GameStateData* to);
 bool GameStateData_IsAnyEntityInPack(GameStateData* gsd, ComponentType ctype);

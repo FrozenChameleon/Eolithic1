@@ -176,19 +176,19 @@ Entity ComponentPack_GetFirstSetEntity(ComponentPack* pack)
 	Exception_Run("Cannot retrieve any entity in pack: Camera", false);
 	return ENTITY_NOTHING;
 }
-void* ComponentPack_GetComponentExclusive(ComponentPack* pack, Entity entity, bool isNotExclusive)
+void* ComponentPack_GetComponent2(ComponentPack* pack, Entity entity, bool isNotExclusive)
 {
-	return ComponentPack_SetExclusive(pack, entity, isNotExclusive);
+	return ComponentPack_Set2(pack, entity, isNotExclusive);
 }
 void* ComponentPack_GetComponent(ComponentPack* pack, Entity entity)
 {
-	return ComponentPack_GetComponentExclusive(pack, entity, false);
+	return ComponentPack_GetComponent2(pack, entity, false);
 }
 void* ComponentPack_GetComponentAtIndex(ComponentPack* pack, int index)
 {
 	return pack->Components + (index * pack->mComponentSizeInBytes);
 }
-void* ComponentPack_SetExclusive(ComponentPack* pack, Entity entity, bool isNotExclusive)
+void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive)
 {
 	if (entity == ENTITY_NOTHING)
 	{
@@ -232,11 +232,11 @@ void* ComponentPack_SetExclusive(ComponentPack* pack, Entity entity, bool isNotE
 
 	ResizePack(pack, pack->_mCapacity * 2);
 
-	return ComponentPack_SetExclusive(pack, entity, isNotExclusive);
+	return ComponentPack_Set2(pack, entity, isNotExclusive);
 }
 void* ComponentPack_Set(ComponentPack* pack, Entity entity)
 {
-	return ComponentPack_SetExclusive(pack, entity, false);
+	return ComponentPack_Set2(pack, entity, false);
 }
 void ComponentPack_Unset(ComponentPack* pack, int entityNumber)
 {

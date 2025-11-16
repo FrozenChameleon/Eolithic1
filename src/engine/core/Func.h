@@ -3,7 +3,6 @@
 #pragma once
 
 #include "../utils/Macros.h"
-//#include "../gamestate/EntitySearch.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"
 #include "../math/Rectangle.h"
@@ -16,14 +15,14 @@
 #include "../gamestate/GameState.h"
 #include "../collision/Body.h"
 //#include "../collision/CollisionEngine.h"
-#include "../components/Camera.h"
-#include "../components/DrawActor.h"
-#include "../components/HitFlashKit.h"
-#include "../components/MirrorEffect.h"
-#include "../components/MoveGetter.h"
-#include "../components/SceneCameraData.h"
-#include "../components/NodeMovingKit.h"
 
+typedef struct Camera Camera;
+typedef struct DrawActor DrawActor;
+typedef struct HitFlashKit HitFlashKit;
+typedef struct MirrorEffect MirrorEffect;
+typedef struct MoveGetter MoveGetter;
+typedef struct SceneCameraData SceneCameraData;
+typedef struct NodeMovingKit NodeMovingKit;
 typedef struct SpriteBatch SpriteBatch;
 typedef struct LevelCameraDataInstance LevelCameraDataInstance;
 typedef struct ThingInstance ThingInstance;
@@ -37,6 +36,7 @@ typedef struct EntitySearch EntitySearch;
 typedef struct TimerDouble TimerDouble;
 typedef struct StringPair StringPair;
 typedef struct CollisionEngine CollisionEngine;
+typedef struct EntitySearch EntitySearch;
 
 //REGION DO
 void Do_DrawCameraData(SpriteBatch* spriteBatch);
@@ -221,12 +221,12 @@ void Do_AddParticles4(const char* name, float absoluteX, float absoluteY, int am
 void Do_DestroyParticlesByName(const char* name);
 void Do_ImprintTile(Vector2 position, int type);
 void Do_ImprintTile2(Vector2 position, int type, int offsetX, int offsetY);
-void Do_ImprintTile3(Vector2 position, int type, int width, int height);
+void Do_ImprintTile3(int type, float x, float y);
+void Do_ImprintTile4(int type, float x, float y, int offsetX, int offsetY);
 void Do_ImprintTiles(Entity entity, float x, float y, int type, int amountX, int amountY);
-void Do_ImprintTiles4(Vector2 position, int type, int width, int height, int offsetX, int offsetY);
-void Do_ImprintTile5(int type, float x, float y);
-void Do_ImprintTile6(int type, float x, float y, int offsetX, int offsetY);
-void Do_ImprintTiles7(int type, float x, float y, int width, int height);
+void Do_ImprintTiles2(Vector2 position, int type, int width, int height);
+void Do_ImprintTiles3(Vector2 position, int type, int width, int height, int offsetX, int offsetY);
+void Do_ImprintTiles4(int type, float x, float y, int width, int height);
 void Do_FlipX(Entity entity);
 void Do_SetFlipX(Entity entity, int value);
 void Do_SetFlipX2(Entity entity, float value);
@@ -566,16 +566,16 @@ bool Is_InitialStringSettingsMapPresent(ComponentType componentType);
 bool Is_StringSettingsPresent(Entity entity);
 bool Is_FlipX(Entity entity);
 bool Is_FlipY(Entity entity);
-bool Is_NearCollisionLowerRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionLowerLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionUpperCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionLowerCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionMiddleRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionMiddleLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionUpperRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollision(int x, int y, int xDirection, int yDirection, const int* collisionToCheck);
-bool Is_NearCollisionUpperLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck);
+bool Is_NearCollisionLowerRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionLowerLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionUpperCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionLowerCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionMiddleRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionMiddleLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionUpperRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollision(int x, int y, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
+bool Is_NearCollisionUpperLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen);
 bool Is_LineOfSight(float x1, float y1, float x2, float y2, bool respectOneWays);
 bool Is_LineOfSight2(float x1, float y1, float x2, float y2);
 bool Is_InLineOfSightWith(Entity entity, float targetX, float targetY, float offsetX, float offsetY);
@@ -630,6 +630,10 @@ int Get_AmountOfMyChildrenWithComponent(ComponentType ctype, Entity entity);
 void Do_DestroyChildrenWithComponent(ComponentType ctype, Entity entity);
 void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const char* particle);
 void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int index);
+EntitySearch* Do_SearchForEntitiesWithComponent(ComponentType ctype);
+EntitySearch* Do_SearchForEntitiesWithComponent2(ComponentType ctype, bool isReverse);
+EntitySearch* Do_SearchForChildrenWithComponent(ComponentType ctype, Entity entity);
+EntitySearch* Do_SearchForChildrenWithComponent2(ComponentType ctype, Entity entity, bool isReverse);
 /*
 Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool useY, bool useInitial)
 {
@@ -682,22 +686,9 @@ template<class TIgnoreThisTag, class TCheckForThisTag, class TSetThisTag> void D
 		Do_SetBoolTag<TSetThisTag>(checkForSearch->mList[i], value);
 	}
 }
-std::shared_ptr<EntitySearch> Do_SearchForEntitiesWithComponent(bool isReverse)
-{
-	return EntitySearch::SearchForEntitiesWithThisComponent<T>(EntitySearch::CreateNewAllEntitySearch(), EntitySearch::CreateNewBlankSearch(), isReverse);
-}
-std::shared_ptr<EntitySearch> Do_SearchForChildrenWithComponent(Entity entity, bool isReverse)
-{
-	return EntitySearch::SearchForEntitiesWithThisComponent<T>(Do_SearchForChildren(entity, isReverse), EntitySearch::CreateNewBlankSearch(), isReverse);
-}
-std::shared_ptr<EntitySearch> Do_SearchForChildrenWithComponent(Entity entity)
-{
-	return Do_SearchForChildrenWithComponent<T>(entity, false);
-}
-std::shared_ptr<EntitySearch> Do_SearchForEntitiesWithComponent()
-{
-	return Do_SearchForEntitiesWithComponent<T>(false);
-}
+
+
+
 
 void Do_DestroyEntitiesWithComponent(const char* particle)
 {
