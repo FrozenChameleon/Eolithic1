@@ -14,4 +14,6 @@ typedef struct StringPair
 
 typedef struct BufferReader BufferReader;
 
+extern const StringPair StringPair_Empty;
+
 void StringPair_Read(StringPair* pair, BufferReader* reader);

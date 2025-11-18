@@ -135,7 +135,7 @@ int32_t Game_Run()
 	double deltaLeftover = 0;
 	while (!isDone)
 	{
-		Utils_FreeJustThisFrameMallocs();
+		Utils_FreeJustThisFrameAllocationArena();
 		bool isFixedTimeStep = IsFixedTimeStep();
 		double delta = deltaLeftover;
 		deltaLeftover = 0;

@@ -6,7 +6,10 @@
 
 #include "StringPair.h"
 
+#include "../utils/Macros.h"
 #include "../io/BufferReader.h"
+
+const StringPair StringPair_Empty = { EE_STR_EMPTY, EE_STR_EMPTY };
 
 void StringPair_Read(StringPair* pair, BufferReader* reader)
 {

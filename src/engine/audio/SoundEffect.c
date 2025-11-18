@@ -285,7 +285,10 @@ static SoundEffectInstance* SetupNextInstance(const char* sound)
 		}
 	}
 
-	Logger_LogWarning("Reached sound effect instance limit");
+	if (!Globals_IsDebugGameSpeedSet())
+	{
+		Logger_LogWarning("Reached sound effect instance limit");
+	}
 	return NULL;
 }
 void SoundEffect_PlaySoundWithForcedVolume(const char* sound, float forcedVolume)
@@ -341,7 +344,7 @@ void SoundEffect_LoopSound(const char* sound, int loopNumber)
 }
 float SoundEffect_GetVolumeHelper(const char* cvar, const char* name, VolumeData* volumeData)
 {
-	if (IsDisabledPermanently() || (Utils_StringEqualTo(name, EE_STR_NOTHING)))
+	if (IsDisabledPermanently() || (Utils_StringEqualTo(name, EE_STR_EMPTY)))
 	{
 		return 0;
 	}

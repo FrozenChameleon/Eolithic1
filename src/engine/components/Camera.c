@@ -1,12 +1,12 @@
 #include "Camera.h"
 
-//#include "../core/Func.h"
+#include "../core/Func.h"
 #include "../globals/Globals.h"
 #include "../math/Random32.h"
 #include "../math/Math.h"
 #include "../utils/Cvars.h"
 #include "../utils/Utils.h"
-//#include "ComCameraSys.h"
+#include "CameraSys.h"
 #include "../../GlobalDefs.h"
 
 const float CAMERA_EXTENDED_CAMERA = 1.333f;
@@ -113,9 +113,7 @@ bool Camera_MoveCameraSomewhereVector2(Camera* camera, bool immediate, Vector2 t
 }
 bool Camera_MoveCameraSomewhere(Camera* camera, bool immediate, float targetX, float targetY, float speed)
 {
-	return true; //TODO C99
-	/*
-	double distance = Get_Distance(camera->mCurrentPosition.X, camera->mCurrentPosition.Y, targetX, targetY);
+	double distance = Get_Distance6(camera->mCurrentPosition.X, camera->mCurrentPosition.Y, targetX, targetY);
 	if (speed < distance)
 	{
 		double angle = Math_GetAngle(camera->mCurrentPosition.X, camera->mCurrentPosition.Y, targetX, targetY);
@@ -149,7 +147,6 @@ bool Camera_MoveCameraSomewhere(Camera* camera, bool immediate, float targetX, f
 		}
 		return true;
 	}
-	*/
 }
 int Camera_GetWidthMul(const Camera* camera, float mul)
 {
@@ -366,7 +363,7 @@ void Camera_SetPosition(Camera* camera, float x, float y)
 	camera->mTargetPosition.X = x;
 	camera->mTargetPosition.Y = y;
 
-	//TODO C99 CameraSys::UpdateCamera(camera);
+	CameraSys_UpdateCamera(camera);
 
 	camera->mCurrentPosition = camera->mTargetPosition;
 

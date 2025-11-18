@@ -14,8 +14,8 @@
 #define EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE 100
 #define EE_PATH_MAX 260
 #define EE_FILENAME_MAX 255
-#define EE_NOT_SET "NOT_SET"
-#define EE_STR_NOTHING ""
+#define EE_STR_NOT_SET "NOT_SET"
+#define EE_STR_EMPTY ""
 #define ENTITY_NOTHING 0
 
 typedef int32_t Entity;

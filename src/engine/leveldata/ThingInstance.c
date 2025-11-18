@@ -18,6 +18,14 @@
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
 
+const char* THINGINSTANCE_SETTING_DTN_OFFSET_X = "DTN_OFFSET_X";
+const char* THINGINSTANCE_SETTING_DTN_OFFSET_Y = "DTN_OFFSET_Y";
+
+const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_EASY = "BLN_DIFFICULTY_EASY";
+const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_NORMAL = "BLN_DIFFICULTY_NORMAL";
+const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_HARD = "BLN_DIFFICULTY_HARD";
+const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD = "BLN_DIFFICULTY_VERY_HARD";
+
 //static std_vector<OeStringPair> _mPairs;
 
 static void BuildGlobalThingSettings()
@@ -59,18 +67,18 @@ void ThingInstance_Init(ThingInstance* ti)
 	mSettings = {};*/
 }
 
-StringPair* ThingInstance_GetSetting(ThingInstance* ti, const char* key)
+StringPair ThingInstance_GetSetting(ThingInstance* ti, const char* key)
 {
-	return NULL;
-	/*for (int i = 0; i < mSettings.size(); i++)
+	int64_t len = arrlen(ti->arr_settings);
+	for (int i = 0; i < len; i += 1)
 	{
-		OeStringPair* pair = &mSettings[i];
-		if (pair->mKey == key)
+		StringPair pair = ti->arr_settings[i];
+		if (Utils_StringEqualTo(pair.mKey, key))
 		{
-			return *pair;
+			return pair;
 		}
 	}
-	return OeStringPair_Empty;*/
+	return StringPair_Empty;
 }
 void ThingInstance_SetSetting(ThingInstance* ti, const char* key, const char* value)
 {
@@ -175,13 +183,7 @@ void ThingInstance_SetupSettings(ThingInstance* instance, bool ignoreWarnings)
 	*/
 }
 
-const char* ThingInstance_SETTING_DTN_OFFSET_X = "DTN_OFFSET_X";
-const char* ThingInstance_SETTING_DTN_OFFSET_Y = "DTN_OFFSET_Y";
 
-const char* ThingInstance_SETTING_BLN_DIFFICULTY_EASY = "BLN_DIFFICULTY_EASY";
-const char* ThingInstance_SETTING_BLN_DIFFICULTY_NORMAL = "BLN_DIFFICULTY_NORMAL";
-const char* ThingInstance_SETTING_BLN_DIFFICULTY_HARD = "BLN_DIFFICULTY_HARD";
-const char* ThingInstance_SETTING_BLN_DIFFICULTY_VERY_HARD = "BLN_DIFFICULTY_VERY_HARD";
 
 void ThingInstance_RemoveUnrelatedPairs(ThingInstance* instance, StringPair* arr_from, StringPair* arr_to, bool ignoreWarnings)
 {

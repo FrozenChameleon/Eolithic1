@@ -89,7 +89,7 @@ void ThingSettings_Init(ThingSettings* ts)
 
 	MString_Assign(&ts->mDefaultState, "DEFAULT");
 	MString_Assign(&ts->mDefaultPhase, "DEFAULT");
-	MString_Assign(&ts->mPreviewSheet, EE_NOT_SET);
+	MString_Assign(&ts->mPreviewSheet, EE_STR_NOT_SET);
 
 	sh_new_arena(ts->sh_graphics_data);
 }

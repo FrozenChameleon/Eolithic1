@@ -75,7 +75,7 @@ char* MString_GetText(const MString* str)
 {
 	if (str == NULL)
 	{
-		return EE_NOT_SET;
+		return EE_STR_NOT_SET;
 	}
 
 	return str->text;

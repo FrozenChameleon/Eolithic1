@@ -12,14 +12,20 @@
 
 typedef struct IStringArray IStringArray;
 
+enum
+{
+	UTILS_ALLOCATION_ARENA_INVALID = 0,
+	UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME = 1
+};
+
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);
 void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);
 void Utils_memset(void* _Dst, int _Val, size_t _Size);
-void* Utils_mallocJustThisFrame(size_t size);
-void* Utils_callocJustThisFrame(size_t nmemb, size_t size);
-void Utils_FreeJustThisFrameMallocs();
+void* Utils_mallocArena(size_t size, int32_t allocationArena);
+void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena);
+void Utils_FreeJustThisFrameAllocationArena();
 void* Utils_malloc(size_t size);
 void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);
@@ -30,7 +36,6 @@ size_t Utils_strlcat(char* dst, const char* src, size_t maxlen);
 bool Utils_ParseBooleanFromChar(const char* str);
 float Utils_ParseFloat(const char* str);
 int32_t Utils_ParseInt(const char* str);
-bool Utils_PointerEqualTo(void* ptr1, void* ptr2);
 bool Utils_StringEqualTo(const char* str1, const char* str2);
 int32_t Utils_IntToString(int32_t value, char* buffer, size_t maxlen);
 int32_t Utils_FloatToString(float value, char* buffer, size_t maxlen);
@@ -60,3 +65,4 @@ bool Utils_CharIsDigit(char c);
 bool Utils_ArrContainsInt(int* arr_values, int containsThis);
 bool Utils_StringContains(const char* str, const char* containsThis);
 bool Utils_StringEndsWith(const char* str, const char* endsWithThis);
+int32_t Utils_ParseDirection(const char* s);

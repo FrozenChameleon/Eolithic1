@@ -634,6 +634,8 @@ EntitySearch* Do_SearchForEntitiesWithComponent(ComponentType ctype);
 EntitySearch* Do_SearchForEntitiesWithComponent2(ComponentType ctype, bool isReverse);
 EntitySearch* Do_SearchForChildrenWithComponent(ComponentType ctype, Entity entity);
 EntitySearch* Do_SearchForChildrenWithComponent2(ComponentType ctype, Entity entity, bool isReverse);
+void Do_DestroyEntitiesWithComponent(ComponentType ctype);
+void Do_DestroyEntitiesWithComponent2(ComponentType ctype, const char* particle);
 /*
 Entity Do_FindEntityByPosition(float positionX, float positionY, bool useX, bool useY, bool useInitial)
 {
@@ -690,23 +692,7 @@ template<class TIgnoreThisTag, class TCheckForThisTag, class TSetThisTag> void D
 
 
 
-void Do_DestroyEntitiesWithComponent(const char* particle)
-{
-	std::shared_ptr<EntitySearch> search = Do_SearchForEntitiesWithComponent<T>();
-	for (int i = 0; i < search->mList.size(); i += 1)
-	{
-		Entity target = search->mList[i];
-		if (particle != "")
-		{
-			Do_AddParticle(particle, Get_Position(target));
-		}
-		Do_SetComplete(target);
-	}
-}
-void Do_DestroyEntitiesWithComponent()
-{
-	Do_DestroyEntitiesWithComponent<T>("");
-}
+
 
 int Get_AmountOfEntitiesWithComponent()
 {

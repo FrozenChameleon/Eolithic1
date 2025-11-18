@@ -10,7 +10,7 @@
 #include "stdarg.h"
 #include "stdio.h"
 
-static const char* _mMessageStr = "MESSAGE : ";
+static const char* _mMessageStr = "INFORMATION : ";
 static const char* _mWarningStr = "WARNING : ";
 static const char* _mErrorStr = "ERROR : ";
 

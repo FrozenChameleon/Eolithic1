@@ -37,6 +37,7 @@ typedef struct AnimTile
 	int mWrapSpeedDelay;
 } AnimTile;
 
-void AnimTile_Read(AnimTile* atile, BufferReader* br);
+void AnimTile_Read(AnimTile* at, BufferReader* br);
 AnimTile* AnimTile_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
-void AnimTile_Dispose(AnimTile* atile);
+void AnimTile_Dispose(AnimTile* at);
+Animation* AnimTile_GetAnimation(AnimTile* at);

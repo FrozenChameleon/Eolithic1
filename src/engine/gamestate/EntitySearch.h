@@ -3,6 +3,7 @@
 #include "../gamestate/ComponentType.h"
 #include "../utils/Macros.h"
 
+//EntitySearch's are created on the "Just This Frame" so they do not need to be manually disposed of.
 typedef struct EntitySearch
 {
 	Entity* entities;

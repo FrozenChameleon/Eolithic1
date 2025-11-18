@@ -563,56 +563,47 @@ Entity Do_BuildThingFromData(int i, int j, ThingInstance* data)
 		return ENTITY_NOTHING;
 	}
 
-	Point tempVec = { 0 };
+	Point buildOffset = Point_Zero;
 	bool buildThing = true;
-	/*if (data != NULL) //TODO C99
+	StringPair pairOffsetX = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_DTN_OFFSET_X);
+	if ((pairOffsetX.mKey != NULL) && !Utils_StringEqualTo(pairOffsetX.mKey, EE_STR_EMPTY))
 	{
-		OeStringPair pairOffsetX = data->GetSetting(ThingInstance_SETTING_DTN_OFFSET_X);
-		if (pairOffsetX.mKey != STR_NOTHING)
+		buildOffset.X = Utils_ParseDirection(pairOffsetX.mValue) * HALF_TILE_SIZE;
+		StringPair pairOffsetY = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_DTN_OFFSET_Y);
+		if ((pairOffsetY.mKey != NULL) && !Utils_StringEqualTo(pairOffsetY.mKey, EE_STR_EMPTY))
 		{
-			tempVec.X = Utils_TryParseDirection(pairOffsetX.mValue) * HALF_TILE_SIZE;
-			OeStringPair pairOffsetY = data->GetSetting(ThingInstance_SETTING_DTN_OFFSET_Y);
-			if (pairOffsetY.mKey != STR_NOTHING)
-			{
-				tempVec.Y = Utils_TryParseDirection(pairOffsetY.mValue) * HALF_TILE_SIZE;
-			}
+			buildOffset.Y = Utils_ParseDirection(pairOffsetY.mValue) * HALF_TILE_SIZE;
 		}
-		OeStringPair pairDifficulty = OeStringPair_Empty;
-		switch (OeTuning_GetCurrentDifficulty())
-		{
-		case 0:
-			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_EASY);
-			break;
-		case 1:
-			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_NORMAL);
-			break;
-		case 2:
-			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_HARD);
-			break;
-		case 3:
-			pairDifficulty = data->GetSetting(ThingInstance_SETTING_BLN_DIFFICULTY_VERY_HARD);
-			break;
-		}
-		if ((pairDifficulty.mKey != STR_NOTHING) && (pairDifficulty.mKey != Utils_NOT_SET))
-		{
-			buildThing = Utils_TryParseBooleanFromChar(pairDifficulty.mValue);
-		}
-	}*/
-	tempVec.X += HALF_TILE_SIZE;
-	tempVec.Y += HALF_TILE_SIZE;
+	}
+	StringPair pairDifficulty = StringPair_Empty;
+	int currentDifficulty = 0; //TODO Tuning_GetCurrentDifficulty()
+	switch (currentDifficulty)
+	{
+	case 0:
+		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_EASY);
+		break;
+	case 1:
+		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_NORMAL);
+		break;
+	case 2:
+		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_HARD);
+		break;
+	case 3:
+		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD);
+		break;
+	}
+	if (!Utils_StringEqualTo(pairDifficulty.mKey, EE_STR_EMPTY) && !Utils_StringEqualTo(pairDifficulty.mKey, EE_STR_NOT_SET))
+	{
+		buildThing = Utils_ParseBooleanFromChar(pairDifficulty.mValue);
+	}
+	buildOffset.X += HALF_TILE_SIZE;
+	buildOffset.Y += HALF_TILE_SIZE;
 	if (buildThing)
 	{
-		int initialPositionX = (i * TILE_SIZE) + tempVec.X;
-		int initialPositionY = (j * TILE_SIZE) + tempVec.Y;
+		int initialPositionX = (i * TILE_SIZE) + buildOffset.X;
+		int initialPositionY = (j * TILE_SIZE) + buildOffset.Y;
 		const char* thingName = ThingInstance_GetName(data);
-		//if (!Utils_StringEqualTo(thingName, "OBJECTACTOR_SPIKES"))// || Utils_StringEqualTo(thingName, "PAINTING")) //TODO - FIND THE PROBLEM ACTOR!
-	//	{
-			return Do_BuildActor5(i, j, initialPositionX, initialPositionY, data, thingName);
-	//	}
-		//else
-		//{
-			//return ENTITY_NOTHING;
-		//}
+		return Do_BuildActor5(i, j, initialPositionX, initialPositionY, data, thingName);
 	}
 	else
 	{
@@ -1822,52 +1813,46 @@ void Do_FadeOutMusic(int time)
 }
 void Do_DestroyChildren(Entity entity)
 {
-	/*
-	std_shared_ptr<EntitySearch> search = Do_SearchForChildren(entity);
-	for (int i = 0; i < search->mList.size(); i++)
+	EntitySearch* search = Do_SearchForChildren(entity);
+	for (int i = 0; i < search->len; i++)
 	{
-		Do_SetComplete(search->mList[i]);
+		Do_SetComplete(search->entities[i]);
 	}
-	*/
 }
 
 void Do_DestroyChildrenByName(Entity entity, const char* name)
 {
-	//Do_DestroyChildrenByName(entity, name, STR_NOTHING);
+	Do_DestroyChildrenByName2(entity, name, EE_STR_EMPTY);
 }
 void Do_DestroyChildrenByName2(Entity entity, const char* name, const char* particle)
 {
-	/*
-	std_shared_ptr<EntitySearch> search = Do_SearchForChildrenWithName(entity, name);
-	for (int i = 0; i < search->mList.size(); i++)
+	EntitySearch* search = Do_SearchForChildrenWithName(entity, name);
+	for (int i = 0; i < search->len; i += 1)
 	{
-		Entity target = search->mList[i];
-		if (particle != STR_NOTHING)
+		Entity target = search->entities[i];
+		if (!Utils_StringEqualTo(particle, EE_STR_EMPTY))
 		{
-			Do_AddParticle(particle, Get_Position(target));
+			Do_AddParticle2(particle, Get_Position(target));
 		}
 		Do_SetComplete(target);
 	}
-	*/
 }
 void Do_DestroyEntitiesWithName(const char* name)
 {
-	//Do_DestroyEntitiesWithName(name, STR_NOTHING);
+	Do_DestroyEntitiesWithName2(name, EE_STR_EMPTY);
 }
 void Do_DestroyEntitiesWithName2(const char* name, const char* particle)
 {
-	/*
-	std_shared_ptr<EntitySearch> search = Do_SearchForEntitiesWithName(name);
-	for (int i = 0; i < search->mList.size(); i++)
+	EntitySearch* search = Do_SearchForEntitiesWithName(name);
+	for (int i = 0; i < search->len; i++)
 	{
-		Entity target = search->mList[i];
-		if (particle != STR_NOTHING)
+		Entity target = search->entities[i];
+		if (!Utils_StringEqualTo(particle, EE_STR_EMPTY))
 		{
-			Do_AddParticle(particle, Get_Position(target));
+			Do_AddParticle2(particle, Get_Position(target));
 		}
 		Do_SetComplete(target);
 	}
-	*/
 }
 void Do_KillIfUnderCamera(Entity entity)
 {
@@ -2569,7 +2554,7 @@ const char* Get_Name(Entity entity)
 	Name* component = TryGet_Component(C_Name, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
-		return EE_NOT_SET;
+		return EE_STR_NOT_SET;
 	}
 	else
 	{
@@ -3392,22 +3377,20 @@ int Get_BodyCollisionGridPositionY(Entity entity)
 }
 int Get_AmountOfMyChildrenByName(Entity entity, const char* name)
 {
-	return 0;
-	//TODO std_shared_ptr<EntitySearch> search = Do_SearchForChildrenWithName(entity, name);
-	//TODO return search->mList.size();
+	EntitySearch* search = Do_SearchForChildrenWithName(entity, name);
+	return search->len;
 }
 int Get_AmountOfMyChildren(Entity entity)
 {
-	return 0;
-	//TODO std_shared_ptr<EntitySearch> search = Do_SearchForChildren(entity);
-	//TODO return search->mList.size();
+	EntitySearch* search = Do_SearchForChildren(entity);
+	return search->len;
 }
 const char* Get_StringSettingAsString(Entity entity, const char* key)
 {
 	StringPair* stringSettings = Get_StringSettings(entity);
 	if (arrlen(stringSettings) == 0)
 	{
-		return EE_STR_NOTHING;
+		return EE_STR_EMPTY;
 	}
 
 	for (int i = 0; i < arrlen(stringSettings); i += 1)
@@ -3419,7 +3402,7 @@ const char* Get_StringSettingAsString(Entity entity, const char* key)
 		}
 	}
 
-	return EE_STR_NOTHING;
+	return EE_STR_EMPTY;
 }
 StringPair* Get_StringSettings(Entity entity)
 {
@@ -3446,7 +3429,7 @@ int Get_StringSettingAsInt(Entity entity, const char* setting)
 bool Get_StringSettingAsBooleanByChar(Entity entity, const char* setting)
 {
 	const char* temp = Get_StringSettingAsString(entity, setting);
-	if (Utils_StringEqualTo(temp, EE_STR_NOTHING))
+	if (Utils_StringEqualTo(temp, EE_STR_EMPTY))
 	{
 		Logger_LogError("Missing char bool setting: ");
 		Logger_LogError(setting);
@@ -3461,7 +3444,7 @@ float Get_StringSettingAsFloat(Entity entity, const char* setting)
 bool Get_StringSettingAsBoolean(Entity entity, const char* setting)
 {
 	const char* temp = Get_StringSettingAsString(entity, setting);
-	if (Utils_StringEqualTo(temp, EE_STR_NOTHING))
+	if (Utils_StringEqualTo(temp, EE_STR_EMPTY))
 	{
 		Logger_LogError("Missing bool setting: ");
 		Logger_LogError(setting);
@@ -4115,9 +4098,8 @@ bool Is_InitialStringSettingsMapPresent(ComponentType componentType)
 }
 bool Is_StringSettingsPresent(Entity entity)
 {
-	return false;
-	/*std_vector<OeStringPair>& stringSettings = Get_StringSettings(entity);
-	return stringSettings.size() != 0;*/
+	StringPair* arr_string_settings = Get_StringSettings(entity);
+	return arrlen(arr_string_settings) > 0;
 }
 bool Is_FlipX(Entity entity)
 {
@@ -4223,8 +4205,6 @@ bool Is_InLineOfSightWithPlayer3(Entity entity, float offsetX, float offsetY)
 }
 bool Is_PlayerNearBody(Entity entity, int buffer)
 {
-	return false;
-	/*
 	if (!Is_PlayerPresent(true))
 	{
 		return false;
@@ -4232,26 +4212,25 @@ bool Is_PlayerNearBody(Entity entity, int buffer)
 
 	Rectangle rect1 = Body_GetRect(Get_Body(Get_Player()));
 	Body* body = Get_Body(entity);
-	Rectangle rect2 = Rectangle(Body_GetRect(body).Left() - buffer, Body_GetRect(body).Top() - buffer,
+	Rectangle bodyRect = Body_GetRect(body);
+	Rectangle rect2 = Rectangle_Create(Rectangle_Left(&bodyRect) - buffer, Rectangle_Top(&bodyRect) - buffer,
 		Body_GetWidth(body) + buffer * 2, Body_GetHeight(body) + buffer * 2);
-	return rect1.Intersects(rect2);
-	*/
+	return Rectangle_Intersects(&rect1, &rect2);
 }
 bool Is_ClosestPlayerNearBody(Entity entity, int buffer)
 {
-	return false;
-	/*
 	if (!Is_PlayerPresent(true))
 	{
 		return false;
 	}
 
-	Rectangle rect1 = Body_GetRect(Get_Body(Get_ClosestPlayer(entity)));
+	Entity closestPlayer = Get_ClosestPlayer2(entity);
+	Rectangle rect1 = Body_GetRect(Get_Body(closestPlayer));
 	Body* body = Get_Body(entity);
-	Rectangle rect2 = Rectangle(Body_GetRect(body).Left() - buffer, Body_GetRect(body).Top() - buffer,
+	Rectangle bodyRect = Body_GetRect(body);
+	Rectangle rect2 = Rectangle_Create(Rectangle_Left(&bodyRect) - buffer, Rectangle_Top(&bodyRect) - buffer,
 		Body_GetWidth(body) + buffer * 2, Body_GetHeight(body) + buffer * 2);
-	return rect1.Intersects(rect2);
-	*/
+	return Rectangle_Intersects(&rect1, &rect2);
 }
 bool Is_LeftOfCamera(Entity entity)
 {
@@ -4477,29 +4456,25 @@ void Do_RemoveUniqueDummyEntity2(ComponentPack* pack)
 }
 int Get_AmountOfMyChildrenWithComponent(ComponentType ctype, Entity entity)
 {
-	return 0;
-	//TODO C99
-	//std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);
-	//return search->mList.size();
+	EntitySearch* search = Do_SearchForChildrenWithComponent(ctype, entity);
+	return search->len;
 }
 void Do_DestroyChildrenWithComponent(ComponentType ctype, Entity entity)
 {
-	Do_DestroyChildrenWithComponent2(ctype, entity, "");
+	Do_DestroyChildrenWithComponent2(ctype, entity, EE_STR_EMPTY);
 }
 void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const char* particle)
 {
-	//TODO C99
-	/*
-	std::shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<T>(entity);
-	for (int i = 0; i < search->mList.size(); i += 1)
+	EntitySearch* search = Do_SearchForChildrenWithComponent(ctype, entity);
+	for (int i = 0; i < search->len; i += 1)
 	{
-		Entity target = search->mList[i];
-		if (particle != "")
+		Entity target = search->entities[i];
+		if (!Utils_StringEqualTo(particle, EE_STR_EMPTY))
 		{
-			Do_AddParticle(particle, Get_Position(target));
+			Do_AddParticle2(particle, Get_Position(target));
 		}
 		Do_SetComplete(target);
-	}*/
+	}
 }
 
 void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int index)
@@ -4528,4 +4503,21 @@ EntitySearch* Do_SearchForChildrenWithComponent2(ComponentType ctype, Entity ent
 {
 	return EntitySearch_SearchForEntitiesWithThisComponent(ctype, Do_SearchForChildren2(entity, isReverse),
 		EntitySearch_CreateNewBlankSearch(), isReverse);
+}
+void Do_DestroyEntitiesWithComponent(ComponentType ctype)
+{
+	Do_DestroyEntitiesWithComponent2(ctype, EE_STR_EMPTY);
+}
+void Do_DestroyEntitiesWithComponent2(ComponentType ctype, const char* particle)
+{
+	EntitySearch* search = Do_SearchForEntitiesWithComponent(ctype);
+	for (int i = 0; i < search->len; i += 1)
+	{
+		Entity target = search->entities[i];
+		if (!Utils_StringEqualTo(particle, EE_STR_EMPTY))
+		{
+			Do_AddParticle2(particle, Get_Position(target));
+		}
+		Do_SetComplete(target);
+	}
 }

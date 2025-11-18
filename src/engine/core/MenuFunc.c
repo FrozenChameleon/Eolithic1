@@ -748,7 +748,7 @@ void MenuFunc_PlayMenuSoundHelper(const char* soundToPlay)
 		return;
 	}
 
-	if (!Utils_StringEqualTo(EE_NOT_SET, soundToPlay))
+	if (!Utils_StringEqualTo(EE_STR_NOT_SET, soundToPlay))
 	{
 		Do_PlaySound(soundToPlay);
 	}

@@ -13,6 +13,7 @@
 #include "../math/Math.h"
 #include "Cvars.h"
 #include "../render/Renderer.h"
+#include "Logger.h"
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
@@ -20,7 +21,7 @@ static uint64_t _mMallocRefs;
 #define LARGE_CHAR_BUFFER_LEN 8192
 static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
-void** arr_mallocs_just_this_frame;
+struct { int32_t key; void** value; }*hm_allocation_arenas;
 
 uint64_t Utils_GetMallocRefs()
 {
@@ -42,31 +43,65 @@ void Utils_memset(void* _Dst, int _Val, size_t _Size)
 {
 	SDL_memset(_Dst, _Val, _Size);
 }
-void* Utils_mallocJustThisFrame(size_t size)
+static void AddToAllocationArenas(int32_t allocationArena, void* memoryAllocation)
+{
+	if (allocationArena == UTILS_ALLOCATION_ARENA_INVALID)
+	{
+		Logger_LogWarning("Attempted to allocate to invalid allocation arena!");
+		return;
+	}
+
+	int64_t index = hmgeti(hm_allocation_arenas, allocationArena);
+	if (index == -1)
+	{
+		hmput(hm_allocation_arenas, allocationArena, NULL);
+	}
+
+	index = hmgeti(hm_allocation_arenas, allocationArena);
+	if (index == -1)
+	{
+		Logger_LogWarning("Attempted to allocate to get allocation arena!");
+		return;
+	}
+
+	arrput(hm_allocation_arenas[index].value, memoryAllocation);
+}
+void* Utils_mallocArena(size_t size, int32_t allocationArena)
 {
 	void* mallocToReturn = Utils_malloc(size);
 
-	arrput(arr_mallocs_just_this_frame, mallocToReturn);
+	AddToAllocationArenas(allocationArena, mallocToReturn);
 
 	return mallocToReturn;
 }
-void* Utils_callocJustThisFrame(size_t nmemb, size_t size)
+void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena)
 {
 	void* callocToReturn = Utils_calloc(nmemb, size);
 
-	arrput(arr_mallocs_just_this_frame, callocToReturn);
+	AddToAllocationArenas(allocationArena, callocToReturn);
 
 	return callocToReturn;
 }
-void Utils_FreeJustThisFrameMallocs()
+void Utils_FreeJustThisFrameAllocationArena()
 {
-	int64_t len = arrlen(arr_mallocs_just_this_frame);
+	int32_t allocationArena = UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME;
+	int64_t index = hmgeti(hm_allocation_arenas, allocationArena);
+	if (index == -1)
+	{
+		return;
+	}
+
+	int64_t len = arrlen(hm_allocation_arenas[index].value);
+	if(len == 0)
+	{
+		return;
+	}
+
 	for (int i = 0; i < len; i += 1)
 	{
-		Utils_free(arr_mallocs_just_this_frame[i]);
-		arr_mallocs_just_this_frame[i] = NULL;
+		Utils_free(hm_allocation_arenas[index].value[i]);
 	}
-	arrsetlen(arr_mallocs_just_this_frame, 0);
+	arrsetlen(hm_allocation_arenas[index].value, 0);
 }
 void* Utils_malloc(size_t size)
 {
@@ -387,4 +422,21 @@ bool Utils_StringEndsWith(const char* str, const char* endsWithThis)
 	}
 
 	return true;
+}
+int32_t Utils_ParseDirection(const char* s)
+{
+	int32_t value;
+	if (Utils_StringEqualTo(s, "0"))
+	{
+		value = 0;
+	}
+	else if (Utils_StringEqualTo(s, "1"))
+	{
+		value = 1;
+	}
+	else
+	{
+		value = -1;
+	}
+	return value;
 }

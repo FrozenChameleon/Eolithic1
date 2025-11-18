@@ -209,7 +209,7 @@ void Music_FadeOutMusic(int fadeOutTime)
 		return;
 	}
 
-	MusicInstance_SetupFadeOut(&_mCurrentMusic, EE_STR_NOTHING, fadeOutTime);
+	MusicInstance_SetupFadeOut(&_mCurrentMusic, EE_STR_EMPTY, fadeOutTime);
 }
 void Music_Tick()
 {

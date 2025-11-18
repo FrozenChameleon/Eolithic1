@@ -17,7 +17,7 @@ static int32_t _mCurrentGameState;
 static int32_t _mCurrentGameStateForRenderCamera;
 static int32_t _mNextGameState;
 static uint64_t _mTicksSinceMapLoad;
-static const char* _mMapToLoad = EE_STR_NOTHING;
+static const char* _mMapToLoad = EE_STR_EMPTY;
 static bool _mJustChangedGameStateThisFrame;
 static System** arr_global_systems;
 static System** arr_state_systems;
@@ -198,7 +198,7 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 		Logger_LogWarning("Attempted to load NULL map!");
 		return;
 	}
-	else if (Utils_StringEqualTo(mapToLoad, EE_NOT_SET))
+	else if (Utils_StringEqualTo(mapToLoad, EE_STR_NOT_SET))
 	{
 		Logger_LogWarning("Attempted to load EMPTY STRING map!");
 		return;
@@ -280,14 +280,14 @@ void GameStateManager_HandleGameStateChange()
 void GameStateManager_HandleLoadNextMap()
 {
 	bool isMapLoad = false;
-	if (!Utils_StringEqualTo(_mMapToLoad, EE_STR_NOTHING))
+	if (!Utils_StringEqualTo(_mMapToLoad, EE_STR_EMPTY))
 	{
 		isMapLoad = true;
 	}
 
 	if (RecordingTool_LoadNextRecordingIfAtEndOfRecording(isMapLoad))
 	{
-		_mMapToLoad = EE_STR_NOTHING;
+		_mMapToLoad = EE_STR_EMPTY;
 		return;
 	}
 
@@ -297,7 +297,7 @@ void GameStateManager_HandleLoadNextMap()
 	}
 
 	GameStateManager_LoadMap(_mMapToLoad);
-	_mMapToLoad = EE_STR_NOTHING;
+	_mMapToLoad = EE_STR_EMPTY;
 }
 bool GameStateManager_JustChangedGameStateThisFrame()
 {

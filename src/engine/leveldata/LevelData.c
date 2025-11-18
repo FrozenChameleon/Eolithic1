@@ -52,7 +52,7 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 
 	if (MString_EqualToString(ld->mLevelName, ""))
 	{
-		MString_Assign(&ld->mLevelName, EE_NOT_SET);
+		MString_Assign(&ld->mLevelName, EE_STR_NOT_SET);
 	}
 
 	//TODO C99

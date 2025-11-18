@@ -28,7 +28,7 @@ void MusicInstance_HandleFadeOut(MusicInstance* mi, float musicVolume)
 	if (Timer_Update(&mi->_mFadeTimer))
 	{
 		MusicInstance_Stop(mi);
-		if (Utils_StringEqualTo(mi->_mNextTrack, EE_STR_NOTHING))
+		if (Utils_StringEqualTo(mi->_mNextTrack, EE_STR_EMPTY))
 		{
 			if (mi->_mWillFadeIn)
 			{
@@ -43,7 +43,7 @@ void MusicInstance_HandleFadeOut(MusicInstance* mi, float musicVolume)
 				SoundEffectInstance_SetVolume(&mi->_mCurrentMusicInstance, musicVolume);
 			}
 			mi->_mCurrentTrack = mi->_mNextTrack;
-			mi->_mNextTrack = EE_STR_NOTHING;
+			mi->_mNextTrack = EE_STR_EMPTY;
 			MusicInstance_Play(mi, mi->_mCurrentTrack, true, mi->_mWillFadeIn, 0);
 			if (mi->_mWillFadeIn)
 			{
@@ -65,9 +65,9 @@ void MusicInstance_Init(MusicInstance* mi)
 {
 	Utils_memset(mi, 0, sizeof(MusicInstance));
 	Timer_Init(&mi->_mFadeTimer, 180);
-	mi->_mPreviousTrack = EE_STR_NOTHING;
-	mi->_mCurrentTrack = EE_STR_NOTHING;
-	mi->_mNextTrack = EE_STR_NOTHING;
+	mi->_mPreviousTrack = EE_STR_EMPTY;
+	mi->_mCurrentTrack = EE_STR_EMPTY;
+	mi->_mNextTrack = EE_STR_EMPTY;
 }
 
 bool MusicInstance_IsLooped(MusicInstance* mi)
@@ -89,13 +89,13 @@ const char* MusicInstance_PreviousTrack(MusicInstance* mi)
 void MusicInstance_Play(MusicInstance* mi, const char* nextTrack, bool isLooping, bool isUsingForcedVolume, float forcedVolume)
 {
 	mi->_mPreviousTrack = mi->_mCurrentTrack;
-	if (Utils_StringEqualTo(mi->_mPreviousTrack, EE_STR_NOTHING))
+	if (Utils_StringEqualTo(mi->_mPreviousTrack, EE_STR_EMPTY))
 	{
 		mi->_mPreviousTrack = nextTrack;
 	}
 
 	mi->_mCurrentTrack = nextTrack;
-	if (Utils_StringEqualTo(mi->_mCurrentTrack, EE_STR_NOTHING))
+	if (Utils_StringEqualTo(mi->_mCurrentTrack, EE_STR_EMPTY))
 	{
 		return;
 	}
@@ -193,9 +193,9 @@ bool MusicInstance_IsFadingOut(MusicInstance* mi)
 }
 void MusicInstance_ClearTrackNames(MusicInstance* mi)
 {
-	mi->_mPreviousTrack = EE_STR_NOTHING;
-	mi->_mCurrentTrack = EE_STR_NOTHING;
-	mi->_mNextTrack = EE_STR_NOTHING;
+	mi->_mPreviousTrack = EE_STR_EMPTY;
+	mi->_mCurrentTrack = EE_STR_EMPTY;
+	mi->_mNextTrack = EE_STR_EMPTY;
 }
 bool MusicInstance_IsPlaying(MusicInstance* mi)
 {

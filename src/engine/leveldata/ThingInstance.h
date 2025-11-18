@@ -12,6 +12,7 @@ typedef struct SpriteBatch SpriteBatch;
 
 extern const char* THINGINSTANCE_SETTING_DTN_OFFSET_X;
 extern const char* THINGINSTANCE_SETTING_DTN_OFFSET_Y;
+
 extern const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_EASY;
 extern const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_NORMAL;
 extern const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_HARD;
@@ -26,7 +27,7 @@ typedef struct ThingInstance
 
 void ThingInstance_Init(ThingInstance* ti);
 
-StringPair* ThingInstance_GetSetting(ThingInstance* ti, const char* key);
+StringPair ThingInstance_GetSetting(ThingInstance* ti, const char* key);
 void ThingInstance_SetSetting(ThingInstance* ti, const char* key, const char* value);
 void ThingInstance_Write(ThingInstance* ti, BufferWriter* writer);
 void ThingInstance_Read(ThingInstance* ti, int version, BufferReader* reader);
