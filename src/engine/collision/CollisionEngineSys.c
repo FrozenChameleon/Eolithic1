@@ -1338,6 +1338,8 @@ void CollisionEngineSys_DrawTiles(GameState* scene)
 }
 void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 {
+	return;
+
 	if (!GLOBALS_DEBUG_SHOW_INGAME_COLLISION || GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
 		//return;

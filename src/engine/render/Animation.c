@@ -19,6 +19,7 @@ static struct { const char* key; IStringArray* value; }*sh_animation_string_map;
 static struct { const char* key; const char* value; }*sh_conversion_map;
 static struct { const char* key; FixedArray value; }*sh_animation_sheet_map;
 static AnimationInfo* arr_animation_info;
+static Sheet** _mDummyAnimationSheets;
 
 //private
 static void Animation_SetupSheets(Animation* data, int32_t flipTimer)
@@ -397,4 +398,14 @@ FixedArray Animation_GetAnimationSheets(const char* animation)
 	}
 
 	return fixedArray;
+}
+
+const Sheet** Animation_GetSheets(const Animation* anim)
+{
+	if (anim->mSheets == NULL)
+	{
+		return _mDummyAnimationSheets;
+	}
+
+	return anim->mSheets;
 }

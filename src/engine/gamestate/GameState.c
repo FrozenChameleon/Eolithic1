@@ -196,15 +196,15 @@ void GameState_ClearReplayCacheNextFrame(GameState* gs)
 }
 void GameState_Draw(GameState* gs, SpriteBatch* spriteBatch)
 {
-	//TODO C99 OeGameHelper::DrawStateSystems(spriteBatch);
+	GameHelper_DrawStateSystems(spriteBatch);
 }
 void GameState_DrawHud(GameState* gs, SpriteBatch* spriteBatch)
 {
-	//TODO C99 	OeGameHelper::DrawHudStateSystems(spriteBatch);
+	GameHelper_DrawHudStateSystems(spriteBatch);
 }
 void GameState_DrawDebugHud(GameState* gs, SpriteBatch* spriteBatch)
 {
-	//TODO C99 OeGameHelper::DrawDebugHudStateSystems(spriteBatch);
+	GameHelper_DrawDebugHudStateSystems(spriteBatch);
 }
 
 void GameState_Load(GameState* gs, const char* levelDataToLoad)

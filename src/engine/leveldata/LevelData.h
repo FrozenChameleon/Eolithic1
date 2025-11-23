@@ -17,6 +17,7 @@
 #include "../utils/Macros.h"
 
 typedef struct BufferReader BufferReader;
+typedef struct SpriteBatch SpriteBatch;
 
 enum
 {
@@ -66,3 +67,6 @@ int32_t* LevelData_CreateCollisionArray(LevelData* ld);
 int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld);
 void LevelData_ImprintToCollisionArray(LevelData* ld, int x, int y, int32_t* collisionArray);
 Rectangle LevelData_GetLevelBoundsRectangle(LevelData* ld);
+bool LevelData_IsTilesetNameSet(LevelData* ld);
+void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera);
+Texture* LevelData_GetTilesetTexture(LevelData* ld);

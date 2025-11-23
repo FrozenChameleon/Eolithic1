@@ -5,8 +5,7 @@
 
 static void Draw(System* sys, SpriteBatch* spriteBatch)
 {
-	//TODO C99
-	//Get_LevelData()->DrawTiles(spriteBatch, OeFunc::Get_Camera());
+	LevelData_DrawTiles(Get_LevelData(), spriteBatch, Get_Camera());
 }
 
 System* SysDrawTiles_CreateSystem()

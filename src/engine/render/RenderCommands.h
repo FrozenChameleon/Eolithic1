@@ -4,9 +4,11 @@
 #include "../render/Color.h"
 #include "../math/Vector2.h"
 #include "../math/Rectangle.h"
-#include "../render/Texture.h"
-#include "../render/ShaderProgram.h"
-#include "../render/DrawRectangle.h"
+
+typedef struct Texture Texture;
+typedef struct ShaderProgram ShaderProgram;
+typedef struct DrawRectangle DrawRectangle;
+typedef struct Tile Tile;
 
 typedef struct RenderCommandSheet
 {
@@ -40,6 +42,22 @@ typedef struct RenderCommandManyRectangle
 	Texture* mTexture;
 } RenderCommandManyRectangle;
 
+typedef struct RenderCommandTileLayer
+{
+	uint8_t mType;
+	uint8_t mDepth;
+	uint8_t mLayer;
+	uint8_t mPadding1;
+	int32_t mX1;
+	int32_t mX2;
+	int32_t mY1;
+	int32_t mY2;
+	Color mColor;
+	Rectangle mTileDataBounds;
+	Tile** mTileData;
+	Texture* mTexture;
+} RenderCommandTileLayer;
+
 /*
 struct OeRenderCommandString
 {
@@ -59,19 +77,5 @@ struct OeRenderCommandString
 	std::string* mString;
 };
 
-struct OeRenderCommandTileLayer
-{
-	uint8_t mType;
-	uint8_t mDepth;
-	uint8_t mLayer;
-	uint8_t mPadding1;
-	int32_t mX1;
-	int32_t mX2;
-	int32_t mY1;
-	int32_t mY2;
-	Color mColor;
-	Rectangle mTileDataBounds;
-	std::vector<OeTile*>* mTileData;
-	OeTexture* mTexture;
-};
+
 */

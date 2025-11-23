@@ -33,6 +33,7 @@
 #include "../resources/TextureManager.h"
 #include "../resources/TextureOffsetManager.h"
 #include "../resources/ThingSettingsManager.h"
+#include "../resources/TilesetOffsetManager.h"
 
 enum
 {
@@ -160,7 +161,6 @@ static bool LoadResources()
 {
 	AnimTileManager_LoadAllFromDat();
 	BmFontManager_LoadAllFromDat();
-	LevelDataManager_LoadAllFromDat();
 	MusicManager_LoadAllFromDat();
 	ParticleManager_LoadAllFromDat();
 	PropManager_LoadAllFromDat();
@@ -168,7 +168,9 @@ static bool LoadResources()
 	SoundEffectManager_LoadAllFromDat();
 	TextureManager_LoadAllFromDat();
 	TextureOffsetManager_LoadAllFromDat();
+	TilesetOffsetManager_LoadAllFromDat();
 	ThingSettingsManager_LoadAllFromDat();
+	LevelDataManager_LoadAllFromDat();
 	return true;
 }
 static bool LoadAfterResources()

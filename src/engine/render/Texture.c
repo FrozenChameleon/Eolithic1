@@ -16,3 +16,15 @@ Texture* Texture_FromStream(const char* path, const char* filenameWithoutExtensi
 {
 	return Renderer_GetTextureData(path, BufferReader_GetBuffer(br));
 }
+int32_t Texture_GetWidth(Texture* tex)
+{
+	return tex->mBounds.Width;
+}
+int32_t Texture_GetHeight(Texture* tex)
+{
+	return tex->mBounds.Height;
+}
+void* Texture_GetTexture2D(Texture* tex)
+{
+	return tex->mTextureData;
+}

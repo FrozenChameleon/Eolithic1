@@ -1616,41 +1616,41 @@ void Do_FlipX(Entity entity)
 {
 	Do_SetFlipX4(entity, !Is_FlipX(entity));
 }
-void Do_SetFlipX(Entity entity, int value)
+void Do_SetFlipX(Entity entity, bool value)
 {
-	Do_SetFlipX4(entity, value < 0);
+	Get_DrawActor(entity)->mIsFlipX = value;
 }
 void Do_SetFlipX2(Entity entity, float value)
 {
-	Do_SetFlipX4(entity, value < 0);
+	Do_SetFlipX(entity, value < 0);
 }
 void Do_SetFlipX3(Entity entity, double value)
 {
-	Do_SetFlipX4(entity, value < 0);
+	Do_SetFlipX(entity, value < 0);
 }
-void Do_SetFlipX4(Entity entity, bool value)
+void Do_SetFlipX4(Entity entity, int value)
 {
-	Get_DrawActor(entity)->mIsFlipX = value;
+	Do_SetFlipX(entity, value < 0);
 }
 void Do_FlipY(Entity entity)
 {
 	Do_SetFlipY(entity, !Is_FlipY(entity));
 }
-void Do_SetFlipY(Entity entity, int value)
+void Do_SetFlipY(Entity entity, bool value)
 {
-	Do_SetFlipY4(entity, value < 0);
+	Get_DrawActor(entity)->mIsFlipY = value;
 }
 void Do_SetFlipY2(Entity entity, float value)
 {
-	Do_SetFlipY4(entity, value < 0);
+	Do_SetFlipY(entity, value < 0);
 }
 void Do_SetFlipY3(Entity entity, double value)
 {
-	Do_SetFlipY4(entity, value < 0);
+	Do_SetFlipY(entity, value < 0);
 }
-void Do_SetFlipY4(Entity entity, bool value)
+void Do_SetFlipY4(Entity entity, int value)
 {
-	Get_DrawActor(entity)->mIsFlipY = value;
+	Do_SetFlipY(entity, value < 0);
 }
 void Do_AddCameraShake(int timerLimit, int minX, int maxX, int minY, int maxY)
 {

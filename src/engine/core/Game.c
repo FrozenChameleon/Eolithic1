@@ -162,7 +162,7 @@ int32_t Game_Run()
 		Game_Update(delta);
 		if (!Service_SuppressDrawing())
 		{
-			//Game_Draw(delta);
+			Game_Draw(delta);
 		}
 		if (!isDone)
 		{
@@ -295,6 +295,40 @@ void Game_Update(double gameTime)
 */
 }
 
+void Game_Draw(double gameTime)
+{
+#if EDITOR
+	if (Globals_DebugIsRenderDisabled())
+	{
+		return;
+	}
+#endif
+
+	double delta = gameTime;
+
+	if (!Globals_IsExceptionUnsafe())
+	{
+		//try
+		//{
+		Renderer_Render(delta);
+		//}
+		//catch (...)
+		//{
+		//	HandleFatalException("Fatal exception in draw!");
+		//}
+	}
+	else
+	{
+		Renderer_Render(delta);
+	}
+
+
+#if EDITOR
+	//WILLNOTDO 05152023 OeGui.AfterLayout();
+	//WILLNOTDO 05152023 _mWasGuiDrawMissed = false;
+#endif
+}
+
 void Game_UpdateHelper(double delta)
 {
 	ServiceHelper_Update(delta);
@@ -308,8 +342,6 @@ void Game_UpdateHelper(double delta)
 	if (!GameLoader_IsLoading())
 	{
 		GameUpdater_Update(delta);
-		Renderer_SetupRenderState(); //TODO REMOVE THIS
-		Renderer_Render(1 / 60.0); //TODO REMOVE THIS
 	}
 }
 

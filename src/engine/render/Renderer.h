@@ -160,19 +160,19 @@ void Renderer_GenerateVertexInfo(Texture* texture, float sourceX, float sourceY,
 void Renderer_PushSprite(Texture* texture, float sourceX, float sourceY, float sourceW, float sourceH,
 	float destinationX, float destinationY, float destinationW, float destinationH,
 	Color color, float originX, float originY, float rotationSin, float rotationCos, float depth, uint8_t effects);
-void Renderer_Draw9(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
-	Vector2 scale, SpriteEffects effects, float layerDepth);
-void Renderer_Draw99(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
-	Vector2 origin, float scale, SpriteEffects effects, float layerDepth);
-void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Color color);
-void Renderer_Draw8(Texture* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
+void Renderer_Draw(Texture* texture, Rectangle destinationRectangle, Color color);
+void Renderer_Draw2(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color);
+void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
 	float rotation, Vector2 origin, SpriteEffects effects, float layerDepth);
-void Renderer_Draw4(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color);
+void Renderer_Draw4(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
+	Vector2 scale, SpriteEffects effects, float layerDepth);
+void Renderer_Draw5(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
+	Vector2 origin, float scale, SpriteEffects effects, float layerDepth);
 void Renderer_DrawSheet(RenderCommandSheet* draw, double delta);
 void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw);
 Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* font, const char* text, Color color, Vector2 position);
 void Renderer_DrawString(DrawInstance* draw, double delta);
-void Renderer_DrawTiles(DrawInstance* draw);
+void Renderer_DrawTiles(RenderCommandTileLayer* draw);
 void Renderer_Commit(SpriteBatch* render, Vector2 cameraOffset, double delta);
 void Renderer_BeforeRender();
 void Renderer_AfterRender();

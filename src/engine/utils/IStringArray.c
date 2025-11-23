@@ -3,6 +3,7 @@
 #include "../utils/Utils.h"
 #include "../../third_party/stb_ds.h"
 #include "IStrings.h"
+#include "../utils/Logger.h"
 
 static uint64_t _mRefs;
 
@@ -21,6 +22,12 @@ IStringArray* IStringArray_Create()
 }
 void IStringArray_Dispose(IStringArray* sa)
 {
+	if (sa == NULL)
+	{
+		Logger_LogInformation("Attempted to dispose NULL IStringArray");
+		return;
+	}
+
 	_mRefs -= 1;
 	hmfree(sa->hm_values);
 	IStrings_Dispose(sa->mStrings);

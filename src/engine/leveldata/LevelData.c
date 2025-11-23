@@ -11,6 +11,11 @@
 #include "../math/Points.h"
 #include "../../third_party/stb_ds.h"
 #include "../../GlobalDefs.h"
+#include "../utils/Cvars.h"
+#include "../render/SpriteBatch.h"
+#include "../resources/TextureManager.h"
+#include "../utils/MString.h"
+#include "../render/TilesetOffset.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -34,12 +39,12 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 		
 		//if (mStringData.Length < STRING_DATA_LENGTH) //if debug then correct custom data if wrong size...
 		//{
-		//	OeLogger::LogInformation("Correcting custom data amount...");
+		//	OeLogger_LogInformation("Correcting custom data amount...");
 
 		//	string[] newCustom = new string[CUSTOM_DATA_AMOUNT];
 		//	for (int i = 0; i < newCustom.Length; i++)
 		//	{
-		//		newCustom[i] = OeUtils::NOT_SET;
+		//		newCustom[i] = OeUtils_NOT_SET;
 		//	}
 		//	for (int i = 0; i < mStringData.Length; i++)
 		//	{
@@ -61,7 +66,7 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 		SetupAsMetaMap();
 		_mMetaMap.Read(reader);
 		_mMetaMap.TestAndRemoveInvalidChunks();
-		if (OeGlobals::IsDebugFileMode())
+		if (OeGlobals_IsDebugFileMode())
 		{
 			_mMetaMap.DebugAlignLevelIni();
 		}
@@ -154,7 +159,7 @@ void LevelData_LoadSetupOffsets(LevelData* ld)
 		Tile* t = ld->arr_save_tiles[i];
 		for (int j = 0; j < LEVELDATA_LAYER_DATA_LENGTH; j += 1)
 		{
-			//TODO C99 TilesetOffset_LoadOffsetPoint(&t->mDrawTiles[j], ld->mTilesetName->text);
+			TilesetOffset_LoadOffsetPoint(&t->mDrawTiles[j], MString_GetText(ld->mTilesetName));
 		}
 	}
 }
@@ -173,9 +178,9 @@ bool LevelData_LoadSetupTileData(LevelData* ld)
 			int gridPos = LevelData_GetTilePos1D(ld, i, j);
 			//WILLNOTDO 06262023 DEBUG
 			/*
-			if (OeGlobals::IsDebugFileMode())
+			if (OeGlobals_IsDebugFileMode())
 			{
-				if (_mIsMetaMap && OeGlobals::DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD || !_mIsMetaMap) //if debug and editing, we use clones of tiles so they can be manipulated...
+				if (_mIsMetaMap && OeGlobals_DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD || !_mIsMetaMap) //if debug and editing, we use clones of tiles so they can be manipulated...
 				{
 					 mTileData[gridPos] = tiles[map[gridPos]].GetClone();
 				}
@@ -278,4 +283,84 @@ void LevelData_ImprintToCollisionArray(LevelData* ld, int x, int y, int32_t* col
 Rectangle LevelData_GetLevelBoundsRectangle(LevelData* ld)
 {
 	return Rectangle_Create(0, 0, LevelData_GetRealSizeX(ld), LevelData_GetRealSizeY(ld));
+}
+bool LevelData_IsTilesetNameSet(LevelData* ld)
+{
+	if (MString_EqualToString(ld->mTilesetName, EE_STR_NOT_SET))
+	{
+		return false;
+	}
+	return true;
+}
+void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera)
+{
+	int32_t preferredLayer = -1;
+	float mul = 1;
+
+#if EDITOR
+	if (!Cvars_GetAsBool(CVARS_EDITOR_SHOW_TILES))
+	{
+		return;
+	}
+#endif
+
+	if (!LevelData_IsTilesetNameSet(ld))
+	{
+		return;
+	}
+
+	Texture* texture = LevelData_GetTilesetTexture(ld);
+	if (texture == NULL)
+	{
+		return;
+	}
+	if (Texture_GetTexture2D(texture) == NULL)
+	{
+		return;
+	}
+
+	int x1 = Camera_GetX1Mul(camera, mul);
+	int x2 = Camera_GetX2Mul(camera, ld->_mGridSize.Width, mul);
+	int y1 = Camera_GetY1Mul(camera, mul);
+	int y2 = Camera_GetY2Mul(camera, ld->_mGridSize.Height, mul);
+
+	for (int i = 0; i < LEVELDATA_LAYER_DATA_LENGTH; i++)
+	{
+		Color color = COLOR_WHITE;
+		int depth = ld->mLayerData[i].mDepth;
+		if (preferredLayer != -1)
+		{
+			if (preferredLayer == i)
+			{
+				depth = 100;
+			}
+			else
+			{
+				color = COLOR_GRAY;
+			}
+		}
+
+		bool showLayer = true;
+#if EDITOR
+		//TODO C99 showLayer = Cvars_GetAsBool(Cvars_GetEditorShowLayer(i));
+#endif
+		if (showLayer)
+		{
+			SpriteBatch_DrawLayer(spriteBatch, texture, color, ld->mTileData, ld->_mGridSize, depth, i, x1, x2, y1, y2);
+		}
+	}
+
+#if EDITOR
+	//TODO C99 DrawTileInfo(spriteBatch, preferredLayer, x1, x2, y1, y2);
+#endif
+}
+
+Texture* LevelData_GetTilesetTexture(LevelData* ld)
+{
+	Resource* resource = TextureManager_GetResource(MString_GetText(ld->mTilesetName));
+	if ((resource == NULL) || (resource->mData == NULL))
+	{
+		return NULL;
+	}
+	return resource->mData;
 }

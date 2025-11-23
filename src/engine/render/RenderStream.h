@@ -9,7 +9,7 @@ typedef struct RenderStream
 } RenderStream;
 
 void RenderStream_Clear(RenderStream* rs);
-//RenderCommandTileLayer* GetRenderCommandLayerUninitialized();
+RenderCommandTileLayer* RenderStream_GetRenderCommandLayerUninitialized(RenderStream* rs);
 RenderCommandManyRectangle* RenderStream_GetRenderCommandManyRectangleUninitialized(RenderStream* rs);
 //RenderCommandString* GetRenderCommandStringUninitialized();
 RenderCommandSheet* RenderStream_GetRenderCommandSheetUninitialized(RenderStream* rs);

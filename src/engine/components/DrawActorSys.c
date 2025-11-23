@@ -51,21 +51,19 @@ void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_gra
 		stateInfo->mDepth = -1;
 
 		ThingGraphicsEntry* sh_thing_graphics_entries = sh_graphics_data[i].value;
-		int DEBUG2 = shlen(sh_thing_graphics_entries);
 		for (int j = 0; j < shlen(sh_thing_graphics_entries); j += 1)
 		{
 			const char* phaseString = sh_thing_graphics_entries[j].key;
 			int phase = shget(sh_draw_phase_map, phaseString);
 
 			ImageData* arr_images = sh_thing_graphics_entries[j].value;
-			int DEBUG1 = arrlen(arr_images);
 			for (int k = 0; k < arrlen(arr_images); k += 1)
 			{
 				DrawRenderInfo* renderInfo = ComponentPack_Set2(renderInfos, owner, true);
 				renderInfo->mState = state;
 				renderInfo->mPhase = phase;
 				ImageData* imageData = &arr_images[k];
-				ImageDataInstance_Init(&renderInfo->mRender, imageData);
+				ImageDataInstance_Init2(&renderInfo->mRender, imageData);
 			}
 		}
 	}
@@ -531,7 +529,7 @@ void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* s
 							shaderProgram = stateInfo->mShader;
 						}
 
-						/*DrawInstance* drawInstance = ImageDataInstance_DrawInterpolated(render, spriteBatch, color, shaderProgram,
+						DrawInstance* drawInstance = ImageDataInstance_DrawInterpolated2(render, spriteBatch, color, shaderProgram,
 							newPos, oldPos, scale, rotation + stateRotation, data->mIsFlipX,
 							data->mIsFlipY, depthOverride, data->mOffset);
 						if (data->mExtraPasses != 0)
@@ -541,7 +539,7 @@ void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* s
 						if (data->mIsBlendStateAdditive)
 						{
 							drawInstance->mBlendState = BLENDSTATE_ADDITIVE;
-						}*/
+						}
 					}
 				}
 			}

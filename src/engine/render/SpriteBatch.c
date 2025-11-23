@@ -47,6 +47,7 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	if (texture == NULL)
 	{
 		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
+		return NULL;
 		//TODO C99texture = OeSheet::GetDefaultSheet()->mTextureResource->GetData();
 	}
 
@@ -73,6 +74,40 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	return command;
 }
 
+RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* texture, Color color, int depth, ShaderProgram* program, Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
+{
+	ClampDepth(&depth);
+
+	if (texture == NULL)
+	{
+		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
+		return NULL;
+		//TODO C99 texture = OeSheet::GetDefaultSheet()->mTextureResource->GetData();
+	}
+
+	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
+	command->mType = RENDERER_TYPE_SHEET;
+	command->mDepth = depth;
+	command->mFlipX = flipX;
+	command->mFlipY = flipY;
+	command->mIsRectangle = false;
+	command->mIsInterpolated = true;
+	command->mBlendState = 0;
+	command->mExtraPasses = 0;
+	command->mColor = color;
+	command->mPosition = position;
+	command->mLastPosition = lastPosition;
+	command->mOrigin = origin;
+	command->mScale = scale;
+	command->mRotation = rotation;
+	command->mSourceRectangle = sourceRectangle;
+	command->mDestinationRectangle = Rectangle_Empty;
+	command->mTexture = texture;
+	command->mShaderProgram = program;
+
+	return command;
+}
+
 RenderCommandManyRectangle* SpriteBatch_DrawManyRectangle(SpriteBatch* sb, int32_t depth, DrawRectangle* manyRectangles)
 {
 	ClampDepth(&depth);
@@ -82,6 +117,32 @@ RenderCommandManyRectangle* SpriteBatch_DrawManyRectangle(SpriteBatch* sb, int32
 	command->mDepth = depth;
 	command->mManyRectangles = manyRectangles;
 	command->mTexture = DrawTool_GetSinglePixel();
+
+	return command;
+}
+RenderCommandTileLayer* SpriteBatch_DrawLayer(SpriteBatch* sb, Texture* tileset, Color color, Tile** tileData, Rectangle tileDataBounds, int32_t depth, int32_t layer, int32_t x1, int32_t x2, int32_t y1, int32_t y2)
+{
+	ClampDepth(&depth);
+
+	if (tileset == NULL)
+	{
+		Logger_LogInformation("MISSING TILESET FOR DRAW");
+		return NULL;
+		//TODO C99 tileset = OeSheet::GetDefaultSheet()->mTextureResource->GetData();
+	}
+
+	RenderCommandTileLayer* command = RenderStream_GetRenderCommandLayerUninitialized(&sb->_mRenderStreams[depth]);
+	command->mType = RENDERER_TYPE_TILE_LAYER;
+	command->mDepth = depth;
+	command->mLayer = layer;
+	command->mX1 = x1;
+	command->mX2 = x2;
+	command->mY1 = y1;
+	command->mY2 = y2;
+	command->mColor = color;
+	command->mTileDataBounds = tileDataBounds;
+	command->mTileData = tileData;
+	command->mTexture = tileset;
 
 	return command;
 }

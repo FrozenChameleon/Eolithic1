@@ -269,7 +269,7 @@ void Renderer_AfterRender()
 		}
 		Rectangle destinationRectangle = Renderer_GetScreenBounds();
 		_mIsDrawingFromOffscreenTarget = true;
-		Renderer_Draw3(&_mOffscreenTarget, destinationRectangle, COLOR_WHITE);
+		Renderer_Draw(&_mOffscreenTarget, destinationRectangle, COLOR_WHITE);
 		Renderer_FlushBatch();
 		_mIsDrawingFromOffscreenTarget = false;
 		_mSamplerState.filter = FNA3D_TEXTUREFILTER_POINT;

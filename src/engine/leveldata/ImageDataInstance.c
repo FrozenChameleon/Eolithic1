@@ -1,15 +1,10 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
-
 #include "ImageDataInstance.h"
 
-#include "../utils/Utils.h"
-#include "../utils/MString.h"
-
-void ImageDataInstance_Init(ImageDataInstance* idi, ImageData* data)
+void ImageDataInstance_Init(ImageDataInstance* idi)
+{
+	Utils_memset(idi, 0, sizeof(ImageDataInstance));
+}
+void ImageDataInstance_Init2(ImageDataInstance* idi, ImageData* data)
 {
 	Utils_memset(idi, 0, sizeof(ImageDataInstance));
 
@@ -33,4 +28,84 @@ void ImageDataInstance_Init(ImageDataInstance* idi, ImageData* data)
 	}
 
 	idi->mIsOriginSet = ImageData_IsOriginSet(data);
+}
+
+DrawInstance* ImageDataInstance_DrawInterpolated(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program, 
+	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int overrideDepth)
+{
+	return ImageDataInstance_DrawInterpolated2(render, spriteBatch, color, program, position, lastPosition, scale, rotation, flipX, flipY, overrideDepth, Vector2_Zero);
+}
+DrawInstance* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program,
+	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int overrideDepth, Vector2 tempOffset)
+{
+	Sheet* sheet = ImageDataInstance_GetCurrentSheet(render);
+
+	Vector2 newOffset = Vector2_Create(render->mData->mOffset.X + tempOffset.X, render->mData->mOffset.Y + tempOffset.Y);
+	if (flipX == true)
+	{
+		newOffset.X = -newOffset.X;
+	}
+	if (flipY == true)
+	{
+		newOffset.Y = -newOffset.Y;
+	}
+	Vector2_MulAssign(&newOffset, scale);
+
+	float newRotation = render->mData->mInitialRotation + rotation;
+
+	int newDepth = render->mData->mDepth;
+	if (overrideDepth != -1)
+	{
+		newDepth = overrideDepth;
+	}
+
+	Vector2 newPosition = Vector2_Add(position, newOffset);
+	Vector2 newLastPosition = Vector2_Add(lastPosition, newOffset);
+	Vector2 newScale = Vector2_MulFloat(scale, render->mData->mScaler);
+
+	if (!render->mIsOriginSet)
+	{
+		DrawInstance* draw = Sheet_DrawInterpolated4(sheet, spriteBatch, color, newDepth, true, true, 
+			program, newPosition, newLastPosition, newScale, newRotation, flipX, flipY);
+		if (render->mData->mIsAdditive)
+		{
+			draw->mBlendState = BLENDSTATE_ADDITIVE;
+		}
+		return draw;
+	}
+	else
+	{
+		DrawInstance* draw = Sheet_DrawInterpolated5(sheet, spriteBatch, color, newDepth, true, true, program, newPosition, newLastPosition, newScale,
+			newRotation, flipX, flipY, render->mData->mOrigin);
+		if (render->mData->mIsAdditive)
+		{
+			draw->mBlendState = BLENDSTATE_ADDITIVE;
+		}
+		return draw;
+	}
+	return NULL;
+}
+Sheet* ImageDataInstance_GetCurrentSheet(ImageDataInstance* render)
+{
+	if (render->mData->mCanAnimate)
+	{
+		return Animation_GetCurrentSheet(&render->mAnimation);
+	}
+	else
+	{
+		return render->mSheet;
+	}
+}
+Sheet* ImageDataInstance_GetSheet(ImageDataInstance* render, int i)
+{
+	if (render->mData->mCanAnimate)
+	{
+		Sheet** sheets = Animation_GetSheets(&render->mAnimation);
+		Sheet* sheetToReturn = sheets[i];
+		return sheetToReturn;
+	}
+	else
+	{
+		return render->mSheet;
+	}
 }

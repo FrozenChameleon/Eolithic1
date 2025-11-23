@@ -43,3 +43,4 @@ void Animation_AddToAnimationMap(const char* baseName, const char* sheetName, in
 void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char* baseName, int32_t frames, int32_t digits);
 const char* Animation_GetConvertedName(const char* baseName);
 FixedArray Animation_GetAnimationSheets(const char* animation);
+const Sheet** Animation_GetSheets(const Animation* anim);

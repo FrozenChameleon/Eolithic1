@@ -55,8 +55,8 @@
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
-static const float _mCornerOffsetX[] = { 0.0f ,1.0f, 0.0f, 1.0f };
-static const float _mCornerOffsetY[] = { 0.0f, 0.0f, 1.0f, 1.0f };
+static const float _mCornerOffsetX[4] = { 0.0f ,1.0f, 0.0f, 1.0f };
+static const float _mCornerOffsetY[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 
 //static SpriteBatch _mOrangeSpriteBatch;
 //static SpriteBatch _mOrangeSpriteBatchDrawHud;
@@ -322,7 +322,98 @@ void Renderer_PushSprite(Texture* texture, float sourceX, float sourceY, float s
 		effects
 	);
 }
-void Renderer_Draw9(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
+void Renderer_Draw(Texture* texture, Rectangle destinationRectangle, Color color)
+{
+	Renderer_PushSprite(
+		texture,
+		0.0f,
+		0.0f,
+		1.0f,
+		1.0f,
+		destinationRectangle.X,
+		destinationRectangle.Y,
+		destinationRectangle.Width,
+		destinationRectangle.Height,
+		color,
+		0.0f,
+		0.0f,
+		0.0f,
+		1.0f,
+		0.0f,
+		0
+	);
+}
+void Renderer_Draw2(
+	Texture* texture,
+	Vector2 position,
+	Rectangle sourceRectangle,
+	Color color
+) {
+	float sourceX, sourceY, sourceW, sourceH;
+	float destW, destH;
+
+	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
+	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
+	sourceW = sourceRectangle.Width / (float)texture->mBounds.Width;
+	sourceH = sourceRectangle.Height / (float)texture->mBounds.Height;
+	destW = sourceRectangle.Width;
+	destH = sourceRectangle.Height;
+
+	Renderer_PushSprite(
+		texture,
+		sourceX,
+		sourceY,
+		sourceW,
+		sourceH,
+		position.X,
+		position.Y,
+		destW,
+		destH,
+		color,
+		0.0f,
+		0.0f,
+		0.0f,
+		1.0f,
+		0.0f,
+		0
+	);
+}
+void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
+	float rotation, Vector2 origin, SpriteEffects effects, float layerDepth
+) {
+	float sourceX, sourceY, sourceW, sourceH;
+
+	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
+	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
+	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
+		Math_abs((float)sourceRectangle.Width),
+		MathHelper_GetMachineEpsilonFloat()
+	) / (float)texture->mBounds.Width;
+	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
+		Math_abs((float)sourceRectangle.Height),
+		MathHelper_GetMachineEpsilonFloat()
+	) / (float)texture->mBounds.Height;
+
+	Renderer_PushSprite(
+		texture,
+		sourceX,
+		sourceY,
+		sourceW,
+		sourceH,
+		destinationRectangle.X,
+		destinationRectangle.Y,
+		destinationRectangle.Width,
+		destinationRectangle.Height,
+		color,
+		origin.X / sourceW / (float)texture->mBounds.Width,
+		origin.Y / sourceH / (float)texture->mBounds.Height,
+		(float)Math_sin(rotation),
+		(float)Math_cos(rotation),
+		layerDepth,
+		(uint8_t)(effects & (SpriteEffects)0x03)
+	);
+}
+void Renderer_Draw4(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation, Vector2 origin,
 	Vector2 scale, SpriteEffects effects, float layerDepth
 )
 {
@@ -359,7 +450,7 @@ void Renderer_Draw9(Texture* texture, Vector2 position, Rectangle sourceRectangl
 		(uint8_t)(effects & (SpriteEffects)0x03)
 	);
 }
-void Renderer_Draw99(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
+void Renderer_Draw5(Texture* texture, Vector2 position, Rectangle sourceRectangle, Color color, float rotation,
 	Vector2 origin, float scale, SpriteEffects effects, float layerDepth
 ) {
 	float sourceX, sourceY, sourceW, sourceH;
@@ -398,97 +489,6 @@ void Renderer_Draw99(Texture* texture, Vector2 position, Rectangle sourceRectang
 		(uint8_t)(effects & (SpriteEffects)0x03)
 	);
 }
-void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Color color)
-{
-	Renderer_PushSprite(
-		texture,
-		0.0f,
-		0.0f,
-		1.0f,
-		1.0f,
-		destinationRectangle.X,
-		destinationRectangle.Y,
-		destinationRectangle.Width,
-		destinationRectangle.Height,
-		color,
-		0.0f,
-		0.0f,
-		0.0f,
-		1.0f,
-		0.0f,
-		0
-	);
-}
-void Renderer_Draw8(Texture* texture, Rectangle destinationRectangle, Rectangle sourceRectangle, Color color,
-	float rotation, Vector2 origin, SpriteEffects effects, float layerDepth
-) {
-	float sourceX, sourceY, sourceW, sourceH;
-
-	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
-	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
-	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Width),
-		MathHelper_GetMachineEpsilonFloat()
-	) / (float)texture->mBounds.Width;
-	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Height),
-		MathHelper_GetMachineEpsilonFloat()
-	) / (float)texture->mBounds.Height;
-
-	Renderer_PushSprite(
-		texture,
-		sourceX,
-		sourceY,
-		sourceW,
-		sourceH,
-		destinationRectangle.X,
-		destinationRectangle.Y,
-		destinationRectangle.Width,
-		destinationRectangle.Height,
-		color,
-		origin.X / sourceW / (float)texture->mBounds.Width,
-		origin.Y / sourceH / (float)texture->mBounds.Height,
-		(float)Math_sin(rotation),
-		(float)Math_cos(rotation),
-		layerDepth,
-		(uint8_t)(effects & (SpriteEffects)0x03)
-	);
-}
-void Renderer_Draw4(
-	Texture* texture,
-	Vector2 position,
-	Rectangle sourceRectangle,
-	Color color
-) {
-	float sourceX, sourceY, sourceW, sourceH;
-	float destW, destH;
-
-	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
-	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
-	sourceW = sourceRectangle.Width / (float)texture->mBounds.Width;
-	sourceH = sourceRectangle.Height / (float)texture->mBounds.Height;
-	destW = sourceRectangle.Width;
-	destH = sourceRectangle.Height;
-
-	Renderer_PushSprite(
-		texture,
-		sourceX,
-		sourceY,
-		sourceW,
-		sourceH,
-		position.X,
-		position.Y,
-		destW,
-		destH,
-		color,
-		0.0f,
-		0.0f,
-		0.0f,
-		1.0f,
-		0.0f,
-		0
-	);
-}
 void Renderer_DrawSheet(RenderCommandSheet* draw, double delta)
 {
 	SpriteEffects effects = Renderer_GetEffects(draw->mFlipX, draw->mFlipY);
@@ -497,20 +497,20 @@ void Renderer_DrawSheet(RenderCommandSheet* draw, double delta)
 	{
 		if (!draw->mIsInterpolated)
 		{
-			Renderer_Draw9(sheetTex, Vector2_Add(draw->mPosition, draw->mOrigin), draw->mSourceRectangle, draw->mColor,
+			Renderer_Draw4(sheetTex, Vector2_Add(draw->mPosition, draw->mOrigin), draw->mSourceRectangle, draw->mColor,
 				Math_ToRadians(draw->mRotation), draw->mOrigin, draw->mScale, effects, draw->mDepth);
 		}
 		else
 		{
 			Vector2 position = { (float)Utils_GetInterpolated(delta, draw->mPosition.X, draw->mLastPosition.X) ,
 				(float)Utils_GetInterpolated(delta, draw->mPosition.Y, draw->mLastPosition.Y) };
-			Renderer_Draw9(sheetTex, Vector2_Add(position, draw->mOrigin),
+			Renderer_Draw4(sheetTex, Vector2_Add(position, draw->mOrigin),
 				draw->mSourceRectangle, draw->mColor, Math_ToRadians(draw->mRotation), draw->mOrigin, draw->mScale, effects, draw->mDepth);
 		}
 	}
 	else
 	{
-		Renderer_Draw8(sheetTex, draw->mDestinationRectangle, draw->mSourceRectangle, draw->mColor, draw->mRotation, Vector2_Zero, effects, draw->mDepth);
+		Renderer_Draw3(sheetTex, draw->mDestinationRectangle, draw->mSourceRectangle, draw->mColor, draw->mRotation, Vector2_Zero, effects, draw->mDepth);
 	}
 }
 void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw)
@@ -522,7 +522,7 @@ void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw)
 	ptrdiff_t len = arrlen(manyRectangles);
 	for (int32_t i = 0; i < len; i += 1)
 	{
-		Renderer_Draw8(draw->mTexture, manyRectangles[i].mRectangle,
+		Renderer_Draw3(draw->mTexture, manyRectangles[i].mRectangle,
 			sourceRectangle, manyRectangles[i].mColor, 0, Vector2_Zero, SPRITEEFFECTS_NONE, draw->mDepth);
 	}
 }
@@ -668,44 +668,44 @@ void Renderer_DrawString(DrawInstance* draw, double delta)
 	}
 	*/
 }
-void Renderer_DrawTiles(DrawInstance* draw)
+void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 {
-	/*
-	std::vector<OeTile*>& tileData = *draw->mTileData;
+	Tile** tileData = draw->mTileData;
 	Rectangle tileDataBounds = draw->mTileDataBounds;
-	Vector2 origin = Vector2(TILE_SIZE / 2, TILE_SIZE / 2);
+	Vector2 origin = Vector2_Create(TILE_SIZE / 2, TILE_SIZE / 2);
 	int depth = draw->mDepth;
 	for (int i = draw->mX1; i < draw->mX2; i += 1)
 	{
 		for (int j = draw->mY1; j < draw->mY2; j += 1)
 		{
 			//Draw The Tile
-			Vector2 position = Vector2(i * TILE_SIZE, j * TILE_SIZE);
+			Vector2 position = Vector2_Create(i * TILE_SIZE, j * TILE_SIZE);
 			int gridPos = i + (j * tileDataBounds.Width);
-			OeDrawTile* drawTile = &tileData[gridPos]->mDrawTiles[draw->mLayer];
+			DrawTile* drawTile = &tileData[gridPos]->mDrawTiles[draw->mLayer];
 			if (drawTile->mPoint.X != -1)
 			{
-				Point point = OeDrawTile::GetCorrectPoint(drawTile);
-				Draw(draw->mTexture, position + origin, Rectangle(point.X, point.Y, TILE_SIZE, TILE_SIZE), draw->mColor, Math_ToRadians(drawTile->mRotation),
+				Point point = DrawTile_GetCorrectPoint(drawTile);
+				Renderer_Draw5(draw->mTexture, Vector2_Add(position, origin), Rectangle_Create(point.X, point.Y, TILE_SIZE, TILE_SIZE), draw->mColor,
+					Math_ToRadians(drawTile->mRotation),
 					origin, 1, Renderer_GetEffects(drawTile->mFlipX, drawTile->mFlipY), depth);
 			}
-			else if (drawTile->mAnimation.size() != 0)
+			else if (MString_GetLength(drawTile->mAnimation) > 0)
 			{
-				OeAnimTile* animTile = OeResourceManagers::AnimTileManager.GetResourceData(drawTile->mAnimation);
+				/*AnimTile* animTile = OeResourceManagers::AnimTileManager.GetResourceData(drawTile->mAnimation);
 				if (animTile != nullptr)
 				{
 					//Draw The Anim Tile
 					bool flippingX = drawTile->mFlipX ? !animTile->mIsFlipX : animTile->mIsFlipX;
 					bool flippingY = drawTile->mFlipY ? !animTile->mIsFlipY : animTile->mIsFlipY;
 
-					SpriteEffects effects = Renderer_GetEffects(flippingX, flippingY);
+					SpriteEffects effects = OeRenderer::GetEffects(flippingX, flippingY);
 
 					if (animTile->mIsWrap)
 					{
 						Rectangle source = Rectangle(0 + animTile->_mWrapOffset.X, 0 + animTile->_mWrapOffset.Y, TILE_SIZE, TILE_SIZE);
 						Vector2 halfRect = Vector2(TILE_SIZE / 2, TILE_SIZE / 2);
 						Draw(OeSheet::GetTexture(animTile->_mWrapSheet), position + origin - halfRect + halfRect, source, draw->mColor,
-							Math_ToRadians(animTile->mRotation + drawTile->mRotation), halfRect, animTile->mScaler, effects, depth);
+							OeMath::ToRadians(animTile->mRotation + drawTile->mRotation), halfRect, animTile->mScaler, effects, depth);
 					}
 					else
 					{
@@ -719,7 +719,7 @@ void Renderer_DrawTiles(DrawInstance* draw)
 							_mCurrentBlendState = BlendState::Additive;
 						}
 						Draw(OeSheet::GetTexture(sheet), position + origin - halfRect + halfRect, source, draw->mColor,
-							Math_ToRadians(animTile->mRotation + drawTile->mRotation),
+							OeMath::ToRadians(animTile->mRotation + drawTile->mRotation),
 							halfRect, animTile->mScaler, effects, depth);
 						if (animTile->mIsAdditive)
 						{
@@ -730,11 +730,10 @@ void Renderer_DrawTiles(DrawInstance* draw)
 				else
 				{
 					Draw(OeDrawTool::GetSinglePixel(), Rectangle((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), Color::Red);
-				}
+				}*/
 			}
 		}
 	}
-	*/
 }
 static uint64_t DrawTheInstance(uint8_t* buffer, uint64_t position, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
@@ -773,6 +772,15 @@ static uint64_t DrawTheInstance(uint8_t* buffer, uint64_t position, double delta
 		}
 	}
 	break;
+	case RENDERER_TYPE_TILE_LAYER:
+	{
+		sizeToReturn = sizeof(RenderCommandTileLayer);
+		if (drawTileLayer)
+		{
+			Renderer_DrawTiles((RenderCommandTileLayer*)(buffer + position));
+		}
+	}
+	break;
 	/*
 	case RENDERER_TYPE_STRING:
 	{
@@ -782,16 +790,6 @@ static uint64_t DrawTheInstance(uint8_t* buffer, uint64_t position, double delta
 			OeRenderer::DrawString((OeRenderCommandString*)(buffer + position), delta);
 		}
 	}
-	break;
-	case RENDERER_TYPE_TILE_LAYER:
-	{
-		sizeToReturn = sizeof(RenderCommandTileLayer);
-		if (drawTileLayer)
-		{
-			OeRenderer::DrawTiles((OeRenderCommandTileLayer*)(buffer + position));
-		}
-	}
-	break;
 	*/
 	}
 
@@ -1098,6 +1096,21 @@ void Renderer_SetupCommit(double delta)
 
 void Renderer_SetupRenderState()
 {
+	if (GameLoader_IsLoading())
+	{
+		SpriteBatch_Clear(&_mOrangeSpriteBatch);
+		SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
+		GameLoader_Draw(&_mOrangeSpriteBatchHud);
+		return;
+	}
+
+	SpriteBatch_Clear(&_mOrangeSpriteBatch);
+	GameStateManager_Draw(&_mOrangeSpriteBatch);
+	SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
+	GameStateManager_DrawHud(&_mOrangeSpriteBatchHud);
+
+	//OLD DEBUG REMOVE TODO C99
+	/*
 	if (!GameLoader_IsLoading())
 	{
 		SpriteBatch_Clear(&_mOrangeSpriteBatch);
@@ -1132,22 +1145,7 @@ void Renderer_SetupRenderState()
 			SpriteBatch_Draw(&_mOrangeSpriteBatchHud, sheet->mTextureResource->mData, Color_White, 0, NULL,
 				position, sheet->mRectangle, Vector2_One, 0, false, false, Vector2_Zero);
 		}
-	}
-
-	/*
-	if (GameLoader_IsLoading())
-	{
-		_mOrangeSpriteBatch.Clear();
-		_mOrangeSpriteBatchDrawHud.Clear();
-		GameLoader_Draw(&_mOrangeSpriteBatchDrawHud);
-		return;
-	}
-
-	_mOrangeSpriteBatch.Clear();
-	GameStateManager_Draw(&_mOrangeSpriteBatch);
-	_mOrangeSpriteBatchDrawHud.Clear();
-	GameStateManager_DrawHud(&_mOrangeSpriteBatchDrawHud);
-	*/
+	}*/
 }
 int Renderer_GetFPS()
 {

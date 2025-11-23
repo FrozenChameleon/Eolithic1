@@ -3,11 +3,19 @@
 #include "../math/Point.h"
 #include "../render/Color.h"
 #include "../utils/MString.h"
+#include "../render/SpriteEffects.h"
 
 typedef struct Texture Texture;
 typedef struct SpriteBatch SpriteBatch;
 typedef struct BufferWriter BufferWriter;
 typedef struct BufferReader BufferReader;
+
+enum
+{
+	DRAWTILE_DRAWING_MODE_NOTHING = 0,
+	DRAWTILE_DRAWING_MODE_NOT_ANIMATED = 1,
+	DRAWTILE_DRAWING_MODE_ANIMATED = 2
+};
 
 typedef struct DrawTile
 {

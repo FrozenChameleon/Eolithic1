@@ -7,6 +7,7 @@
 #include "../render/DrawRectangle.h"
 #include "../font/BmFont.h"
 #include "../leveldata/Tile.h"
+#include "../render/ShaderProgram.h"
 
 typedef struct DrawInstance
 {
