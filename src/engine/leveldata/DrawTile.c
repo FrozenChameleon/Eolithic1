@@ -18,7 +18,7 @@
 
 void DrawTile_Init(DrawTile* drawTile)
 {
-	MString_Assign(&drawTile->mAnimation, "");
+	MString_Assign(&drawTile->mAnimation, EE_STR_EMPTY);
 	drawTile->mPoint = Points_NegativeOne;
 	drawTile->mOffsetPoint = Points_NegativeOne;
 }
@@ -43,7 +43,7 @@ void DrawTile_LoadSheet(DrawTile* drawTile, int x, int y)
 	drawTile->mPoint.X = x;
 	drawTile->mPoint.Y = y;
 
-	MString_Assign(&drawTile->mAnimation, "");
+	MString_Assign(&drawTile->mAnimation, EE_STR_EMPTY);
 }
 void DrawTile_LoadAnimation(DrawTile* drawTile, const char* animation)
 {
@@ -86,7 +86,7 @@ Point DrawTile_GetCorrectPoint(DrawTile* drawTile)
 }
 bool DrawTile_IsZero(DrawTile* drawTile)
 {
-	if (MString_EqualToString(drawTile->mAnimation, "") &&
+	if (MString_EqualToString(drawTile->mAnimation, EE_STR_EMPTY) &&
 		(drawTile->mPoint.X == -1) &&
 		(drawTile->mPoint.Y == -1))
 	{
@@ -96,7 +96,7 @@ bool DrawTile_IsZero(DrawTile* drawTile)
 }
 bool DrawTile_IsAnimation(DrawTile* drawTile)
 {
-	if (MString_EqualToString(drawTile->mAnimation, ""))
+	if (MString_EqualToString(drawTile->mAnimation, EE_STR_EMPTY))
 	{
 		return false;
 	}

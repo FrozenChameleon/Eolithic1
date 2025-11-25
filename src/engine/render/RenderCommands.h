@@ -9,6 +9,7 @@ typedef struct Texture Texture;
 typedef struct ShaderProgram ShaderProgram;
 typedef struct DrawRectangle DrawRectangle;
 typedef struct Tile Tile;
+typedef struct BmFont BmFont;
 
 typedef struct RenderCommandSheet
 {
@@ -58,8 +59,7 @@ typedef struct RenderCommandTileLayer
 	Texture* mTexture;
 } RenderCommandTileLayer;
 
-/*
-struct OeRenderCommandString
+typedef struct RenderCommandString
 {
 	uint8_t mType;
 	uint8_t mDepth;
@@ -73,9 +73,6 @@ struct OeRenderCommandString
 	Vector2 mPosition;
 	Vector2 mLastPosition;
 	Color mColor;
-	OeBmFont* mFont;
-	std::string* mString;
-};
-
-
-*/
+	BmFont* mFont;
+	const char* mString;
+} RenderCommandString;

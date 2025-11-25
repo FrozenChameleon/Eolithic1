@@ -6,7 +6,6 @@
 
 #include "PropInstance.h"
 
-
 #include "../utils/Utils.h"
 #include "../render/SpriteBatch.h"
 #include "../io/BufferReader.h"
@@ -82,25 +81,25 @@ void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int depth,
 }
 void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position, bool drawInfo)
 {
-	/*Prop* propData = GetThePropData(prop);
+	Prop* propData = GetThePropData(prop);
 
 	if (propData == NULL)
 	{
-		OeDrawTool::DrawRectangle(spriteBatch, OeColors::BLUE, 100, Rectangle((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), 0, false);
+		DrawTool_DrawRectangle2(spriteBatch, COLOR_BLUE, 100, Rectangle_Create((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), 0, false);
 	}
 	else
 	{
 		Vector2 temp;
 		if (!drawInfo)
 		{
-			temp = position + prop->mOffset + prop->mDrawOffset;
+			temp = Vector2_Add(Vector2_Add(position, prop->mOffset), prop->mDrawOffset);
 		}
 		else
 		{
-			temp = position + prop->mOffset;
+			temp = Vector2_Add(position, prop->mOffset);
 		}
-		propData->Draw(spriteBatch, depth, OePoints::ToPoint(temp), prop->mScale, prop->mRotation, prop->mFlipX, prop->mFlipY, drawInfo);
-	}*/
+		Prop_Draw(propData, spriteBatch, depth, Points_ToPointFromVector2(temp), prop->mScale, prop->mRotation, prop->mFlipX, prop->mFlipY, drawInfo);
+	}
 }
 Prop* PropInstance_GetPropData(PropInstance* prop)
 {
@@ -122,26 +121,25 @@ bool PropInstance_IsPropValid(PropInstance* prop)
 
 Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position)
 {
-	return Rectangle_Empty;
-	/*Prop* propData = GetThePropData(prop);
+	Prop* propData = GetThePropData(prop);
 
 	Sheet* propSheet;
-	if (propData != nullptr)
+	if (propData != NULL)
 	{
-		propSheet = propData->GetSheet();
+		propSheet = Prop_GetSheet(propData);
 	}
 	else
 	{
-		propSheet = nullptr;
+		propSheet = NULL;
 	}
 
 	int width;
 	int height;
-	if (propSheet != nullptr)
+	if (propSheet != NULL)
 	{
 		const Rectangle* rect = &propSheet->mRectangle;
-		width = static_cast<int>(rect->Width * propData->mScaler * prop->mScale);
-		height = static_cast<int>(rect->Height * propData->mScaler * prop->mScale);
+		width = (int)(rect->Width * propData->mScaler * prop->mScale);
+		height = (int)(rect->Height * propData->mScaler * prop->mScale);
 	}
 	else
 	{
@@ -149,9 +147,9 @@ Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position)
 		height = TILE_SIZE;
 	}
 
-	return Rectangle(static_cast<int>(position.X + prop->mOffset.X),
-		static_cast<int>(position.Y + prop->mOffset.Y),
-		width, height);*/
+	return Rectangle_Create((int)(position.X + prop->mOffset.X),
+		(int)(position.Y + prop->mOffset.Y),
+		width, height);
 }
 bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
 {

@@ -213,17 +213,17 @@ static void DrawRoutineActual(ParticleInstance* data, SpriteBatch* spriteBatch, 
 		return;
 	}
 
-	/*
-	OeSheet* sheet = data->mParticle->mTextureIsAnimation ? OeAnimation_GetCurrentSheet(&data->mAnimation) : data->mSheet;
+	Sheet* sheet = data->mParticle->mTextureIsAnimation ? Animation_GetCurrentSheet(&data->mAnimation) : data->mSheet;
 
 	float scale = data->mParticle->mScaler;
-	OeDrawInstance* drawInstance = OeSheet_DrawInterpolated(sheet, spriteBatch, data->mInfluencedColor, GetDepth(data), true, true, data->mShaderProgram, position, lastPosition,
-		Vector2(scale), data->mInfluencedRotation, data->mFlipX, data->mFlipY);
+	RenderCommandSheet* drawInstance = Sheet_DrawInterpolated4(sheet, spriteBatch, data->mInfluencedColor, GetDepth(data), true, true, 
+		data->mShaderProgram, position, lastPosition,
+		Vector2_Create2(scale), data->mInfluencedRotation, data->mFlipX, data->mFlipY);
 	if (data->mParticle->mIsBlendStateAdditive)
 	{
-		drawInstance->mBlendState = BlendState_Additive;
+		drawInstance->mBlendState = BLENDSTATE_ADDITIVE;
 	}
-	drawInstance->mExtraPasses = data->mParticle->mExtraPasses;*/
+	drawInstance->mExtraPasses = data->mParticle->mExtraPasses;
 }
 static void DrawRoutine(ParticleInstance* data, SpriteBatch* spriteBatch)
 {
@@ -352,39 +352,37 @@ static void Update(System* sys)
 }
 static void UpdateLastRenderPosition(System* sys, GameState* gameState)
 {
-	/*
-	OeComponentPack<ParticleInstance>* pack = gameState->GetComponentPack<ParticleInstance>();
+	ComponentPack* pack = GameState_GetComponentPack(gameState, C_ParticleInstance);
 
-	OePackIterator iter = OePackIterator_Begin();
-	while (pack->Next(&iter))
+	PackIterator iter = PackIterator_Begin;
+	while (ComponentPack_Next(pack, &iter))
 	{
-		UpdateLastRenderPositionRoutine(&pack->Components[iter.mIndex]);
+		UpdateLastRenderPositionRoutine(iter.mComponent);
 	}
-	*/
 }
 static void Draw(System* sys, SpriteBatch* spriteBatch)
 {
-	/*
-	float mul = OeComCamera_EXTENDED_CAMERA;
+	float mul = CAMERA_EXTENDED_CAMERA;
 
-	OeComCamera* camera = Get_Camera();
-	int left = OeComCamera_GetLeft(camera, mul);
-	int top = OeComCamera_GetTop(camera, mul);
-	int right = OeComCamera_GetRight(camera, mul);
-	int bottom = OeComCamera_GetBottom(camera, mul);
+	Camera* camera = Get_Camera();
+	int left = Camera_GetLeftMul(camera, mul);
+	int top = Camera_GetTopMul(camera, mul);
+	int right = Camera_GetRightMul(camera, mul);
+	int bottom = Camera_GetBottomMul(camera, mul);
 
-	OeComponentPack<ParticleInstance>* pack = Get_ComponentPack<ParticleInstance>();
-	OePackIterator iter = OePackIterator_Begin();
-	while (pack->Next(&iter))
+	ComponentPack* pack = Get_ComponentPack(C_ParticleInstance);
+	PackIterator iter = PackIterator_Begin;
+	while (ComponentPack_Next(pack, &iter))
 	{
-		if ((pack->Components[iter.mIndex].mPosition.X > left) && (pack->Components[iter.mIndex].mPosition.Y > top))
+		ParticleInstance* instance = iter.mComponent;
+		if ((instance->mPosition.X > left) && (instance->mPosition.Y > top))
 		{
-			if ((pack->Components[iter.mIndex].mPosition.X < right) && (pack->Components[iter.mIndex].mPosition.Y < bottom))
+			if ((instance->mPosition.X < right) && (instance->mPosition.Y < bottom))
 			{
-				DrawRoutine(&pack->Components[iter.mIndex], spriteBatch);
+				DrawRoutine(instance, spriteBatch);
 			}
 		}
-	}*/
+	}
 }
 
 System* ParticleInstanceSys_CreateSystem()

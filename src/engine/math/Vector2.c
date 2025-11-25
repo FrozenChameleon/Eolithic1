@@ -28,6 +28,13 @@ Vector2 Vector2_Create(float x, float y)
 	vec.Y = y;
 	return vec;
 }
+Vector2 Vector2_Create2(float value)
+{
+	Vector2 vec;
+	vec.X = value;
+	vec.Y = value;
+	return vec;
+}
 void Vector2_Init(Vector2* value, float x, float y)
 {
 	value->X = x;

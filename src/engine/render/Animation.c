@@ -121,10 +121,7 @@ void Animation_Init2(Animation* data, Sheet** sheets, int32_t sheetsLen, int32_t
 }
 const char* Animation_GetCurrentSheetName(Animation* data)
 {
-	return NULL;
-	/*
-	return GetCurrentSheet(data)->mSheetName;
-	*/
+	return Animation_GetCurrentSheet(data)->mSheetName;
 }
 bool Animation_Update(Animation* data)
 {

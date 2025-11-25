@@ -1,7 +1,9 @@
 #pragma once
 
+#include "../utils/MString.h"
+
 typedef struct BmFontDataPage
 {
 	int ID;
-	const char* File;
+	MString* File;
 } BmFontDataPage;

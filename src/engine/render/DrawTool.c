@@ -4,14 +4,14 @@
 #include "../math/Math.h"
 #include "../math/Point.h"
 #include "../resources/TextureManager.h"
+#include "../resources/BmFontManager.h"
 
 static Resource* _mSinglePixel;
 
-/*
-static OeBmFont* GetFont(std_string font)
+static BmFont* GetFont(const char* font)
 {
-	return OeResourceManagers_FontManager.GetResourceData(font);
-}*/
+	return BmFontManager_GetResourceData(font);
+}
 
 Texture* DrawTool_GetSinglePixel()
 {
@@ -56,8 +56,7 @@ void DrawTool_DrawRectangleHollow2(SpriteBatch* spriteBatch, Color color, int de
 }
 Rectangle DrawTool_GetBounds(const char* str, const char* font)
 {
-	return Rectangle_Empty;
-	//TODO C99 return GetFont(font)->GetBounds(str, false);
+	return BmFont_GetBounds(GetFont(font), str, false);
 }
 void DrawTool_DrawLine(SpriteBatch* spriteBatch, Color color, int depth, int delay, int offset, int size, Point begin, Point end)
 {
@@ -84,7 +83,7 @@ void DrawTool_DrawLine3(SpriteBatch* spriteBatch, Color color, int depth, int de
 		else
 		{
 			x = (float)(x1 + i * seg);
-			//TODO C99 y = Math_GetSlopeInterceptY(x1, y1, x2, y2, x);
+			y = Math_GetSlopeInterceptY(x1, y1, x2, y2, x);
 		}
 		if ((counter + offset) % delay == 0)
 		{

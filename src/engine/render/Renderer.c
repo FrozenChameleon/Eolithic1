@@ -52,6 +52,7 @@
 #include "../core/Func.h"
 #include "../gamestate/GameStateManager.h"
 #include "../render/DrawTool.h"
+#include "../resources/AnimTileManager.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -528,7 +529,7 @@ void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw)
 }
 /*void Renderer_DrawManyRectangles(DrawInstance* draw)
 {
-	const std::vector<OeDrawRectangle>& manyRectangles = *draw->mManyRectangles;
+	const std_vector<OeDrawRectangle>& manyRectangles = *draw->mManyRectangles;
 
 	for (int i = 0; i < manyRectangles.size(); i += 1)
 	{
@@ -540,105 +541,105 @@ static BmFont* GetBmFont(const char* font)
 {
 	return NULL;
 
-	//return OeResourceManagers::FontManager.GetResourceData(font);
+	//return OeResourceManagers_FontManager.GetResourceData(font);
 }
-Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* font, const char* text, Color color, Vector2 position)
+Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* bmf, const char* text, Color color, Vector2 position)
 {
-	return Rectangle_Empty;
-	/*
-	Texture* tex = font->GetFontTexture();
-	if (tex == nullptr)
+	Texture* tex = BmFont_GetFontTexture(bmf);
+	if (tex == NULL)
 	{
-		return Rectangle::Empty;
+		return Rectangle_Empty;
 	}
 
 	int boundsMaxWidth = 0;
 	int boundsWidth = 0;
-	int boundsHeight = font->GetBaseHeight();
+	int boundsHeight = BmFont_GetBaseHeight(bmf);
 	float currentX = position.X;
 	float currentY = position.Y;
 
-	for (int i = 0; i < text.size(); i += 1)
+	int textLen = Utils_strlen(text);
+	for (int i = 0; i < textLen; i += 1)
 	{
 		if (text[i] == '\n')
 		{
 			boundsWidth = 0;
-			boundsHeight += font->GetLineHeight();
-			currentY += font->GetLineHeight();
+			boundsHeight += BmFont_GetLineHeight(bmf);
+			currentY += BmFont_GetLineHeight(bmf);
 			currentX = position.X;
 		}
 		else
 		{
-			BmFontDataChar* bmChar = nullptr;
-			auto it = font->_mFontCharMap.find(text[i]); //TryGetValue equivalent
-			if (it != font->_mFontCharMap.end())
+			BmFontDataChar* bmChar = NULL;
+			int charToLookUp = text[i];
+			int64_t charIndex = hmgeti(bmf->hm_font_char_map, charToLookUp);
+			if (charIndex >= 0)
 			{
-				bmChar = &it->second;
+				bmChar = &bmf->hm_font_char_map[charIndex].value;
+			}
+			if (bmChar == NULL)
+			{
+				continue;
 			}
 
-			if (bmChar != nullptr)
+			boundsWidth += bmChar->XAdvance;
+			if (boundsWidth > boundsMaxWidth)
 			{
-				boundsWidth += bmChar->XAdvance;
-				if (boundsWidth > boundsMaxWidth)
-				{
-					boundsMaxWidth = boundsWidth;
-				}
-
-				if (drawTheText)
-				{
-					Draw(tex, Vector2(currentX + bmChar->XOffset, currentY + bmChar->YOffset), Rectangle(bmChar->X, bmChar->Y, bmChar->Width, bmChar->Height), color);
-				}
-
-				currentX += bmChar->XAdvance;
+				boundsMaxWidth = boundsWidth;
 			}
+
+			if (drawTheText)
+			{
+				Renderer_Draw2(tex, Vector2_Create(currentX + bmChar->XOffset, currentY + bmChar->YOffset),
+					Rectangle_Create(bmChar->X, bmChar->Y, bmChar->Width, bmChar->Height), color);
+			}
+
+			currentX += bmChar->XAdvance;
 		}
 	}
 
-	return Rectangle(0, 0, boundsMaxWidth, boundsHeight);
-	*/
+	return Rectangle_Create(0, 0, boundsMaxWidth, boundsHeight);
 }
-void Renderer_DrawString(DrawInstance* draw, double delta)
+void Renderer_DrawString(RenderCommandString* draw, double delta)
 {
-	/*
-	const std::string& strToDraw = *draw->mString;
+	const char* strToDraw = draw->mString;
 
 	Vector2 offset = Vector2_Zero;
 
-	if (draw->mAlignmentX == OeAlign::CENTER || draw->mAlignmentX == OeAlign::RIGHT ||
-		draw->mAlignmentY == OeAlign::CENTER || draw->mAlignmentY == OeAlign::BOTTOM)
+	if (draw->mAlignmentX == ALIGN_CENTER || draw->mAlignmentX == ALIGN_RIGHT ||
+		draw->mAlignmentY == ALIGN_CENTER || draw->mAlignmentY == ALIGN_BOTTOM)
 	{
-		Rectangle layout = draw->mFont->GetBounds(strToDraw, draw->mDoNotReplaceFont);
+		Rectangle layout = BmFont_GetBounds(draw->mFont, strToDraw, draw->mDoNotReplaceFont);
 
-		if (draw->mAlignmentX == OeAlign::CENTER)
+		if (draw->mAlignmentX == ALIGN_CENTER)
 		{
 			offset.X = -(layout.Width / 2.0f);
 		}
-		else if (draw->mAlignmentX == OeAlign::RIGHT)
+		else if (draw->mAlignmentX == ALIGN_RIGHT)
 		{
 			offset.X = -layout.Width;
 		}
-		if (draw->mAlignmentY == OeAlign::CENTER)
+		if (draw->mAlignmentY == ALIGN_CENTER)
 		{
 			offset.Y = -(layout.Height / 2.0f);
 		}
-		else if (draw->mAlignmentY == OeAlign::BOTTOM)
+		else if (draw->mAlignmentY == ALIGN_BOTTOM)
 		{
 			offset.Y = -layout.Height;
 		}
 	}
 
-	Vector2 offsetPosition = draw->mPosition + offset;
-	Vector2 offsetLastPosition = draw->mLastPosition + offset;
+	Vector2 offsetPosition = Vector2_Add(draw->mPosition, offset);
+	Vector2 offsetLastPosition = Vector2_Add(draw->mLastPosition, offset);
 	if (draw->mIsLockedToInt)
 	{
-		offsetPosition = Vector2((int)(offsetPosition.X), (int)(offsetPosition.Y));
-		offsetLastPosition = Vector2((int)(offsetLastPosition.X), (int)(offsetLastPosition.Y));
+		offsetPosition = Vector2_Create((int)(offsetPosition.X), (int)(offsetPosition.Y));
+		offsetLastPosition = Vector2_Create((int)(offsetLastPosition.X), (int)(offsetLastPosition.Y));
 	}
 
 	Vector2 finalPos;
 	if (draw->mIsInterpolated)
 	{
-		finalPos = Vector2((float)(Utils_GetInterpolated(delta, offsetPosition.X, offsetLastPosition.X)),
+		finalPos = Vector2_Create((float)(Utils_GetInterpolated(delta, offsetPosition.X, offsetLastPosition.X)),
 			(float)(Utils_GetInterpolated(delta, offsetPosition.Y, offsetLastPosition.Y)));
 	}
 	else
@@ -648,7 +649,7 @@ void Renderer_DrawString(DrawInstance* draw, double delta)
 
 	bool doNotRender = false;
 	//#if !DISABLE_TT_FONT
-	const OeFontMapData* replacement = OeFontMap::GetReplacement(draw->mFont->GetFontName());
+	/*const OeFontMapData* replacement = OeFontMap_GetReplacement(draw->mFont->GetFontName());
 	if (replacement != nullptr && !draw->mDoNotReplaceFont)
 	{
 		doNotRender = true;
@@ -658,15 +659,14 @@ void Renderer_DrawString(DrawInstance* draw, double delta)
 		}
 		else
 		{
-			OeRenderTtFont::Draw(replacement, strToDraw, draw->mColor, finalPos);
+			OeRenderTtFont_Draw(replacement, strToDraw, draw->mColor, finalPos);
 		}
-	}
+	}*/
 	//#endif
 	if (!doNotRender)
 	{
-		RenderBmFont(true, draw->mFont, strToDraw, draw->mColor, finalPos);
+		Renderer_RenderBmFont(true, draw->mFont, strToDraw, draw->mColor, finalPos);
 	}
-	*/
 }
 void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 {
@@ -691,46 +691,47 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 			}
 			else if (MString_GetLength(drawTile->mAnimation) > 0)
 			{
-				/*AnimTile* animTile = OeResourceManagers::AnimTileManager.GetResourceData(drawTile->mAnimation);
-				if (animTile != nullptr)
+				AnimTile* animTile = AnimTileManager_GetResourceData(MString_GetText(drawTile->mAnimation));
+				if (animTile == NULL)
 				{
-					//Draw The Anim Tile
-					bool flippingX = drawTile->mFlipX ? !animTile->mIsFlipX : animTile->mIsFlipX;
-					bool flippingY = drawTile->mFlipY ? !animTile->mIsFlipY : animTile->mIsFlipY;
+					Renderer_Draw(DrawTool_GetSinglePixel(), Rectangle_Create((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), Color_Red);
+					continue;
+				}
 
-					SpriteEffects effects = OeRenderer::GetEffects(flippingX, flippingY);
+				//Draw The Anim Tile
+				bool flippingX = drawTile->mFlipX ? !animTile->mIsFlipX : animTile->mIsFlipX;
+				bool flippingY = drawTile->mFlipY ? !animTile->mIsFlipY : animTile->mIsFlipY;
 
-					if (animTile->mIsWrap)
-					{
-						Rectangle source = Rectangle(0 + animTile->_mWrapOffset.X, 0 + animTile->_mWrapOffset.Y, TILE_SIZE, TILE_SIZE);
-						Vector2 halfRect = Vector2(TILE_SIZE / 2, TILE_SIZE / 2);
-						Draw(OeSheet::GetTexture(animTile->_mWrapSheet), position + origin - halfRect + halfRect, source, draw->mColor,
-							OeMath::ToRadians(animTile->mRotation + drawTile->mRotation), halfRect, animTile->mScaler, effects, depth);
-					}
-					else
-					{
-						OeSheet* sheet = OeAnimTile::GetAnimationSheet(animTile);
-						Rectangle rect = sheet->mRectangle;
-						Vector2 halfRect = Vector2(rect.Width / 2, rect.Height / 2);
-						Rectangle source = Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
-						BlendState oldBlendState = _mCurrentBlendState;
-						if (animTile->mIsAdditive)
-						{
-							_mCurrentBlendState = BlendState::Additive;
-						}
-						Draw(OeSheet::GetTexture(sheet), position + origin - halfRect + halfRect, source, draw->mColor,
-							OeMath::ToRadians(animTile->mRotation + drawTile->mRotation),
-							halfRect, animTile->mScaler, effects, depth);
-						if (animTile->mIsAdditive)
-						{
-							_mCurrentBlendState = oldBlendState;
-						}
-					}
+				SpriteEffects effects = Renderer_GetEffects(flippingX, flippingY);
+
+				if (animTile->mIsWrap)
+				{
+					//TODO C99
+					/*
+					Rectangle source = Rectangle_Create(0 + animTile->_mWrapOffset.X, 0 + animTile->_mWrapOffset.Y, TILE_SIZE, TILE_SIZE);
+					Vector2 halfRect = Vector2_Create(TILE_SIZE / 2, TILE_SIZE / 2);
+					Draw(OeSheet_GetTexture(animTile->_mWrapSheet), position + origin - halfRect + halfRect, source, draw->mColor,
+						OeMath_ToRadians(animTile->mRotation + drawTile->mRotation), halfRect, animTile->mScaler, effects, depth);*/
 				}
 				else
 				{
-					Draw(OeDrawTool::GetSinglePixel(), Rectangle((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), Color::Red);
-				}*/
+					Sheet* sheet = AnimTile_GetAnimationSheet(animTile);
+					Rectangle rect = sheet->mRectangle;
+					Vector2 halfRect = Vector2_Create(rect.Width / 2, rect.Height / 2);
+					Rectangle source = Rectangle_Create(rect.X, rect.Y, rect.Width, rect.Height);
+					BlendState oldBlendState = _mCurrentBlendState;
+					if (animTile->mIsAdditive)
+					{
+						_mCurrentBlendState = BLENDSTATE_ADDITIVE;
+					}
+					Renderer_Draw5(Sheet_GetTexture(sheet), Vector2_Add(position, origin), source, draw->mColor,
+						Math_ToRadians(animTile->mRotation + drawTile->mRotation),
+						halfRect, animTile->mScaler, effects, depth);
+					if (animTile->mIsAdditive)
+					{
+						_mCurrentBlendState = oldBlendState;
+					}
+				}
 			}
 		}
 	}
@@ -781,16 +782,14 @@ static uint64_t DrawTheInstance(uint8_t* buffer, uint64_t position, double delta
 		}
 	}
 	break;
-	/*
 	case RENDERER_TYPE_STRING:
 	{
 		sizeToReturn = sizeof(RenderCommandString);
 		if (drawString)
 		{
-			OeRenderer::DrawString((OeRenderCommandString*)(buffer + position), delta);
+			Renderer_DrawString((RenderCommandString*)(buffer + position), delta);
 		}
 	}
-	*/
 	}
 
 	return sizeToReturn;
@@ -815,7 +814,7 @@ static void DrawEverythingForwards(RenderStream* draws, double delta, bool drawS
 	}
 }
 /*
-static void DrawEverythingBackwards(std::vector<std::vector<DrawInstance>>& draws, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
+static void DrawEverythingBackwards(std_vector<std_vector<DrawInstance>>& draws, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
 	for (int i = (draws.size() - 1); i >= 0; i -= 1)
 	{
@@ -830,7 +829,7 @@ void Renderer_Commit(SpriteBatch* render, Vector2 cameraOffset, double delta)
 	_mCurrentShaderProgram = NULL;
 
 	RenderStream* draws = render->_mRenderStreams;
-	//std::vector<std::vector<OeDrawInstance>>& draws = render->GetDraws();
+	//std_vector<std_vector<OeDrawInstance>>& draws = render->GetDraws();
 
 	Renderer_BeforeCommit();
 
@@ -838,7 +837,7 @@ void Renderer_Commit(SpriteBatch* render, Vector2 cameraOffset, double delta)
 
 	/*
 	*
-	if (!OeService::PlatformDisablesDepthBufferForRender())
+	if (!OeService_PlatformDisablesDepthBufferForRender())
 	{
 		EnableDepthBufferWrite();
 
@@ -1060,15 +1059,13 @@ Rectangle Renderer_GetScreenBounds()
 	return _mScreenBounds;
 }
 
-static float DEBUG_OFFSET = 0;
 void Renderer_SetupCommit(double delta)
 {
 	FPSTool_Update(&_mFpsToolDraw, delta);
 
-	//TODO C99
 	if (GameLoader_IsLoading())
 	{
-		//Renderer_Commit(&_mOrangeSpriteBatchHud, Vector2_Zero, 1);
+		Renderer_Commit(&_mOrangeSpriteBatchHud, Vector2_Zero, 1);
 		return;
 	}
 
@@ -1082,16 +1079,11 @@ void Renderer_SetupCommit(double delta)
 	{
 		drawDelta = GameUpdater_GetDeltaAccumulator();
 	}
-
 	Camera* camera = GameStateManager_GetCurrentRenderCamera();
 	Vector2 cam = Camera_GetInterpCameraAsVector2(camera, drawDelta);
-	Vector2 hud = { camera->mWorldWidth / 2, camera->mWorldHeight / 2 };
+	Vector2 hud = Vector2_Create(camera->mWorldWidth / 2, camera->mWorldHeight / 2);
 	Renderer_Commit(&_mOrangeSpriteBatch, cam, drawDelta);
-	
-	hud.X = 360 + DEBUG_OFFSET;
-	hud.Y = 640 + DEBUG_OFFSET;
 	Renderer_Commit(&_mOrangeSpriteBatchHud, hud, drawDelta);
-	DEBUG_OFFSET += 0.1f;
 }
 
 void Renderer_SetupRenderState()

@@ -170,8 +170,8 @@ void Renderer_Draw5(Texture* texture, Vector2 position, Rectangle sourceRectangl
 	Vector2 origin, float scale, SpriteEffects effects, float layerDepth);
 void Renderer_DrawSheet(RenderCommandSheet* draw, double delta);
 void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw);
-Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* font, const char* text, Color color, Vector2 position);
-void Renderer_DrawString(DrawInstance* draw, double delta);
+Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* bmf, const char* text, Color color, Vector2 position);
+void Renderer_DrawString(RenderCommandString* draw, double delta);
 void Renderer_DrawTiles(RenderCommandTileLayer* draw);
 void Renderer_Commit(SpriteBatch* render, Vector2 cameraOffset, double delta);
 void Renderer_BeforeRender();

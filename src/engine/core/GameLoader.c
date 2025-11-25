@@ -31,6 +31,7 @@
 #include "../resources/ShaderProgramManager.h"
 #include "../resources/SoundEffectManager.h"
 #include "../resources/TextureManager.h"
+#include "../resources/TextureFontManager.h"
 #include "../resources/TextureOffsetManager.h"
 #include "../resources/ThingSettingsManager.h"
 #include "../resources/TilesetOffsetManager.h"
@@ -167,6 +168,7 @@ static bool LoadResources()
 	ShaderProgramManager_LoadAllFromDat();
 	SoundEffectManager_LoadAllFromDat();
 	TextureManager_LoadAllFromDat();
+	TextureFontManager_LoadAllFromDat();
 	TextureOffsetManager_LoadAllFromDat();
 	TilesetOffsetManager_LoadAllFromDat();
 	ThingSettingsManager_LoadAllFromDat();

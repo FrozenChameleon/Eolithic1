@@ -41,3 +41,7 @@ void AnimTile_Read(AnimTile* at, BufferReader* br);
 AnimTile* AnimTile_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void AnimTile_Dispose(AnimTile* at);
 Animation* AnimTile_GetAnimation(AnimTile* at);
+void AnimTile_UpdateResource(AnimTile* at);
+void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int depth, int x, int y, float rotation, bool flipX, bool flipY);
+Sheet* AnimTile_GetAnimationSheet(AnimTile* at);
+void AnimTile_LoadAnimation(AnimTile* at);

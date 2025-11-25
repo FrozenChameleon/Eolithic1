@@ -17,7 +17,7 @@ static int32_t _mCurrentGameState;
 static int32_t _mCurrentGameStateForRenderCamera;
 static int32_t _mNextGameState;
 static uint64_t _mTicksSinceMapLoad;
-static const char* _mMapToLoad = EE_STR_EMPTY;
+static MString* _mMapToLoad;
 static bool _mJustChangedGameStateThisFrame;
 static System** arr_global_systems;
 static System** arr_state_systems;
@@ -31,6 +31,7 @@ void GameStateManager_Ctor()
 		return;
 	}
 
+	MString_Assign(&_mMapToLoad, EE_STR_EMPTY);
 	GameState_Ctor(&_mGameState, "WHATEVER", false);
 
 	_mHasRunCtor = true;
@@ -165,12 +166,12 @@ void GameStateManager_DebugForceLoadMapNow(const char* map)
 void GameStateManager_SetupLoadMap(const char* s)
 {
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
-	_mMapToLoad = s;
+	MString_Assign(&_mMapToLoad, s);
 }
 void GameStateManager_SetupReloadMap()
 {
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
-	_mMapToLoad = GameStateManager_GetCurrentFileName();
+	MString_Assign(&_mMapToLoad, GameStateManager_GetCurrentFileName());
 }
 const char* GameStateManager_GetCurrentFileName()
 {
@@ -280,14 +281,14 @@ void GameStateManager_HandleGameStateChange()
 void GameStateManager_HandleLoadNextMap()
 {
 	bool isMapLoad = false;
-	if (!Utils_StringEqualTo(_mMapToLoad, EE_STR_EMPTY))
+	if (!MString_EqualToString(_mMapToLoad, EE_STR_EMPTY))
 	{
 		isMapLoad = true;
 	}
 
 	if (RecordingTool_LoadNextRecordingIfAtEndOfRecording(isMapLoad))
 	{
-		_mMapToLoad = EE_STR_EMPTY;
+		MString_Assign(&_mMapToLoad, EE_STR_EMPTY);
 		return;
 	}
 
@@ -296,8 +297,8 @@ void GameStateManager_HandleLoadNextMap()
 		return;
 	}
 
-	GameStateManager_LoadMap(_mMapToLoad);
-	_mMapToLoad = EE_STR_EMPTY;
+	GameStateManager_LoadMap(MString_GetText(_mMapToLoad));
+	MString_Assign(&_mMapToLoad, EE_STR_EMPTY);
 }
 bool GameStateManager_JustChangedGameStateThisFrame()
 {

@@ -258,22 +258,28 @@ void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, in
 }
 void Tile_DrawProps(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
 {
-	/*DrawProps(spriteBatch, camera, gridX, gridY, overrideDepth, false);*/
+	Tile_DrawProps2(t, spriteBatch, camera, gridX, gridY, overrideDepth, false);
 }
 void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, int gridX, int gridY, bool overrideDepth, bool drawInfo)
 {
-	/*if (mProps.size() == 0)
+	if (t->arr_props == NULL)
 	{
 		return;
 	}
 
-	Rectangle cameraRect = camera->GetRectangle(camera, 1.0f);
-	Vector2 position = Vector2(gridX * TILE_SIZE, gridY * TILE_SIZE);
-	for (int k = 0; k < mProps.size(); k++)
+	int64_t arr_props_len = arrlen(t->arr_props);
+	if (arr_props_len == 0)
 	{
-		OePropInstance* propInstance = &mProps[k];
+		return;
+	}
 
-		Rectangle cameraCheck = OePropInstance_GetRectangle(propInstance, position);
+	Rectangle cameraRect = Camera_GetRectangle(camera, 1.0f);
+	Vector2 position = Vector2_Create(gridX * TILE_SIZE, gridY * TILE_SIZE);
+	for (int i = 0; i < arr_props_len; i += 1)
+	{
+		PropInstance* propInstance = &t->arr_props[i];
+
+		Rectangle cameraCheck = PropInstance_GetRectangle(propInstance, position);
 		//To compensate for possible rotation around its upper left, which is how it is done for some reason.
 		if (cameraCheck.Width < cameraCheck.Height)
 		{
@@ -283,24 +289,25 @@ void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, i
 		{
 			cameraCheck.Height = cameraCheck.Width;
 		}
-		cameraCheck.Inflate(cameraCheck.Width + HALF_TILE_SIZE, cameraCheck.Height + HALF_TILE_SIZE);
+		Rectangle_Inflate(&cameraCheck, cameraCheck.Width + HALF_TILE_SIZE, cameraCheck.Height + HALF_TILE_SIZE);
 		//
-		if (!cameraRect.Intersects(cameraCheck))
+		if (!Rectangle_Intersects(&cameraRect, &cameraCheck))
 		{
 			continue;
 		}
 
 		if (!overrideDepth)
 		{
-			OePropInstance_Draw(propInstance, spriteBatch, position, drawInfo);
+			PropInstance_Draw2(propInstance, spriteBatch, position, drawInfo);
 		}
 		else
 		{
-			OePropInstance_Draw(propInstance, spriteBatch, OVERRIDE_DEPTH, position, drawInfo);
-		}*/
+			PropInstance_Draw4(propInstance, spriteBatch, OVERRIDE_DEPTH, position, drawInfo);
+		}
 
 		//Debug stuff to draw the camera check rectangle
 		//Color color = Color_Red;
 		//color.A = 122;
 		//OeDrawTool_DrawRectangle(spriteBatch, color, 100, cameraCheck, 0, false);
+	}
 }

@@ -148,6 +148,40 @@ Texture* Sheet_GetTexture(Sheet* sheet)
 	}
 }
 
+RenderCommandSheet* Sheet_Draw(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, 
+	ShaderProgram* program, Vector2 position)
+{
+	return Sheet_Draw2(sheet, spriteBatch, color, depth, isCenterX, isCenterY, program, position, Vector2_One);
+}
+RenderCommandSheet* Sheet_Draw2(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, 
+	ShaderProgram* program, Vector2 position, Vector2 scale)
+{
+	return Sheet_Draw3(sheet, spriteBatch, color, depth, isCenterX, isCenterY, program, position, scale, 0);
+}
+RenderCommandSheet* Sheet_Draw3(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, 
+	ShaderProgram* program, Vector2 position, Vector2 scale, float rotation)
+{
+	return Sheet_Draw4(sheet, spriteBatch, color, depth, isCenterX, isCenterY, program, position, scale, rotation, false, false);
+}
+RenderCommandSheet* Sheet_Draw4(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY,
+	ShaderProgram* program, Vector2 position, Vector2 scale, float rotation, bool flipX, bool flipY)
+{
+	Rectangle rect = sheet->mRectangle;
+	return Sheet_Draw5(sheet, spriteBatch, color, depth, isCenterX, isCenterY, program, position, scale, rotation, flipX, flipY,
+		Vector2_DivFloat(Vector2_Create(rect.Width, rect.Height), 2.0f));
+}
+RenderCommandSheet* Sheet_Draw5(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, 
+	ShaderProgram* program, Vector2 position, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
+{
+	Rectangle rect = sheet->mRectangle;
+	float halfWidth = rect.Width / 2.0f;
+	float halfHeight = rect.Height / 2.0f;
+	float newX = isCenterX ? position.X - (int)halfWidth : position.X;
+	float newY = isCenterY ? position.Y - (int)halfHeight : position.Y;
+	return SpriteBatch_Draw(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(newX, newY),
+		rect, scale, rotation, flipX, flipY, origin);
+}
+
 RenderCommandSheet* Sheet_DrawInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY,
 	ShaderProgram* program, Vector2 position, Vector2 lastPosition)
 {

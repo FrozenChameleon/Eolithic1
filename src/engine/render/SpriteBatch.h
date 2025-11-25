@@ -22,3 +22,9 @@ RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* textu
 RenderCommandManyRectangle* SpriteBatch_DrawManyRectangle(SpriteBatch* sb, int32_t depth, DrawRectangle* manyRectangles);
 RenderCommandTileLayer* SpriteBatch_DrawLayer(SpriteBatch* sb, Texture* tileset, Color color, Tile** tileData, Rectangle tileDataBounds, int32_t depth, int32_t layer,
 	int32_t x1, int32_t x2, int32_t y1, int32_t y2);
+
+RenderCommandString* SpriteBatch_DrawString(SpriteBatch* sb, const char* font, const char* str, Color color, int32_t depth, Vector2 position);
+RenderCommandString* SpriteBatch_DrawString2(SpriteBatch* sb, const char* font, const char* str, Color color, int32_t depth, Vector2 position,
+	int32_t alignmentX, int32_t alignmentY);
+RenderCommandString* SpriteBatch_DrawString3(SpriteBatch* sb, const char* font, const char* str, Color color, int32_t depth, Vector2 position,
+	int32_t alignmentX, int32_t alignmentY, bool isLockedToInt);

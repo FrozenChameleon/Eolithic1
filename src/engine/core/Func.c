@@ -1491,26 +1491,48 @@ void Do_ClearShake2(Entity entity, int state)
 {
 	Do_Shake(entity, state, 0, 0);
 }
-
 ParticleInstance* Do_AddParticle(Entity entity, const char* name)
 {
-	return ParticleInstance_Dummy();
-	//return Do_AddParticle2(name, Get_Position(entity), 0, 0);
+	return Do_AddParticle3(name, Get_Position(entity), 0, 0);
 }
 ParticleInstance* Do_AddParticle2(const char* name, Vector2 absolutePos)
 {
-	return ParticleInstance_Dummy();
-	//return Do_AddParticle4(name, absolutePos.X, absolutePos.Y, 0, 0);
+	return Do_AddParticle5(name, absolutePos.X, absolutePos.Y, 0, 0);
 }
 ParticleInstance* Do_AddParticle3(const char* name, Vector2 absolutePos, int rangeX, int rangeY)
 {
-	return ParticleInstance_Dummy();
-	//return Do_AddParticle5(name, absolutePos.X, absolutePos.Y, rangeX, rangeY);
+	return Do_AddParticle5(name, absolutePos.X, absolutePos.Y, rangeX, rangeY);
 }
 ParticleInstance* Do_AddParticle4(const char* name, float absoluteX, float absoluteY)
 {
-	return ParticleInstance_Dummy();
-	//return Do_AddParticle4(name, absoluteX, absoluteY, 0, 0);
+	return Do_AddParticle5(name, absoluteX, absoluteY, 0, 0);
+}
+ParticleInstance* Do_AddParticle5(const char* name, float absoluteX, float absoluteY, int rangeX, int rangeY)
+{
+	Point rangePoint = { rangeX, rangeY };
+	Point randomWrappedPointInRange = Get_RandomPointInBounds(rangePoint, true, Get_SharedRandom());
+	absoluteX += randomWrappedPointInRange.X;
+	absoluteY += randomWrappedPointInRange.Y;
+	return GameState_GetParticleInstance(Get_ActiveGameState(), name, absoluteX, absoluteY);
+}
+void Do_AddParticles(const char* name, Vector2 absolutePos, int amount)
+{
+	Do_AddParticles4(name, absolutePos.X, absolutePos.Y, amount, 0, 0);
+}
+void Do_AddParticles2(const char* name, float absoluteX, float absoluteY, int amount)
+{
+	Do_AddParticles4(name, absoluteX, absoluteY, amount, 0, 0);
+}
+void Do_AddParticles3(const char* name, Vector2 absolutePos, int amount, int rangeX, int rangeY)
+{
+	Do_AddParticles4(name, absolutePos.X, absolutePos.Y, amount, rangeX, rangeY);
+}
+void Do_AddParticles4(const char* name, float absoluteX, float absoluteY, int amount, int rangeX, int rangeY)
+{
+	for (int i = 0; i < amount; i++)
+	{
+		Do_AddParticle5(name, absoluteX, absoluteY, rangeX, rangeY);
+	}
 }
 Point Get_RandomPointInBounds(Point bounds, bool wrapped, Random32* random)
 {
@@ -1535,50 +1557,18 @@ Point Get_RandomPointInBounds(Point bounds, bool wrapped, Random32* random)
 	}
 	return pointToReturn;
 }
-ParticleInstance* Do_AddParticle5(const char* name, float absoluteX, float absoluteY, int rangeX, int rangeY)
-{
-	return ParticleInstance_Dummy();
-	/*
-	Point rangePoint = { rangeX, rangeY };
-	Point randomWrappedPointInRange = Get_RandomPointInBounds(rangePoint, true, Get_SharedRandom());
-	absoluteX += randomWrappedPointInRange.X;
-	absoluteY += randomWrappedPointInRange.Y;
-	return Get_ActiveGameState()->GetParticleInstance(name, absoluteX, absoluteY);
-	*/
-}
-void Do_AddParticles(const char* name, Vector2 absolutePos, int amount)
-{
-	//TODODo_AddParticles2(name, absolutePos.X, absolutePos.Y, amount, 0, 0);
-}
-void Do_AddParticles2(const char* name, float absoluteX, float absoluteY, int amount)
-{
-	//TODODo_AddParticles2(name, absoluteX, absoluteY, amount, 0, 0);
-}
-void Do_AddParticles3(const char* name, Vector2 absolutePos, int amount, int rangeX, int rangeY)
-{
-	//TODODo_AddParticles2(name, absolutePos.X, absolutePos.Y, amount, rangeX, rangeY);
-}
-void Do_AddParticles4(const char* name, float absoluteX, float absoluteY, int amount, int rangeX, int rangeY)
-{
-	for (int i = 0; i < amount; i++)
-	{
-		//TODODo_AddParticle4(name, absoluteX, absoluteY, rangeX, rangeY);
-	}
-}
 void Do_DestroyParticlesByName(const char* name)
 {
-	/*
-	ComponentPack<ParticleInstance>* particles = Get_ComponentPack<ParticleInstance>();
-	OePackIterator iter = OePackIterator_Begin();
-	while (particles->Next(&iter))
+	ComponentPack* particles = Get_ComponentPack(C_ParticleInstance);
+	PackIterator iter = PackIterator_Begin;
+	while (ComponentPack_Next(particles, &iter))
 	{
-		ParticleInstance* particleData = &particles->Components[iter.mIndex];
-		if (name == particleData->mName.Get())
+		ParticleInstance* particleData = iter.mComponent;
+		if (MString_EqualToString(particleData->mName, name))
 		{
 			particleData->mIsComplete = true;
 		}
 	}
-	*/
 }
 void Do_ImprintTile(Vector2 position, int type)
 {

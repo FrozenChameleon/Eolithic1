@@ -70,3 +70,4 @@ Rectangle LevelData_GetLevelBoundsRectangle(LevelData* ld);
 bool LevelData_IsTilesetNameSet(LevelData* ld);
 void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera);
 Texture* LevelData_GetTilesetTexture(LevelData* ld);
+void LevelData_DrawProps(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera);

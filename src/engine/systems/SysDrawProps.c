@@ -6,8 +6,7 @@
 
 static void Draw(System* sys, SpriteBatch* spriteBatch)
 {
-	//TODO C99
-	//Get_LevelData()->DrawProps(spriteBatch, OeFunc::Get_Camera());
+	LevelData_DrawProps(Get_LevelData(), spriteBatch, Get_Camera());
 }
 
 System* SysDrawProps_CreateSystem()

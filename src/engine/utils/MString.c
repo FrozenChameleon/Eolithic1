@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Logger.h"
 #include "Macros.h"
+#include "../io/BufferReader.h"
 
 typedef struct MString
 {
@@ -115,6 +116,14 @@ void MString_Assign(MString** str, const char* toThis)
 	MString_Dispose(&oldStr);
 	*str = newStr;
 }
+void MString_AssignMString(MString** str, MString* toThis)
+{
+	MString_Assign(str, MString_GetText(toThis));
+}
+void MString_Clear(MString** str)
+{
+	MString_Assign(str, EE_STR_EMPTY);
+}
 void MString_AssignEmpty(MString** str, int32_t size)
 {
 	CheckAndReplaceNullString(str);
@@ -222,8 +231,16 @@ void MString_Dispose(MString** str)
 	Utils_free((*str));
 	*str = NULL;
 }
-
-
+MString* MString_Read(BufferReader* br)
+{
+	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
+	int32_t newStrCapacity = newStringLength + 1;
+	MString* strToReturn = NULL;
+	MString_AssignEmpty(&strToReturn, newStrCapacity);
+	strToReturn->len = newStringLength;
+	BufferReader_ReadJustTheStringData(br, newStringLength, MString_GetText(strToReturn), newStrCapacity);
+	return strToReturn;
+}
 uint64_t MString_GetRefs()
 {
 	return _mRefs;

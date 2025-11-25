@@ -354,7 +354,6 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 	//TODO C99 DrawTileInfo(spriteBatch, preferredLayer, x1, x2, y1, y2);
 #endif
 }
-
 Texture* LevelData_GetTilesetTexture(LevelData* ld)
 {
 	Resource* resource = TextureManager_GetResource(MString_GetText(ld->mTilesetName));
@@ -363,4 +362,31 @@ Texture* LevelData_GetTilesetTexture(LevelData* ld)
 		return NULL;
 	}
 	return resource->mData;
+}
+void LevelData_DrawProps(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera)
+{
+	bool drawInfo = false;
+
+#if EDITOR
+	if (!Cvars_GetAsBool(CVARS_EDITOR_SHOW_PROPS))
+	{
+		return;
+	}
+#endif
+
+	int dist = Cvars_GetAsInt(CVARS_ENGINE_PROP_DISTANCE);
+
+	int x1 = Camera_GetX1Mul(camera, dist);
+	int x2 = Camera_GetX2Mul(camera, LevelData_GetGridSizeWidth(ld), dist);
+	int y1 = Camera_GetY1Mul(camera, dist);
+	int y2 = Camera_GetY2Mul(camera, LevelData_GetGridSizeHeight(ld), dist);
+
+	for (int i = x1; i < x2; i += 1)
+	{
+		for (int j = y1; j < y2; j += 1)
+		{
+			Tile* t = ld->mTileData[LevelData_GetTilePos1D(ld, i, j)];
+			Tile_DrawProps2(t, spriteBatch, camera, i, j, false, drawInfo);
+		}
+	}
 }

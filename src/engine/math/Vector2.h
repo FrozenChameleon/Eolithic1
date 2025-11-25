@@ -28,6 +28,7 @@ const extern Vector2 Vector2_Zero;
 const extern Vector2 Vector2_One;
 
 Vector2 Vector2_Create(float x, float y);
+Vector2 Vector2_Create2(float value);
 void Vector2_Init(Vector2* value, float x, float y);
 void Vector2_InitFromFloat(Vector2* value, float value2);
 float Vector2_Distance(Vector2 value1, Vector2 value2);

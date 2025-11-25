@@ -3,6 +3,12 @@
 #include "../render/DrawTool.h"
 #include "../utils/Logger.h"
 #include "Renderer.h"
+#include "../globals/Align.h"
+#include "../resources/BmFontManager.h"
+#include "../utils/MString.h"
+#include "../../third_party/stb_ds.h"
+
+static MString** arr_pinned_strings;
 
 #define MINIMUM_DEPTH 0
 #define MAXIMUM_DEPTH 200
@@ -48,7 +54,7 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	{
 		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
 		return NULL;
-		//TODO C99texture = OeSheet::GetDefaultSheet()->mTextureResource->GetData();
+		//TODO C99texture = OeSheet_GetDefaultSheet()->mTextureResource->GetData();
 	}
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
@@ -82,7 +88,7 @@ RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* textu
 	{
 		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
 		return NULL;
-		//TODO C99 texture = OeSheet::GetDefaultSheet()->mTextureResource->GetData();
+		//TODO C99 texture = OeSheet_GetDefaultSheet()->mTextureResource->GetData();
 	}
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
@@ -128,7 +134,7 @@ RenderCommandTileLayer* SpriteBatch_DrawLayer(SpriteBatch* sb, Texture* tileset,
 	{
 		Logger_LogInformation("MISSING TILESET FOR DRAW");
 		return NULL;
-		//TODO C99 tileset = OeSheet::GetDefaultSheet()->mTextureResource->GetData();
+		//TODO C99 tileset = OeSheet_GetDefaultSheet()->mTextureResource->GetData();
 	}
 
 	RenderCommandTileLayer* command = RenderStream_GetRenderCommandLayerUninitialized(&sb->_mRenderStreams[depth]);
@@ -143,6 +149,47 @@ RenderCommandTileLayer* SpriteBatch_DrawLayer(SpriteBatch* sb, Texture* tileset,
 	command->mTileDataBounds = tileDataBounds;
 	command->mTileData = tileData;
 	command->mTexture = tileset;
+
+	return command;
+}
+
+RenderCommandString* SpriteBatch_DrawString(SpriteBatch* sb, const char* font, const char* str, Color color, int32_t depth, Vector2 position)
+{
+	return SpriteBatch_DrawString2(sb, font, str, color, depth, position, ALIGN_LEFT, ALIGN_TOP);
+}
+RenderCommandString* SpriteBatch_DrawString2(SpriteBatch* sb, const char* font, const char* str, Color color, int32_t depth, Vector2 position, int32_t alignmentX, int32_t alignmentY)
+{
+	return SpriteBatch_DrawString3(sb, font, str, color, depth, position, alignmentX, alignmentY, true);
+}
+RenderCommandString* SpriteBatch_DrawString3(SpriteBatch* sb, const char* font, const char* str, Color color, int32_t depth, Vector2 position, int32_t alignmentX, int32_t alignmentY, bool isLockedToInt)
+{
+	ClampDepth(&depth);
+
+	BmFont* bitmapFont = BmFontManager_GetResourceData(font);
+	if (bitmapFont == NULL)
+	{
+		Logger_LogError("MISSING FONT FOR DRAW: ");
+		Logger_LogError(font);
+		return NULL;
+		//TODO C99 return &_mDummyRenderCommandString;
+	}
+
+	RenderCommandString* command = RenderStream_GetRenderCommandStringUninitialized(&sb->_mRenderStreams[depth]);
+	command->mType = RENDERER_TYPE_STRING;
+	command->mDepth = depth;
+	command->mIsInterpolated = false;
+	command->mIsLockedToInt = isLockedToInt;
+	command->mDoNotReplaceFont = false;
+	command->mAlignmentX = alignmentX;
+	command->mAlignmentY = alignmentY;
+	command->mPosition = position;
+	command->mLastPosition = Vector2_Zero;
+	command->mColor = color;
+	command->mFont = bitmapFont;
+	MString* tempString = NULL;
+	MString_Assign(&tempString, str);
+	command->mString = MString_GetText(tempString);
+	arrput(arr_pinned_strings, tempString);
 
 	return command;
 }

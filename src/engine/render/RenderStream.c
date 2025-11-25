@@ -12,7 +12,10 @@ RenderCommandManyRectangle* RenderStream_GetRenderCommandManyRectangleUninitiali
 {
 	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandManyRectangle));
 }
-//RenderCommandString* GetRenderCommandStringUninitialized();
+RenderCommandString* RenderStream_GetRenderCommandStringUninitialized(RenderStream* rs)
+{
+	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandString));
+}
 RenderCommandSheet* RenderStream_GetRenderCommandSheetUninitialized(RenderStream* rs)
 {
 	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandSheet));

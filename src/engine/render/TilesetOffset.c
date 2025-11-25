@@ -56,7 +56,8 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 
 	IStringArray* addToHere = NULL;
 
-	for (int i = 2; i < IStringArray_Length(strings); i += 1)
+	int64_t stringsLen = IStringArray_Length(strings);
+	for (int i = 2; i < stringsLen; i += 1)
 	{
 		const char* nextLine = IStringArray_Get(strings, i);
 		if (Utils_StringEqualTo(nextLine, EE_STR_EMPTY))
@@ -71,9 +72,9 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 			continue;
 		}
 
-		int index = Utils_ParseInt(IStringArray_Get(addToHere, 0));
-		int x = Utils_ParseInt(IStringArray_Get(addToHere, 1));
-		int y = Utils_ParseInt(IStringArray_Get(addToHere, 2));
+		int32_t index = Utils_ParseInt(IStringArray_Get(addToHere, 0));
+		int32_t x = Utils_ParseInt(IStringArray_Get(addToHere, 1));
+		int32_t y = Utils_ParseInt(IStringArray_Get(addToHere, 2));
 		int64_t sh_index = shgeti(sh_draw_tile_offset, tilesetName);
 		hmput(sh_draw_tile_offset[sh_index].value, index, Point_Create(x, y));
 		IStringArray_Dispose(addToHere);
@@ -111,24 +112,24 @@ void TilesetOffset_LoadOffsetPoint(DrawTile* drawTile, const char* tilesetName)
 	}
 
 	int64_t original_index = shgeti(sh_draw_tile_original, tilesetName);
-	if (offset_index < 0)
+	if (original_index < 0)
 	{
 		Logger_LogInformation("Original point map not found for tileset (tileset not found)");
 		return;
 	}
 
-	HmInnerMap* hm_map_ref = sh_draw_tile_offset->value;
-	int64_t hm_map_ref_len = hmlen(hm_map_ref);
+	HmInnerMap* hm_offset_map_ref = sh_draw_tile_offset[offset_index].value;
+	int64_t hm_offset_map_ref_len = hmlen(hm_offset_map_ref);
 
 	int offset = sh_draw_tile_original[original_index].value.X / TILE_SIZE;
-	int loc = (drawTile->mPoint.X / TILE_SIZE) + (drawTile->mPoint.Y / TILE_SIZE * offset);
-	if (loc > (hm_map_ref_len - 1))
+	int loc = (drawTile->mPoint.X / TILE_SIZE) + ((drawTile->mPoint.Y / TILE_SIZE) * offset);
+	if (loc > (hm_offset_map_ref_len - 1))
 	{
 		Logger_LogInformation("Offset point location mismatch.");
 		return;
 	}
 
-	Point pointToReturn = hm_map_ref[loc].value;
+	Point pointToReturn = hm_offset_map_ref[loc].value;
 	drawTile->mOffsetPoint = pointToReturn;
 }
 

@@ -151,12 +151,7 @@ void BufferReader_ReadString(BufferReader* br, char* dst, size_t maxlen)
 }
 MString* BufferReader_ReadMString(BufferReader* br)
 {
-	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
-	int32_t newStrCapacity = newStringLength + 1;
-	MString* strToReturn = NULL;
-	MString_AssignEmpty(&strToReturn, newStrCapacity);
-	BufferReader_ReadJustTheStringData(br, newStringLength, MString_GetText(strToReturn), newStrCapacity);
-	return strToReturn;
+	return MString_Read(br);
 }
 bool BufferReader_HasNext(BufferReader* br)
 {

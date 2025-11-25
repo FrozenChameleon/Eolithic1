@@ -11,7 +11,7 @@ typedef struct RenderStream
 void RenderStream_Clear(RenderStream* rs);
 RenderCommandTileLayer* RenderStream_GetRenderCommandLayerUninitialized(RenderStream* rs);
 RenderCommandManyRectangle* RenderStream_GetRenderCommandManyRectangleUninitialized(RenderStream* rs);
-//RenderCommandString* GetRenderCommandStringUninitialized();
+RenderCommandString* RenderStream_GetRenderCommandStringUninitialized(RenderStream* rs);
 RenderCommandSheet* RenderStream_GetRenderCommandSheetUninitialized(RenderStream* rs);
 DynamicByteBuffer* RenderStream_GetBuffer(RenderStream* rs);
 void RenderStream_PreallocateBuffer(RenderStream* rs, int32_t initialCapacity);

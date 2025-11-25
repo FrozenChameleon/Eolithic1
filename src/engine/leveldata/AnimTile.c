@@ -6,6 +6,15 @@
 
 #include "AnimTile.h"
 #include "../utils/Utils.h"
+#include "../io/File.h"
+#include "../render/SpriteBatch.h"
+#include "../render/Sheet.h"
+#include "../render/BlendState.h"
+#include "../../GlobalDefs.h"
+
+#define TILE_SIZE GLOBAL_DEF_TILE_SIZE
+
+const static int VERSION = 3;
 
 void AnimTile_Read(AnimTile* at, BufferReader* br)
 {
@@ -39,4 +48,89 @@ void AnimTile_Dispose(AnimTile* at)
 Animation* AnimTile_GetAnimation(AnimTile* at)
 {
 	return &at->_mAnimation;
+}
+void AnimTile_UpdateResource(AnimTile* at)
+{
+	if (!at->_mIsSetup)
+	{
+		AnimTile_LoadAnimation(at);
+		at->_mIsSetup = true;
+	}
+
+	Animation_Update(&at->_mAnimation);
+
+	if (at->_mWrapSpeedCounter >= at->mWrapSpeedDelay)
+	{
+		if (at->mIsWrapX)
+		{
+			at->_mWrapOffset.X += at->mWrapSpeedX;
+		}
+		else
+		{
+			at->_mWrapOffset.X = 0;
+		}
+
+		if (at->mIsWrapY)
+		{
+			at->_mWrapOffset.Y += at->mWrapSpeedY;
+		}
+		else
+		{
+			at->_mWrapOffset.Y = 0;
+		}
+
+		at->_mWrapSpeedCounter = 0;
+	}
+	else
+	{
+		at->_mWrapSpeedCounter += 1;
+	}
+}
+void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int depth, int x, int y, float rotation, bool flipX, bool flipY)
+{
+	int scaler = at->mScaler;
+
+	bool flippingX = flipX ? !at->mIsFlipX : at->mIsFlipX;
+	bool flippingY = flipY ? !at->mIsFlipY : at->mIsFlipY;
+
+	if (at->mIsWrap)
+	{
+		//TODO C99
+		/*
+		Sheet_DrawSourceRect(_mWrapSheet, spriteBatch, color, depth, true, nullptr, Vector2(x + (TILE_SIZE / 2), y + (TILE_SIZE / 2)),
+			Rectangle(0 + _mWrapOffset.X, 0 + _mWrapOffset.Y, TILE_SIZE, TILE_SIZE),
+			scaler, mRotation + rotation, flippingX, flippingY);
+			*/
+	}
+	else
+	{
+		RenderCommandSheet* instance = Sheet_Draw4(AnimTile_GetAnimationSheet(at), spriteBatch, color, depth, true, true, NULL,
+			Vector2_Create(x + (TILE_SIZE / 2), y + (TILE_SIZE / 2)),
+			Vector2_Create2(scaler), at->mRotation + rotation, flippingX, flippingY);
+		if (at->mIsAdditive)
+		{
+			instance->mBlendState = BLENDSTATE_ADDITIVE;
+		}
+	}
+}
+Sheet* AnimTile_GetAnimationSheet(AnimTile* at)
+{
+	return Animation_GetCurrentSheet(&at->_mAnimation);
+}
+void AnimTile_LoadAnimation(AnimTile* at)
+{
+	if (at->mIsWrap)
+	{
+		if (!MString_EqualToString(at->mWrapTextureName, EE_STR_NOT_SET))
+		{
+			//TODO C99 at->_mWrapSheet = new OeSheet(OeFile::Combine("data", "gfx", "special", "anim", mWrapTextureName + ".png"));
+		}
+	}
+	else
+	{
+		if (!MString_EqualToString(at->mTextureName, EE_STR_NOT_SET))
+		{
+			Animation_Init(&at->_mAnimation, MString_GetText(at->mTextureName), at->mFlipSpeed);
+		}
+	}
 }

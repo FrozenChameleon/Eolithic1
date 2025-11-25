@@ -78,14 +78,14 @@ void Color_Init4(Color* color, int r, int g, int b, int alpha)
 	color->B = b;
 	color->A = alpha;
 }
-bool Color_EqualTo(const Color* value1, const Color* value2)
+bool Color_EqualTo(Color value1, Color value2)
 {
-	return (value1->R == value2->R) &&
-		(value1->G == value2->G) && 
-		(value1->B == value2->B) && 
-		(value1->A == value2->A);
+	return (value1.R == value2.R) &&
+		(value1.G == value2.G) &&
+		(value1.B == value2.B) &&
+		(value1.A == value2.A);
 }
-bool Color_NotEqual(const Color* value1, const Color* value2)
+bool Color_NotEqual(Color value1, Color value2)
 {
 	return !Color_EqualTo(value1, value2);
 }

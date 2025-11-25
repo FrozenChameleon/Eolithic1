@@ -230,7 +230,7 @@ int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen,
 		{
 			if (!findLastIndex)
 			{
-				return loc;
+				return i;
 			}
 			else
 			{

@@ -18,10 +18,10 @@ typedef struct ImageDataInstance
 void ImageDataInstance_Init(ImageDataInstance* idi);
 void ImageDataInstance_Init2(ImageDataInstance* idi, ImageData* data);
 
-DrawInstance* ImageDataInstance_DrawInterpolated(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program, Vector2 position, Vector2 lastPosition,
+RenderCommandSheet* ImageDataInstance_DrawInterpolated(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program, Vector2 position, Vector2 lastPosition,
 	Vector2 scale, float rotation, bool flipX,
 	bool flipY, int overrideDepth);
-DrawInstance* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program, Vector2 position, Vector2 lastPosition,
+RenderCommandSheet* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program, Vector2 position, Vector2 lastPosition,
 	Vector2 scale, float rotation, bool flipX,
 	bool flipY, int overrideDepth, Vector2 tempOffset);
 Sheet* ImageDataInstance_GetCurrentSheet(ImageDataInstance* render);

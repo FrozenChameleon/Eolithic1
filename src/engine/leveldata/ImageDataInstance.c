@@ -30,12 +30,12 @@ void ImageDataInstance_Init2(ImageDataInstance* idi, ImageData* data)
 	idi->mIsOriginSet = ImageData_IsOriginSet(data);
 }
 
-DrawInstance* ImageDataInstance_DrawInterpolated(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program, 
+RenderCommandSheet* ImageDataInstance_DrawInterpolated(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int overrideDepth)
 {
 	return ImageDataInstance_DrawInterpolated2(render, spriteBatch, color, program, position, lastPosition, scale, rotation, flipX, flipY, overrideDepth, Vector2_Zero);
 }
-DrawInstance* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program,
+RenderCommandSheet* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int overrideDepth, Vector2 tempOffset)
 {
 	Sheet* sheet = ImageDataInstance_GetCurrentSheet(render);
@@ -65,7 +65,7 @@ DrawInstance* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, Spr
 
 	if (!render->mIsOriginSet)
 	{
-		DrawInstance* draw = Sheet_DrawInterpolated4(sheet, spriteBatch, color, newDepth, true, true, 
+		RenderCommandSheet* draw = Sheet_DrawInterpolated4(sheet, spriteBatch, color, newDepth, true, true,
 			program, newPosition, newLastPosition, newScale, newRotation, flipX, flipY);
 		if (render->mData->mIsAdditive)
 		{
@@ -75,7 +75,7 @@ DrawInstance* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, Spr
 	}
 	else
 	{
-		DrawInstance* draw = Sheet_DrawInterpolated5(sheet, spriteBatch, color, newDepth, true, true, program, newPosition, newLastPosition, newScale,
+		RenderCommandSheet* draw = Sheet_DrawInterpolated5(sheet, spriteBatch, color, newDepth, true, true, program, newPosition, newLastPosition, newScale,
 			newRotation, flipX, flipY, render->mData->mOrigin);
 		if (render->mData->mIsAdditive)
 		{
