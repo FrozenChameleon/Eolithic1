@@ -4,7 +4,7 @@
 #include "../math/Math.h"
 
 /*
-void OeComNodeMovingKit::Setup(OeEntity owner, int type, bool moveContacts)
+void OeComNodeMovingKit::Setup(OeEntity owner, int32_t type, bool moveContacts)
 {
 	mType = type;
 	mMoveContacts = moveContacts;

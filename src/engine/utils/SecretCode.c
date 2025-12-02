@@ -3,7 +3,7 @@
 #include "../../GlobalDefs.h"
 
 //definition private
-static int _mTempCodeDepth;
+static int32_t _mTempCodeDepth;
 static bool _mTempResetDepth;
 static bool _mTempWentForward;
 static bool _mTempButtons[SECRETCODES_AMOUNT_OF_SECRET_BUTTONS];
@@ -31,7 +31,7 @@ bool SecretCodes_UpdateSecretCode(SecretCode* data, bool(*code)(int))
 	return isUnlocked;
 #endif
 }
-bool SecretCodes_Check(int buttonToCheck, int currentDepth)
+bool SecretCodes_Check(int buttonToCheck, int32_t currentDepth)
 {
 #ifdef GLOBAL_DEF_DISABLE_CHEAT_CODES
 	return false;

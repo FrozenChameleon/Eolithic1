@@ -26,7 +26,7 @@ void MouseData_Poll(MouseData* md);
 int32_t MouseData_GetScrollWheelValue(const MouseData* md);
 int32_t MouseData_GetMouseX(const MouseData* md);
 int32_t MouseData_GetMouseY(const MouseData* md);
-bool MouseData_IsButtonPressed(const MouseData* md, int button);
+bool MouseData_IsButtonPressed(const MouseData* md, int32_t button);
 
 void MouseState_Init();
 void MouseState_MuteInput();

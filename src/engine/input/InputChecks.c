@@ -8,7 +8,7 @@
 
 #include "../utils/Exception.h"
 
-InputCheck* InputChecks_Get(InputChecks* data, int index)
+InputCheck* InputChecks_Get(InputChecks* data, int32_t index)
 {
 	if ((index >= 0) && (index < INPUTCHECKS_LENGTH))
 	{
@@ -19,7 +19,7 @@ InputCheck* InputChecks_Get(InputChecks* data, int index)
 	return NULL;
 }
 
-void InputChecks_Set(InputChecks* data, int index, InputCheck check)
+void InputChecks_Set(InputChecks* data, int32_t index, InputCheck check)
 {
 	if ((index >= 0) && (index < INPUTCHECKS_LENGTH))
 	{

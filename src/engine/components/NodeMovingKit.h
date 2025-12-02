@@ -21,7 +21,7 @@ typedef struct NodeMovingKit
 } NodeMovingKit;
 
 /*
-void Setup(OeEntity owner, int type, bool moveContacts);
+void Setup(OeEntity owner, int32_t type, bool moveContacts);
 bool IsOnTarget();
 int GetCurrentNode();
 bool IsComplete();

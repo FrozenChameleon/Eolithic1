@@ -111,7 +111,7 @@ double BufferReader_ReadDouble(BufferReader* br)
 	Utils_memcpy(&dst, &source, sizeof(double));
 	return dst;
 }
-int* BufferReader_ReadIntArray2D(BufferReader* br, int width, int height)
+int* BufferReader_ReadIntArray2D(BufferReader* br, int32_t width, int32_t height)
 {
 	int totalArrayLen = (width * height);
 	int* readToThis = Utils_malloc(totalArrayLen * sizeof(int));
@@ -156,7 +156,7 @@ MString* BufferReader_ReadMString(BufferReader* br)
 bool BufferReader_HasNext(BufferReader* br)
 {
 	int64_t cur = BufferReader_Tell(br);
-	uint64_t end = BufferReader_GetSize(br);
+	int64_t end = (int64_t)BufferReader_GetSize(br);
 	if (cur >= end)
 	{
 		return false;

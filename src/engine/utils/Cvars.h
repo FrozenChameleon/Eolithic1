@@ -12,7 +12,7 @@
 
 void Cvars_FlipAsBool(const char* key);
 void Cvars_SetAsBool(const char* key, bool value);
-void Cvars_SetAsInt(const char* key, int value);
+void Cvars_SetAsInt(const char* key, int32_t value);
 void Cvars_SetAsFloat(const char* key, float value);
 void Cvars_Set(const char* key, const char* value);
 const char* Cvars_Get(const char* key);

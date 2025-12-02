@@ -31,7 +31,7 @@ Point Line_GetMiddle(Point begin, Point end)
 	Point diff = Point_Sub(end, begin);
 	return Point_Create(begin.X + (diff.X / 2), begin.Y + (diff.Y / 2));
 }
-void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int cameraWidth, int cameraHeight)
+void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int32_t cameraWidth, int32_t cameraHeight)
 {
 	Point beginPoint = Line_GetRealBegin(line);
 	Point endPoint = Line_GetRealEnd(line);
@@ -52,7 +52,7 @@ void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font,
 	DrawTool_DrawLine(spriteBatch, color, depth, lineDelay, 0, lineThickness, lowerRight, lowerLeft);
 	DrawTool_DrawLine(spriteBatch, color, depth, lineDelay, 0, lineThickness, lowerLeft, upperLeft);
 }
-void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int lineNumber, int offset)
+void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int32_t lineNumber, int32_t offset)
 {
 	//TODO C99
 	/*
@@ -66,12 +66,12 @@ void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color
 	DrawTool_DrawRectangle2(spriteBatch, COLOR_COMETSTRIKER_BLUE, 100, Rectangle_Create(endPoint.X, endPoint.Y, HALF_TILE_SIZE, HALF_TILE_SIZE), 0, true);
 	*/
 }
-void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, int lineNumber, Vector2 pos)
+void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, int32_t lineNumber, Vector2 pos)
 {
-	int align = ALIGN_CENTER;
-	Vector2 textPos = Vector2_Create(pos.X, pos.Y - HALF_TILE_SIZE);
-	int depth = 100;
-	Color textColor = COLOR_RED;
+	//int align = ALIGN_CENTER;
+	//Vector2 textPos = Vector2_Create(pos.X, pos.Y - HALF_TILE_SIZE);
+	//int depth = 100;
+	//Color textColor = COLOR_RED;
 	//TODO C99
 	/*
 	spriteBatch->DrawString(font, OeUtils_ToString(lineNumber), textColor, depth, textPos, align, align);
@@ -267,7 +267,7 @@ void Line_Read(int version, Line* line, BufferReader* reader)
 		line->mOverrideSpeedFromMinecart = BufferReader_ReadI32(reader);
 	}
 }
-Rectangle Line_GetTouchBounds(Line* line, int inflation)
+Rectangle Line_GetTouchBounds(Line* line, int32_t inflation)
 {
 	Rectangle rect = PointRectangle_GetRectanglePoint(Line_GetRealBegin(line), Line_GetRealEnd(line));
 	Rectangle_Inflate(&rect, inflation, inflation);

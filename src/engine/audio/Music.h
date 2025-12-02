@@ -29,7 +29,7 @@ void Music_PauseMusic(int priority);
 void Music_ResumeMusic(int priority);
 void Music_RestartMusic();
 void Music_PlayPreviousTrack();
-void Music_PlayMusic(const char* nextTrack, bool isLooping, bool isForced, bool isFadeIn, int fadeInTime, bool isFadeOut, int fadeOutTime);
+void Music_PlayMusic(const char* nextTrack, bool isLooping, bool isForced, bool isFadeIn, int32_t fadeInTime, bool isFadeOut, int32_t fadeOutTime);
 void Music_StopMusic();
 void Music_FadeOutMusic(int fadeOutTime);
 void Music_Tick();

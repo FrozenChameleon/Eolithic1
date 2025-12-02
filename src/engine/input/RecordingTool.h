@@ -87,13 +87,13 @@ void RecordingTool_DrawReadSessionReadout(SpriteBatch* spriteBatch, const char* 
 void RecordingTool_CheckForDebugReadSessionCode();
 bool RecordingTool_IsWriting();
 bool RecordingTool_IsReading();
-RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int playerNumber, int boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger);
+RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int32_t playerNumber, int32_t boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger);
 int RecordingTool_GetPlayerReadCounter();
 void RecordingTool_SetPlayerReadCounter(int value);
 bool RecordingTool_IsRunning();
 void RecordingTool_SetupWriteSession(int priority, const char* mapToLoad);
 bool RecordingTool_LoadNextRecordingIfAtEndOfRecording(bool isMapLoad);
-void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int priority, bool goFast);
+void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int32_t priority, bool goFast);
 bool RecordingTool_IsGoFastFlagSet();
 void RecordingTool_TickReadSessionSuccessCounter(int successNumber);
 void RecordingTool_RewriteAllRecordings();

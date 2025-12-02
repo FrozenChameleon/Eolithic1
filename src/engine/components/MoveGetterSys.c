@@ -2,8 +2,8 @@
 
 /*
 static bool DEBUG_IS_FORCED_MOVE;
-static int DEBUG_FORCED_MOVE;
-static int DEBUG_ID_COUNTER;
+static int32_t DEBUG_FORCED_MOVE;
+static int32_t DEBUG_ID_COUNTER;
 
 void OeComMoveGetterSys::SetupSystem()
 {

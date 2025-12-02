@@ -12,9 +12,9 @@
 
 static bool _mHasInit;
 
-//TODO C99 static int _mMasterRecordingCurrentVersion = OeGlobals::GetNewestRecordingVersion();
-static int _mMasterRecordingCurrentVersion;
-static int _mMasterRecordingReadFrame;
+//TODO C99 static int32_t _mMasterRecordingCurrentVersion = OeGlobals::GetNewestRecordingVersion();
+static int32_t _mMasterRecordingCurrentVersion;
+static int32_t _mMasterRecordingReadFrame;
 
 //static BinaryWriter _mWriter;
 static bool _mIsReading;

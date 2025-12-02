@@ -79,7 +79,7 @@ Point Points_GetFourWay(int direction)
 		return Point_Zero;
 	}
 }
-void Points_Rotate(Point* point, int degree)
+void Points_Rotate(Point* point, int32_t degree)
 {
 	int amount = degree / 90;
 
@@ -173,25 +173,25 @@ float Points_GetDiagCorrectedX(Point point)
 {
 	if (Points_IsUpRight(point) || Points_IsDownRight(point) || Points_IsDownLeft(point) || Points_IsUpLeft(point))
 	{
-		return point.X * MATH_DIAGONAL_LIMITER_MUL;
+		return (point.X * MATH_DIAGONAL_LIMITER_MUL);
 	}
 	else
 	{
-		return point.X;
+		return (float)point.X;
 	}
 }
 float Points_GetDiagCorrectedY(Point point)
 {
 	if (Points_IsUpRight(point) || Points_IsDownRight(point) || Points_IsDownLeft(point) || Points_IsUpLeft(point))
 	{
-		return point.Y * MATH_DIAGONAL_LIMITER_MUL;
+		return (point.Y * MATH_DIAGONAL_LIMITER_MUL);
 	}
 	else
 	{
-		return point.Y;
+		return (float)point.Y;
 	}
 }
-void Points_SetDirectionFromFourWayInt(Point* point, int direction)
+void Points_SetDirectionFromFourWayInt(Point* point, int32_t direction)
 {
 	switch (direction)
 	{
@@ -211,7 +211,7 @@ void Points_SetDirectionFromFourWayInt(Point* point, int direction)
 		break;
 	}
 }
-void Points_SetDirectionFromEightWayInt(Point* point, int direction)
+void Points_SetDirectionFromEightWayInt(Point* point, int32_t direction)
 {
 	switch (direction)
 	{
@@ -243,7 +243,7 @@ void Points_SetDirectionFromEightWayInt(Point* point, int direction)
 		break;
 	}
 }
-void Points_RotateClockwise(Point* point, int amount)
+void Points_RotateClockwise(Point* point, int32_t amount)
 {
 	int value = Points_GetEightWayInt(*point);
 	for (int i = 0; i < amount; i++)
@@ -256,7 +256,7 @@ void Points_RotateClockwise(Point* point, int amount)
 	}
 	Points_SetDirectionFromEightWayInt(point, value);
 }
-void Points_RotateCounterClockwise(Point* point, int amount)
+void Points_RotateCounterClockwise(Point* point, int32_t amount)
 {
 	int value = Points_GetEightWayInt(*point);
 	for (int i = 0; i < amount; i++)
@@ -388,7 +388,7 @@ int Points_GetEightWayInt(Point point)
 		return -1;
 	}
 }
-void Points_SetFromDegree(Point* point, int degree)
+void Points_SetFromDegree(Point* point, int32_t degree)
 {
 	int offset = 22;
 	int halfOffset = offset / 2;

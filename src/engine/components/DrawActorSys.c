@@ -39,7 +39,6 @@ void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_gra
 	data->mDefaultDrawState = shget(sh_draw_state_map, defaultDrawState);
 	data->mDefaultDrawPhase = shget(sh_draw_phase_map, defaultDrawPhase);
 
-	int DEBUG3 = shlen(sh_graphics_data);
 	for (int i = 0; i < shlen(sh_graphics_data); i += 1)
 	{
 		const char* stateString = sh_graphics_data[i].key;
@@ -70,7 +69,7 @@ void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_gra
 
 	DrawActorSys_SetImageState(owner, data, data->mDefaultDrawState, data->mDefaultDrawPhase);
 }
-void DrawActorSys_CreateExplosionModules(Entity owner, int state, int phase, int time, int type)
+void DrawActorSys_CreateExplosionModules(Entity owner, int32_t state, int32_t phase, int32_t time, int32_t type)
 {
 	//Vector2 position = Get_Position(owner);
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
@@ -172,7 +171,7 @@ void DrawActorSys_BeforeUpdateRoutine()
 		RealUpdateRoutine(iter.mEntity, component, camera, bodyPack, isUpdateDisabledPack, fakePositionPack, stateInfos, renderInfos);
 	}
 }
-DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int state)
+DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int32_t state)
 {
 	ComponentPack* drawStateInfos = GetDrawStateInfos();
 	for (int i = 0; i < ComponentPack_Length(drawStateInfos); i += 1)
@@ -189,11 +188,11 @@ DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int state)
 	//TODO C99 Logger_LogError("State Not Available: " + OeUtils_ToString(state) + " on " + Get_Name(owner));
 	return ComponentPack_GetComponentAtIndex(drawStateInfos, 0);
 }
-void DrawActorSys_SetDepthOverride(Entity owner, int state, int value)
+void DrawActorSys_SetDepthOverride(Entity owner, int32_t state, int32_t value)
 {
 	DrawActorSys_GetStateInfo(owner, state)->mDepth = value;
 }
-void DrawActorSys_SetImageDataDepth(Entity owner, int state, int phase, int depth)
+void DrawActorSys_SetImageDataDepth(Entity owner, int32_t state, int32_t phase, int32_t depth)
 {
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
 	for (int i = 0; i < ComponentPack_Length(drawRenderInfos); i += 1)
@@ -208,11 +207,11 @@ void DrawActorSys_SetImageDataDepth(Entity owner, int state, int phase, int dept
 		}
 	}
 }
-void DrawActorSys_SetImageState(Entity owner, DrawActor* data, int state, int phase)
+void DrawActorSys_SetImageState(Entity owner, DrawActor* data, int32_t state, int32_t phase)
 {
 	DrawActorSys_SetImageState2(owner, data, state, phase, false);
 }
-void DrawActorSys_SetImageState2(Entity owner, DrawActor* data, int state, int newPhase, bool carryAnimationState)
+void DrawActorSys_SetImageState2(Entity owner, DrawActor* data, int32_t state, int32_t newPhase, bool carryAnimationState)
 {
 	int oldPhase = DrawActorSys_GetCurrentPhase(owner, state);
 	if ((oldPhase == DRAWACTORSYS_NOTHING) && (newPhase == DRAWACTORSYS_NOTHING))
@@ -289,19 +288,19 @@ void DrawActorSys_SetImageState2(Entity owner, DrawActor* data, int state, int n
 
 	DrawActorSys_GetStateInfo(owner, state)->mCurrentPhase = newPhase; //set current phase
 }
-void DrawActorSys_SetStateRotation(Entity owner, int state, float rotation)
+void DrawActorSys_SetStateRotation(Entity owner, int32_t state, float rotation)
 {
 	DrawActorSys_GetStateInfo(owner, state)->mRotation = rotation;
 }
-int DrawActorSys_GetCurrentPhase(Entity owner, int state)
+int DrawActorSys_GetCurrentPhase(Entity owner, int32_t state)
 {
 	return DrawActorSys_GetStateInfo(owner, state)->mCurrentPhase;
 }
-void DrawActorSys_SetNudge(Entity owner, int state, float x, float y)
+void DrawActorSys_SetNudge(Entity owner, int32_t state, float x, float y)
 {
 	DrawActorSys_GetStateInfo(owner, state)->mNudge = Vector2_Create(x, y);
 }
-ImageDataInstance* DrawActorSys_GetRender(Entity owner, int state, int phase, int index)
+ImageDataInstance* DrawActorSys_GetRender(Entity owner, int32_t state, int32_t phase, int32_t index)
 {
 	int counter = 0;
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
@@ -325,15 +324,15 @@ ImageDataInstance* DrawActorSys_GetRender(Entity owner, int state, int phase, in
 	}
 	return &EmptyRender;
 }
-int DrawActorSys_GetAnimationPosition(Entity owner, int state, int phase)
+int DrawActorSys_GetAnimationPosition(Entity owner, int32_t state, int32_t phase)
 {
 	return DrawActorSys_GetAnimation(owner, state, phase)->mFrameTimer.mCurrent;
 }
-Animation* DrawActorSys_GetCurrentAnimation(Entity owner, int state)
+Animation* DrawActorSys_GetCurrentAnimation(Entity owner, int32_t state)
 {
 	return DrawActorSys_GetAnimation(owner, state, DrawActorSys_GetCurrentPhase(owner, state));
 }
-Animation* DrawActorSys_GetAnimation(Entity owner, int state, int phase)
+Animation* DrawActorSys_GetAnimation(Entity owner, int32_t state, int32_t phase)
 {
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
 	for (int i = 0; i < ComponentPack_Length(drawRenderInfos); i += 1)
@@ -353,7 +352,7 @@ Animation* DrawActorSys_GetAnimation(Entity owner, int state, int phase)
 	//TODO C99 Logger_LogError("Unable to get Animation: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
 	return &EmptyAnimation;
 }
-ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int state, int phase)
+ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int32_t state, int32_t phase)
 {
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
 	for (int i = 0; i < ComponentPack_Length(drawRenderInfos); i += 1)
@@ -370,7 +369,7 @@ ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int stat
 	//TODO C99 Logger_LogError("Unable to get Image Data Render: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
 	return &EmptyRender;
 }
-void DrawActorSys_ResetCurrentAnimation(Entity owner, int state)
+void DrawActorSys_ResetCurrentAnimation(Entity owner, int32_t state)
 {
 	int currentPhase = DrawActorSys_GetCurrentPhase(owner, state);
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
@@ -389,7 +388,7 @@ void DrawActorSys_ResetCurrentAnimation(Entity owner, int state)
 		}
 	}
 }
-void DrawActorSys_SetCurrentAnimationPosition(Entity owner, int state, int position)
+void DrawActorSys_SetCurrentAnimationPosition(Entity owner, int32_t state, int32_t position)
 {
 	int currentPhase = DrawActorSys_GetCurrentPhase(owner, state);
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
@@ -408,7 +407,7 @@ void DrawActorSys_SetCurrentAnimationPosition(Entity owner, int state, int posit
 		}
 	}
 }
-void DrawActorSys_SetAnimationPosition(Entity owner, int state, int phase, int position)
+void DrawActorSys_SetAnimationPosition(Entity owner, int32_t state, int32_t phase, int32_t position)
 {
 	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
 	for (int i = 0; i < ComponentPack_Length(drawRenderInfos); i += 1)
@@ -427,7 +426,7 @@ void DrawActorSys_SetAnimationPosition(Entity owner, int state, int phase, int p
 		}
 	}
 }
-void DrawActorSys_SetShaderProgram(Entity owner, int state, ShaderProgram* shaderProgram)
+void DrawActorSys_SetShaderProgram(Entity owner, int32_t state, ShaderProgram* shaderProgram)
 {
 	DrawActorSys_GetStateInfo(owner, state)->mShader = shaderProgram;
 }
@@ -480,7 +479,7 @@ void DrawActorSys_DrawRoutine(Entity owner, DrawActor* data, SpriteBatch* sprite
 		data->mScale, data->mUniversalDepthOverride);
 }
 void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* spriteBatch,
-	Color color, Vector2 currentPosition, Vector2 lastPosition, float rotation, Vector2 scale, int givenDepth)
+	Color color, Vector2 currentPosition, Vector2 lastPosition, float rotation, Vector2 scale, int32_t givenDepth)
 {
 	if (!data->mIsOnScreen)
 	{
@@ -529,7 +528,7 @@ void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* s
 							shaderProgram = stateInfo->mShader;
 						}
 
-						DrawInstance* drawInstance = ImageDataInstance_DrawInterpolated2(render, spriteBatch, color, shaderProgram,
+						RenderCommandSheet* drawInstance = ImageDataInstance_DrawInterpolated2(render, spriteBatch, color, shaderProgram,
 							newPos, oldPos, scale, rotation + stateRotation, data->mIsFlipX,
 							data->mIsFlipY, depthOverride, data->mOffset);
 						if (data->mExtraPasses != 0)

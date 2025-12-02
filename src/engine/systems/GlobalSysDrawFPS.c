@@ -10,8 +10,8 @@
 
 #define TIME_TO_STOP_DRAWING 5
 
-static int _mDoNotDrawThisCounter = TIME_TO_STOP_DRAWING;
-static int _mOffsetFromCorner;
+static int32_t _mDoNotDrawThisCounter = TIME_TO_STOP_DRAWING;
+static int32_t _mOffsetFromCorner;
 static const char* _mFont = "game";
 
 void GlobalSysDrawFPS_SetOffsetFromCorner(int offset)

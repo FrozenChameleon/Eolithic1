@@ -45,7 +45,7 @@ void SpriteBatch_Clear(SpriteBatch* sb)
 	}
 }
 
-RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int depth, ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, 
+RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int32_t depth, ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, 
 	Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
 {
 	ClampDepth(&depth);
@@ -80,7 +80,7 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	return command;
 }
 
-RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* texture, Color color, int depth, ShaderProgram* program, Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
+RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* texture, Color color, int32_t depth, ShaderProgram* program, Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
 {
 	ClampDepth(&depth);
 

@@ -23,8 +23,8 @@ int TEMP_WINDOW_SIZE_MULTIPLE = 0;
 Rectangle TEMP_WINDOW_SIZE = { 0 };
 
 static bool SUPPRESS_MENU_SOUNDS;
-static int SOUND_TEST_CURRENT_SOUND;
-static int SOUND_TEST_CURRENT_MUSIC;
+static int32_t SOUND_TEST_CURRENT_SOUND;
+static int32_t SOUND_TEST_CURRENT_MUSIC;
 static StringPair* MUSIC_LIST;
 static StringPair* SOUND_LIST;
 static bool LOADED_OPTIONS_MENU;
@@ -79,7 +79,7 @@ void MenuFunc_SoundStopSoundTestMusic()
 {
 	Do_StopMusic();
 }
-static void HandleSoundTestDirectionLogic(int* value, const int direction, const int len)
+static void HandleSoundTestDirectionLogic(int* value, const int32_t direction, const int32_t len)
 {
 	if (direction == 1)
 	{
@@ -324,7 +324,7 @@ void MenuFunc_VideoApplyWindowSize()
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, TEMP_WINDOW_SIZE.Height);
 	//TODO C99 OeUtils_InvokeWindowedMode();
 }
-void MenuFunc_VideoChangeWindowSize(int direction, int forcedSliderValue)
+void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
 {
 	/*std_vector<Rectangle> resolutions = OeUtils_GetWindowResolutions(true);
 	if (resolutions.size() == 0)
@@ -364,7 +364,7 @@ void MenuFunc_VideoChangeWindowSize(int direction, int forcedSliderValue)
 	}
 	TEMP_WINDOW_SIZE = resolutions[next];*/
 }
-void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int forcedSliderValue)
+void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderValue)
 {
 	int maxValue = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
 	int min = 1;
@@ -483,7 +483,7 @@ void MenuFunc_InputDeadzoneToggle()
 	OeUniverse.SaveUserConfig();
 	*/
 }
-int MenuFunc_VolumeToggle(const char* cvar, int direction, int forcedSliderValue)
+int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue)
 {
 	int returnValue = 0;
 	int volume = Cvars_GetAsInt(cvar);
@@ -556,7 +556,7 @@ void MenuFunc_VideoShowInGameTimerToggle()
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_SHOWING_IN_GAME_TIMER);
 }
-void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int forcedSliderValue)
+void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t forcedSliderValue)
 {
 	int maxValue = MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue();
 	int current = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);

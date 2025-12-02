@@ -429,7 +429,7 @@ InputCheck InputCheck_CreateCheckButton(int button)
 	tempCheck.mButton = button;
 	return tempCheck;
 }
-InputCheck InputCheck_CreateCheckAxis(int axis, int direction)
+InputCheck InputCheck_CreateCheckAxis(int axis, int32_t direction)
 {
 	InputCheck tempCheck = { 0 };
 	tempCheck.mType = INPUTCHECK_TYPE_AXIS;

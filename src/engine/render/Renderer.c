@@ -72,7 +72,7 @@ static TtFontState _mFontState;
 static bool _mIndexBufferDataSet;
 static uint16_t _mIndexBufferData[MAX_INDICES];
 
-static int _mCurrentDepth;
+static int32_t _mCurrentDepth;
 static Vector2 _mCurrentCameraPosition;
 static BlendState _mCurrentBlendState;
 static ShaderProgram* _mCurrentShaderProgram;
@@ -167,7 +167,7 @@ Rectangle Renderer_GetWantedBackBufferBounds()
 	bounds.Height = mul * internalRenderHeight;
 	return bounds;
 }
-void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color fontColor, int pos, const float* verts, const float* tcoords, const unsigned int* colors, int nverts)
+void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color fontColor, int32_t pos, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts)
 {
 	ColorFloat4 colorToUse;
 	colorToUse.R = (float)(fontColor.R) / 0xFF;
@@ -196,7 +196,7 @@ void Renderer_SetupTtFontState(const TtFontState* fontState)
 {
 	_mFontState = *fontState;
 }
-void Renderer_SetupVerticesFromVPCT4(VertexPositionColorTexture* vertices, int pos, const VertexPositionColorTexture4* sprite)
+void Renderer_SetupVerticesFromVPCT4(VertexPositionColorTexture* vertices, int32_t pos, const VertexPositionColorTexture4* sprite)
 {
 	vertices[pos + 0].Position = sprite->Position0; //UPPER LEFT
 	vertices[pos + 1].Position = sprite->Position1; //UPPER RIGHT
@@ -331,10 +331,10 @@ void Renderer_Draw(Texture* texture, Rectangle destinationRectangle, Color color
 		0.0f,
 		1.0f,
 		1.0f,
-		destinationRectangle.X,
-		destinationRectangle.Y,
-		destinationRectangle.Width,
-		destinationRectangle.Height,
+		(float)destinationRectangle.X,
+		(float)destinationRectangle.Y,
+		(float)destinationRectangle.Width,
+		(float)destinationRectangle.Height,
 		color,
 		0.0f,
 		0.0f,
@@ -357,8 +357,8 @@ void Renderer_Draw2(
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
 	sourceW = sourceRectangle.Width / (float)texture->mBounds.Width;
 	sourceH = sourceRectangle.Height / (float)texture->mBounds.Height;
-	destW = sourceRectangle.Width;
-	destH = sourceRectangle.Height;
+	destW = (float)sourceRectangle.Width;
+	destH = (float)sourceRectangle.Height;
 
 	Renderer_PushSprite(
 		texture,
@@ -387,11 +387,11 @@ void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Rectangle 
 	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
 	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Width),
+		Math_fabsf((float)sourceRectangle.Width),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Width;
 	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Height),
+		Math_fabsf((float)sourceRectangle.Height),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Height;
 
@@ -401,10 +401,10 @@ void Renderer_Draw3(Texture* texture, Rectangle destinationRectangle, Rectangle 
 		sourceY,
 		sourceW,
 		sourceH,
-		destinationRectangle.X,
-		destinationRectangle.Y,
-		destinationRectangle.Width,
-		destinationRectangle.Height,
+		(float)destinationRectangle.X,
+		(float)destinationRectangle.Y,
+		(float)destinationRectangle.Width,
+		(float)destinationRectangle.Height,
 		color,
 		origin.X / sourceW / (float)texture->mBounds.Width,
 		origin.Y / sourceH / (float)texture->mBounds.Height,
@@ -422,11 +422,11 @@ void Renderer_Draw4(Texture* texture, Vector2 position, Rectangle sourceRectangl
 	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
 	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Width),
+		Math_fabsf((float)sourceRectangle.Width),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Width;
 	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Height),
+		Math_fabsf((float)sourceRectangle.Height),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Height;
 	scale.X *= sourceRectangle.Width;
@@ -461,11 +461,11 @@ void Renderer_Draw5(Texture* texture, Vector2 position, Rectangle sourceRectangl
 	sourceX = sourceRectangle.X / (float)texture->mBounds.Width;
 	sourceY = sourceRectangle.Y / (float)texture->mBounds.Height;
 	sourceW = Math_SignumInt(sourceRectangle.Width) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Width),
+		Math_fabsf((float)sourceRectangle.Width),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Width;
 	sourceH = Math_SignumInt(sourceRectangle.Height) * Math_MaxFloat(
-		Math_abs((float)sourceRectangle.Height),
+		Math_fabsf((float)sourceRectangle.Height),
 		MathHelper_GetMachineEpsilonFloat()
 	) / (float)texture->mBounds.Height;
 	destW *= sourceRectangle.Width;
@@ -557,7 +557,7 @@ Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* bmf, const char* text,
 	float currentX = position.X;
 	float currentY = position.Y;
 
-	int textLen = Utils_strlen(text);
+	int32_t textLen = (int32_t)Utils_strlen(text);
 	for (int i = 0; i < textLen; i += 1)
 	{
 		if (text[i] == '\n')
@@ -616,7 +616,7 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 		}
 		else if (draw->mAlignmentX == ALIGN_RIGHT)
 		{
-			offset.X = -layout.Width;
+			offset.X = (float)(-layout.Width);
 		}
 		if (draw->mAlignmentY == ALIGN_CENTER)
 		{
@@ -624,7 +624,7 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 		}
 		else if (draw->mAlignmentY == ALIGN_BOTTOM)
 		{
-			offset.Y = -layout.Height;
+			offset.Y = (float)(-layout.Height);
 		}
 	}
 
@@ -632,8 +632,8 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 	Vector2 offsetLastPosition = Vector2_Add(draw->mLastPosition, offset);
 	if (draw->mIsLockedToInt)
 	{
-		offsetPosition = Vector2_Create((int)(offsetPosition.X), (int)(offsetPosition.Y));
-		offsetLastPosition = Vector2_Create((int)(offsetLastPosition.X), (int)(offsetLastPosition.Y));
+		offsetPosition = Vector2_Create((float)((int)(offsetPosition.X)), (float)((int)(offsetPosition.Y)));
+		offsetLastPosition = Vector2_Create((float)((int)(offsetLastPosition.X)), (float)((int)(offsetLastPosition.Y)));
 	}
 
 	Vector2 finalPos;
@@ -679,7 +679,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 		for (int j = draw->mY1; j < draw->mY2; j += 1)
 		{
 			//Draw The Tile
-			Vector2 position = Vector2_Create(i * TILE_SIZE, j * TILE_SIZE);
+			Vector2 position = Vector2_Create((float)(i * TILE_SIZE), (float)(j * TILE_SIZE));
 			int gridPos = i + (j * tileDataBounds.Width);
 			DrawTile* drawTile = &tileData[gridPos]->mDrawTiles[draw->mLayer];
 			if (drawTile->mPoint.X != -1)
@@ -687,7 +687,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 				Point point = DrawTile_GetCorrectPoint(drawTile);
 				Renderer_Draw5(draw->mTexture, Vector2_Add(position, origin), Rectangle_Create(point.X, point.Y, TILE_SIZE, TILE_SIZE), draw->mColor,
 					Math_ToRadians(drawTile->mRotation),
-					origin, 1, Renderer_GetEffects(drawTile->mFlipX, drawTile->mFlipY), depth);
+					origin, 1, Renderer_GetEffects(drawTile->mFlipX, drawTile->mFlipY), (float)depth);
 			}
 			else if (MString_GetLength(drawTile->mAnimation) > 0)
 			{
@@ -717,7 +717,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 				{
 					Sheet* sheet = AnimTile_GetAnimationSheet(animTile);
 					Rectangle rect = sheet->mRectangle;
-					Vector2 halfRect = Vector2_Create(rect.Width / 2, rect.Height / 2);
+					Vector2 halfRect = Vector2_Create((float)(rect.Width / 2), (float)(rect.Height / 2));
 					Rectangle source = Rectangle_Create(rect.X, rect.Y, rect.Width, rect.Height);
 					BlendState oldBlendState = _mCurrentBlendState;
 					if (animTile->mIsAdditive)
@@ -726,7 +726,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 					}
 					Renderer_Draw5(Sheet_GetTexture(sheet), Vector2_Add(position, origin), source, draw->mColor,
 						Math_ToRadians(animTile->mRotation + drawTile->mRotation),
-						halfRect, animTile->mScaler, effects, depth);
+						halfRect, (float)animTile->mScaler, effects, (float)depth);
 					if (animTile->mIsAdditive)
 					{
 						_mCurrentBlendState = oldBlendState;
@@ -891,12 +891,12 @@ SpriteEffects Renderer_GetEffects(bool flipX, bool flipY)
 
 	return effects;
 }
-int Renderer_ImageRead(void* context, char* data, int size)
+int Renderer_ImageRead(void* context, char* data, int32_t size)
 {
 	SDL_IOStream* rwop = (SDL_IOStream*)(context);
-	return SDL_ReadIO(rwop, data, size);
+	return (int)SDL_ReadIO(rwop, data, size);
 }
-void Renderer_ImageSkip(void* context, int n)
+void Renderer_ImageSkip(void* context, int32_t n)
 {
 	SDL_IOStream* rwop = (SDL_IOStream*)(context);
 	SDL_SeekIO(rwop, n, SDL_IO_SEEK_CUR);
@@ -983,8 +983,8 @@ void Renderer_UpdateDisplayDimensions()
 	float height = 0;
 
 	Rectangle drawable = Renderer_GetDrawableSize();
-	float currentWidth = drawable.Width;
-	float currentHeight = drawable.Height;
+	float currentWidth = (float)drawable.Width;
+	float currentHeight = (float)drawable.Height;
 
 	int internalRenderWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
 	int internalRenderHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
@@ -1021,8 +1021,8 @@ void Renderer_UpdateDisplayDimensions()
 	else if (drawMode == RENDERER_DRAWMODE_PIXELPERFECT)
 	{
 		Rectangle backBuffer = Renderer_GetWantedBackBufferBounds();
-		width = backBuffer.Width;
-		height = backBuffer.Height;
+		width = (float)backBuffer.Width;
+		height = (float)backBuffer.Height;
 
 		_mScreenScale.X = internalRenderWidth / width; // calculating from either width or height is fine due to perfect scaling
 		_mScreenScale.Y = _mScreenScale.X;
@@ -1081,7 +1081,7 @@ void Renderer_SetupCommit(double delta)
 	}
 	Camera* camera = GameStateManager_GetCurrentRenderCamera();
 	Vector2 cam = Camera_GetInterpCameraAsVector2(camera, drawDelta);
-	Vector2 hud = Vector2_Create(camera->mWorldWidth / 2, camera->mWorldHeight / 2);
+	Vector2 hud = Vector2_Create((float)(camera->mWorldWidth / 2), (float)(camera->mWorldHeight / 2));
 	Renderer_Commit(&_mOrangeSpriteBatch, cam, drawDelta);
 	Renderer_Commit(&_mOrangeSpriteBatchHud, hud, drawDelta);
 }

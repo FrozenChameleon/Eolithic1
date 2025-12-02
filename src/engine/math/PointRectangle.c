@@ -59,7 +59,7 @@ Rectangle PointRectangle_GetRectanglePoint(Point pointOne, Point pointTwo)
 	Rectangle tempRect = { x, y, width, height };
 	return tempRect;
 }
-void PointRectangle_Add(PointRectangle* prect, int amountX, int amountY)
+void PointRectangle_Add(PointRectangle* prect, int32_t amountX, int32_t amountY)
 {
 	Point temp = { amountX, amountY };
 	Point_AddAssign(&prect->mPointOne, temp);

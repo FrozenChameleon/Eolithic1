@@ -82,7 +82,7 @@ void File_AppendPathSeparator(MString** str)
 
 static MString* File_GetFileNameHelper(const char* path, bool removeTheExtension)
 {
-	int32_t len = Utils_strlen(path);
+	int32_t len = (int32_t)Utils_strlen(path);
 	int32_t loc = Utils_StringIndexOf(PATH_SEPARATOR, path, len + 1, true);
 	if (loc == -1)
 	{

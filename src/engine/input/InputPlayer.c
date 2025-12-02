@@ -27,7 +27,7 @@ InputAction* InputPlayer_GetCurrentActions(InputPlayer* ip)
 	return ip->_mActions;
 }
 
-void InputPlayer_SetInputDevice(InputPlayer* ip, int newDeviceNumber)
+void InputPlayer_SetInputDevice(InputPlayer* ip, int32_t newDeviceNumber)
 {
 	if (newDeviceNumber == ip->_mInputDeviceNumber)
 	{
@@ -68,7 +68,7 @@ void InputPlayer_StopVibrating(InputPlayer* ip)
 	ControllerState_SetVibration(controller, 0, 0);
 }
 
-void InputPlayer_Init(InputPlayer* ip, int number)
+void InputPlayer_Init(InputPlayer* ip, int32_t number)
 {
 	Utils_memset(ip, 0, sizeof(InputPlayer));
 
@@ -190,7 +190,7 @@ bool InputPlayer_IsPlayerPressingAnything(InputPlayer* ip)
 	}
 	return false;
 }
-void InputPlayer_SetBlockMenuInput(InputPlayer* ip, int value)
+void InputPlayer_SetBlockMenuInput(InputPlayer* ip, int32_t value)
 {
 	ip->_mIsBlockedForPlayerSelect = value;
 }
@@ -239,7 +239,7 @@ ControllerState* InputPlayer_GetController(InputPlayer* ip)
 {
 	return Input_GetController(ip->_mInputDeviceNumber);
 }
-void InputPlayer_Vibrate(InputPlayer* ip, int priority, int frames, float leftMotor, float rightMotor)
+void InputPlayer_Vibrate(InputPlayer* ip, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
 #ifdef DEBUG_DEF_DISABLE_RUMBLE
 	return;
@@ -273,7 +273,7 @@ bool InputPlayer_MyControllerLostConnection(InputPlayer* ip)
 	return false;
 }
 #if EDITOR
-void InputPlayer_DebugSetDevice(InputPlayer* ip, int deviceNumber)
+void InputPlayer_DebugSetDevice(InputPlayer* ip, int32_t deviceNumber)
 {
 	ip->_mInputDeviceNumber = deviceNumber;
 }

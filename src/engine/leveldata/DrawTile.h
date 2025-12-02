@@ -29,10 +29,10 @@ typedef struct DrawTile
 
 void DrawTile_Init(DrawTile* drawTile);
 void DrawTile_Write(DrawTile* drawTile, BufferWriter* writer);
-void DrawTile_Read(DrawTile* drawTile, int version, BufferReader* reader);
-void DrawTile_LoadSheet(DrawTile* drawTile, int x, int y);
+void DrawTile_Read(DrawTile* drawTile, int32_t version, BufferReader* reader);
+void DrawTile_LoadSheet(DrawTile* drawTile, int32_t x, int32_t y);
 void DrawTile_LoadAnimation(DrawTile* drawTile, const char* animation);
-void DrawTile_Draw(DrawTile* drawTile, SpriteBatch* spriteBatch, Texture* texture, Color color, int depth, int x, int y);
+void DrawTile_Draw(DrawTile* drawTile, SpriteBatch* spriteBatch, Texture* texture, Color color, int32_t depth, int32_t x, int32_t y);
 Point DrawTile_GetCorrectPoint(DrawTile* drawTile);
 bool DrawTile_IsZero(DrawTile* drawTile);
 bool DrawTile_IsAnimation(DrawTile* drawTile);

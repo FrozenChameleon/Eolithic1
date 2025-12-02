@@ -13,9 +13,9 @@
 
 typedef struct BufferWriter BufferWriter;
 
-FixedByteBuffer* BufferWriter_WriteBytes(BufferWriter* br, int64_t length);
+DynamicByteBuffer* BufferWriter_WriteBytes(BufferWriter* br, int64_t length);
 int64_t BufferWriter_Position(BufferWriter* br);
-FixedByteBuffer* BufferWriter_GetBuffer(BufferWriter* br);
+DynamicByteBuffer* BufferWriter_GetBuffer(BufferWriter* br);
 uint64_t BufferWriter_GetSize(BufferWriter* br);
 uint8_t* BufferWriter_GetBufferData(BufferWriter* br);
 int64_t BufferWriter_Tell(BufferWriter* br);

@@ -52,9 +52,9 @@ enum Step
 
 typedef bool (*JobFunc)();
 
-static int _mFps;
-static int _mStep;
-static int _mPreloaderGraphicFrame;
+static int32_t _mFps;
+static int32_t _mStep;
+static int32_t _mPreloaderGraphicFrame;
 static double _mDeltaAccumulator;
 static double _mFlipDeltaAccumulator;
 static bool _mIsFirstFrame = true;
@@ -426,7 +426,7 @@ void GameLoader_Draw(SpriteBatch* spriteBatch)
 
 	int internalWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
 	int internalHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
-	Vector2 offset = { -internalWidth / 2, -internalHeight / 2 };
+	Vector2 offset = { (float)(-internalWidth / 2), (float)(-internalHeight / 2) };
 
 	if (_mStep == STEP_LOADING)
 	{

@@ -111,7 +111,7 @@ void ThingInstance_Write(ThingInstance* ti, BufferWriter* writer)
 		OeStringPair_Write(&mSettings[i], writer);
 	}*/
 }
-void ThingInstance_Read(ThingInstance* ti, int version, BufferReader* reader)
+void ThingInstance_Read(ThingInstance* ti, int32_t version, BufferReader* reader)
 {
 	if (version >= 3)
 	{
@@ -289,7 +289,7 @@ void ThingInstance_Draw(ThingInstance* ti, SpriteBatch* spriteBatch, Color color
 {
 	//Draw(spriteBatch, color, 100, position, isSelected);
 }
-void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color color, int depth, Point position, bool isSelected)
+void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color color, int32_t depth, Point position, bool isSelected)
 {
 	//WILLNOTDO 05152023
 	/*

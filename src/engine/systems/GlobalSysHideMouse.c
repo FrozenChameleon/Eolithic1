@@ -6,7 +6,7 @@
 #include "../render/Renderer.h"
 #include "../core/Window.h"
 
-static int mCounter = 0;
+static int32_t mCounter = 0;
 
 static void Update(System* sys)
 {

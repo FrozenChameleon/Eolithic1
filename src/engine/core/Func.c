@@ -84,8 +84,8 @@
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
 
-static int _mFlippedGameState = -1;
-static int _mAttackIdCounter;
+static int32_t _mFlippedGameState = -1;
+static int32_t _mAttackIdCounter;
 //static OeDictionary<std_string, OeDictionary<std_string, std_string>> _mTuningsMap;
 //static OeDictionary<std_type_index, std_vector<OeStringPair>> _mControllerComponentStringSettingsMap;
 //static std_string _mBuilder;
@@ -197,7 +197,7 @@ Entity Get_ClosestPlayer(float x, float y)
 	/*
 	* double distance = Double.MAX_VALUE;
 	*
-	* int player = -1;
+	* int32_t player = -1;
 	*
 	* //TODO for (int i = 0; i < _mPlayers.Count; i++) { if (!_mPlayers[i].mIsDisabled) { //TODO double currentDistance = GeneralTools.getDistance(x, y, _mPlayers[i].getCurrentPositionX(), _mPlayers[i].getCurrentPositionY()); if (currentDistance < distance) { player = i; distance = currentDistance; } } }
 	*
@@ -288,7 +288,7 @@ void Do_HandleNormalCamera(bool useAutoHingeCamera, bool forceCameraPosition, Le
 	if (forceCameraPosition)
 	{
 		Rectangle tempRect = PointRectangle_GetRectangle(&instance->mData.mVolumeTrigger);
-		Camera_SetPosition(camera, Rectangle_Center(&tempRect).X, Rectangle_Center(&tempRect).Y);
+		Camera_SetPosition(camera, (float)Rectangle_Center(&tempRect).X, (float)Rectangle_Center(&tempRect).Y);
 	}
 
 	SceneCameraData* sceneCameraData = Get_SceneCameraData();
@@ -354,7 +354,7 @@ LevelCameraDataInstance* Do_HandleCamera(bool useAutoHingeCamera, bool forceCame
 {
 	return Do_HandleCamera2(useAutoHingeCamera, forceCameraPosition, false, -1);
 }
-LevelCameraDataInstance* Do_HandleCamera2(bool useAutoHingeCamera, bool forceCameraPosition, bool manualSize, int size)
+LevelCameraDataInstance* Do_HandleCamera2(bool useAutoHingeCamera, bool forceCameraPosition, bool manualSize, int32_t size)
 {
 	return NULL;
 	//TODO
@@ -406,7 +406,7 @@ void Do_ResetCollisionGrid()
 	CollisionEngineSys_SetupCollisionGrid(Get_CollisionEngine(), Get_LevelData());
 }
 
-void Do_LoadCameraNumber(bool useAutoHingeCamera, bool forceCameraPosition, int number)
+void Do_LoadCameraNumber(bool useAutoHingeCamera, bool forceCameraPosition, int32_t number)
 {
 	/*
 	std_vector<LevelCameraDataInstance>& cameras = Get_CameraDataInstances();
@@ -481,7 +481,7 @@ Vector2 Do_FindThingPositionInTileData(const char* name)
 				const char* thingInstanceName = ThingInstance_GetName(thingInstance);
 				if (Utils_StringEqualTo(thingInstanceName, name))
 				{
-					return Vector2_Create(i * TILE_SIZE + HALF_TILE_SIZE, j * TILE_SIZE + HALF_TILE_SIZE);
+					return Vector2_Create((float)((i * TILE_SIZE) + HALF_TILE_SIZE), (float)((j * TILE_SIZE) + HALF_TILE_SIZE));
 				}
 			}
 		}
@@ -508,10 +508,11 @@ void Do_InitPermanentThingsByRealCoordinates(float realX1, float realY1, float r
 void Do_InitPermanentThingsByRoomBounds(LevelCameraDataInstance* instance, bool startThings)
 {
 	PointRectangle* pointRect = LevelCameraData_GetActiveBoundsPointRectangle(&instance->mData);
-	Do_InitPermanentThingsByRealCoordinates(pointRect->mPointOne.X, pointRect->mPointOne.Y, pointRect->mPointTwo.X, pointRect->mPointTwo.Y, startThings);
+	Do_InitPermanentThingsByRealCoordinates((float)pointRect->mPointOne.X, (float)pointRect->mPointOne.Y, 
+		(float)pointRect->mPointTwo.X, (float)pointRect->mPointTwo.Y, startThings);
 }
 
-void Do_InitPermanentThingsByGridCoordinates(int x1, int y1, int x2, int y2)
+void Do_InitPermanentThingsByGridCoordinates(int x1, int32_t y1, int32_t x2, int32_t y2)
 {
 	LevelData* levelData = Get_LevelData();
 	for (int i = x1; i < x2; i += 1)
@@ -527,12 +528,12 @@ void Do_InitPermanentThingsByGridCoordinates(int x1, int y1, int x2, int y2)
 	}
 }
 
-void Do_InitPermanentThingsByGridCoordinates2(int x, int y)
+void Do_InitPermanentThingsByGridCoordinates2(int x, int32_t y)
 {
 	//Do_InitPermanentThingsByGridCoordinates(x, y, STR_NOTHING);
 }
 
-void Do_InitPermanentThingsByGridCoordinates3(int x, int y, const char* onlyWithThisName)
+void Do_InitPermanentThingsByGridCoordinates3(int x, int32_t y, const char* onlyWithThisName)
 {
 	/*
 	OeLevelData* levelData = Get_LevelData();
@@ -556,7 +557,7 @@ void Do_InitPermanentThingsByGridCoordinates3(int x, int y, const char* onlyWith
 }
 
 //private
-Entity Do_BuildThingFromData(int i, int j, ThingInstance* data)
+Entity Do_BuildThingFromData(int i, int32_t j, ThingInstance* data)
 {
 	if (data == NULL)
 	{
@@ -603,7 +604,7 @@ Entity Do_BuildThingFromData(int i, int j, ThingInstance* data)
 		int initialPositionX = (i * TILE_SIZE) + buildOffset.X;
 		int initialPositionY = (j * TILE_SIZE) + buildOffset.Y;
 		const char* thingName = ThingInstance_GetName(data);
-		return Do_BuildActor5(i, j, initialPositionX, initialPositionY, data, thingName);
+		return Do_BuildActor5(i, j, (float)initialPositionX, (float)initialPositionY, data, thingName);
 	}
 	else
 	{
@@ -699,7 +700,7 @@ int Get_IntTag(Entity entity)
 	}
 }
 
-void Do_SetIntTag(Entity entity, int value)
+void Do_SetIntTag(Entity entity, int32_t value)
 {
 	IntTag* component = Get_Component(C_IntTag, entity);
 	component->mTag = value;
@@ -723,7 +724,7 @@ void Do_ResetStepCounter(Entity entity)
 	component->mCounter = 0;
 }
 
-void Do_SetMove(Entity entity, int value)
+void Do_SetMove(Entity entity, int32_t value)
 {
 	Move* component = Get_Component(C_Move, entity);
 	component->mMove = value;
@@ -736,7 +737,7 @@ int Get_Move(Entity entity)
 	return component->mMove;
 }
 
-void Do_SetStep(Entity entity, int value)
+void Do_SetStep(Entity entity, int32_t value)
 {
 	Step* component = Get_Component(C_Step, entity);
 	component->mStep = value;
@@ -805,14 +806,14 @@ bool Do_UpdateStepTimer2(Entity entity, const char* tuning)
 	//TODOC99return Do_UpdateStepTimer2(entity, Get_TuningAsInt(entity, tuning));
 }
 
-bool Do_UpdateStepTimer(Entity entity, int limit)
+bool Do_UpdateStepTimer(Entity entity, int32_t limit)
 {
 	StepTimer* data = Get_Component(C_StepTimer, entity);
 	data->mTimer.mLimit = limit;
 	return Timer_Update(&data->mTimer);
 }
 
-void Do_SetBodyFramesInAir(Entity entity, int value)
+void Do_SetBodyFramesInAir(Entity entity, int32_t value)
 {
 	Get_Body(entity)->mFramesInAir = value;
 }
@@ -842,12 +843,12 @@ void Do_SetBodyPushes(Entity entity, bool value)
 	Get_Body(entity)->mPushes = value;
 }
 
-void Do_SetBodyCollideWithBody(Entity entity, void (*colliderBody)(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical))
+void Do_SetBodyCollideWithBody(Entity entity, void (*colliderBody)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical))
 {
 	Get_Body(entity)->mCollideWithBody = colliderBody;
 }
 
-void Do_SetBodyCollideWithCollision(Entity entity, bool (*colliderCollision)(Body* myBody, int x, int y, int width, int height, int myDirectionX, int myDirectionY, int collisionBit, bool isVertical))
+void Do_SetBodyCollideWithCollision(Entity entity, bool (*colliderCollision)(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical))
 {
 	Get_Body(entity)->mCollideWithCollision = colliderCollision;
 }
@@ -872,7 +873,7 @@ void Do_SetBodyIgnoreBakedCollision(Entity entity, bool value)
 	Get_Body(entity)->mIgnoreBakedCollision = value;
 }
 
-void Do_SetBodyType(Entity entity, int type)
+void Do_SetBodyType(Entity entity, int32_t type)
 {
 	Get_Body(entity)->mType = type;
 }
@@ -892,7 +893,7 @@ void Do_SetBodyDisabled(Entity entity, bool value)
 	Do_SetBodyDisabled2(entity, value, 0);
 }
 
-void Do_SetBodyDisabled2(Entity entity, bool value, int number)
+void Do_SetBodyDisabled2(Entity entity, bool value, int32_t number)
 {
 	Get_Body2(entity, number)->mIsDisabled = value;
 }
@@ -938,12 +939,12 @@ EntitySearch* Do_SearchForChildrenWithName2(Entity entity, const char* name, boo
 	return EntitySearch_SearchForEntitiesWithThisName(Do_SearchForChildren2(entity, isReverse), EntitySearch_CreateNewBlankSearch(), name, isReverse);
 }
 
-EntitySearch* Do_SearchForChildrenWithIntTag(Entity entity, int value)
+EntitySearch* Do_SearchForChildrenWithIntTag(Entity entity, int32_t value)
 {
 	return Do_SearchForChildrenWithIntTag2(entity, value, false);
 }
 
-EntitySearch* Do_SearchForChildrenWithIntTag2(Entity entity, int value, bool isReverse)
+EntitySearch* Do_SearchForChildrenWithIntTag2(Entity entity, int32_t value, bool isReverse)
 {
 	return EntitySearch_SearchForEntitiesWithThisIntTag(Do_SearchForChildren2(entity, isReverse), EntitySearch_CreateNewBlankSearch(), value, isReverse);
 }
@@ -962,28 +963,28 @@ void Do_DestroyAllEnemies()
 	}
 }
 
-MoveGetter* Do_InitMoveGetter(Entity entity, const char* name, int movesToRemember)
+MoveGetter* Do_InitMoveGetter(Entity entity, const char* name, int32_t movesToRemember)
 {
 	MoveGetter* moveGetter = Do_InitComponent(C_MoveGetter, entity);
 	//moveGetter->Setup(name, movesToRemember);
 	return moveGetter;
 }
 
-NodeMovingKit* Do_InitNodeMovingKit(Entity entity, int type, bool moveContacts)
+NodeMovingKit* Do_InitNodeMovingKit(Entity entity, int32_t type, bool moveContacts)
 {
 	NodeMovingKit* kit = Do_InitComponent(C_NodeMovingKit, entity);
 	//kit->Setup(entity, type, moveContacts);
 	return kit;
 }
 
-HitFlashKit* Do_InitHitFlashKit(Entity entity, int time)
+HitFlashKit* Do_InitHitFlashKit(Entity entity, int32_t time)
 {
 	HitFlashKit* kit = Do_InitComponent(C_HitFlashKit, entity);
 	//kit->Setup(time);
 	return kit;
 }
 
-MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int depth)
+MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int32_t depth)
 {
 	MirrorEffect* effect = Do_InitComponent(C_MirrorEffect, entity);
 	effect->mColor = color;
@@ -1001,17 +1002,17 @@ void Do_Rotate(Entity entity, float value)
 	Get_DrawActor(entity)->mRotation += value;
 }
 
-void DeprecatedDo_SetTag(Entity entity, int whatever, int whatever2)
+void DeprecatedDo_SetTag(Entity entity, int32_t whatever, int32_t whatever2)
 {
 	//WILLNOTDO20240323//TODO
 }
 
 
 
-void Do_IdleCircle(Entity entity, float radius, bool useX, bool useY, int idleDegreeIncrease)
+void Do_IdleCircle(Entity entity, float radius, bool useX, bool useY, int32_t idleDegreeIncrease)
 {
 	IdleCircleData* data = Get_Component(C_IdleCircleData, entity);
-	Do_MoveCircle2(entity, data->mIdleDegree, 0, radius, useX, useY);
+	Do_MoveCircle2(entity, (float)data->mIdleDegree, 0, radius, useX, useY);
 	data->mIdleDegree += idleDegreeIncrease;
 }
 
@@ -1152,12 +1153,12 @@ void Do_SetIgnoringTransitions(Entity entity, bool value)
 	Do_SetBoolTag(C_TagIsIgnoringTransitions, entity, value);
 }
 
-void Do_DrawBodyRectangle(Entity entity, SpriteBatch* spriteBatch, double delta, int depth, Color color)
+void Do_DrawBodyRectangle(Entity entity, SpriteBatch* spriteBatch, double delta, int32_t depth, Color color)
 {
 	//TODO C99Body_DrawBody(Get_Body(entity), spriteBatch, delta, depth, color);
 }
 
-void Do_SetDepthOverride(Entity entity, int value)
+void Do_SetDepthOverride(Entity entity, int32_t value)
 {
 	Get_DrawActor(entity)->mUniversalDepthOverride = value;
 }
@@ -1167,17 +1168,17 @@ void Do_ResetDepthOverride(Entity entity)
 	Do_SetDepthOverride(entity, -1);
 }
 
-void Do_SetDepthOverride2(Entity entity, int state, int value)
+void Do_SetDepthOverride2(Entity entity, int32_t state, int32_t value)
 {
 	DrawActorSys_SetDepthOverride(entity, state, value);
 }
 
-void Do_ResetDepthOverride2(Entity entity, int state)
+void Do_ResetDepthOverride2(Entity entity, int32_t state)
 {
 	Do_SetDepthOverride2(entity, state, -1);
 }
 
-void Do_SetDrawExtraPasses(Entity entity, int extra)
+void Do_SetDrawExtraPasses(Entity entity, int32_t extra)
 {
 	Get_DrawActor(entity)->mExtraPasses = extra;
 }
@@ -1201,7 +1202,7 @@ void Do_DrawFullscreenRectangle(SpriteBatch* spriteBatch, Color color)
 		*/
 }
 
-void Do_SetAnimationTimeLimit(Entity entity, int state, int phase, int time)
+void Do_SetAnimationTimeLimit(Entity entity, int32_t state, int32_t phase, int32_t time)
 {
 	Get_Animation(entity, state, phase)->mFlipTimer.mLimit = time;
 }
@@ -1211,7 +1212,7 @@ void Do_SetShader(Entity entity, ShaderProgram* program)
 	Get_DrawActor(entity)->mShaderProgram = program;
 }
 
-void Do_SetShader2(Entity entity, int state, ShaderProgram* program)
+void Do_SetShader2(Entity entity, int32_t state, ShaderProgram* program)
 {
 	DrawActorSys_SetShaderProgram(entity, state, program);
 }
@@ -1234,7 +1235,7 @@ void Do_SetupShaderSingleColorReplace2(ShaderProgram* program, uint8_t targetR, 
 	//TODO2024program.mEffect.Parameters["ColorReplace"].SetValue(new Vector4(replaceR, replaceG, replaceB, alpha));
 }
 
-void Do_SetupShaderMultiColorLength(ShaderProgram* program, int length)
+void Do_SetupShaderMultiColorLength(ShaderProgram* program, int32_t length)
 {
 	/*
 	program->mShaderType = OeRenderer_SHADER_TYPE_MULTI_COLOR_REPLACE;
@@ -1249,13 +1250,13 @@ ShaderProgram* Do_CreateShader(const char* name)
 	//return ShaderProgram_LoadShader(name);
 }
 
-void Do_SetupShaderMultiColor(ShaderProgram* program, int i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
+void Do_SetupShaderMultiColor(ShaderProgram* program, int32_t i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
 	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB)
 {
 	Do_SetupShaderMultiColor2(program, i, targetR, targetG, targetB, replaceR, replaceG, replaceB, 255);
 }
 
-void Do_SetupShaderMultiColor2(ShaderProgram* program, int i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
+void Do_SetupShaderMultiColor2(ShaderProgram* program, int32_t i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
 	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB, uint8_t alpha)
 {
 	/*
@@ -1271,7 +1272,7 @@ void Do_SetupShaderMultiColor2(ShaderProgram* program, int i, uint8_t targetR, u
 	*/
 }
 
-Body* Do_InitBody(Entity entity, int width, int height)
+Body* Do_InitBody(Entity entity, int32_t width, int32_t height)
 {
 	Body* body = Do_InitComponent(C_Body, entity);
 	Body_Setup(body, width, height, false);
@@ -1279,7 +1280,7 @@ Body* Do_InitBody(Entity entity, int width, int height)
 	return body;
 }
 
-Body* Do_InitExtraBody(Entity entity, int width, int height, bool isFollower)
+Body* Do_InitExtraBody(Entity entity, int32_t width, int32_t height, bool isFollower)
 {
 	Entity newBodyEntity = Do_BuildNewEntity();
 	Do_SetParentNumber(newBodyEntity, entity);
@@ -1318,13 +1319,13 @@ void Do_SetUpdateAndDrawDisabled(Entity entity, bool value)
 	Do_SetDrawDisabled(entity, value);
 }
 
-void Do_SetStunFrames(Entity entity, int value)
+void Do_SetStunFrames(Entity entity, int32_t value)
 {
 	StunFrames* component = Get_Component(C_StunFrames, entity);
 	component->mTag = value;
 }
 
-void Do_SetStateRotation(Entity entity, int state, float rotation)
+void Do_SetStateRotation(Entity entity, int32_t state, float rotation)
 {
 	DrawActorSys_SetStateRotation(entity, state, rotation);
 }
@@ -1352,7 +1353,7 @@ void Do_SetComplete(Entity entity)
 	Do_SetBoolTag(C_TagIsComplete, entity, true);
 }
 
-void Do_SetGridPosition(Entity entity, int x, int y)
+void Do_SetGridPosition(Entity entity, int32_t x, int32_t y)
 {
 	GridPosition* gridPosition = Get_Component(C_GridPosition, entity);
 	gridPosition->mGridPosition.X = x;
@@ -1375,13 +1376,13 @@ void Do_SetName(Entity entity, const char* name)
 	Name* component = Get_Component(C_Name, entity);
 	component->mName = name;
 }
-void Do_SetDrawOffset(Entity entity, int x, int y)
+void Do_SetDrawOffset(Entity entity, int32_t x, int32_t y)
 {
 	DrawActor* drawActor = Get_DrawActor(entity);
-	drawActor->mOffset.X = x;
-	drawActor->mOffset.Y = y;
+	drawActor->mOffset.X = (float)x;
+	drawActor->mOffset.Y = (float)y;
 }
-void Do_DrawLineOfSight(Entity entity, SpriteBatch* spriteBatch, float offsetX, float offsetY, bool limit, int limitAngle)
+void Do_DrawLineOfSight(Entity entity, SpriteBatch* spriteBatch, float offsetX, float offsetY, bool limit, int32_t limitAngle)
 {
 	if (!GLOBALS_DEBUG_SHOW_INGAME_COLLISION)
 	{
@@ -1406,7 +1407,7 @@ void Do_MoveCircle2(Entity entity, float degree, float degreeOffset, float radiu
 {
 	Do_MoveCircle3(entity, degree, degreeOffset, radius, useX, useY, 1, 1, 1, 1);
 }
-void Do_MoveCircle3(Entity entity, float degree, float degreeOffset, float radius, bool useX, bool useY, int directionX, int directionY, float mulX, float mulY)
+void Do_MoveCircle3(Entity entity, float degree, float degreeOffset, float radius, bool useX, bool useY, int32_t directionX, int32_t directionY, float mulX, float mulY)
 {
 	float x = (float)Get_CurrentCircleX(degree, degreeOffset, radius);
 	float y = (float)Get_CurrentCircleY(degree, degreeOffset, radius);
@@ -1438,11 +1439,11 @@ void Do_DefaultQuickDebugCamera(Entity entity)
 	}
 	*/
 }
-void Do_LoopSound(const char* sound, int number)
+void Do_LoopSound(const char* sound, int32_t number)
 {
 	SoundEffect_LoopSound(sound, number);
 }
-void Do_SynchronizeAnimation(Entity entity, int state, int phase)
+void Do_SynchronizeAnimation(Entity entity, int32_t state, int32_t phase)
 {
 	Animation* anim = Get_Animation(entity, state, phase);
 	Do_SynchronizeAnimation2(anim);
@@ -1457,37 +1458,37 @@ void Do_SynchronizeAnimation2(Animation* anim)
 	anim->mFrameTimer.mCurrent = frame;
 	anim->mFlipTimer.mCurrent = time;
 }
-void Do_Vibrate(int player, int priority, int frames, float leftMotor, float rightMotor)
+void Do_Vibrate(int player, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
 	//TODO Input_GetPlayer(player)->Vibrate(priority, frames, leftMotor, rightMotor);
 }
-void Do_Vibrate2(Entity entity, int priority, int frames, float leftMotor, float rightMotor)
+void Do_Vibrate2(Entity entity, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
 	Do_Vibrate(Get_PlayerNumber(entity), priority, frames, leftMotor, rightMotor);
 }
-void Do_RandomShake(Entity entity, int state, int amount)
+void Do_RandomShake(Entity entity, int32_t state, int32_t amount)
 {
 	int amountX = Get_RandomBinaryDirection(Globals_GetSharedRandom()) * amount;
 	int amountY = Get_RandomBinaryDirection(Globals_GetSharedRandom()) * amount;
 	Do_Shake(entity, state, amountX, amountY);
 }
-void Do_RandomShake2(Entity entity, int amount)
+void Do_RandomShake2(Entity entity, int32_t amount)
 {
 	int nudgeX = Get_RandomBinaryDirection(Globals_GetSharedRandom()) * amount;
 	int nudgeY = Get_RandomBinaryDirection(Globals_GetSharedRandom()) * amount;
 	Vector2* universalNudge = &Get_DrawActor(entity)->mUniversalNudge;
-	universalNudge->X = nudgeX;
-	universalNudge->Y = nudgeY;
+	universalNudge->X = (float)nudgeX;
+	universalNudge->Y = (float)nudgeY;
 }
-void Do_Shake(Entity entity, int state, int amountX, int amountY)
+void Do_Shake(Entity entity, int32_t state, int32_t amountX, int32_t amountY)
 {
-	DrawActorSys_SetNudge(entity, state, amountX, amountY);
+	DrawActorSys_SetNudge(entity, state, (float)amountX, (float)amountY);
 }
 void Do_ClearShake(Entity entity)
 {
 	Get_DrawActor(entity)->mUniversalNudge = Vector2_Zero;
 }
-void Do_ClearShake2(Entity entity, int state)
+void Do_ClearShake2(Entity entity, int32_t state)
 {
 	Do_Shake(entity, state, 0, 0);
 }
@@ -1499,7 +1500,7 @@ ParticleInstance* Do_AddParticle2(const char* name, Vector2 absolutePos)
 {
 	return Do_AddParticle5(name, absolutePos.X, absolutePos.Y, 0, 0);
 }
-ParticleInstance* Do_AddParticle3(const char* name, Vector2 absolutePos, int rangeX, int rangeY)
+ParticleInstance* Do_AddParticle3(const char* name, Vector2 absolutePos, int32_t rangeX, int32_t rangeY)
 {
 	return Do_AddParticle5(name, absolutePos.X, absolutePos.Y, rangeX, rangeY);
 }
@@ -1507,7 +1508,7 @@ ParticleInstance* Do_AddParticle4(const char* name, float absoluteX, float absol
 {
 	return Do_AddParticle5(name, absoluteX, absoluteY, 0, 0);
 }
-ParticleInstance* Do_AddParticle5(const char* name, float absoluteX, float absoluteY, int rangeX, int rangeY)
+ParticleInstance* Do_AddParticle5(const char* name, float absoluteX, float absoluteY, int32_t rangeX, int32_t rangeY)
 {
 	Point rangePoint = { rangeX, rangeY };
 	Point randomWrappedPointInRange = Get_RandomPointInBounds(rangePoint, true, Get_SharedRandom());
@@ -1515,19 +1516,19 @@ ParticleInstance* Do_AddParticle5(const char* name, float absoluteX, float absol
 	absoluteY += randomWrappedPointInRange.Y;
 	return GameState_GetParticleInstance(Get_ActiveGameState(), name, absoluteX, absoluteY);
 }
-void Do_AddParticles(const char* name, Vector2 absolutePos, int amount)
+void Do_AddParticles(const char* name, Vector2 absolutePos, int32_t amount)
 {
 	Do_AddParticles4(name, absolutePos.X, absolutePos.Y, amount, 0, 0);
 }
-void Do_AddParticles2(const char* name, float absoluteX, float absoluteY, int amount)
+void Do_AddParticles2(const char* name, float absoluteX, float absoluteY, int32_t amount)
 {
 	Do_AddParticles4(name, absoluteX, absoluteY, amount, 0, 0);
 }
-void Do_AddParticles3(const char* name, Vector2 absolutePos, int amount, int rangeX, int rangeY)
+void Do_AddParticles3(const char* name, Vector2 absolutePos, int32_t amount, int32_t rangeX, int32_t rangeY)
 {
 	Do_AddParticles4(name, absolutePos.X, absolutePos.Y, amount, rangeX, rangeY);
 }
-void Do_AddParticles4(const char* name, float absoluteX, float absoluteY, int amount, int rangeX, int rangeY)
+void Do_AddParticles4(const char* name, float absoluteX, float absoluteY, int32_t amount, int32_t rangeX, int32_t rangeY)
 {
 	for (int i = 0; i < amount; i++)
 	{
@@ -1570,11 +1571,11 @@ void Do_DestroyParticlesByName(const char* name)
 		}
 	}
 }
-void Do_ImprintTile(Vector2 position, int type)
+void Do_ImprintTile(Vector2 position, int32_t type)
 {
 	Do_ImprintTile2(position, type, 0, 0);
 }
-void Do_ImprintTile2(Vector2 position, int type, int offsetX, int offsetY)
+void Do_ImprintTile2(Vector2 position, int32_t type, int32_t offsetX, int32_t offsetY)
 {
 	CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), position.X + offsetX, position.Y + offsetY, 1, 1, type);
 }
@@ -1582,23 +1583,23 @@ void Do_ImprintTile3(int type, float x, float y)
 {
 	CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), x, y, 1, 1, type);
 }
-void Do_ImprintTile4(int type, float x, float y, int offsetX, int offsetY)
+void Do_ImprintTile4(int type, float x, float y, int32_t offsetX, int32_t offsetY)
 {
 	CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), x + offsetX, y + offsetY, 1, 1, type);
 }
-void Do_ImprintTiles(Entity entity, float x, float y, int type, int amountX, int amountY)
+void Do_ImprintTiles(Entity entity, float x, float y, int32_t type, int32_t amountX, int32_t amountY)
 {
 	CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), x, y, amountX, amountY, type);
 }
-void Do_ImprintTiles2(Vector2 position, int type, int width, int height)
+void Do_ImprintTiles2(Vector2 position, int32_t type, int32_t width, int32_t height)
 {
 	Do_ImprintTiles3(position, type, width, height, 0, 0);
 }
-void Do_ImprintTiles3(Vector2 position, int type, int width, int height, int offsetX, int offsetY)
+void Do_ImprintTiles3(Vector2 position, int32_t type, int32_t width, int32_t height, int32_t offsetX, int32_t offsetY)
 {
 	CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), position.X + offsetX, position.Y + offsetY, width, height, type);
 }
-void Do_ImprintTiles4(int type, float x, float y, int width, int height)
+void Do_ImprintTiles4(int type, float x, float y, int32_t width, int32_t height)
 {
 	CollisionEngineSys_ImprintToCollisionGrid(Get_CollisionEngine(), x, y, width, height, type);
 }
@@ -1618,7 +1619,7 @@ void Do_SetFlipX3(Entity entity, double value)
 {
 	Do_SetFlipX(entity, value < 0);
 }
-void Do_SetFlipX4(Entity entity, int value)
+void Do_SetFlipX4(Entity entity, int32_t value)
 {
 	Do_SetFlipX(entity, value < 0);
 }
@@ -1638,19 +1639,19 @@ void Do_SetFlipY3(Entity entity, double value)
 {
 	Do_SetFlipY(entity, value < 0);
 }
-void Do_SetFlipY4(Entity entity, int value)
+void Do_SetFlipY4(Entity entity, int32_t value)
 {
 	Do_SetFlipY(entity, value < 0);
 }
-void Do_AddCameraShake(int timerLimit, int minX, int maxX, int minY, int maxY)
+void Do_AddCameraShake(int timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
 	//SpecialShakeCameraSys_Create(timerLimit, minX, maxX, minY, maxY);
 }
-void Do_ShakeCamera(int minX, int maxX, int minY, int maxY)
+void Do_ShakeCamera(int minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
 	Camera_ShakeCamera(Get_Camera(), minX, maxX, minY, maxY);
 }
-void Do_AddCameraShakeWhileOnScreen(Entity entity, int timerLimit, int minX, int maxX, int minY, int maxY, float mul)
+void Do_AddCameraShakeWhileOnScreen(Entity entity, int32_t timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY, float mul)
 {
 	if (Is_OnScreen2(entity, mul))
 	{
@@ -1681,7 +1682,7 @@ void Do_FaceSomewhere2(Entity entity, float x, bool reverse)
 	}
 }
 /*
-void Do_ResetFrameTimers(std_vector<Timer>& timers, int time)
+void Do_ResetFrameTimers(std_vector<Timer>& timers, int32_t time)
 {
 	for (int i = 0; i < timers.size(); i++)
 	{
@@ -1689,7 +1690,7 @@ void Do_ResetFrameTimers(std_vector<Timer>& timers, int time)
 	}
 }
 */
-void Do_ResetFrameTimer(Timer* timer, int time)
+void Do_ResetFrameTimer(Timer* timer, int32_t time)
 {
 	Timer_Reset(timer);
 	timer->mLimit = time;
@@ -1698,7 +1699,7 @@ void Do_ResetFrameTimer2(Timer* timer)
 {
 	Timer_Reset(timer);
 }
-void Do_ResetEaseTimer(TimerDouble* timer, int time)
+void Do_ResetEaseTimer(TimerDouble* timer, int32_t time)
 {
 	//TimerDouble_Setup(timer, time);
 }
@@ -1789,7 +1790,7 @@ void Do_PlayMusic2(const char* nextTrack, bool isLooping, bool isForced)
 {
 	Do_PlayMusic3(nextTrack, isLooping, isForced, false, 0, false, 0);
 }
-void Do_PlayMusic3(const char* name, bool isLooping, bool isForced, bool isFadeIn, int fadeInTime, bool isFadeOut, int fadeOutTime)
+void Do_PlayMusic3(const char* name, bool isLooping, bool isForced, bool isFadeIn, int32_t fadeInTime, bool isFadeOut, int32_t fadeOutTime)
 {
 	Music_PlayMusic(name, isLooping, isForced, isFadeIn, fadeInTime, isFadeOut, fadeOutTime);
 }
@@ -1851,27 +1852,27 @@ void Do_KillIfUnderCamera(Entity entity)
 		Do_SetComplete(entity);
 	}
 }
-void Do_SetDrawDisabledByModuloOverHalf(Entity entity, int value)
+void Do_SetDrawDisabledByModuloOverHalf(Entity entity, int32_t value)
 {
 	Do_SetDrawDisabledByModuloOverHalf2(entity, value, Get_LevelFrameCount());
 }
-void Do_SetDrawDisabledByModuloOverHalf2(Entity entity, int value, int source)
+void Do_SetDrawDisabledByModuloOverHalf2(Entity entity, int32_t value, int32_t source)
 {
 	Do_SetDrawDisabled(entity, source % value >= value / 2);
 }
-void Do_SetDrawDisabledByModulo(Entity entity, int value, int target)
+void Do_SetDrawDisabledByModulo(Entity entity, int32_t value, int32_t target)
 {
 	Do_SetDrawDisabledByModulo2(entity, value, target, Get_LevelFrameCount());
 }
-void Do_SetDrawDisabledByModulo2(Entity entity, int value, int target, int source)
+void Do_SetDrawDisabledByModulo2(Entity entity, int32_t value, int32_t target, int32_t source)
 {
 	Do_SetDrawDisabled(entity, source % value == target);
 }
-void Do_SetColorByModulo(Entity entity, Color tint, int value, int target)
+void Do_SetColorByModulo(Entity entity, Color tint, int32_t value, int32_t target)
 {
 	Do_SetColorByModulo2(entity, tint, value, target, Get_LevelFrameCount());
 }
-void Do_SetColorByModulo2(Entity entity, Color tint, int value, int target, int source)
+void Do_SetColorByModulo2(Entity entity, Color tint, int32_t value, int32_t target, int32_t source)
 {
 	if (source % value == target)
 	{
@@ -1882,11 +1883,11 @@ void Do_SetColorByModulo2(Entity entity, Color tint, int value, int target, int 
 		Do_SetColor(entity, COLOR_WHITE);
 	}
 }
-void Do_SetColorByModuloOverHalf(Entity entity, Color tint, int value)
+void Do_SetColorByModuloOverHalf(Entity entity, Color tint, int32_t value)
 {
 	Do_SetColorByModuloOverHalf2(entity, tint, value, Get_LevelFrameCount());
 }
-void Do_SetColorByModuloOverHalf2(Entity entity, Color tint, int value, int source)
+void Do_SetColorByModuloOverHalf2(Entity entity, Color tint, int32_t value, int32_t source)
 {
 	if (source % value >= value / 2)
 	{
@@ -1897,11 +1898,11 @@ void Do_SetColorByModuloOverHalf2(Entity entity, Color tint, int value, int sour
 		Do_SetColor(entity, COLOR_WHITE);
 	}
 }
-void Do_SetHitFlashByModulo(Entity entity, int value, int target)
+void Do_SetHitFlashByModulo(Entity entity, int32_t value, int32_t target)
 {
 	Do_SetHitFlashByModulo2(entity, value, target, Get_LevelFrameCount());
 }
-void Do_SetHitFlashByModulo2(Entity entity, int value, int target, int source)
+void Do_SetHitFlashByModulo2(Entity entity, int32_t value, int32_t target, int32_t source)
 {
 	if (source % value == target)
 	{
@@ -1912,11 +1913,11 @@ void Do_SetHitFlashByModulo2(Entity entity, int value, int target, int source)
 		Do_SetShader(entity, NULL);
 	}
 }
-void Do_SetHitFlashByModuloOverHalf(Entity entity, int value)
+void Do_SetHitFlashByModuloOverHalf(Entity entity, int32_t value)
 {
 	Do_SetHitFlashByModuloOverHalf2(entity, value, Get_LevelFrameCount());
 }
-void Do_SetHitFlashByModuloOverHalf2(Entity entity, int value, int source)
+void Do_SetHitFlashByModuloOverHalf2(Entity entity, int32_t value, int32_t source)
 {
 	if (source % value >= value / 2)
 	{
@@ -1929,7 +1930,7 @@ void Do_SetHitFlashByModuloOverHalf2(Entity entity, int value, int source)
 }
 bool Do_MoveSomewherePoint(Entity entity, Point target, float speed)
 {
-	return Do_MoveSomewhere(entity, target.X, target.Y, speed);
+	return Do_MoveSomewhere(entity, (float)target.X, (float)target.Y, speed);
 }
 bool Do_MoveSomewhereVector2(Entity entity, Vector2 target, float speed)
 {
@@ -1976,29 +1977,29 @@ bool Do_MoveSomewhereToVector(Vector2* moveThis, Vector2 target, float speed)
 		return true;
 	}
 }
-void Do_SetImage(Entity entity, int state, int phase)
+void Do_SetImage(Entity entity, int32_t state, int32_t phase)
 {
 	if (!Is_ImagePhaseTheSame(entity, state, phase))
 	{
 		Do_SetImageForced(entity, state, phase);
 	}
 }
-void Do_SetImage2(Entity entity, int state, int phase, bool carry)
+void Do_SetImage2(Entity entity, int32_t state, int32_t phase, bool carry)
 {
 	if (!Is_ImagePhaseTheSame(entity, state, phase))
 	{
 		Do_SetImageForced2(entity, state, phase, carry);
 	}
 }
-void Do_SetImageForced(Entity entity, int state, int phase)
+void Do_SetImageForced(Entity entity, int32_t state, int32_t phase)
 {
 	Do_SetImageForced2(entity, state, phase, false);
 }
-void Do_SetImageForced2(Entity entity, int state, int phase, bool carry)
+void Do_SetImageForced2(Entity entity, int32_t state, int32_t phase, bool carry)
 {
 	DrawActorSys_SetImageState2(entity, Get_DrawActor(entity), state, phase, carry);
 }
-Entity Do_AddAnimation(Entity entity, float x, float y, int timeLimit, const char* name)
+Entity Do_AddAnimation(Entity entity, float x, float y, int32_t timeLimit, const char* name)
 {
 	//TODO
 	return ENTITY_NOTHING;
@@ -2007,11 +2008,11 @@ void Do_RestrictOnSides(Entity entity)
 {
 	if (Is_LeftOfCamera(entity))
 	{
-		Body_ForcePosition(Get_Body(entity), Camera_GetLeft(Get_Camera()), Get_Y(entity));
+		Body_ForcePosition(Get_Body(entity), (float)Camera_GetLeft(Get_Camera()), Get_Y(entity));
 	}
 	if (Is_RightOfCamera(entity))
 	{
-		Body_ForcePosition(Get_Body(entity), Camera_GetRight(Get_Camera()), Get_Y(entity));
+		Body_ForcePosition(Get_Body(entity), (float)Camera_GetRight(Get_Camera()), Get_Y(entity));
 	}
 }
 void Do_SetColor(Entity entity, Color color)
@@ -2020,7 +2021,7 @@ void Do_SetColor(Entity entity, Color color)
 }
 void Do_MovePoint(Entity entity, Point move, float speed)
 {
-	Do_Move(entity, move.X, move.Y, speed);
+	Do_Move(entity, (float)move.X, (float)move.Y, speed);
 }
 void Do_MoveVector2(Entity entity, Vector2 move, float speed)
 {
@@ -2032,7 +2033,7 @@ void Do_Move(Entity entity, float x, float y, float speed)
 }
 void Do_MovePointAbsolute(Entity entity, Point move)
 {
-	Do_MoveAbsolute(entity, move.X, move.Y);
+	Do_MoveAbsolute(entity, (float)move.X, (float)move.Y);
 }
 void Do_MoveVector2Absolute(Entity entity, Vector2 move)
 {
@@ -2060,11 +2061,11 @@ void Do_MoveAtAngle(Entity entity, double angle, float speed)
 	float moveY = (float)tempY;
 	Do_MoveAbsolute(entity, moveX, moveY);
 }
-void Do_AddBrDeathEffect(Entity entity, int state, int phase)
+void Do_AddBrDeathEffect(Entity entity, int32_t state, int32_t phase)
 {
 	//DrawActorSys_CreateExplosionModules(entity, state, phase, 60, 1);
 }
-void Do_AddNdDeathEffect(Entity entity, int state, int phase)
+void Do_AddNdDeathEffect(Entity entity, int32_t state, int32_t phase)
 {
 	//DrawActorSys_CreateExplosionModules(entity, state, phase, 240, 0);
 }
@@ -2150,7 +2151,7 @@ HitFlashKit* Get_HitFlashKit(Entity entity)
 {
 	return Get_Component(C_HitFlashKit, entity);
 }
-int DeprecatedGet_Tag(Entity entity, int whatever)
+int DeprecatedGet_Tag(Entity entity, int32_t whatever)
 {
 	//TODO
 	return -1;
@@ -2169,7 +2170,7 @@ int Get_AttackId()
 	_mAttackIdCounter++;
 	return returnValue;
 }
-int Get_LengthUntilTiles(int xPos, int yPos, int directionX, int directionY)
+int Get_LengthUntilTiles(int xPos, int32_t yPos, int32_t directionX, int32_t directionY)
 {
 	return 0;
 	/*
@@ -2338,11 +2339,11 @@ float Get_AdjustedMouseY()
 }
 float Get_MouseX()
 {
-	return Input_GetMouseX();
+	return (float)Input_GetMouseX();
 }
 float Get_MouseY()
 {
-	return Input_GetMouseY();
+	return (float)Input_GetMouseY();
 }
 Color Get_Color(Entity entity)
 {
@@ -2352,7 +2353,7 @@ CollisionEngine* Get_CollisionEngine()
 {
 	return Get_FirstSetComponent(C_CollisionEngine);
 }
-Point Get_Node(Entity entity, int i)
+Point Get_Node(Entity entity, int32_t i)
 {
 	Point* nodes = Get_GridNodes(entity);
 	if (arrlen(nodes) == 0)
@@ -2366,7 +2367,7 @@ Point Get_Node(Entity entity, int i)
 	int positionY = (node->Y + gridPosition.Y) * TILE_SIZE + HALF_TILE_SIZE;
 	return Point_Create(positionX, positionY);
 }
-Point Get_NodeAsGrid(Entity entity, int i)
+Point Get_NodeAsGrid(Entity entity, int32_t i)
 {
 	Point* nodes = Get_GridNodes(entity);
 	if (arrlen(nodes) == 0) //TODO 2024 THIS NEEDS SAFETY
@@ -2376,19 +2377,19 @@ Point Get_NodeAsGrid(Entity entity, int i)
 
 	return nodes[i];
 }
-int Get_IndexOfRandomNode(Entity entity, Random32* random)
+int32_t Get_IndexOfRandomNode(Entity entity, Random32* random)
 {
 	return Get_IndexOfRandomNode2(entity, random, -1);
 }
-int Get_IndexOfRandomNode2(Entity entity, Random32* random, int ignore)
+int32_t Get_IndexOfRandomNode2(Entity entity, Random32* random, int32_t ignore)
 {
 	Point* nodes = Get_GridNodes(entity);
 	if (arrlen(nodes) == 0)
 	{
 		return -1;
 	}
-	int count = arrlen(nodes);
-	int index = Random32_NextInt(random, count);
+	int64_t count = arrlen(nodes);
+	int32_t index = Random32_NextInt(random, (int32_t)count);
 
 	if (ignore != -1)
 	{
@@ -2400,19 +2401,19 @@ int Get_IndexOfRandomNode2(Entity entity, Random32* random, int ignore)
 
 	return index;
 }
-int Get_AmountOfNodes(Entity entity)
+int32_t Get_AmountOfNodes(Entity entity)
 {
-	return arrlen(Get_GridNodes(entity));
+	return (int32_t)arrlen(Get_GridNodes(entity));
 }
 Point Get_RandomNode(Entity entity, Random32* random)
 {
 	return Get_RandomNode2(entity, random, -1);
 }
-Point Get_RandomNode2(Entity entity, Random32* random, int ignore)
+Point Get_RandomNode2(Entity entity, Random32* random, int32_t ignore)
 {
 	return Get_Node(entity, Get_IndexOfRandomNode2(entity, random, ignore));
 }
-int Get_IndexOfClosestNodeToPlayerX(Entity entity, int losOffsetX, int losOffsetY)
+int Get_IndexOfClosestNodeToPlayerX(Entity entity, int32_t losOffsetX, int32_t losOffsetY)
 {
 	if (!Is_NodesPresent(entity))
 	{
@@ -2421,7 +2422,7 @@ int Get_IndexOfClosestNodeToPlayerX(Entity entity, int losOffsetX, int losOffset
 
 	float playerX = Get_PlayerX();
 	float playerY = Get_PlayerY();
-	int amountOfNodes = Get_AmountOfNodes(entity);
+	int64_t amountOfNodes = Get_AmountOfNodes(entity);
 	if (amountOfNodes > 0)
 	{
 		float value = FLT_MAX;
@@ -2438,9 +2439,9 @@ int Get_IndexOfClosestNodeToPlayerX(Entity entity, int losOffsetX, int losOffset
 			else if (dist == value) //on same X
 			{
 				Point indexNode = Get_Node(entity, index);
-				if (!Is_LineOfSight2(indexNode.X + losOffsetX, indexNode.Y + losOffsetY, playerX, playerY))
+				if (!Is_LineOfSight2((float)(indexNode.X + losOffsetX), (float)(indexNode.Y + losOffsetY), playerX, playerY))
 				{
-					if (Is_LineOfSight2(currentNode.X + losOffsetX, currentNode.Y + losOffsetY, playerX, playerY))
+					if (Is_LineOfSight2((float)(currentNode.X + losOffsetX), (float)(currentNode.Y + losOffsetY), playerX, playerY))
 					{
 						index = i;
 					}
@@ -2462,7 +2463,7 @@ int Get_IndexOfClosestNodeToThing(Entity entity, Entity target)
 	}
 
 	float targetX = Get_X(target);
-	int amountOfNodes = Get_AmountOfNodes(entity);
+	int64_t amountOfNodes = Get_AmountOfNodes(entity);
 	if (amountOfNodes > 0)
 	{
 		float value = FLT_MAX;
@@ -2483,14 +2484,14 @@ int Get_IndexOfClosestNodeToThing(Entity entity, Entity target)
 		return -1;
 	}
 }
-Point Get_ClosestNodeToPlayerX(Entity entity, int losOffsetX, int losOffsetY)
+Point Get_ClosestNodeToPlayerX(Entity entity, int32_t losOffsetX, int32_t losOffsetY)
 {
 	return Get_Node(entity, Get_IndexOfClosestNodeToPlayerX(entity, losOffsetX, losOffsetY));
 }
 Point Get_ClosestNodeToPlayerY(Entity entity)
 {
 	float playerY = Get_PlayerY();
-	int amountOfNodes = Get_AmountOfNodes(entity);
+	int64_t amountOfNodes = Get_AmountOfNodes(entity);
 	if (amountOfNodes > 0)
 	{
 		float value = FLT_MAX;
@@ -2533,7 +2534,7 @@ int Get_ParentNumber(Entity entity)
 		return component->mTag;
 	}
 }
-void Do_SetParentNumber(Entity entity, int value)
+void Do_SetParentNumber(Entity entity, int32_t value)
 {
 	ParentNumber* component = Get_Component(C_ParentNumber, entity);
 	component->mTag = value;
@@ -2596,7 +2597,7 @@ Point Get_GridPosition(Entity entity)
 		return component->mGridPosition;
 	}
 }
-int Get_CurrentImagePhase(Entity entity, int state)
+int Get_CurrentImagePhase(Entity entity, int32_t state)
 {
 	return DrawActorSys_GetCurrentPhase(entity, state);
 }
@@ -2653,7 +2654,7 @@ int Get_PlayerNumber(Entity entity)
 		return component->mTag;
 	}
 }
-void Do_SetPlayerNumber(Entity entity, int playerNumber)
+void Do_SetPlayerNumber(Entity entity, int32_t playerNumber)
 {
 	PlayerNumber* component = Get_Component(C_PlayerNumber, entity);
 	component->mTag = playerNumber;
@@ -2672,7 +2673,7 @@ Resource* Get_LevelDataResource()
 }
 const char* Get_LevelFileName()
 {
-	return Get_LevelDataResource()->mFileNameWithoutExtension;
+	return MString_GetText(Get_LevelDataResource()->mFileNameWithoutExtension);
 }
 Rectangle Get_BodyRectangle(Entity entity)
 {
@@ -2682,7 +2683,7 @@ Body* Get_Body(Entity entity)
 {
 	return Get_Component(C_Body, entity);
 }
-Body* Get_Body2(Entity entity, int number)
+Body* Get_Body2(Entity entity, int32_t number)
 {
 	//TODO
 	/*
@@ -2799,14 +2800,14 @@ int Get_RandomValidSpot5(Entity entity, Random32* random, Vector2* spotTo, bool 
 	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, lockToTile, anchorX, anchorY, minLimitToAnchor, maxLimitToAnchor, minLimitToCurrentSpot, maxLimitToCurrentSpot, 0);
 }
 int Get_RandomValidSpot6(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX,
-	float anchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int validityCondition)
+	float anchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int32_t validityCondition)
 {
 	return 0;
 	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, lockToTile, anchorX, anchorY, minLimitToAnchor, maxLimitToAnchor,
 	//	minLimitToCurrentSpot, maxLimitToCurrentSpot, validityCondition, -1, -1);
 }
 int Get_RandomValidSpot7(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float distAnchorX,
-	float distAnchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int validityCondition, float lineOfSightAnchorX, float lineOfSightAnchorY)
+	float distAnchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int32_t validityCondition, float lineOfSightAnchorX, float lineOfSightAnchorY)
 {
 	float currentSpotX = spotTo->X;
 	float currentSpotY = spotTo->Y;
@@ -2832,8 +2833,8 @@ int Get_RandomValidSpot7(Entity entity, Random32* random, Vector2* spotTo, bool 
 	}
 
 	Camera* camera = Get_Camera();
-	float left = Camera_GetLeft(camera);
-	float top = Camera_GetTop(camera);
+	float left = (float)Camera_GetLeft(camera);
+	float top = (float)Camera_GetTop(camera);
 
 	float newX = -1;
 	float newY = -1;
@@ -2876,8 +2877,8 @@ int Get_RandomValidSpot7(Entity entity, Random32* random, Vector2* spotTo, bool 
 
 		if (lockToTile)
 		{
-			newX = Get_ValueLockedToTileSize(newX);
-			newY = Get_ValueLockedToTileSize(newY);
+			newX = (float)Get_ValueLockedToTileSize(newX);
+			newY = (float)Get_ValueLockedToTileSize(newY);
 
 			newX += TILE_SIZE / 2;
 			newY += TILE_SIZE / 2;
@@ -3026,7 +3027,7 @@ const char* Get_TuningNameAsFloat(Entity entity, const char* dataName)
 	return Get_TuningName(entity, "FLT", dataName);
 }
 */
-int Get_ClampedValueAsInt(int value, int limit)
+int Get_ClampedValueAsInt(int value, int32_t limit)
 {
 	int signum = Math_SignumInt(value);
 	int abs = Math_abs(value);
@@ -3060,11 +3061,11 @@ double Get_ClampedValueAsDouble(double value, double limit)
 	return returnValue;
 }
 /*
-int Get_AmountOfTiles(float x, float y, int directionX, int directionY, std_vector<int> types)
+int Get_AmountOfTiles(float x, float y, int32_t directionX, int32_t directionY, std_vector<int> types)
 {
 	return Get_AmountOfTiles(x, y, directionX, directionY, types, -1);
 }
-int Get_AmountOfTiles(float x, float y, int directionX, int directionY, std_vector<int> types, int returnOnFailure)
+int Get_AmountOfTiles(float x, float y, int32_t directionX, int32_t directionY, std_vector<int> types, int32_t returnOnFailure)
 {
 	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
 
@@ -3135,11 +3136,11 @@ void Get_NearestTileDirectionAsPoint(Point* point, float x, float y, std_vector<
 		*point = OePoints_Left;
 	}
 }
-int Get_AmountOfTilesInDirection(float x, float y, int direction, int outOfBoundsExtra, std_vector<int> types)
+int Get_AmountOfTilesInDirection(float x, float y, int32_t direction, int32_t outOfBoundsExtra, std_vector<int> types)
 {
 	return Get_AmountOfTilesInDirection(x, y, direction, outOfBoundsExtra, types, -1);
 }
-int Get_AmountOfTilesInDirection(float x, float y, int direction, int outOfBoundsExtra, std_vector<int> types, int returnValue)
+int Get_AmountOfTilesInDirection(float x, float y, int32_t direction, int32_t outOfBoundsExtra, std_vector<int> types, int32_t returnValue)
 {
 	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
 
@@ -3167,11 +3168,11 @@ int Get_AmountOfTilesInDirection(float x, float y, int direction, int outOfBound
 
 	return -1;
 }
-int Get_LengthUntilTiles(int x, int y, int directionX, int directionY, int outOfBoundsExtra, std_vector<int> types)
+int Get_LengthUntilTiles(int x, int32_t y, int32_t directionX, int32_t directionY, int32_t outOfBoundsExtra, std_vector<int> types)
 {
 	return Get_LengthUntilTiles(x, y, directionX, directionY, outOfBoundsExtra, types, -1);
 }
-int Get_LengthUntilTiles(int x, int y, int directionX, int directionY, int outOfBoundsExtra, std_vector<int> types, int returnValue)
+int Get_LengthUntilTiles(int x, int32_t y, int32_t directionX, int32_t directionY, int32_t outOfBoundsExtra, std_vector<int> types, int32_t returnValue)
 {
 	int HARD_LIMIT = 100;
 
@@ -3213,15 +3214,15 @@ int Get_LengthUntilTiles(int x, int y, int directionX, int directionY, int outOf
 	return returnValue;
 }
 */
-Animation* Get_Animation(Entity entity, int state, int phase)
+Animation* Get_Animation(Entity entity, int32_t state, int32_t phase)
 {
 	return DrawActorSys_GetAnimation(entity, state, phase);
 }
-Animation* Get_CurrentAnimation(Entity entity, int state)
+Animation* Get_CurrentAnimation(Entity entity, int32_t state)
 {
 	return DrawActorSys_GetCurrentAnimation(entity, state);
 }
-void Get_PointDirectionFromEightWayIntegerDirection(Point* point, int value)
+void Get_PointDirectionFromEightWayIntegerDirection(Point* point, int32_t value)
 {
 	switch (value)
 	{
@@ -3306,7 +3307,7 @@ double Get_AngleToPlayer(Entity entity)
 {
 	return Get_AngleToThing(entity, Get_Player());
 }
-double Get_AngleToPlayer2(Entity entity, int i)
+double Get_AngleToPlayer2(Entity entity, int32_t i)
 {
 	return Get_AngleToThing(entity, Get_Player(i));
 }
@@ -3534,7 +3535,7 @@ Entity Get_ChildByName(Entity entity, const char* name)
 {
 	return Get_ChildByName2(entity, name, 0);
 }
-Entity Get_ChildByName2(Entity entity, const char* name, int number)
+Entity Get_ChildByName2(Entity entity, const char* name, int32_t number)
 {
 	return 0;
 	/*
@@ -3549,12 +3550,12 @@ Entity Get_ChildByName2(Entity entity, const char* name, int number)
 	}
 	*/
 }
-Entity Get_ChildByTag(Entity entity, int value)
+Entity Get_ChildByTag(Entity entity, int32_t value)
 {
 	return 0;
 	//return Get_ChildByTag(entity, value, 0);
 }
-Entity Get_ChildByTag2(Entity entity, int value, int number)
+Entity Get_ChildByTag2(Entity entity, int32_t value, int32_t number)
 {
 	return 0;
 	/*
@@ -3692,14 +3693,14 @@ int Get_RandomDirection(Random32* random)
 		return 0;
 	}
 }
-float Get_ArcVelocityX(float targetPosX, float throwPosX, int travelTime, float mul)
+float Get_ArcVelocityX(float targetPosX, float throwPosX, int32_t travelTime, float mul)
 {
 	float diffX = targetPosX - throwPosX;
 	float startVelX;
 	startVelX = diffX / travelTime;
 	return startVelX * mul;
 }
-float Get_ArcVelocityY(float targetPosY, float throwPosY, float grav, int travelTime, float mul)
+float Get_ArcVelocityY(float targetPosY, float throwPosY, float grav, int32_t travelTime, float mul)
 {
 	float diffY = targetPosY - throwPosY;
 	float startVelY;
@@ -3710,14 +3711,14 @@ int Get_LevelFrameCount()
 {
 	return ((LevelFrameCounter*)Get_FirstSetComponent(C_LevelFrameCounter))->mCounter;
 }
-int Get_CollisionBit(float posX, float posY, int tileOffsetX, int tileOffsetY)
+int Get_CollisionBit(float posX, float posY, int32_t tileOffsetX, int32_t tileOffsetY)
 {
 	return 0;/*
 	float bitX = posX + (tileOffsetX * TILE_SIZE);
 	float bitY = posY + (tileOffsetY * TILE_SIZE);
 	return CollisionEngineSys_GetCollisionBit(Get_CollisionEngine(), bitX, bitY);*/
 }
-int Get_CollisionBitSafe(float posX, float posY, int tileOffsetX, int tileOffsetY, int returnValue)
+int Get_CollisionBitSafe(float posX, float posY, int32_t tileOffsetX, int32_t tileOffsetY, int32_t returnValue)
 {
 	return 0;/*
 	float bitX = posX + (tileOffsetX * TILE_SIZE);
@@ -3762,11 +3763,11 @@ Entity Do_BuildActor4(float initialPositionX, float initialPositionY, ThingInsta
 {
 	return Do_BuildActor6(0, 0, initialPositionX, initialPositionY, instanceData, name, parent);
 }
-Entity Do_BuildActor5(int gridPositionX, int gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name)
+Entity Do_BuildActor5(int gridPositionX, int32_t gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name)
 {
 	return Do_BuildActor6(gridPositionX, gridPositionY, initialPositionX, initialPositionY, instanceData, name, ENTITY_NOTHING);
 }
-Entity Do_BuildActor6(int gridPositionX, int gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name, Entity parent)
+Entity Do_BuildActor6(int gridPositionX, int32_t gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name, Entity parent)
 {
 	ThingSettings* settings = ThingSettingsManager_GetResourceData(name);
 	if (settings == NULL)
@@ -3840,15 +3841,15 @@ void Do_SendBroadcast(int type)
 {
 	Do_SendBroadcast2(type, -1);
 }
-void Do_SendBroadcast2(int type, int packet1)
+void Do_SendBroadcast2(int type, int32_t packet1)
 {
 	Do_SendBroadcast3(type, packet1, -1);
 }
-void Do_SendBroadcast3(int type, int packet1, int packet2)
+void Do_SendBroadcast3(int type, int32_t packet1, int32_t packet2)
 {
 	Do_SendBroadcast4(type, packet1, packet2, -1);
 }
-void Do_SendBroadcast4(int type, int packet1, int packet2, int packet3)
+void Do_SendBroadcast4(int type, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 	GameState_Do_SendBroadcast(Get_ActiveGameState(), type, packet1, packet2, packet3);
 }
@@ -3867,15 +3868,15 @@ void Do_SaveUserConfig()
 
 
 //IS REGION
-bool Is_IntersectingCameraExtended(Camera* camera, int posX, int posY, int width, int height, bool isCentered)
+bool Is_IntersectingCameraExtended(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered)
 {
 	return Is_IntersectingCamera2(camera, posX, posY, width, height, isCentered, CAMERA_EXTENDED_CAMERA);
 }
-bool Is_IntersectingCamera(Camera* camera, int posX, int posY, int width, int height, bool isCentered)
+bool Is_IntersectingCamera(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered)
 {
 	return Is_IntersectingCamera2(camera, posX, posY, width, height, isCentered, 1);
 }
-bool Is_IntersectingCamera2(Camera* camera, int posX, int posY, int width, int height, bool isCentered, float mul)
+bool Is_IntersectingCamera2(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered, float mul)
 {
 	Rectangle rect;
 	rect.Width = width;
@@ -3998,7 +3999,7 @@ bool Is_NodesPresent(Entity entity)
 {
 	return Get_AmountOfNodes(entity) != 0;
 }
-bool DeprecatedIs_TagPresent(Entity entity, int i)
+bool DeprecatedIs_TagPresent(Entity entity, int32_t i)
 {
 	return false;
 	/*
@@ -4099,59 +4100,59 @@ bool Is_FlipY(Entity entity)
 {
 	return Get_DrawActor(entity)->mIsFlipY;
 }
-bool Is_NearCollisionLowerRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionLowerRight(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Right(&rect), Rectangle_Bottom(&rect),
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionLowerLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionLowerLeft(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Left(&rect), Rectangle_Bottom(&rect),
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionUpperCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionUpperCenter(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Center(&rect).X, Rectangle_Top(&rect),
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionLowerCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionLowerCenter(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Center(&rect).X, Rectangle_Bottom(&rect),
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionMiddleRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionMiddleRight(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Right(&rect), Rectangle_Center(&rect).Y,
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionMiddleLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionMiddleLeft(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Left(&rect), Rectangle_Center(&rect).Y,
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionUpperRight(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionUpperRight(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Right(&rect), Rectangle_Top(&rect),
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionCenter(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionCenter(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Center(&rect).X, Rectangle_Center(&rect).Y,
 		xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollision(int x, int y, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollision(int x, int32_t y, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), x, y, xDirection, yDirection, collisionToCheck, collisionToCheckLen);
 }
-bool Is_NearCollisionUpperLeft(Entity entity, int xDirection, int yDirection, const int* collisionToCheck, int collisionToCheckLen)
+bool Is_NearCollisionUpperLeft(Entity entity, int32_t xDirection, int32_t yDirection, const int* collisionToCheck, int32_t collisionToCheckLen)
 {
 	Rectangle rect = Body_GetRect(Get_Body(entity));
 	return CollisionEngineSys_CheckSurroundingCollision(Get_CollisionEngine(), Rectangle_Left(&rect), Rectangle_Top(&rect), 
@@ -4178,7 +4179,7 @@ bool Is_InLineOfSightWithPlayer(Entity entity)
 {
 	return Is_InLineOfSightWithPlayer3(entity, 0, 0);
 }
-bool Is_InLineOfSightWithPlayer2(Entity entity, float offsetX, float offsetY, int limAngle)
+bool Is_InLineOfSightWithPlayer2(Entity entity, float offsetX, float offsetY, int32_t limAngle)
 {
 	float wrappedAngle = (float)(Get_WrappedAngle(Get_AngleToClosestPlayer(entity)));
 	float toDegrees = Math_ToDegrees(wrappedAngle);
@@ -4193,7 +4194,7 @@ bool Is_InLineOfSightWithPlayer3(Entity entity, float offsetX, float offsetY)
 {
 	return Is_InLineOfSightWith(entity, Get_PlayerX(), Get_PlayerY(), offsetX, offsetY);
 }
-bool Is_PlayerNearBody(Entity entity, int buffer)
+bool Is_PlayerNearBody(Entity entity, int32_t buffer)
 {
 	if (!Is_PlayerPresent(true))
 	{
@@ -4207,7 +4208,7 @@ bool Is_PlayerNearBody(Entity entity, int buffer)
 		Body_GetWidth(body) + buffer * 2, Body_GetHeight(body) + buffer * 2);
 	return Rectangle_Intersects(&rect1, &rect2);
 }
-bool Is_ClosestPlayerNearBody(Entity entity, int buffer)
+bool Is_ClosestPlayerNearBody(Entity entity, int32_t buffer)
 {
 	if (!Is_PlayerPresent(true))
 	{
@@ -4262,7 +4263,7 @@ bool Is_UnderCameraHinge(Entity entity)
 {
 	return Is_UnderCameraHinge2(entity, 0);
 }
-bool Is_UnderCameraHinge2(Entity entity, int offset)
+bool Is_UnderCameraHinge2(Entity entity, int32_t offset)
 {
 	Rectangle bodyRect = Body_GetRect(Get_Body(entity));
 	if (Rectangle_Top(&bodyRect) > Get_CameraHingeBottom() + offset)
@@ -4275,7 +4276,7 @@ bool Is_UnderLevelBounds(Entity entity)
 {
 	return Is_UnderLevelBounds2(entity, 0);
 }
-bool Is_UnderLevelBounds2(Entity entity, int offset)
+bool Is_UnderLevelBounds2(Entity entity, int32_t offset)
 {
 	Rectangle bodyRect = Body_GetRect(Get_Body(entity));
 	Rectangle levelBoundsRectangle = Get_LevelBoundsRectangle();
@@ -4289,7 +4290,7 @@ bool Is_UnderCamera(Entity entity)
 {
 	return Is_UnderCamera2(entity, 0);
 }
-bool Is_UnderCamera2(Entity entity, int offset)
+bool Is_UnderCamera2(Entity entity, int32_t offset)
 {
 	Rectangle bodyRect = Body_GetRect(Get_Body(entity));
 	if (Rectangle_Top(&bodyRect) > Camera_GetBottom(Get_Camera()) + offset)
@@ -4298,7 +4299,7 @@ bool Is_UnderCamera2(Entity entity, int offset)
 	}
 	return false;
 }
-bool Is_NearPlayerX(Entity entity, int buffer)
+bool Is_NearPlayerX(Entity entity, int32_t buffer)
 {
 	if (Get_DistanceToPlayerX(entity) < buffer)
 	{
@@ -4306,7 +4307,7 @@ bool Is_NearPlayerX(Entity entity, int buffer)
 	}
 	return false;
 }
-bool Is_NearPlayerY(Entity entity, int buffer)
+bool Is_NearPlayerY(Entity entity, int32_t buffer)
 {
 	if (Get_DistanceToPlayerY(entity) < buffer)
 	{
@@ -4314,7 +4315,7 @@ bool Is_NearPlayerY(Entity entity, int buffer)
 	}
 	return false;
 }
-bool Is_OnDrawPhase(Entity entity, int state, int phaseToCheck)
+bool Is_OnDrawPhase(Entity entity, int32_t state, int32_t phaseToCheck)
 {
 	if (Get_CurrentImagePhase(entity, state) == phaseToCheck)
 	{
@@ -4322,11 +4323,11 @@ bool Is_OnDrawPhase(Entity entity, int state, int phaseToCheck)
 	}
 	return false;
 }
-bool Is_AnimationComplete(Entity entity, int state, int phase)
+bool Is_AnimationComplete(Entity entity, int32_t state, int32_t phase)
 {
 	return Get_Animation(entity, state, phase)->mIsAnimationComplete;
 }
-bool Is_ImagePhaseTheSame(Entity entity, int state, int phase)
+bool Is_ImagePhaseTheSame(Entity entity, int32_t state, int32_t phase)
 {
 	if (Get_CurrentImagePhase(entity, state) == phase)
 	{
@@ -4338,7 +4339,7 @@ bool Is_LevelFrameCountModuloOverHalf(int value)
 {
 	return Get_LevelFrameCount() % value >= value / 2;
 }
-bool Is_LevelFrameCountModulo(int value, int target)
+bool Is_LevelFrameCountModulo(int value, int32_t target)
 {
 	return Get_LevelFrameCount() % value == target;
 }
@@ -4467,7 +4468,7 @@ void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const 
 	}
 }
 
-void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int index)
+void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int32_t index)
 {
 	Entity dummyEntity = pack->Entities[index];
 	ComponentPack_UnsetAtIndex(pack, index);

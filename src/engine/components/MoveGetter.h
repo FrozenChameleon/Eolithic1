@@ -21,9 +21,9 @@ typedef struct MoveGetter
 	Point mDebugFirstWindowPosition;
 } MoveGetter;
 
-void MoveGetter_Setup(MoveGetter* mg, const char* name, int movesToRemember);
+void MoveGetter_Setup(MoveGetter* mg, const char* name, int32_t movesToRemember);
 void MoveGetter_SetAsFixedOrder(MoveGetter* mg, const int* order);
 void MoveGetter_AddMove(MoveGetter* mg, const char* name);
 void MoveGetter_OverflowCheck(MoveGetter* mg);
 int MoveGetter_GetLastMove(MoveGetter* mg);
-void MoveGetter_AddConstraint(MoveGetter* mg, int value);
+void MoveGetter_AddConstraint(MoveGetter* mg, int32_t value);

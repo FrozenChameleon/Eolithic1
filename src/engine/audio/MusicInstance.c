@@ -169,18 +169,18 @@ void MusicInstance_Update(MusicInstance* mi)
 
 	SoundEffectInstance_Update(&mi->_mCurrentMusicInstance);
 }
-void MusicInstance_SetupQueuedFadeIn(MusicInstance* mi, int fadeInTime)
+void MusicInstance_SetupQueuedFadeIn(MusicInstance* mi, int32_t fadeInTime)
 {
 	mi->_mWillFadeIn = true;
 	mi->_mWillFadeInTime = fadeInTime;
 }
-void MusicInstance_SetupFadeIn(MusicInstance* mi, int fadeInTime)
+void MusicInstance_SetupFadeIn(MusicInstance* mi, int32_t fadeInTime)
 {
 	Timer_Reset(&mi->_mFadeTimer);
 	mi->_mState = STATE_FADE_IN;
 	mi->_mFadeTimer.mLimit = fadeInTime;
 }
-void MusicInstance_SetupFadeOut(MusicInstance* mi, const char* nextTrack, int fadeOutTime)
+void MusicInstance_SetupFadeOut(MusicInstance* mi, const char* nextTrack, int32_t fadeOutTime)
 {
 	Timer_Reset(&mi->_mFadeTimer);
 	mi->_mNextTrack = nextTrack;

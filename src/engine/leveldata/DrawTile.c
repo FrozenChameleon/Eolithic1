@@ -30,7 +30,7 @@ void DrawTile_Write(DrawTile* drawTile, BufferWriter* writer)
 	writer->WriteBoolean(drawTile->mFlipY);
 	writer->WriteSingle(drawTile->mRotation);*/
 }
-void DrawTile_Read(DrawTile* drawTile, int version, BufferReader* reader)
+void DrawTile_Read(DrawTile* drawTile, int32_t version, BufferReader* reader)
 {
 	drawTile->mAnimation = BufferReader_ReadMString(reader);
 	Points_Read(&drawTile->mPoint, reader);
@@ -38,7 +38,7 @@ void DrawTile_Read(DrawTile* drawTile, int version, BufferReader* reader)
 	drawTile->mFlipY = BufferReader_ReadBoolean(reader);
 	drawTile->mRotation = BufferReader_ReadFloat(reader);
 }
-void DrawTile_LoadSheet(DrawTile* drawTile, int x, int y)
+void DrawTile_LoadSheet(DrawTile* drawTile, int32_t x, int32_t y)
 {
 	drawTile->mPoint.X = x;
 	drawTile->mPoint.Y = y;
@@ -50,7 +50,7 @@ void DrawTile_LoadAnimation(DrawTile* drawTile, const char* animation)
 	MString_Assign(&drawTile->mAnimation, animation);
 	drawTile->mPoint = Points_NegativeOne;
 }
-void DrawTile_Draw(DrawTile* drawTile, SpriteBatch* spriteBatch, Texture* texture, Color color, int depth, int x, int y)
+void DrawTile_Draw(DrawTile* drawTile, SpriteBatch* spriteBatch, Texture* texture, Color color, int32_t depth, int32_t x, int32_t y)
 {
 	/*if (drawTile->mAnimation.size() != 0)
 	{

@@ -31,12 +31,12 @@ void ImageDataInstance_Init2(ImageDataInstance* idi, ImageData* data)
 }
 
 RenderCommandSheet* ImageDataInstance_DrawInterpolated(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program,
-	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int overrideDepth)
+	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int32_t overrideDepth)
 {
 	return ImageDataInstance_DrawInterpolated2(render, spriteBatch, color, program, position, lastPosition, scale, rotation, flipX, flipY, overrideDepth, Vector2_Zero);
 }
 RenderCommandSheet* ImageDataInstance_DrawInterpolated2(ImageDataInstance* render, SpriteBatch* spriteBatch, Color color, ShaderProgram* program,
-	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int overrideDepth, Vector2 tempOffset)
+	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, int32_t overrideDepth, Vector2 tempOffset)
 {
 	Sheet* sheet = ImageDataInstance_GetCurrentSheet(render);
 
@@ -61,7 +61,7 @@ RenderCommandSheet* ImageDataInstance_DrawInterpolated2(ImageDataInstance* rende
 
 	Vector2 newPosition = Vector2_Add(position, newOffset);
 	Vector2 newLastPosition = Vector2_Add(lastPosition, newOffset);
-	Vector2 newScale = Vector2_MulFloat(scale, render->mData->mScaler);
+	Vector2 newScale = Vector2_MulInt(scale, render->mData->mScaler);
 
 	if (!render->mIsOriginSet)
 	{
@@ -96,7 +96,7 @@ Sheet* ImageDataInstance_GetCurrentSheet(ImageDataInstance* render)
 		return render->mSheet;
 	}
 }
-Sheet* ImageDataInstance_GetSheet(ImageDataInstance* render, int i)
+Sheet* ImageDataInstance_GetSheet(ImageDataInstance* render, int32_t i)
 {
 	if (render->mData->mCanAnimate)
 	{

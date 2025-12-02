@@ -23,7 +23,7 @@ static void DummyDrawDebugHud(System* sys, SpriteBatch* spriteBatch)
 static void DummyUpdateLastRenderPosition(System* sys, GameState* gameState)
 {
 }
-static void DummyReceiveBroadcast(System* sys, int broadcastType, int packet1, int packet2, int packet3)
+static void DummyReceiveBroadcast(System* sys, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 }
 

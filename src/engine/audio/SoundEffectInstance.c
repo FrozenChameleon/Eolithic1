@@ -230,7 +230,7 @@ void SoundEffectInstance_Update(SoundEffectInstance* sei)
 			&state,
 			FAUDIO_VOICE_NOSAMPLESPLAYED
 		);
-		while (SoundEffectInstance_PendingBufferCount(sei) > state.BuffersQueued)
+		while (SoundEffectInstance_PendingBufferCount(sei) > (int32_t)state.BuffersQueued)
 		{
 			Utils_free(sei->arr_queued_buffers[0]);
 			arrdel(sei->arr_queued_buffers, 0);
@@ -320,7 +320,7 @@ int32_t SoundEffectInstance_GetLoopNumber(const SoundEffectInstance* sei)
 
 	return sei->_mLoopNumber;
 }
-void SoundEffectInstance_SetLoopNumber(SoundEffectInstance* sei, int value)
+void SoundEffectInstance_SetLoopNumber(SoundEffectInstance* sei, int32_t value)
 {
 	if (!sei->_mHasSetup)
 	{
@@ -410,7 +410,7 @@ void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei)
 	FAudioWaveFormatEx* format = GetFormat(sei);
 	FAudioSourceVoice* handle = GetHandle(sei);
 	FAudioBuffer buffer = { 0 };
-	int32_t len = arrlen(sei->arr_queued_buffers);
+	int64_t len = arrlen(sei->arr_queued_buffers);
 	for (int i = 0; i < len; i += 1)
 	{
 		buffer.AudioBytes = sei->arr_queued_sizes[i];
@@ -435,7 +435,7 @@ void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 		return;
 	}
 
-	int32_t len = arrlen(sei->arr_queued_buffers);
+	int64_t len = arrlen(sei->arr_queued_buffers);
 	for (int i = 0; i < len; i += 1)
 	{
 		Utils_free(sei->arr_queued_buffers[i]);
@@ -443,7 +443,7 @@ void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 	arrsetlen(sei->arr_queued_buffers, 0);
 	arrsetlen(sei->arr_queued_sizes, 0);
 }
-void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, int amountOfSamples)
+void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, int32_t amountOfSamples)
 {
 	if (!sei->_mHasSetup)
 	{
@@ -528,7 +528,7 @@ int32_t SoundEffectInstance_GetSampleSize(const SoundEffectInstance* sei)
 		return 0;
 	}
 
-	return sei->_mData->nBlockAlign;
+	return (int32_t)sei->_mData->nBlockAlign;
 }
 int32_t SoundEffectInstance_GetTotalSamples(const SoundEffectInstance* sei)
 {
@@ -537,9 +537,9 @@ int32_t SoundEffectInstance_GetTotalSamples(const SoundEffectInstance* sei)
 		return 0;
 	}
 
-	return sei->_mData->mWaveDataLength / SoundEffectInstance_GetSampleSize(sei);
+	return (sei->_mData->mWaveDataLength / SoundEffectInstance_GetSampleSize(sei));
 }
-int32_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
+int64_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
 {
 	if (!sei->_mHasSetup)
 	{

@@ -49,7 +49,7 @@ Achievement* AchievementHandler_GetAchievement(int32_t i)
 }
 int32_t AchievementHandler_GetAchievementsLength()
 {
-	return arrlen(arr_achievements);
+	return (int32_t)arrlen(arr_achievements);
 }
 int32_t AchievementHandler_GetAmountOfAchievements()
 {

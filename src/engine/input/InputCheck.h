@@ -71,4 +71,4 @@ const char* InputCheck_GetGlyphStringForController(const char* value);
 InputCheck InputCheck_CreateCheckKey(int key);
 InputCheck InputCheck_CreateCheckMouseButton(int mouseButton);
 InputCheck InputCheck_CreateCheckButton(int button);
-InputCheck InputCheck_CreateCheckAxis(int axis, int direction);
+InputCheck InputCheck_CreateCheckAxis(int axis, int32_t direction);

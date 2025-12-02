@@ -33,7 +33,7 @@ static MString* MString_CreateEmpty(int32_t size)
 }
 static MString* MString_Create(const char* fromThisStr)
 {
-	int32_t strLen = Utils_strlen(fromThisStr);
+	int32_t strLen = (int32_t)Utils_strlen(fromThisStr);
 	MString* mstring = MString_CreateEmpty(strLen + 1);
 	Utils_strlcpy(mstring->text, fromThisStr, strLen + 1);
 	mstring->len = strLen;
@@ -170,7 +170,7 @@ void MString_AddAssignChar(MString** str, char addThisChar)
 	MString* oldStr = *str;
 	size_t newLen = oldStr->len + 1;
 	size_t newCapacity = newLen + 1;
-	MString* newStr = MString_CreateEmpty(newCapacity);
+	MString* newStr = MString_CreateEmpty((int32_t)newCapacity);
 	Utils_strlcpy(newStr->text, oldStr->text, oldStr->len + 1);
 	newStr->text[newLen - 1] = addThisChar;
 	newStr->text[newLen] = '\0';
@@ -198,7 +198,7 @@ void MString_AddAssignString(MString** str, const char* addThisStr)
 	MString_Dispose(&oldStr);
 	*str = newStr;
 }
-void MString_Truncate(MString** str, int newLength)
+void MString_Truncate(MString** str, int32_t newLength)
 {
 	CheckAndReplaceNullString(str);
 

@@ -31,7 +31,7 @@ void SoundEffect_StopSound(const char* sound);
 void SoundEffect_StopAllSounds();
 void SoundEffect_PlaySound(const char* sound);
 void SoundEffect_PlaySoundWithForcedVolume(const char* sound, float forcedVolume);
-void SoundEffect_LoopSound(const char* sound, int loopNumber);
+void SoundEffect_LoopSound(const char* sound, int32_t loopNumber);
 float SoundEffect_GetVolumeHelper(const char* cvar, const char* name, VolumeData* volumeData);
 const char* SoundEffect_GetExtension();
 const char* SoundEffect_GetDirectories();

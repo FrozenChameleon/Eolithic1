@@ -15,14 +15,14 @@
 
 #include "Point.h"
 
-Point Point_Create(int x, int y)
+Point Point_Create(int x, int32_t y)
 {
 	Point point;
 	point.X = x;
 	point.Y = y;
 	return point;
 }
-void Point_Init(Point* point, int x, int y)
+void Point_Init(Point* point, int32_t x, int32_t y)
 {
 	point->X = x;
 	point->Y = y;

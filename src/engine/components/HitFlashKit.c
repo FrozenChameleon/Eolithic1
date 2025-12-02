@@ -2,7 +2,7 @@
 
 #include "../core/Func.h"
 
-void HitFlashKit_Setup(HitFlashKit* hfk, int time)
+void HitFlashKit_Setup(HitFlashKit* hfk, int32_t time)
 {
 	hfk->mHitFlashTimer.mLimit = time;
 }

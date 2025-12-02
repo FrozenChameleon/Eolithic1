@@ -24,5 +24,5 @@ typedef struct InputChecks
 } InputChecks;
 
 
-InputCheck* InputChecks_Get(InputChecks* data, int index);
-void InputChecks_Set(InputChecks* data, int index, InputCheck check);
+InputCheck* InputChecks_Get(InputChecks* data, int32_t index);
+void InputChecks_Set(InputChecks* data, int32_t index, InputCheck check);

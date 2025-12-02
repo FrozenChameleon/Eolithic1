@@ -26,8 +26,8 @@ typedef struct Point
 
 const extern Point Point_Zero;
 
-Point Point_Create(int x, int y);
-void Point_Init(Point* point, int x, int y);
+Point Point_Create(int x, int32_t y);
+void Point_Init(Point* point, int32_t x, int32_t y);
 bool Point_EqualTo(Point value1, Point value2);
 bool Point_NotEqual(Point value1, Point value2);
 void Point_AddAssign(Point* value1, Point value2);

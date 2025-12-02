@@ -39,7 +39,7 @@ ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name,
 void GameState_RemoveEntity(GameState* gs, Entity entity);
 void GameState_FillListWithEntitiesInPlay(GameState* gs, EntitySearch* list);
 int32_t GameState_GetAmountOfEntitiesInPlay(GameState* gs);
-void GameState_Do_SendBroadcast(GameState* gs, int type, int packet1, int packet2, int packet3);
+void GameState_Do_SendBroadcast(GameState* gs, int32_t type, int32_t packet1, int32_t packet2, int32_t packet3);
 Entity GameState_BuildNewEntity(GameState* gs);
 void GameState_Update(GameState* gs);
 void GameState_SetDisableRewindTemporarily(GameState* gs, bool value);
@@ -53,7 +53,7 @@ void GameState_Draw(GameState* gs, SpriteBatch* spriteBatch);
 void GameState_DrawHud(GameState* gs, SpriteBatch* spriteBatch);
 void GameState_DrawDebugHud(GameState* gs, SpriteBatch* spriteBatch);
 void GameState_Load(GameState* gs, const char* levelDataToLoad);
-Entity GameState_GetEntityInPlay(GameState* gs, int entityNumber);
+Entity GameState_GetEntityInPlay(GameState* gs, int32_t entityNumber);
 void GameState_UpdateReplayFrame(GameState* gs);
 bool GameState_HasCreatedForGameSaveState(GameState* gs);
 void GameState_ClearForGameSaveState(GameState* gs);

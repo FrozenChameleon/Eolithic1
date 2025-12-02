@@ -100,7 +100,7 @@ int32_t GameState_GetAmountOfEntitiesInPlay(GameState* gs)
 {
 	return GameStateData_GetAmountOfEntitiesInPlay(&gs->_mData);
 }
-void GameState_Do_SendBroadcast(GameState* gs, int type, int packet1, int packet2, int packet3)
+void GameState_Do_SendBroadcast(GameState* gs, int32_t type, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
@@ -219,7 +219,7 @@ void GameState_Load(GameState* gs, const char* levelDataToLoad)
 
 	GameHelper_InitGameState(levelDataToLoad);
 }
-Entity GameState_GetEntityInPlay(GameState* gs, int entityNumber)
+Entity GameState_GetEntityInPlay(GameState* gs, int32_t entityNumber)
 {
 	return GameStateData_GetEntityInPlay(&gs->_mData, entityNumber);
 }

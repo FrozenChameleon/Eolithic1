@@ -27,8 +27,8 @@ FixedByteBuffer* PlayerBindingData_CreateBufferFromBindings()
 {
 	return NULL;
 }
-//void PlayerBindingData_ResetCertainBindingsToDefault(std::vector<std::string>& actions, int indexStart, int length);
-bool PlayerBindingData_DoBindingsExistFor(const char* action, int indexStart, int length)
+//void PlayerBindingData_ResetCertainBindingsToDefault(std::vector<std::string>& actions, int32_t indexStart, int32_t length);
+bool PlayerBindingData_DoBindingsExistFor(const char* action, int32_t indexStart, int32_t length)
 {
 	return false;
 }

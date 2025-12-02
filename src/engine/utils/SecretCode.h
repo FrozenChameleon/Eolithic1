@@ -23,4 +23,4 @@ enum SecretCodeButtons
 };
 
 bool SecretCodes_UpdateSecretCode(SecretCode* data, bool (*code)(int));
-bool SecretCodes_Check(int buttonToCheck, int currentDepth);
+bool SecretCodes_Check(int buttonToCheck, int32_t currentDepth);

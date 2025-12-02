@@ -39,7 +39,7 @@ void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size)
 {
 	SDL_memcpy(_Dst, _Src, _Size);
 }
-void Utils_memset(void* _Dst, int _Val, size_t _Size)
+void Utils_memset(void* _Dst, int32_t _Val, size_t _Size)
 {
 	SDL_memset(_Dst, _Val, _Size);
 }
@@ -199,21 +199,21 @@ void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet)
 {
 	for (int i = 0; i < len; i += 1)
 	{
-		values[i] = false;
+		values[i] = valueToSet;
 	}
 }
 void Utils_ResetArrayAsInt32(int32_t* values, size_t len, int32_t valueToSet)
 {
 	for (int i = 0; i < len; i += 1)
 	{
-		values[i] = 0;
+		values[i] = valueToSet;
 	}
 }
 void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet)
 {
 	for (int i = 0; i < len; i += 1)
 	{
-		values[i] = 0;
+		values[i] = valueToSet;
 	}
 }
 void Utils_ToggleFullscreenButton()
@@ -222,7 +222,7 @@ void Utils_ToggleFullscreenButton()
 }
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex)
 {
-	int32_t len = Utils_strnlen(strInThis, maxlen);
+	int32_t len = (int32_t)Utils_strnlen(strInThis, maxlen);
 	int32_t loc = -1;
 	for (int i = 0; i < len; i += 1)
 	{
@@ -342,7 +342,7 @@ char Utils_GetCharFromNumber(int val)
 	}
 	return '0';
 }
-int Utils_Get1DArrayPosFor2DArray(int i, int j, int width)
+int Utils_Get1DArrayPosFor2DArray(int i, int32_t j, int32_t width)
 {
 	return i + (j * width);
 }
@@ -373,7 +373,7 @@ bool Utils_CharIsDigit(char c)
 	}
 	return false;
 }
-bool Utils_ArrContainsInt(int* arr_values, int containsThis)
+bool Utils_ArrContainsInt(int* arr_values, int32_t containsThis)
 {
 	int64_t len = arrlen(arr_values);
 	for (int i = 0; i < len; i += 1)
@@ -387,7 +387,7 @@ bool Utils_ArrContainsInt(int* arr_values, int containsThis)
 }
 bool Utils_StringContains(const char* str, const char* containsThis)
 {
-	int len = Utils_strlen(str);
+	int32_t len = (int32_t)Utils_strlen(str);
 	char* result = SDL_strnstr(str, containsThis, len);
 	if (result == NULL)
 	{
@@ -400,16 +400,16 @@ bool Utils_StringContains(const char* str, const char* containsThis)
 }
 bool Utils_StringEndsWith(const char* str, const char* endsWithThis)
 {
-	size_t strLen = Utils_strlen(str);
-	size_t endsWithThisLen = Utils_strlen(endsWithThis);
+	int32_t strLen = (int32_t)Utils_strlen(str);
+	int32_t endsWithThisLen = (int32_t)Utils_strlen(endsWithThis);
 
 	if (strLen < endsWithThisLen)
 	{
 		return false;
 	}
 
-	int targetCounter = 0;
-	for (int i = (strLen - endsWithThisLen); i < strLen; i += 1)
+	int32_t targetCounter = 0;
+	for (int32_t i = (strLen - endsWithThisLen); i < strLen; i += 1)
 	{
 		if (str[i] != endsWithThis[targetCounter])
 		{

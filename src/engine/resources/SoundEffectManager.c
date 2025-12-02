@@ -69,12 +69,12 @@ Resource* SoundEffectManager_LoadAssetFromStreamAndCreateResource(BufferReader* 
 
 	Resource* resource = Utils_malloc(sizeof(Resource));
 	Utils_memset(resource, 0, sizeof(Resource));
-	resource->mPath = IStrings_GlobalGet(path);
-	resource->mFileNameWithoutExtension = IStrings_GlobalGet(filenameWithoutExtension);
+	MString_Assign(&resource->mPath, path);
+	MString_Assign(&resource->mFileNameWithoutExtension, filenameWithoutExtension);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = SoundEffect_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
-	shput(sh_resources, resource->mFileNameWithoutExtension, resource);
+	resource->mData = SoundEffect_FromStream(MString_GetText(resource->mPath), MString_GetText(resource->mFileNameWithoutExtension), br);
+	shput(sh_resources, MString_GetText(resource->mFileNameWithoutExtension), resource);
 	return resource;
 }
 const char* SoundEffectManager_GetDatFileName()
@@ -117,7 +117,7 @@ void SoundEffectManager_Dispose(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	int32_t len = shlen(sh_resources);
+	int64_t len = shlen(sh_resources);
 	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
@@ -132,7 +132,7 @@ void SoundEffectManager_DisposeAll()
 	Init();
 	//
 	
-	int32_t len = shlen(sh_resources);
+	int64_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
 		SoundEffectManager_Dispose(sh_resources[i].key);

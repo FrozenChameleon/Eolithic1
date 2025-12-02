@@ -25,7 +25,7 @@ typedef struct Prop
 
 void Prop_Init(Prop* p);
 Sheet* Prop_GetSheet(Prop* p);
-void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int depth, Point position, float scale, float rotation, bool flipX, bool flipY, bool showInfo);
+void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int32_t depth, Point position, float scale, float rotation, bool flipX, bool flipY, bool showInfo);
 void Prop_UpdateResource(Prop* p);
 void Prop_LoadDrawing(Prop* p);
 Rectangle Prop_GetRectangle(Prop* p);

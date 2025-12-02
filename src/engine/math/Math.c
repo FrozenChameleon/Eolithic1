@@ -183,7 +183,7 @@ double Math_GetDistanceDouble(double x1, double x2)
 }
 double Math_GetDistanceEuclideanPoint(Point begin, Point end)
 {
-	return Math_GetDistanceEuclideanFloat(begin.X, begin.Y, end.X, end.Y);
+	return Math_GetDistanceEuclideanFloat((float)begin.X, (float)begin.Y, (float)end.X, (float)end.Y);
 }
 double Math_GetDistanceEuclideanVector2(Vector2 begin, Vector2 end)
 {
@@ -199,7 +199,7 @@ double Math_pow(double x, double y)
 {
 	return SDL_pow(x, y);
 }
-int Math_ClampInt(int value, int lowerBound, int upperBound)
+int Math_ClampInt(int value, int32_t lowerBound, int32_t upperBound)
 {
 	value = Math_MinInt(value, upperBound);
 	value = Math_MaxInt(value, lowerBound);
@@ -229,7 +229,7 @@ float Math_GetIntercept(float x, float y, float slope)
 }
 float Math_GetSlopeInterceptXPoint(Point begin, Point end, float y)
 {
-	return Math_GetSlopeInterceptX(begin.X, begin.Y, end.X, end.Y, y);
+	return Math_GetSlopeInterceptX((float)begin.X, (float)begin.Y, (float)end.X, (float)end.Y, y);
 }
 float Math_GetSlopeInterceptXVector2(Vector2 begin, Vector2 end, float y)
 {
@@ -243,7 +243,7 @@ float Math_GetSlopeInterceptX(float x1, float y1, float x2, float y2, float y)
 }
 float Math_GetSlopeInterceptYPoint(Point begin, Point end, float x)
 {
-	return Math_GetSlopeInterceptY(begin.X, begin.Y, end.X, end.Y, x);
+	return Math_GetSlopeInterceptY((float)begin.X, (float)begin.Y, (float)end.X, (float)end.Y, x);
 }
 float Math_GetSlopeInterceptYVector2(Vector2 begin, Vector2 end, float x)
 {

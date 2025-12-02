@@ -59,12 +59,12 @@ enum
 
 extern const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION;
 extern const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION_MAX;
-extern const int GAMEHELPER_DEFAULT_MOVING_PLATFORM_LEEWAY;
+extern const int32_t GAMEHELPER_DEFAULT_MOVING_PLATFORM_LEEWAY;
 
-extern int GAMEHELPER_PLATFORM_UP;
-extern int GAMEHELPER_PLATFORM_DOWN;
-extern int GAMEHELPER_PLATFORM_RIGHT;
-extern int GAMEHELPER_PLATFORM_LEFT;
+extern int32_t GAMEHELPER_PLATFORM_UP;
+extern int32_t GAMEHELPER_PLATFORM_DOWN;
+extern int32_t GAMEHELPER_PLATFORM_RIGHT;
+extern int32_t GAMEHELPER_PLATFORM_LEFT;
 
 #if EDITOR
 void GameHelper_OnDebugFastResetPlusMove();
@@ -108,11 +108,11 @@ IStringArray* GameHelper_GetControllerComponentStringArray();
 IntIntPair* GameHelper_GetControllerComponentTypeMap();
 void GameHelper_SetupPlatformTypes();
 bool GameHelper_IsCollisionSolidForLineOfSight(int collision);
-bool GameHelper_IsCollisionSolidForPathFinding(int collision, int currentX, int currentY, int newX, int newY);
+bool GameHelper_IsCollisionSolidForPathFinding(int collision, int32_t currentX, int32_t currentY, int32_t newX, int32_t newY);
 void GameHelper_DefaultBindings(IStringArray* strings, InputAction* input);
 void GameHelper_SetupMusicAndSfxList(StringPair* music, StringPair* sfx);
 const char* GameHelper_ReturnInputDisplayMask(const char* displayName);
 void GameHelper_AddStrings();
 void GameHelper_AddDefaultThingSettings(StringPair* pairs);
 IStringArray* GameHelper_GetAllTheRecordings();
-void GameHelper_BakedCollisionCheck(float x, float y, int collisionToCheck, Body* bodyRef, bool vertical, CollisionCheckData* data);
+void GameHelper_BakedCollisionCheck(float x, float y, int32_t collisionToCheck, Body* bodyRef, bool vertical, CollisionCheckData* data);

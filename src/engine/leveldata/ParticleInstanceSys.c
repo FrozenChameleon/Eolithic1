@@ -27,7 +27,7 @@ static float ReturnOppositeSign(float newValue, float oldValue)
 {
 	return -ReturnSameSign(newValue, oldValue);
 }
-static int GetDirection()
+static int32_t GetDirection()
 {
 	return Random32_NextInt(Globals_GetSharedRandom(), 2) == 1 ? -1 : 1;
 }
@@ -42,7 +42,7 @@ static float GetValue(float min, float max, bool allowNegative)
 
 	return newValue;
 }
-static int GetValueInt(int min, int max)
+static int32_t GetValueInt(int min, int32_t max)
 {
 	if (max - min <= 0)
 	{
@@ -123,7 +123,7 @@ static void UpdateAttachedPosition(ParticleInstance* data)
 	data->mPosition.Y = Get_Y(entity) + data->mAttachedThingOffset.Y;
 	*/
 }
-static void AttachThing(ParticleInstance* data, Entity entity, int offsetX, int offsetY, bool followFlipX)
+static void AttachThing(ParticleInstance* data, Entity entity, int32_t offsetX, int32_t offsetY, bool followFlipX)
 {
 	data->mAttachedEntity = entity;
 	data->mAttachedThingOffset.X = offsetX;
@@ -206,6 +206,10 @@ static void HandleCurve(ParticleInstance* data)
 		}
 	}
 }
+static int32_t GetDepth(ParticleInstance* data)
+{
+	return (data->mInfluencedDepth != -1) ? data->mInfluencedDepth : data->mParticle->mTextureDepth;
+}
 static void DrawRoutineActual(ParticleInstance* data, SpriteBatch* spriteBatch, Vector2 position, Vector2 lastPosition)
 {
 	if (data->mIsFlickering)
@@ -215,7 +219,7 @@ static void DrawRoutineActual(ParticleInstance* data, SpriteBatch* spriteBatch, 
 
 	Sheet* sheet = data->mParticle->mTextureIsAnimation ? Animation_GetCurrentSheet(&data->mAnimation) : data->mSheet;
 
-	float scale = data->mParticle->mScaler;
+	float scale = (float)data->mParticle->mScaler;
 	RenderCommandSheet* drawInstance = Sheet_DrawInterpolated4(sheet, spriteBatch, data->mInfluencedColor, GetDepth(data), true, true, 
 		data->mShaderProgram, position, lastPosition,
 		Vector2_Create2(scale), data->mInfluencedRotation, data->mFlipX, data->mFlipY);
@@ -231,10 +235,7 @@ static void DrawRoutine(ParticleInstance* data, SpriteBatch* spriteBatch)
 	Vector2 lastPosition = Vector2_Add(data->mLastRenderPosition, data->mOffset);
 	DrawRoutineActual(data, spriteBatch, position, lastPosition);
 }
-static int GetDepth(ParticleInstance* data)
-{
-	return data->mInfluencedDepth != -1 ? data->mInfluencedDepth : data->mParticle->mTextureDepth;
-}
+
 void ParticleInstanceSys_Setup(ParticleInstance* data, const char* name, Particle* particleData, float x, float y)
 {
 	data->mInfluencedColor = COLOR_WHITE;

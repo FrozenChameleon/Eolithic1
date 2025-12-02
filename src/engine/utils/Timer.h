@@ -19,12 +19,12 @@ typedef struct Timer
 extern const Timer Timer_Zero;
 
 Timer Timer_Create(int limit);
-void Timer_Init(Timer* timer, int limit);
+void Timer_Init(Timer* timer, int32_t limit);
 float Timer_GetPercentage(const Timer* timer);
 float Timer_GetInversePercentage(const Timer* timer);
 int Timer_GetRemainingTime(const Timer* timer);
 bool Timer_UpdateWithTuningLimit(Timer* timer, Entity entity, const char* tuning);
-bool Timer_UpdateWithLimit(Timer* timer, int limit);
+bool Timer_UpdateWithLimit(Timer* timer, int32_t limit);
 bool Timer_Update(Timer* timer);
 void Timer_Reset(Timer* timer);
 bool Timer_IsAtPercentage(const Timer* timer, float percent);

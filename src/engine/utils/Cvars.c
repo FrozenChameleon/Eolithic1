@@ -11,11 +11,11 @@
 #include "Utils.h"
 #include "Macros.h"
 #include "../io/INIFile.h"
+#include "../utils/MString.h"
 
 #define STR_NOT_SET "NOT_SET"
 #define STR_ZERO "0"
 #define STR_ONE "1"
-#define CVAR_CHAR_LIMIT EE_PATH_MAX
 
 //private to definition
 typedef struct CvarData
@@ -23,8 +23,8 @@ typedef struct CvarData
 	float mCachedNumber;
 	bool mHasBeenSet;
 	bool mDoNotRefreshCachedNumber;
-	char mKey[CVAR_CHAR_LIMIT];
-	char mValue[CVAR_CHAR_LIMIT];
+	MString* mKey;
+	MString* mValue;
 } CvarData;
 
 static struct { char* key; CvarData value; } *sh_cvars;
@@ -40,8 +40,8 @@ static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenS
 		cvar.mCachedNumber = 0;
 		cvar.mHasBeenSet = true;
 		cvar.mDoNotRefreshCachedNumber = false;
-		Utils_strlcpy(cvar.mKey, key, CVAR_CHAR_LIMIT);
-		Utils_strlcpy(cvar.mValue, valueIfCvarHasNotBeenSet, CVAR_CHAR_LIMIT);
+		MString_Assign(&cvar.mKey, key);
+		MString_Assign(&cvar.mValue, valueIfCvarHasNotBeenSet);
 		shput(sh_cvars, key, cvar);
 	}
 	return &shgetp(sh_cvars, key)->value;
@@ -51,7 +51,7 @@ static void SetupCvarForSet(CvarData* cvar, const char* key)
 	cvar->mCachedNumber = 0;
 	cvar->mHasBeenSet = true;
 	cvar->mDoNotRefreshCachedNumber = false;
-	Utils_strlcpy(cvar->mKey, key, CVAR_CHAR_LIMIT);
+	MString_Assign(&cvar->mKey, key);
 }
 
 static void Init()
@@ -89,7 +89,7 @@ void Cvars_SetAsBool(const char* key, bool value)
 		Cvars_Set(key, STR_ONE);
 	}
 }
-void Cvars_SetAsInt(const char* key, int value)
+void Cvars_SetAsInt(const char* key, int32_t value)
 {
 	//
 	Init();
@@ -97,7 +97,7 @@ void Cvars_SetAsInt(const char* key, int value)
 
 	CvarData* cvar = GetCvarData(key, STR_NOT_SET);
 	SetupCvarForSet(cvar, key);
-	Utils_IntToString(value, cvar->mValue, CVAR_CHAR_LIMIT);
+	Utils_IntToString(value, MString_GetText(cvar->mValue), MString_GetLength(cvar->mValue));
 }
 void Cvars_SetAsFloat(const char* key, float value)
 {
@@ -107,7 +107,7 @@ void Cvars_SetAsFloat(const char* key, float value)
 
 	CvarData* cvar = GetCvarData(key, STR_NOT_SET);
 	SetupCvarForSet(cvar, key);
-	Utils_FloatToString(value, cvar->mValue, CVAR_CHAR_LIMIT);
+	Utils_FloatToString(value, MString_GetText(cvar->mValue), MString_GetLength(cvar->mValue));
 }
 void Cvars_Set(const char* key, const char* value)
 {
@@ -117,7 +117,7 @@ void Cvars_Set(const char* key, const char* value)
 
 	CvarData* cvar = GetCvarData(key, value);
 	SetupCvarForSet(cvar, key);
-	Utils_strlcpy(cvar->mValue, value, CVAR_CHAR_LIMIT);
+	MString_Assign(&cvar->mValue, value);
 }
 const char* Cvars_Get(const char* key)
 {
@@ -125,7 +125,7 @@ const char* Cvars_Get(const char* key)
 	Init();
 	//
 
-	return GetCvarData(key, STR_NOT_SET)->mValue;
+	return MString_GetText(GetCvarData(key, STR_NOT_SET)->mValue);
 }
 float Cvars_GetAsFloat(const char* key)
 {
@@ -140,7 +140,7 @@ float Cvars_GetAsFloat(const char* key)
 	}
 	else
 	{
-		data->mCachedNumber = Utils_ParseFloat(data->mValue);
+		data->mCachedNumber = Utils_ParseFloat(MString_GetText(data->mValue));
 		data->mDoNotRefreshCachedNumber = true;
 		return data->mCachedNumber;
 	}

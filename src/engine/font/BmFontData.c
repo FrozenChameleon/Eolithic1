@@ -50,11 +50,11 @@ void BmFontData_Load(BmFontData* bmfd, BufferReader* br)
 }
 void BmFontData_ReadInfo(BmFontData* bmfd, IStringArray* tagSplit)
 {
-	bmfd->mInfo.Face = BmFontData_FindString("face", tagSplit);
+	MString_Assign(&bmfd->mInfo.Face, BmFontData_FindString("face", tagSplit));
 	bmfd->mInfo.Size = BmFontData_FindInt("size", tagSplit);
 	bmfd->mInfo.Bold = BmFontData_FindInt("bold", tagSplit);
 	bmfd->mInfo.Italic = BmFontData_FindInt("italic", tagSplit);
-	bmfd->mInfo.Charset = BmFontData_FindString("charset", tagSplit);
+	MString_Assign(&bmfd->mInfo.Charset, BmFontData_FindString("charset", tagSplit));
 	bmfd->mInfo.Unicode = BmFontData_FindInt("unicode", tagSplit);
 	bmfd->mInfo.StretchH = BmFontData_FindInt("stretchH", tagSplit);
 	bmfd->mInfo.Smooth = BmFontData_FindInt("smooth", tagSplit);
@@ -101,7 +101,7 @@ void BmFontData_ReadPage(BmFontData* bmfd, IStringArray* tagSplit)
 {
 	BmFontDataPage bmPage = { 0 };
 	bmPage.ID = BmFontData_FindInt("id", tagSplit);
-	bmPage.File = BmFontData_FindString("file", tagSplit);
+	MString_Assign(&bmPage.File, BmFontData_FindString("file", tagSplit));
 	arrput(bmfd->mPages, bmPage);
 }
 void BmFontData_ReadChar(BmFontData* bmfd, IStringArray* tagSplit)
@@ -134,12 +134,12 @@ int BmFontData_FindInt(const char* key, IStringArray* tagSplit)
 	{
 		return 0;
 	}
-	int value = Utils_ParseInt(str);
+	int32_t value = Utils_ParseInt(str);
 	return value;
 }
 const char* BmFontData_FindString(const char* key, IStringArray* tagSplit)
 {
-	for (int i = 0; i < IStringArray_Length(tagSplit); i++)
+	for (int32_t i = 0; i < IStringArray_Length(tagSplit); i++)
 	{
 		const char* str = IStringArray_Get(tagSplit, i);
 		bool strContains = Utils_StringContains(str, key);
@@ -148,7 +148,7 @@ const char* BmFontData_FindString(const char* key, IStringArray* tagSplit)
 			int index = Utils_StringIndexOf('=', str, Utils_strlen(str), false);
 			if (index != -1)
 			{
-				int strLen = Utils_strlen(str);
+				int32_t strLen = (int32_t)Utils_strlen(str);
 				MString_AssignSubString(&_mTempString, str, index + 1, strLen - index - 1);
 				return MString_GetText(_mTempString);
 			}

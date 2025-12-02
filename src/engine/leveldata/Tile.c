@@ -49,7 +49,7 @@ void Tile_Write(Tile* t, BufferWriter* writer)
 	}
 	*/
 }
-void Tile_Read(Tile* t, int version, BufferReader* reader)
+void Tile_Read(Tile* t, int32_t version, BufferReader* reader)
 {
 	BufferReader_ReadI32(reader); //
 	BufferReader_ReadI32(reader); //Unused - Multi Array Collision
@@ -89,7 +89,7 @@ void Tile_DeleteDrawTiles(Tile* t)
 		Tile_DeleteDrawTiles2(t, i);
 	}
 }
-void Tile_DeleteDrawTiles2(Tile* t, int layer)
+void Tile_DeleteDrawTiles2(Tile* t, int32_t layer)
 {
 	//TODO C99 DrawTile_Init(&mDrawTiles[layer]);
 }
@@ -190,11 +190,11 @@ bool Tile_IsEqualTo(Tile* t, Tile* tile2)
 
 	//return true;
 }
-void Tile_DrawThis(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, LevelData* level, bool overrideDepth, Texture* wrapper)
+void Tile_DrawThis(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, LevelData* level, bool overrideDepth, Texture* wrapper)
 {
 	//WILLNOTDO 05152023
 }
-void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
+void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth)
 {
 	//TODO C99
 	/*if (tile->mCollisionType == 0)
@@ -212,7 +212,7 @@ void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera,
 	Color color = Utils_GetCollisionColor(mCollisionType);
 	DrawTool_DrawRectangle(spriteBatch, color, depth, rect, 0, false);*/
 }
-Rectangle Tile_GetCollisionRectangle(Tile* t, int gridX, int gridY)
+Rectangle Tile_GetCollisionRectangle(Tile* t, int32_t gridX, int32_t gridY)
 {
 	int rectX = gridX * TILE_SIZE;
 	int rectY = gridY * TILE_SIZE;
@@ -236,7 +236,7 @@ Rectangle Tile_GetCollisionRectangle(Tile* t, int gridX, int gridY)
 	}
 	return Rectangle_Create(rectX, rectY, rectWidth, rectHeight);
 }
-void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
+void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth)
 {
 	/*if (mInstances.size() == 0)
 	{
@@ -256,11 +256,11 @@ void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, in
 		}
 	}*/
 }
-void Tile_DrawProps(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int gridX, int gridY, bool overrideDepth)
+void Tile_DrawProps(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth)
 {
 	Tile_DrawProps2(t, spriteBatch, camera, gridX, gridY, overrideDepth, false);
 }
-void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, int gridX, int gridY, bool overrideDepth, bool drawInfo)
+void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth, bool drawInfo)
 {
 	if (t->arr_props == NULL)
 	{
@@ -274,7 +274,7 @@ void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, i
 	}
 
 	Rectangle cameraRect = Camera_GetRectangle(camera, 1.0f);
-	Vector2 position = Vector2_Create(gridX * TILE_SIZE, gridY * TILE_SIZE);
+	Vector2 position = Vector2_Create((float)(gridX * TILE_SIZE), (float)(gridY * TILE_SIZE));
 	for (int i = 0; i < arr_props_len; i += 1)
 	{
 		PropInstance* propInstance = &t->arr_props[i];

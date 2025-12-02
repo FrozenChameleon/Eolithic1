@@ -2,7 +2,7 @@
 
 #include "../utils/Utils.h"
 
-void MoveGetter_Setup(MoveGetter* mg, const char* name, int movesToRemember)
+void MoveGetter_Setup(MoveGetter* mg, const char* name, int32_t movesToRemember)
 {
 	/*
 	mg->mDebugName = name;
@@ -46,7 +46,7 @@ int MoveGetter_GetLastMove(MoveGetter* mg)
 	return 0;
 	//return mLastMoves[0];
 }
-void MoveGetter_AddConstraint(MoveGetter* mg, int value)
+void MoveGetter_AddConstraint(MoveGetter* mg, int32_t value)
 {
 	//mConstraints.push_back(value);
 }

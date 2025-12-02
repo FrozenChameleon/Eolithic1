@@ -17,15 +17,15 @@ Timer Timer_Create(int limit)
 	timer.mLimit = limit;
 	return timer;
 }
-void Timer_Init(Timer* timer, int limit)
+void Timer_Init(Timer* timer, int32_t limit)
 {
 	Utils_memset(timer, 0, sizeof(Timer));
 	timer->mLimit = limit;
 }
 float Timer_GetPercentage(const Timer* timer)
 {
-	float temp1 = timer->mCurrent;
-	float temp2 = timer->mLimit;
+	float temp1 = (float)timer->mCurrent;
+	float temp2 = (float)timer->mLimit;
 	return temp1 / temp2;
 }
 float Timer_GetInversePercentage(const Timer* timer)
@@ -41,7 +41,7 @@ bool Timer_UpdateWithTuningLimit(Timer* timer, Entity entity, const char* tuning
 	return false;
 	//WILLNOTDO MCDX 2023return Update(timer, OeFunc.Get_TuningAsInt(entity, tuning));
 }
-bool Timer_UpdateWithLimit(Timer* timer, int limit)
+bool Timer_UpdateWithLimit(Timer* timer, int32_t limit)
 {
 	timer->mLimit = limit;
 	return Timer_Update(timer);

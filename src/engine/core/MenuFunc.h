@@ -98,7 +98,7 @@ enum MenuCatDebug
 	MENUFUNC_DEBUG_TOGGLE_AUTO_SPEED = 7706,
 };
 
-extern int MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE;
+extern int32_t MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE;
 extern Rectangle MENUFUNC_TEMP_WINDOW_SIZE;
 
 void MenuFunc_Init();
@@ -127,19 +127,19 @@ void MenuFunc_SoundStopSoundTestSfx();
 void MenuFunc_VideoFixedTimeStepToggle();
 void MenuFunc_VideoApplyWindowSizeMultiple();
 void MenuFunc_VideoApplyWindowSize();
-void MenuFunc_VideoChangeWindowSize(int direction, int forcedSliderValue);
-void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int forcedSliderValue);
+void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue);
+void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderValue);
 const char* MenuFunc_StringHelperBorder(int value);
 const char* MenuFunc_StringHelperBool(bool value);
 const char* MenuFunc_StringHelperFloat(float value);
 const char* MenuFunc_StringHelperInt(int value);
 void MenuFunc_InputDeadzoneToggle();
-int MenuFunc_VolumeToggle(const char* cvar, int direction, int forcedSliderValue);
+int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue);
 void MenuFunc_VideoVsyncToggle();
 void MenuFunc_InputRumbleToggle();
 void MenuFunc_VideoShowFpsToggle();
 void MenuFunc_VideoShowInGameTimerToggle();
-void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int forcedSliderValue);
+void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t forcedSliderValue);
 int MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue();
 int MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
 void MenuFunc_VideoLinearFilterToggle();

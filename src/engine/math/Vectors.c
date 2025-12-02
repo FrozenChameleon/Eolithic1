@@ -17,7 +17,7 @@ const Vector2 Vectors_UpLeft = { -1, -1 };
 
 Vector2 Vectors_ToVector2(Point point)
 {
-	Vector2 temp = { point.X, point.Y };
+	Vector2 temp = { (float)point.X, (float)point.Y };
 	return temp;
 }
 const char* Vectors_ToString(Vector2 vec)

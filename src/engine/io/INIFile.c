@@ -57,11 +57,11 @@ int64_t INIFile_GetLength(INIFile* ini)
 {
 	return shlen(ini->sh_values);
 }
-const char* INIFile_GetKey(INIFile* ini, int index)
+const char* INIFile_GetKey(INIFile* ini, int32_t index)
 {
 	return ini->sh_values[index].key;
 }
-const char* INIFile_GetValue(INIFile* ini, int index)
+const char* INIFile_GetValue(INIFile* ini, int32_t index)
 {
 	return ini->sh_values[index].value;
 }

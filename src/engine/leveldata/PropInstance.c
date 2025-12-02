@@ -54,7 +54,7 @@ void PropInstance_Write(PropInstance* prop, BufferWriter* writer)
 	writer->WriteBoolean(prop->mFlipY);
 	writer->WriteString(prop->mName);*/
 }
-void PropInstance_Read(PropInstance* prop, int version, BufferReader* reader)
+void PropInstance_Read(PropInstance* prop, int32_t version, BufferReader* reader)
 {
 	prop->mOffset.X = BufferReader_ReadFloat(reader);
 	prop->mOffset.Y = BufferReader_ReadFloat(reader);
@@ -75,11 +75,11 @@ void PropInstance_Draw2(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 po
 {
 	PropInstance_Draw4(prop, spriteBatch, prop->mDepth, position, drawInfo);
 }
-void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position)
+void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int32_t depth, Vector2 position)
 {
 	PropInstance_Draw4(prop, spriteBatch, depth, position, false);
 }
-void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position, bool drawInfo)
+void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int32_t depth, Vector2 position, bool drawInfo)
 {
 	Prop* propData = GetThePropData(prop);
 
@@ -193,15 +193,14 @@ bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
 	}
 	return false;*/
 }
-bool PropInstance_IsEqualTo(PropInstance* prop, PropInstance* instance)
+bool PropInstance_IsEqualTo(PropInstance* pi, PropInstance* instance)
 {
-	return false;
-	/*if (instance->mOffset == mOffset && instance->mScale == mScale && instance->mDepth == mDepth &&
-		instance->mRotation == mRotation && instance->mDrawOffset == mDrawOffset && instance->mFlipX == mFlipX &&
-		instance->mFlipY == mFlipY && instance->mName == mName)
+	if (Vector2_EqualTo(instance->mOffset, pi->mOffset) && (instance->mScale == pi->mScale) && (instance->mDepth == pi->mDepth) &&
+		(instance->mRotation == pi->mRotation) && Vector2_EqualTo(instance->mDrawOffset, pi->mDrawOffset) && (instance->mFlipX == pi->mFlipX) &&
+		(instance->mFlipY == pi->mFlipY) && (instance->mName == pi->mName))
 	{
 		return true;
 	}
 
-	return false;*/
+	return false;
 }

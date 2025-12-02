@@ -20,8 +20,8 @@
 
 #define USE_SCREEN_DISTANCE_CULL
 #ifdef USE_SCREEN_DISTANCE_CULL
-static const int SCREEN_DISTANCE_CULL_WIDTH = (1280 * BODY_PHYSICS_SCALER);
-static const int SCREEN_DISTANCE_CULL_HEIGHT = (720 * BODY_PHYSICS_SCALER);
+static const int32_t SCREEN_DISTANCE_CULL_WIDTH = (1280 * BODY_PHYSICS_SCALER);
+static const int32_t SCREEN_DISTANCE_CULL_HEIGHT = (720 * BODY_PHYSICS_SCALER);
 #endif
 
 #define RESOLUTION_LIMIT 40
@@ -37,7 +37,7 @@ static bool _mCornerChecks[CORNER_CHECKS_LEN];
 static ComponentPack* _mImprintPack;
 static bool _mIsDynamicGravityDisabled;
 
-static int GetTilePos1D(int i, int j, CollisionEngine* data)
+static int32_t GetTilePos1D(int i, int32_t j, CollisionEngine* data)
 {
 	return i + (j * data->mCollisionGridSize.Width);
 }
@@ -60,7 +60,7 @@ void CollisionEngineSys_ResolveBody(CollisionEngine* data, bool isVertical, Body
 		return;
 	}
 }
-void CollisionEngineSys_CollisionHelper(Body* body, int myDirectionX, int myDirectionY, int collisionBit)
+void CollisionEngineSys_CollisionHelper(Body* body, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit)
 {
 	body->mLastCollisionBitTouched = collisionBit;
 
@@ -178,8 +178,8 @@ void CollisionEngineSys_HandleNullDividePlusPushing(CollisionEngine* data, Body*
 {
 	if (data->mDefaultBodyPushAmount != 0)
 	{
-		int pushingDirectionX = pushingBody->mLastDirection.X;
-		int pushingDirectionY = pushingBody->mLastDirection.Y;
+		int32_t pushingDirectionX = pushingBody->mLastDirection.X;
+		int32_t pushingDirectionY = pushingBody->mLastDirection.Y;
 
 		if (isVertical)
 		{
@@ -192,13 +192,13 @@ void CollisionEngineSys_HandleNullDividePlusPushing(CollisionEngine* data, Body*
 
 		if (pushingBody->mBodyPushAmount == 0)
 		{
-			Body_QueueMove(pushedBody, pushingDirectionX * data->mDefaultBodyPushAmount, pushingDirectionY * data->mDefaultBodyPushAmount);
-			Body_QueueMove(pushingBody, -pushingDirectionX * data->mDefaultBodyPushAmount, -pushingDirectionY * data->mDefaultBodyPushAmount);
+			Body_QueueMove(pushedBody, (float)(pushingDirectionX * data->mDefaultBodyPushAmount), (float)(pushingDirectionY * data->mDefaultBodyPushAmount));
+			Body_QueueMove(pushingBody, (float)(-pushingDirectionX * data->mDefaultBodyPushAmount), (float)(-pushingDirectionY * data->mDefaultBodyPushAmount));
 		}
 		else
 		{
-			Body_QueueMove(pushedBody, pushingDirectionX * pushingBody->mBodyPushAmount, pushingDirectionY * pushingBody->mBodyPushAmount);
-			Body_QueueMove(pushingBody, -pushingDirectionX * pushedBody->mBodyPushAmount, -pushingDirectionY * pushedBody->mBodyPushAmount);
+			Body_QueueMove(pushedBody, (float)(pushingDirectionX * pushingBody->mBodyPushAmount), (float)(pushingDirectionY * pushingBody->mBodyPushAmount));
+			Body_QueueMove(pushingBody, (float)(-pushingDirectionX * pushedBody->mBodyPushAmount), (float)(-pushingDirectionY * pushedBody->mBodyPushAmount));
 		}
 	}
 }
@@ -221,7 +221,7 @@ void CollisionEngineSys_ImprintToCollisionGridHelper(CollisionEngine* data, Coll
 		}
 	}
 }
-bool CollisionEngineSys_IsPointSafe(CollisionEngine* data, int x, int y)
+bool CollisionEngineSys_IsPointSafe(CollisionEngine* data, int32_t x, int32_t y)
 {
 	int gridWidth = data->mCollisionGridSize.Width;
 	int gridHeight = data->mCollisionGridSize.Height;
@@ -266,7 +266,7 @@ int CollisionEngineSys_GetIndexOfNode(OePathNode givenNode, std_vector<std_share
 	//return OeListTools.GetIndexOfValue(givenNode, nodes);
 }
 */
-bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float checkY, int directionX, int directionY, Body* body, bool isVertical)
+bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float checkY, int32_t directionX, int32_t directionY, Body* body, bool isVertical)
 {
 	Point point = CollisionEngineSys_GetCollisionGridPosition(checkX, checkY);
 	if ((point.X >= 0) && (point.Y >= 0) && (point.X < data->mCollisionGridSize.Width) // Check for safety make this a universal method some time.
@@ -304,7 +304,7 @@ bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float ch
 
 				collisionCheckData.mCollisionToReport = collisionToCheck;
 
-				GameHelper_BakedCollisionCheck(tempX, tempY, collisionToCheck, body, isVertical, &collisionCheckData);
+				GameHelper_BakedCollisionCheck((float)tempX, (float)tempY, collisionToCheck, body, isVertical, &collisionCheckData);
 
 				if (!collisionCheckData.mDisableCollision)
 				{
@@ -428,11 +428,11 @@ bool CollisionEngineSys_PushBody(CollisionEngine* data, bool isBakedCollision, b
 	{
 		if (isVertical) // Lock to integer after being pushed.
 		{
-			body->mPhysicsPosition.Y = (int)(body->mPhysicsPosition.Y);
+			body->mPhysicsPosition.Y = (float)((int)(body->mPhysicsPosition.Y));
 		}
 		else
 		{
-			body->mPhysicsPosition.X = (int)(body->mPhysicsPosition.X);
+			body->mPhysicsPosition.X = (float)((int)(body->mPhysicsPosition.X));
 		}
 
 		if (!body->mUsesBulletCollisionEngine && !body->mIsParticle)
@@ -451,8 +451,8 @@ bool CollisionEngineSys_PushBody(CollisionEngine* data, bool isBakedCollision, b
 bool CollisionEngineSys_IsCollisionValid(Body* bodyOne, Body* bodyTwo, bool isVertical)
 {
 #ifdef USE_SCREEN_DISTANCE_CULL
-	if ((abs(bodyOne->mPhysicsPosition.X - bodyTwo->mPhysicsPosition.X) > SCREEN_DISTANCE_CULL_WIDTH) ||
-		(abs(bodyOne->mPhysicsPosition.Y - bodyTwo->mPhysicsPosition.Y) > SCREEN_DISTANCE_CULL_HEIGHT))
+	if ((Math_fabsf(bodyOne->mPhysicsPosition.X - bodyTwo->mPhysicsPosition.X) > SCREEN_DISTANCE_CULL_WIDTH) ||
+		(Math_fabsf(bodyOne->mPhysicsPosition.Y - bodyTwo->mPhysicsPosition.Y) > SCREEN_DISTANCE_CULL_HEIGHT))
 	{
 		return false;
 	}
@@ -651,7 +651,7 @@ void CollisionEngineSys_RemoveAllCollisionImprints()
 {
 	GameState_UnsetAll(Get_ActiveGameState(), C_CollisionImprintData);
 }
-void CollisionEngineSys_ImprintToCollisionGrid(CollisionEngine* data, float pixelX, float pixelY, int width, int height, int type)
+void CollisionEngineSys_ImprintToCollisionGrid(CollisionEngine* data, float pixelX, float pixelY, int32_t width, int32_t height, int32_t type)
 {
 	Entity collisionEntity = Get_FirstSetEntity(C_CollisionEngine);
 	ComponentPack* imprintPack = Get_ComponentPack(C_CollisionImprintData);
@@ -681,7 +681,7 @@ int CollisionEngineSys_GetCollisionBit(CollisionEngine* data, float x, float y)
 	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
 	return data->mCollisionGrid[GetTilePos1D(point.X, point.Y, data)];
 }
-int CollisionEngineSys_GetCollisionBitSafe(CollisionEngine* data, float x, float y, int returnValue)
+int CollisionEngineSys_GetCollisionBitSafe(CollisionEngine* data, float x, float y, int32_t returnValue)
 {
 	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
 	if (!CollisionEngineSys_IsPointSafe(data, point.X, point.Y))
@@ -690,7 +690,7 @@ int CollisionEngineSys_GetCollisionBitSafe(CollisionEngine* data, float x, float
 	}
 	return data->mCollisionGrid[GetTilePos1D(point.X, point.Y, data)];
 }
-int CollisionEngineSys_GetCollisionBitSafeGrid(CollisionEngine* data, int x, int y, int returnValue)
+int CollisionEngineSys_GetCollisionBitSafeGrid(CollisionEngine* data, int32_t x, int32_t y, int32_t returnValue)
 {
 	if (!CollisionEngineSys_IsPointSafe(data, x, y))
 	{
@@ -699,7 +699,7 @@ int CollisionEngineSys_GetCollisionBitSafeGrid(CollisionEngine* data, int x, int
 
 	return data->mCollisionGrid[GetTilePos1D(x, y, data)];
 }
-int CollisionEngineSys_GetCollisionBitGrid(CollisionEngine* data, int x, int y)
+int CollisionEngineSys_GetCollisionBitGrid(CollisionEngine* data, int32_t x, int32_t y)
 {
 	return data->mCollisionGrid[GetTilePos1D(x, y, data)];
 }
@@ -726,11 +726,11 @@ bool CollisionEngineSys_DoPlatformCollision(Body* platformBody, Body* thingBody)
 {
 	Vector2 velocity = Body_GetVelocity(thingBody);
 	Vector2 lastLogicalPosition = Body_GetLastLogicalPosition(thingBody);
-	float halfHeightOffset = Body_GetHeight(thingBody) / 2;
+	float halfHeightOffset = (float)(Body_GetHeight(thingBody) / 2);
 	float leeway = GameHelper_GetMovingPlatformLeeway();
 	float heightCheck = lastLogicalPosition.Y + halfHeightOffset - leeway;
 	Rectangle bodyRectangle = Body_GetRect(platformBody);
-	float platformTop = Rectangle_Top(&bodyRectangle);
+	float platformTop = (float)Rectangle_Top(&bodyRectangle);
 	if ((velocity.Y <= 0) || (heightCheck >= platformTop))
 	{
 		return false;
@@ -742,10 +742,10 @@ Point CollisionEngineSys_GetCollisionGridPosition(float x, float y)
 	Point temp = { (int)(x / TILE_SIZE), (int)(y / TILE_SIZE) };
 	return temp;
 }
-bool CollisionEngineSys_CheckSurroundingCollision(CollisionEngine* data, int bodyX, int bodyY, int xDirection, int yDirection, 
-	const int* collisionToCheck, int collisionToCheckLen)
+bool CollisionEngineSys_CheckSurroundingCollision(CollisionEngine* data, int32_t bodyX, int32_t bodyY, int32_t xDirection, int32_t yDirection, 
+	const int* collisionToCheck, int32_t collisionToCheckLen)
 {
-	Point point = Point_Add(CollisionEngineSys_GetCollisionGridPosition(bodyX, bodyY), Point_Create(xDirection, yDirection));
+	Point point = Point_Add(CollisionEngineSys_GetCollisionGridPosition((float)bodyX, (float)bodyY), Point_Create(xDirection, yDirection));
 
 	if ((point.X < 0) || (point.Y < 0) || (point.X >= data->mCollisionGridSize.Width) || (point.Y >= data->mCollisionGridSize.Height))
 	{
@@ -776,7 +776,7 @@ bool CollisionEngineSys_CheckSurroundingCollision(CollisionEngine* data, int bod
 
 	return false;
 }
-bool CollisionEngineSys_IsRectIntersectsCollision(CollisionEngine* data, int x, int y, int width, int height)
+bool CollisionEngineSys_IsRectIntersectsCollision(CollisionEngine* data, int32_t x, int32_t y, int32_t width, int32_t height)
 {
 	int expansionX = ((width / TILE_SIZE) + 1);
 	int expansionY = ((height / TILE_SIZE) + 1);
@@ -785,7 +785,7 @@ bool CollisionEngineSys_IsRectIntersectsCollision(CollisionEngine* data, int x, 
 	{
 		for (int j = 0; j < 1 + (expansionY * 2); j += 1)
 		{
-			Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
+			Point point = CollisionEngineSys_GetCollisionGridPosition((float)x, (float)y);
 			int tileX = point.X - expansionX;
 			int tileY = point.Y - expansionY;
 
@@ -815,12 +815,12 @@ bool CollisionEngineSys_IsRectIntersectsCollision(CollisionEngine* data, int x, 
 	}
 	return false;
 }
-bool CollisionEngineSys_CheckFeetCollision(CollisionEngine* data, Body* body, bool checkLeft, bool checkRight, int offset, int collisionBit)
+bool CollisionEngineSys_CheckFeetCollision(CollisionEngine* data, Body* body, bool checkLeft, bool checkRight, int32_t offset, int32_t collisionBit)
 {
 	Rectangle rect = Body_GetRect(body); // Add Vector2s (quadrants of the rectangle)
 
-	Point pnt1 = CollisionEngineSys_GetCollisionGridPosition(Rectangle_Left(&rect) + offset, Rectangle_Bottom(&rect) + 1);
-	Point pnt2 = CollisionEngineSys_GetCollisionGridPosition(Rectangle_Right(&rect) - offset, Rectangle_Bottom(&rect) + 1);
+	Point pnt1 = CollisionEngineSys_GetCollisionGridPosition((float)(Rectangle_Left(&rect) + offset), (float)(Rectangle_Bottom(&rect) + 1));
+	Point pnt2 = CollisionEngineSys_GetCollisionGridPosition((float)(Rectangle_Right(&rect) - offset), (float)(Rectangle_Bottom(&rect) + 1));
 
 	if ((pnt1.X < 0) || (pnt1.Y < 0) || (pnt1.X >= data->mCollisionGridSize.Width) || (pnt1.Y >= data->mCollisionGridSize.Height))
 	{
@@ -955,7 +955,7 @@ int CollisionEngineSys_GetPlatformUp()
 {
 	return GAMEHELPER_PLATFORM_UP;
 }
-Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPosition, bool disableDiagonals, float currentX, float currentY, float targetX, float targetY, int hardLimit)
+Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPosition, bool disableDiagonals, float currentX, float currentY, float targetX, float targetY, int32_t hardLimit)
 {
 	return Vector2_Zero;
 	/*
@@ -1116,7 +1116,7 @@ Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPos
 	return vec;
 	*/
 }
-float CollisionEngineSys_GetCurrentDeceleration(float maxDecel, int framesInAir)
+float CollisionEngineSys_GetCurrentDeceleration(float maxDecel, int32_t framesInAir)
 {
 	float deceleration = framesInAir * GameHelper_GetGravityDeceleration();
 	if (deceleration > maxDecel)
@@ -1251,35 +1251,35 @@ void CollisionEngineSys_ResolveWithBakedCollision(CollisionEngine* data, Body* b
 	int centerX = Rectangle_Center(&rect).X;
 	int centerY = Rectangle_Center(&rect).Y;
 
-	if (CollisionEngineSys_CheckPoint(data, centerX, top, directionX, directionY, body, vertical)) // TOP
+	if (CollisionEngineSys_CheckPoint(data, (float)centerX, (float)top, directionX, directionY, body, vertical)) // TOP
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, right, top, directionX, directionY, body, vertical)) // TOP RIGHT
+	else if (CollisionEngineSys_CheckPoint(data, (float)right, (float)top, directionX, directionY, body, vertical)) // TOP RIGHT
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, left, top, directionX, directionY, body, vertical)) // TOP LEFT
+	else if (CollisionEngineSys_CheckPoint(data, (float)left, (float)top, directionX, directionY, body, vertical)) // TOP LEFT
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, right, centerY, directionX, directionY, body, vertical)) // RIGHT
+	else if (CollisionEngineSys_CheckPoint(data, (float)right, (float)centerY, directionX, directionY, body, vertical)) // RIGHT
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, left, centerY, directionX, directionY, body, vertical)) // LEFT
+	else if (CollisionEngineSys_CheckPoint(data, (float)left, (float)centerY, directionX, directionY, body, vertical)) // LEFT
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, right, bottom, directionX, directionY, body, vertical)) // BOTTOM RIGHT
+	else if (CollisionEngineSys_CheckPoint(data, (float)right, (float)bottom, directionX, directionY, body, vertical)) // BOTTOM RIGHT
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, left, bottom, directionX, directionY, body, vertical)) // BOTTOM LEFT
+	else if (CollisionEngineSys_CheckPoint(data, (float)left, (float)bottom, directionX, directionY, body, vertical)) // BOTTOM LEFT
 	{
 		return;
 	}
-	else if (CollisionEngineSys_CheckPoint(data, centerX, bottom, directionX, directionY, body, vertical)) // BOTTOM
+	else if (CollisionEngineSys_CheckPoint(data, (float)centerX, (float)bottom, directionX, directionY, body, vertical)) // BOTTOM
 	{
 		return;
 	}

@@ -14,6 +14,6 @@ typedef struct Resource
 {
 	void* mData;
 	ResourceID mID;
-	IString mPath;
-	IString mFileNameWithoutExtension;
+	MString* mPath;
+	MString* mFileNameWithoutExtension;
 } Resource;

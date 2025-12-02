@@ -19,7 +19,7 @@ typedef struct BmFont
 	MString* _mFontName;
 	BmFontData _mFontData;
 	Texture* _mFontTexture;
-	struct { int key; BmFontDataChar value; }*hm_font_char_map;
+	struct { int32_t key; BmFontDataChar value; }*hm_font_char_map;
 } BmFont;
 
 void BmFont_Init(BmFont* bmf, BufferReader* br, const char* fontName);

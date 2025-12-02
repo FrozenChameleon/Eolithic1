@@ -12,6 +12,7 @@
 #include "engine/utils/MString.h"
 #include "engine/io/File.h"
 #include "engine/globals/Globals.h"
+#include "engine/input/RecordingTool.h"
 
 int main(int argc, char* args[])
 {
@@ -23,7 +24,8 @@ int main(int argc, char* args[])
 	Cvars_Read(MString_GetText(userPath));
 	MString_Dispose(&userPath);
 
-	Globals_TurnOnAutoMode(true);
+	RecordingTool_EnableFromArgumentsPlayback(RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SESSION_NORMAL);
+	//Globals_TurnOnAutoMode(true);
 
 	Game_Run();
 

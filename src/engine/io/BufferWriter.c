@@ -17,27 +17,27 @@ typedef struct BufferWriter
 	DynamicByteBuffer* mBuffer;
 } BufferWriter;
 
-FixedByteBuffer* BufferWriter_WriteBytes(BufferWriter* br, int64_t length)
+DynamicByteBuffer* BufferWriter_WriteBytes(BufferWriter* br, int64_t length)
 {
-	//FixedByteBuffer* fbb = FixedByteBuffer_Create(length);
-	//SDL_WriteIO(br->mIOStream, FixedByteBuffer_GetBuffer(fbb), length);
+	//FixedByteBuffer* fbb = DynamicByteBuffer_Create(length);
+	//SDL_WriteIO(br->mIOStream, DynamicByteBuffer_GetBuffer(fbb), length);
 	return NULL;
 }
 int64_t BufferWriter_Position(BufferWriter* br)
 {
 	return BufferWriter_Tell(br);
 }
-FixedByteBuffer* BufferWriter_GetBuffer(BufferWriter* br)
+DynamicByteBuffer* BufferWriter_GetBuffer(BufferWriter* br)
 {
 	return br->mBuffer;
 }
 uint64_t BufferWriter_GetSize(BufferWriter* br)
 {
-	return FixedByteBuffer_GetLength(br->mBuffer);
+	return DynamicByteBuffer_GetLength(br->mBuffer);
 }
 uint8_t* BufferWriter_GetBufferData(BufferWriter* br)
 {
-	return FixedByteBuffer_GetBuffer(br->mBuffer);
+	return DynamicByteBuffer_GetBuffer(br->mBuffer);
 }
 int64_t BufferWriter_Tell(BufferWriter* br)
 {
@@ -117,7 +117,7 @@ void BufferWriter_WriteDouble(BufferWriter* br)
 }
 void BufferWriter_WriteJustTheStringLength(BufferWriter* br)
 {
-	return BufferWriter_WriteU8(br);
+	BufferWriter_WriteU8(br);
 }
 void BufferWriter_WriteJustTheStringData(BufferWriter* br, uint8_t stringLength, char* dst, size_t maxlen)
 {
@@ -155,7 +155,7 @@ MString* BufferWriter_WriteStringToMString(BufferWriter* br)
 bool BufferWriter_HasNext(BufferWriter* br)
 {
 	int64_t cur = BufferWriter_Tell(br);
-	uint64_t end = BufferWriter_GetSize(br);
+	int64_t end = (int64_t)BufferWriter_GetSize(br);
 	if (cur >= end)
 	{
 		return false;

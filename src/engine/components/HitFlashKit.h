@@ -10,5 +10,5 @@ typedef struct HitFlashKit
 	Timer mHitFlashTimer;
 } HitFlashKit;
 
-void HitFlashKit_Setup(HitFlashKit* hfk, int time);
+void HitFlashKit_Setup(HitFlashKit* hfk, int32_t time);
 void HitFlashKit_ResetFlash(HitFlashKit* hfk);

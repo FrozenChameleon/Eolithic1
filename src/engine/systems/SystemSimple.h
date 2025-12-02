@@ -8,9 +8,9 @@ typedef struct SystemSimple
 {
 	ComponentType _mType;
 	bool _mHasBeenInit;
-	bool (*_mBeforeCollideWithBody)(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical);
-	void (*_mCollideWithBody)(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical);
-	bool (*_mCollideWithCollision)(Body* myBody, int x, int y, int width, int height, int myDirectionX, int myDirectionY, int collisionBit, bool isVertical);
+	bool (*_mBeforeCollideWithBody)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+	void (*_mCollideWithBody)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+	bool (*_mCollideWithCollision)(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical);
 	void (*_mBeforeUpdateRoutine)();
 	void (*_mAfterUpdateRoutine)();
 	void (*_mDrawRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch);
@@ -18,7 +18,7 @@ typedef struct SystemSimple
 	void (*_mDrawDebugHudRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch);
 	void (*_mJustCompletedRoutine)(Entity owner, void* data);
 	void (*_mUpdateLastRenderPositionRoutine)(void* data);
-	void (*_mReceiveBroadcastRoutine)(Entity owner, void* data, int broadcastType, int packet1, int packet2, int packet3);
+	void (*_mReceiveBroadcastRoutine)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
 	void (*_mUpdateRoutine)(Entity entity, void* data);
 	void (*_mInitRoutine)(Entity owner, void* data);
 	void (*_mSetupSystem)();

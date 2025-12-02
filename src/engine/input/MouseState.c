@@ -12,7 +12,7 @@
 #include "../utils/Cvars.h"
 #include "../core/Game.h"
 
-static int _mScrollWheelValue;
+static int32_t _mScrollWheelValue;
 static bool _mIsButtonMuted[MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS];
 static MouseData _mThisFrame;
 static MouseData _mLastFrame;
@@ -39,7 +39,11 @@ void MouseData_ClearOnlyButtonData(MouseData* md)
 }
 void MouseData_Poll(MouseData* md)
 {
-	Uint32 mouseButtonState = SDL_GetMouseState(&md->_mMousePosition.X, &md->_mMousePosition.Y);
+	float tempMouseX = 0;
+	float tempMouseY = 0;
+	Uint32 mouseButtonState = SDL_GetMouseState(&tempMouseX, &tempMouseY); //TODO MAKE MOUSE ALL FLOATS
+	md->_mMousePosition.X = (int32_t)tempMouseX;
+	md->_mMousePosition.Y = (int32_t)tempMouseY;
 
 	//_mScrollWheelValue = _mScrollWheelValue;
 
@@ -76,7 +80,7 @@ int32_t MouseData_GetMouseY(const MouseData* md)
 {
 	return md->_mMousePosition.Y;
 }
-bool MouseData_IsButtonPressed(const MouseData* md, int button)
+bool MouseData_IsButtonPressed(const MouseData* md, int32_t button)
 {
 	return md->_mIsButtonDown[button];
 }

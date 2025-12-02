@@ -12,7 +12,7 @@ class OeComMoveGetterSys final : OeSystemSimple<OeComMoveGetter>
 {
 public:
 	void SetupSystem() override;
-	static int GetMove(OeComMoveGetter* data, OeRandom* random);
+	static int32_t GetMove(OeComMoveGetter* data, OeRandom* random);
 	static void InitRoutine(OeEntity owner, OeComMoveGetter* data);
 	static void UpdateRoutine(OeEntity owner, OeComMoveGetter* data);
 };

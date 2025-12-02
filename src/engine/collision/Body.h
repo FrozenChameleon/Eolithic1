@@ -20,9 +20,9 @@ enum
 
 typedef struct Body Body;
 
-typedef bool (*Body_BeforeCollideWithBodyFunc)(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical);
-typedef void (*Body_CollideWithBodyFunc)(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical);
-typedef bool (*Body_CollideWithCollisionFunc)(Body* myBody, int x, int y, int width, int height, int myDirectionX, int myDirectionY, int collisionBit, bool isVertical);
+typedef bool (*Body_BeforeCollideWithBodyFunc)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+typedef void (*Body_CollideWithBodyFunc)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+typedef bool (*Body_CollideWithCollisionFunc)(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical);
 
 typedef struct Body
 {
@@ -96,17 +96,17 @@ typedef struct Body
 	Body_CollideWithCollisionFunc mCollideWithCollision;
 } Body;
 
-bool Body_DefaultBeforeColliderBody(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical);
-void Body_DefaultColliderBody(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical);
-bool Body_DefaultColliderCollision(Body* myBody, int x, int y, int width, int height, int myDirectionX, int myDirectionY, int collisionBit, bool isVertical);
-void Body_Setup(Body* body, int width, int height, bool isParticle);
+bool Body_DefaultBeforeColliderBody(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+void Body_DefaultColliderBody(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+bool Body_DefaultColliderCollision(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical);
+void Body_Setup(Body* body, int32_t width, int32_t height, bool isParticle);
 void Body_UpdateLastRenderPosition(Body* body);
 bool Body_IsPushesThisThingSet(Body* body);
-//void DrawBody(Body* body, OeSpriteBatch* spriteBatch, double delta, int depth, Color color);
+//void DrawBody(Body* body, OeSpriteBatch* spriteBatch, double delta, int32_t depth, Color color);
 void Body_ResetCollideWithCollision(Body* body);
 void Body_ResetCollideWithBody(Body* body);
 void Body_ResetBeforeCollideWithBody(Body* body);
-void Body_Resize(Body* body, int width, int height);
+void Body_Resize(Body* body, int32_t width, int32_t height);
 void Body_FlipBody(Body* body);
 void Body_MoveVector2(Body* body, Vector2 pixelMovement);
 void Body_Move(Body* body, float pixelX, float pixelY);
@@ -114,9 +114,9 @@ Vector2 Body_GetPosition(Body* body);
 Rectangle Body_GetRect(Body* body);
 Rectangle Body_GetPhysicsRect(Body* body);
 int Body_GetWidth(Body* body);
-void Body_SetWidth(Body* body, int pixelWidth);
+void Body_SetWidth(Body* body, int32_t pixelWidth);
 int Body_GetHeight(Body* body);
-void Body_SetHeight(Body* body, int pixelHeight);
+void Body_SetHeight(Body* body, int32_t pixelHeight);
 int Body_GetOriginalWidth(Body* body);
 int Body_GetOriginalHeight(Body* body);
 void Body_SetPositionVector2(Body* body, Vector2 pixelMovement);

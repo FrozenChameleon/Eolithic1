@@ -68,7 +68,7 @@ static void HandleAltEnterCheck()
 	}
 }
 #if EDITOR
-static int _mDebugTimeHeld = 0;
+static int32_t _mDebugTimeHeld = 0;
 static void Cheats()
 {
 	//WILLNOTDO 05152023

@@ -40,18 +40,20 @@ Vector2 Camera_GetInterpCameraAsVector2(const Camera* camera, double delta)
 #if EDITOR
 	if (Cvars_GetAsBool(CVARS_EDITOR_STRICT_CAMERA))
 	{
-		x = (int)(x);
-		y = (int)(y);
+		x = (float)((int)(x));
+		y = (float)((int)(y));
 	}
 #endif
 
 	Vector2 returnVector = { x, y };
 	return returnVector;
 }
-Matrix Camera_GetInterpCamera(const Camera* camera, float offsetX, float offsetY, double delta, int scale)
+Matrix Camera_GetInterpCamera(const Camera* camera, float offsetX, float offsetY, double delta, int32_t scale)
 {
 	Vector2 pos = Camera_GetInterpCameraAsVector2(camera, delta);
-	return Camera_GetTranslation(offsetX + pos.X, offsetY + pos.Y, camera->mWorldRotation, (1.0f / camera->mWorldZoom) * scale, camera->mWorldWidth * scale, camera->mWorldHeight * scale);
+	return Camera_GetTranslation(offsetX + pos.X, offsetY + pos.Y, 
+		camera->mWorldRotation, (1.0f / camera->mWorldZoom) * scale, 
+		(float)(camera->mWorldWidth * scale), (float)(camera->mWorldHeight * scale));
 }
 float Camera_GetRenderedInterpolatedX(const Camera* camera, double delta)
 {
@@ -102,7 +104,7 @@ Matrix Camera_GetTranslation(float x, float y, float rotation, float zoom, float
 
 	return Matrix_Mul(&model, Matrix_Mul(&rot, Matrix_Mul(&scale, world)));
 }
-void Camera_Resize(Camera* camera, int width, int height)
+void Camera_Resize(Camera* camera, int32_t width, int32_t height)
 {
 	camera->mWorldWidth = width;
 	camera->mWorldHeight = height;
@@ -285,19 +287,19 @@ int Camera_GetY1(const Camera* camera)
 {
 	return Camera_GetY1Mul(camera, 1);
 }
-int Camera_GetX2Mul(const Camera* camera, int gridSizeX, float mul)
+int Camera_GetX2Mul(const Camera* camera, int32_t gridSizeX, float mul)
 {
 	return Math_MinInt(Camera_GetX1Mul(camera, mul) + (Camera_GetWidthMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeX);
 }
-int Camera_GetX2(const Camera* camera, int gridSizeX)
+int Camera_GetX2(const Camera* camera, int32_t gridSizeX)
 {
 	return Camera_GetX2Mul(camera, gridSizeX, 1);
 }
-int Camera_GetY2Mul(const Camera* camera, int gridSizeY, float mul)
+int Camera_GetY2Mul(const Camera* camera, int32_t gridSizeY, float mul)
 {
 	return Math_MinInt(Camera_GetY1Mul(camera, mul) + (Camera_GetHeightMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeY);
 }
-int Camera_GetY2(const Camera* camera, int gridSizeY)
+int Camera_GetY2(const Camera* camera, int32_t gridSizeY)
 {
 	return Camera_GetY2Mul(camera, gridSizeY, 1);
 }
@@ -309,7 +311,7 @@ bool Camera_IntersectsCameraRectMul(const Camera* camera, const Rectangle* rect,
 {
 	return Camera_IntersectsCamera(camera, rect->X, rect->Y, rect->Width, rect->Height, mul);
 }
-bool Camera_IntersectsCamera(const Camera* camera, int x, int y, int width, int height, float mul)
+bool Camera_IntersectsCamera(const Camera* camera, int32_t x, int32_t y, int32_t width, int32_t height, float mul)
 {
 	Rectangle rect1 = { x, y, width, height };
 	Rectangle rect2 = Camera_GetRectangle(camera, mul);
@@ -352,7 +354,7 @@ void Camera_MoveToY(Camera* camera, float y)
 }
 void Camera_SetPositionPoint(Camera* camera, Point pos)
 {
-	Camera_SetPosition(camera, pos.X, pos.Y);
+	Camera_SetPosition(camera, (float)pos.X, (float)pos.Y);
 }
 void Camera_SetPositionVector2(Camera* camera, Vector2 pos)
 {
@@ -369,7 +371,7 @@ void Camera_SetPosition(Camera* camera, float x, float y)
 
 	camera->mLastRenderedPosition = camera->mCurrentPosition;
 }
-void Camera_SetHingeDirectionX(Camera* camera, int hingeDirectionX)
+void Camera_SetHingeDirectionX(Camera* camera, int32_t hingeDirectionX)
 {
 	if (hingeDirectionX != camera->mHingeDirection.X)
 	{
@@ -377,7 +379,7 @@ void Camera_SetHingeDirectionX(Camera* camera, int hingeDirectionX)
 	}
 	camera->mHingeDirection.X = hingeDirectionX;
 }
-void Camera_SetHingeDirectionY(Camera* camera, int hingeDirectionY)
+void Camera_SetHingeDirectionY(Camera* camera, int32_t hingeDirectionY)
 {
 	if (hingeDirectionY != camera->mHingeDirection.Y)
 	{
@@ -410,7 +412,7 @@ void Camera_SetHingeSpeedLimit(Camera* camera, float hingeLimitX, float hingeLim
 	camera->mHingeSpeedLimit.X = hingeLimitX;
 	camera->mHingeSpeedLimit.Y = hingeLimitY;
 }
-void Camera_SetHingeGateLeft(Camera* camera, int value)
+void Camera_SetHingeGateLeft(Camera* camera, int32_t value)
 {
 	if (value != -1)
 	{
@@ -418,7 +420,7 @@ void Camera_SetHingeGateLeft(Camera* camera, int value)
 	}
 	camera->mHingeGateLeft = value;
 }
-void Camera_SetHingeGateRight(Camera* camera, int value)
+void Camera_SetHingeGateRight(Camera* camera, int32_t value)
 {
 	if (value != -1)
 	{
@@ -426,7 +428,7 @@ void Camera_SetHingeGateRight(Camera* camera, int value)
 	}
 	camera->mHingeGateRight = value;
 }
-void Camera_SetHingeGateTop(Camera* camera, int value)
+void Camera_SetHingeGateTop(Camera* camera, int32_t value)
 {
 	if (value != -1)
 	{
@@ -434,7 +436,7 @@ void Camera_SetHingeGateTop(Camera* camera, int value)
 	}
 	camera->mHingeGateTop = value;
 }
-void Camera_SetHingeGateBottom(Camera* camera, int value)
+void Camera_SetHingeGateBottom(Camera* camera, int32_t value)
 {
 	if (value != -1)
 	{
@@ -442,7 +444,7 @@ void Camera_SetHingeGateBottom(Camera* camera, int value)
 	}
 	camera->mHingeGateBottom = value;
 }
-void Camera_ShakeCameraMul(Camera* camera, float mul, int minX, int maxX, int minY, int maxY)
+void Camera_ShakeCameraMul(Camera* camera, float mul, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
 	if (Cvars_GetAsBool(CVARS_USER_IS_SCREENSHAKE_DISABLED))
 	{
@@ -458,7 +460,7 @@ void Camera_ShakeCameraMul(Camera* camera, float mul, int minX, int maxX, int mi
 	camera->mNewShake.X = (minX + randomX) * directionX;
 	camera->mNewShake.Y = (minY + randomY) * directionY;
 }
-void Camera_ShakeCamera(Camera* camera, int minX, int maxX, int minY, int maxY)
+void Camera_ShakeCamera(Camera* camera, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
 	Camera_ShakeCameraMul(camera, 1, minX, maxX, minY, maxY);
 }

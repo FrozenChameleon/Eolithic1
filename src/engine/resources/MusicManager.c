@@ -69,12 +69,12 @@ Resource* MusicManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, co
 
 	Resource* resource = Utils_malloc(sizeof(Resource));
 	Utils_memset(resource, 0, sizeof(Resource));
-	resource->mPath = IStrings_GlobalGet(path);
-	resource->mFileNameWithoutExtension = IStrings_GlobalGet(filenameWithoutExtension);
+	MString_Assign(&resource->mPath, path);
+	MString_Assign(&resource->mFileNameWithoutExtension, filenameWithoutExtension);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = Music_FromStream(resource->mPath, resource->mFileNameWithoutExtension, br);
-	shput(sh_resources, resource->mFileNameWithoutExtension, resource);
+	resource->mData = Music_FromStream(MString_GetText(resource->mPath), MString_GetText(resource->mFileNameWithoutExtension), br);
+	shput(sh_resources, MString_GetText(resource->mFileNameWithoutExtension), resource);
 	return resource;
 }
 const char* MusicManager_GetDatFileName()
@@ -117,7 +117,7 @@ void MusicManager_Dispose(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	int32_t len = shlen(sh_resources);
+	int64_t len = shlen(sh_resources);
 	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
@@ -132,7 +132,7 @@ void MusicManager_DisposeAll()
 	Init();
 	//
 	
-	int32_t len = shlen(sh_resources);
+	int64_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
 		MusicManager_Dispose(sh_resources[i].key);

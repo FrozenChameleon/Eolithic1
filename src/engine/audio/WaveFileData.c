@@ -116,7 +116,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 			uint32_t numSampleLoops = BufferReader_ReadU32(br);
 			int samplerData = BufferReader_ReadI32(br);
 
-			for (int i = 0; i < numSampleLoops; i += 1)
+			for (int32_t i = 0; i < ((int32_t)numSampleLoops); i += 1)
 			{
 				BufferReader_ReadU32(br); // Cue Point ID
 				BufferReader_ReadU32(br); // Type

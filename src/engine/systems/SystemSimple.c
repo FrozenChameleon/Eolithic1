@@ -123,7 +123,7 @@ static void UpdateLastRenderPosition(System* sys, GameState* gameState)
 		SystemFunc_UpdateLastRenderPositionHelper(ss->_mType, gameState, ss->_mUpdateLastRenderPositionRoutine);
 	}
 }
-static void ReceiveBroadcast(System* sys, int type, int packet1, int packet2, int packet3)
+static void ReceiveBroadcast(System* sys, int32_t type, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 	SystemSimple* ss = sys->_mData;
 

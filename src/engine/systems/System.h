@@ -12,7 +12,7 @@ typedef void (*System_InitFunc)(System* sys, ComponentType givenType, Entity own
 typedef void (*System_UpdateFunc)(System* sys);
 typedef void (*System_DrawFunc)(System* sys, SpriteBatch* spriteBatch);
 typedef void (*System_UpdateLastRenderPositionFunc)(System* sys, GameState* gameState);
-typedef void (*System_ReceiveBroadcastFunc)(System* sys, int broadcastType, int packet1, int packet2, int packet3);
+typedef void (*System_ReceiveBroadcastFunc)(System* sys, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
 
 typedef struct System
 {

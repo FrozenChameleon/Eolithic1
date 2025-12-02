@@ -30,11 +30,11 @@ typedef struct PropInstance
 
 void PropInstance_Init(PropInstance* prop);
 void PropInstance_Write(PropInstance* prop, BufferWriter* writer);
-void PropInstance_Read(PropInstance* prop, int version, BufferReader* reader);
+void PropInstance_Read(PropInstance* prop, int32_t version, BufferReader* reader);
 void PropInstance_Draw(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position);
 void PropInstance_Draw2(PropInstance* prop, SpriteBatch* spriteBatch, Vector2 position, bool drawInfo);
-void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position);
-void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int depth, Vector2 position, bool drawInfo);
+void PropInstance_Draw3(PropInstance* prop, SpriteBatch* spriteBatch, int32_t depth, Vector2 position);
+void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int32_t depth, Vector2 position, bool drawInfo);
 Prop* PropInstance_GetPropData(PropInstance* prop);
 bool PropInstance_IsPropValid(PropInstance* prop);
 Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position);

@@ -46,10 +46,20 @@ void IStringArray_Add(IStringArray* sa, const char* str)
 }
 int64_t IStringArray_Length(IStringArray* sa)
 {
+	if (sa == NULL)
+	{
+		return 0;
+	}
+
 	return hmlen(sa->hm_values);
 }
 IString IStringArray_Get(IStringArray* sa, int32_t index)
 {
+	if (sa == NULL)
+	{
+		return NULL;
+	}
+
 	return sa->hm_values[index].value;
 }
 uint64_t IStringArray_GetRefs()

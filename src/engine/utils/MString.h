@@ -22,7 +22,7 @@ void MString_AddAssignDouble(MString** str, double addThisDouble);
 void MString_AddAssignChar(MString** str, char addThisChar);
 void MString_AddAssignMString(MString** str, const MString* addThisStr);
 void MString_AddAssignString(MString** str, const char* addThisStr);
-void MString_Truncate(MString** str, int newLength);
+void MString_Truncate(MString** str, int32_t newLength);
 void MString_Dispose(MString** str);
 MString* MString_Read(BufferReader* br);
 uint64_t MString_GetRefs();

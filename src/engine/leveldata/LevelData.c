@@ -233,11 +233,11 @@ int LevelData_GetRealSizeY(LevelData* ld)
 {
 	return ld->_mGridSize.Height * TILE_SIZE;
 }
-int LevelData_GetTilePos1D(LevelData* ld, int i, int j)
+int LevelData_GetTilePos1D(LevelData* ld, int32_t i, int32_t j)
 {
 	return i + (j * ld->_mGridSize.Width);
 }
-Tile* LevelData_GetTile(LevelData* ld, int x, int y)
+Tile* LevelData_GetTile(LevelData* ld, int32_t x, int32_t y)
 {
 	if (!LevelData_IsSafe(ld, x, y))
 	{
@@ -250,7 +250,7 @@ Tile* LevelData_GetTilePoint(LevelData* ld, Point p)
 {
 	return LevelData_GetTile(ld, p.X, p.Y);
 }
-bool LevelData_IsSafe(LevelData* ld, int x, int y)
+bool LevelData_IsSafe(LevelData* ld, int32_t x, int32_t y)
 {
 	if ((x < 0) || (y < 0) || (x >= ld->_mGridSize.Width) || (y >= ld->_mGridSize.Height))
 	{
@@ -268,7 +268,7 @@ int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld)
 {
 	return Utils_calloc(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t));
 }
-void LevelData_ImprintToCollisionArray(LevelData* ld, int x, int y, int32_t* collisionArray)
+void LevelData_ImprintToCollisionArray(LevelData* ld, int32_t x, int32_t y, int32_t* collisionArray)
 {
 	int width = ld->_mGridSize.Width;
 	int height = ld->_mGridSize.Height;
@@ -376,10 +376,10 @@ void LevelData_DrawProps(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 
 	int dist = Cvars_GetAsInt(CVARS_ENGINE_PROP_DISTANCE);
 
-	int x1 = Camera_GetX1Mul(camera, dist);
-	int x2 = Camera_GetX2Mul(camera, LevelData_GetGridSizeWidth(ld), dist);
-	int y1 = Camera_GetY1Mul(camera, dist);
-	int y2 = Camera_GetY2Mul(camera, LevelData_GetGridSizeHeight(ld), dist);
+	int x1 = Camera_GetX1Mul(camera, (float)dist);
+	int x2 = Camera_GetX2Mul(camera, LevelData_GetGridSizeWidth(ld), (float)dist);
+	int y1 = Camera_GetY1Mul(camera, (float)dist);
+	int y2 = Camera_GetY2Mul(camera, LevelData_GetGridSizeHeight(ld), (float)dist);
 
 	for (int i = x1; i < x2; i += 1)
 	{

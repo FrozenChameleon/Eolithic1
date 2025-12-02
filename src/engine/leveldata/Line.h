@@ -36,9 +36,9 @@ typedef struct Line
 } Line;
 
 Point Line_GetMiddle(Point begin, Point end);
-void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int cameraWidth, int cameraHeight);
-void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int lineNumber, int offset);
-void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, int lineNumber, Vector2 pos);
+void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int32_t cameraWidth, int32_t cameraHeight);
+void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int32_t lineNumber, int32_t offset);
+void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, int32_t lineNumber, Vector2 pos);
 double Line_GetDistance(Line* line);
 bool Line_DoLinesConnect(Line* line1, Line* line2);
 Point Line_GetJunction(Line* line1, Line* line2);
@@ -50,6 +50,6 @@ Point Line_GetRealBegin(Line* line);
 Point Line_GetRealEnd(Line* line);
 //void Write(Line* line, std::shared_ptr<OeIniWriter> writer);
 void Line_Read(int version, Line* line, BufferReader* reader);
-Rectangle Line_GetTouchBounds(Line* line, int inflation);
+Rectangle Line_GetTouchBounds(Line* line, int32_t inflation);
 //std::string ToString();
 

@@ -23,6 +23,7 @@
 #include "../../DebugDefs.h"
 #include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
+#include "../render/Color.h"
 
 enum ToolState
 {
@@ -38,22 +39,22 @@ enum
 
 #define READOUT_LIMIT_FOR_LOW_FPS 20
 
-static int _mToolState;
-static int _mCurrentPriority;
-static int _mPlayerSwitchCounter;
+static int32_t _mToolState;
+static int32_t _mCurrentPriority;
+static int32_t _mPlayerSwitchCounter;
 static RecordingData _mDummy;
 static RecordingData* _mData;
 static HeaderData _mHeaderData;
 static ReaderData _mReaderData;
 //static std_shared_ptr<OeIniWriter> _mWriter;
-static int _mDisplaySuccessCounter;
+static int32_t _mDisplaySuccessCounter;
 static MString* _mDisplaySuccessCounterStr;
-static int _mDisplayFailureCounter;
+static int32_t _mDisplayFailureCounter;
 static MString* _mDisplayFailureCounterStr;
 static IStringArray* _mDisplayReadout;
 static MString* _mLastReadRecordingFilename;
 static bool _mGoFastFlag;
-static int _mFromArgumentsPlaybackState;
+static int32_t _mFromArgumentsPlaybackState;
 
 static void InitData()
 {
@@ -81,7 +82,7 @@ static void DisposeWriter()
 	_mWriter = null;
 	*/
 }
-static int GetAmountInUse()
+static int32_t GetAmountInUse()
 {
 	int counter = 0;
 	for (int i = 0; i < TOOL_DATA_LENGTH; i += 1)
@@ -403,7 +404,7 @@ static void ContinueReadSession(bool isFirst)
 	GLOBALS_DEBUG_IS_GOD_MODE = false;
 	_mGoFastFlag = false;
 }
-static RecordingPlayerData* GetPlayerData(RecordingData* recordingData, int playerNumber)
+static RecordingPlayerData* GetPlayerData(RecordingData* recordingData, int32_t playerNumber)
 {
 	switch (playerNumber)
 	{
@@ -578,57 +579,54 @@ bool RecordingTool_IsDisplayingSessionReadout()
 }
 void RecordingTool_DrawReadSessionReadout(SpriteBatch* spriteBatch, const char* font)
 {
-	//TODO C99
-	/*
-	if (!IsDisplayingSessionReadout())
+	if (!RecordingTool_IsDisplayingSessionReadout())
 	{
 		return;
 	}
 
 	int distY = 16;
 	int posY = distY;
-	if (_mLastReadRecordingFilename != "" && _mToolState == TOOL_STATE_READING)
+	if (!MString_EqualToString(_mLastReadRecordingFilename, EE_STR_EMPTY) && (_mToolState == TOOL_STATE_READING))
 	{
-		spriteBatch->DrawString(font, _mLastReadRecordingFilename, Color_Yellow, 100, Vector2(0, posY));
+		SpriteBatch_DrawString(spriteBatch, font, MString_GetText(_mLastReadRecordingFilename), Color_Yellow, 100, Vector2_Create(0, (float)posY));
 		posY += distY;
-		spriteBatch->DrawString(font, OeGameUpdater_GetFpsString(), Color_Yellow, 100, Vector2(0, posY));
-		posY += distY;
-	}
-
-	if (_mDisplaySuccessCounterStr != "")
-	{
-		spriteBatch->DrawString(font, _mDisplaySuccessCounterStr, Color_Yellow, 100, Vector2(0, posY));
+		SpriteBatch_DrawString(spriteBatch, font, GameUpdater_GetFpsString(), Color_Yellow, 100, Vector2_Create(0, (float)posY));
 		posY += distY;
 	}
 
-	if (_mDisplayFailureCounterStr != "")
+	if (!MString_EqualToString(_mDisplaySuccessCounterStr, EE_STR_EMPTY))
 	{
-		spriteBatch->DrawString(font, _mDisplayFailureCounterStr, Color_Yellow, 100, Vector2(0, posY));
+		SpriteBatch_DrawString(spriteBatch, font, MString_GetText(_mDisplaySuccessCounterStr), Color_Yellow, 100, Vector2_Create(0, (float)posY));
 		posY += distY;
 	}
 
-	Vector2 offset = Vector2(0, posY);
-	for (int i = 0; i < _mDisplayReadout.size(); i += 1)
+	if (!MString_EqualToString(_mDisplayFailureCounterStr, EE_STR_EMPTY))
 	{
-		std_string displayString = _mDisplayReadout[i];
-		Rectangle bounds = OeDrawTool_GetBounds(displayString, font);
-		spriteBatch->DrawString(font, displayString, Color_Black, 100, offset - Vector2(-1, -1));
-		spriteBatch->DrawString(font, displayString, Color_Yellow, 100, offset);
+		SpriteBatch_DrawString(spriteBatch, font, MString_GetText(_mDisplayFailureCounterStr), Color_Yellow, 100, Vector2_Create(0, (float)posY));
+		posY += distY;
+	}
+
+	Vector2 offset = Vector2_Create(0, (float)posY);
+	for (int i = 0; i < IStringArray_Length(_mDisplayReadout); i += 1)
+	{
+		const char* displayString = IStringArray_Get(_mDisplayReadout, i);
+		Rectangle bounds = DrawTool_GetBounds(displayString, font);
+		SpriteBatch_DrawString(spriteBatch, font, displayString, COLOR_BLACK, 100, Vector2_Sub(offset, Vector2_Create(-1, -1)));
+		SpriteBatch_DrawString(spriteBatch, font, displayString, COLOR_YELLOW, 100, offset);
 		offset.Y += bounds.Height + 4;
 	}
 
 	if (_mToolState != TOOL_STATE_READING)
 	{
-		if (OeInput_GetPlayerAction(OeActionList_GAME_MENU_SELECT)->mIsPressed)
+		if (Input_GetPlayerOneAction(ACTIONLIST_GAME_MENU_SELECT)->mIsPressed)
 		{
 			_mDisplayFailureCounter = 0;
-			_mDisplayFailureCounterStr = "";
+			MString_Assign(&_mDisplayFailureCounterStr, EE_STR_EMPTY);
 			_mDisplaySuccessCounter = 0;
-			_mDisplaySuccessCounterStr = "";
-			_mDisplayReadout.clear();
+			MString_Assign(&_mDisplaySuccessCounterStr, EE_STR_EMPTY);
+			IStringArray_Clear(_mDisplayReadout);
 		}
 	}
-	*/
 }
 void RecordingTool_CheckForDebugReadSessionCode()
 {
@@ -655,7 +653,7 @@ bool RecordingTool_IsReading()
 {
 	return _mToolState == TOOL_STATE_READING;
 }
-RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int playerNumber, int boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger)
+RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int32_t playerNumber, int32_t boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger)
 {
 	int currentFps = GameUpdater_GetFPS();
 	if (_mReaderData.mPerLevelData.mLowestFps == 0 || currentFps < _mReaderData.mPerLevelData.mLowestFps)
@@ -820,7 +818,7 @@ bool RecordingTool_LoadNextRecordingIfAtEndOfRecording(bool isMapLoad)
 	Logger_LogInformation(MString_GetText(_mHeaderData.mLevelFileName));
 	return true;
 }
-void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int priority, bool goFast)
+void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int32_t priority, bool goFast)
 {
 	IStringArray* recordingsToRead = NULL;
 	if ((givenRecordings == NULL) || (IStringArray_Length(givenRecordings) == 0))

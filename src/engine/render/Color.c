@@ -64,14 +64,14 @@ void Color_Init(Color* color)
 	color->B = 0;
 	color->A = 255;
 }
-void Color_Init3(Color* color, int r, int g, int b)
+void Color_Init3(Color* color, int32_t r, int32_t g, int32_t b)
 {
 	color->R = r;
 	color->G = g;
 	color->B = b;
 	color->A = 255;
 }
-void Color_Init4(Color* color, int r, int g, int b, int alpha)
+void Color_Init4(Color* color, int32_t r, int32_t g, int32_t b, int32_t alpha)
 {
 	color->R = r;
 	color->G = g;
@@ -89,7 +89,7 @@ bool Color_NotEqual(Color value1, Color value2)
 {
 	return !Color_EqualTo(value1, value2);
 }
-Color Color_ToColor(Color color, int alpha)
+Color Color_ToColor(Color color, int32_t alpha)
 {
 	Color tempColor = { color.R, color.G, color.B, alpha };
 	return tempColor;
@@ -106,19 +106,19 @@ float Color_BlueF(Color color)
 {
 	return color.B / 255.0f;
 }
-Color Color_Create4(int red, int green, int blue, int alpha)
+Color Color_Create4(int red, int32_t green, int32_t blue, int32_t alpha)
 {
 	Color tempColor;
 	Color_Init4(&tempColor, red, green, blue, alpha);
 	return tempColor;
 }
-Color Color_Create3(int red, int green, int blue)
+Color Color_Create3(int red, int32_t green, int32_t blue)
 {
 	Color tempColor;
 	Color_Init3(&tempColor, red, green, blue);
 	return tempColor;
 }
-Color Color_Create2(Color color, int alpha)
+Color Color_Create2(Color color, int32_t alpha)
 {
 	color.A = alpha;
 	return color;

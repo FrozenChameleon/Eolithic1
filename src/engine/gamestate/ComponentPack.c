@@ -4,7 +4,7 @@
 #include "../utils/Logger.h"
 #include "../utils/Exception.h"
 
-static void ResizePack(ComponentPack* pack, int newCapacity)
+static void ResizePack(ComponentPack* pack, int32_t newCapacity)
 {
 	Entity* newEntities = Utils_malloc(sizeof(Entity) * newCapacity);
 	Utils_memset(newEntities, 0, sizeof(Entity) * newCapacity);
@@ -33,7 +33,7 @@ void ComponentPack_LogNothingEntityWarning(ComponentPack* pack)
 {
 	Logger_LogWarning("Attempted to use a nothing entity in a component pack");
 }
-void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int initialSize)
+void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int32_t initialSize)
 {
 	initialSize = 1024; //TODO REMOVE THIS
 
@@ -78,7 +78,7 @@ bool ComponentPack_HasComponent(ComponentPack* pack, Entity entity)
 {
 	return (ComponentPack_GetEntityLocation(pack, entity) != -1);
 }
-void ComponentPack_SetMaximumCapacity(ComponentPack* pack, int value)
+void ComponentPack_SetMaximumCapacity(ComponentPack* pack, int32_t value)
 {
 	pack->_mMaximumCapacity = value;
 }
@@ -127,7 +127,7 @@ int ComponentPack_GetFirstSetEntityLocation(ComponentPack* pack)
 	}
 	return -1;
 }
-int ComponentPack_GetEntityLocation(ComponentPack* pack, int entityNumber)
+int ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber)
 {
 	if (entityNumber == ENTITY_NOTHING)
 	{
@@ -184,7 +184,7 @@ void* ComponentPack_GetComponent(ComponentPack* pack, Entity entity)
 {
 	return ComponentPack_GetComponent2(pack, entity, false);
 }
-void* ComponentPack_GetComponentAtIndex(ComponentPack* pack, int index)
+void* ComponentPack_GetComponentAtIndex(ComponentPack* pack, int32_t index)
 {
 	return pack->Components + (index * pack->mComponentSizeInBytes);
 }
@@ -238,7 +238,7 @@ void* ComponentPack_Set(ComponentPack* pack, Entity entity)
 {
 	return ComponentPack_Set2(pack, entity, false);
 }
-void ComponentPack_Unset(ComponentPack* pack, int entityNumber)
+void ComponentPack_Unset(ComponentPack* pack, int32_t entityNumber)
 {
 	if (entityNumber == ENTITY_NOTHING)
 	{
@@ -254,7 +254,7 @@ void ComponentPack_Unset(ComponentPack* pack, int entityNumber)
 		}
 	}
 }
-void ComponentPack_UnsetAtIndex(ComponentPack* pack, int index)
+void ComponentPack_UnsetAtIndex(ComponentPack* pack, int32_t index)
 {
 	pack->Entities[index] = ENTITY_NOTHING;
 

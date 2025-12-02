@@ -7,7 +7,7 @@
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
-void OePathNode::Setup(std::shared_ptr<OePathNode> givenParent, int gridX, int gridY, int targetX, int targetY)
+void OePathNode::Setup(std::shared_ptr<OePathNode> givenParent, int32_t gridX, int32_t gridY, int32_t targetX, int32_t targetY)
 {
 	if (givenParent != nullptr)
 	{
@@ -137,7 +137,7 @@ std::shared_ptr<OePathNode> OePathNode::GetRoot()
 
 	return nullptr;
 }
-std::shared_ptr<OePathNode> OePathNode::Obtain(std::shared_ptr<OePathNode> givenParent, int gridX, int gridY, int targetX, int targetY)
+std::shared_ptr<OePathNode> OePathNode::Obtain(std::shared_ptr<OePathNode> givenParent, int32_t gridX, int32_t gridY, int32_t targetX, int32_t targetY)
 {
 	std::shared_ptr<OePathNode> node = std::shared_ptr<OePathNode>(new OePathNode());
 	node->Setup(givenParent, gridX, gridY, targetX, targetY);

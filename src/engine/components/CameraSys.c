@@ -54,30 +54,30 @@ void CameraSys_UpdateCamera(Camera* data)
 		int halfHeight = Camera_GetHeight(data) / 2;
 		if (data->mHingeGateLeft != -1)
 		{
-			if (data->mTargetPosition.X - halfWidth < data->mHingeGateLeft)
+			if ((data->mTargetPosition.X - halfWidth) < data->mHingeGateLeft)
 			{
-				data->mTargetPosition.X = data->mHingeGateLeft + halfWidth;
+				data->mTargetPosition.X = (float)(data->mHingeGateLeft + halfWidth);
 			}
 		}
 		if (data->mHingeGateRight != -1)
 		{
-			if (data->mTargetPosition.X + halfWidth > data->mHingeGateRight)
+			if ((data->mTargetPosition.X + halfWidth) > data->mHingeGateRight)
 			{
-				data->mTargetPosition.X = data->mHingeGateRight - halfWidth;
+				data->mTargetPosition.X = (float)(data->mHingeGateRight - halfWidth);
 			}
 		}
 		if (data->mHingeGateTop != -1)
 		{
-			if (data->mTargetPosition.Y - halfHeight < data->mHingeGateTop)
+			if ((data->mTargetPosition.Y - halfHeight) < data->mHingeGateTop)
 			{
-				data->mTargetPosition.Y = data->mHingeGateTop + halfHeight;
+				data->mTargetPosition.Y = (float)(data->mHingeGateTop + halfHeight);
 			}
 		}
 		if (data->mHingeGateBottom != -1)
 		{
-			if (data->mTargetPosition.Y + halfHeight > data->mHingeGateBottom)
+			if ((data->mTargetPosition.Y + halfHeight) > data->mHingeGateBottom)
 			{
-				data->mTargetPosition.Y = data->mHingeGateBottom - halfHeight;
+				data->mTargetPosition.Y = (float)(data->mHingeGateBottom - halfHeight);
 			}
 		}
 	}

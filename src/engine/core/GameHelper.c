@@ -29,13 +29,13 @@
 #include "../../engine/utils/Utils.h"
 #include "../leveldata/ThingInstance.h"
 
-static struct { int key; int value; } _mControllerComponentTypeMap;
+static struct { int32_t key; int32_t value; } _mControllerComponentTypeMap;
 static IStringArray* _mControllerComponentStrArray;
 //static std_unordered_map<std_string, std_unordered_map<std_string, int>> _mComponentSizes;
 
 const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION = 0.233f;
 const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION_MAX = 5.25f;
-const int GAMEHELPER_DEFAULT_MOVING_PLATFORM_LEEWAY = 1;
+const int32_t GAMEHELPER_DEFAULT_MOVING_PLATFORM_LEEWAY = 1;
 
 int GAMEHELPER_PLATFORM_UP = -1;
 int GAMEHELPER_PLATFORM_DOWN = -1;

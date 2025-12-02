@@ -49,7 +49,7 @@ Sheet* Prop_GetSheet(Prop* p)
 		return p->_mSheet;
 	}
 }
-void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int depth, Point position, float scale, float rotation, bool flipX, bool flipY, bool showInfo)
+void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int32_t depth, Point position, float scale, float rotation, bool flipX, bool flipY, bool showInfo)
 {
 	Sheet* sheet = Prop_GetSheet(p);
 	Rectangle rect = sheet->mRectangle;
@@ -70,7 +70,7 @@ void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int depth, Point position, flo
 		RenderCommandSheet* instance = Sheet_Draw5(sheet, spriteBatch, COLOR_WHITE, depth, false, false, NULL,
 			Vector2_Create(position.X + (scaledWidth / 2) - (rect.Width / 2.0f), position.Y + (scaledHeight / 2) - (rect.Height / 2.0f)),
 			Vector2_Create2(scaler), rotation, flipX, flipY,
-			Vector2_DivFloat(Vector2_Create(rect.Width, rect.Height), 2.0f));
+			Vector2_DivFloat(Vector2_Create((float)rect.Width, (float)rect.Height), 2.0f));
 		if (p->mIsAdditive)
 		{
 			instance->mBlendState = BLENDSTATE_ADDITIVE;

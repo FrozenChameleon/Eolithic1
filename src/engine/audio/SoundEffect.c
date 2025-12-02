@@ -45,7 +45,7 @@ static float GetVolumeForSoundEffect(const char* sound)
 }
 static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 {
-	int32_t len = arrlen(arr_sound_effect_playback_time_buffer);
+	int64_t len = arrlen(arr_sound_effect_playback_time_buffer);
 	for (int i = 0; i < len; i += 1)
 	{
 		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
@@ -81,7 +81,7 @@ static uint64_t GetLastFramePlayed(const char* sound)
 	}
 	return highest;
 }
-static bool RefreshLoopStatus(const char* sound, int loopNumber)
+static bool RefreshLoopStatus(const char* sound, int32_t loopNumber)
 {
 	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
@@ -125,7 +125,7 @@ void SoundEffect_SetDefaultSoundPlaybackTimeBuffer(uint64_t value)
 }
 void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t time)
 {
-	int32_t len = arrlen(arr_sound_effect_playback_time_buffer);
+	int64_t len = arrlen(arr_sound_effect_playback_time_buffer);
 	for (int i = 0; i < len; i += 1)
 	{
 		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
@@ -316,7 +316,7 @@ void SoundEffect_PlaySoundWithForcedVolume(const char* sound, float forcedVolume
 	SoundEffectInstance_Update(instance);
 	SoundEffectInstance_Play(instance);
 }
-void SoundEffect_LoopSound(const char* sound, int loopNumber)
+void SoundEffect_LoopSound(const char* sound, int32_t loopNumber)
 {
 	if (IsDisabledPermanently() || IsRewinding())
 	{

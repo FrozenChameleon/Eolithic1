@@ -39,7 +39,7 @@ void GameStateManager_Ctor()
 
 int32_t GameStateManager_GetGlobalSystemsLen()
 {
-	return arrlen(arr_global_systems);
+	return (int32_t)arrlen(arr_global_systems);
 }
 System** GameStateManager_GetGlobalSystems()
 {
@@ -51,7 +51,7 @@ void GameStateManager_AddGlobalSystem(System* sys)
 }
 int32_t GameStateManager_GetStateSystemsLen()
 {
-	return arrlen(arr_state_systems);
+	return (int32_t)arrlen(arr_state_systems);
 }
 System** GameStateManager_GetStateSystems()
 {
@@ -59,11 +59,6 @@ System** GameStateManager_GetStateSystems()
 }
 void GameStateManager_AddStateSystem(System* sys)
 {
-	int len = arrlen(arr_state_systems);
-	if (len == 81 || len == 82 || len == 83)
-	{
-		int hello = 0;
-	}
 	arrput(arr_state_systems, sys);
 }
 GameState* GameStateManager_GetGameState()

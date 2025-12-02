@@ -88,8 +88,8 @@ static FNA3D_Color _mWhiteBlendFactor = { 0xFF, 0xFF, 0xFF,0xFF };
 static FNA3D_Buffer* _mIndexBuffer;
 static FNA3D_SamplerState _mSamplerState;
 static FNA3D_DepthStencilState _mDepthStencilState;
-//static int _mVertexBufferCounter;
-static int _mBatchNumber;
+//static int32_t _mVertexBufferCounter;
+static int32_t _mBatchNumber;
 //Setup Render State Stuff
 static float _mMultiColorReplaceData[MULTI_COLOR_REPLACE_LEN];
 static float _mTransformDest[TRANSFORM_DEST_LEN];
@@ -286,8 +286,8 @@ static void CreateIndexBuffer()
 
 	uint16_t* indexBufferData = Renderer_GetDefaultIndexBufferData();
 	size_t sizeInBytes = MAX_INDICES * sizeof(uint16_t);
-	_mIndexBuffer = FNA3D_GenIndexBuffer(_mDeviceContext, 0, FNA3D_BUFFERUSAGE_WRITEONLY, sizeInBytes);
-	FNA3D_SetIndexBufferData(_mDeviceContext, _mIndexBuffer, 0, indexBufferData, sizeInBytes, FNA3D_SETDATAOPTIONS_NONE);
+	_mIndexBuffer = FNA3D_GenIndexBuffer(_mDeviceContext, 0, FNA3D_BUFFERUSAGE_WRITEONLY, (int32_t)sizeInBytes);
+	FNA3D_SetIndexBufferData(_mDeviceContext, _mIndexBuffer, 0, indexBufferData, (int32_t)sizeInBytes, FNA3D_SETDATAOPTIONS_NONE);
 }
 static FNA3D_BlendState GetBlendStateFromBlendState(BlendState value)
 {
@@ -417,13 +417,13 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		widthForTf = drawable.Width;
 		heightForTf = drawable.Height;
 
-		Vector3 matrixTranslationValue = { -widthForTf / 2.0f, -heightForTf / 2.0f, 0 };
+		Vector3 matrixTranslationValue = { (float)(-widthForTf / 2.0f), (float)(-heightForTf / 2.0f), 0 };
 		Matrix matrixTranslation = Matrix_CreateTranslation(matrixTranslationValue);
 
 		Vector3 matrixScaleValue = { scale.X, scale.Y, 1.0f };
 		Matrix matrixScale = Matrix_CreateScale(matrixScaleValue);
 
-		Vector3 matrixWorldValue = { widthForTf / 2.0f, heightForTf / 2.0f, 0 };
+		Vector3 matrixWorldValue = { (float)(widthForTf / 2.0f), (float)(heightForTf / 2.0f), 0 };
 		Matrix matrixWorld = Matrix_CreateTranslation(matrixWorldValue);
 
 		transformMatrix = Matrix_Mul(&matrixTranslation, Matrix_Mul(&matrixScale, matrixWorld));
@@ -602,7 +602,7 @@ static void NextBatch(bool keepDrawState)
 		_mCurrentDrawBatch.mDrawState = drawState;
 	}
 }
-void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int nverts)
+void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts)
 {
 	NextBatch(false);
 
@@ -681,7 +681,7 @@ Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
 
 	return tex;
 }
-Texture* Renderer_GetNewTextureData(const char* path, int width, int height, bool clearTexture)
+Texture* Renderer_GetNewTextureData(const char* path, int32_t width, int32_t height, bool clearTexture)
 {
 	InvalidateNextSetupRenderState();
 
@@ -705,7 +705,7 @@ Texture* Renderer_GetNewTextureData(const char* path, int width, int height, boo
 
 	return tex;
 }
-void Renderer_UpdateTextureData(Texture* texture, int x, int y, int w, int h, int level, void* data, int dataLength)
+void Renderer_UpdateTextureData(Texture* texture, int32_t x, int32_t y, int32_t w, int32_t h, int32_t level, void* data, int32_t dataLength)
 {
 	InvalidateNextSetupRenderState();
 
@@ -723,18 +723,18 @@ static void LoadShader(Effect* effect, const char* shaderName)
 	uint8_t* effectCode = Utils_malloc(sizeof(uint8_t) * effectCodeLength);
 	SDL_ReadIO(effectFile, effectCode, effectCodeLength);
 	SDL_CloseIO(effectFile);
-	FNA3D_CreateEffect(_mDeviceContext, effectCode, effectCodeLength, &effect->mHandle, &effect->mData);
+	FNA3D_CreateEffect(_mDeviceContext, effectCode, (uint32_t)effectCodeLength, &effect->mHandle, &effect->mData);
 	Utils_free(effectCode);
 	effectCode = NULL;
 }
 int Renderer_Init(void* deviceWindowHandle)
 {
-	_mInternalWidth = Utils_GetInternalWidth();
-	_mInternalHeight = Utils_GetInternalHeight();
-	_mInternalWidthRender = Utils_GetInternalRenderWidth();
-	_mInternalHeightRender = Utils_GetInternalRenderHeight();
-	_mInternalWorldTranslation.X = _mInternalWidth / 2.0f;
-	_mInternalWorldTranslation.Y = _mInternalHeight / 2.0f;
+	_mInternalWidth = (float)Utils_GetInternalWidth();
+	_mInternalHeight = (float)Utils_GetInternalHeight();
+	_mInternalWidthRender = (float)Utils_GetInternalRenderWidth();
+	_mInternalHeightRender = (float)Utils_GetInternalRenderHeight();
+	_mInternalWorldTranslation.X = (_mInternalWidth / 2.0f);
+	_mInternalWorldTranslation.Y = (_mInternalHeight / 2.0f);
 	_mInternalWorldTranslation.Z = 0;
 
 	_mDeviceWindowHandle = deviceWindowHandle;

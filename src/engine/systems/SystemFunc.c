@@ -88,7 +88,7 @@ void SystemFunc_UpdateLastRenderPositionHelper(ComponentType ctype, GameState* g
 		updateLastRenderPositionsRoutine(ComponentPack_GetComponentAtIndex(pack, iter.mIndex));
 	}
 }
-void SystemFunc_ReceiveBroadcastHelper(ComponentType ctype, void(*receiveBroadcastRoutine)(Entity owner, void* data, int broadcastType, int packet1, int packet2, int packet3), int broadcastType, int packet1, int packet2, int packet3)
+void SystemFunc_ReceiveBroadcastHelper(ComponentType ctype, void(*receiveBroadcastRoutine)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3), int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))

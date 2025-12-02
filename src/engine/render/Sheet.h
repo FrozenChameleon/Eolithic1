@@ -33,24 +33,24 @@ IStringArray* Sheet_CreateListOfSheetNames();
 Resource* Sheet_GetTextureResource(Sheet* sheet);
 Texture* Sheet_GetTexture(Sheet* sheet);
 
-RenderCommandSheet* Sheet_Draw(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+RenderCommandSheet* Sheet_Draw(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position);
- RenderCommandSheet* Sheet_Draw2(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+ RenderCommandSheet* Sheet_Draw2(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 scale);
- RenderCommandSheet* Sheet_Draw3(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+ RenderCommandSheet* Sheet_Draw3(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 scale, float rotation);
- RenderCommandSheet* Sheet_Draw4(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+ RenderCommandSheet* Sheet_Draw4(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 scale, float rotation, bool flipX, bool flipY);
- RenderCommandSheet* Sheet_Draw5(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+ RenderCommandSheet* Sheet_Draw5(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin);
 
-RenderCommandSheet* Sheet_DrawInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition);
-RenderCommandSheet* Sheet_DrawInterpolated2(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawInterpolated2(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale);
-RenderCommandSheet* Sheet_DrawInterpolated3(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawInterpolated3(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation);
-RenderCommandSheet* Sheet_DrawInterpolated4(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawInterpolated4(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY);
-RenderCommandSheet* Sheet_DrawInterpolated5(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawInterpolated5(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin);

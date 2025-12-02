@@ -8,19 +8,19 @@
 
 #include "../math/Math.h"
 
-bool Body_DefaultBeforeColliderBody(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical)
+bool Body_DefaultBeforeColliderBody(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical)
 {
 	return true;
 }
-void Body_DefaultColliderBody(Body* myBody, Body* otherBody, int myDirectionX, int myDirectionY, int otherDirectionX, int otherDirectionY, bool isVertical)
+void Body_DefaultColliderBody(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical)
 {
 
 }
-bool Body_DefaultColliderCollision(Body* myBody, int x, int y, int width, int height, int myDirectionX, int myDirectionY, int collisionBit, bool isVertical)
+bool Body_DefaultColliderCollision(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical)
 {
 	return true;
 }
-void Body_Setup(Body* body, int width, int height, bool isParticle)
+void Body_Setup(Body* body, int32_t width, int32_t height, bool isParticle)
 {
 	body->mIsParticle = isParticle;
 	body->mPhysicsOriginalWidth = width * BODY_PHYSICS_SCALER;
@@ -43,7 +43,7 @@ bool Body_IsPushesThisThingSet(Body* body)
 		return true;
 	}
 }
-//void DrawBody(Body* body, OeSpriteBatch* spriteBatch, double delta, int depth, Color color);
+//void DrawBody(Body* body, OeSpriteBatch* spriteBatch, double delta, int32_t depth, Color color);
 void Body_ResetCollideWithCollision(Body* body)
 {
 	body->mCollideWithCollision = NULL;
@@ -59,7 +59,7 @@ void Body_ResetBeforeCollideWithBody(Body* body)
 	body->mBeforeCollideWithBody = NULL;
 	body->mBeforeCollideWithBody = Body_DefaultBeforeColliderBody;
 }
-void Body_Resize(Body* body, int width, int height)
+void Body_Resize(Body* body, int32_t width, int32_t height)
 {
 	body->mPhysicsWidth = (width * BODY_PHYSICS_SCALER);
 	body->mPhysicsHeight = (height * BODY_PHYSICS_SCALER);
@@ -113,7 +113,7 @@ int Body_GetWidth(Body* body)
 {
 	return body->mPhysicsWidth / BODY_PHYSICS_SCALER;
 }
-void Body_SetWidth(Body* body, int pixelWidth)
+void Body_SetWidth(Body* body, int32_t pixelWidth)
 {
 	body->mPhysicsWidth = pixelWidth * BODY_PHYSICS_SCALER;
 }
@@ -121,7 +121,7 @@ int Body_GetHeight(Body* body)
 {
 	return body->mPhysicsHeight / BODY_PHYSICS_SCALER;
 }
-void Body_SetHeight(Body* body, int pixelHeight)
+void Body_SetHeight(Body* body, int32_t pixelHeight)
 {
 	body->mPhysicsHeight = pixelHeight * BODY_PHYSICS_SCALER;
 }

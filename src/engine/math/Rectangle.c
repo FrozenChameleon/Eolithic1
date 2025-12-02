@@ -17,7 +17,7 @@
 
 const Rectangle Rectangle_Empty = { 0 };
 
-Rectangle Rectangle_Create(int x, int y, int width, int height)
+Rectangle Rectangle_Create(int x, int32_t y, int32_t width, int32_t height)
 {
 	Rectangle rect;
 	rect.X = x;
@@ -26,7 +26,7 @@ Rectangle Rectangle_Create(int x, int y, int width, int height)
 	rect.Height = height;
 	return rect;
 }
-void Rectangle_Init(Rectangle* value, int x, int y, int width, int height)
+void Rectangle_Init(Rectangle* value, int32_t x, int32_t y, int32_t width, int32_t height)
 {
 	value->X = x;
 	value->Y = y;
@@ -41,7 +41,7 @@ bool Rectangle_NotEqual(const Rectangle* value1, const Rectangle* value2)
 {
 	return !Rectangle_EqualTo(value1, value2);
 }
-void Rectangle_Inflate(Rectangle* value, int horizontalValue, int verticalValue)
+void Rectangle_Inflate(Rectangle* value, int32_t horizontalValue, int32_t verticalValue)
 {
 	value->X -= horizontalValue;
 	value->Y -= verticalValue;
@@ -78,7 +78,7 @@ bool Rectangle_Intersects(const Rectangle* value1, const Rectangle* value2)
 		(Rectangle_Top(value2) < Rectangle_Bottom(value1)) &&
 		(Rectangle_Top(value1) < Rectangle_Bottom(value2)));
 }
-bool Rectangle_Contains(const Rectangle* value, int x, int y)
+bool Rectangle_Contains(const Rectangle* value, int32_t x, int32_t y)
 {
 	return ((value->X <= x) &&
 		(x < (value->X + value->Width)) &&

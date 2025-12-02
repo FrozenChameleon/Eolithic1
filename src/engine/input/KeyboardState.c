@@ -14,7 +14,7 @@
 #include "../core/Game.h"
 
 static bool _mIsKeyMuted[KEYS_AMOUNT_OF_KEYS];
-static int _mKeyTimeHeld[KEYS_AMOUNT_OF_KEYS];
+static int32_t _mKeyTimeHeld[KEYS_AMOUNT_OF_KEYS];
 static KeyboardData _mThisFrame;
 static KeyboardData _mLastFrame;
 static bool _mHasInit;

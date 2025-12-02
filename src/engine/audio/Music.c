@@ -17,7 +17,7 @@
 
 static VolumeData _mVolumeData;
 static MusicInstance _mCurrentMusic;
-static int _mMusicPausePriority;
+static int32_t _mMusicPausePriority;
 static bool _mDoNotAllowUpdatesWhilePaused;
 static bool _mIsMusicMuted;
 static bool _mHackToIgnoreNextFadeOutMusic;
@@ -143,7 +143,7 @@ void Music_PlayPreviousTrack()
 {
 	Music_PlayMusic(MusicInstance_PreviousTrack(&_mCurrentMusic), true, true, false, 0, false, 0);
 }
-void Music_PlayMusic(const char* nextTrack, bool isLooping, bool isForced, bool isFadeIn, int fadeInTime, bool isFadeOut, int fadeOutTime)
+void Music_PlayMusic(const char* nextTrack, bool isLooping, bool isForced, bool isFadeIn, int32_t fadeInTime, bool isFadeOut, int32_t fadeOutTime)
 {
 	if (IsDisabledPermanently() || IsRewinding())
 	{

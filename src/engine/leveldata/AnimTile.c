@@ -14,7 +14,7 @@
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
-const static int VERSION = 3;
+const static int32_t VERSION = 3;
 
 void AnimTile_Read(AnimTile* at, BufferReader* br)
 {
@@ -86,7 +86,7 @@ void AnimTile_UpdateResource(AnimTile* at)
 		at->_mWrapSpeedCounter += 1;
 	}
 }
-void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int depth, int x, int y, float rotation, bool flipX, bool flipY)
+void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int32_t depth, int32_t x, int32_t y, float rotation, bool flipX, bool flipY)
 {
 	int scaler = at->mScaler;
 
@@ -105,8 +105,8 @@ void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int dept
 	else
 	{
 		RenderCommandSheet* instance = Sheet_Draw4(AnimTile_GetAnimationSheet(at), spriteBatch, color, depth, true, true, NULL,
-			Vector2_Create(x + (TILE_SIZE / 2), y + (TILE_SIZE / 2)),
-			Vector2_Create2(scaler), at->mRotation + rotation, flippingX, flippingY);
+			Vector2_Create((float)(x + (TILE_SIZE / 2)), (float)(y + (TILE_SIZE / 2))),
+			Vector2_Create2((float)scaler), at->mRotation + rotation, flippingX, flippingY);
 		if (at->mIsAdditive)
 		{
 			instance->mBlendState = BLENDSTATE_ADDITIVE;

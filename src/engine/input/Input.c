@@ -45,8 +45,8 @@ static bool _mHasInit;
 static InputPlayer _mPlayers[INPUT_MAXIMUM_PLAYER_COUNT];
 static DoubleClickData _mLeftDoubleClick;
 static OverrideDeadzoneData _mOverrideDeadzoneData;
-static int _mBlockMKBInputForFrames = 0;
-static int _mMasterRecordingState = 0;
+static int32_t _mBlockMKBInputForFrames = 0;
+static int32_t _mMasterRecordingState = 0;
 
 static void HandleDoubleClickData(DoubleClickData* data, bool tapValue)
 {

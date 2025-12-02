@@ -23,6 +23,6 @@ void PointRectangle_CorrectPoints(PointRectangle* prect);
 void PointRectangle_Read(PointRectangle* prect, BufferReader* reader);
 Rectangle PointRectangle_GetRectangle(PointRectangle* prect);
 Rectangle PointRectangle_GetRectanglePoint(Point pointOne, Point pointTwo);
-void PointRectangle_Add(PointRectangle* prect, int amountX, int amountY);
+void PointRectangle_Add(PointRectangle* prect, int32_t amountX, int32_t amountY);
 // void PointRectangle_Draw(OePointRectangle* prect, OeSpriteBatch* spriteBatch, Color rectangleColor, bool isHollow);
 // void PointRectangle_Draw(OePointRectangle* prect, OeSpriteBatch* spriteBatch, Color rectangleColor, Color pointColor1, Color pointColor2, bool isHollow);

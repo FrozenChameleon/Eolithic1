@@ -34,7 +34,7 @@ bool LevelCameraData_HasBounds(LevelCameraData* lcd)
 {
 	return !PointRectangle_IsEmpty(&lcd->mVolumeBounds);
 }
-void LevelCameraData_Read(LevelCameraData* lcd, int version, BufferReader* reader)
+void LevelCameraData_Read(LevelCameraData* lcd, int32_t version, BufferReader* reader)
 {
 	PointRectangle_Read(&lcd->mVolumeTrigger, reader);
 	PointRectangle_Read(&lcd->mVolumeBounds, reader);

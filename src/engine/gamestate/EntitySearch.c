@@ -55,7 +55,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisName(const EntitySearch* loo
 	}
 	return addToThis;
 }
-EntitySearch* EntitySearch_SearchForEntitiesWithThisParentNumber(const EntitySearch* lookThroughThis, EntitySearch* addToThis, int value, bool isReverse)
+EntitySearch* EntitySearch_SearchForEntitiesWithThisParentNumber(const EntitySearch* lookThroughThis, EntitySearch* addToThis, int32_t value, bool isReverse)
 {
 	for (int i = 0; i < lookThroughThis->len; i += 1)
 	{
@@ -67,7 +67,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisParentNumber(const EntitySea
 	}
 	return addToThis;
 }
-EntitySearch* EntitySearch_SearchForEntitiesWithThisIntTag(const EntitySearch* lookThroughThis, EntitySearch* addToThis, int value, bool isReverse)
+EntitySearch* EntitySearch_SearchForEntitiesWithThisIntTag(const EntitySearch* lookThroughThis, EntitySearch* addToThis, int32_t value, bool isReverse)
 {
 	for (int i = 0; i < lookThroughThis->len; i += 1)
 	{

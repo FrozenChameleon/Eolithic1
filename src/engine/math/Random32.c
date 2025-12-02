@@ -39,7 +39,7 @@ bool Random32_NextBoolean(Random32* data)
 {
 	return Random32_NextInt(data, 2) == 0;
 }
-int32_t Random32_NextInt(Random32* data, int givenMaxValue)
+int32_t Random32_NextInt(Random32* data, int32_t givenMaxValue)
 {
 	return (int32_t)(givenMaxValue * Random32_NextDouble(data));
 }

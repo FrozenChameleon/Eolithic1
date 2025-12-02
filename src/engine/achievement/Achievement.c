@@ -30,7 +30,7 @@ void Achievement_Init(Achievement* achievement, bool (*condition)(), const char*
 		achievement->mSheet = Sheet_GetSheet(image);
 	}
 }
-void Achievement_Update(bool doNotCertify, Achievement* achievement, int index)
+void Achievement_Update(bool doNotCertify, Achievement* achievement, int32_t index)
 {
 	if (!achievement->mIsUnlocked)
 	{
@@ -40,7 +40,7 @@ void Achievement_Update(bool doNotCertify, Achievement* achievement, int index)
 		}
 	}
 }
-void Achievement_UnlockAchievement(bool doNotCertify, Achievement* achievement, int index)
+void Achievement_UnlockAchievement(bool doNotCertify, Achievement* achievement, int32_t index)
 {
 	if (achievement->mIsUnlocked)
 	{
@@ -54,7 +54,7 @@ void Achievement_UnlockAchievement(bool doNotCertify, Achievement* achievement, 
 		Achievement_CertifyAchievement(achievement, index);
 	}
 }
-void Achievement_CertifyAchievement(Achievement* achievement, int index)
+void Achievement_CertifyAchievement(Achievement* achievement, int32_t index)
 {
 	if (!achievement->mIsUnlocked || achievement->mIsCertified || !Service_HasSignedIn() || Globals_AreAchievementsDisabled())
 	{

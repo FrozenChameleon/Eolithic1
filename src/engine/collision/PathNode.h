@@ -18,7 +18,7 @@ struct OePathNode final
 	int mTargetDistance;
 	int mTotalDistance;
 
-	void Setup(std::shared_ptr<OePathNode> givenParent, int gridX, int gridY, int targetX, int targetY);
+	void Setup(std::shared_ptr<OePathNode> givenParent, int32_t gridX, int32_t gridY, int32_t targetX, int32_t targetY);
 	float GetRealX();
 	float GetRealY();
 	int GetDirectionToHereX();
@@ -29,7 +29,7 @@ struct OePathNode final
 	void Reset();
 	int Count();
 	std::shared_ptr<OePathNode> GetRoot();
-	static std::shared_ptr<OePathNode> Obtain(std::shared_ptr<OePathNode> givenParent, int gridX, int gridY, int targetX, int targetY);
+	static std::shared_ptr<OePathNode> Obtain(std::shared_ptr<OePathNode> givenParent, int32_t gridX, int32_t gridY, int32_t targetX, int32_t targetY);
 };
 
 */

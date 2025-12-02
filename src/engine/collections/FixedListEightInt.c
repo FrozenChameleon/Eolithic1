@@ -43,7 +43,7 @@ int32_t FixedListEightInt_Get(const FixedListEightInt* flei, int32_t i)
 	}
 	else
 	{
-		Logger_LogWarning("Fixed list eight int invalid get");
+		Logger_LogWarning("Fixed list eight int32_t invalid get");
 		return -1;
 	}
 }
@@ -55,7 +55,7 @@ void FixedListEightInt_Set(FixedListEightInt* flei, int32_t i, int32_t value)
 	}
 	else
 	{
-		Logger_LogWarning("Fixed list eight int invalid set");
+		Logger_LogWarning("Fixed list eight int32_t invalid set");
 	}
 }
 void FixedListEightInt_Add(FixedListEightInt* flei, int32_t value)
@@ -67,6 +67,6 @@ void FixedListEightInt_Add(FixedListEightInt* flei, int32_t value)
 	}
 	else
 	{
-		Logger_LogWarning("Fixed list eight int over limit");
+		Logger_LogWarning("Fixed list eight int32_t over limit");
 	}
 }

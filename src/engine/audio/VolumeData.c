@@ -55,7 +55,7 @@ int VolumeData_GetVolume(VolumeData* vd, const char* name)
 	}
 	*/
 }
-void VolumeData_SetVolume(VolumeData* vd, const char* name, int volume)
+void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume)
 {
 	//_mVolumeMap[name] = volume;
 }
