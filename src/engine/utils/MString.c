@@ -4,6 +4,9 @@
 #include "Logger.h"
 #include "Macros.h"
 #include "../io/BufferReader.h"
+#include "../../third_party/stb_ds.h"
+
+#define FIND_THE_LEAKS
 
 typedef struct MString
 {
@@ -16,6 +19,16 @@ static uint64_t _mRefs;
 
 static char _mTempBuffer[EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE];
 
+#ifdef FIND_THE_LEAKS
+typedef struct LeakTest
+{ 
+	MString* key; 
+	int value;
+} LeakTest;
+
+static LeakTest* _mLeakTest;
+#endif
+
 static void ClearTempBuffer()
 {
 	Utils_memset(_mTempBuffer, 0, EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE * sizeof(char));
@@ -26,6 +39,9 @@ static MString* MString_CreateEmpty(int32_t size)
 	_mRefs += 1;
 
 	MString* mstring = Utils_calloc(1, sizeof(MString));
+#ifdef FIND_THE_LEAKS
+	hmput(_mLeakTest, mstring, 0);
+#endif
 	mstring->text = Utils_calloc(1, size);
 	mstring->len = 0;
 	mstring->capacity = size;
@@ -50,7 +66,6 @@ static bool CheckDoublePointerSafetyForComparison(MString** str)
 
 	if (*str == NULL)
 	{
-		Logger_LogWarning("MString pointer is not safe...");
 		return false;
 	}
 
@@ -69,7 +84,7 @@ static void CheckAndReplaceNullString(MString** str)
 		return;
 	}
 
-	*str = MString_Create("");
+	*str = MString_Create(EE_STR_EMPTY);
 }
 
 char* MString_GetText(const MString* str)
@@ -225,6 +240,10 @@ void MString_Dispose(MString** str)
 		return;
 	}
 
+#ifdef FIND_THE_LEAKS
+	hmdel(_mLeakTest, *str);
+#endif
+
 	_mRefs -= 1;
 
 	Utils_free((*str)->text);
@@ -244,4 +263,41 @@ MString* MString_Read(BufferReader* br)
 uint64_t MString_GetRefs()
 {
 	return _mRefs;
+}
+void MString_Combine2(MString** str, const char* str1, const char* str2)
+{
+	MString_Assign(str, str1);
+	MString_AddAssignString(str, str2);
+}
+void MString_Combine3(MString** str, const char* str1, const char* str2, const char* str3)
+{
+	MString_Assign(str, str1);
+	MString_AddAssignString(str, str2);
+	MString_AddAssignString(str, str3);
+}
+void MString_Combine4(MString** str, const char* str1, const char* str2, const char* str3, const char* str4)
+{
+	MString_Assign(str, str1);
+	MString_AddAssignString(str, str2);
+	MString_AddAssignString(str, str3);
+	MString_AddAssignString(str, str4);
+}
+void MString_Combine5(MString** str, const char* str1, const char* str2, const char* str3, const char* str4, const char* str5)
+{
+	MString_Assign(str, str1);
+	MString_AddAssignString(str, str2);
+	MString_AddAssignString(str, str3);
+	MString_AddAssignString(str, str4);
+	MString_AddAssignString(str, str5);
+}
+void MString_DebugPrintLeakInfo()
+{
+#ifdef FIND_THE_LEAKS
+	int64_t len = hmlen(_mLeakTest);
+	for (int i = 0; i < len; i += 1)
+	{
+		Logger_printf(MString_GetText(_mLeakTest[i].key));
+		Logger_printf("\n");
+	}
+#endif
 }

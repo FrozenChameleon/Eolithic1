@@ -8,7 +8,10 @@
 
 #define ACTIONLIST_LENGTH 30
 
+typedef struct IStringArray IStringArray;
+
 const char* ActionList_GetAction(int index);
+IStringArray* ActionList_GetArray();
 
 extern const char* ACTIONLIST_GAME_A;
 extern const char* ACTIONLIST_GAME_B;

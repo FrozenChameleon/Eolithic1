@@ -11,6 +11,8 @@
 #include "../utils/Utils.h"
 #include "Input.h"
 
+InputAction INPUTACTION_DUMMY_ACTION = { 0 };
+
 void InputAction_ClearPolledInput(InputAction* action)
 {
 	action->mTimeHeld = 0;
@@ -28,8 +30,16 @@ void InputAction_ClearPolledInput(InputAction* action)
 void InputAction_Init(const char* name, InputAction* action)
 {
 	Utils_memset(action, 0, sizeof(InputAction));
-	action->mName = name;
+	MString_Assign(&action->mName, name);
 	Timer_Init(&action->mTimerDoubleTap, INPUT_ACTION_DOUBLE_TAP_LENGTH);
+}
+void InputAction_Write(InputAction* action, const char* begin, BufferWriter* writer)
+{
+
+}
+void InputAction_Read(InputAction* action, const char* begin, BufferReader* reader)
+{
+
 }
 void InputAction_Update(InputAction* action, InputPlayer* input)
 {

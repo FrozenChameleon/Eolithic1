@@ -193,3 +193,37 @@ RenderCommandString* SpriteBatch_DrawString3(SpriteBatch* sb, const char* font, 
 
 	return command;
 }
+
+RenderCommandSheet* SpriteBatch_DrawRectangle(SpriteBatch* sb, Texture* texture, Color color, int32_t depth, ShaderProgram* program,
+	Rectangle destinationRectangle, Rectangle sourceRectangle, float rotation, bool flipX, bool flipY, Vector2 origin)
+{
+	ClampDepth(&depth);
+
+	if (texture == NULL)
+	{
+		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
+		texture = Sheet_GetDefaultSheet()->mTextureResource->mData;
+	}
+
+	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
+	command->mType = RENDERER_TYPE_SHEET;
+	command->mDepth = depth;
+	command->mFlipX = flipX;
+	command->mFlipY = flipY;
+	command->mIsRectangle = true;
+	command->mIsInterpolated = false;
+	command->mBlendState = 0;
+	command->mExtraPasses = 0;
+	command->mColor = color;
+	command->mPosition = Vector2_Zero;
+	command->mLastPosition = Vector2_Zero;
+	command->mOrigin = origin;
+	command->mScale = Vector2_Zero;
+	command->mRotation = rotation;
+	command->mSourceRectangle = sourceRectangle;
+	command->mDestinationRectangle = destinationRectangle;
+	command->mTexture = texture;
+	command->mShaderProgram = program;
+
+	return command;
+}

@@ -152,6 +152,10 @@ MString* BufferWriter_WriteStringToMString(BufferWriter* br)
 	BufferWriter_WriteJustTheStringData(br, newStringLength, strToReturn->text, newStrCapacity);
 	return strToReturn;*/
 }
+void BufferWriter_WriteEOF(BufferWriter* br)
+{
+	//TODO
+}
 bool BufferWriter_HasNext(BufferWriter* br)
 {
 	int64_t cur = BufferWriter_Tell(br);
@@ -183,6 +187,11 @@ void BufferWriter_Dispose(BufferWriter* br, bool doNotDisposeBuffer)
 	}
 	//SDL_CloseIO(br->mIOStream);
 	Utils_free(br);
+}
+FixedByteBuffer* BufferWriter_ToFixedByteBuffer(BufferWriter* br)
+{
+	//TODO
+	return NULL;
 }
 uint64_t BufferWriter_GetRefs()
 {

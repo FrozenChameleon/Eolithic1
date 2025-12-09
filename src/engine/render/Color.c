@@ -106,13 +106,13 @@ float Color_BlueF(Color color)
 {
 	return color.B / 255.0f;
 }
-Color Color_Create4(int red, int32_t green, int32_t blue, int32_t alpha)
+Color Color_Create4(int32_t red, int32_t green, int32_t blue, int32_t alpha)
 {
 	Color tempColor;
 	Color_Init4(&tempColor, red, green, blue, alpha);
 	return tempColor;
 }
-Color Color_Create3(int red, int32_t green, int32_t blue)
+Color Color_Create3(int32_t red, int32_t green, int32_t blue)
 {
 	Color tempColor;
 	Color_Init3(&tempColor, red, green, blue);

@@ -30,7 +30,7 @@
 #define DEVICES_ARRAY_LENGTH 4
 
 //static std::vector<OeInputAction> _mDummyAction;
-//static const std::string _mGlyphDummy = STR_NOTHING;
+static const char* _mGlyphDummy = EE_STR_EMPTY;
 static SDL_Gamepad* INTERNAL_devices[DEVICES_ARRAY_LENGTH];
 static struct { int32_t key; int32_t value; } *hm_INTERNAL_instanceList = NULL; //Map of SDL device # to internal devices array index ^
 
@@ -266,7 +266,7 @@ bool ControllerState_IsUsingControllerPrompt()
 {
 	return false;
 }
-//const std::string& OeControllerState_PlatformGetForcedSpecificGlyphAsString()
-//{
-//	return _mGlyphDummy;
-//}
+const char* ControllerState_PlatformGetForcedSpecificGlyphAsString()
+{
+	return _mGlyphDummy;
+}

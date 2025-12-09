@@ -14,6 +14,10 @@
 #include "Cvars.h"
 #include "../render/Renderer.h"
 #include "Logger.h"
+#include "../input/Input.h"
+#include "../service/Service.h"
+#include "../input/ControllerState.h"
+#include "../input/ControllerStates.h"
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
@@ -23,6 +27,15 @@ static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
 struct { int32_t key; void** value; }*hm_allocation_arenas;
 
+static void ResetLargeCharBuffer()
+{
+	Utils_memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
+}
+
+bool Utils_IsCurrentLanguageEnglish()
+{
+	return true;
+}
 uint64_t Utils_GetMallocRefs()
 {
 	return _mMallocRefs;
@@ -180,6 +193,30 @@ int32_t Utils_DoubleToString(double value, char* buffer, size_t maxlen)
 {
 	return SDL_snprintf(buffer, maxlen, "%.17g", value); //17 FROM DBL_DECIMAL_DIG in float.h
 }
+char* Utils_IntToStringStaticBuffer(int32_t value)
+{
+	if (SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%d", value) < 0)
+	{
+		ResetLargeCharBuffer();
+	}
+	return _mLargeCharBuffer;
+}
+char* Utils_FloatToStringStaticBuffer(float value)
+{
+	if (SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.9g", value) < 0) //9 FROM FROM FLT_DECIMAL_DIG in float.h
+	{
+		ResetLargeCharBuffer();
+	}
+	return _mLargeCharBuffer;
+}
+char* Utils_DoubleToStringStaticBuffer(double value)
+{
+	if (SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.17g", value) < 0) //17 FROM DBL_DECIMAL_DIG in float.h
+	{
+		ResetLargeCharBuffer();
+	}
+	return _mLargeCharBuffer;
+}
 char* Utils_CreateStringBuffer(size_t length)
 {
 	_mStringRefs += 1;
@@ -202,7 +239,7 @@ void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet)
 		values[i] = valueToSet;
 	}
 }
-void Utils_ResetArrayAsInt32(int32_t* values, size_t len, int32_t valueToSet)
+void Utils_ResetArrayAsInt(int32_t* values, size_t len, int32_t valueToSet)
 {
 	for (int i = 0; i < len; i += 1)
 	{
@@ -309,7 +346,6 @@ IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
 
 	return sa;
 }
-
 char Utils_GetCharFromNumber(int val)
 {
 	if (val == -1)
@@ -423,6 +459,26 @@ bool Utils_StringEndsWith(const char* str, const char* endsWithThis)
 
 	return true;
 }
+bool Utils_StringStartsWith(const char* str, const char* startsWithThis)
+{
+	int32_t strLen = (int32_t)Utils_strlen(str);
+	int32_t startsWithThisLen = (int32_t)Utils_strlen(startsWithThis);
+
+	if (strLen < startsWithThisLen)
+	{
+		return false;
+	}
+
+	for (int32_t i = 0; i < startsWithThisLen; i += 1)
+	{
+		if (str[i] != startsWithThis[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 int32_t Utils_ParseDirection(const char* s)
 {
 	int32_t value;
@@ -439,4 +495,33 @@ int32_t Utils_ParseDirection(const char* s)
 		value = -1;
 	}
 	return value;
+}
+const char* Utils_GetGlyphType()
+{
+	int controllerType = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
+	if (Service_PlatformForcesSpecificGlyph())
+	{
+		const char* strForcedGlyph = ControllerState_PlatformGetForcedSpecificGlyphAsString();
+		if (!Utils_StringEqualTo(strForcedGlyph, EE_STR_EMPTY))
+		{
+			return strForcedGlyph;
+		}
+		else
+		{
+			controllerType = Service_PlatformGetForcedSpecificGlyph();
+		}
+	}
+
+	switch (controllerType)
+	{
+	case INPUT_CONTROLLER_GLYPH_X:
+		return "XONE";
+	case INPUT_CONTROLLER_GLYPH_P4:
+		return "PS4";
+	case INPUT_CONTROLLER_GLYPH_P5:
+		return "PS5";
+	case INPUT_CONTROLLER_GLYPH_N:
+		return "SWITCH";
+	}
+	return "?";
 }

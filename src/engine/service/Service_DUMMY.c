@@ -42,6 +42,23 @@ bool Service_PlatformForcesControllerOnPressStartScreen()
 {
 	return false;
 }
+static const char* DUMMYWHATEVER = "";
+void Service_ResetLeaderboardRequestStuff()
+{
+
+}
+void Service_TurnOffLeaderboardCannotConnectError()
+{
+
+}
+const char* Service_PlatformSpecificTerminologyFilter()
+{
+	return DUMMYWHATEVER;
+}
+bool Service_TellServiceIfOnLeaderboardMenuRightNow()
+{
+	return false;
+}
 bool Service_PlatformDisablesKeyboardUse()
 {
 	return false;
@@ -170,13 +187,33 @@ bool Service_AreNetworkFeaturesAreAvailableRightNow(bool isSilent)
 {
 	return true;
 }
-bool Service_LeaveTheLeaderboardMenuRightNow()
+int Service_GetCurrentLowestRank()
+{
+	return 0;
+}
+int Service_GetCurrentHighestRank()
+{
+	return 0;
+}
+bool Service_CanLeaderboardGoLeft()
 {
 	return false;
 }
-void Service_TurnOffLeaderboardCannotConnectError()
+bool Service_CanLeaderboardGoRight()
 {
-
+	return false;
+}
+int Service_GetLeaderboardEntryCount()
+{
+	return 0;
+}
+bool Service_IsLeaderboardReady()
+{
+	return false;
+}
+bool Service_LeaveTheLeaderboardMenuRightNow()
+{
+	return false;
 }
 bool Service_IsWaitingOnServiceToFinishLoading(double delta)
 {

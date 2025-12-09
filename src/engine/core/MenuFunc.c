@@ -19,8 +19,8 @@
 #include "Func.h"
 #include "../../third_party/stb_ds.h"
 
-int TEMP_WINDOW_SIZE_MULTIPLE = 0;
-Rectangle TEMP_WINDOW_SIZE = { 0 };
+int MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = 0;
+Rectangle MENUFUNC_TEMP_WINDOW_SIZE = { 0 };
 
 static bool SUPPRESS_MENU_SOUNDS;
 static int32_t SOUND_TEST_CURRENT_SOUND;
@@ -311,7 +311,7 @@ void MenuFunc_VideoFixedTimeStepToggle()
 void MenuFunc_VideoApplyWindowSizeMultiple()
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, false);
-	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, TEMP_WINDOW_SIZE_MULTIPLE);
+	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH, -1);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, -1);
 	//TODO C99 Utils_InvokeWindowedMode();
@@ -320,8 +320,8 @@ void MenuFunc_VideoApplyWindowSize()
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, false);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, 1);
-	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH, TEMP_WINDOW_SIZE.Width);
-	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, TEMP_WINDOW_SIZE.Height);
+	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH, MENUFUNC_TEMP_WINDOW_SIZE.Width);
+	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, MENUFUNC_TEMP_WINDOW_SIZE.Height);
 	//TODO C99 OeUtils_InvokeWindowedMode();
 }
 void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
@@ -370,34 +370,34 @@ void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderV
 	int min = 1;
 	if (forcedSliderValue != -1)
 	{
-		TEMP_WINDOW_SIZE_MULTIPLE = (int)(maxValue * (forcedSliderValue / 100.0f));
-		if (TEMP_WINDOW_SIZE_MULTIPLE < min)
+		MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = (int)(maxValue * (forcedSliderValue / 100.0f));
+		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE < min)
 		{
-			TEMP_WINDOW_SIZE_MULTIPLE = min;
+			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = min;
 		}
 	}
 	else if (direction != 0)
 	{
-		TEMP_WINDOW_SIZE_MULTIPLE += direction;
-		if (TEMP_WINDOW_SIZE_MULTIPLE > maxValue)
+		MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE += direction;
+		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE > maxValue)
 		{
-			TEMP_WINDOW_SIZE_MULTIPLE = maxValue;
+			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = maxValue;
 		}
-		if (TEMP_WINDOW_SIZE_MULTIPLE < min)
+		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE < min)
 		{
-			TEMP_WINDOW_SIZE_MULTIPLE = min;
+			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = min;
 		}
 	}
 	else
 	{
-		TEMP_WINDOW_SIZE_MULTIPLE++;
-		if (TEMP_WINDOW_SIZE_MULTIPLE > maxValue)
+		MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE++;
+		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE > maxValue)
 		{
-			TEMP_WINDOW_SIZE_MULTIPLE = min;
+			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = min;
 		}
-		if (TEMP_WINDOW_SIZE_MULTIPLE < min)
+		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE < min)
 		{
-			TEMP_WINDOW_SIZE_MULTIPLE = maxValue;
+			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = maxValue;
 		}
 	}
 }
@@ -609,8 +609,8 @@ int MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
 int MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue()
 {
 	Rectangle displayBounds = Window_GetDisplayBounds();
-	int width = 0; //TODO C99 Utils_GetWindowSizeMulWidth();
-	int height = 0; //TODO C99  Utils_GetWindowSizeMulHeight();
+	int width = 1280; //TODO C99 Utils_GetWindowSizeMulWidth();
+	int height = 720; //TODO C99  Utils_GetWindowSizeMulHeight();
 	int maxWidth = displayBounds.Width / width;
 	int maxHeight = displayBounds.Height / height;
 	int maxValue = maxWidth > maxHeight ? maxHeight : maxWidth;

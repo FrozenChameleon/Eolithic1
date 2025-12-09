@@ -218,3 +218,17 @@ RenderCommandSheet* Sheet_DrawInterpolated5(Sheet* sheet, SpriteBatch* spriteBat
 	return SpriteBatch_DrawInterpolated(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(currentX, currentY), Vector2_Create(lastX, lastY),
 		rect, scale, rotation, flipX, flipY, origin);
 }
+RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, 
+	ShaderProgram* program, Rectangle destinationRect, float rotation, bool flipX, bool flipY, Vector2 origin)
+{
+	Rectangle rect = sheet->mRectangle;
+	int newX = destinationRect.X;
+	int newY = destinationRect.Y;
+	if (isCenter)
+	{
+		newX -= destinationRect.Width / 2;
+		newY -= destinationRect.Height / 2;
+	}
+	return SpriteBatch_DrawRectangle(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Rectangle_Create(newX, newY, destinationRect.Width, destinationRect.Height),
+		rect, rotation, flipX, flipY, origin);
+}

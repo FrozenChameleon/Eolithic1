@@ -26,3 +26,8 @@ void MString_Truncate(MString** str, int32_t newLength);
 void MString_Dispose(MString** str);
 MString* MString_Read(BufferReader* br);
 uint64_t MString_GetRefs();
+void MString_Combine2(MString** str, const char* str1, const char* str2);
+void MString_Combine3(MString** str, const char* str1, const char* str2, const char* str3);
+void MString_Combine4(MString** str, const char* str1, const char* str2, const char* str3, const char* str4);
+void MString_Combine5(MString** str, const char* str1, const char* str2, const char* str3, const char* str4, const char* str5);
+void MString_DebugPrintLeakInfo();

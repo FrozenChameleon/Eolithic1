@@ -14,6 +14,9 @@
 #include "Input.h"
 #include "Axes.h"
 #include "../utils/Logger.h"
+#include "../utils/Utils.h"
+
+static MString* _mTempString;
 
 float InputCheck_CorrectAnalogForDirection(int direction, float value)
 {
@@ -405,8 +408,8 @@ const char* InputCheck_GetGlyphString(InputCheck* data)
 }
 const char* InputCheck_GetGlyphStringForController(const char* value)
 {
-	return "TODOC99";
-	//return "GLYPH_" + OeUtils::GetGlyphType() + "_" + value;
+	MString_Combine4(&_mTempString, "GLYPH_", Utils_GetGlyphType(), "_", value);
+	return MString_GetText(_mTempString);
 }
 InputCheck InputCheck_CreateCheckKey(int key)
 {

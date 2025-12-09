@@ -13,7 +13,7 @@
 #include "ControllerState.h"
 #include "ControllerStates.h"
 #include "../math/Math.h"
-//#include "OeInputBindings.h"
+#include "InputBindings.h"
 #include "../core/Game.h"
 #include "../service/Service.h"
 #include "../components/Camera.h"
@@ -109,9 +109,9 @@ void Input_Init()
 	KeyboardState_Init();
 	ControllerStates_Init();
 
-	//TODO C99 InputBindings::Init();
+	InputBindings_Init();
 
-	//TODO C99 InputBindings::SyncAllBindingsToAllPlayers();
+	InputBindings_SyncAllBindingsToAllPlayers();
 
 	_mHasInit = true;
 }

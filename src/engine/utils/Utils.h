@@ -18,6 +18,7 @@ enum
 	UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME = 1
 };
 
+bool Utils_IsCurrentLanguageEnglish();
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);
@@ -40,11 +41,14 @@ bool Utils_StringEqualTo(const char* str1, const char* str2);
 int32_t Utils_IntToString(int32_t value, char* buffer, size_t maxlen);
 int32_t Utils_FloatToString(float value, char* buffer, size_t maxlen);
 int32_t Utils_DoubleToString(double value, char* buffer, size_t maxlen);
+char* Utils_IntToStringStaticBuffer(int32_t value);
+char* Utils_FloatToStringStaticBuffer(float value);
+char* Utils_DoubleToStringStaticBuffer(double value);
 char* Utils_CreateStringBuffer(size_t length);
 char* Utils_CreateStringCopy(const char* str);
 void Utils_FreeString(char* str);
 void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet);
-void Utils_ResetArrayAsInt32(int32_t* values, size_t len, int32_t valueToSet);
+void Utils_ResetArrayAsInt(int32_t* values, size_t len, int32_t valueToSet);
 void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet);
 void Utils_ToggleFullscreenButton();
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex);
@@ -65,4 +69,6 @@ bool Utils_CharIsDigit(char c);
 bool Utils_ArrContainsInt(int* arr_values, int32_t containsThis);
 bool Utils_StringContains(const char* str, const char* containsThis);
 bool Utils_StringEndsWith(const char* str, const char* endsWithThis);
+bool Utils_StringStartsWith(const char* str, const char* startsWithThis);
 int32_t Utils_ParseDirection(const char* s);
+const char* Utils_GetGlyphType();

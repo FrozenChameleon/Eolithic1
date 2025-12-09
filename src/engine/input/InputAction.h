@@ -10,6 +10,11 @@
 #include "stdbool.h"
 #include "../utils/Timer.h"
 #include "InputChecks.h"
+#include "../utils/MString.h"
+
+typedef struct BufferWriter BufferWriter;
+typedef struct BufferReader BufferReader;
+typedef struct MString MString;
 
 typedef struct InputAction
 {
@@ -23,10 +28,12 @@ typedef struct InputAction
 	bool mIsDoubleTapped;
 	bool mIsReleased;
 	bool mIsCheckDoubleTap;
-	const char* mName;
+	MString* mName;
 	Timer mTimerDoubleTap;
 	InputChecks mChecks;
 } InputAction;
+
+extern InputAction INPUTACTION_DUMMY_ACTION;
 
 enum
 {
@@ -35,8 +42,8 @@ enum
 
 void InputAction_ClearPolledInput(InputAction* action);
 void InputAction_Init(const char* name, InputAction* action);
-//static void Write(InputAction* action, const std::string& begin, std::shared_ptr<OeIniWriter> writer);
-//static void Read(InputAction* action, const std::string& begin, std::shared_ptr<OeIniReader> reader);
+void InputAction_Write(InputAction* action, const char* begin, BufferWriter* writer);
+void InputAction_Read(InputAction* action, const char* begin, BufferReader* reader);
 void InputAction_Update(InputAction* action, InputPlayer* input);
 //static void DrawCurrentGlyph(InputAction* action, OeSpriteBatch* spriteBatch, int32_t depth, const std::string& font,
 //	Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);

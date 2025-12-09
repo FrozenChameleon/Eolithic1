@@ -81,4 +81,4 @@ bool ControllerState_PlatformIsForcingCustomInputActions(int32_t player);
 //static std::vector<OeInputAction>& ControllerState_GetForcedCustomInputActions(int32_t player);
 bool ControllerState_IsUsingControllerForbiddenToFullRebinding();
 bool ControllerState_IsUsingControllerPrompt();
-//static const std::string& ControllerState_PlatformGetForcedSpecificGlyphAsString();
+const char* ControllerState_PlatformGetForcedSpecificGlyphAsString();

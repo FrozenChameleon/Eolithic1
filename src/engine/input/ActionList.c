@@ -6,6 +6,7 @@
 
 #include "ActionList.h"
 
+#include "../utils/IStringArray.h"
 #include "../utils/Logger.h"
 
 const char* ACTIONLIST_GAME_A = "GAME_A";
@@ -108,4 +109,46 @@ const char* ActionList_GetAction(int index)
 	Logger_LogWarning("Trying to get action from action list that does not exist!");
 
 	return ACTIONLIST_GAME_A;
+}
+
+static IStringArray* _mActionNames;
+
+IStringArray* ActionList_GetArray()
+{
+	if (_mActionNames == NULL)
+	{
+		_mActionNames = IStringArray_Create();
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_A);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_B);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_X);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_Y);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LB);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LS);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RB);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RS);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_START);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_SELECT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LS_UP);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LS_RIGHT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LS_DOWN);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_LS_LEFT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RS_UP);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RS_RIGHT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RS_DOWN);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_RS_LEFT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_DIGITAL_UP);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_DIGITAL_RIGHT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_DIGITAL_DOWN);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_DIGITAL_LEFT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_MENU_SELECT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_MENU_BACK);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_MENU_UP);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_MENU_RIGHT);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_MENU_DOWN);
+		IStringArray_Add(_mActionNames, ACTIONLIST_GAME_MENU_LEFT);
+	}
+
+	return _mActionNames;
 }

@@ -26,6 +26,41 @@ enum ServicePlatform
 	PLATFORM_N = 3
 };
 
+enum ServiceLeaderboardSendStatus
+{
+	SERVICE_LEADERBOARD_SEND_STATUS_NOTHING = 0,
+	SERVICE_LEADERBOARD_SEND_STATUS_SENDING = 1,
+	SERVICE_LEADERBOARD_SEND_STATUS_SENT = 2,
+	SERVICE_LEADERBOARD_SEND_STATUS_FAILED = 3
+};
+
+enum ServiceLeaderboardScope
+{
+	SERVICE_LEADERBOARD_SCOPE_GLOBAL = 0,
+	SERVICE_LEADERBOARD_SCOPE_USER = 1,
+	SERVICE_LEADERBOARD_SCOPE_FRIENDS = 2
+};
+
+enum ServiceLeaderboardQueueState
+{
+	SERVICE_LEADERBOARD_QUEUE_STATE_NOTHING = 0,
+	SERVICE_LEADERBOARD_QUEUE_STATE_NEW_REQUEST = 1,
+	SERVICE_LEADERBOARD_QUEUE_STATE_NEXT_PAGE = 2
+};
+
+int Service_GetCurrentLowestRank();
+int Service_GetCurrentHighestRank();
+bool Service_CanLeaderboardGoLeft();
+bool Service_CanLeaderboardGoRight();
+
+bool Service_PlatformForcesSpecificGlyph();
+int Service_GetLeaderboardEntryCount();
+bool Service_IsLeaderboardReady();
+bool Service_LeaveTheLeaderboardMenuRightNow();
+void Service_ResetLeaderboardRequestStuff();
+void Service_TurnOffLeaderboardCannotConnectError();
+const char* Service_PlatformSpecificTerminologyFilter();
+bool Service_TellServiceIfOnLeaderboardMenuRightNow();
 bool Service_PlatformDisablesKeyboardUse();
 void Service_LeaderboardGoLeft();
 void Service_LeaderboardGoRight();
