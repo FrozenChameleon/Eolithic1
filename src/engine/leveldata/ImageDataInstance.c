@@ -13,7 +13,7 @@ void ImageDataInstance_Init2(ImageDataInstance* idi, ImageData* data)
 	if (data->mCanAnimate)
 	{
 		idi->mSheet = Sheet_GetDefaultSheet();
-		Animation_Init(&idi->mAnimation, MString_GetText(data->mImage), data->mFlipSpeed);
+		Animation_Init(&idi->mAnimation, data->mImage, data->mFlipSpeed);
 		idi->mAnimation.mIsLoopingDisabled = data->mAnimationStops;
 		if (data->mAnimationBlanks)
 		{
@@ -23,7 +23,7 @@ void ImageDataInstance_Init2(ImageDataInstance* idi, ImageData* data)
 	}
 	else
 	{
-		idi->mSheet = Sheet_GetSheet(MString_GetText(data->mImage));
+		idi->mSheet = Sheet_GetSheet(data->mImage);
 		Utils_memset(&idi->mAnimation, 0, sizeof(Animation));
 	}
 

@@ -16,6 +16,7 @@
 #include "../resources/TextureManager.h"
 #include "../utils/MString.h"
 #include "../render/TilesetOffset.h"
+#include "../utils/Utils.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -55,9 +56,9 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 		//}
 	}
 
-	if (MString_EqualToString(ld->mLevelName, ""))
+	if (Utils_StringEqualTo(ld->mLevelName, EE_STR_EMPTY))
 	{
-		MString_Assign(&ld->mLevelName, EE_STR_NOT_SET);
+		Utils_strlcpy(ld->mLevelName, EE_STR_NOT_SET, EE_FILENAME_MAX);
 	}
 
 	//TODO C99
@@ -86,13 +87,13 @@ void LevelData_ReadHeader(LevelData* ld, BufferReader* reader)
 
 	ld->_mIsMetaMap = BufferReader_ReadBoolean(reader); // <- Add these two to CometStriker/Mute Crimson+ for parity
 
-	ld->mLevelName = BufferReader_ReadMString(reader);
-	ld->mTilesetName = BufferReader_ReadMString(reader);
+	BufferReader_ReadString(reader, ld->mLevelName, EE_FILENAME_MAX);
+	BufferReader_ReadString(reader, ld->mTilesetName, EE_FILENAME_MAX);
 
 	int customDataSize = BufferReader_ReadI32(reader);
 	for (int i = 0; i < customDataSize; i++)
 	{
-		ld->mStringData[i] = BufferReader_ReadMString(reader);
+		BufferReader_ReadString(reader, ld->mStringData[i], EE_FILENAME_MAX);
 	}
 
 	BufferReader_ReadFloat(reader); //Unused - Player Position X
@@ -159,7 +160,7 @@ void LevelData_LoadSetupOffsets(LevelData* ld)
 		Tile* t = ld->arr_save_tiles[i];
 		for (int j = 0; j < LEVELDATA_LAYER_DATA_LENGTH; j += 1)
 		{
-			TilesetOffset_LoadOffsetPoint(&t->mDrawTiles[j], MString_GetText(ld->mTilesetName));
+			TilesetOffset_LoadOffsetPoint(&t->mDrawTiles[j], ld->mTilesetName);
 		}
 	}
 }
@@ -286,7 +287,7 @@ Rectangle LevelData_GetLevelBoundsRectangle(LevelData* ld)
 }
 bool LevelData_IsTilesetNameSet(LevelData* ld)
 {
-	if (MString_EqualToString(ld->mTilesetName, EE_STR_NOT_SET))
+	if (Utils_StringEqualTo(ld->mTilesetName, EE_STR_NOT_SET))
 	{
 		return false;
 	}
@@ -356,7 +357,7 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 }
 Texture* LevelData_GetTilesetTexture(LevelData* ld)
 {
-	Resource* resource = TextureManager_GetResource(MString_GetText(ld->mTilesetName));
+	Resource* resource = TextureManager_GetResource(ld->mTilesetName);
 	if ((resource == NULL) || (resource->mData == NULL))
 	{
 		return NULL;

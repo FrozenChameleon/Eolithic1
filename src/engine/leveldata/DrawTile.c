@@ -18,7 +18,8 @@
 
 void DrawTile_Init(DrawTile* drawTile)
 {
-	MString_Assign(&drawTile->mAnimation, EE_STR_EMPTY);
+	Utils_memset(drawTile, 0, sizeof(DrawTile));
+	Utils_strlcpy(drawTile->mAnimation, EE_STR_EMPTY, EE_FILENAME_MAX);
 	drawTile->mPoint = Points_NegativeOne;
 	drawTile->mOffsetPoint = Points_NegativeOne;
 }
@@ -32,7 +33,7 @@ void DrawTile_Write(DrawTile* drawTile, BufferWriter* writer)
 }
 void DrawTile_Read(DrawTile* drawTile, int32_t version, BufferReader* reader)
 {
-	drawTile->mAnimation = BufferReader_ReadMString(reader);
+	BufferReader_ReadString(reader, drawTile->mAnimation, EE_FILENAME_MAX);
 	Points_Read(&drawTile->mPoint, reader);
 	drawTile->mFlipX = BufferReader_ReadBoolean(reader);
 	drawTile->mFlipY = BufferReader_ReadBoolean(reader);
@@ -43,11 +44,11 @@ void DrawTile_LoadSheet(DrawTile* drawTile, int32_t x, int32_t y)
 	drawTile->mPoint.X = x;
 	drawTile->mPoint.Y = y;
 
-	MString_Assign(&drawTile->mAnimation, EE_STR_EMPTY);
+	Utils_strlcpy(drawTile->mAnimation, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
 void DrawTile_LoadAnimation(DrawTile* drawTile, const char* animation)
 {
-	MString_Assign(&drawTile->mAnimation, animation);
+	Utils_strlcpy(drawTile->mAnimation, animation, EE_FILENAME_MAX);
 	drawTile->mPoint = Points_NegativeOne;
 }
 void DrawTile_Draw(DrawTile* drawTile, SpriteBatch* spriteBatch, Texture* texture, Color color, int32_t depth, int32_t x, int32_t y)
@@ -86,7 +87,7 @@ Point DrawTile_GetCorrectPoint(DrawTile* drawTile)
 }
 bool DrawTile_IsZero(DrawTile* drawTile)
 {
-	if (MString_EqualToString(drawTile->mAnimation, EE_STR_EMPTY) &&
+	if (Utils_StringEqualTo(drawTile->mAnimation, EE_STR_EMPTY) &&
 		(drawTile->mPoint.X == -1) &&
 		(drawTile->mPoint.Y == -1))
 	{
@@ -96,7 +97,7 @@ bool DrawTile_IsZero(DrawTile* drawTile)
 }
 bool DrawTile_IsAnimation(DrawTile* drawTile)
 {
-	if (MString_EqualToString(drawTile->mAnimation, EE_STR_EMPTY))
+	if (Utils_StringEqualTo(drawTile->mAnimation, EE_STR_EMPTY))
 	{
 		return false;
 	}

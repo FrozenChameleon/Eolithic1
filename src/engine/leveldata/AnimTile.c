@@ -24,10 +24,10 @@ void AnimTile_Read(AnimTile* at, BufferReader* br)
 	at->mIsFlipY = BufferReader_ReadBoolean(br);
 	at->mFlipSpeed = BufferReader_ReadI32(br);
 	at->mRotation = BufferReader_ReadFloat(br);
-	at->mTextureName = BufferReader_ReadMString(br);
-	at->mTilesetFilter = BufferReader_ReadMString(br);
+	BufferReader_ReadString(br, at->mTextureName, EE_FILENAME_MAX);
+	BufferReader_ReadString(br, at->mTilesetFilter, EE_FILENAME_MAX);
 	at->mIsWrap = BufferReader_ReadBoolean(br);
-	at->mWrapTextureName = BufferReader_ReadMString(br);
+	BufferReader_ReadString(br, at->mWrapTextureName, EE_FILENAME_MAX);
 	at->mIsWrapX = BufferReader_ReadBoolean(br);
 	at->mWrapSpeedX = BufferReader_ReadI32(br);
 	at->mIsWrapY = BufferReader_ReadBoolean(br);
@@ -121,16 +121,16 @@ void AnimTile_LoadAnimation(AnimTile* at)
 {
 	if (at->mIsWrap)
 	{
-		if (!MString_EqualToString(at->mWrapTextureName, EE_STR_NOT_SET))
+		if (!Utils_StringEqualTo(at->mWrapTextureName, EE_STR_NOT_SET))
 		{
 			//TODO C99 at->_mWrapSheet = new OeSheet(OeFile::Combine("data", "gfx", "special", "anim", mWrapTextureName + ".png"));
 		}
 	}
 	else
 	{
-		if (!MString_EqualToString(at->mTextureName, EE_STR_NOT_SET))
+		if (!Utils_StringEqualTo(at->mTextureName, EE_STR_NOT_SET))
 		{
-			Animation_Init(&at->_mAnimation, MString_GetText(at->mTextureName), at->mFlipSpeed);
+			Animation_Init(&at->_mAnimation, at->mTextureName, at->mFlipSpeed);
 		}
 	}
 }

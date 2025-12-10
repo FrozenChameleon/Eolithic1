@@ -1565,7 +1565,7 @@ void Do_DestroyParticlesByName(const char* name)
 	while (ComponentPack_Next(particles, &iter))
 	{
 		ParticleInstance* particleData = iter.mComponent;
-		if (MString_EqualToString(particleData->mName, name))
+		if (Utils_StringEqualTo(particleData->mName, name))
 		{
 			particleData->mIsComplete = true;
 		}
@@ -3820,7 +3820,7 @@ Entity Do_BuildActor6(int gridPositionX, int32_t gridPositionY, float initialPos
 	{
 		DrawActor* drawActor = Do_InitComponent(C_DrawActor, entity);
 		DrawActorSys_Setup(entity, drawActor, settings->sh_graphics_data, 
-			MString_GetText(settings->mDefaultState), MString_GetText(settings->mDefaultPhase));
+			settings->mDefaultState, settings->mDefaultPhase);
 	}
 
 	if (settings->mHasAI)

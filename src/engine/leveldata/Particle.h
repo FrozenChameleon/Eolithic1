@@ -55,7 +55,7 @@ typedef struct Particle
 	int mCurveFluctuateIntervalMax;
 
 	int mTextureDepth;
-	MString* mTextureName;
+	char mTextureName[EE_FILENAME_MAX];
 	int mTextureFlipSpeed;
 	bool mTextureIsAnimation;
 	int mScaler;

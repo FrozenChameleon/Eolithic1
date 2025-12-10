@@ -241,7 +241,7 @@ void ParticleInstanceSys_Setup(ParticleInstance* data, const char* name, Particl
 	data->mInfluencedColor = COLOR_WHITE;
 	data->mInfluencedDepth = -1;
 
-	MString_Assign(&data->mName, name);
+	Utils_strlcpy(data->mName, name, EE_FILENAME_MAX);
 	data->mParticle = particleData;
 
 	data->mFlipX = false;
@@ -255,13 +255,13 @@ void ParticleInstanceSys_Setup(ParticleInstance* data, const char* name, Particl
 
 	if (data->mParticle->mTextureIsAnimation)
 	{
-		Animation_Init(&data->mAnimation, MString_GetText(data->mParticle->mTextureName), data->mParticle->mTextureFlipSpeed);
+		Animation_Init(&data->mAnimation, data->mParticle->mTextureName, data->mParticle->mTextureFlipSpeed);
 		data->mAnimation.mAnimationLoopPoint = data->mParticle->mTextureLoopPoint;
 		data->mAnimation.mIsLoopingDisabled = data->mParticle->mTextureDoesAnimationStop;
 	}
 	else
 	{
-		data->mSheet = Sheet_GetSheet(MString_GetText(data->mParticle->mTextureName));
+		data->mSheet = Sheet_GetSheet(data->mParticle->mTextureName);
 	}
 
 	GenerateNewCurveMax(data);

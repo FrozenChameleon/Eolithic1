@@ -28,10 +28,10 @@ INIFile* INIFile_Create_From_Binary(const char* path)
 	BufferReader* br = BufferReader_CreateFromPath(path);
 	while (BufferReader_HasNext(br))
 	{
-		char* key = Utils_CreateStringBuffer(EE_PATH_MAX);
-		char* value = Utils_CreateStringBuffer(EE_PATH_MAX);
-		BufferReader_ReadString(br, key, EE_PATH_MAX);
-		BufferReader_ReadString(br, value, EE_PATH_MAX);
+		char* key = Utils_CreateStringBuffer(EE_FILENAME_MAX);
+		char* value = Utils_CreateStringBuffer(EE_FILENAME_MAX);
+		BufferReader_ReadString(br, key, EE_FILENAME_MAX);
+		BufferReader_ReadString(br, value, EE_FILENAME_MAX);
 		shput(ini->sh_values, key, value);
 	}
 	BufferReader_Dispose(br, false);

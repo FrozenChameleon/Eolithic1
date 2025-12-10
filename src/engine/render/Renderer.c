@@ -689,9 +689,9 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 					Math_ToRadians(drawTile->mRotation),
 					origin, 1, Renderer_GetEffects(drawTile->mFlipX, drawTile->mFlipY), (float)depth);
 			}
-			else if (MString_GetLength(drawTile->mAnimation) > 0)
+			else if (Utils_strnlen(drawTile->mAnimation, EE_FILENAME_MAX) > 0)
 			{
-				AnimTile* animTile = AnimTileManager_GetResourceData(MString_GetText(drawTile->mAnimation));
+				AnimTile* animTile = AnimTileManager_GetResourceData(drawTile->mAnimation);
 				if (animTile == NULL)
 				{
 					Renderer_Draw(DrawTool_GetSinglePixel(), Rectangle_Create((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), Color_Red);

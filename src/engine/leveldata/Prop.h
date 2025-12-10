@@ -19,8 +19,8 @@ typedef struct Prop
 	int mScaler;
 	int mFlipSpeed;
 	bool mIsAnimation;
-	MString* mTextureName;
-	MString* mTilesetFilter;
+	char mTextureName[EE_FILENAME_MAX];
+	char mTilesetFilter[EE_FILENAME_MAX];
 } Prop;
 
 void Prop_Init(Prop* p);

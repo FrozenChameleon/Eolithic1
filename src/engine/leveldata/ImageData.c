@@ -32,7 +32,7 @@ void ImageData_Init(ImageData* id)
 }*/
 void ImageData_Read(ImageData* id, BufferReader* br)
 {
-	id->mImage = BufferReader_ReadMString(br);
+	BufferReader_ReadString(br, id->mImage, EE_FILENAME_MAX);
 	id->mIsAdditive = BufferReader_ReadBoolean(br);
 	id->mOrigin.X = BufferReader_ReadFloat(br);
 	id->mOrigin.Y = BufferReader_ReadFloat(br);
@@ -49,7 +49,7 @@ void ImageData_Read(ImageData* id, BufferReader* br)
 }
 const char* ImageData_ToString(ImageData* id)
 {
-	return MString_GetText(id->mImage);
+	return id->mImage;
 }
 bool ImageData_IsOriginSet(ImageData* id)
 {

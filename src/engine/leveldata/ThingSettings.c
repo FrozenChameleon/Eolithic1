@@ -87,9 +87,9 @@ void ThingSettings_Init(ThingSettings* ts)
 {
 	Utils_memset(ts, 0, sizeof(ThingSettings));
 
-	MString_Assign(&ts->mDefaultState, "DEFAULT");
-	MString_Assign(&ts->mDefaultPhase, "DEFAULT");
-	MString_Assign(&ts->mPreviewSheet, EE_STR_NOT_SET);
+	Utils_strlcpy(ts->mDefaultState, "DEFAULT", EE_FILENAME_MAX);
+	Utils_strlcpy(ts->mDefaultPhase, "DEFAULT", EE_FILENAME_MAX);
+	Utils_strlcpy(ts->mPreviewSheet, EE_STR_NOT_SET, EE_FILENAME_MAX);
 
 	sh_new_arena(ts->sh_graphics_data);
 }
@@ -105,9 +105,9 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 	ts->mHasAI = BufferReader_ReadBoolean(br);
 	ts->mHasDrawing = BufferReader_ReadBoolean(br);
 	ts->mHasCollision = BufferReader_ReadBoolean(br);
-	ts->mDefaultState = BufferReader_ReadMString(br);
-	ts->mDefaultPhase = BufferReader_ReadMString(br);
-	ts->mPreviewSheet = BufferReader_ReadMString(br);
+	BufferReader_ReadString(br, ts->mDefaultState, EE_FILENAME_MAX);
+	BufferReader_ReadString(br, ts->mDefaultPhase, EE_FILENAME_MAX);
+	BufferReader_ReadString(br, ts->mPreviewSheet, EE_FILENAME_MAX);
 
 	int stateCount = BufferReader_ReadI32(br);
 	for (int i = 0; i < stateCount; i += 1)

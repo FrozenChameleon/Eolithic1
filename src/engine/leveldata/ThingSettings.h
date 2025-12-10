@@ -33,9 +33,9 @@ typedef struct ThingSettings
 	bool mHasAI;
 	bool mHasDrawing;
 	bool mHasCollision;
-	MString* mDefaultState;
-	MString* mDefaultPhase;
-	MString* mPreviewSheet;
+	char mDefaultState[EE_FILENAME_MAX];
+	char mDefaultPhase[EE_FILENAME_MAX];
+	char mPreviewSheet[EE_FILENAME_MAX];
 	ThingGraphicsData* sh_graphics_data;
 } ThingSettings;
 

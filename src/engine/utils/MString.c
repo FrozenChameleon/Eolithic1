@@ -37,7 +37,6 @@ static void ClearTempBuffer()
 static MString* MString_CreateEmpty(int32_t size)
 {
 	_mRefs += 1;
-
 	MString* mstring = Utils_calloc(1, sizeof(MString));
 #ifdef FIND_THE_LEAKS
 	hmput(_mLeakTest, mstring, 0);

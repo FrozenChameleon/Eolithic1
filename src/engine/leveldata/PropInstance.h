@@ -23,7 +23,7 @@ typedef struct PropInstance
 	float mRotation;
 	bool mFlipX;
 	bool mFlipY;
-	MString* mName;
+	char mName[EE_FILENAME_MAX];
 	Vector2 mOffset;
 	Vector2 mDrawOffset;
 } PropInstance;

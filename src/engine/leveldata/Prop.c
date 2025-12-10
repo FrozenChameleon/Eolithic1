@@ -34,8 +34,8 @@ void Prop_Init(Prop* p)
 
 	p->_mSheet = Sheet_GetDefaultSheet();
 	p->mScaler = 1;
-	MString_Assign(&p->mTextureName, EE_STR_EMPTY);
-	MString_Assign(&p->mTilesetFilter, EE_STR_EMPTY);
+	Utils_strlcpy(p->mTextureName, EE_STR_EMPTY, EE_FILENAME_MAX);
+	Utils_strlcpy(p->mTilesetFilter, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
 
 Sheet* Prop_GetSheet(Prop* p)
@@ -94,11 +94,11 @@ void Prop_LoadDrawing(Prop* p)
 {
 	if (p->mIsAnimation)
 	{
-		Animation_Init(&p->_mAnimation, MString_GetText(p->mTextureName), p->mFlipSpeed);
+		Animation_Init(&p->_mAnimation, p->mTextureName, p->mFlipSpeed);
 	}
 	else
 	{
-		p->_mSheet = Sheet_GetSheet(MString_GetText(p->mTextureName));
+		p->_mSheet = Sheet_GetSheet(p->mTextureName);
 	}
 }
 Rectangle Prop_GetRectangle(Prop* p)
@@ -114,7 +114,7 @@ Rectangle Prop_GetRectangle(Prop* p)
 }
 const char* Prop_ToString(Prop* p)
 {
-	return MString_GetText(p->mTextureName);
+	return p->mTextureName;
 }
 Animation* Prop_GetAnimation(Prop* p)
 {
@@ -137,8 +137,8 @@ void Prop_ReadIni(Prop* p, BufferReader* reader)
 	p->mScaler = BufferReader_ReadI32(reader);
 	p->mFlipSpeed = BufferReader_ReadI32(reader);
 	p->mIsAnimation = BufferReader_ReadBoolean(reader);
-	p->mTextureName = BufferReader_ReadMString(reader);
-	p->mTilesetFilter = BufferReader_ReadMString(reader);
+	BufferReader_ReadString(reader, p->mTextureName, EE_FILENAME_MAX);
+	BufferReader_ReadString(reader, p->mTilesetFilter, EE_FILENAME_MAX);
 }
 IStringArray* Prop_GetDirectories()
 {

@@ -13,6 +13,7 @@ typedef struct SpriteBatch
 	bool _mHasInit;
 } SpriteBatch;
 
+void SpriteBatch_DisposePinnedStrings();
 void SpriteBatch_Init(SpriteBatch* sb);
 void SpriteBatch_Clear(SpriteBatch* sb);
 RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int32_t depth, ShaderProgram* program, Vector2 position,

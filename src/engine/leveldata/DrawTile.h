@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils/Macros.h"
 #include "../math/Point.h"
 #include "../render/Color.h"
 #include "../utils/MString.h"
@@ -19,7 +20,7 @@ enum
 
 typedef struct DrawTile
 {
-	MString* mAnimation;
+	char mAnimation[EE_FILENAME_MAX];
 	Point mPoint;
 	bool mFlipX;
 	bool mFlipY;

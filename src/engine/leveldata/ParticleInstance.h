@@ -28,7 +28,7 @@ typedef struct ParticleInstance
 	bool mFlipX;
 	bool mFlipY;
 	bool mIsComplete;
-	MString* mName;
+	char mName[EE_FILENAME_MAX];
 	Point mAttachedThingOffset;
 	Point mInfluencedDirection;
 	Vector2 mCurveMaximum;

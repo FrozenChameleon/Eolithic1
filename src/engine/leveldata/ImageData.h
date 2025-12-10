@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils/Macros.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"
 #include "../utils/MString.h"
@@ -20,7 +21,7 @@ typedef struct ImageData
 	int mFlipSpeed;
 	int mDepth;
 	float mInitialRotation;
-	MString* mImage;
+	char mImage[EE_FILENAME_MAX];
 	int mScaler;
 } ImageData;
 

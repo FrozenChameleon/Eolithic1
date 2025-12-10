@@ -59,7 +59,7 @@ void Particle_Read(Particle* p, BufferReader* br)
 	p->mCurveFluctuateIntervalMax = BufferReader_ReadI32(br);
 
 	p->mTextureDepth = BufferReader_ReadI32(br);
-	p->mTextureName = BufferReader_ReadMString(br);
+	BufferReader_ReadString(br, p->mTextureName, EE_FILENAME_MAX);
 	p->mTextureFlipSpeed = BufferReader_ReadI32(br);
 	p->mTextureIsAnimation = BufferReader_ReadBoolean(br);
 	p->mScaler = BufferReader_ReadI32(br);

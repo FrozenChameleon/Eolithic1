@@ -26,10 +26,10 @@ typedef struct AnimTile
 	bool mIsFlipY;
 	int mFlipSpeed;
 	float mRotation;
-	MString* mTextureName;
-	MString* mTilesetFilter;
+	char mTextureName[EE_FILENAME_MAX];
+	char mTilesetFilter[EE_FILENAME_MAX];
 	bool mIsWrap;
-	MString* mWrapTextureName;
+	char mWrapTextureName[EE_FILENAME_MAX];
 	bool mIsWrapX;
 	int mWrapSpeedX;
 	bool mIsWrapY;
