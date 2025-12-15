@@ -6,10 +6,10 @@
 
 #include "Utils.h"
 
-#include "../../third_party/stb_ds.h"
-#include "SDL3/SDL.h"
 #include "stdlib.h"
 #include "float.h"
+#include "../../third_party/stb_ds.h"
+#include "SDL3/SDL.h"
 #include "../math/Math.h"
 #include "Cvars.h"
 #include "../render/Renderer.h"
@@ -18,9 +18,11 @@
 #include "../service/Service.h"
 #include "../input/ControllerState.h"
 #include "../input/ControllerStates.h"
+#include "../globals/Globals.h"
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
+static int64_t _mSaveFrames;
 
 #define LARGE_CHAR_BUFFER_LEN 8192
 static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
@@ -195,26 +197,20 @@ int32_t Utils_DoubleToString(double value, char* buffer, size_t maxlen)
 }
 char* Utils_IntToStringStaticBuffer(int32_t value)
 {
-	if (SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%d", value) < 0)
-	{
-		ResetLargeCharBuffer();
-	}
+	ResetLargeCharBuffer();
+	SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%d", value);
 	return _mLargeCharBuffer;
 }
 char* Utils_FloatToStringStaticBuffer(float value)
 {
-	if (SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.9g", value) < 0) //9 FROM FROM FLT_DECIMAL_DIG in float.h
-	{
-		ResetLargeCharBuffer();
-	}
+	ResetLargeCharBuffer();
+	SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.9g", value); //9 FROM FROM FLT_DECIMAL_DIG in float.h
 	return _mLargeCharBuffer;
 }
 char* Utils_DoubleToStringStaticBuffer(double value)
 {
-	if (SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.17g", value) < 0) //17 FROM DBL_DECIMAL_DIG in float.h
-	{
-		ResetLargeCharBuffer();
-	}
+	ResetLargeCharBuffer();
+	SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.17g", value); //17 FROM DBL_DECIMAL_DIG in float.h
 	return _mLargeCharBuffer;
 }
 char* Utils_CreateStringBuffer(size_t length)
@@ -324,6 +320,8 @@ float Utils_GetCurrentInternalRatio()
 }
 IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
 {
+	ResetLargeCharBuffer();
+
 	IStringArray* sa = IStringArray_Create();
 
 	size_t len = Utils_strnlen(str, maxlen);
@@ -524,4 +522,107 @@ const char* Utils_GetGlyphType()
 		return "SWITCH";
 	}
 	return "?";
+}
+float Utils_GetSubseconds(int32_t val)
+{
+	return (val % 60) * (100.0f / 60.0f);
+}
+int Utils_GetMinutes(int32_t val)
+{
+	int minutes = 0;
+
+	int seconds = val / 60;
+	if (seconds >= 60)
+	{
+		minutes = seconds / 60;
+		if (minutes >= 60)
+		{
+			minutes = minutes % 60;
+		}
+	}
+
+	return minutes;
+}
+int Utils_GetHours(int32_t val)
+{
+	int hours = 0;
+
+	int seconds = val / 60;
+	if (seconds >= 60)
+	{
+		int minutes = seconds / 60;
+		if (minutes >= 60)
+		{
+			hours = minutes / 60;
+		}
+	}
+
+	return hours;
+}
+int Utils_GetSeconds(int32_t val)
+{
+	int seconds = val / 60;
+
+	if (seconds >= 60)
+	{
+		seconds = seconds % 60;
+	}
+
+	return seconds;
+}
+bool Utils_CheckSave(bool update)
+{
+	if (_mSaveFrames > 0)
+	{
+		if (update)
+		{
+			_mSaveFrames -= 1;
+		}
+		return true;
+	}
+	return false;
+}
+void Utils_JustSaved()
+{
+	if (Globals_IsSavingUserDataDisabled())
+	{
+		return;
+	}
+
+	_mSaveFrames = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_TIME);
+}
+static BuilderHelper(char* buffer, int index, int32_t val)
+{
+	if (val < 10)
+	{
+		buffer[index] = '0';
+		buffer[index + 1] = Utils_GetCharFromNumber(val);
+	}
+	else
+	{
+		buffer[index] = Utils_GetCharFromNumber(val / 10);
+		buffer[index + 1] = Utils_GetCharFromNumber(val % 10);
+	}
+}
+void Utils_UpdateFramesToTimeDisplay(char* buffer, int32_t val)
+{
+	int subseconds = (int)Utils_GetSubseconds(val);
+	int seconds = Utils_GetSeconds(val);
+	int minutes = Utils_GetMinutes(val);
+	int hours = Utils_GetHours(val);
+	if (hours >= 24)
+	{
+		hours = 23;
+		minutes = 59;
+		seconds = 59;
+		subseconds = 99;
+	}
+
+	BuilderHelper(buffer, 0, hours);
+	buffer[2] = ':';
+	BuilderHelper(buffer, 3, minutes);
+	buffer[5] = ':';
+	BuilderHelper(buffer, 6, seconds);
+	buffer[8] = ':';
+	BuilderHelper(buffer, 9, subseconds);
 }

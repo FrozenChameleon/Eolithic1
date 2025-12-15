@@ -255,6 +255,10 @@ float Math_GetSlopeInterceptY(float x1, float y1, float x2, float y2, float x)
 	float b = Math_GetIntercept(x1, y1, m);
 	return (m * x) + b;
 }
+double Math_GetLineDistance(float x1, float y1, float x2, float y2)
+{
+	return Math_sqrt(Math_pow(x2 - x1, 2) + Math_pow(y2 - y1, 2));
+}
 double Math_GetAngle(float x1, float y1, float x2, float y2)
 {
 	return Math_atan2(y2 - y1, x2 - x1);

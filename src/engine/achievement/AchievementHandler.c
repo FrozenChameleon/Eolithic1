@@ -7,6 +7,7 @@
 #include "AchievementHandler.h"
 
 #include "../../third_party/stb_ds.h"
+#include "../utils/Utils.h"
 
 static int32_t _mCertifyCrawlingCounter;
 static bool _mIsUsingMask;
@@ -58,17 +59,21 @@ int32_t AchievementHandler_GetAmountOfAchievements()
 void AchievementHandler_AddAchievement(bool isHidden, const char* name, const char* description, const char* lockedDescription, const char* image, bool (*condition)())
 {
 	int32_t current = AchievementHandler_GetAchievementsLength();
-	//std::string nameToUse = name;
-	//std::string descriptionToUse = description;
+	MString* nameToUse = NULL;
+	MString_Assign(&nameToUse, name);
+	MString* descriptionToUse = NULL;
+	MString_Assign(&descriptionToUse, description);
+	description;
 	if (_mIsUsingMask)
 	{
-		//TODO
-		//nameToUse = "ACHIEVEMENT_" + std::to_string(current) + "_NAME";
-		//descriptionToUse = "ACHIEVEMENT_" + std::to_string(current) + "_DESCRIPTION";
+		MString_Combine3(&nameToUse, "ACHIEVEMENT_", Utils_IntToStringStaticBuffer(current), "_NAME");
+		MString_Combine3(&descriptionToUse, "ACHIEVEMENT_", Utils_IntToStringStaticBuffer(current), "_DESCRIPTION");
 	}
 	Achievement achievement;
 	Achievement_Init(&achievement, condition, name, description, lockedDescription, image, isHidden);
 	arrput(arr_achievements, achievement);
+	MString_Dispose(&nameToUse);
+	MString_Dispose(&descriptionToUse);
 }
 void AchievementHandler_Reset()
 {

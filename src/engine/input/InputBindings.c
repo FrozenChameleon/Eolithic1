@@ -97,7 +97,7 @@ void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, ISt
 	{
 		for (int j = 0; j < IStringArray_Length(actions); j += 1)
 		{
-			if (MString_EqualToString(pbd->_mBindings[i].mName, IStringArray_Get(actions, j)))
+			if (Utils_StringEqualTo(pbd->_mBindings[i].mName, IStringArray_Get(actions, j)))
 			{
 				InputAction* currentAction = &pbd->_mBindings[i];
 				InputAction* defaultAction = &defaultActions[i];
@@ -110,14 +110,14 @@ void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, ISt
 		}
 	}
 
-	//TODO C99 OeLogger_LogInformation("Player #" + std_to_string(_mPlayerNumber) + " certain bindings (" + std_to_string(indexStart) + "-" + std_to_string((indexStart + (length - 1))) + ") have been reset to default");
+	//TODO C99 Logger_LogInformation("Player #" + std_to_string(_mPlayerNumber) + " certain bindings (" + std_to_string(indexStart) + "-" + std_to_string((indexStart + (length - 1))) + ") have been reset to default");
 }
 bool PlayerBindingData_DoBindingsExistFor(PlayerBindingData* pbd, const char* action, int indexStart, int length)
 {
 	int dummyCounter = 0;
 	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
-		if (MString_EqualToString(pbd->_mBindings[i].mName, action))
+		if (Utils_StringEqualTo(pbd->_mBindings[i].mName, action))
 		{
 			InputAction* currentAction = &pbd->_mBindings[i];
 			for (int j = indexStart; j < indexStart + length; j++)
@@ -422,7 +422,7 @@ InputAction* InputBindings_GetActionFromArray(InputAction* actions, const char* 
 	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
 		InputAction* action = &actions[i];
-		if (MString_EqualToString(action->mName, name))
+		if (Utils_StringEqualTo(action->mName, name))
 		{
 			return action;
 		}

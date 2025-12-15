@@ -232,3 +232,25 @@ RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteB
 	return SpriteBatch_DrawRectangle(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Rectangle_Create(newX, newY, destinationRect.Width, destinationRect.Height),
 		rect, rotation, flipX, flipY, origin);
 }
+RenderCommandSheet* Sheet_DrawSourceRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, 
+	ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY)
+{
+	float halfWidth = sourceRectangle.Width / 2.0f;
+	float halfHeight = sourceRectangle.Height / 2.0f;
+	float newX = isCenter ? position.X - (int)halfWidth : position.X;
+	float newY = isCenter ? position.Y - (int)halfHeight : position.Y;
+	return SpriteBatch_Draw(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(newX, newY), sourceRectangle, Vector2_Create2(scale),
+		rotation, flipX, flipY, Vector2_Create((float)(sourceRectangle.Width / 2), (float)(sourceRectangle.Height / 2)));
+}
+RenderCommandSheet* Sheet_DrawSourceRectInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter,
+	ShaderProgram* program, Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY)
+{
+	float halfWidth = sourceRectangle.Width / 2.0f;
+	float halfHeight = sourceRectangle.Height / 2.0f;
+	float newX = isCenter ? position.X - (int)halfWidth : position.X;
+	float newY = isCenter ? position.Y - (int)halfHeight : position.Y;
+	float lastX = isCenter ? lastPosition.X - (int)halfWidth : lastPosition.X;
+	float lastY = isCenter ? lastPosition.Y - (int)halfHeight : lastPosition.Y;
+	return SpriteBatch_DrawInterpolated(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(newX, newY), Vector2_Create(lastX, lastY),
+		sourceRectangle, Vector2_Create2(scale), rotation, flipX, flipY, Vector2_Create((float)(sourceRectangle.Width / 2), (float)(sourceRectangle.Height / 2)));
+}

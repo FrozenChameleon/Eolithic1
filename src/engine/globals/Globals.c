@@ -11,6 +11,7 @@
 #include "../utils/Utils.h"
 #include "../input/Input.h"
 #include "../input/ControllerStates.h"
+#include "../input/RecordingTool.h"
 #include "time.h"
 
 static bool _mIsAutoMode;
@@ -205,21 +206,18 @@ int32_t Globals_GetNewestRecordingVersion()
 }
 int32_t Globals_GetCurrentRecordingVersion()
 {
-	return Globals_GetNewestRecordingVersion();
-
-	//TODO C99
-	//if (Input_IsPlayingMasterRecording())
-	//{
-	//	return ControllerStates_GetCurrentMasterRecordingVersion();
-	//}
-	//else if (OeRecordingTool::IsReading())
-	//{
-	//	return OeRecordingTool::GetCurrentRecordingVersion();
-	//}
-	//else
-	//{
-	//	return GetNewestRecordingVersion();
-	//}
+	if (Input_IsPlayingMasterRecording())
+	{
+		return ControllerStates_GetCurrentMasterRecordingVersion();
+	}
+	else if (RecordingTool_IsReading())
+	{
+		return RecordingTool_GetCurrentRecordingVersion();
+	}
+	else
+	{
+		return Globals_GetNewestRecordingVersion();
+	}
 }
 int64_t Globals_GetTime()
 {

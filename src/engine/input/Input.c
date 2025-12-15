@@ -54,7 +54,7 @@ static void HandleDoubleClickData(DoubleClickData* data, bool tapValue)
 	data->mIsTapped = tapValue;
 	if (data->mIsTapped)
 	{
-		if (data->mTimeSinceLastTap < INPUT_ACTION_DOUBLE_TAP_LENGTH)
+		if (data->mTimeSinceLastTap < INPUTACTION_DOUBLE_TAP_LENGTH)
 		{
 			data->mIsDoubleClicked = true;
 		}

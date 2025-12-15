@@ -11,6 +11,7 @@
 #include "../utils/Logger.h"
 #include "../input/RecordingTool.h"
 #include "../utils/Utils.h"
+#include "../core/Func.h"
 
 static int32_t _mUniqueMapSeed;
 static int32_t _mCurrentGameState;
@@ -170,9 +171,7 @@ void GameStateManager_SetupReloadMap()
 }
 const char* GameStateManager_GetCurrentFileName()
 {
-	//TODO C99
-	return NULL;
-	//return Func::Get_LevelDataResource()->GetName();
+	return Get_LevelFileName();
 }
 void GameStateManager_DebugForceReloadMapNow()
 {

@@ -15,6 +15,7 @@
 #include "Axes.h"
 #include "../utils/Logger.h"
 #include "../utils/Utils.h"
+#include "../utils/MString.h"
 
 static MString* _mTempString;
 

@@ -19,9 +19,9 @@ typedef struct Achievement
 	bool mIsCertified;
 	bool mIsHidden;
 	bool mIsUnlocked;
-	MString* mName;
-	MString* mDescription;
-	MString* mLockedDescription;
+	char mName[EE_FILENAME_MAX];
+	char mDescription[EE_FILENAME_MAX];
+	char mLockedDescription[EE_FILENAME_MAX];
 	bool (*mCondition)();
 	Sheet* mSheet;
 } Achievement;

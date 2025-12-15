@@ -1,17 +1,16 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
-
 #include "InputAction.h"
 
-#include "InputCheck.h"
-#include "InputChecks.h"
-#include "../utils/Utils.h"
 #include "Input.h"
+#include "../io/BufferReader.h"
+#include "../io/BufferWriter.h"
+#include "../render/SpriteBatch.h"
+#include "../core/Game.h"
+#include "../service/Service.h"
+#include "InputPlayer.h"
+#include "../render/Sheet.h"
+#include "../render/DrawTool.h"
 
-InputAction INPUTACTION_DUMMY_ACTION = { 0 };
+InputAction INPUTACTION_DUMMY_ACTION;
 
 void InputAction_ClearPolledInput(InputAction* action)
 {
@@ -30,16 +29,30 @@ void InputAction_ClearPolledInput(InputAction* action)
 void InputAction_Init(const char* name, InputAction* action)
 {
 	Utils_memset(action, 0, sizeof(InputAction));
-	MString_Assign(&action->mName, name);
-	Timer_Init(&action->mTimerDoubleTap, INPUT_ACTION_DOUBLE_TAP_LENGTH);
+	Utils_strlcpy(action->mName, name, EE_FILENAME_MAX);
+	action->mTimerDoubleTap = Timer_Create(INPUTACTION_DOUBLE_TAP_LENGTH);
 }
 void InputAction_Write(InputAction* action, const char* begin, BufferWriter* writer)
 {
+	/*writer->WriteString(begin + "name", action->mName);
 
+	writer->WriteInt32(begin + "check_length", InputChecks_LENGTH);
+	for (int i = 0; i < InputChecks_LENGTH; i++)
+	{
+		std_string newBegin = begin + std_to_string(i) + "_";
+		InputCheck_Write(InputChecks_Get(&action->mChecks, i), newBegin, writer);
+	}*/
 }
 void InputAction_Read(InputAction* action, const char* begin, BufferReader* reader)
 {
+	/*action->mName = reader->ReadString(begin + "name");
 
+	int count = reader->ReadInt32(begin + "check_length");
+	for (int i = 0; i < count; i++)
+	{
+		std_string newBegin = begin + std_to_string(i) + "_";
+		InputCheck_Read(InputChecks_Get(&action->mChecks, i), newBegin, reader);
+	}*/
 }
 void InputAction_Update(InputAction* action, InputPlayer* input)
 {
@@ -135,5 +148,103 @@ void InputAction_Update(InputAction* action, InputPlayer* input)
 		action->mIsCheckDoubleTap = true;
 	}
 
-	action->mIsPressedOrReleased = (action->mIsPressed || action->mIsReleased);
+	action->mIsPressedOrReleased = action->mIsPressed || action->mIsReleased;
 }
+void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
+	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph)
+{
+	InputAction_DrawCurrentGlyph2(action, spriteBatch, depth, font, color, color, centerX, centerY, alignmentX, alignmentY, x, y, scale, forceControllerGlyph);
+}
+void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
+	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y,
+	Vector2 scale, bool forceControllerGlyph)
+{
+	bool isController = InputPlayer_IsUsingController(Input_GetPlayerOne());
+	if (forceControllerGlyph || Service_PlatformForcesControllerGlyphs())
+	{
+		isController = true;
+	}
+	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
+	{
+		InputCheck* check = InputChecks_Get(&action->mChecks, i);
+		if (!InputCheck_IsDummy(check))
+		{
+			bool isCheckController = InputCheck_IsController(check);
+			if ((isController && isCheckController) || (!isController && !isCheckController))
+			{
+				Color color = colorForText;
+				if (isController)
+				{
+					color = colorForSheet;
+				}
+				InputAction_DrawGlyph(action, i, spriteBatch, depth, font, color, centerX, centerY, alignmentX, alignmentY, x, y, scale);
+				return;
+			}
+		}
+	}
+}
+Rectangle InputAction_GetCurrentGlyphRectangle(InputAction* action, const char* font, bool forceControllerGlyph)
+{
+	bool isController = InputPlayer_IsUsingController(Input_GetPlayerOne());
+	if (forceControllerGlyph || Service_PlatformForcesControllerGlyphs())
+	{
+		isController = true;
+	}
+	for (int i = 0; i < INPUTCHECKS_LENGTH; i++)
+	{
+		InputCheck* check = InputChecks_Get(&action->mChecks, i);
+		if (!InputCheck_IsDummy(check))
+		{
+			bool isCheckController = InputCheck_IsController(check);
+			if ((isController && isCheckController) || (!isController && !isCheckController))
+			{
+				return InputAction_GetGlyphRectangle(action, i, font);
+			}
+		}
+	}
+	return Rectangle_Create(0, 0, 0, 0);
+}
+Rectangle InputAction_GetGlyphRectangle(InputAction* action, int index, const char* font)
+{
+	InputCheck* check = InputChecks_Get(&action->mChecks, index);
+	const char* glyphString = InputCheck_GetGlyphString(check);
+	if (InputCheck_IsGlyphImage(check))
+	{
+		Sheet* sheet = Sheet_GetSheet(glyphString);
+		Rectangle rect = sheet->mRectangle;
+		return Rectangle_Create(0, 0, rect.Width, rect.Height);
+	}
+	else
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "[");
+		MString_AddAssignString(&tempString, glyphString);
+		MString_AddAssignString(&tempString, "]");
+		Rectangle rect = DrawTool_GetBounds(MString_GetText(tempString), font);
+		MString_Dispose(&tempString);
+		return rect;
+	}
+}
+void InputAction_DrawGlyph(InputAction* action, int index, SpriteBatch* spriteBatch, int depth, const char* font, Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale)
+{
+	InputCheck* check = InputChecks_Get(&action->mChecks, index);
+	const char* glyphString = InputCheck_GetGlyphString(check);
+	if (InputCheck_IsGlyphImage(check))
+	{
+		Sheet_Draw3(Sheet_GetSheet(glyphString), spriteBatch, color, depth, centerX, centerY, NULL, Vector2_Create(x, y), scale, 0);
+	}
+	else
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "[");
+		MString_AddAssignString(&tempString, glyphString);
+		MString_AddAssignString(&tempString, "]");
+		SpriteBatch_DrawString3(spriteBatch, font, MString_GetText(tempString), color, depth, Vector2_Create(x, y), alignmentX, alignmentY, false);
+		MString_Dispose(&tempString);
+	}
+}
+const char* InputAction_ToString(InputAction* action)
+{
+	return action->mName;
+}
+

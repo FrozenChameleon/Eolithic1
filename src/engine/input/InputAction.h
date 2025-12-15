@@ -1,24 +1,23 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
-
 #pragma once
 
-#include "stdint.h"
-#include "stdbool.h"
 #include "../utils/Timer.h"
 #include "InputChecks.h"
-#include "../utils/MString.h"
+#include "../math/Rectangle.h"
+#include "../math/Vector2.h"
+#include "../render/Color.h"
 
 typedef struct BufferWriter BufferWriter;
 typedef struct BufferReader BufferReader;
-typedef struct MString MString;
+typedef struct SpriteBatch SpriteBatch;
+
+enum
+{
+	INPUTACTION_DOUBLE_TAP_LENGTH = 12
+};
 
 typedef struct InputAction
 {
-	int32_t mTimeHeld;
+	int mTimeHeld;
 	float mAnalogValue;
 	bool mWasAnalog;
 	bool mIsPressed;
@@ -28,30 +27,25 @@ typedef struct InputAction
 	bool mIsDoubleTapped;
 	bool mIsReleased;
 	bool mIsCheckDoubleTap;
-	MString* mName;
+	char mName[EE_FILENAME_MAX];
 	Timer mTimerDoubleTap;
 	InputChecks mChecks;
 } InputAction;
 
 extern InputAction INPUTACTION_DUMMY_ACTION;
 
-enum
-{
-	INPUT_ACTION_DOUBLE_TAP_LENGTH = 12
-};
-
 void InputAction_ClearPolledInput(InputAction* action);
 void InputAction_Init(const char* name, InputAction* action);
 void InputAction_Write(InputAction* action, const char* begin, BufferWriter* writer);
 void InputAction_Read(InputAction* action, const char* begin, BufferReader* reader);
 void InputAction_Update(InputAction* action, InputPlayer* input);
-//static void DrawCurrentGlyph(InputAction* action, OeSpriteBatch* spriteBatch, int32_t depth, const std::string& font,
-//	Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);
-//static void DrawCurrentGlyph(InputAction* action, OeSpriteBatch* spriteBatch, int32_t depth, const std::string& font,
-//	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y,
-//	Vector2 scale, bool forceControllerGlyph);
-//static Rectangle GetCurrentGlyphRectangle(InputAction* action, std::string font, bool forceControllerGlyph);
-//static Rectangle GetGlyphRectangle(InputAction* action, int32_t index, std::string font);
-//static void DrawGlyph(InputAction* action, int32_t index, OeSpriteBatch* spriteBatch, int32_t depth, std::string font,
-//	Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale);
-//std::string ToString();
+void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
+	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);
+void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
+	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y,
+	Vector2 scale, bool forceControllerGlyph);
+Rectangle InputAction_GetCurrentGlyphRectangle(InputAction* action, const char* font, bool forceControllerGlyph);
+Rectangle InputAction_GetGlyphRectangle(InputAction* action, int index, const char* font);
+void InputAction_DrawGlyph(InputAction* action, int index, SpriteBatch* spriteBatch, int depth, const char* font,
+	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale);
+const char* InputAction_ToString(InputAction* action);

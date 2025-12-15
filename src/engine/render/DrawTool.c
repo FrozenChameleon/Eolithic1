@@ -39,9 +39,9 @@ void DrawTool_DrawRectangle2(SpriteBatch* spriteBatch, Color color, int32_t dept
 		newX -= destinationRect.Width / 2;
 		newY -= destinationRect.Height / 2;
 	}
-	//TODO C99 Vector2 origin = Vector2(destinationRect.Width / 2, destinationRect.Height / 2);
-	//spriteBatch->DrawRectangle(GetSinglePixel(), color, depth, nullptr, Rectangle(newX, newY, destinationRect.Width, destinationRect.Height),
-//		Rectangle(0, 0, 1, 1), rotation, false, false, origin);
+	Vector2 origin = Vector2_Create((float)(destinationRect.Width / 2), (float)(destinationRect.Height / 2));
+	SpriteBatch_DrawRectangle(spriteBatch, DrawTool_GetSinglePixel(), color, depth, NULL, Rectangle_Create(newX, newY, destinationRect.Width, destinationRect.Height),
+		Rectangle_Create(0, 0, 1, 1), rotation, false, false, origin);
 }
 void DrawTool_DrawRectangleHollow(SpriteBatch* spriteBatch, Color color, int32_t depth, int32_t x, int32_t y, int32_t width, int32_t height, float rotation, bool isCenter, int32_t thickness)
 {
@@ -68,7 +68,7 @@ void DrawTool_DrawLine2(SpriteBatch* spriteBatch, Color color, int32_t depth, in
 }
 void DrawTool_DrawLine3(SpriteBatch* spriteBatch, Color color, int32_t depth, int32_t delay, int32_t offset, int32_t size, float x1, float y1, float x2, float y2)
 {
-	double distance = 0; //TODO C99 Math_GetLineDistance(x1, y1, x2, y2);
+	double distance = Math_GetLineDistance(x1, y1, x2, y2);
 	double seg = (x2 - x1) / distance;
 	int counter = 0;
 	for (int i = 0; i < distance; i++)
@@ -89,6 +89,6 @@ void DrawTool_DrawLine3(SpriteBatch* spriteBatch, Color color, int32_t depth, in
 		{
 			DrawTool_DrawRectangle2(spriteBatch, color, depth, Rectangle_Create((int)x, (int)y, size, size), 0, true);
 		}
-		counter++;
+		counter += 1;
 	}
 }

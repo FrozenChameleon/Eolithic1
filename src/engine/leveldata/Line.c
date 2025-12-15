@@ -16,6 +16,7 @@
 #include "../math/Math.h"
 #include "../../GlobalDefs.h"
 #include "../io/BufferReader.h"
+#include "../render/SpriteBatch.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -54,8 +55,6 @@ void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font,
 }
 void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color color, int32_t lineNumber, int32_t offset)
 {
-	//TODO C99
-	/*
 	Point beginPoint = Line_GetRealBegin(line);
 	Point endPoint = Line_GetRealEnd(line);
 	Line_DrawLineText(line, spriteBatch, font, lineNumber, Vectors_ToVector2(beginPoint));
@@ -64,82 +63,85 @@ void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color
 	int lineThickness = 4;
 	DrawTool_DrawLine(spriteBatch, color, 99, lineDelay, offset, lineThickness, beginPoint, endPoint);
 	DrawTool_DrawRectangle2(spriteBatch, COLOR_COMETSTRIKER_BLUE, 100, Rectangle_Create(endPoint.X, endPoint.Y, HALF_TILE_SIZE, HALF_TILE_SIZE), 0, true);
-	*/
 }
 void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, int32_t lineNumber, Vector2 pos)
 {
-	//int align = ALIGN_CENTER;
-	//Vector2 textPos = Vector2_Create(pos.X, pos.Y - HALF_TILE_SIZE);
-	//int depth = 100;
-	//Color textColor = COLOR_RED;
-	//TODO C99
-	/*
-	spriteBatch->DrawString(font, OeUtils_ToString(lineNumber), textColor, depth, textPos, align, align);
+	int align = ALIGN_CENTER;
+	Vector2 textPos = Vector2_Create(pos.X, pos.Y - HALF_TILE_SIZE);
+	int depth = 100;
+	Color textColor = COLOR_RED;
+	SpriteBatch_DrawString2(spriteBatch, font, Utils_IntToStringStaticBuffer(lineNumber), textColor, depth, textPos, align, align);
 	if (line->mEnterDownOnly)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Enter Down Only", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Enter Down Only", textColor, depth, textPos, align, align);
 	}
 	if (line->mEnterLeftOnly)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Enter Left Only", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Enter Left Only", textColor, depth, textPos, align, align);
 	}
 	if (line->mEnterUpOnly)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Enter Up Only", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Enter Up Only", textColor, depth, textPos, align, align);
 	}
 	if (line->mEnterRightOnly)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Enter Right Only", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Enter Right Only", textColor, depth, textPos, align, align);
 	}
 	if (line->mOneWayUp)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "One Way Up", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "One Way Up", textColor, depth, textPos, align, align);
 	}
 	if (line->mOneWayRight)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "One Way Right", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "One Way Right", textColor, depth, textPos, align, align);
 	}
 	if (line->mOneWayDown)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "One Way Down", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "One Way Down", textColor, depth, textPos, align, align);
 	}
 	if (line->mOneWayLeft)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "One Way Left", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "One Way Left", textColor, depth, textPos, align, align);
 	}
 	if (line->mIsGap)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Is Gap", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Is Gap", textColor, depth, textPos, align, align);
 	}
 	if (line->mIsFirstLine)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Is First Line", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Is First Line", textColor, depth, textPos, align, align);
 	}
 	if (line->mIsLastLine)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Is Last Line", textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, "Is Last Line", textColor, depth, textPos, align, align);
 	}
 	if (line->mOverrideSpeedFromPlayer != 0)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Override Speed From Player: " + std_to_string(line->mOverrideSpeedFromPlayer), textColor, depth, textPos, align, align);
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Override Speed From Player: ", Utils_IntToStringStaticBuffer(line->mOverrideSpeedFromPlayer));
+		SpriteBatch_DrawString2(spriteBatch, font, MString_GetText(tempString), textColor, depth, textPos, align, align);
+		MString_Dispose(&tempString);
 	}
 	if (line->mOverrideSpeedFromMinecart != 0)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
-		spriteBatch->DrawString(font, "Override Speed From Minecart: " + std_to_string(line->mOverrideSpeedFromMinecart), textColor, depth, textPos, align, align);
-	}*/
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Override Speed From Minecart: ", Utils_IntToStringStaticBuffer(line->mOverrideSpeedFromMinecart));
+		SpriteBatch_DrawString2(spriteBatch, font, MString_GetText(tempString), textColor, depth, textPos, align, align);
+		MString_Dispose(&tempString);
+	}
 }
 double Line_GetDistance(Line* line)
 {

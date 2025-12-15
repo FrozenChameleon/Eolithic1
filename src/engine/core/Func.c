@@ -1112,7 +1112,7 @@ void Do_InitBossRandom(Entity entity)
 	int seed;
 	if (frameCount == 0)
 	{
-		//TODOC99seed = OeGameStateManager_GetUniqueMapSeed();
+		seed = GameStateManager_GetUniqueMapSeed();
 	}
 	else
 	{
@@ -1645,7 +1645,7 @@ void Do_SetFlipY4(Entity entity, int32_t value)
 }
 void Do_AddCameraShake(int timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
-	//SpecialShakeCameraSys_Create(timerLimit, minX, maxX, minY, maxY);
+	SpecialShakeCameraSys_Create(timerLimit, minX, maxX, minY, maxY);
 }
 void Do_ShakeCamera(int minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
@@ -3859,7 +3859,7 @@ int Get_CameraHingeBottom()
 }
 void Do_SaveGame()
 {
-	//TODOOeGameSaveManager_Save();
+	GameSaveManager_Save();
 }
 void Do_SaveUserConfig()
 {

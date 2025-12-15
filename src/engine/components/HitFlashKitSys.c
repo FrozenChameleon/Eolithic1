@@ -26,10 +26,8 @@ void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data)
 		return;
 	}
 
-	//TODO C99
-	/*
 	bool wasSuccessful;
-	OeComDrawActor* drawActor = TryGet_Component<OeComDrawActor>(owner, &wasSuccessful);
+	DrawActor* drawActor = TryGet_Component(C_DrawActor, owner, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return;
@@ -41,20 +39,20 @@ void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data)
 	}
 	else
 	{
-		Do_SetShader(owner, data->mState, _mShaderProgram);
+		Do_SetShader2(owner, data->mState, _mShaderProgram);
 	}
 	if (Timer_Update(&data->mHitFlashTimer))
 	{
 		data->mShowHitFlash = false;
 		if (data->mState == -1)
 		{
-			drawActor->mShaderProgram = nullptr;
+			drawActor->mShaderProgram = NULL;
 		}
 		else
 		{
-			Do_SetShader(owner, data->mState, nullptr);
+			Do_SetShader2(owner, data->mState, NULL);
 		}
-	}*/
+	}
 }
 
 System* HitFlashKitSys_CreateSystem()

@@ -59,6 +59,7 @@ float Math_GetSlopeInterceptX(float x1, float y1, float x2, float y2, float y);
 float Math_GetSlopeInterceptYPoint(Point begin, Point end, float x);
 float Math_GetSlopeInterceptYVector2(Vector2 begin, Vector2 end, float x);
 float Math_GetSlopeInterceptY(float x1, float y1, float x2, float y2, float x);
+double Math_GetLineDistance(float x1, float y1, float x2, float y2);
 double Math_GetAngle(float x1, float y1, float x2, float y2);
 double Math_GetVectorFromRadianAngleX(double radianAngle);
 double Math_GetVectorFromRadianAngleY(double radianAngle);

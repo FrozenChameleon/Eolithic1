@@ -55,19 +55,19 @@ void GameSaveManager_ResetSaveData()
 }
 void GameSaveManager_Save()
 {
-	//TODO C99
-	/*
-	Utils_JustSaved();
-
-	if (OeGlobals_IsSavingUserDataDisabled())
+	if (Globals_IsSavingUserDataDisabled())
 	{
 		return;
 	}
 
+	Utils_JustSaved();
+
+	//TODO C99
+	/*
 	Service_SaveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME, CreateBufferFromSaveData());
+	*/
 
 	Logger_LogInformation("Save file saved to save0.bin");
-	*/
 }
 void GameSaveManager_Load()
 {

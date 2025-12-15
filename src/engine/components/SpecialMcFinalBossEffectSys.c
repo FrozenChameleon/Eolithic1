@@ -22,8 +22,6 @@ static void InitAfterInit(SpecialMcFinalBossEffect* data)
 }
 static void DrawRoutine(Entity owner, SpecialMcFinalBossEffect* data, SpriteBatch* spriteBatch)
 {
-	//TODO C99
-	/*
 	Sheet* sheet = Animation_GetCurrentSheet(&data->mAnimation);
 
 	Rectangle rect = sheet->mRectangle;
@@ -33,10 +31,10 @@ static void DrawRoutine(Entity owner, SpecialMcFinalBossEffect* data, SpriteBatc
 
 	if (height >= data->mLineCounter)
 	{
-		OeSheet_DrawSourceRect(sheet, spriteBatch, OeColors_WHITE, 80, true, nullptr,
-			Vector2(data->mPosition.X - (width / 4) + data->mRandomOffset.X, data->mPosition.Y - data->mLineCounter + data->mRandomOffset.Y),
-			Rectangle(rect.X, rect.Y, width, height - data->mLineCounter), 2, 0, false, false); //Old depth was 95
-	}*/
+		Sheet_DrawSourceRect(sheet, spriteBatch, COLOR_WHITE, 80, true, NULL,
+			Vector2_Create(data->mPosition.X - (width / 4) + data->mRandomOffset.X, data->mPosition.Y - data->mLineCounter + data->mRandomOffset.Y),
+			Rectangle_Create(rect.X, rect.Y, width, height - data->mLineCounter), 2, 0, false, false); //Old depth was 95
+	}
 }
 static void UpdateRoutine(Entity owner, SpecialMcFinalBossEffect* data)
 {
@@ -110,13 +108,10 @@ static void UpdateRoutine(Entity owner, SpecialMcFinalBossEffect* data)
 }
 static void DrawHudRoutine(Entity owner, SpecialMcFinalBossEffect* data, SpriteBatch* spriteBatch)
 {
-	//TODO C99
-	/*
 	if (data->mLineCounter == 0)
 	{
-		OeDrawTool_DrawRectangle(spriteBatch, OeColors_WHITE, 100, Rectangle(0, 0, 1280, 720), 0, false);
+		DrawTool_DrawRectangle2(spriteBatch, COLOR_WHITE, 100, Rectangle_Create(0, 0, 1280, 720), 0, false);
 	}
-	*/
 }
 
 void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationName, Vector2 bloodOffset, bool disableShaking, 

@@ -114,12 +114,5 @@ bool DrawTile_IsSheet(DrawTile* drawTile)
 }
 bool DrawTile_IsEqualTo(DrawTile* drawTile, DrawTile* otherDrawTile)
 {
-	return false;
-	//TODO C99
-	/*if (drawTile->mPoint == otherDrawTile->mPoint && drawTile->mAnimation == otherDrawTile->mAnimation &&
-		drawTile->mFlipX == otherDrawTile->mFlipX && drawTile->mFlipY == otherDrawTile->mFlipY && drawTile->mRotation == otherDrawTile->mRotation)
-	{
-		return true;
-	}
-	return false;*/
+	return (Utils_memcmp(drawTile, otherDrawTile, sizeof(DrawTile)) == 0);
 }

@@ -57,3 +57,7 @@ RenderCommandSheet* Sheet_DrawInterpolated5(Sheet* sheet, SpriteBatch* spriteBat
 
 RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, ShaderProgram* program,
 	Rectangle destinationRect, float rotation, bool flipX, bool flipY, Vector2 origin);
+RenderCommandSheet* Sheet_DrawSourceRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, ShaderProgram* program,
+	Vector2 position, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY);
+RenderCommandSheet* Sheet_DrawSourceRectInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, ShaderProgram* program,
+	Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY);
