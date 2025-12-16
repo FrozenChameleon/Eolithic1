@@ -16,7 +16,7 @@ typedef struct BmFont
 //#if !DISABLE_TT_FONT
 	//TODO C99 OeTTFont* GetTTFont(const std::string& font);
 //#endif
-	MString* _mFontName;
+	char _mFontName[EE_FILENAME_MAX];
 	BmFontData _mFontData;
 	Texture* _mFontTexture;
 	struct { int32_t key; BmFontDataChar value; }*hm_font_char_map;

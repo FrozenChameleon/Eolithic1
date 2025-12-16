@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../utils/MString.h"
+#include "../utils/Macros.h"
 
 typedef struct LevelDataStub
 {
-	MString* mLevelName;
+	char mLevelName[EE_FILENAME_MAX];
 } LevelDataStub;

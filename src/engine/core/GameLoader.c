@@ -35,6 +35,8 @@
 #include "../resources/TextureOffsetManager.h"
 #include "../resources/ThingSettingsManager.h"
 #include "../resources/TilesetOffsetManager.h"
+#include "../resources/MovieManager.h"
+#include "../resources/MovieTimingManager.h"
 
 enum
 {
@@ -172,6 +174,8 @@ static bool LoadResources()
 	TextureOffsetManager_LoadAllFromDat();
 	TilesetOffsetManager_LoadAllFromDat();
 	ThingSettingsManager_LoadAllFromDat();
+	MovieManager_LoadAllFromDat();
+	MovieTimingManager_LoadAllFromDat();
 	LevelDataManager_LoadAllFromDat();
 	return true;
 }

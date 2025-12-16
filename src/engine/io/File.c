@@ -42,6 +42,15 @@ FixedByteBuffer* File_ReadAll(const char* path)
 	SDL_CloseIO(rwops);
 	return fbb;
 }
+MString* File_ReadAllToBigString(BufferReader* br)
+{
+	uint64_t len = BufferReader_GetSize(br);
+	uint8_t* bufferData = BufferReader_GetBufferData(br);
+	MString* stringToReturn = NULL;
+	MString_AssignEmpty(&stringToReturn, (int32_t)(len + 1));
+	Utils_memcpy(MString_GetText(stringToReturn), bufferData, len);
+	return stringToReturn;
+}
 bool File_Exists(const char* path)
 {
 	MString* sharedStringBuffer = File_Combine2(File_GetBasePath(), path);

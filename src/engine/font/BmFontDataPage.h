@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../utils/MString.h"
+#include "../utils/Macros.h"
 
 typedef struct BmFontDataPage
 {
 	int ID;
-	MString* File;
+	char File[EE_FILENAME_MAX];
 } BmFontDataPage;

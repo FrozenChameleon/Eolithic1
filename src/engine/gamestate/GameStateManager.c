@@ -188,6 +188,8 @@ _mMapToLoad = filename;
 }
 void GameStateManager_LoadMap(const char* mapToLoad)
 {
+	Utils_FreeJustThisLevelAllocationArena();
+
 	if(mapToLoad == NULL)
 	{
 		Logger_LogWarning("Attempted to load NULL map!");

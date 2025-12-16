@@ -1,0 +1,27 @@
+﻿#pragma once
+
+#include "MovieOperation.h"
+#include "../math/Vector2.h"
+#include "../utils/Timer.h"
+
+typedef struct SpriteBatch SpriteBatch;
+
+typedef struct MovieOperationFadeText
+{
+	int32_t mType;
+	bool mIsComplete;
+	Vector2 mPosition;
+	int mRamp;
+	bool mIsRampingDown;
+	bool mIsRamping;
+	char mStringToShow[EE_FILENAME_MAX];
+	char mFont[EE_FILENAME_MAX];
+	Timer mTimerHold;
+	Timer mTimerRamp;
+	bool mIsCentered;
+} MovieOperationFadeText;
+
+void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, const char* font, Vector2 position, int rampSpeed, int holdTime, bool isTextCentered);
+void MovieOperationFadeText_Update(MovieOperationFadeText* fade);
+void MovieOperationFadeText_DrawHud(MovieOperationFadeText* fade, SpriteBatch* spriteBatch);
+void MovieOperationFadeText_SpeedUp(MovieOperationFadeText* fade);

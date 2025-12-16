@@ -16,6 +16,7 @@
 
 void File_AppendPathSeparator(MString** str);
 FixedByteBuffer* File_ReadAll(const char* path);
+MString* File_ReadAllToBigString(BufferReader* br);
 bool File_Exists(const char* path);
 const char* File_GetBasePath();
 const char* File_GetPrefPath();

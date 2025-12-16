@@ -97,9 +97,8 @@ void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena)
 
 	return callocToReturn;
 }
-void Utils_FreeJustThisFrameAllocationArena()
+static void FreeArenaHelper(int32_t allocationArena)
 {
-	int32_t allocationArena = UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME;
 	int64_t index = hmgeti(hm_allocation_arenas, allocationArena);
 	if (index == -1)
 	{
@@ -107,7 +106,7 @@ void Utils_FreeJustThisFrameAllocationArena()
 	}
 
 	int64_t len = arrlen(hm_allocation_arenas[index].value);
-	if(len == 0)
+	if (len == 0)
 	{
 		return;
 	}
@@ -117,6 +116,14 @@ void Utils_FreeJustThisFrameAllocationArena()
 		Utils_free(hm_allocation_arenas[index].value[i]);
 	}
 	arrsetlen(hm_allocation_arenas[index].value, 0);
+}
+void Utils_FreeJustThisFrameAllocationArena()
+{
+	FreeArenaHelper(UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
+}
+void Utils_FreeJustThisLevelAllocationArena()
+{
+	FreeArenaHelper(UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 }
 void* Utils_malloc(size_t size)
 {

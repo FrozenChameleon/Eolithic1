@@ -15,7 +15,8 @@ typedef struct IStringArray IStringArray;
 enum
 {
 	UTILS_ALLOCATION_ARENA_INVALID = 0,
-	UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME = 1
+	UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME = 1,
+	UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL = 2
 };
 
 bool Utils_IsCurrentLanguageEnglish();
@@ -27,6 +28,7 @@ void Utils_memset(void* _Dst, int32_t _Val, size_t _Size);
 void* Utils_mallocArena(size_t size, int32_t allocationArena);
 void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena);
 void Utils_FreeJustThisFrameAllocationArena();
+void Utils_FreeJustThisLevelAllocationArena();
 void* Utils_malloc(size_t size);
 void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);

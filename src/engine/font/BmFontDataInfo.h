@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../utils/MString.h"
+#include "../utils/Macros.h"
 
 typedef struct BmFontDataInfo
 {
-	MString* Face;
+	char Face[EE_FILENAME_MAX];
 	int Size;
 	int Bold;
 	int Italic;
-	MString* Charset;
+	char Charset[EE_FILENAME_MAX];
 	int Unicode;
 	int StretchH;
 	int Smooth;

@@ -50,11 +50,11 @@ void BmFontData_Load(BmFontData* bmfd, BufferReader* br)
 }
 void BmFontData_ReadInfo(BmFontData* bmfd, IStringArray* tagSplit)
 {
-	MString_Assign(&bmfd->mInfo.Face, BmFontData_FindString("face", tagSplit));
+	Utils_strlcpy(bmfd->mInfo.Face, BmFontData_FindString("face", tagSplit), EE_FILENAME_MAX);
 	bmfd->mInfo.Size = BmFontData_FindInt("size", tagSplit);
 	bmfd->mInfo.Bold = BmFontData_FindInt("bold", tagSplit);
 	bmfd->mInfo.Italic = BmFontData_FindInt("italic", tagSplit);
-	MString_Assign(&bmfd->mInfo.Charset, BmFontData_FindString("charset", tagSplit));
+	Utils_strlcpy(bmfd->mInfo.Charset, BmFontData_FindString("charset", tagSplit), EE_FILENAME_MAX);
 	bmfd->mInfo.Unicode = BmFontData_FindInt("unicode", tagSplit);
 	bmfd->mInfo.StretchH = BmFontData_FindInt("stretchH", tagSplit);
 	bmfd->mInfo.Smooth = BmFontData_FindInt("smooth", tagSplit);
@@ -101,7 +101,7 @@ void BmFontData_ReadPage(BmFontData* bmfd, IStringArray* tagSplit)
 {
 	BmFontDataPage bmPage = { 0 };
 	bmPage.ID = BmFontData_FindInt("id", tagSplit);
-	MString_Assign(&bmPage.File, BmFontData_FindString("file", tagSplit));
+	Utils_strlcpy(bmPage.File, BmFontData_FindString("file", tagSplit), EE_FILENAME_MAX);
 	arrput(bmfd->mPages, bmPage);
 }
 void BmFontData_ReadChar(BmFontData* bmfd, IStringArray* tagSplit)

@@ -6,7 +6,7 @@
 #include "../io/BufferReader.h"
 #include "../../third_party/stb_ds.h"
 
-#define FIND_THE_LEAKS
+//#define FIND_THE_LEAKS
 
 typedef struct MString
 {

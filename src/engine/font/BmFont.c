@@ -22,7 +22,7 @@ int BmFont_GetLineHeight(BmFont* bmf)
 }
 const char* BmFont_GetFontName(BmFont* bmf)
 {
-	return MString_GetText(bmf->_mFontName);
+	return bmf->_mFontName;
 }
 Texture* BmFont_GetFontTexture(BmFont* bmf)
 {
@@ -34,7 +34,7 @@ bool BmFont_UpdateFontTexture(BmFont* bmf)
 {
 	if (bmf->_mFontTexture == NULL)
 	{
-		Texture* tex = TextureFontManager_GetResourceData(MString_GetText(bmf->_mFontName));
+		Texture* tex = TextureFontManager_GetResourceData(bmf->_mFontName);
 		if (tex == NULL)
 		{
 			bmf->_mFontTexture = NULL;
@@ -49,7 +49,7 @@ void BmFont_Init(BmFont* bmf, BufferReader* br, const char* fontName)
 	Utils_memset(bmf, 0, sizeof(BmFont));
 
 	BmFontData_Init(&bmf->_mFontData, br);
-	MString_Assign(&bmf->_mFontName, fontName);
+	Utils_strlcpy(bmf->_mFontName, fontName, EE_FILENAME_MAX);
 
 	BmFontDataChar* chars = bmf->_mFontData.mChars;
 	int64_t charsLen = arrlen(chars);
