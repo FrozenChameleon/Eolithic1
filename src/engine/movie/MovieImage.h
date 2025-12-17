@@ -15,7 +15,9 @@ typedef struct MovieImage
 	Vector2 mShake;
 	Animation mAnimation;
 	char mImage[EE_FILENAME_MAX];
-	//std::vector<OeSheet*> mSheetsForAnimation;
+	Sheet** mSheetsForAnimation;
+	int32_t mSheetsForAnimationLen;
+	Sheet* mSheetForImage;
 } MovieImage;
 
 void MovieImage_Init(MovieImage* mi, int scale, const char* image);

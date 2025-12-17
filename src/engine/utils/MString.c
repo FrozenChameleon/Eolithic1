@@ -251,7 +251,7 @@ void MString_Dispose(MString** str)
 }
 MString* MString_Read(BufferReader* br)
 {
-	int32_t newStringLength = BufferReader_ReadJustTheStringLength(br);
+	uint8_t newStringLength = BufferReader_ReadJustTheStringLength(br);
 	int32_t newStrCapacity = newStringLength + 1;
 	MString* strToReturn = NULL;
 	MString_AssignEmpty(&strToReturn, newStrCapacity);

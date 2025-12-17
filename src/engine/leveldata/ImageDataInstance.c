@@ -83,7 +83,6 @@ RenderCommandSheet* ImageDataInstance_DrawInterpolated2(ImageDataInstance* rende
 		}
 		return draw;
 	}
-	return NULL;
 }
 Sheet* ImageDataInstance_GetCurrentSheet(ImageDataInstance* render)
 {

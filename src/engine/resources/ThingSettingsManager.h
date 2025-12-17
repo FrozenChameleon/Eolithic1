@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../leveldata/ThingSettings.h"
 
+bool ThingSettingsManager_HasResource(const char* filenameWithoutExtension);
 Resource* ThingSettingsManager_GetResource(const char* filenameWithoutExtension);
 ThingSettings* ThingSettingsManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* ThingSettingsManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

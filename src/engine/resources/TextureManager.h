@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../render/Texture.h"
 
+bool TextureManager_HasResource(const char* filenameWithoutExtension);
 Resource* TextureManager_GetResource(const char* filenameWithoutExtension);
 Texture* TextureManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* TextureManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

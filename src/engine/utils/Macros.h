@@ -9,6 +9,8 @@
 #include "stdint.h"
 #include "stdbool.h"
 
+#define UNUSED(x) (void)(x)
+
 #define EE_SAFE_BUFFER_LENGTH_FOR_INT 20
 #define EE_SAFE_BUFFER_LENGTH_FOR_FLOAT 50
 #define EE_SAFE_BUFFER_LENGTH_FOR_DOUBLE 100

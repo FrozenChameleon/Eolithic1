@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../font/BmFont.h"
 
+bool BmFontManager_HasResource(const char* filenameWithoutExtension);
 Resource* BmFontManager_GetResource(const char* filenameWithoutExtension);
 BmFont* BmFontManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* BmFontManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

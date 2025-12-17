@@ -63,3 +63,4 @@ double Math_GetLineDistance(float x1, float y1, float x2, float y2);
 double Math_GetAngle(float x1, float y1, float x2, float y2);
 double Math_GetVectorFromRadianAngleX(double radianAngle);
 double Math_GetVectorFromRadianAngleY(double radianAngle);
+double Math_log10(double value);

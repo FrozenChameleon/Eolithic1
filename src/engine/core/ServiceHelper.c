@@ -131,6 +131,8 @@ static void LoadEverything()
 
 void ServiceHelper_Update(double delta)
 {
+	UNUSED(delta);
+
 	/*
 	TrySignIn();
 

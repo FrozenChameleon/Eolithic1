@@ -32,6 +32,7 @@
 #include "../resources/SoundEffectManager.h"
 #include "../resources/TextureManager.h"
 #include "../resources/TextureFontManager.h"
+#include "../resources/TextureMovieManager.h"
 #include "../resources/TextureOffsetManager.h"
 #include "../resources/ThingSettingsManager.h"
 #include "../resources/TilesetOffsetManager.h"
@@ -171,6 +172,7 @@ static bool LoadResources()
 	SoundEffectManager_LoadAllFromDat();
 	TextureManager_LoadAllFromDat();
 	TextureFontManager_LoadAllFromDat();
+	TextureMovieManager_LoadAllFromDat();
 	TextureOffsetManager_LoadAllFromDat();
 	TilesetOffsetManager_LoadAllFromDat();
 	ThingSettingsManager_LoadAllFromDat();
@@ -384,13 +386,10 @@ void GameLoader_Update(double delta)
 static void RunShaderStutterFix(SpriteBatch* spriteBatch, Texture* tex, Vector2 offset)
 {
 	//Running this to preempt various pipeline states 
-
-	//TODO C99 
-	/*
 	Rectangle rect = { 0, 0, 32, 32 };
 	for (int i = 0; i < 2; i += 1)
 	{
-		DrawInstance* instance = spriteBatch->Draw(tex, Color_White, 0, NULL, offset, rect, Vector2_One, 0, false, false, Vector2_Zero);
+		RenderCommandSheet* instance = SpriteBatch_Draw(spriteBatch, tex, Color_White, 0, NULL, offset, rect, Vector2_One, 0, false, false, Vector2_Zero);
 		switch (i)
 		{
 		case 0:
@@ -401,7 +400,6 @@ static void RunShaderStutterFix(SpriteBatch* spriteBatch, Texture* tex, Vector2 
 			break;
 		}
 	}
-	*/
 }
 void GameLoader_Draw(SpriteBatch* spriteBatch)
 {

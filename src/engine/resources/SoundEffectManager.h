@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../audio/SoundEffect.h"
 
+bool SoundEffectManager_HasResource(const char* filenameWithoutExtension);
 Resource* SoundEffectManager_GetResource(const char* filenameWithoutExtension);
 SoundEffect* SoundEffectManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* SoundEffectManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

@@ -188,7 +188,7 @@ _mMapToLoad = filename;
 }
 void GameStateManager_LoadMap(const char* mapToLoad)
 {
-	Utils_FreeJustThisLevelAllocationArena();
+	Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 
 	if(mapToLoad == NULL)
 	{

@@ -19,7 +19,9 @@ void BmFontData_Load(BmFontData* bmfd, BufferReader* br)
 			continue;
 		}
 
-		IStringArray* tagSplit = Utils_SplitString(line, Utils_strlen(line), SEPARATOR_SPACE);
+		IStringArray* tagSplit = IStringArray_Create();
+
+		Utils_SplitString(line, Utils_strlen(line), SEPARATOR_SPACE, tagSplit);
 
 		const char* tag = IStringArray_Get(tagSplit, 0);
 		if (Utils_StringEqualTo(tag, "info"))
@@ -64,7 +66,8 @@ void BmFontData_ReadInfo(BmFontData* bmfd, IStringArray* tagSplit)
 		const char* padding = BmFontData_FindString("padding", tagSplit);
 		if (!Utils_StringEqualTo(padding, DUMMY_STR_NOTHING))
 		{
-			IStringArray* paddingSplit = Utils_SplitString(padding, Utils_strlen(padding), ',');
+			IStringArray* paddingSplit = IStringArray_Create();
+			Utils_SplitString(padding, Utils_strlen(padding), ',', paddingSplit);
 			bmfd->mInfo.PaddingUp = Utils_ParseInt(IStringArray_Get(paddingSplit, 0));
 			bmfd->mInfo.PaddingRight = Utils_ParseInt(IStringArray_Get(paddingSplit, 1));
 			bmfd->mInfo.PaddingDown = Utils_ParseInt(IStringArray_Get(paddingSplit, 2));
@@ -76,7 +79,8 @@ void BmFontData_ReadInfo(BmFontData* bmfd, IStringArray* tagSplit)
 		const char* spacing = BmFontData_FindString("spacing", tagSplit);
 		if (!Utils_StringEqualTo(spacing, DUMMY_STR_NOTHING))
 		{
-			IStringArray* spacingSplit = Utils_SplitString(spacing, Utils_strlen(spacing), ',');
+			IStringArray* spacingSplit = IStringArray_Create(); 
+			Utils_SplitString(spacing, Utils_strlen(spacing), ',', spacingSplit);
 			bmfd->mInfo.SpacingHoriz = Utils_ParseInt(IStringArray_Get(spacingSplit, 0));
 			bmfd->mInfo.SpacingVert = Utils_ParseInt(IStringArray_Get(spacingSplit, 1));
 			IStringArray_Dispose(spacingSplit);

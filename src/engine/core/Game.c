@@ -136,7 +136,7 @@ int32_t Game_Run()
 	while (!isDone)
 	{
 		SpriteBatch_DisposePinnedStrings();
-		Utils_FreeJustThisFrameAllocationArena();
+		Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
 		bool isFixedTimeStep = IsFixedTimeStep();
 		double delta = deltaLeftover;
 		deltaLeftover = 0;

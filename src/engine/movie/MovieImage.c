@@ -4,13 +4,32 @@
 #include "../render/Texture.h"
 #include "../render/Color.h"
 #include "../render/Sheet.h"
-//#include "MovieSheetsTool.h"
+#include "../resources/TextureMovieManager.h"
 
+static Sheet* CreateNewSheetForMovieImage(const char* image)
+{
+	const char* internedKey = TextureMovieManager_GetKey(image);
+	if (internedKey == NULL)
+	{
+		return NULL;
+	}
+
+	Sheet* temp = Utils_callocArena(1, sizeof(Sheet), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	temp->mTextureResource = TextureMovieManager_GetResource(internedKey);
+	temp->mSheetName = internedKey;
+	temp->mUnderlyingTextureName = internedKey;
+	temp->mRectangle = ((Texture*)temp->mTextureResource->mData)->mBounds;
+	return temp;
+}
 void MovieImage_Init(MovieImage* mi, int scale, const char* image)
 {
 	Utils_memset(mi, 0, sizeof(MovieImage));
+
 	mi->mScale = scale;
+
 	Utils_strlcpy(mi->mImage, image, EE_FILENAME_MAX);
+
+	mi->mSheetForImage = CreateNewSheetForMovieImage(image);
 }
 void MovieImage_Init2(MovieImage* mi, int scale, const char* baseImage, int frames, int flip)
 {
@@ -18,24 +37,27 @@ void MovieImage_Init2(MovieImage* mi, int scale, const char* baseImage, int fram
 
 	mi->mScale = scale;
 
-	//TODO C99
-	/*std_vector<std_string> images = std_vector<std_string>();
-	Animation_CreateAnimationStringArray(images, baseImage, frames, OeUtils_GetAmountOfDigits(frames));
+	IStringArray* images = IStringArray_Create();
+	Animation_CreateAnimationStringArray(images, baseImage, frames, Utils_GetAmountOfDigits(frames));
 
+	mi->mSheetsForAnimationLen = frames;
+	mi->mSheetsForAnimation = Utils_callocArena(mi->mSheetsForAnimationLen, sizeof(Sheet*), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	
 	for (int i = 0; i < frames; i += 1)
 	{
-		OeResource<OeTexture*>* resource = OeResourceManagers_MovieTextureManager.GetResource(images[i]);
-		if (resource == nullptr)
+		const char* currentImage = IStringArray_Get(images, i);
+		Resource* resource = TextureMovieManager_GetResource(currentImage);
+		if (resource == NULL)
 		{
-			mSheetsForAnimation.push_back(OeSheet_GetDefaultSheet());
+			mi->mSheetsForAnimation[i] = Sheet_GetDefaultSheet();
 		}
 		else
 		{
-			mSheetsForAnimation.push_back(OeMovieSheetsTool_GetSheet(images[i]));
+			mi->mSheetsForAnimation[i] = CreateNewSheetForMovieImage(currentImage);
 		}
 	}
-
-	Animation_Init(&mi->mAnimation, &mSheetsForAnimation, flip);*/
+	
+	Animation_Init2(&mi->mAnimation, mi->mSheetsForAnimation, mi->mSheetsForAnimationLen, flip);
 
 	mi->mIsAnimationSet = true;
 }
@@ -64,24 +86,21 @@ void MovieImage_SetIsPermanentImage(MovieImage* mi, bool value)
 }
 void MovieImage_DrawHud(MovieImage* mi, SpriteBatch* spriteBatch)
 {
-	/*Sheet tempSheet = Sheet();
 	Sheet* sheet = NULL;
-	if (mIsAnimationSet)
+	if (mi->mIsAnimationSet)
 	{
-		sheet = OeAnimation_GetCurrentSheet(&mAnimation);
+		sheet = Animation_GetCurrentSheet(&mi->mAnimation);
 	}
 	else
 	{
-		OeResource<OeTexture*>* resource = OeResourceManagers_MovieTextureManager.GetResource(mImage);
-		if (resource == nullptr)
-		{
-			sheet = OeSheet_GetDefaultSheet();
-		}
-		else
-		{
-			tempSheet = OeSheet(resource);
-			sheet = &tempSheet;
-		}
+		sheet = mi->mSheetForImage;
 	}
-	Sheet_Draw(sheet, spriteBatch, OeColors_WHITE, mDepth, false, false, nullptr, mPosition + mShake, Vector2(mScale, mScale), 0, false, false, Vector2_Zero);*/
+
+	if (sheet == NULL)
+	{
+		return;
+	}
+
+	Sheet_Draw5(sheet, spriteBatch, COLOR_WHITE, mi->mDepth, false, false, NULL, Vector2_Add(mi->mPosition, mi->mShake), 
+		Vector2_Create((float)mi->mScale, (float)mi->mScale), 0, false, false, Vector2_Zero);
 }

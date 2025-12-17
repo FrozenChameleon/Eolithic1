@@ -25,7 +25,8 @@ MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithou
 {
 	MovieTiming* mt = Utils_calloc(1, sizeof(MovieTiming));
 	MString* bigString = File_ReadAllToBigString(br);
-	IStringArray* lotsOfStrings = Utils_SplitString(MString_GetText(bigString), MString_GetCapacity(bigString), ',');
+	IStringArray* lotsOfStrings = IStringArray_Create();
+	Utils_SplitString(MString_GetText(bigString), MString_GetCapacity(bigString), ',', lotsOfStrings);
 	int32_t len = (int32_t)IStringArray_Length(lotsOfStrings);
 	mt->timings = Utils_calloc(len, sizeof(int32_t));
 	mt->len = len;

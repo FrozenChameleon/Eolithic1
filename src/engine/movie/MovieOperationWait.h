@@ -5,6 +5,7 @@
 
 typedef struct MovieOperationWait
 {
+	int32_t mType;
 	bool mIsComplete;
 	Timer mTimerWait;
 } MovieOperationWait;

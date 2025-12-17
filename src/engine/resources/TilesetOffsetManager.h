@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../render/TilesetOffset.h"
 
+bool TilesetOffsetManager_HasResource(const char* filenameWithoutExtension);
 Resource* TilesetOffsetManager_GetResource(const char* filenameWithoutExtension);
 TilesetOffset* TilesetOffsetManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* TilesetOffsetManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

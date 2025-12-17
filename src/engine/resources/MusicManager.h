@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../audio/Music.h"
 
+bool MusicManager_HasResource(const char* filenameWithoutExtension);
 Resource* MusicManager_GetResource(const char* filenameWithoutExtension);
 Music* MusicManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* MusicManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

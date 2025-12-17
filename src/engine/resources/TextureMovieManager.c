@@ -6,7 +6,7 @@
  
 //THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
 
-#include "ShaderProgramManager.h"
+#include "TextureMovieManager.h"
 
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
@@ -31,16 +31,22 @@ static void Init()
 	_mHasInit = true;
 }
 
-bool ShaderProgramManager_HasResource(const char* filenameWithoutExtension)
+const char* TextureMovieManager_GetKey(const char* filenameWithoutExtension)
 {
+	//
+	Init();
+	//
+
 	int64_t index = shgeti(sh_resources, filenameWithoutExtension);
 	if (index < 0)
 	{
-		return false;
+		Logger_printf("Unable to get key: %s", filenameWithoutExtension);
+		return NULL;
 	}
-	return true;
+
+	return sh_resources[index].key;
 }
-Resource* ShaderProgramManager_GetResource(const char* filenameWithoutExtension)
+Resource* TextureMovieManager_GetResource(const char* filenameWithoutExtension)
 {
 	//
 	Init();
@@ -55,22 +61,22 @@ Resource* ShaderProgramManager_GetResource(const char* filenameWithoutExtension)
 	
 	return resource;
 }
-ShaderProgram* ShaderProgramManager_GetResourceData(const char* filenameWithoutExtension)
+Texture* TextureMovieManager_GetResourceData(const char* filenameWithoutExtension)
 {
 	//
 	Init();
 	//
 	
-	Resource* resource = ShaderProgramManager_GetResource(filenameWithoutExtension);
+	Resource* resource = TextureMovieManager_GetResource(filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
 		return NULL;
 	}
 
-	return (ShaderProgram*)resource->mData;
+	return (Texture*)resource->mData;
 }
-Resource* ShaderProgramManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
+Resource* TextureMovieManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
 	//
 	Init();
@@ -82,21 +88,21 @@ Resource* ShaderProgramManager_LoadAssetFromStreamAndCreateResource(BufferReader
 	MString_Assign(&resource->mFileNameWithoutExtension, filenameWithoutExtension);
 	resource->mID = _mResourceCounter;
 	_mResourceCounter += 1;
-	resource->mData = ShaderProgram_FromStream(MString_GetText(resource->mPath), MString_GetText(resource->mFileNameWithoutExtension), br);
+	resource->mData = Texture_FromStream(MString_GetText(resource->mPath), MString_GetText(resource->mFileNameWithoutExtension), br);
 	shput(sh_resources, MString_GetText(resource->mFileNameWithoutExtension), resource);
 	return resource;
 }
-const char* ShaderProgramManager_GetDatFileName()
+const char* TextureMovieManager_GetDatFileName()
 {
-	return "shaderprogram.dat";
+	return "texturemovie.dat";
 }
-void ShaderProgramManager_LoadAllFromDat()
+void TextureMovieManager_LoadAllFromDat()
 {
 	//
 	Init();
 	//
 
-	MString* path = File_Combine2("data", ShaderProgramManager_GetDatFileName());
+	MString* path = File_Combine2("data", TextureMovieManager_GetDatFileName());
 	if (!File_Exists(MString_GetText(path)))
 	{
 		Logger_printf("Unable to load from dat: %s\n", MString_GetText(path));
@@ -110,7 +116,7 @@ void ShaderProgramManager_LoadAllFromDat()
 		MString* fileName = File_GetFileName(MString_GetText(nextPath));
 		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_GetText(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
-		ShaderProgramManager_LoadAssetFromStreamAndCreateResource(br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
+		TextureMovieManager_LoadAssetFromStreamAndCreateResource(br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
 		BufferReader_Dispose(br, false);
 		MString_Dispose(&nextPath);
 		MString_Dispose(&fileName);
@@ -120,21 +126,22 @@ void ShaderProgramManager_LoadAllFromDat()
 	DatReader_Dispose(dr);
 	MString_Dispose(&path);
 }
-void ShaderProgramManager_Dispose(const char* filenameWithoutExtension)
+void TextureMovieManager_Dispose(const char* filenameWithoutExtension)
 {
 	//
 	Init();
 	//
 	
+	int64_t len = shlen(sh_resources);
 	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{
-		ShaderProgram_Dispose(resource->mData);
+		Texture_Dispose(resource->mData);
 	}
 	Utils_free(resource);
 	shdel(sh_resources, filenameWithoutExtension);
 }
-void ShaderProgramManager_DisposeAll()
+void TextureMovieManager_DisposeAll()
 {
 	//
 	Init();
@@ -143,7 +150,7 @@ void ShaderProgramManager_DisposeAll()
 	int64_t len = shlen(sh_resources);
 	for (int i = 0; i < len; i += 1)
 	{
-		ShaderProgramManager_Dispose(sh_resources[i].key);
+		TextureMovieManager_Dispose(sh_resources[i].key);
 	}
 
 	shfree(sh_resources);
@@ -151,15 +158,15 @@ void ShaderProgramManager_DisposeAll()
 	_mResourceCounter = 0;
 	_mHasInit = false;
 }
-int64_t ShaderProgramManager_Length()
+int64_t TextureMovieManager_Length()
 {
 	return shlen(sh_resources);
 }
-Resource* ShaderProgramManager_GetResourceByIndex(int index)
+Resource* TextureMovieManager_GetResourceByIndex(int index)
 {
 	return sh_resources[index].value;
 }
-ShaderProgram* ShaderProgramManager_GetResourceDataByIndex(int index)
+Texture* TextureMovieManager_GetResourceDataByIndex(int index)
 {
-	return (ShaderProgram*)sh_resources[index].value->mData;
+	return (Texture*)sh_resources[index].value->mData;
 }

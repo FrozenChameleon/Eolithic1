@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../leveldata/Particle.h"
 
+bool ParticleManager_HasResource(const char* filenameWithoutExtension);
 Resource* ParticleManager_GetResource(const char* filenameWithoutExtension);
 Particle* ParticleManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* ParticleManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../leveldata/Prop.h"
 
+bool PropManager_HasResource(const char* filenameWithoutExtension);
 Resource* PropManager_GetResource(const char* filenameWithoutExtension);
 Prop* PropManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* PropManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

@@ -31,6 +31,15 @@ static void Init()
 	_mHasInit = true;
 }
 
+bool TilesetOffsetManager_HasResource(const char* filenameWithoutExtension)
+{
+	int64_t index = shgeti(sh_resources, filenameWithoutExtension);
+	if (index < 0)
+	{
+		return false;
+	}
+	return true;
+}
 Resource* TilesetOffsetManager_GetResource(const char* filenameWithoutExtension)
 {
 	//
@@ -117,7 +126,6 @@ void TilesetOffsetManager_Dispose(const char* filenameWithoutExtension)
 	Init();
 	//
 	
-	int64_t len = shlen(sh_resources);
 	Resource* resource = shget(sh_resources, filenameWithoutExtension);
 	if (resource->mData != NULL)
 	{

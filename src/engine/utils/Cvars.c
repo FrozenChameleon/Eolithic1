@@ -32,7 +32,6 @@ static bool _mHasInit;
 
 static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenSet)
 {
-	int64_t len = shlen(sh_cvars);
 	int64_t index = shgeti(sh_cvars, key);
 	if (index == -1)
 	{

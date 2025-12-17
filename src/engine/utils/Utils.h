@@ -16,7 +16,8 @@ enum
 {
 	UTILS_ALLOCATION_ARENA_INVALID = 0,
 	UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME = 1,
-	UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL = 2
+	UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL = 2,
+	UTILS_ALLOCATION_ARENA_MOVIE_PLAYER = 3
 };
 
 bool Utils_IsCurrentLanguageEnglish();
@@ -27,8 +28,7 @@ void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);
 void Utils_memset(void* _Dst, int32_t _Val, size_t _Size);
 void* Utils_mallocArena(size_t size, int32_t allocationArena);
 void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena);
-void Utils_FreeJustThisFrameAllocationArena();
-void Utils_FreeJustThisLevelAllocationArena();
+void Utils_FreeArena(int32_t allocationArena);
 void* Utils_malloc(size_t size);
 void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);
@@ -39,6 +39,7 @@ size_t Utils_strlcat(char* dst, const char* src, size_t maxlen);
 bool Utils_ParseBooleanFromChar(const char* str);
 float Utils_ParseFloat(const char* str);
 int32_t Utils_ParseInt(const char* str);
+bool Utils_ParseBoolean(const char* str);
 bool Utils_StringEqualTo(const char* str1, const char* str2);
 int32_t Utils_IntToString(int32_t value, char* buffer, size_t maxlen);
 int32_t Utils_FloatToString(float value, char* buffer, size_t maxlen);
@@ -64,7 +65,7 @@ int Utils_GetInternalRenderWidth();
 int Utils_GetInternalRenderHeight();
 float Utils_GetCurrentHardwareRatio();
 float Utils_GetCurrentInternalRatio();
-IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim);
+void Utils_SplitString(const char* str, size_t maxlen, char delim, IStringArray* addToThis);
 char Utils_GetCharFromNumber(int val);
 int Utils_Get1DArrayPosFor2DArray(int i, int32_t j, int32_t width);
 bool Utils_CharIsDigit(char c);
@@ -81,3 +82,5 @@ int Utils_GetHours(int32_t val);
 int Utils_GetSeconds(int32_t val);
 bool Utils_CheckSave(bool update);
 void Utils_JustSaved();
+int32_t Utils_GetAmountOfDigits(int32_t n);
+void Utils_GetSplitCSV(const char* str, IStringArray* addToHere);

@@ -97,7 +97,7 @@ void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena)
 
 	return callocToReturn;
 }
-static void FreeArenaHelper(int32_t allocationArena)
+void Utils_FreeArena(int32_t allocationArena)
 {
 	int64_t index = hmgeti(hm_allocation_arenas, allocationArena);
 	if (index == -1)
@@ -116,14 +116,6 @@ static void FreeArenaHelper(int32_t allocationArena)
 		Utils_free(hm_allocation_arenas[index].value[i]);
 	}
 	arrsetlen(hm_allocation_arenas[index].value, 0);
-}
-void Utils_FreeJustThisFrameAllocationArena()
-{
-	FreeArenaHelper(UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
-}
-void Utils_FreeJustThisLevelAllocationArena()
-{
-	FreeArenaHelper(UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 }
 void* Utils_malloc(size_t size)
 {
@@ -174,6 +166,18 @@ float Utils_ParseFloat(const char* str)
 int32_t Utils_ParseInt(const char* str)
 {
 	return SDL_atoi(str);
+}
+bool Utils_ParseBoolean(const char* str)
+{
+	int32_t value = SDL_atoi(str);
+	if (value == 0)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 bool Utils_StringEqualTo(const char* str1, const char* str2)
 {
@@ -325,11 +329,9 @@ float Utils_GetCurrentInternalRatio()
 {
 	return (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH)) / (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT));
 }
-IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
+void Utils_SplitString(const char* str, size_t maxlen, char delim, IStringArray* addToThis)
 {
 	ResetLargeCharBuffer();
-
-	IStringArray* sa = IStringArray_Create();
 
 	size_t len = Utils_strnlen(str, maxlen);
 	int counter = 0;
@@ -338,7 +340,7 @@ IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
 		if ((str[i] == delim) || (i == len)) //We need to make sure we get the stuff at the end...
 		{
 			_mLargeCharBuffer[counter] = '\0';
-			IStringArray_Add(sa, _mLargeCharBuffer);
+			IStringArray_Add(addToThis, _mLargeCharBuffer);
 			Utils_memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
 			counter = 0;
 		}
@@ -348,8 +350,6 @@ IStringArray* Utils_SplitString(const char* str, size_t maxlen, char delim)
 			counter += 1;
 		}
 	}
-
-	return sa;
 }
 char Utils_GetCharFromNumber(int val)
 {
@@ -598,7 +598,91 @@ void Utils_JustSaved()
 
 	_mSaveFrames = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_TIME);
 }
-static BuilderHelper(char* buffer, int index, int32_t val)
+int32_t Utils_GetAmountOfDigits(int32_t n)
+{
+	double value = (Math_log10(n) + 1);
+	return (int32_t)value;
+}
+void Utils_GetSplitCSV(const char* str, IStringArray* addToHere)
+{
+	ResetLargeCharBuffer();
+	//std::vector<std::string> strings = {};
+
+	bool startedNewString = true;
+	bool isEscaped = false;
+	bool checkForNest = false;
+	bool isNested = false;
+	bool suppressAdd = false;
+
+	size_t strLen = Utils_strlen(str);
+	int32_t addCounter = 0;
+	for (int i = 0; i < strLen; i += 1)
+	{
+		suppressAdd = false;
+
+		char currentChar = str[i];
+
+		if (currentChar == '"')
+		{
+			if (checkForNest)
+			{
+				isNested = true;
+			}
+			else if (isNested)
+			{
+				isNested = false;
+			}
+			else
+			{
+				if (isEscaped)
+				{
+					isEscaped = false;
+					suppressAdd = true;
+				}
+			}
+
+			if (startedNewString)
+			{
+				isEscaped = true;
+				checkForNest = true;
+				suppressAdd = true;
+			}
+		}
+		else
+		{
+			if (startedNewString)
+			{
+				if (currentChar == ' ')
+				{
+					suppressAdd = true;
+				}
+			}
+
+			checkForNest = false;
+		}
+
+		startedNewString = false;
+
+		if (currentChar == ',' && !isEscaped)
+		{
+			IStringArray_Add(addToHere, _mLargeCharBuffer);
+			ResetLargeCharBuffer();
+			addCounter = 0;
+			startedNewString = true;
+		}
+		else
+		{
+			if (!suppressAdd)
+			{
+				_mLargeCharBuffer[addCounter] = currentChar;
+				addCounter += 1;
+			}
+		}
+	}
+
+	IStringArray_Add(addToHere, _mLargeCharBuffer);
+}
+static void BuilderHelper(char* buffer, int index, int32_t val)
 {
 	if (val < 10)
 	{

@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../movie/Movie.h"
 
+bool MovieManager_HasResource(const char* filenameWithoutExtension);
 Resource* MovieManager_GetResource(const char* filenameWithoutExtension);
 Movie* MovieManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* MovieManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

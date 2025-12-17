@@ -54,8 +54,6 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 	int originalHeight = Utils_ParseInt(IStringArray_Get(strings, 1));
 	shput(sh_draw_tile_original, tilesetName, Point_Create(originalWidth, originalHeight));
 
-	IStringArray* addToHere = NULL;
-
 	int64_t stringsLen = IStringArray_Length(strings);
 	for (int i = 2; i < stringsLen; i += 1)
 	{
@@ -65,7 +63,8 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 			continue;
 		}
 
-		addToHere = Utils_SplitString(nextLine, Utils_strlen(nextLine), ',');
+		IStringArray* addToHere = IStringArray_Create();
+		Utils_SplitString(nextLine, Utils_strlen(nextLine), ',', addToHere);
 		if (IStringArray_Length(addToHere) != 3)
 		{
 			IStringArray_Dispose(addToHere);

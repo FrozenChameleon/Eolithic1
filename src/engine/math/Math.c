@@ -271,3 +271,7 @@ double Math_GetVectorFromRadianAngleY(double radianAngle)
 {
 	return Math_sin(radianAngle);
 }
+double Math_log10(double value)
+{
+	return log10(value);
+}

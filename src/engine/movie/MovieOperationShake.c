@@ -3,7 +3,7 @@
 #include "../utils/Utils.h"
 #include "../math/Random32.h"
 
-MovieOperationShake_OeMovieOperationShake(MovieOperationShake* shake, const char* key, MovieImage* image, int min, int max, int time)
+void MovieOperationShake_Init(MovieOperationShake* shake, const char* key, MovieImage* image, int32_t min, int32_t max, int32_t time)
 {
 	Utils_memset(shake, 0, sizeof(MovieOperationShake));
 

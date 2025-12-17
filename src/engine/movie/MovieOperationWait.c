@@ -1,11 +1,13 @@
 #include "MovieOperationWait.h"
 
 #include "../utils/Utils.h"
+#include "MovieGlobals.h"
 
 void MovieOperationWait_Init(MovieOperationWait* wait, int timeLimit)
 {
 	Utils_memset(wait, 0, sizeof(MovieOperationWait));
 
+	wait->mType = MOVIE_OPERATION_TYPE_WAIT;
 	wait->mIsComplete = false;
 	wait->mTimerWait = Timer_Create(timeLimit);
 }

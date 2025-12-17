@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../render/ShaderProgram.h"
 
+bool ShaderProgramManager_HasResource(const char* filenameWithoutExtension);
 Resource* ShaderProgramManager_GetResource(const char* filenameWithoutExtension);
 ShaderProgram* ShaderProgramManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* ShaderProgramManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

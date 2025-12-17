@@ -319,7 +319,7 @@ void KeyboardData_Poll(KeyboardData* kd)
 	const int* keyArray = KeyList_GetArray();
 	int32_t keyArrayLength = KeyList_GetArrayLength();
 
-	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	const bool* currentKeyStates = SDL_GetKeyboardState(NULL);
 
 	for (int i = 0; i < keyArrayLength; i += 1)
 	{

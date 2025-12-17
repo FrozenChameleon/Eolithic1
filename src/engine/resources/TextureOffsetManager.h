@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../render/TextureOffset.h"
 
+bool TextureOffsetManager_HasResource(const char* filenameWithoutExtension);
 Resource* TextureOffsetManager_GetResource(const char* filenameWithoutExtension);
 TextureOffset* TextureOffsetManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* TextureOffsetManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

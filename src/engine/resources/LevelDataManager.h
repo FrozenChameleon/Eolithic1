@@ -13,6 +13,7 @@
 #include "../io/BufferReader.h"
 #include "../leveldata/LevelData.h"
 
+bool LevelDataManager_HasResource(const char* filenameWithoutExtension);
 Resource* LevelDataManager_GetResource(const char* filenameWithoutExtension);
 LevelData* LevelDataManager_GetResourceData(const char* filenameWithoutExtension);
 Resource* LevelDataManager_LoadAssetFromStreamAndCreateResource(BufferReader* br, const char* filenameWithoutExtension, const char* path);

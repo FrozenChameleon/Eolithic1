@@ -7,7 +7,7 @@
 #include "ParticleInstance.h"
 
 static ParticleInstance _mDummy;
-const static ParticleInstance _mEmpty;
+const static ParticleInstance _mEmpty = { 0 };
 
 ParticleInstance* ParticleInstance_Dummy()
 {

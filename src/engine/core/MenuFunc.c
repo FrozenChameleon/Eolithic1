@@ -18,6 +18,7 @@
 #include "../core/Window.h"
 #include "Func.h"
 #include "../../third_party/stb_ds.h"
+#include "../utils/Macros.h"
 
 int MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = 0;
 Rectangle MENUFUNC_TEMP_WINDOW_SIZE = { 0 };
@@ -102,10 +103,12 @@ static void HandleSoundTestDirectionLogic(int* value, const int32_t direction, c
 }
 void MenuFunc_SoundChangeSoundTextMusic(int direction)
 {
-	//TODO C99 	HandleSoundTestDirectionLogic(&SOUND_TEST_CURRENT_MUSIC, direction, MUSIC_LIST.size());
+	UNUSED(direction);
+	//TODO C99 HandleSoundTestDirectionLogic(&SOUND_TEST_CURRENT_MUSIC, direction, MUSIC_LIST.size());
 }
 void MenuFunc_SoundChangeSoundTextSfx(int direction)
 {
+	UNUSED(direction);
 	//TODO C99 HandleSoundTestDirectionLogic(&SOUND_TEST_CURRENT_SOUND, direction, SOUND_LIST.size());
 }
 void MenuFunc_SoundPlaySoundTestSfx()
