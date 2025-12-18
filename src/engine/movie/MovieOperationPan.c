@@ -6,6 +6,7 @@ void MovieOperationPan_Init(MovieOperationPan* pan, MovieImage* image, Vector2 s
 {
 	Utils_memset(pan, 0, sizeof(MovieOperationPan));
 
+	pan->mType = MOVIE_OPERATION_TYPE_PAN;
 	pan->mIsComplete = false;
 	pan->mSpeed = speed;
 	pan->mTimerWait = Timer_Create(time);

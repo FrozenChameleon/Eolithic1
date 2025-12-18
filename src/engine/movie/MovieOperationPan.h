@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include "MovieOperation.h"
+#include "MovieGlobals.h"
 #include "../math/Vector2.h"
 #include "../utils/Timer.h"
 #include "MovieImage.h"
 
 typedef struct MovieOperationPan
 {
-	int32_t mType;
-	bool mIsComplete;
+	MOVIE_OPERATION_HEADER
 	Vector2 mSpeed;
 	Timer mTimerWait;
 	MovieImage* mImage;

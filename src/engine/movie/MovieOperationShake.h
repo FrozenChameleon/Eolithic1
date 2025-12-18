@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include "MovieOperation.h"
+#include "MovieGlobals.h"
 #include "MovieImage.h"
 #include "../utils/Timer.h"
 #include "../globals/Globals.h"
 
 typedef struct MovieOperationShake
 {
-	int32_t mType;
-	bool mIsComplete;
+	MOVIE_OPERATION_HEADER
 	int32_t mMinimum;
 	int32_t mMaximum;
 	bool mContinual;

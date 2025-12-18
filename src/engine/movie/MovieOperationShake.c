@@ -2,11 +2,13 @@
 
 #include "../utils/Utils.h"
 #include "../math/Random32.h"
+#include "MovieGlobals.h"
 
 void MovieOperationShake_Init(MovieOperationShake* shake, const char* key, MovieImage* image, int32_t min, int32_t max, int32_t time)
 {
 	Utils_memset(shake, 0, sizeof(MovieOperationShake));
 
+	shake->mType = MOVIE_OPERATION_TYPE_SHAKE;
 	shake->mIsComplete = false;
 	shake->mMinimum = min;
 	shake->mMaximum = max;

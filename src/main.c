@@ -25,7 +25,7 @@ int main(int argc, char* args[])
 	MString_Dispose(&userPath);
 
 	//RecordingTool_EnableFromArgumentsPlayback(RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SESSION_NORMAL);
-	//Globals_TurnOnAutoMode(true);
+	Globals_TurnOnAutoMode(true);
 
 	Game_Run();
 

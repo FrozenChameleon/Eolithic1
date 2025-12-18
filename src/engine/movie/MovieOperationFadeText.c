@@ -9,6 +9,7 @@ void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, 
 {
 	Utils_memset(fade, 0, sizeof(MovieOperationFadeText));
 
+	fade->mType = MOVIE_OPERATION_TYPE_FADE_TEXT;
 	fade->mIsCentered = isTextCentered;
 	Utils_strlcpy(fade->mStringToShow, str, EE_FILENAME_MAX);
 	//TODO C99 mStringToShow = OeUtils_StringReplaceStr(mStringToShow, "\\n", "\n");

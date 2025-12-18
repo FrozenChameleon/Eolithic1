@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include "MovieOperation.h"
+#include "MovieGlobals.h"
 #include "../utils/Timer.h"
 
 typedef struct MovieOperationWait
 {
-	int32_t mType;
-	bool mIsComplete;
+	MOVIE_OPERATION_HEADER
 	Timer mTimerWait;
 } MovieOperationWait;
 

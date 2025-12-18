@@ -1,14 +1,14 @@
 ﻿#pragma once
 
+#include "MovieGlobals.h"
 #include "PlaySound.h"
 #include "Pause.h"
-#include "MovieOperation.h"
 #include "../render/Color.h"
 #include "../utils/Timer.h"
 #include "../math/Vector2.h"
 
-#define AMOUNT_OF_MOVIE_PAUSES 16
-#define AMOUNT_OF_MOVIE_PLAY_SOUNDS 16
+#define TEXT_PAUSES_LEN 16
+#define PLAY_SOUNDS_LEN 8
 
 typedef struct SpriteBatch SpriteBatch;
 
@@ -16,10 +16,9 @@ extern char mTextTypeSound[EE_FILENAME_MAX];
 
 typedef struct MovieOperationText
 {
-	int32_t mType;
-	bool mIsComplete;
-	Pause* mPauses;
-	PlaySound* mPlaySounds;
+	MOVIE_OPERATION_HEADER
+	Pause mPauses[TEXT_PAUSES_LEN];
+	PlaySound mPlaySounds[PLAY_SOUNDS_LEN];
 	Timer mTimerAddText;
 	Timer mTimerWait;
 	Vector2 mPosition;
@@ -47,4 +46,4 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 void MovieOperationText_SpeedUp(MovieOperationText* text);
 void MovieOperationText_Update(MovieOperationText* text);
 void MovieOperationText_DrawHud(MovieOperationText* text, SpriteBatch* spriteBatch);
-static void MovieOperationText_SetTextTypeSound(MovieOperationText* text, const char* sound);
+void MovieOperationText_SetTextTypeSound(MovieOperationText* text, const char* sound);

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../math/Vector2.h"
-#include "MovieOperation.h"
 #include "MovieImage.h"
 
 void MoviePlayer_Init(bool useSwappedImages, int scale, const char* movieName);

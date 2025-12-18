@@ -101,6 +101,82 @@ static void WriteTimings()
 	*/
 }
 
+static const char* GetCurrentTextColor()
+{
+	const char* color = _mData->_mTextData.mColor;
+	if (!Utils_StringEqualTo(_mData->_mNextTextData.mColor, EE_STR_EMPTY))
+	{
+		color = _mData->_mNextTextData.mColor;
+	}
+	return color;
+}
+static MovieFadeTextData GetFadeTextData(IStringArray* arguments)
+{
+	MovieFadeTextData fadeTextData = { 0 };
+	if (IStringArray_Length(arguments) >= 2)
+	{
+		Utils_strlcpy(fadeTextData.mFont, IStringArray_Get(arguments, 1), EE_FILENAME_MAX);
+	}
+	if (IStringArray_Length(arguments) >= 4)
+	{
+		fadeTextData.mPosition = Vector2_Create((float)Utils_ParseInt(IStringArray_Get(arguments, 2)), (float)Utils_ParseInt(IStringArray_Get(arguments, 3)));
+	}
+	if (IStringArray_Length(arguments) >= 5)
+	{
+		fadeTextData.mRampSpeed = Utils_ParseInt(IStringArray_Get(arguments, 4));
+	}
+	if (IStringArray_Length(arguments) >= 6)
+	{
+		fadeTextData.mHoldTime = Utils_ParseInt(IStringArray_Get(arguments, 5));
+	}
+	return fadeTextData;
+}
+static MovieTextData GetTextData(IStringArray* arguments)
+{
+	MovieTextData textData = { 0 };
+	if (IStringArray_Length(arguments) >= 2)
+	{
+		Utils_strlcpy(textData.mFont, IStringArray_Get(arguments, 1), EE_FILENAME_MAX);
+	}
+	if (IStringArray_Length(arguments) >= 4)
+	{
+		textData.mPosition = Vector2_Create((float)Utils_ParseInt(IStringArray_Get(arguments, 2)), (float)Utils_ParseInt(IStringArray_Get(arguments, 3)));
+	}
+	if (IStringArray_Length(arguments) >= 5)
+	{
+		textData.mSpeed = Utils_ParseInt(IStringArray_Get(arguments, 4));
+	}
+	if (IStringArray_Length(arguments) >= 6)
+	{
+		textData.mRate = Utils_ParseInt(IStringArray_Get(arguments, 5));
+	}
+	return textData;
+}
+static MovieOperationText* CreateNewMovieOperationText(bool isMappedText, const char* str, const char* font, Vector2 position,
+	int speed, int rate, int wait, const char* color, bool isTextCentered)
+{
+	MovieOperationText* text = Utils_mallocArena(sizeof(MovieOperationText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationText_Init(text, isMappedText, str, font, position, speed, rate, wait, color, isTextCentered);
+	return text;
+}
+static MovieOperationFadeText* CreateNewMovieOperationFadeText(const char* str, const char* font, Vector2 position, int rampSpeed, int holdTime, bool isTextCentered)
+{
+	MovieOperationFadeText* fadeText = Utils_mallocArena(sizeof(MovieOperationFadeText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationFadeText_Init(fadeText, str, font, position, rampSpeed, holdTime, isTextCentered);
+	return fadeText;
+}
+static MovieOperationPan* CreateNewMovieOperationPan(MovieImage* image, Vector2 speed, int time)
+{
+	MovieOperationPan* pan = Utils_mallocArena(sizeof(MovieOperationPan), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationPan_Init(pan, image, speed, time);
+	return pan;
+}
+static MovieOperationShake* CreateNewMovieOperationShake(const char* key, MovieImage* image, int32_t min, int32_t max, int32_t time)
+{
+	MovieOperationShake* shake = Utils_mallocArena(sizeof(MovieOperationShake), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationShake_Init(shake, key, image, min, max, time);
+	return shake;
+}
 static MovieOperationWait* CreateNewMovieOperationWait(int timeLimit)
 {
 	MovieOperationWait* wait = Utils_mallocArena(sizeof(MovieOperationWait), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
@@ -168,14 +244,15 @@ static void OperationPan(IStringArray* arguments)
 		return;
 	}
 
-	/*
-	std_shared_ptr<MovieImage> image = _mImages[arguments[0]];
-	if (image != nullptr)
+	const char* key = IStringArray_Get(arguments, 0);
+	MovieImage* image = shget(_mData->sh_images, key);
+	if (image != NULL)
 	{
-		_mOperations.push_back(std_shared_ptr<MovieOperation>(
-			new MovieOperationPan(image,
-				Vector2(OeUtils_TryParseFloat(arguments[1]), OeUtils_TryParseFloat(arguments[2])), OeUtils_TryParseInt(arguments[3]))));
-	}*/
+		Vector2 speed = Vector2_Create(Utils_ParseFloat(IStringArray_Get(arguments, 1)), Utils_ParseFloat(IStringArray_Get(arguments, 2)));
+		int32_t time = Utils_ParseInt(IStringArray_Get(arguments, 3));
+		MovieOperationPan* pan = CreateNewMovieOperationPan(image, speed, time);
+		arrput(_mData->arr_operations, pan);
+	}
 }
 static void OperationClear()
 {
@@ -285,16 +362,15 @@ static void OperationNewText(const char* operation, IStringArray* arguments)
 		return;
 	}
 
-	/*
-	std_string str = arguments[0];
+	const char* str = IStringArray_Get(arguments, 0);
 	bool isMappedText = false;
-	if (Utils_StringEqualTo(operation, ("newMappedText"))
+	if (Utils_StringEqualTo(operation, "newMappedText"))
 	{
 		isMappedText = true;
 	}
-	_mOperations.push_back(std_shared_ptr<MovieOperation>(new MovieOperationText(isMappedText, str, _mTextData.mFont, _mTextData.mPosition,
-		_mTextData.mSpeed, _mTextData.mRate, _mTextData.mWait, GetCurrentTextColor(), _mTextData.mIsCentered)));
-		_mNextTextData = NewMovieTextData();*/
+	MovieOperationText* text = CreateNewMovieOperationText(isMappedText, str, _mData->_mTextData.mFont, _mData->_mTextData.mPosition,
+		_mData->_mTextData.mSpeed, _mData->_mTextData.mRate, _mData->_mTextData.mWait, GetCurrentTextColor(), _mData->_mTextData.mIsCentered);
+	arrput(_mData->arr_operations, text);
 }
 static void OperationNewFadeText(const char* operation, IStringArray* arguments)
 {
@@ -303,23 +379,14 @@ static void OperationNewFadeText(const char* operation, IStringArray* arguments)
 		return;
 	}
 
-	/*std_string str = arguments[0];
-	if (Utils_StringEqualTo(operation, ("newMappedFadeText"))
+	const char* str = IStringArray_Get(arguments, 0);
+	if (Utils_StringEqualTo(operation, ("newMappedFadeText")))
 	{
-		str = OeStrings_Get(str);
+		str = Strings_Get(str);
 	}
-	_mOperations.push_back(std_shared_ptr<MovieOperation>(new MovieOperationFadeText(str, _mTextData.mFont, _mTextData.mPosition,
-		_mTextData.mFadeRampSpeed, _mTextData.mFadeHoldTime, _mTextData.mIsCentered)));
-		_mNextTextData = NewMovieTextData();*/
-}
-static const char* GetCurrentTextColor()
-{
-	const char* color = _mData->_mTextData.mColor;
-	if (!Utils_StringEqualTo(_mData->_mNextTextData.mColor, EE_STR_EMPTY))
-	{
-		color = _mData->_mNextTextData.mColor;
-	}
-	return color;
+	MovieOperationFadeText* fadeText = CreateNewMovieOperationFadeText(str, _mData->_mTextData.mFont, _mData->_mTextData.mPosition,
+		_mData->_mTextData.mFadeRampSpeed, _mData->_mTextData.mFadeHoldTime, _mData->_mTextData.mIsCentered);
+	arrput(_mData->arr_operations, fadeText);
 }
 static void OperationSetTextFont(IStringArray* arguments)
 {
@@ -450,15 +517,6 @@ static void OperationWait(IStringArray* arguments)
 	MovieOperationWait* wait = CreateNewMovieOperationWait(timeLimit);
 	arrput(_mData->arr_operations, wait);
 }
-static void OperationStopShake(IStringArray* arguments)
-{
-	if (IStringArray_Length(arguments) < 1)
-	{
-		return;
-	}
-
-	//TODO C99 Broadcast("shake", arguments[0]);
-}
 static void OperationShake(IStringArray* arguments)
 {
 	if (IStringArray_Length(arguments) < 4)
@@ -466,16 +524,16 @@ static void OperationShake(IStringArray* arguments)
 		return;
 	}
 
-	/*std_string strImage = arguments[0];
-	std_shared_ptr<MovieImage> image = _mImages[strImage];
-	if (image != nullptr)
+	const char* strImage = IStringArray_Get(arguments, 0);
+	MovieImage* movieImage = shget(_mData->sh_images, strImage);
+	if (movieImage != NULL)
 	{
-		int min = OeUtils_TryParseInt(arguments[1]);
-		int max = OeUtils_TryParseInt(arguments[2]);
-		int time = OeUtils_TryParseInt(arguments[3]);
-		_mOperations.push_back(std_shared_ptr<MovieOperation>(
-			new MovieOperationShake(strImage, image, min, max, time)));
-	}*/
+		int32_t min = Utils_ParseInt(IStringArray_Get(arguments, 1));
+		int32_t max = Utils_ParseInt(IStringArray_Get(arguments, 2));
+		int32_t time = Utils_ParseInt(IStringArray_Get(arguments, 3));
+		MovieOperationShake* shake = CreateNewMovieOperationShake(strImage, movieImage, min, max, time);
+		arrput(_mData->arr_operations, shake);
+	}
 }
 static void OperationText(const char* operation, IStringArray* arguments)
 {
@@ -484,52 +542,34 @@ static void OperationText(const char* operation, IStringArray* arguments)
 		return;
 	}
 
-	/*MovieTextData textData = GetTextData(arguments);
-	std_string str = arguments[0];
+	MovieTextData textData = GetTextData(arguments);
+	const char* str = IStringArray_Get(arguments, 0);
 	bool isMappedText = false;
-	if (Utils_StringEqualTo(operation, "mappedText")
+	if (Utils_StringEqualTo(operation, "mappedText"))
 	{
 		isMappedText = true;
 	}
 	int wait = 0;
-		if (IStringArray_Length(arguments) >= 7)
-		{
-			wait = OeUtils_TryParseInt(arguments[6]);
-		}
-	std_string color = "WHITE";
-		if (IStringArray_Length(arguments) >= 8)
-		{
-			color = arguments[7];
-		}
-	_mOperations.push_back(std_shared_ptr<MovieOperation>(new MovieOperationText(isMappedText, str, textData.mFont,
-		textData.mPosition, textData.mSpeed, textData.mRate, wait, color, false)));*/
+	if (IStringArray_Length(arguments) >= 7)
+	{
+		wait = Utils_ParseInt(IStringArray_Get(arguments, 6));
+	}
+	const char* color = "WHITE";
+	if (IStringArray_Length(arguments) >= 8)
+	{
+		color = IStringArray_Get(arguments, 7);
+	}
+
+	MovieOperationText* text = CreateNewMovieOperationText(isMappedText, str, textData.mFont,
+		textData.mPosition, textData.mSpeed, textData.mRate, wait, color, false);
+	arrput(_mData->arr_operations, text);
 }
 static void OperationGiveTime()
 {
-	//TODO C99 OeLogger_LogInformation(std_to_string(_mFrameCounter));
-}
-static MovieTextData GetTextData(IStringArray* arguments)
-{
-	MovieTextData temp;
-	return temp;
-	/*MovieTextData textData = MovieTextData();
-	if (IStringArray_Length(arguments) >= 2)
-	{
-		textData.mFont = arguments[1];
-	}
-	if (IStringArray_Length(arguments) >= 4)
-	{
-		textData.mPosition = Vector2(OeUtils_TryParseInt(arguments[2]), OeUtils_TryParseInt(arguments[3]));
-	}
-	if (IStringArray_Length(arguments) >= 5)
-	{
-		textData.mSpeed = OeUtils_TryParseInt(arguments[4]);
-	}
-	if (IStringArray_Length(arguments) >= 6)
-	{
-		textData.mRate = OeUtils_TryParseInt(arguments[5]);
-	}
-	return textData;*/
+	MString* temp = NULL;
+	MString_AddAssignInt(&temp, _mData->_mFrameCounter);
+	Logger_LogInformation(MString_GetText(temp));
+	MString_Dispose(&temp);
 }
 static void OperationFadeText(const char* operation, IStringArray* arguments)
 {
@@ -538,44 +578,37 @@ static void OperationFadeText(const char* operation, IStringArray* arguments)
 		return;
 	}
 
-	/*MovieFadeTextData fadeTextData = GetFadeTextData(arguments);
-	std_string str = arguments[0];
-	if (Utils_StringEqualTo(operation, ("mappedFadeText"))
+	MovieFadeTextData fadeTextData = GetFadeTextData(arguments);
+	const char* str = IStringArray_Get(arguments, 0);
+	if (Utils_StringEqualTo(operation, "mappedFadeText"))
 	{
-		str = OeStrings_Get(str);
+		str = Strings_Get(str);
 	}
-	_mOperations.push_back(std_shared_ptr<MovieOperation>(new MovieOperationFadeText(str, fadeTextData.mFont, fadeTextData.mPosition, fadeTextData.mRampSpeed,
-		fadeTextData.mHoldTime, false)));*/
-}
-static MovieFadeTextData GetFadeTextData(IStringArray* arguments)
-{
-	MovieFadeTextData temp;
-	return temp;
-	/*MovieFadeTextData fadeTextData = MovieFadeTextData();
-	if (IStringArray_Length(arguments) >= 2)
-	{
-		fadeTextData.mFont = arguments[1];
-	}
-	if (IStringArray_Length(arguments) >= 4)
-	{
-		fadeTextData.mPosition = Vector2(OeUtils_TryParseInt(arguments[2]), OeUtils_TryParseInt(arguments[3]));
-	}
-	if (IStringArray_Length(arguments) >= 5)
-	{
-		fadeTextData.mRampSpeed = OeUtils_TryParseInt(arguments[4]);
-	}
-	if (IStringArray_Length(arguments) >= 6)
-	{
-		fadeTextData.mHoldTime = OeUtils_TryParseInt(arguments[5]);
-	}
-	return fadeTextData;*/
+	MovieOperationFadeText* fadeText = CreateNewMovieOperationFadeText(str, fadeTextData.mFont, fadeTextData.mPosition, fadeTextData.mRampSpeed, fadeTextData.mHoldTime, false);
+	arrput(_mData->arr_operations, fadeText);
 }
 static void Broadcast(const char* key, const char* value)
 {
-	/*for (int i = 0; i < _mOperations.size(); i++)
+	for (int i = 0; i < arrlen(_mData->arr_operations); i += 1)
 	{
-		_mOperations[i]->Broadcast(key, value);
-	}*/
+		void* op = _mData->arr_operations[i];
+		int32_t type = *((int32_t*)op);
+		switch (type)
+		{
+		case MOVIE_OPERATION_TYPE_SHAKE:
+			MovieOperationShake_Broadcast(op, key, value);
+			break;
+		}
+	}
+}
+static void OperationStopShake(IStringArray* arguments)
+{
+	if (IStringArray_Length(arguments) < 1)
+	{
+		return;
+	}
+
+	Broadcast("shake", IStringArray_Get(arguments, 0));
 }
 static void AddOperation(const char* operation, IStringArray* arguments)
 {
@@ -748,48 +781,67 @@ static void AddOperation(const char* operation, IStringArray* arguments)
 	}
 }
 
-static bool IsOperationComplete(void* op)
+static int32_t GetOperationType(void* op)
 {
-	int32_t type = *((int32_t*)op);
-	switch (type)
-	{
-	case MOVIE_OPERATION_TYPE_WAIT:
-		return ((MovieOperationWait*)op)->mIsComplete;
-	}
-	return true;
+	return *((int32_t*)op);;
 }
 static void DoOperationSpeedUp(void* op)
 {
-	int32_t type = *((int32_t*)op);
+	int32_t type = GetOperationType(op);
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_WAIT:
 		MovieOperationWait_SpeedUp(op);
 		break;
+	case MOVIE_OPERATION_TYPE_SHAKE:
+		MovieOperationShake_SpeedUp(op);
+		break;
+	case MOVIE_OPERATION_TYPE_FADE_TEXT:
+		MovieOperationFadeText_SpeedUp(op);
+		break;
+	case MOVIE_OPERATION_TYPE_TEXT:
+		MovieOperationText_SpeedUp(op);
+		break;
+	case MOVIE_OPERATION_TYPE_PAN:
+		MovieOperationPan_SpeedUp(op);
+		break;
 	}
 }
 static void DoOperationUpdate(void* op)
 {
-	int32_t type = *((int32_t*)op);
+	int32_t type = GetOperationType(op);
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_WAIT:
 		MovieOperationWait_Update(op);
 		break;
+	case MOVIE_OPERATION_TYPE_SHAKE:
+		MovieOperationShake_Update(op);
+		break;
+	case MOVIE_OPERATION_TYPE_FADE_TEXT:
+		MovieOperationFadeText_Update(op);
+		break;
+	case MOVIE_OPERATION_TYPE_TEXT:
+		MovieOperationText_Update(op);
+		break;
+	case MOVIE_OPERATION_TYPE_PAN:
+		MovieOperationPan_Update(op);
+		break;
 	}
 }
 static bool OperationDoesNotBlock(void* op)
 {
-	/*int32_t type = *((int32_t*)op);
+	int32_t type = GetOperationType(op);
 	switch (type)
 	{
-
-	}*/
+	case MOVIE_OPERATION_TYPE_SHAKE:
+		return MovieOperationShake_DoesNotBlock(op);
+	}
 	return false;
 }
 static bool OperationForcesWait(void* op)
 {
-	int32_t type = *((int32_t*)op);
+	int32_t type = GetOperationType(op);
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_WAIT:
@@ -888,7 +940,7 @@ void MoviePlayer_Update2(bool doNotAllowMovieSkip)
 		if (_mData->_mFrameCounter > targetTime)
 		{
 			Logger_LogInformation("Frame counter over target time, cannot continue movie");
-			if (_mData->_mFrameCounter > targetTime + (60 * 5))
+			if (_mData->_mFrameCounter > (targetTime + (60 * 5)))
 			{
 				_mData->_mIsComplete = true;
 			}
@@ -971,7 +1023,10 @@ void MoviePlayer_Update2(bool doNotAllowMovieSkip)
 		for (int i = 0; i < arrlen(_mData->arr_operations); i += 1)
 		{
 			void* op = _mData->arr_operations[i];
-			if (!IsOperationComplete(op))
+
+			bool isComplete = *(((uint8_t*)op) + sizeof(int32_t));
+
+			if (!isComplete)
 			{
 				if (speedUp)
 				{
@@ -1005,11 +1060,20 @@ void MoviePlayer_Update2(bool doNotAllowMovieSkip)
 }
 void MoviePlayer_DrawHud(SpriteBatch* spriteBatch)
 {
-	/*for (int i = 0; i < _mOperations.size(); i++)
+	for (int i = 0; i < arrlen(_mData->arr_operations); i += 1)
 	{
-		_mOperations[i]->DrawHud(spriteBatch);
+		void* op = _mData->arr_operations[i];
+		int32_t type = GetOperationType(op);
+		switch (type)
+		{
+		case MOVIE_OPERATION_TYPE_FADE_TEXT:
+			MovieOperationFadeText_DrawHud(op, spriteBatch);
+			break;
+		case MOVIE_OPERATION_TYPE_TEXT:
+			MovieOperationText_DrawHud(op, spriteBatch);
+			break;
+		}
 	}
-	*/
 
 	for (int i = 0; i < shlen(_mData->sh_images); i += 1)
 	{

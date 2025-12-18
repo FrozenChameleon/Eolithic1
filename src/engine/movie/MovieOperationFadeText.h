@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "MovieOperation.h"
+#include "MovieGlobals.h"
 #include "../math/Vector2.h"
 #include "../utils/Timer.h"
 
@@ -8,8 +8,7 @@ typedef struct SpriteBatch SpriteBatch;
 
 typedef struct MovieOperationFadeText
 {
-	int32_t mType;
-	bool mIsComplete;
+	MOVIE_OPERATION_HEADER
 	Vector2 mPosition;
 	int mRamp;
 	bool mIsRampingDown;

@@ -7,6 +7,7 @@
 #include "../render/SpriteBatch.h"
 #include "../core/Func.h"
 #include "../globals/Align.h"
+#include "../utils/Logger.h"
 
 char mTextTypeSound[EE_FILENAME_MAX];
 
@@ -58,43 +59,58 @@ void MovieOperationText_NormalUpdate(MovieOperationText* text)
 	}
 	else
 	{
-		//TODO C99
-		/*
-		for (int i = 0; i < text->mPauses.size(); i += 1)
+		for (int i = 0; i < TEXT_PAUSES_LEN; i += 1)
 		{
 			Pause* pause = &text->mPauses[i];
+			if (!pause->mIsLoaded)
+			{
+				continue;
+			}
+
 			if (Pause_IsAtPoint(pause, text->mIndex))
 			{
 				Pause_Update(pause);
-				if (pause->_mIsComplete)
+				if (pause->mIsComplete)
 				{
 					text->mIsPaused = false;
 				}
 			}
-		}*/
+		}
 	}
 }
 void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int point)
 {
-	//TODO C99
-	/*
-	for (int j = 0; j < mPlaySounds.size(); j += 1)
+	for (int j = 0; j < PLAY_SOUNDS_LEN; j += 1)
 	{
-		mPlaySounds[j].PlayTheSoundIfAtPoint(point);
-	}
-	for (int j = 0; j < mPauses.size(); j += 1)
-	{
-		if (mPauses[j].IsAtPoint(point))
+		PlaySound* playSound = &text->mPlaySounds[j];
+		if (!playSound->mIsLoaded)
 		{
-			mIsPaused = true;
+			continue;
 		}
-	}*/
+
+		PlaySound_PlayTheSoundIfAtPoint(playSound, point);
+	}
+	for (int j = 0; j < TEXT_PAUSES_LEN; j += 1)
+	{
+		Pause* pause = &text->mPauses[j];
+		if (!pause->mIsLoaded)
+		{
+			continue;
+		}
+
+		if (Pause_IsAtPoint(pause, point))
+		{
+			text->mIsPaused = true;
+		}
+	}
 }
 
 void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const char* str, const char* font, Vector2 position,
 	int speed, int rate, int wait, const char* color, bool isTextCentered)
 {
 	Utils_memset(text, 0, sizeof(MovieOperationText));
+
+	text->mType = MOVIE_OPERATION_TYPE_TEXT;
 
 	text->mIsCentered = isTextCentered;
 
@@ -107,8 +123,6 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 	Utils_strlcpy(text->mFont, font, EE_FILENAME_MAX);
 	Utils_strlcpy(text->mTotalString, strToUse, EE_FILENAME_MAX);
 	//TODO C99 mTotalString = Utils_StringReplaceStr(mTotalString, "\\n", "\n");
-	//TODO C99 mPauses = std_vector<Pause>();
-	//TODO C99 mPlaySounds = std_vector<PlaySound>();
 
 	bool isReady = false;
 	while (!isReady)
@@ -119,24 +133,74 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 			int end = Utils_StringIndexOf('}', text->mTotalString, EE_FILENAME_MAX, false);
 
 			int off = begin + 1;
-			//TODO C99
-			/*
-			std_string total = mTotalString.substr(off, end - off);
+			MString* total = NULL;
+			MString_AssignSubString(&total, text->mTotalString, off, end - off);
 
-			if (OeUtils_StringStartsWith(total, "&"))
+			if (Utils_StringStartsWith(MString_GetText(total), "&"))
 			{
-				std_string sound = total.substr(1, total.size() - 1);
-				mPlaySounds.push_back(PlaySound(begin, sound));
+				int32_t totalLen = MString_GetLength(total);
+				MString* sound = NULL;
+				MString_AssignSubString(&sound, MString_GetText(total), 1, totalLen - 1);
+				bool wasFound = false;
+				for (int i = 0; i < PLAY_SOUNDS_LEN; i += 1)
+				{
+					PlaySound* ps = &text->mPlaySounds[i];
+					if (!ps->mIsLoaded)
+					{
+						ps->mPoint = begin;
+						Utils_strlcpy(ps->mSound, MString_GetText(sound), EE_FILENAME_MAX);
+						ps->mIsLoaded = true;
+						wasFound = true;
+						break;
+					}
+				}
+				if (!wasFound)
+				{
+					Logger_LogInformation("Unable to find index for movie play sound!");
+				}
+				MString_Dispose(&sound);
 			}
-			else if (OeUtils_StringStartsWith(total, "^"))
+			else if (Utils_StringStartsWith(MString_GetText(total), "^"))
 			{
-				std_string number = total.substr(1, total.size() - 1);
-				mPauses.push_back(Pause(OeUtils_TryParseInt(number), begin));
+				int32_t totalLen = MString_GetLength(total);
+				MString* number = NULL;
+				MString_AssignSubString(&number, MString_GetText(total), 1, totalLen - 1);
+				int pauseTime = Utils_ParseInt(MString_GetText(number));
+				bool wasFound = false;
+				for (int i = 0; i < TEXT_PAUSES_LEN; i += 1)
+				{
+					Pause* p = &text->mPauses[i];
+					if (!p->mIsLoaded)
+					{
+						p->mPoint = begin;
+						p->mTimer = Timer_Create(pauseTime);
+						p->mIsLoaded = true;
+						wasFound = true;
+						break;
+					}
+				}
+				if (!wasFound)
+				{
+					Logger_LogInformation("Unable to find index for movie text pause!");
+				}
+				MString_Dispose(&number);
 			}
 
-			std_string strFirstNew = mTotalString.substr(0, begin);
-			std_string strSecondNew = mTotalString.substr(end + 1, mTotalString.size() - (end + 1));
-			mTotalString = strFirstNew + strSecondNew;*/
+			MString* strFirstNew = NULL;
+			MString_AssignSubString(&strFirstNew, text->mTotalString,0, begin);
+
+			MString* strSecondNew = NULL;
+			MString_AssignSubString(&strSecondNew, text->mTotalString, end + 1, (int32_t)(Utils_strlen(text->mTotalString) - (end + 1)));
+
+			MString* finalResult = NULL;
+			MString_AssignMString(&finalResult, strFirstNew);
+			MString_AddAssignMString(&finalResult, strSecondNew);
+			Utils_strlcpy(text->mTotalString, MString_GetText(finalResult), EE_FILENAME_MAX);
+
+			MString_Dispose(&total);
+			MString_Dispose(&strFirstNew);
+			MString_Dispose(&strSecondNew);
+			MString_Dispose(&finalResult);
 		}
 		else
 		{
