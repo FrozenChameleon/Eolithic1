@@ -11,6 +11,16 @@
 #include "../math/Rectangle.h"
 
 typedef struct IStringArray IStringArray;
+typedef struct MString MString;
+
+#define UTILS_ENGLISH_LANGUAGE_CODE "en"
+#define UTILS_FRENCH_LANGUAGE_CODE "fr"
+#define UTILS_ITALIAN_LANGUAGE_CODE "it"
+#define UTILS_GERMAN_LANGUAGE_CODE "de"
+#define UTILS_SPANISH_LANGUAGE_CODE "es"
+
+#define UTILS_EXTENSION_BIN ".bin"
+#define UTILS_EXTENSION_INI ".ini"
 
 enum
 {
@@ -20,6 +30,7 @@ enum
 	UTILS_ALLOCATION_ARENA_MOVIE_PLAYER = 3
 };
 
+const char* Utils_GetCurrentUserLanguageCode();
 bool Utils_IsCurrentLanguageEnglish();
 uint64_t Utils_GetMallocRefs();
 uint64_t Utils_GetStringRefs();
@@ -55,6 +66,8 @@ void Utils_ResetArrayAsInt(int32_t* values, size_t len, int32_t valueToSet);
 void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet);
 void Utils_ToggleFullscreenButton();
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex);
+int32_t Utils_StringFirstIndexOf(char findThis, const char* strInThis, size_t maxlen);
+int32_t Utils_StringLastIndexOf(char findThis, const char* strInThis, size_t maxlen);
 double Utils_GetNormalStepLength();
 double Utils_GetInterpolated(double delta, float current, float last);
 Rectangle Utils_GetInternalRectangle();
@@ -84,3 +97,6 @@ bool Utils_CheckSave(bool update);
 void Utils_JustSaved();
 int32_t Utils_GetAmountOfDigits(int32_t n);
 void Utils_GetSplitCSV(const char* str, IStringArray* addToHere);
+bool Utils_IsStringUnderWidth(const char* str, const char* font, int32_t start, int32_t currentIndex, int32_t width);
+int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width);
+void Utils_GetStringWithNewLines(const char* str, const char* font, int32_t width, MString** assignToThis);

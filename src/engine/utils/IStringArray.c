@@ -44,6 +44,19 @@ void IStringArray_Add(IStringArray* sa, const char* str)
 	int64_t len = hmlen(sa->hm_values);
 	hmput(sa->hm_values, len, internedString);
 }
+bool IStringArray_Contains(IStringArray* sa, const char* containsThis)
+{
+	int64_t len = IStringArray_Length(sa);
+	for (int i = 0; i < len; i += 1)
+	{
+		const char* tempStr = IStringArray_Get(sa, i);
+		if (Utils_StringEqualTo(tempStr, containsThis))
+		{
+			return true;
+		}
+	}
+	return false;
+}
 int64_t IStringArray_Length(IStringArray* sa)
 {
 	if (sa == NULL)

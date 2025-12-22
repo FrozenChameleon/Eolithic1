@@ -48,3 +48,12 @@ uint64_t FixedByteBuffer_GetRefs()
 {
 	return _mRefs;
 }
+FixedByteBuffer* FixedByteBuffer_Clone(FixedByteBuffer* cloneThis)
+{
+	_mRefs += 1;
+	FixedByteBuffer* fbbToReturn = Utils_malloc(sizeof(FixedByteBuffer));
+	fbbToReturn->mLength = cloneThis->mLength;
+	fbbToReturn->mBuffer = Utils_malloc(sizeof(uint8_t) * cloneThis->mLength);
+	Utils_memcpy(fbbToReturn->mBuffer, cloneThis->mBuffer, cloneThis->mLength);
+	return fbbToReturn;
+}

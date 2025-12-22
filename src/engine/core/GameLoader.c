@@ -38,6 +38,7 @@
 #include "../resources/TilesetOffsetManager.h"
 #include "../resources/MovieManager.h"
 #include "../resources/MovieTimingManager.h"
+#include "../resources/TTFontManager.h"
 
 enum
 {
@@ -174,6 +175,7 @@ static bool LoadResources()
 	TextureFontManager_LoadAllFromDat();
 	TextureMovieManager_LoadAllFromDat();
 	TextureOffsetManager_LoadAllFromDat();
+	TTFontManager_LoadAllFromDat();
 	TilesetOffsetManager_LoadAllFromDat();
 	ThingSettingsManager_LoadAllFromDat();
 	MovieManager_LoadAllFromDat();

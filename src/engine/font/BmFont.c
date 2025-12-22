@@ -1,13 +1,13 @@
 #include "BmFont.h"
 
-//TODO C99 #include "OeFontMap.h"
-//TODO C99 #include "../resources/ResourceManagers.h"
+#include "FontMap.h"
 #include "../render/Texture.h"
-//TODO C99 #include "../render/OeRenderTtFont.h"
+#include "../render/RenderTtFont.h"
 #include "../render/Renderer.h"
 #include "../resources/BmFontManager.h"
 #include "../../third_party/stb_ds.h"
 #include "../resources/TextureFontManager.h"
+#include "../resources/TTFontManager.h"
 
 #define FONT_EXTENSION ".fnt"
 //TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_Combine("data", "fonts") };
@@ -63,37 +63,34 @@ BmFont* BmFont_GetBmFont(BmFont* bmf, const char* font)
 {
 	return BmFontManager_GetResourceData(font);
 }
-/*const OeFontMapData* BmFont_GetReplacement()
+const FontMapData* BmFont_GetReplacement(BmFont* bmf)
 {
-	return OeFontMap_GetReplacement(_mFontName);
-}*/
+	return FontMap_GetReplacement(bmf->_mFontName);
+}
 
-//#if !DISABLE_TT_FONT
-//TODO C99 
-// OeTTFont* BmFont_GetTTFont(const std_string& font)
-//{
-//	return OeResourceManagers_TTFontManager.GetResourceData(font);
-//}
-//#endif
+#if !DISABLE_TT_FONT
+static TTFont* BmFont_GetTTFont(const char* font)
+{
+	return TTFontManager_GetResourceData(font);
+}
+#endif
 
 Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont)
 {
-	//#if !DISABLE_TT_FONT
-	//TODO C99
-	/*
-	const OeFontMapData* replacement = GetReplacement();
-	if (replacement != nullptr && !doNotReplaceFont)
+	#if !DISABLE_TT_FONT
+	const FontMapData* replacement = BmFont_GetReplacement(bmf);
+	if ((replacement != NULL) && !doNotReplaceFont)
 	{
 		if (replacement->mIsBitmap)
 		{
-			return OeRenderer_RenderBmFont(false, GetBmFont(replacement->mFontName), text, Color_White, Vector2_Zero);
+			return Renderer_RenderBmFont(false, BmFont_GetBmFont(bmf, replacement->mFontName), text, COLOR_WHITE, Vector2_Zero);
 		}
 		else
 		{
-			return OeRenderTtFont_GetBounds(replacement, text);
+			return RenderTtFont_GetBounds(replacement, text);
 		}
-	}*/
-	//#endif
+	}
+	#endif
 	return Renderer_RenderBmFont(false, bmf, text, COLOR_WHITE, Vector2_Zero);
 }
 

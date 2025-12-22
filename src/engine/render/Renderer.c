@@ -43,8 +43,8 @@
 #define STBI_ONLY_PNG
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../third_party/stb_image.h"
-//#include "../font/FontMap.h"
-//#include "../render/RenderTtFont.h"
+#include "../font/FontMap.h"
+#include "../render/RenderTtFont.h"
 #include "../../DebugDefs.h"
 #include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
@@ -605,8 +605,8 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 
 	Vector2 offset = Vector2_Zero;
 
-	if (draw->mAlignmentX == ALIGN_CENTER || draw->mAlignmentX == ALIGN_RIGHT ||
-		draw->mAlignmentY == ALIGN_CENTER || draw->mAlignmentY == ALIGN_BOTTOM)
+	if ((draw->mAlignmentX == ALIGN_CENTER) || (draw->mAlignmentX == ALIGN_RIGHT) ||
+		(draw->mAlignmentY == ALIGN_CENTER) || (draw->mAlignmentY == ALIGN_BOTTOM))
 	{
 		Rectangle layout = BmFont_GetBounds(draw->mFont, strToDraw, draw->mDoNotReplaceFont);
 
@@ -648,21 +648,21 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 	}
 
 	bool doNotRender = false;
-	//#if !DISABLE_TT_FONT
-	/*const OeFontMapData* replacement = OeFontMap_GetReplacement(draw->mFont->GetFontName());
-	if (replacement != nullptr && !draw->mDoNotReplaceFont)
+	#if !DISABLE_TT_FONT
+	const FontMapData* replacement = FontMap_GetReplacement(BmFont_GetFontName(draw->mFont));
+	if ((replacement != NULL) && !draw->mDoNotReplaceFont)
 	{
 		doNotRender = true;
 		if (replacement->mIsBitmap)
 		{
-			RenderBmFont(true, GetBmFont(replacement->mFontName), strToDraw, draw->mColor, finalPos);
+			Renderer_RenderBmFont(true, GetBmFont(replacement->mFontName), strToDraw, draw->mColor, finalPos);
 		}
 		else
 		{
-			OeRenderTtFont_Draw(replacement, strToDraw, draw->mColor, finalPos);
+			RenderTtFont_Draw(replacement, strToDraw, draw->mColor, finalPos);
 		}
-	}*/
-	//#endif
+	}
+	#endif
 	if (!doNotRender)
 	{
 		Renderer_RenderBmFont(true, draw->mFont, strToDraw, draw->mColor, finalPos);
@@ -1088,6 +1088,8 @@ void Renderer_SetupCommit(double delta)
 
 void Renderer_SetupRenderState()
 {
+	SpriteBatch_DisposePinnedStrings();
+
 	if (GameLoader_IsLoading())
 	{
 		SpriteBatch_Clear(&_mOrangeSpriteBatch);
@@ -1100,44 +1102,6 @@ void Renderer_SetupRenderState()
 	GameStateManager_Draw(&_mOrangeSpriteBatch);
 	SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
 	GameStateManager_DrawHud(&_mOrangeSpriteBatchHud);
-
-	//OLD DEBUG REMOVE TODO C99
-	/*
-	if (!GameLoader_IsLoading())
-	{
-		SpriteBatch_Clear(&_mOrangeSpriteBatch);
-		SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
-
-		if (Is_AnyEntityInPack(C_CollisionEngine)) //TODO REMOVE ALL THIS STUFF
-		{
-			CollisionEngineSys_DrawRoutine(Get_FirstSetEntity(C_CollisionEngine), Get_FirstSetComponent(C_CollisionEngine), &_mOrangeSpriteBatch);
-		}
-		
-		Texture* pixel = DrawTool_GetSinglePixel();
-		Rectangle sourceRect = { 0, 0, 1, 1 };
-		for (int i = 0; i < 50; i += 1)
-		{
-			for (int j = 0; j < 50; j += 1)
-			{
-				Vector2 position;
-				position.X = 8 * i;
-				position.Y = 8 * j;
-				//SpriteBatch_Draw(&_mOrangeSpriteBatchHud, pixel, COLOR_BLUE, 0, NULL,
-			//		position, sourceRect, Vector2_One, 0, false, false, Vector2_Zero);
-			}
-		}
-		
-
-		Sheet* sheet = Sheet_GetSheet("monsterEyeShootCatchUp_00");
-		for (int i = 0; i < 1; i += 1)
-		{
-			Vector2 position;
-			position.X = 25 * i;
-			position.Y = 0;
-			SpriteBatch_Draw(&_mOrangeSpriteBatchHud, sheet->mTextureResource->mData, Color_White, 0, NULL,
-				position, sheet->mRectangle, Vector2_One, 0, false, false, Vector2_Zero);
-		}
-	}*/
 }
 int Renderer_GetFPS()
 {

@@ -240,6 +240,8 @@ static void Cheats()
 #endif
 static void Tick()
 {
+	Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
+
 	GameStateManager_UpdateLastRenderPosition();
 
 	if (ServiceHelper_HasPlayerHasLostControllerConnection())

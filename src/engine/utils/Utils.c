@@ -19,6 +19,8 @@
 #include "../input/ControllerState.h"
 #include "../input/ControllerStates.h"
 #include "../globals/Globals.h"
+#include "../utils/IStringArray.h"
+#include "../render/DrawTool.h"
 
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
@@ -34,9 +36,85 @@ static void ResetLargeCharBuffer()
 	Utils_memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
 }
 
+const char* Utils_GetCurrentUserLanguageCode()
+{
+	return UTILS_ENGLISH_LANGUAGE_CODE;
+
+	//MUTE CRIMSON DX DOES NOT HAVE MULTIPLE LANGUAGES, SO NOT DOING THIS RIGHT NOW...
+
+	/*
+#ifdef DEBUG_DEF_FORCED_LANGUAGE
+
+	switch (DEBUG_DEF_FORCED_LANGUAGE)
+	{
+	case 0:
+		return UTILS_ENGLISH_LANGUAGE_CODE;
+	case 1:
+		return UTILS_FRENCH_LANGUAGE_CODE;
+	case 2:
+		return UTILS_ITALIAN_LANGUAGE_CODE;
+	case 3:
+		return UTILS_GERMAN_LANGUAGE_CODE;
+	case 4:
+		return UTILS_SPANISH_LANGUAGE_CODE;
+	}
+#endif
+
+	if (!_mHasCachedValidLanguages)
+	{
+		const std::vector<std::string>& listOfLanguages = OeResourceManagers::StringsTextManager.GetKeyList();
+		for (int i = 0; i < listOfLanguages.size(); i += 1)
+		{
+			_mCachedValidLanguages.push_back(listOfLanguages[i]);
+		}
+		_mHasCachedValidLanguages = true;
+	}
+
+	if (_mCachedValidLanguages.size() <= 1) //No other languages present
+	{
+		return ENGLISH_LANGUAGE_CODE;
+	}
+
+	if (_mCultureLanguage == STR_NOTHING)
+	{
+		const std::string& platformLanguage = OeService::GetPlatformLanguage();
+		if (platformLanguage != STR_NOTHING)
+		{
+			_mCultureLanguage = platformLanguage;
+		}
+		else
+		{
+			_mCultureLanguage = ENGLISH_LANGUAGE_CODE;
+			//WILLNOTDO _mCultureLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+		}
+	}
+
+	std::string currentLanguage = OeCvars::Get(OeCvars::USER_LANGUAGE);
+	if (currentLanguage == LANGUAGE_SYSTEM)
+	{
+		currentLanguage = _mCultureLanguage;
+	}
+
+	bool isValid = false;
+	for (int i = 0; i < _mCachedValidLanguages.size(); i += 1)
+	{
+		if (_mCachedValidLanguages[i] == currentLanguage)
+		{
+			isValid = true;
+		}
+	}
+
+	if (!isValid)
+	{
+		return ENGLISH_LANGUAGE_CODE;
+	}
+
+	return currentLanguage;*/
+}
+
 bool Utils_IsCurrentLanguageEnglish()
 {
-	return true;
+	return (Utils_StringEqualTo(Utils_GetCurrentUserLanguageCode(), UTILS_ENGLISH_LANGUAGE_CODE));
 }
 uint64_t Utils_GetMallocRefs()
 {
@@ -283,6 +361,14 @@ int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen,
 		}
 	}
 	return loc;
+}
+int32_t Utils_StringFirstIndexOf(char findThis, const char* strInThis, size_t maxlen)
+{
+	return Utils_StringIndexOf(findThis, strInThis, maxlen, false);
+}
+int32_t Utils_StringLastIndexOf(char findThis, const char* strInThis, size_t maxlen)
+{
+	return Utils_StringIndexOf(findThis, strInThis, maxlen, true);
 }
 double Utils_GetNormalStepLength()
 {
@@ -681,6 +767,95 @@ void Utils_GetSplitCSV(const char* str, IStringArray* addToHere)
 	}
 
 	IStringArray_Add(addToHere, _mLargeCharBuffer);
+}
+bool Utils_IsStringUnderWidth(const char* str, const char* font, int32_t start, int32_t currentIndex, int32_t width)
+{
+	MString* testString = NULL;
+	MString_AssignSubString(&testString, str, start, currentIndex - start);
+	Rectangle bounds = DrawTool_GetBounds(MString_GetText(testString), font);
+	MString_Dispose(&testString);
+	if (bounds.Width < width)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	return false;
+}
+int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width)
+{
+	size_t strSize = Utils_strlen(str);
+
+	int start = Utils_StringLastIndexOf('\n', str, strSize);
+	if (start == -1)
+	{
+		start = 0;
+	}
+	else
+	{
+		start += 1;
+	}
+
+	int last = -1;
+	for (int i = start; i < strSize; i += 1)
+	{
+		if (str[i] != ' ')
+		{
+			continue;
+		}
+		if (Utils_IsStringUnderWidth(str, font, start, i, width))
+		{
+			last = i;
+		}
+		else
+		{
+			return last;
+		}
+	}
+
+	if (!Utils_IsStringUnderWidth(str, font, start, (int32_t)strSize, width))
+	{
+		return last;
+	}
+
+	return -1;
+}
+void Utils_GetStringWithNewLines(const char* str, const char* font, int32_t width, MString** assignToThis)
+{
+	MString_Assign(assignToThis, str);
+
+	if (Utils_StringContains(str, "\n") || Utils_StringContains(str, "\r") || Utils_StringContains(str, "\r\n"))
+	{
+		return;
+	}
+
+	bool isDone = false;
+	do
+	{
+		size_t strLen = Utils_strlen(MString_GetText(*assignToThis));
+		int32_t loc = Utils_GetSpotForNewLine(MString_GetText(*assignToThis), font, width);
+		if (loc != -1)
+		{
+			MString* firstHalf = NULL;
+			MString_AssignSubString(&firstHalf, MString_GetText(*assignToThis), 0, loc);
+
+			MString* secondHalf = NULL;
+			MString_AssignSubString(&secondHalf, MString_GetText(*assignToThis), loc + 1, (int32_t)(strLen - loc - 1));
+
+			MString_AssignMString(assignToThis, firstHalf);
+			MString_AddAssignString(assignToThis, "\n");
+			MString_AddAssignMString(assignToThis, secondHalf);
+
+			MString_Dispose(&firstHalf);
+			MString_Dispose(&secondHalf);
+		}
+		else
+		{
+			isDone = true;
+		}
+	} while (!isDone);
 }
 static void BuilderHelper(char* buffer, int index, int32_t val)
 {

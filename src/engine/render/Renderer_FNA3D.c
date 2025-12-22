@@ -35,7 +35,7 @@
 #include "../math/Matrix.h"
 #include "../math/MathHelper.h"
 #include "../io/File.h"
-//#include "RenderTtFont.h"
+#include "RenderTtFont.h"
 #include "../utils/Utils.h"
 #include "FNA3D.h"
 #include "FNA3D_Image.h"

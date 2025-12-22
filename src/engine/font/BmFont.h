@@ -2,9 +2,7 @@
 
 #include "BmFontData.h"
 #include "../utils/MString.h"
-/*#include "../resources/ResourceData.h"
-#include "../io/OeStream.h"
-#include "../font/OeFontMapData.h"*/
+#include "../font/FontMapData.h"
 
 typedef struct SpriteBatch SpriteBatch;
 typedef struct Texture Texture;
@@ -24,7 +22,7 @@ typedef struct BmFont
 
 void BmFont_Init(BmFont* bmf, BufferReader* br, const char* fontName);
 BmFont* BmFont_GetBmFont(BmFont* bmf, const char* font);
-//TODO C99 const OeFontMapData* BmFont_GetReplacement(BmFont* bmf);
+const FontMapData* BmFont_GetReplacement(BmFont* bmf);
 const char* BmFont_GetFontName(BmFont* bmf);
 Texture* BmFont_GetFontTexture(BmFont* bmf);
 bool BmFont_UpdateFontTexture(BmFont* bmf);

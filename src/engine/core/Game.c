@@ -36,6 +36,7 @@
 #include "../utils/Utils.h"
 #include "../gamestate/GameStateManager.h"
 #include "../gamesave/GameSaveManager.h"
+#include "../font/FontMap.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -115,6 +116,7 @@ int32_t Game_Init()
 	OeTilesetOffset.Init();
 	OeMusic.Init();
 	*/
+	FontMap_Init();
 	Input_Init();
 	GameStateManager_Ctor();
 	GameSaveManager_Init();
@@ -135,8 +137,6 @@ int32_t Game_Run()
 	double deltaLeftover = 0;
 	while (!isDone)
 	{
-		SpriteBatch_DisposePinnedStrings();
-		Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
 		bool isFixedTimeStep = IsFixedTimeStep();
 		double delta = deltaLeftover;
 		deltaLeftover = 0;
