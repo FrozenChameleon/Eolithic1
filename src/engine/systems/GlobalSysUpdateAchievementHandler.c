@@ -2,7 +2,7 @@
 
 #include "../achievement/AchievementHandler.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	AchievementHandler_Update();
 }

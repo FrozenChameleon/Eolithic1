@@ -186,7 +186,7 @@ Entity Get_FirstPlayer()
 {
 	return Get_Player2(0);
 }
-Entity Get_Player()
+Entity Get_Player(void)
 {
 	return Get_FirstPlayer();
 }
@@ -1754,7 +1754,7 @@ void Do_ResumeAllSounds(int priority)
 {
 	SoundEffect_ResumeAllSounds(priority);
 }
-void Do_StopAllSounds()
+void Do_StopAllSounds(void)
 {
 	SoundEffect_StopAllSounds();
 }
@@ -3289,11 +3289,11 @@ float Get_PlayerY()
 }
 float Get_PlayerX2(int i)
 {
-	return Get_X(Get_Player(i));
+	return Get_X(Get_Player2(i));
 }
 float Get_PlayerY2(int i)
 {
-	return Get_Y(Get_Player(i));
+	return Get_Y(Get_Player2(i));
 }
 float Get_ClosestPlayerX(Entity entity)
 {
@@ -3309,7 +3309,7 @@ double Get_AngleToPlayer(Entity entity)
 }
 double Get_AngleToPlayer2(Entity entity, int32_t i)
 {
-	return Get_AngleToThing(entity, Get_Player(i));
+	return Get_AngleToThing(entity, Get_Player2(i));
 }
 double Get_AngleToClosestPlayer(Entity entity)
 {

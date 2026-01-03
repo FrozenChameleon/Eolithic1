@@ -32,7 +32,7 @@ typedef struct SoundEffectInstance
 	uint8_t* _mBuffer;
 	int _mBufferLength;
 	WaveFileData* _mData;
-	const char* _mName;
+	char _mName[EE_FILENAME_MAX];
 	bool _mIsDisposed;
 	int _mSampleRate;
 	AudioChannels _mChannels;
@@ -69,4 +69,4 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 int32_t SoundEffectInstance_GetSampleSize(const SoundEffectInstance* sei);
 int32_t SoundEffectInstance_GetTotalSamples(const SoundEffectInstance* sei);
 int64_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei);
-int32_t SoundEffectInstance_InitAudio();
+int32_t SoundEffectInstance_InitAudio(void);

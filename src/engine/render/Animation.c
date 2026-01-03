@@ -270,9 +270,9 @@ void Animation_CheckForAnimation(const char* textureName)
 	}
 
 	AnimationInfo newInfo = { 0 };
-	newInfo.mSheetName = IStrings_GlobalGet(sheetName);
+	Utils_strlcpy(newInfo.mSheetName, sheetName, EE_FILENAME_MAX);
 
-	newInfo.mBaseName = IStrings_GlobalGet(MString_GetText(baseName));
+	Utils_strlcpy(newInfo.mBaseName, MString_GetText(baseName), EE_FILENAME_MAX);
 	newInfo.mNumberOfDigits = numberOfDigits;
 	newInfo.mFrames += 1;
 	if (isStart)

@@ -104,10 +104,10 @@ void GameState_Do_SendBroadcast(GameState* gs, int32_t type, int32_t packet1, in
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
-	for (int i = 0; i < stateSystemsLen; i += 1)
+	for (int32_t i = 0; i < stateSystemsLen; i += 1)
 	{
-		System* currentSystem = stateSystems[i];
-		currentSystem->_mReceiveBroadcast(currentSystem, type, packet1, packet2, packet3);
+		System* stateSys = stateSystems[i];
+		stateSys->_mReceiveBroadcast(stateSys->_mData, type, packet1, packet2, packet3);
 	}
 }
 Entity GameState_BuildNewEntity(GameState* gs)

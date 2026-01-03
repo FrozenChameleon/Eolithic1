@@ -59,7 +59,7 @@ typedef struct ReaderData
 
 typedef struct HeaderData
 {
-	MString* mLevelFileName;
+	char mLevelFileName[EE_FILENAME_MAX];
 	int mAmountOfPlayers;
 	int mBoolLength;
 	bool mUseLeftAxis;

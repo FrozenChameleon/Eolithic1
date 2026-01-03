@@ -19,14 +19,14 @@ bool CollisionEngineSys_IsPointSafe(CollisionEngine* data, int32_t x, int32_t y)
 //int GetIndexOfNode(OePathNode givenNode, std::vector<std::shared_ptr<OePathNode>>& nodes);
 bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float checkY, int32_t directionX, int32_t directionY, Body* body, bool isVertical);
 
-void CollisionEngineSys_DisableDynamicGravity();
+void CollisionEngineSys_DisableDynamicGravity(void);
 
 void CollisionEngineSys_CopyCollisionGridFromPristine(CollisionEngine* data);
 void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data);
 bool CollisionEngineSys_PushBody(CollisionEngine* data, bool isBakedCollision, bool isVertical, Body* body, const Rectangle* otherPhysicsRectangle);
 bool CollisionEngineSys_IsCollisionValid(Body* bodyOne, Body* bodyTwo, bool isVertical);
 void CollisionEngineSys_UpdateParticleBody(CollisionEngine* data, Body* body);
-void CollisionEngineSys_RemoveAllCollisionImprints();
+void CollisionEngineSys_RemoveAllCollisionImprints(void);
 void CollisionEngineSys_ImprintToCollisionGrid(CollisionEngine* data, float pixelX, float pixelY, int32_t width, int32_t height, int32_t type);
 void CollisionEngineSys_ImprintChunkToCollisionGridWithSolid(CollisionEngine* data, MetaMapChunk* chunk);
 void CollisionEngineSys_ImprintChunkToCollisionGrid(CollisionEngine* data, MetaMapChunk* chunk);
@@ -43,10 +43,10 @@ bool CollisionEngineSys_IsRectIntersectsCollision(CollisionEngine* data, int32_t
 bool CollisionEngineSys_CheckFeetCollision(CollisionEngine* data, Body* body, bool checkLeft, bool checkRight, int32_t offset, int32_t collisionBit);
 bool CollisionEngineSys_HasLineOfSight(CollisionEngine* data, float x1, float y1, float x2, float y2, bool respectOneWays);
 bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, SpriteBatch* spriteBatch, float x1, float y1, float x2, float y2, bool respectOneWays);
-int CollisionEngineSys_GetPlatformDown();
-int CollisionEngineSys_GetPlatformLeft();
-int CollisionEngineSys_GetPlatformRight();
-int CollisionEngineSys_GetPlatformUp();
+int CollisionEngineSys_GetPlatformDown(void);
+int CollisionEngineSys_GetPlatformLeft(void);
+int CollisionEngineSys_GetPlatformRight(void);
+int CollisionEngineSys_GetPlatformUp(void);
 Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPosition, bool disableDiagonals, float currentX, float currentY, float targetX, float targetY, int32_t hardLimit);
 float CollisionEngineSys_GetCurrentDeceleration(float maxDecel, int32_t framesInAir);
 void CollisionEngineSys_HandleDynamicGravityY(Body* body);
@@ -60,4 +60,4 @@ void CollisionEngineSys_DrawTiles(GameState* scene);
 //void CollisionEngineSys_DebugDrawNodes(CollisionEngine* data);
 void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data);
 
-System* CollisionEngineSys_CreateSystem();
+System* CollisionEngineSys_CreateSystem(void);

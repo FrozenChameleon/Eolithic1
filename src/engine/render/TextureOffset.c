@@ -33,9 +33,9 @@ TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWi
 
 		TextureOffsetInfo info = { 0 };
 		info.mRect = rect;
-		info.mPath = path;
-		info.mVirtualName = IStrings_GlobalGet(IStringArray_Get(spaceSplit, 0));
-		info.mFilenameWithoutExtension = filenameWithoutExtension;
+		Utils_strlcpy(info.mPath, path, EE_FILENAME_MAX);
+		Utils_strlcpy(info.mVirtualName, IStringArray_Get(spaceSplit, 0), EE_FILENAME_MAX);
+		Utils_strlcpy(info.mFilenameWithoutExtension, filenameWithoutExtension, EE_FILENAME_MAX);
 
 		arrput(textureOffset->arr_offsets, info);
 		IStringArray_Dispose(spaceSplit);

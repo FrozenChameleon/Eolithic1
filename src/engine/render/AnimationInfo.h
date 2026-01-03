@@ -6,8 +6,8 @@
 typedef struct AnimationInfo
 {
 	bool mHasStart;
-	IString mSheetName;
-	IString mBaseName;
+	char mSheetName[EE_FILENAME_MAX];
+	char mBaseName[EE_FILENAME_MAX];
 	int mFrames;
 	int mNumberOfDigits;
 } AnimationInfo;

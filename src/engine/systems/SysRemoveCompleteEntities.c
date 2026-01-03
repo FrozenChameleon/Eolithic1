@@ -17,7 +17,7 @@ static void RemoveCompleteEntities()
 	}
 }
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	RemoveCompleteEntities();
 }

@@ -19,7 +19,7 @@ void AchievementHandler_SetIsUpdateSuppressed(bool value)
 {
 	_mIsUpdateSuppressed = value;
 }
-void AchievementHandler_DebugUnlockNextAchievement()
+void AchievementHandler_DebugUnlockNextAchievement(void)
 {
 	int32_t len = AchievementHandler_GetAchievementsLength();
 	for (int32_t i = 0; i < len; i += 1)
@@ -32,15 +32,15 @@ void AchievementHandler_DebugUnlockNextAchievement()
 		}
 	}
 }
-void AchievementHandler_SetToUseMask()
+void AchievementHandler_SetToUseMask(void)
 {
 	_mIsUsingMask = true;
 }
-void AchievementHandler_Update()
+void AchievementHandler_Update(void)
 {
 
 }
-Achievement* AchievementHandler_GetAchievements()
+Achievement* AchievementHandler_GetAchievements(void)
 {
 	return arr_achievements;
 }
@@ -48,11 +48,11 @@ Achievement* AchievementHandler_GetAchievement(int32_t i)
 {
 	return &arr_achievements[i];
 }
-int32_t AchievementHandler_GetAchievementsLength()
+int32_t AchievementHandler_GetAchievementsLength(void)
 {
 	return (int32_t)arrlen(arr_achievements);
 }
-int32_t AchievementHandler_GetAmountOfAchievements()
+int32_t AchievementHandler_GetAmountOfAchievements(void)
 {
 	return AchievementHandler_GetAchievementsLength();
 }
@@ -75,7 +75,7 @@ void AchievementHandler_AddAchievement(bool isHidden, const char* name, const ch
 	MString_Dispose(&nameToUse);
 	MString_Dispose(&descriptionToUse);
 }
-void AchievementHandler_Reset()
+void AchievementHandler_Reset(void)
 {
 	int32_t len = AchievementHandler_GetAchievementsLength();
 	for (int32_t i = 0; i < len; i += 1)
@@ -83,7 +83,7 @@ void AchievementHandler_Reset()
 		arr_achievements[i].mIsUnlocked = false;
 	}
 }
-int32_t AchievementHandler_GetAmountOfAchievementsComplete()
+int32_t AchievementHandler_GetAmountOfAchievementsComplete(void)
 {
 	int32_t currentAchievementsDone = 0;
 
@@ -98,7 +98,7 @@ int32_t AchievementHandler_GetAmountOfAchievementsComplete()
 
 	return currentAchievementsDone;
 }
-int32_t AchievementHandler_GetIntegerPercentage()
+int32_t AchievementHandler_GetIntegerPercentage(void)
 {
 	float temp = (float)AchievementHandler_GetAmountOfAchievementsComplete() / AchievementHandler_GetAmountOfAchievements();
 	float value = temp * 100.0f;

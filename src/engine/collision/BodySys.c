@@ -37,7 +37,7 @@ static void UpdateLastRenderPositionRoutine(Body* data)
 	Body_UpdateLastRenderPosition(data);
 }
 
-System* BodySys_CreateSystem()
+System* BodySys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_Body);
 	ss->_mInitRoutine = BodySys_InitRoutine;

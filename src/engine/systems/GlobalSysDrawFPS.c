@@ -26,14 +26,14 @@ void GlobalSysDrawFPS_DoNotDrawThisRightNow()
 {
 	_mDoNotDrawThisCounter = TIME_TO_STOP_DRAWING;
 }
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	if (_mDoNotDrawThisCounter > 0)
 	{
 		_mDoNotDrawThisCounter -= 1;
 	}
 }
-static void DrawHud(System* sys, SpriteBatch* spriteBatch)
+static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 {
 	if (_mDoNotDrawThisCounter > 0)
 	{

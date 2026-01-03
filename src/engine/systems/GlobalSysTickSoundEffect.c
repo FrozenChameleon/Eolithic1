@@ -2,7 +2,7 @@
 
 #include "../audio/SoundEffect.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	SoundEffect_Tick();
 }

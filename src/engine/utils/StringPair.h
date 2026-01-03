@@ -6,10 +6,12 @@
 
 #pragma once
 
+#include "../utils/Macros.h"
+
 typedef struct StringPair
 {
-	const char* mKey;
-	const char* mValue;
+	char mKey[EE_FILENAME_MAX];
+	char mValue[EE_FILENAME_MAX];
 } StringPair;
 
 typedef struct BufferReader BufferReader;

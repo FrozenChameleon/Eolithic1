@@ -20,7 +20,7 @@ static void InitAnimation()
 	Animation_Init(&_mSaveIcon, spriteSheet, flipTimer);
 }
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	if (!HasInit())
 	{
@@ -37,7 +37,7 @@ static void Update(System* sys)
 		Animation_ResetAnimation(&_mSaveIcon);
 	}
 }
-static void DrawHud(System* sys, SpriteBatch* spriteBatch)
+static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 {
 	if (!HasInit())
 	{

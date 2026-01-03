@@ -4,7 +4,7 @@
 #include "../leveldata/LevelData.h"
 #include "SysDrawProps.h"
 
-static void Draw(System* sys, SpriteBatch* spriteBatch)
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 	LevelData_DrawProps(Get_LevelData(), spriteBatch, Get_Camera());
 }

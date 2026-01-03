@@ -65,8 +65,8 @@ void GameHelper_UpdateLastRenderPositionNormally()
 
 	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
-		System* currentSystem = stateSystems[i];
-		currentSystem->_mUpdateLastRenderPosition(currentSystem, gameState);
+		System* stateSys = stateSystems[i];
+		stateSys->_mUpdateLastRenderPosition(stateSys->_mData, gameState);
 	}
 }
 Camera* GameHelper_GetDefaultCameraForRender()
@@ -88,8 +88,8 @@ void GameHelper_UpdateGlobalSystemsNormally()
 	System** globalSystems = GameStateManager_GetGlobalSystems();
 	for (int i = 0; i < globalSystemsLen; i += 1)
 	{
-		System* currentSystem = globalSystems[i];
-		currentSystem->_mUpdate(currentSystem);
+		System* globalSys = globalSystems[i];
+		globalSys->_mUpdate(globalSys->_mData);
 	}
 }
 void GameHelper_DrawGlobalSystemsNormally(SpriteBatch* spriteBatch)
@@ -98,8 +98,8 @@ void GameHelper_DrawGlobalSystemsNormally(SpriteBatch* spriteBatch)
 	System** globalSystems = GameStateManager_GetGlobalSystems();
 	for (int i = 0; i < globalSystemsLen; i += 1)
 	{
-		System* currentSystem = globalSystems[i];
-		currentSystem->_mDraw(currentSystem, spriteBatch);
+		System* globalSys = globalSystems[i];
+		globalSys->_mDraw(globalSys->_mData, spriteBatch);
 	}
 }
 void GameHelper_DrawHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
@@ -108,8 +108,8 @@ void GameHelper_DrawHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
 	System** globalSystems = GameStateManager_GetGlobalSystems();
 	for (int i = 0; i < globalSystemsLen; i += 1)
 	{
-		System* currentSystem = globalSystems[i];
-		currentSystem->_mDrawHud(currentSystem, spriteBatch);
+		System* globalSys = globalSystems[i];
+		globalSys->_mDrawHud(globalSys->_mData, spriteBatch);
 	}
 }
 void GameHelper_DrawDebugHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
@@ -118,8 +118,8 @@ void GameHelper_DrawDebugHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
 	System** globalSystems = GameStateManager_GetGlobalSystems();
 	for (int i = 0; i < globalSystemsLen; i += 1)
 	{
-		System* currentSystem = globalSystems[i];
-		currentSystem->_mDrawDebugHud(currentSystem, spriteBatch);
+		System* globalSys = globalSystems[i];
+		globalSys->_mDrawDebugHud(globalSys->_mData, spriteBatch);
 	}
 }
 void GameHelper_UpdateStateSystemsNormally()
@@ -128,8 +128,8 @@ void GameHelper_UpdateStateSystemsNormally()
 	System** stateSystems = GameStateManager_GetStateSystems();
 	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
-		System* currentSystem = stateSystems[i];
-		currentSystem->_mUpdate(currentSystem);
+		System* stateSys = stateSystems[i];
+		stateSys->_mUpdate(stateSys->_mData);
 	}
 }
 void GameHelper_DrawStateSystemsNormally(SpriteBatch* spriteBatch)
@@ -138,8 +138,8 @@ void GameHelper_DrawStateSystemsNormally(SpriteBatch* spriteBatch)
 	System** stateSystems = GameStateManager_GetStateSystems();
 	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
-		System* currentSystem = stateSystems[i];
-		currentSystem->_mDraw(currentSystem, spriteBatch);
+		System* stateSys = stateSystems[i];
+		stateSys->_mDraw(stateSys->_mData, spriteBatch);
 	}
 }
 void GameHelper_DrawHudStateSystemsNormally(SpriteBatch* spriteBatch)
@@ -148,8 +148,8 @@ void GameHelper_DrawHudStateSystemsNormally(SpriteBatch* spriteBatch)
 	System** stateSystems = GameStateManager_GetStateSystems();
 	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
-		System* currentSystem = stateSystems[i];
-		currentSystem->_mDrawHud(currentSystem, spriteBatch);
+		System* stateSys = stateSystems[i];
+		stateSys->_mDrawHud(stateSys->_mData, spriteBatch);
 	}
 }
 void GameHelper_DrawDebugHudStateSystemsNormally(SpriteBatch* spriteBatch)
@@ -158,8 +158,8 @@ void GameHelper_DrawDebugHudStateSystemsNormally(SpriteBatch* spriteBatch)
 	System** stateSystems = GameStateManager_GetStateSystems();
 	for (int i = 0; i < stateSystemsLen; i += 1)
 	{
-		System* currentSystem = stateSystems[i];
-		currentSystem->_mDrawDebugHud(currentSystem, spriteBatch);
+		System* stateSys = stateSystems[i];
+		stateSys->_mDrawDebugHud(stateSys->_mData, spriteBatch);
 	}
 }
 void GameHelper_CreateDefaultGameStates()

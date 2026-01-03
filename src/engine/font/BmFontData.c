@@ -19,33 +19,35 @@ void BmFontData_Load(BmFontData* bmfd, BufferReader* br)
 			continue;
 		}
 
-		IStringArray* tagSplit = IStringArray_Create();
+		{
+			IStringArray* tagSplit = IStringArray_Create();
 
-		Utils_SplitString(line, Utils_strlen(line), SEPARATOR_SPACE, tagSplit);
+			Utils_SplitString(line, Utils_strlen(line), SEPARATOR_SPACE, tagSplit);
 
-		const char* tag = IStringArray_Get(tagSplit, 0);
-		if (Utils_StringEqualTo(tag, "info"))
-		{
-			BmFontData_ReadInfo(bmfd, tagSplit);
-		}
-		else if (Utils_StringEqualTo(tag, "common"))
-		{
-			BmFontData_ReadCommon(bmfd, tagSplit);
-		}
-		else if (Utils_StringEqualTo(tag, "page"))
-		{
-			BmFontData_ReadPage(bmfd, tagSplit);
-		}
-		else if (Utils_StringEqualTo(tag, "char"))
-		{
-			BmFontData_ReadChar(bmfd, tagSplit);
-		}
-		else if (Utils_StringEqualTo(tag, "kerning"))
-		{
-			BmFontData_ReadKerning(bmfd, tagSplit);
-		}
+			const char* tag = IStringArray_Get(tagSplit, 0);
+			if (Utils_StringEqualTo(tag, "info"))
+			{
+				BmFontData_ReadInfo(bmfd, tagSplit);
+			}
+			else if (Utils_StringEqualTo(tag, "common"))
+			{
+				BmFontData_ReadCommon(bmfd, tagSplit);
+			}
+			else if (Utils_StringEqualTo(tag, "page"))
+			{
+				BmFontData_ReadPage(bmfd, tagSplit);
+			}
+			else if (Utils_StringEqualTo(tag, "char"))
+			{
+				BmFontData_ReadChar(bmfd, tagSplit);
+			}
+			else if (Utils_StringEqualTo(tag, "kerning"))
+			{
+				BmFontData_ReadKerning(bmfd, tagSplit);
+			}
 
-		IStringArray_Dispose(tagSplit);
+			IStringArray_Dispose(tagSplit);
+		}
 	}
 
 	IStringArray_Dispose(listOfStrings);
@@ -66,24 +68,28 @@ void BmFontData_ReadInfo(BmFontData* bmfd, IStringArray* tagSplit)
 		const char* padding = BmFontData_FindString("padding", tagSplit);
 		if (!Utils_StringEqualTo(padding, DUMMY_STR_NOTHING))
 		{
-			IStringArray* paddingSplit = IStringArray_Create();
-			Utils_SplitString(padding, Utils_strlen(padding), ',', paddingSplit);
-			bmfd->mInfo.PaddingUp = Utils_ParseInt(IStringArray_Get(paddingSplit, 0));
-			bmfd->mInfo.PaddingRight = Utils_ParseInt(IStringArray_Get(paddingSplit, 1));
-			bmfd->mInfo.PaddingDown = Utils_ParseInt(IStringArray_Get(paddingSplit, 2));
-			bmfd->mInfo.PaddingLeft = Utils_ParseInt(IStringArray_Get(paddingSplit, 3));
-			IStringArray_Dispose(paddingSplit);
+			{
+				IStringArray* paddingSplit = IStringArray_Create();
+				Utils_SplitString(padding, Utils_strlen(padding), ',', paddingSplit);
+				bmfd->mInfo.PaddingUp = Utils_ParseInt(IStringArray_Get(paddingSplit, 0));
+				bmfd->mInfo.PaddingRight = Utils_ParseInt(IStringArray_Get(paddingSplit, 1));
+				bmfd->mInfo.PaddingDown = Utils_ParseInt(IStringArray_Get(paddingSplit, 2));
+				bmfd->mInfo.PaddingLeft = Utils_ParseInt(IStringArray_Get(paddingSplit, 3));
+				IStringArray_Dispose(paddingSplit);
+			}
 		}
 	}
 	{
 		const char* spacing = BmFontData_FindString("spacing", tagSplit);
 		if (!Utils_StringEqualTo(spacing, DUMMY_STR_NOTHING))
 		{
-			IStringArray* spacingSplit = IStringArray_Create(); 
-			Utils_SplitString(spacing, Utils_strlen(spacing), ',', spacingSplit);
-			bmfd->mInfo.SpacingHoriz = Utils_ParseInt(IStringArray_Get(spacingSplit, 0));
-			bmfd->mInfo.SpacingVert = Utils_ParseInt(IStringArray_Get(spacingSplit, 1));
-			IStringArray_Dispose(spacingSplit);
+			{
+				IStringArray* spacingSplit = IStringArray_Create();
+				Utils_SplitString(spacing, Utils_strlen(spacing), ',', spacingSplit);
+				bmfd->mInfo.SpacingHoriz = Utils_ParseInt(IStringArray_Get(spacingSplit, 0));
+				bmfd->mInfo.SpacingVert = Utils_ParseInt(IStringArray_Get(spacingSplit, 1));
+				IStringArray_Dispose(spacingSplit);
+			}
 		}
 	}
 	bmfd->mInfo.Outline = BmFontData_FindInt("outline", tagSplit);

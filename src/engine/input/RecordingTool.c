@@ -437,14 +437,17 @@ static void Read(const char* recordingFilenameWithoutExtension)
 	MString_Assign(&_mLastReadRecordingFilename, recordingFilenameWithoutExtension);
 	MString_AddAssignString(&_mLastReadRecordingFilename, ".bin");
 
-	MString* path = File_Combine3("data", "recordings", MString_GetText(_mLastReadRecordingFilename));
-	BufferReader* br = BufferReader_CreateFromPath(MString_GetText(path));
-	MString_Dispose(&path);
+	BufferReader* br = NULL;
+	{
+		MString* path = File_Combine3("data", "recordings", MString_GetText(_mLastReadRecordingFilename));
+		br = BufferReader_CreateFromPath(MString_GetText(path));
+		MString_Dispose(&path);
+	}
 
 	GLOBALS_DEBUG_IS_GOD_MODE = BufferReader_ReadBoolean(br);
 	GameStateManager_SetUniqueMapSeed(BufferReader_ReadI32(br));
 	BufferReader_ReadI32(br); //TODO C99 OeTuning_SetCurrentDifficulty(BufferReader_ReadI32()); 
-	_mHeaderData.mLevelFileName = BufferReader_ReadMString(br);
+	BufferReader_ReadString(br, _mHeaderData.mLevelFileName, EE_FILENAME_MAX);
 #ifndef GLOBAL_DEF_RECORDING_TOOL_DO_NOT_WRITE_SAVE_FILES
 	OeGameSaveManager_ResetAllDataAndReadAllForRecording(reader);
 #endif
@@ -765,7 +768,7 @@ void RecordingTool_SetupWriteSession(int priority, const char* mapToLoad)
 
 	_mCurrentPriority = priority;
 	_mToolState = TOOL_STATE_WRITING;
-	MString_Assign(&_mHeaderData.mLevelFileName, mapToLoad);
+	Utils_strlcpy(_mHeaderData.mLevelFileName, mapToLoad, EE_FILENAME_MAX);
 
 	WriteHeader();
 }
@@ -812,10 +815,10 @@ bool RecordingTool_LoadNextRecordingIfAtEndOfRecording(bool isMapLoad)
 
 	_mToolState = TOOL_STATE_READING;
 	Read(_mReaderData.mCurrentRecording);
-	GameStateManager_LoadMap(MString_GetText(_mHeaderData.mLevelFileName));
+	GameStateManager_LoadMap(_mHeaderData.mLevelFileName);
 	_mReaderData.mIsReadyForNext = false;
 	Logger_LogInformation("Reading recording has begun for:");
-	Logger_LogInformation(MString_GetText(_mHeaderData.mLevelFileName));
+	Logger_LogInformation(_mHeaderData.mLevelFileName);
 	return true;
 }
 void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int32_t priority, bool goFast)

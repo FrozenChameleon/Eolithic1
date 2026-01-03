@@ -127,7 +127,7 @@ void CameraSys_UpdateCamera(Camera* data)
 	data->mLastDifference.Y = differenceY;
 }
 
-System* CameraSys_CreateSystem()
+System* CameraSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_Camera);
 	ss->_mUpdateLastRenderPositionRoutine = CameraSys_UpdateLastRenderPositionRoutine;

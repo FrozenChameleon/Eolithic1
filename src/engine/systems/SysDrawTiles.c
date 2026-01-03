@@ -3,7 +3,7 @@
 #include "../core/Func.h"
 #include "../leveldata/LevelData.h"
 
-static void Draw(System* sys, SpriteBatch* spriteBatch)
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 	LevelData_DrawTiles(Get_LevelData(), spriteBatch, Get_Camera());
 }

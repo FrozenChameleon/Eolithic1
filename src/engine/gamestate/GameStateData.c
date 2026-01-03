@@ -123,11 +123,11 @@ void* GameStateData_SetAndInit(GameStateData* gsd, ComponentType ctype, Entity e
 void GameStateData_Init(GameStateData* gsd, ComponentType ctype, Entity entity)
 {
 	int len = GameStateManager_GetStateSystemsLen();
-	System** systems = GameStateManager_GetStateSystems();
+	System** stateSystems = GameStateManager_GetStateSystems();
 	for (int i = 0; i < len; i += 1)
 	{
-		System* system = systems[i];
-		system->_mInit(system, ctype, entity);
+		System* stateSys = stateSystems[i];
+		stateSys->_mInit(stateSys->_mData, ctype, entity);
 	}
 }
 void GameStateData_Unset(GameStateData* gsd, ComponentType ctype, Entity entity)

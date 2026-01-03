@@ -6,7 +6,7 @@
 #include "../core/Func.h"
 #include "../math/Rectangle.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	Camera* camera = Get_Camera();
 	ComponentPack* pack = Get_ComponentPack(C_FreezeEntityTillOnScreen);
@@ -31,7 +31,7 @@ static void Update(System* sys)
 	}
 }
 
-System* FreezeEntityTillOnScreenSys_CreateSystem()
+System* FreezeEntityTillOnScreenSys_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

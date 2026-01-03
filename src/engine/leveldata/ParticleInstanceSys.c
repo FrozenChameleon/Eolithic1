@@ -339,7 +339,7 @@ bool ParticleInstanceSys_UpdateRoutine(ParticleInstance* data)
 	return data->mIsComplete;
 }
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	ComponentPack* pack = Get_ComponentPack(C_ParticleInstance);
 	PackIterator iter = PackIterator_Begin;
@@ -351,7 +351,7 @@ static void Update(System* sys)
 		}
 	}
 }
-static void UpdateLastRenderPosition(System* sys, GameState* gameState)
+static void UpdateLastRenderPosition(void* givenData, GameState* gameState)
 {
 	ComponentPack* pack = GameState_GetComponentPack(gameState, C_ParticleInstance);
 
@@ -361,7 +361,7 @@ static void UpdateLastRenderPosition(System* sys, GameState* gameState)
 		UpdateLastRenderPositionRoutine(iter.mComponent);
 	}
 }
-static void Draw(System* sys, SpriteBatch* spriteBatch)
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 	float mul = CAMERA_EXTENDED_CAMERA;
 

@@ -37,26 +37,31 @@ void MovieImage_Init2(MovieImage* mi, int scale, const char* baseImage, int fram
 
 	mi->mScale = scale;
 
-	IStringArray* images = IStringArray_Create();
-	Animation_CreateAnimationStringArray(images, baseImage, frames, Utils_GetAmountOfDigits(frames));
-
-	mi->mSheetsForAnimationLen = frames;
-	mi->mSheetsForAnimation = Utils_callocArena(mi->mSheetsForAnimationLen, sizeof(Sheet*), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
-	
-	for (int i = 0; i < frames; i += 1)
 	{
-		const char* currentImage = IStringArray_Get(images, i);
-		Resource* resource = TextureMovieManager_GetResource(currentImage);
-		if (resource == NULL)
+		IStringArray* images = IStringArray_Create();
+
+		Animation_CreateAnimationStringArray(images, baseImage, frames, Utils_GetAmountOfDigits(frames));
+
+		mi->mSheetsForAnimationLen = frames;
+		mi->mSheetsForAnimation = Utils_callocArena(mi->mSheetsForAnimationLen, sizeof(Sheet*), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+
+		for (int i = 0; i < frames; i += 1)
 		{
-			mi->mSheetsForAnimation[i] = Sheet_GetDefaultSheet();
+			const char* currentImage = IStringArray_Get(images, i);
+			Resource* resource = TextureMovieManager_GetResource(currentImage);
+			if (resource == NULL)
+			{
+				mi->mSheetsForAnimation[i] = Sheet_GetDefaultSheet();
+			}
+			else
+			{
+				mi->mSheetsForAnimation[i] = CreateNewSheetForMovieImage(currentImage);
+			}
 		}
-		else
-		{
-			mi->mSheetsForAnimation[i] = CreateNewSheetForMovieImage(currentImage);
-		}
+
+		IStringArray_Dispose(images);
 	}
-	
+
 	Animation_Init2(&mi->mAnimation, mi->mSheetsForAnimation, mi->mSheetsForAnimationLen, flip);
 
 	mi->mIsAnimationSet = true;

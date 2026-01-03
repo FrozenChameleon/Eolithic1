@@ -11,7 +11,7 @@ static void UpdateProps()
 }
 */
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	{
 		int64_t len = AnimTileManager_Length();

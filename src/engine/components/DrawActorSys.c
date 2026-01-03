@@ -150,7 +150,7 @@ void DrawActorSys_UpdateRoutine(Entity owner, DrawActor* data)
 	RealUpdateRoutine(owner, data, Get_Camera(), Get_ComponentPack(C_Body),
 		Get_ComponentPack(C_TagIsUpdateDisabled), Get_ComponentPack(C_FakePosition), GetDrawStateInfos(), GetDrawRenderInfos());
 }
-void DrawActorSys_BeforeUpdateRoutine()
+void DrawActorSys_BeforeUpdateRoutine(void)
 {
 	ComponentPack* drawActorPack = Get_ComponentPack(C_DrawActor);
 	if (!ComponentPack_IsAnyEntityInPack(drawActorPack))
@@ -546,7 +546,7 @@ void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* s
 	}
 }
 
-System* DrawActorSys_CreateSystem()
+System* DrawActorSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_DrawActor);
 	ss->_mInitRoutine = DrawActorSys_InitRoutine;

@@ -272,6 +272,10 @@ bool Utils_StringEqualTo(const char* str1, const char* str2)
 		return (SDL_strcmp(str1, str2) == 0);
 	}
 }
+int32_t Utils_UInt64ToString(uint64_t value, char* buffer, size_t maxlen)
+{
+	return SDL_snprintf(buffer, maxlen, "%d", value);
+}
 int32_t Utils_IntToString(int32_t value, char* buffer, size_t maxlen)
 {
 	return SDL_snprintf(buffer, maxlen, "%d", value);
@@ -284,22 +288,28 @@ int32_t Utils_DoubleToString(double value, char* buffer, size_t maxlen)
 {
 	return SDL_snprintf(buffer, maxlen, "%.17g", value); //17 FROM DBL_DECIMAL_DIG in float.h
 }
+char* Utils_UInt64ToStringStaticBuffer(uint64_t value)
+{
+	ResetLargeCharBuffer();
+	Utils_UInt64ToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
+	return _mLargeCharBuffer;
+}
 char* Utils_IntToStringStaticBuffer(int32_t value)
 {
 	ResetLargeCharBuffer();
-	SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%d", value);
+	Utils_IntToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
 }
 char* Utils_FloatToStringStaticBuffer(float value)
 {
 	ResetLargeCharBuffer();
-	SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.9g", value); //9 FROM FROM FLT_DECIMAL_DIG in float.h
+	Utils_FloatToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
 }
 char* Utils_DoubleToStringStaticBuffer(double value)
 {
 	ResetLargeCharBuffer();
-	SDL_snprintf(_mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN, "%.17g", value); //17 FROM DBL_DECIMAL_DIG in float.h
+	Utils_DoubleToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
 }
 char* Utils_CreateStringBuffer(size_t length)

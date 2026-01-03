@@ -2,4 +2,4 @@
 
 #include "../systems/System.h"
 
-System* FreezeEntityTillOnScreenSys_CreateSystem();
+System* FreezeEntityTillOnScreenSys_CreateSystem(void);

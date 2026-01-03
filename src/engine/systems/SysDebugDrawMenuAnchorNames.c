@@ -2,7 +2,7 @@
 
 #include "../render/SpriteBatch.h"
 
-static void Draw(System* sys, SpriteBatch* spriteBatch)
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 	/*
 	OeLevelData levelData = Get_LevelData();

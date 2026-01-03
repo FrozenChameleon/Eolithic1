@@ -7,12 +7,12 @@ typedef struct SpriteBatch SpriteBatch;
 typedef struct GameState GameState;
 typedef struct System System;
 
-typedef void (*System_InitStringSettingsHereFunc)(System* sys);
-typedef void (*System_InitFunc)(System* sys, ComponentType givenType, Entity owner);
-typedef void (*System_UpdateFunc)(System* sys);
-typedef void (*System_DrawFunc)(System* sys, SpriteBatch* spriteBatch);
-typedef void (*System_UpdateLastRenderPositionFunc)(System* sys, GameState* gameState);
-typedef void (*System_ReceiveBroadcastFunc)(System* sys, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
+typedef void (*System_InitStringSettingsHereFunc)(void* givenData);
+typedef void (*System_InitFunc)(void* givenData, ComponentType givenType, Entity owner);
+typedef void (*System_UpdateFunc)(void* givenData);
+typedef void (*System_DrawFunc)(void* givenData, SpriteBatch* spriteBatch);
+typedef void (*System_UpdateLastRenderPositionFunc)(void* givenData, GameState* gameState);
+typedef void (*System_ReceiveBroadcastFunc)(void* givenData, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
 
 typedef struct System
 {

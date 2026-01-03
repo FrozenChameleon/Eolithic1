@@ -8,7 +8,7 @@
 
 static int32_t mCounter = 0;
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	if (!Cvars_GetAsBool(CVARS_USER_IS_AUTO_HIDE_MOUSE))
 	{

@@ -2,28 +2,28 @@
 
 #include "../utils/Utils.h"
 
-static void DummyInitStringSettingsHere(System* sys)
+static void DummyInitStringSettingsHere(void* givenData)
 {
 }
-static void DummyInit(System* sys, ComponentType givenType, Entity owner)
+static void DummyInit(void* givenData, ComponentType givenType, Entity owner)
 {
 }
-static void DummyUpdate(System* sys)
+static void DummyUpdate(void* givenData)
 {
 }
-static void DummyDraw(System* sys, SpriteBatch* spriteBatch)
+static void DummyDraw(void* givenData, SpriteBatch* spriteBatch)
 {
 }
-static void DummyDrawHud(System* sys, SpriteBatch* spriteBatch)
+static void DummyDrawHud(void* givenData, SpriteBatch* spriteBatch)
 {
 }
-static void DummyDrawDebugHud(System* sys, SpriteBatch* spriteBatch)
+static void DummyDrawDebugHud(void* givenData, SpriteBatch* spriteBatch)
 {
 }
-static void DummyUpdateLastRenderPosition(System* sys, GameState* gameState)
+static void DummyUpdateLastRenderPosition(void* givenData, GameState* gameState)
 {
 }
-static void DummyReceiveBroadcast(System* sys, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
+static void DummyReceiveBroadcast(void* givenData, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 }
 

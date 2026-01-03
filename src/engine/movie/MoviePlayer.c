@@ -256,23 +256,25 @@ static void OperationPan(IStringArray* arguments)
 }
 static void OperationClear()
 {
-	IStringArray* removeThese = IStringArray_Create();
-	for (int i = 0; i < shlen(_mData->sh_images); i += 1)
 	{
-		if (!_mData->sh_images[i].value->mIsPermanent)
+		IStringArray* removeThese = IStringArray_Create();
+		for (int i = 0; i < shlen(_mData->sh_images); i += 1)
 		{
-			IStringArray_Add(removeThese, _mData->sh_images[i].key);
+			if (!_mData->sh_images[i].value->mIsPermanent)
+			{
+				IStringArray_Add(removeThese, _mData->sh_images[i].key);
+			}
 		}
+
+		for (int i = 0; i < IStringArray_Length(removeThese); i += 1)
+		{
+			shdel(_mData->sh_images, IStringArray_Get(removeThese, i));
+		}
+
+		arrsetlen(_mData->arr_operations, 0);
+
+		IStringArray_Dispose(removeThese);
 	}
-
-	for (int i = 0; i < IStringArray_Length(removeThese); i += 1)
-	{
-		shdel(_mData->sh_images, IStringArray_Get(removeThese, i));
-	}
-
-	arrsetlen(_mData->arr_operations, 0);
-
-	IStringArray_Dispose(removeThese);
 }
 static void OperationPlaySound(IStringArray* arguments)
 {
@@ -982,16 +984,19 @@ void MoviePlayer_Update2(bool doNotAllowMovieSkip)
 						size_t lineSize = Utils_strlen(line);
 						int firstIndex = Utils_StringIndexOf('(', line, lineSize, false);
 						//int secondIndex = OeUtils_StringIndexOf(line, ')');
-						MString* operation = NULL;
-						MString_AssignSubString(&operation, line, 0, firstIndex);
-						MString* argumentString = NULL;
-						MString_AssignSubString(&argumentString, line, firstIndex + 1, (int32_t)(lineSize - firstIndex - 2));
-						IStringArray* arguments = IStringArray_Create();
-						Utils_GetSplitCSV(MString_GetText(argumentString), arguments);
-						AddOperation(MString_GetText(operation), arguments);
-						MString_Dispose(&operation);
-						MString_Dispose(&argumentString);
-						IStringArray_Dispose(arguments);
+						{
+							MString* operation = NULL;
+							MString* argumentString = NULL;
+							IStringArray* arguments = NULL;
+							MString_AssignSubString(&operation, line, 0, firstIndex);
+							MString_AssignSubString(&argumentString, line, firstIndex + 1, (int32_t)(lineSize - firstIndex - 2));
+							arguments = IStringArray_Create();
+							Utils_GetSplitCSV(MString_GetText(argumentString), arguments);
+							AddOperation(MString_GetText(operation), arguments);
+							MString_Dispose(&operation);
+							MString_Dispose(&argumentString);
+							IStringArray_Dispose(arguments);
+						}
 					}
 				}
 

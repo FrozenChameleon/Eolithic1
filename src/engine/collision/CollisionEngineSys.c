@@ -328,7 +328,7 @@ bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float ch
 }
 
 //public
-void CollisionEngineSys_DisableDynamicGravity()
+void CollisionEngineSys_DisableDynamicGravity(void)
 {
 	_mIsDynamicGravityDisabled = true;
 }
@@ -647,7 +647,7 @@ void CollisionEngineSys_UpdateParticleBody(CollisionEngine* data, Body* body)
 
 	body->mPhysicsVelocity = Vector2_Zero;
 }
-void CollisionEngineSys_RemoveAllCollisionImprints()
+void CollisionEngineSys_RemoveAllCollisionImprints(void)
 {
 	GameState_UnsetAll(Get_ActiveGameState(), C_CollisionImprintData);
 }
@@ -939,19 +939,19 @@ bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, Sprite
 
 	return true;*/
 }
-int CollisionEngineSys_GetPlatformDown()
+int CollisionEngineSys_GetPlatformDown(void)
 {
 	return GAMEHELPER_PLATFORM_DOWN;
 }
-int CollisionEngineSys_GetPlatformLeft()
+int CollisionEngineSys_GetPlatformLeft(void)
 {
 	return GAMEHELPER_PLATFORM_LEFT;
 }
-int CollisionEngineSys_GetPlatformRight()
+int CollisionEngineSys_GetPlatformRight(void)
 {
 	return GAMEHELPER_PLATFORM_RIGHT;
 }
-int CollisionEngineSys_GetPlatformUp()
+int CollisionEngineSys_GetPlatformUp(void)
 {
 	return GAMEHELPER_PLATFORM_UP;
 }
@@ -1412,7 +1412,7 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 	//End Draw Tiles
 }
 
-System* CollisionEngineSys_CreateSystem()
+System* CollisionEngineSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_CollisionEngine);
 	ss->_mUpdateRoutine = CollisionEngineSys_UpdateRoutine;

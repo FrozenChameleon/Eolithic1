@@ -5,7 +5,7 @@
 #include "../gamestate/GameStateManager.h"
 #include "../gamestate/GameState.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	ComponentPack* pack = Get_ComponentPack(C_LevelFrameCounter);
 

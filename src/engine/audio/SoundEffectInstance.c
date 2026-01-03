@@ -41,10 +41,25 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 		return false;
 	}
 
+	//DISPOSAL
+	if (sei->_mBuffer != NULL)
+	{
+		Utils_free(sei->_mBuffer);
+		sei->_mBuffer = NULL;
+	}
+	if (sei->_mFormatStorage != NULL)
+	{
+		Utils_free(sei->_mFormatStorage);
+		sei->_mFormatStorage = NULL;
+	}
+	arrfree(sei->arr_queued_buffers);
+	arrfree(sei->arr_queued_sizes);
+	//
+
 	Utils_memset(sei, 0, sizeof(SoundEffectInstance));
 
 	sei->_mHasSetup = true;
-	sei->_mName = name;
+	Utils_strlcpy(sei->_mName, name, EE_FILENAME_MAX);
 	sei->_mLoopNumber = -1;
 
 	SoundEffectInstance_SetIsLooped(sei, false);
@@ -63,14 +78,10 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	{
 		init = true;
 	}
+
 	sei->_mData = waveFileData;
 	if (init)
 	{
-		if (sei->_mBuffer != NULL)
-		{
-			Utils_free(sei->_mBuffer);
-			sei->_mBuffer = NULL;
-		}
 		sei->_mBufferLength = (sei->_mData->nAvgBytesPerSec / 20); //10 = 100MS BUFFER, 20 = 50MS BUFFER
 		sei->_mBuffer = Utils_malloc(sei->_mBufferLength);
 	}
@@ -79,6 +90,7 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	sei->_mInternalState = SOUNDSTATE_STOPPED;
 	sei->_mSampleRate = waveFileData->nSamplesPerSec;
 	sei->_mChannels = (waveFileData->nChannels == 1) ? AUDIOCHANNELS_MONO : AUDIOCHANNELS_STEREO;
+
 	FAudioWaveFormatEx* format = Utils_malloc(sizeof(FAudioWaveFormatEx));
 	format->wFormatTag = 1;
 	format->nChannels = (uint16_t)sei->_mChannels;
@@ -87,11 +99,6 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	format->nBlockAlign = (uint16_t)(2 * format->nChannels);
 	format->nAvgBytesPerSec = format->nBlockAlign * format->nSamplesPerSec;
 	format->cbSize = 0;
-	if (sei->_mFormatStorage != NULL)
-	{
-		Utils_free(sei->_mFormatStorage);
-		sei->_mFormatStorage = NULL;
-	}
 	sei->_mFormatStorage = format;
 
 	return true;
@@ -308,7 +315,6 @@ void SoundEffectInstance_Dispose(SoundEffectInstance* sei)
 	}
 
 	SoundEffectInstance_Stop(sei);
-	//TODO DISPOSE OF sei->FORMAT HERE???? MEMORY LEAK
 	sei->_mIsDisposed = true;
 }
 int32_t SoundEffectInstance_GetLoopNumber(const SoundEffectInstance* sei)
@@ -435,8 +441,7 @@ void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 		return;
 	}
 
-	int64_t len = arrlen(sei->arr_queued_buffers);
-	for (int i = 0; i < len; i += 1)
+	for (int i = 0; i < arrlen(sei->arr_queued_buffers); i += 1)
 	{
 		Utils_free(sei->arr_queued_buffers[i]);
 	}
@@ -497,7 +502,6 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 
 	uint8_t* next = Utils_malloc(sizeof(uint8_t) * bufferLength);
 	Utils_memcpy(next, buffer, sizeof(uint8_t) * bufferLength);
-
 	arrput(sei->arr_queued_buffers, next);
 
 	if (sei->_mInternalState != SOUNDSTATE_STOPPED)
@@ -548,7 +552,7 @@ int64_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
 
 	return arrlen(sei->arr_queued_buffers);
 }
-int32_t SoundEffectInstance_InitAudio()
+int32_t SoundEffectInstance_InitAudio(void)
 {
 	if (_mFAudioContext != NULL)
 	{

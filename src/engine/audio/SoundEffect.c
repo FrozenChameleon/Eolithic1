@@ -57,7 +57,7 @@ static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 
 	return DEFAULT_SOUND_PLAYBACK_TIME_BUFFER;
 }
-static bool IsRewinding()
+static bool IsRewinding(void)
 {
 	//if (OeGameStateManager::ActiveGameState()->IsRewinding())
 	//{
@@ -97,7 +97,7 @@ static bool RefreshLoopStatus(const char* sound, int32_t loopNumber)
 	}
 	return false;
 }
-static bool IsDisabledPermanently()
+static bool IsDisabledPermanently(void)
 {
 	return Globals_IsAudioDisabledPermanently();
 }
@@ -115,7 +115,7 @@ void SoundEffect_Dispose(SoundEffect* music)
 
 	Utils_free(music);
 }
-uint64_t SoundEffect_GetDefaultSoundPlaybackTimeBuffer()
+uint64_t SoundEffect_GetDefaultSoundPlaybackTimeBuffer(void)
 {
 	return DEFAULT_SOUND_PLAYBACK_TIME_BUFFER;
 }
@@ -145,15 +145,15 @@ void SoundEffect_SetSfxMuted(bool value)
 {
 	_mIsSfxMuted = value;
 }
-uint64_t SoundEffect_GetCurrentFrame()
+uint64_t SoundEffect_GetCurrentFrame(void)
 {
 	return _mCurrentFrame;
 }
-VolumeData* SoundEffect_GetVolumeData()
+VolumeData* SoundEffect_GetVolumeData(void)
 {
 	return &_mVolumeData;
 }
-void SoundEffect_Tick()
+void SoundEffect_Tick(void)
 {
 	if (IsDisabledPermanently())
 	{
@@ -209,7 +209,7 @@ void SoundEffect_ResumeAllSounds(int priority)
 	}
 	_mSoundPausePriority = -1;
 }
-void SoundEffect_StopAllPausedSounds()
+void SoundEffect_StopAllPausedSounds(void)
 {
 	if (IsDisabledPermanently() || IsRewinding())
 	{
@@ -241,7 +241,7 @@ void SoundEffect_StopSound(const char* sound)
 		}
 	}
 }
-void SoundEffect_StopAllSounds()
+void SoundEffect_StopAllSounds(void)
 {
 	if (IsDisabledPermanently() || IsRewinding())
 	{
@@ -360,11 +360,11 @@ float SoundEffect_GetVolumeHelper(const char* cvar, const char* name, VolumeData
 	//}
 	//return clipVolume * userVolume * userVolumeMaster * rewindingVolume;
 }
-const char* SoundEffect_GetExtension()
+const char* SoundEffect_GetExtension(void)
 {
 	return ".wav";
 }
-const char* SoundEffect_GetDirectories()
+const char* SoundEffect_GetDirectories(void)
 {
 	return NULL;
 }

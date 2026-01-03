@@ -3,7 +3,7 @@
 #include "../gamestate/GameStateManager.h"
 #include "GlobalSysHandleLoadNextMap.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	GameStateManager_HandleLoadNextMap();
 }

@@ -2,7 +2,7 @@
 
 #include "../gamestate/GameStateManager.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	GameStateManager_IncrementTicksSinceMapLoad();
 }

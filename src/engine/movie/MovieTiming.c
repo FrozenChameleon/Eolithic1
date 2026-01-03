@@ -24,19 +24,21 @@ const std::vector<std::string>& OeMovieTiming::GetDirectories()
 MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	MovieTiming* mt = Utils_calloc(1, sizeof(MovieTiming));
-	MString* bigString = File_ReadAllToBigString(br);
-	IStringArray* lotsOfStrings = IStringArray_Create();
-	Utils_SplitString(MString_GetText(bigString), MString_GetCapacity(bigString), ',', lotsOfStrings);
-	int32_t len = (int32_t)IStringArray_Length(lotsOfStrings);
-	mt->timings = Utils_calloc(len, sizeof(int32_t));
-	mt->len = len;
-	for (int i = 0; i < len; i += 1)
 	{
-		int32_t theTiming = Utils_ParseInt(IStringArray_Get(lotsOfStrings, i));
-		mt->timings[i] = theTiming;
+		MString* bigString = File_ReadAllToBigString(br);
+		IStringArray* lotsOfStrings = IStringArray_Create();
+		Utils_SplitString(MString_GetText(bigString), MString_GetCapacity(bigString), ',', lotsOfStrings);
+		int32_t len = (int32_t)IStringArray_Length(lotsOfStrings);
+		mt->timings = Utils_calloc(len, sizeof(int32_t));
+		mt->len = len;
+		for (int i = 0; i < len; i += 1)
+		{
+			int32_t theTiming = Utils_ParseInt(IStringArray_Get(lotsOfStrings, i));
+			mt->timings[i] = theTiming;
+		}
+		MString_Dispose(&bigString);
+		IStringArray_Dispose(lotsOfStrings);
 	}
-	MString_Dispose(&bigString);
-	IStringArray_Dispose(lotsOfStrings);
 	return mt;
 }
 void MovieTiming_Dispose(MovieTiming* mt)

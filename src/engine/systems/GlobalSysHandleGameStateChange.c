@@ -3,7 +3,7 @@
 #include "../gamestate/GameStateManager.h"
 #include "GlobalSysHandleGameStateChange.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	GameStateManager_HandleGameStateChange();
 }

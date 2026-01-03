@@ -23,7 +23,7 @@ static bool _mIsMusicMuted;
 static bool _mHackToIgnoreNextFadeOutMusic;
 static bool _mHasInit;
 
-static bool IsRewinding()
+static bool IsRewinding(void)
 {
 	//if (OeGameStateManager::ActiveGameState()->IsRewinding())
 	//{
@@ -31,7 +31,7 @@ static bool IsRewinding()
 	//}
 	return false;
 }
-static bool IsDisabledPermanently()
+static bool IsDisabledPermanently(void)
 {
 	if (!_mHasInit)
 	{
@@ -41,7 +41,7 @@ static bool IsDisabledPermanently()
 	return Globals_IsAudioDisabledPermanently();
 }
 
-void Music_Init()
+void Music_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -56,7 +56,7 @@ float Music_GetVolumeForMusic(const char* name)
 {
 	return 1.0f;
 }
-bool Music_IsPlaying()
+bool Music_IsPlaying(void)
 {
 	if (IsDisabledPermanently())
 	{
@@ -78,7 +78,7 @@ void Music_Dispose(Music* music)
 
 	Utils_free(music);
 }
-bool Music_HackToIgnoreNextFadeOutMusic()
+bool Music_HackToIgnoreNextFadeOutMusic(void)
 {
 	return _mHackToIgnoreNextFadeOutMusic;
 }
@@ -86,11 +86,11 @@ void Music_SetHackToIgnoreNextFadeOutMusic(bool value)
 {
 	_mHackToIgnoreNextFadeOutMusic = value;
 }
-const char* Music_GetExtension()
+const char* Music_GetExtension(void)
 {
 	return ".wav";
 }
-const char* Music_GetDirectories()
+const char* Music_GetDirectories(void)
 {
 	return NULL;
 }
@@ -98,7 +98,7 @@ void Music_SetMusicMuted(bool value)
 {
 	_mIsMusicMuted = value;
 }
-bool Music_DoNotAllowUpdatesWhilePaused()
+bool Music_DoNotAllowUpdatesWhilePaused(void)
 {
 	return _mDoNotAllowUpdatesWhilePaused;
 }
@@ -106,7 +106,7 @@ void Music_SetDoNotAllowUpdatesWhilePaused(bool value)
 {
 	_mDoNotAllowUpdatesWhilePaused = value;
 }
-VolumeData* Music_GetVolumeData()
+VolumeData* Music_GetVolumeData(void)
 {
 	return &_mVolumeData;
 }
@@ -130,7 +130,7 @@ void Music_ResumeMusic(int priority)
 	MusicInstance_Resume(&_mCurrentMusic);
 	_mMusicPausePriority = -1;
 }
-void Music_RestartMusic()
+void Music_RestartMusic(void)
 {
 	if (IsDisabledPermanently() || IsRewinding())
 	{
@@ -139,7 +139,7 @@ void Music_RestartMusic()
 
 	Music_PlayMusic(MusicInstance_CurrentTrack(&_mCurrentMusic), true, true, false, 0, false, 0);
 }
-void Music_PlayPreviousTrack()
+void Music_PlayPreviousTrack(void)
 {
 	Music_PlayMusic(MusicInstance_PreviousTrack(&_mCurrentMusic), true, true, false, 0, false, 0);
 }
@@ -185,7 +185,7 @@ void Music_PlayMusic(const char* nextTrack, bool isLooping, bool isForced, bool 
 		}
 	}
 }
-void Music_StopMusic()
+void Music_StopMusic(void)
 {
 	if (IsDisabledPermanently() || IsRewinding())
 	{
@@ -211,7 +211,7 @@ void Music_FadeOutMusic(int fadeOutTime)
 
 	MusicInstance_SetupFadeOut(&_mCurrentMusic, EE_STR_EMPTY, fadeOutTime);
 }
-void Music_Tick()
+void Music_Tick(void)
 {
 	if (IsDisabledPermanently())
 	{

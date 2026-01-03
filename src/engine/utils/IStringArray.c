@@ -10,7 +10,7 @@ static uint64_t _mRefs;
 typedef struct IStringArray
 {
 	IStrings* mStrings;
-	struct { int64_t key; IString value; } *hm_values;
+	struct { int64_t key; const char* value; } *hm_values;
 } IStringArray;
 
 IStringArray* IStringArray_Create()
@@ -40,7 +40,7 @@ void IStringArray_Clear(IStringArray* sa)
 }
 void IStringArray_Add(IStringArray* sa, const char* str)
 {
-	IString internedString = IStrings_Get(sa->mStrings, str);
+	const char* internedString = IStrings_Get(sa->mStrings, str);
 	int64_t len = hmlen(sa->hm_values);
 	hmput(sa->hm_values, len, internedString);
 }
@@ -66,7 +66,7 @@ int64_t IStringArray_Length(IStringArray* sa)
 
 	return hmlen(sa->hm_values);
 }
-IString IStringArray_Get(IStringArray* sa, int32_t index)
+const char* IStringArray_Get(IStringArray* sa, int32_t index)
 {
 	if (sa == NULL)
 	{

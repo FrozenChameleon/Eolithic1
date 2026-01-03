@@ -22,7 +22,7 @@ void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_gra
 void DrawActorSys_CreateExplosionModules(Entity owner, int32_t state, int32_t phase, int32_t time, int32_t type);
 void DrawActorSys_InitRoutine(Entity owner, DrawActor* data);
 void DrawActorSys_UpdateLastRenderPositionRoutine(DrawActor* data);
-void DrawActorSys_BeforeUpdateRoutine();
+void DrawActorSys_BeforeUpdateRoutine(void);
 void DrawActorSys_UpdateRoutine(Entity owner, DrawActor* data);
 DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int32_t state);
 void DrawActorSys_SetDepthOverride(Entity owner, int32_t state, int32_t value);
@@ -45,4 +45,4 @@ void DrawActorSys_UpdateRenders(Entity owner, DrawActor* data, ComponentPack* st
 void DrawActorSys_DrawRoutine(Entity owner, DrawActor* data, SpriteBatch* spriteBatch);
 void DrawActorSys_DrawInterpolated(Entity owner, DrawActor* data, SpriteBatch* spriteBatch, Color color, Vector2 currentPosition, Vector2 lastPosition,
 	float rotation, Vector2 scale, int32_t givenDepth);
-System* DrawActorSys_CreateSystem();
+System* DrawActorSys_CreateSystem(void);

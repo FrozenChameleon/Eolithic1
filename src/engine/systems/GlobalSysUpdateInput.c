@@ -2,7 +2,7 @@
 
 #include "../input/Input.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	Input_Update(false);
 }

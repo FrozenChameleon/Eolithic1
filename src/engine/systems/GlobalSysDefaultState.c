@@ -4,7 +4,7 @@
 #include "../gamestate/GameStateManager.h"
 #include "../gamestate/GameState.h"
 
-static void Draw(System* sys, SpriteBatch* spriteBatch)
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 	if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
@@ -17,7 +17,7 @@ static void Draw(System* sys, SpriteBatch* spriteBatch)
 		GameState_Draw(GameStateManager_GetGameState(), spriteBatch);
 	}
 }
-static void DrawHud(System* sys, SpriteBatch* spriteBatch)
+static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 {
 	if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
@@ -36,7 +36,7 @@ static void DrawHud(System* sys, SpriteBatch* spriteBatch)
 	//WILLNOTDO 06262023 (EDITOR) 2023 OeGameStateManager.ActiveGameState.DrawDebugHud(spriteBatch);
 #endif
 }*/
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 #if EDITOR
 	if (GLOBALS_DEBUG_IS_EDITOR_MODE)

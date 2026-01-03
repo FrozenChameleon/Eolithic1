@@ -9,4 +9,4 @@ void CameraSys_InitCamera(Camera* data);
 void CameraSys_UpdateRoutine(Entity owner, Camera* data);
 void CameraSys_UpdateCamera(Camera* data);
 
-System* CameraSys_CreateSystem();
+System* CameraSys_CreateSystem(void);

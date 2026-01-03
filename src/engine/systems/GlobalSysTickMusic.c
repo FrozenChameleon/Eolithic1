@@ -2,7 +2,7 @@
 
 #include "../audio/Music.h"
 
-static void Update(System* sys)
+static void Update(void* givenData)
 {
 	Music_Tick();
 }

@@ -9,7 +9,7 @@ static uint64_t _mRefs;
 typedef struct IStringMap
 {
 	IStrings* mStrings;
-	struct { IString key; IString value; } *sh_values;
+	struct { const char* key; const char* value; } *sh_values;
 } IStringMap;
 
 IStringMap* IStringMap_Create()
@@ -33,11 +33,11 @@ void IStringMap_Clear(IStringMap* sm)
 }
 void IStringMap_Add(IStringMap* sm, const char* key, const char* value)
 {
-	IString internedKey = IStrings_Get(sm->mStrings, key);
-	IString internedValue = IStrings_Get(sm->mStrings, value);
+	const char* internedKey = IStrings_Get(sm->mStrings, key);
+	const char* internedValue = IStrings_Get(sm->mStrings, value);
 	shput(sm->sh_values, internedKey, internedValue);
 }
-IString IStringMap_Get(IStringMap* sm, const char* key)
+const char* IStringMap_Get(IStringMap* sm, const char* key)
 {
 	return shget(sm->sh_values, key);
 }
@@ -54,7 +54,7 @@ int64_t IStringMap_Length(IStringMap* sm)
 {
 	return shlen(sm->sh_values);
 }
-IString IStringMap_GetByIndex(IStringMap* sm, int32_t index)
+const char* IStringMap_GetByIndex(IStringMap* sm, int32_t index)
 {
 	return sm->sh_values[index].value;
 }

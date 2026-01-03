@@ -5,7 +5,7 @@
 #include "../globals/Globals.h"
 #include "DrawLineOfSightSys.h"
 
-static void Draw(System* sys, SpriteBatch* spriteBatch)
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 //#if EDITOR
 	SystemFunc_DrawHelper(C_DrawLineOfSight, DrawLineOfSightSys_DrawRoutine, spriteBatch);
@@ -27,7 +27,7 @@ void DrawLineOfSightSys_DrawRoutine(Entity owner, DrawLineOfSight* data, SpriteB
 }
 //#endif
 
-System* DrawLineOfSightSys_CreateSystem()
+System* DrawLineOfSightSys_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mDraw = Draw;

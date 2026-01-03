@@ -6,7 +6,7 @@
 typedef struct TextureOffsetInfo
 {
 	Rectangle mRect;
-	IString mPath;
-	IString mVirtualName;
-	IString mFilenameWithoutExtension;
+	char mPath[EE_FILENAME_MAX];
+	char mVirtualName[EE_FILENAME_MAX];
+	char mFilenameWithoutExtension[EE_FILENAME_MAX];
 } TextureOffsetInfo;
