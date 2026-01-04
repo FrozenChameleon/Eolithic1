@@ -8,6 +8,7 @@
 //class OeIniReader;
 
 void GameSaveManager_Init();
+bool GameSaveManager_HasInit();
 void* GameSaveManager_GetCurrentSaveData();
 void GameSaveManager_ResetSaveData();
 void GameSaveManager_Save();

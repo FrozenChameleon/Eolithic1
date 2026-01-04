@@ -13,6 +13,8 @@
 #include "../input/ControllerStates.h"
 #include "../input/RecordingTool.h"
 #include "time.h"
+#include "../../GlobalDefs.h"
+#include "../../DebugDefs.h"
 
 static bool _mIsAutoMode;
 static bool _mIsAutoModeFixed;

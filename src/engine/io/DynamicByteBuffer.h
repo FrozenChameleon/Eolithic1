@@ -13,9 +13,17 @@
 typedef struct DynamicByteBuffer DynamicByteBuffer;
 
 void* DynamicByteBuffer_GetUninitializedMemoryBlock(DynamicByteBuffer* dbb, uint64_t memoryBlockLength);
-void DynamicByteBuffer_WriteUInt8(DynamicByteBuffer* dbb, uint8_t value);
-void DynamicByteBuffer_WriteInt32(DynamicByteBuffer* dbb, int32_t value);
+void DynamicByteBuffer_WriteUI8(DynamicByteBuffer* dbb, uint8_t value);
+void DynamicByteBuffer_WriteU16(DynamicByteBuffer* dbb, uint16_t value);
+void DynamicByteBuffer_WriteU32(DynamicByteBuffer* dbb, uint32_t value);
+void DynamicByteBuffer_WriteU64(DynamicByteBuffer* dbb, uint64_t value);
+void DynamicByteBuffer_WriteI8(DynamicByteBuffer* dbb, int8_t value);
+void DynamicByteBuffer_WriteI16(DynamicByteBuffer* dbb, int16_t value);
+void DynamicByteBuffer_WriteI32(DynamicByteBuffer* dbb, int32_t value);
+void DynamicByteBuffer_WriteI64(DynamicByteBuffer* dbb, int64_t value);
 void DynamicByteBuffer_WriteFloat(DynamicByteBuffer* dbb, float value);
+void DynamicByteBuffer_WriteDouble(DynamicByteBuffer* dbb, double value);
+void DynamicByteBuffer_WriteBoolean(DynamicByteBuffer* dbb, bool value);
 uint8_t* DynamicByteBuffer_GetBuffer(const DynamicByteBuffer* dbb);
 uint64_t DynamicByteBuffer_GetLength(const DynamicByteBuffer* dbb);
 void DynamicByteBuffer_SetLength(DynamicByteBuffer* dbb, uint64_t value);

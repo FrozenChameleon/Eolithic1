@@ -1,71 +1,59 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
+﻿#pragma once
 
-#pragma once
-
-#include "stdint.h"
-#include "stdbool.h"
+#include "ServiceLeaderboard.h"
+#include "SaveBlobDataRequest.h"
+#include "../io/FixedByteBuffer.h"
 #include "../math/Rectangle.h"
+#include "../input/InputChecks.h"
+#include "../input/InputBindings.h"
+
+//supposed to be protected
+const int* Service_GetAchievementMap();
+BufferRequest Service_AskToRetrieveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path);
+int Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
+	FixedByteBuffer* buffer);
 
 //supposed to be public
-enum ServicePlatformCrashText
+typedef enum ServicePlatformCrashText
 {
 	PLATFORM_CRASH_TEXT_NOTHING = 0,
 	PLATFORM_CRASH_TEXT_WITH_LOG = 1,
 	PLATFORM_CRASH_TEXT_NO_LOG = 2
-};
+} ServicePlatformCrashText;
 
-enum ServicePlatform
+typedef enum ServicePlatform
 {
-	PLATFORM_S = 0,
-	PLATFORM_X = 1,
-	PLATFORM_P = 2,
-	PLATFORM_N = 3
-};
+	PLATFORM_STEAM = 0,
+	PLATFORM_XBOX = 1,
+	PLATFORM_PLAYSTATION = 2,
+	PLATFORM_NINTENDO = 3
+} ServicePlatform;
 
-enum ServiceLeaderboardSendStatus
-{
-	SERVICE_LEADERBOARD_SEND_STATUS_NOTHING = 0,
-	SERVICE_LEADERBOARD_SEND_STATUS_SENDING = 1,
-	SERVICE_LEADERBOARD_SEND_STATUS_SENT = 2,
-	SERVICE_LEADERBOARD_SEND_STATUS_FAILED = 3
-};
-
-enum ServiceLeaderboardScope
-{
-	SERVICE_LEADERBOARD_SCOPE_GLOBAL = 0,
-	SERVICE_LEADERBOARD_SCOPE_USER = 1,
-	SERVICE_LEADERBOARD_SCOPE_FRIENDS = 2
-};
-
-enum ServiceLeaderboardQueueState
-{
-	SERVICE_LEADERBOARD_QUEUE_STATE_NOTHING = 0,
-	SERVICE_LEADERBOARD_QUEUE_STATE_NEW_REQUEST = 1,
-	SERVICE_LEADERBOARD_QUEUE_STATE_NEXT_PAGE = 2
-};
-
-int Service_GetCurrentLowestRank();
-int Service_GetCurrentHighestRank();
-bool Service_CanLeaderboardGoLeft();
-bool Service_CanLeaderboardGoRight();
-
-bool Service_PlatformForcesSpecificGlyph();
-int Service_GetLeaderboardEntryCount();
-bool Service_IsLeaderboardReady();
-bool Service_LeaveTheLeaderboardMenuRightNow();
-void Service_ResetLeaderboardRequestStuff();
-void Service_TurnOffLeaderboardCannotConnectError();
-const char* Service_PlatformSpecificTerminologyFilter();
-bool Service_TellServiceIfOnLeaderboardMenuRightNow();
-bool Service_PlatformDisablesKeyboardUse();
-void Service_LeaderboardGoLeft();
-void Service_LeaderboardGoRight();
-bool Service_SignIn(bool whatever1, bool whatever2);
+void Service_Init();
+bool Service_IsPlatformSteam();
+void Service_ResetAchievements();
+int Service_GetPlatformType();
+void Service_SetAchievementMap(int* map);
+BufferRequest Service_AskToRetrieveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path);
+void Service_SaveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
+	FixedByteBuffer* buffer);
+const char* Service_GetSignedInUserName();
+void Service_SignIn(bool trySilentSignIn, bool forceSignIn);
+bool Service_HasSignedIn();
 bool Service_IsSigningIn();
+bool Service_IsOverlayEnabled();
+void Service_Create();
+void Service_Update(double delta);
+void Service_UpdateHelper(double delta);
+void Service_Resize(int width, int height);
+void Service_Pause();
+void Service_Resume();
+void Service_Dispose();
+void Service_HandleException(const char* e);
+void Service_HandleSetAchievement(int index, const char* achievement);
+void Service_HandleApplicationExit();
+bool Service_PlatformDisablesKeyboardUse();
+bool Service_IsSingleUserApplication();
 bool Service_PlatformForcesControllerOnPressStartScreen();
 bool Service_PlatformForcesControllerGlyphs();
 bool Service_PlatformForcesRelyOnVsync();
@@ -79,7 +67,7 @@ bool Service_PlatformHidesFocusLossToggles();
 bool Service_PlatformHidesResetAllData();
 bool Service_PlatformForcesSpecificGlyph();
 int Service_PlatformGetForcedSpecificGlyph();
-bool Service_PlatformForcesPlatformNGlyphs();
+bool Service_PlatformForcesNintendoGlyphs();
 bool Service_PlatformDisablesWritingRecordings();
 bool Service_PlatformUsesLocalStorageForSaveData();
 Rectangle Service_PlatformGetForcedWindowSize();
@@ -97,7 +85,7 @@ bool Service_PlatformStopsPollingInputWhenGameIsNotActive();
 const char* Service_GetPlatformLanguage();
 bool Service_ShowSignInFailure();
 int Service_PlatformCrashText();
-//void Service_LogMessage(const char* message);
+void Service_LogMessage(const char* message);
 bool Service_IsOnlineRightNow();
 bool Service_AreNetworkFeaturesAreAvailableRightNow(bool isSilent);
 bool Service_IsWaitingOnServiceToFinishLoading(double delta);
@@ -113,10 +101,4 @@ void Service_SignalThatCampaignHasBeenStarted();
 void Service_SignalThatCampaignHasBeenCompleted();
 void Service_SignalThatCampaigHasBeenAbandoned();
 void Service_SignalThatCampaigHasBeenFailed();
-bool Service_AreLeaderboardDisabled();
-void Service_DisableLeaderboards();
-bool Service_HasSignedIn();
-void Service_HandleSetAchievement(int index, const char* name);
-void Service_SetLeaderboardAmountOfRowsToRetrieve(int value);
-void Service_SetAchievementMap(int* value);
-void Service_CheckLeaderboardSendStatus();
+const char* Service_PlatformSpecificTerminologyFilter(const char* key);

@@ -44,15 +44,13 @@ int64_t BufferWriter_Tell(BufferWriter* br)
 	return 0;
 	//return SDL_TellIO(br->mIOStream);
 }
-void BufferWriter_WriteU8(BufferWriter* br)
+void BufferWriter_WriteU8(BufferWriter* br, uint8_t value)
 {
-	//uint8_t value;
-	//SDL_WriteU8(br->mIOStream, &value);
-	//return value;
+	//DynamicByteBuffer_WriteUInt8(br->mBuffer, value);
 }
-void BufferWriter_WriteBoolean(BufferWriter* br)
+void BufferWriter_WriteBoolean(BufferWriter* br, bool value)
 {
-	//return (BufferWriter_WriteU8(br) != 0);
+	//DynamicByteBuffer_WriteUInt8(br->mBuffer, value ? 1 : 0);
 }
 void BufferWriter_WriteU16(BufferWriter* br)
 {
@@ -115,9 +113,9 @@ void BufferWriter_WriteDouble(BufferWriter* br)
 	Utils_memcpy(&dst, &source, sizeof(double));
 	return dst;*/
 }
-void BufferWriter_WriteJustTheStringLength(BufferWriter* br)
+void BufferWriter_WriteJustTheStringLength(BufferWriter* br, uint8_t stringLength)
 {
-	BufferWriter_WriteU8(br);
+	BufferWriter_WriteU8(br, stringLength);
 }
 void BufferWriter_WriteJustTheStringData(BufferWriter* br, uint8_t stringLength, char* dst, size_t maxlen)
 {

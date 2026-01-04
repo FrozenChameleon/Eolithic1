@@ -28,6 +28,7 @@ typedef struct BufferWriter BufferWriter;
 typedef struct BufferReader BufferReader;
 typedef struct ThingInstance ThingInstance;
 typedef struct IStringArray IStringArray;
+typedef struct DynamicByteBuffer DynamicByteBuffer;
 
 //supposed to be protected
 void GameHelper_DoDefaultSetupThingInstanceSettings(ThingInstance* instance, bool ignoreWarnings);
@@ -116,3 +117,5 @@ void GameHelper_AddStrings();
 void GameHelper_AddDefaultThingSettings(StringPair* pairs);
 IStringArray* GameHelper_GetAllTheRecordings();
 void GameHelper_BakedCollisionCheck(float x, float y, int32_t collisionToCheck, Body* bodyRef, bool vertical, CollisionCheckData* data);
+void GameHelper_WriteGameSaveData(void* gsd, DynamicByteBuffer* writer);
+void GameHelper_ReadGameSaveData(void* gsd, BufferReader* reader);

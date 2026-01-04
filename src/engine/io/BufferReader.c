@@ -178,11 +178,16 @@ BufferReader* BufferReader_CreateFromPath(const char* path)
 void BufferReader_Dispose(BufferReader* br, bool doNotDisposeBuffer)
 {
 	_mRefs -= 1;
+
 	if (!doNotDisposeBuffer)
 	{
 		FixedByteBuffer_Dispose(br->mBuffer);
 	}
+	br->mBuffer = NULL;
+
 	SDL_CloseIO(br->mIOStream);
+	br->mIOStream = NULL;
+
 	Utils_free(br);
 }
 uint64_t BufferReader_GetRefs()

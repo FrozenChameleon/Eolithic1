@@ -8,6 +8,9 @@
 #include "../service/Service.h"
 #include "../globals/Globals.h"
 #include "../../GlobalDefs.h"
+#include "../io/FixedByteBuffer.h"
+#include "../io/DynamicByteBuffer.h"
+#include "../io/BufferReader.h"
 
 #define SAVE_FILE_NAME "mcdcsave.bin"
 #define CONTAINER_DISPLAY_NAME "GameSave"
@@ -30,15 +33,19 @@ void GameSaveManager_Init()
 	_mHasInit = true;
 }
 
-//private
-/*
-static std_shared_ptr<OeFixedByteBuffer> CreateBufferFromSaveData()
+bool GameSaveManager_HasInit()
 {
-	std_shared_ptr<OeIniWriter> writer = OeIniWriter_CreateNewOeIniWriter();
-	_mData.Write(writer);
-	return writer->ToFixedByteBuffer();
+	return _mHasInit;
 }
-*/
+
+static FixedByteBuffer* CreateBufferFromSaveData()
+{
+	DynamicByteBuffer* dbb = DynamicByteBuffer_Create();
+	GameHelper_WriteGameSaveData(_mData, dbb);
+	FixedByteBuffer* fbb = DynamicByteBuffer_ConvertToFixedByteBufferAndDispose(dbb);
+	return fbb;
+}
+
 void* GameSaveManager_GetCurrentSaveData()
 {
 	return _mData;
@@ -62,46 +69,43 @@ void GameSaveManager_Save()
 
 	Utils_JustSaved();
 
-	//TODO C99
-	/*
-	Service_SaveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME, CreateBufferFromSaveData());
-	*/
+	FixedByteBuffer* fbb = CreateBufferFromSaveData();
+	Service_SaveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME, fbb);
+	FixedByteBuffer_Dispose(fbb);
 
 	Logger_LogInformation("Save file saved to save0.bin");
 }
 void GameSaveManager_Load()
 {
-	//TODO C99
-	/*
 	_mWasDataJustLoaded = false;
 
-	if (OeGlobals_IsLoadingUserDataDisabled())
+	if (Globals_IsLoadingUserDataDisabled())
 	{
 		_mHasLoaded = true;
-		Logger_LogInformation("Loading disabled");
+		Logger_LogInformation("Loading game save data is disabled");
 		return;
 	}
 
-	OeBufferRequest request = OeService_AskToRetrieveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME);
+	BufferRequest request = Service_AskToRetrieveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME);
 	if (request.mIsBufferReady)
 	{
 		_mHasLoaded = true;
-		if (request.mBuffer == nullptr)
+		if (request.mBuffer == NULL)
 		{
-			Logger_LogInformation("Nothing to load");
+			Logger_LogInformation("No game save data to load...");
 			return;
 		}
 		else
 		{
-			ResetSaveData();
-			std_shared_ptr<OeIniReader> reader = OeIniReader_CreateNewOeIniReader(true, OeStream_CreateNewStream(request.mBuffer));
-			_mData.Read(reader);
+			GameSaveManager_ResetSaveData();
+			BufferReader* reader = BufferReader_Create(request.mBuffer);
+			GameHelper_ReadGameSaveData(_mData, reader);
+			BufferReader_Dispose(reader, false);
 			_mWasDataJustLoaded = true;
-			Logger_LogInformation("Read save data");
+			Logger_LogInformation("Loaded game save data successfully!");
 			return;
 		}
 	}
-	*/
 }
 bool GameSaveManager_HasLoaded()
 {

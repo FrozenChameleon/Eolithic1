@@ -8,7 +8,7 @@
 #include "../input/ControllerStates.h"
 #include "../input/KeyboardState.h"
 #include "../input/MouseState.h"
-//TODO C99 #include "../input/RecordingTool.h"
+#include "../input/RecordingTool.h"
 #include "../gamesave/GameSaveManager.h"
 #include "../input/InputBindings.h"
 #include "../../DebugDefs.h"
@@ -21,8 +21,7 @@ static bool _mHasLoadedEverything;
 
 static void UpdateLostControllerConnectionStatus()
 {
-	/*
-	if (OeRecordingTool_IsDisplayingSessionReadout() || Input_IsRecordingOrPlayingMasterRecording())
+	if (RecordingTool_IsDisplayingSessionReadout() || Input_IsRecordingOrPlayingMasterRecording())
 	{
 		return;
 	}
@@ -37,9 +36,9 @@ static void UpdateLostControllerConnectionStatus()
 #endif
 
 	int len = INPUT_MAXIMUM_PLAYER_COUNT;
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i < len; i += 1)
 	{
-		if (Input_GetPlayer(i)->MyControllerLostConnection())
+		if (InputPlayer_MyControllerLostConnection(Input_GetPlayer(i)))
 		{
 			_mPlayerHasLostControllerConnection[i] = true;
 		}
@@ -53,12 +52,9 @@ static void TrySignIn()
 	}
 
 	Service_SignIn(true, false);
-	*/
 }
 static bool LoadEverythingHelper()
 {
-	return true;
-	/*
 	bool loadedSaves = false;
 	bool loadedConfig = false;
 	bool loadedBindings = false;
@@ -75,9 +71,11 @@ static bool LoadEverythingHelper()
 		}
 	}
 
+	loadedConfig = true;
+	/*
 	if (!Service_PlatformUsesLocalStorageForSaveData()) //Cvars are loaded immediately if local storage
 	{
-		if (!OeCvars_HasLoadedSaveDataCvars())
+		if (!Cvars_HasLoadedSaveDataCvars())
 		{
 			Cvars_LoadSaveCvarsFromBlob();
 		}
@@ -90,7 +88,10 @@ static bool LoadEverythingHelper()
 	{
 		loadedConfig = true;
 	}
+	*/
 
+	loadedBindings = true;
+	/*
 	if (Input_HasInit())
 	{
 		if (!InputBindings_HaveAllPlayersLoadedBindings())
@@ -102,6 +103,7 @@ static bool LoadEverythingHelper()
 			loadedBindings = true;
 		}
 	}
+	*/
 
 	if (loadedSaves && loadedConfig && loadedBindings)
 	{
@@ -111,11 +113,9 @@ static bool LoadEverythingHelper()
 	{
 		return false;
 	}
-	*/
 }
 static void LoadEverything()
 {
-	/*
 	if (!Service_HasSignedIn())
 	{
 		return;
@@ -126,14 +126,10 @@ static void LoadEverything()
 	{
 		_mHasLoadedEverything = LoadEverythingHelper();
 	}
-	*/
 }
 
 void ServiceHelper_Update(double delta)
 {
-	UNUSED(delta);
-
-	/*
 	TrySignIn();
 
 	LoadEverything();
@@ -141,13 +137,10 @@ void ServiceHelper_Update(double delta)
 	UpdateLostControllerConnectionStatus();
 
 	Service_Update(delta);
-	*/
 }
 bool ServiceHelper_HasPlayerHasLostControllerConnection()
 {
-	return false;
-	/*
-	int playerThatLostConnection = GetPlayerThatLostControllerConnection();
+	int playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
 	if (playerThatLostConnection != -1)
 	{
 		return true;
@@ -156,12 +149,9 @@ bool ServiceHelper_HasPlayerHasLostControllerConnection()
 	{
 		return false;
 	}
-	*/
 }
 int ServiceHelper_GetPlayerThatLostControllerConnection()
 {
-	return -1;
-	/*
 	for (int i = 0; i < PLAYER_LOST_CONTROLLER_CONNECTION_LENGTH; i++)
 	{
 		if (_mPlayerHasLostControllerConnection[i])
@@ -170,26 +160,22 @@ int ServiceHelper_GetPlayerThatLostControllerConnection()
 		}
 	}
 	return -1;
-	*/
 }
 void ServiceHelper_HandlePlayerLostControllerConnection()
 {
-	/*
-	int playerThatLostConnection = GetPlayerThatLostControllerConnection();
+	int playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
 	if (playerThatLostConnection == -1)
 	{
 		return;
 	}
 
-	int controllerTapped = OeControllerStates_GetControllerNumberIfAnyButtonTapped();
-	if (controllerTapped != -1 || OeKeyboardState_IsAnyKeyTapped() || OeMouseState_IsAnyButtonTapped())
+	int controllerTapped = ControllerStates_GetControllerNumberIfAnyButtonTapped();
+	if ((controllerTapped != -1) || KeyboardState_IsAnyKeyTapped() || MouseState_IsAnyButtonTapped())
 	{
 		_mPlayerHasLostControllerConnection[playerThatLostConnection] = false;
 	}
-	*/
 }
 bool ServiceHelper_HasLoadedEverything()
 {
-	return true;
-	//return _mHasLoadedEverything;
+	return _mHasLoadedEverything;
 }

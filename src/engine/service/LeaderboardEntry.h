@@ -1,10 +1,12 @@
 ﻿#pragma once
 
+#include "../utils/Macros.h"
+
 typedef struct LeaderboardEntry
 {
 	int mGlobalRank;
 	int mDisplayRank;
 	int mScore;
 	bool mIsCurrentUser;
-	const char* mName;
+	char mName[EE_FILENAME_MAX];
 } LeaderboardEntry;

@@ -19,7 +19,7 @@ typedef struct DynamicByteBuffer
 	uint8_t* mBuffer;
 } DynamicByteBuffer;
 
-static void CheckLength(DynamicByteBuffer* dbb, uint64_t size)
+static void CheckLength(DynamicByteBuffer* dbb, size_t size)
 {
 	if ((dbb->mLength + size) < dbb->mCapacity)
 	{
@@ -42,26 +42,57 @@ void* DynamicByteBuffer_GetUninitializedMemoryBlock(DynamicByteBuffer* dbb, uint
 	return memoryBlockStart;
 }
 
-void DynamicByteBuffer_WriteUInt8(DynamicByteBuffer* dbb, uint8_t value)
+static void WriteSomething(DynamicByteBuffer* dbb, void* value, size_t size)
 {
-	uint64_t size = sizeof(uint8_t);
 	CheckLength(dbb, size);
-	Utils_memcpy(dbb->mBuffer + dbb->mLength, &value, size);
+	Utils_memcpy(dbb->mBuffer + dbb->mLength, value, size);
 	dbb->mLength += size;
 }
-void DynamicByteBuffer_WriteInt32(DynamicByteBuffer* dbb, int32_t value)
+
+void DynamicByteBuffer_WriteU8(DynamicByteBuffer* dbb, uint8_t value)
 {
-	uint64_t size = sizeof(int32_t);
-	CheckLength(dbb, size);
-	Utils_memcpy(dbb->mBuffer + dbb->mLength, &value, size);
-	dbb->mLength += size;
+	WriteSomething(dbb, &value, sizeof(uint8_t));
+}
+void DynamicByteBuffer_WriteU16(DynamicByteBuffer* dbb, uint16_t value)
+{
+	WriteSomething(dbb, &value, sizeof(uint16_t));
+}
+void DynamicByteBuffer_WriteU32(DynamicByteBuffer* dbb, uint32_t value)
+{
+	WriteSomething(dbb, &value, sizeof(uint32_t));
+}
+void DynamicByteBuffer_WriteU64(DynamicByteBuffer* dbb, uint64_t value)
+{
+	WriteSomething(dbb, &value, sizeof(uint64_t));
+}
+void DynamicByteBuffer_WriteI8(DynamicByteBuffer* dbb, int8_t value)
+{
+	WriteSomething(dbb, &value, sizeof(int8_t));
+}
+void DynamicByteBuffer_WriteI16(DynamicByteBuffer* dbb, int16_t value)
+{
+	WriteSomething(dbb, &value, sizeof(int16_t));
+}
+void DynamicByteBuffer_WriteI32(DynamicByteBuffer* dbb, int32_t value)
+{
+	WriteSomething(dbb, &value, sizeof(int32_t));
+}
+void DynamicByteBuffer_WriteI64(DynamicByteBuffer* dbb, int64_t value)
+{
+	WriteSomething(dbb, &value, sizeof(int64_t));
 }
 void DynamicByteBuffer_WriteFloat(DynamicByteBuffer* dbb, float value)
 {
-	uint64_t size = sizeof(float);
-	CheckLength(dbb, size);
-	Utils_memcpy(dbb->mBuffer + dbb->mLength, &value, size);
-	dbb->mLength += size;
+	WriteSomething(dbb, &value, sizeof(float));
+}
+void DynamicByteBuffer_WriteDouble(DynamicByteBuffer* dbb, double value)
+{
+	WriteSomething(dbb, &value, sizeof(double));
+}
+void DynamicByteBuffer_WriteBoolean(DynamicByteBuffer* dbb, bool value)
+{
+	uint8_t valueToWrite = value ? 1 : 0;
+	WriteSomething(dbb, &valueToWrite, sizeof(uint8_t));
 }
 uint8_t* DynamicByteBuffer_GetBuffer(const DynamicByteBuffer* dbb)
 {

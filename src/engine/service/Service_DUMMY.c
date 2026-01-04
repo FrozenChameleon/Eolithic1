@@ -1,11 +1,108 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
- * Released under the zlib License.
- * See LICENSE for details.
- */
+#if SERVICE_DUMMY
 
+#include "SDL3/SDL.h"
 #include "Service.h"
+#include "../io/File.h"
+#include "../core/Platform.h"
+#include "../utils/Strings.h"
 
+//protected
+void Service_UpdateScoreKeepBestHelper(const char* leaderboard, int score, bool isAscending, bool isMilliseconds)
+{
+
+}
+int Service_GetMinimumRank()
+{
+	return 0;
+}
+int Service_GetMaximumRank()
+{
+	return 0;
+}
+void Service_RetrieveLeaderboardEntriesHelper(int leaderboardPage, bool isInitialRequest, int direction)
+{
+}
+
+//public
+void Service_Init()
+{
+}
+BufferRequest Service_AskToRetrieveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName,
+	const char* path)
+{
+	return Service_AskToRetrieveBufferForPC(isPurelyGameSaveData, containerDisplayName, containerName, path);
+}
+void Service_SaveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
+	FixedByteBuffer* buffer)
+{
+	Service_SaveBufferForPC(isPurelyGameSaveData, containerDisplayName, containerName, path, buffer);
+}
+const char* Service_GetSignedInUserName()
+{
+	return "NOT_SET";
+}
+void Service_SignIn(bool trySilentSignIn, bool forceSignIn)
+{
+}
+bool Service_HasSignedIn()
+{
+	return true;
+}
+void Service_HandleException(const char* e)
+{
+}
+void Service_HandleSetAchievement(int i, const char* achievement)
+{
+}
+void Service_HandleApplicationExit()
+{
+}
+void Service_Create()
+{
+}
+void Service_UpdateHelper(double delta)
+{
+}
+void Service_Resize(int width, int height)
+{
+}
+void Service_Pause()
+{
+}
+void Service_Resume()
+{
+}
+void Service_Dispose()
+{
+}
+bool Service_IsOverlayEnabled()
+{
+	return false;
+}
+
+int Service_GetPlatformType()
+{
+	return PLATFORM_STEAM;
+}
+bool Service_IsSimplifiedLeaderboard()
+{
+	return false;
+}
+void Service_FlushStatsToServiceForXbox()
+{
+}
+bool Service_IsLeaderboardRetrievalInProgress()
+{
+	return false;
+}
+bool Service_IsShowingLeaderboardCannotConnectError()
+{
+	return true;
+}
+bool Service_IsSingleUserApplication()
+{
+	return true;
+}
 bool Service_PlatformHidesOptionChangeControllerGlyphs()
 {
 	return false;
@@ -42,23 +139,6 @@ bool Service_PlatformForcesControllerOnPressStartScreen()
 {
 	return false;
 }
-static const char* DUMMYWHATEVER = "";
-void Service_ResetLeaderboardRequestStuff()
-{
-
-}
-void Service_TurnOffLeaderboardCannotConnectError()
-{
-
-}
-const char* Service_PlatformSpecificTerminologyFilter()
-{
-	return DUMMYWHATEVER;
-}
-bool Service_TellServiceIfOnLeaderboardMenuRightNow()
-{
-	return false;
-}
 bool Service_PlatformDisablesKeyboardUse()
 {
 	return false;
@@ -75,7 +155,7 @@ int Service_PlatformGetForcedSpecificGlyph()
 {
 	return -1;
 }
-bool Service_PlatformForcesPlatformNGlyphs()
+bool Service_PlatformForcesNintendoGlyphs()
 {
 	return false;
 }
@@ -142,30 +222,17 @@ bool Service_PlatformStopsPollingInputWhenGameIsNotActive()
 {
 	return false;
 }
-void Service_LeaderboardGoLeft()
-{
-
-}
-void Service_LeaderboardGoRight()
-{
-
-}
-bool Service_SignIn(bool whatever1, bool whatever2)
-{
-	return false;
-}
 bool Service_IsSigningIn()
 {
 	return false;
 }
 double Service_GetPlatformLeaderboardDelayTime()
 {
-	return .5;
+	return 0.5;
 }
 const char* Service_GetPlatformLanguage()
 {
-	return "en";
-	//return OePlatform::GetPreferredLocalesEFIGS();
+	return Platform_GetPreferredLocalesEFIGS();
 }
 bool Service_ShowSignInFailure()
 {
@@ -187,33 +254,13 @@ bool Service_AreNetworkFeaturesAreAvailableRightNow(bool isSilent)
 {
 	return true;
 }
-int Service_GetCurrentLowestRank()
-{
-	return 0;
-}
-int Service_GetCurrentHighestRank()
-{
-	return 0;
-}
-bool Service_CanLeaderboardGoLeft()
-{
-	return false;
-}
-bool Service_CanLeaderboardGoRight()
-{
-	return false;
-}
-int Service_GetLeaderboardEntryCount()
-{
-	return 0;
-}
-bool Service_IsLeaderboardReady()
-{
-	return false;
-}
 bool Service_LeaveTheLeaderboardMenuRightNow()
 {
 	return false;
+}
+void Service_TurnOffLeaderboardCannotConnectError()
+{
+
 }
 bool Service_IsWaitingOnServiceToFinishLoading(double delta)
 {
@@ -229,7 +276,7 @@ bool Service_PlatformDisablesDepthBufferForRender()
 }
 bool Service_PlatformRequiresOffscreenTargetForRender()
 {
-	return false;
+	return true;
 }
 bool Service_PlatformCanShowWebsites()
 {
@@ -267,34 +314,8 @@ void Service_SignalThatCampaigHasBeenFailed()
 {
 
 }
-bool Service_AreLeaderboardDisabled()
+const char* Service_PlatformSpecificTerminologyFilter(const char* key)
 {
-	return true;
+	return Strings_Get(key);
 }
-void Service_DisableLeaderboards()
-{
-
-}
-bool Service_HasSignedIn()
-{
-	return true;
-}
-void Service_HandleSetAchievement(int index, const char* name)
-{
-
-}
-
-void Service_SetLeaderboardAmountOfRowsToRetrieve(int value)
-{
-
-}
-
-void Service_SetAchievementMap(int* value)
-{
-
-}
-
-void Service_CheckLeaderboardSendStatus()
-{
-
-}
+#endif
