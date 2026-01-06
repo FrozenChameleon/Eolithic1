@@ -9,8 +9,9 @@
 #include "stdint.h"
 
 typedef struct INIFile INIFile;
+typedef struct BufferReader BufferReader;
 
-INIFile* INIFile_Create_From_Binary(const char* path);
+INIFile* INIFile_Create_From_Binary(BufferReader* br);
 void INIFile_Dispose(INIFile* ini);
 uint64_t INIFile_GetRefs();
 int64_t INIFile_GetLength(INIFile* ini);

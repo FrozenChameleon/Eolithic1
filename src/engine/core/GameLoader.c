@@ -228,7 +228,7 @@ static void HandleFps()
 	{
 		Logger_LogInformation("High hz detected, turning fixed time step off");
 		Cvars_SetAsBool(CVARS_USER_IS_FIXED_TIMESTEP_ENABLED, false);
-		Cvars_SaveUserConfig(false);
+		Cvars_SaveUserConfig2(false);
 	}
 }
 static void UpdatePreloaderGraphic(double delta)

@@ -14,12 +14,12 @@
 #include "../utils/Utils.h"
 #include "../utils/IStringArray.h"
 
-static const char* CONTAINER_DISPLAY_NAME = "GameBindings";
-static const char* CONTAINER_NAME = "GameBindingsContainer";
+#define CONTAINER_DISPLAY_NAME "GameBindings"
+#define CONTAINER_NAME "GameBindingsContainer"
 
-static const int CURRENT_DATA_VERSION = 0;
-static const char* data_version = "data_version";
-static const char* data_count = "data_count";
+#define CURRENT_DATA_VERSION 0
+#define data_version "data_version"
+#define data_count "data_count"
 
 #define PLAYERBINDINGS_LEN INPUT_MAXIMUM_PLAYER_COUNT
 
@@ -54,34 +54,24 @@ void PlayerBindingData_LoadFromStream(PlayerBindingData* pbd, BufferReader* read
 	int count = BufferReader_ReadI32(reader);
 	for (int i = 0; i < count; i += 1)
 	{
-		MString* begin = NULL;
-		MString_Assign(&begin, Utils_IntToStringStaticBuffer(i));
-		MString_AddAssignString(&begin, "_");
 		InputAction data;
 		InputAction_Init(EE_STR_NOT_SET, &data);
-		InputAction_Read(&data, MString_GetText(begin), reader);
+		InputAction_Read(&data,  reader);
 		pbd->_mBindings[i] = data;
 	}
 }
 FixedByteBuffer* PlayerBindingData_CreateBufferFromBindings(PlayerBindingData* pbd)
 {
-	return NULL;
-	//TODO C99
-	/*
-	BufferWriter* writer = BufferWriter_Create();
-	BufferWriter_WriteInt32(writer, data_version, CURRENT_DATA_VERSION);
-	BufferWriter_WriteInt32(writer, data_count, PLAYERBINDINGDATA_BINDINGS_LEN);
+	DynamicByteBuffer* writer = DynamicByteBuffer_Create();
+	DynamicByteBuffer_WriteI32(writer, CURRENT_DATA_VERSION);
+	DynamicByteBuffer_WriteI32(writer, PLAYERBINDINGDATA_BINDINGS_LEN);
 	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
-		MString* begin = NULL;
-		MString_Assign(&begin, Utils_IntToStringStaticBuffer(i));
-		MString_AddAssignString(&begin, "_");
-		InputAction_Write(&pbd->_mBindings[i], begin, writer);
-		MString_Dispose(&begin);
+		InputAction_Write(&pbd->_mBindings[i], writer);
 	}
 
-	BufferWriter_WriteEOF(writer);
-	return BufferWriter_ToFixedByteBuffer(writer);*/
+	DynamicByteBuffer_WriteEOF(writer);
+	return DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(writer);
 }
 
 void PlayerBindingData_Init(PlayerBindingData* pbd, IStringArray* actionList, int playerNumber)
@@ -166,25 +156,24 @@ void PlayerBindingData_Load(PlayerBindingData* pbd)
 		return;
 	}
 
-	//TODO C99
-	/*
-	const char* filename = PlayerBindingData_GetFilePlayerPath();
-	BufferRequest request = OeService_AskToRetrieveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename);
+	const char* filename = PlayerBindingData_GetFilePlayerPath(pbd);
+	BufferRequest request = Service_AskToRetrieveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename);
 	if (request.mIsBufferReady)
 	{
-		_mHasLoaded = true;
-		if (request.mBuffer == nullptr)
+		pbd->_mHasLoaded = true;
+		if (request.mBuffer == NULL)
 		{
-			LogLoadFailure();
+			PlayerBindingData_LogLoadFailure(pbd);
 			return;
 		}
 		else
 		{
 			//try
 			//{
-			std_shared_ptr<OeIniReader> reader = OeIniReader_CreateNewOeIniReader(true, OeStream_CreateNewStream(request.mBuffer));
-			LoadFromStream(reader);
-			LogLoadSuccess();
+			
+			BufferReader* reader = BufferReader_Create(request.mBuffer);
+			PlayerBindingData_LoadFromStream(pbd, reader);
+			PlayerBindingData_LogLoadSuccess(pbd);
 			return;
 			// }
 			//catch (...)
@@ -194,16 +183,19 @@ void PlayerBindingData_Load(PlayerBindingData* pbd)
 			//	return;
 			//}
 		}
-	}*/
+	}
 }
 void PlayerBindingData_Save(PlayerBindingData* pbd)
 {
-	//TODO C99
-	/*
-	const char* filename = PlayerBindingData_GetFilePlayerPath();
-	OeService_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename, CreateBufferFromBindings());
-	OeLogger_LogInformation("Bindings have been saved for player #" + std_to_string(_mPlayerNumber) + ", " + filename);
-	OeUtils_JustSaved();*/
+	const char* filename = PlayerBindingData_GetFilePlayerPath(pbd);
+	Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename, PlayerBindingData_CreateBufferFromBindings(pbd));
+	{
+		MString* tempString = NULL;
+		MString_Combine4(&tempString, "Bindings have been saved for player #", Utils_IntToStringStaticBuffer(pbd->_mPlayerNumber), ", ", filename);
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+	Utils_JustSaved();
 }
 
 static bool IsMirroringBindingsDisabled()
@@ -235,16 +227,14 @@ static void CopyActions(const InputAction* copyFrom, InputAction* copyTo)
 }
 static void UpdateAllBindingsToMatchPlayerOne()
 {
-	/*
-	std_vector<InputAction>& playerOneBindings = _mPlayerBindings[0].GetBindings();
-	for (int i = 0; i < _mPlayerBindings.size(); i += 1)
+	InputAction* playerOneBindings = PlayerBindingData_GetBindings(&_mPlayerBindings[0]);
+	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		if (i != 0)
 		{
-			CopyActions(playerOneBindings, _mPlayerBindings[i].GetBindings());
+			CopyActions(playerOneBindings, PlayerBindingData_GetBindings(&_mPlayerBindings[i]));
 		}
 	}
-	*/
 }
 
 void InputBindings_Init()
@@ -429,8 +419,7 @@ InputAction* InputBindings_GetActionFromArray(InputAction* actions, const char* 
 	}
 
 	MString* tempStr = NULL;
-	MString_Assign(&tempStr, "Unable to find action: ");
-	MString_AddAssignString(&tempStr, name);
+	MString_Combine2(&tempStr, "Unable to find action: ", name);
 	Logger_LogError(MString_GetText(tempStr));
 	MString_Dispose(&tempStr);
 	return &INPUTACTION_DUMMY_ACTION;

@@ -10,6 +10,8 @@
 #include "stdbool.h"
 
 typedef struct InputPlayer InputPlayer;
+typedef struct BufferReader BufferReader;
+typedef struct DynamicByteBuffer DynamicByteBuffer;
 
 typedef struct InputCheck
 {
@@ -62,8 +64,8 @@ bool InputCheck_Check(InputPlayer* playerInput, InputCheck* data);
 void InputCheck_UpdateAnalogValue(InputPlayer* playerInput, InputCheck* data);
 bool InputCheck_IsAnalog(InputCheck* data);
 const char* InputCheck_GetName(InputCheck* data);
-//void Write(InputCheck* data, const char* begin, std::shared_ptr<OeIniWriter> writer);
-//void Read(InputCheck* data, const char* begin, std::shared_ptr<OeIniReader> reader);
+void InputCheck_Write(InputCheck* data, DynamicByteBuffer* writer);
+void InputCheck_Read(InputCheck* data, BufferReader* reader);
 bool InputCheck_IsGlyphImage(InputCheck* data);
 bool InputCheck_IsController(InputCheck* data);
 const char* InputCheck_GetGlyphString(InputCheck* data);

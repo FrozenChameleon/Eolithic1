@@ -111,7 +111,7 @@ void SoundEffectManager_LoadAllFromDat()
 		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_GetText(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
 		SoundEffectManager_LoadAssetFromStreamAndCreateResource(br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
-		BufferReader_Dispose(br, false);
+		BufferReader_Dispose(br);
 		MString_Dispose(&nextPath);
 		MString_Dispose(&fileName);
 		MString_Dispose(&fileNameWithoutExtension);

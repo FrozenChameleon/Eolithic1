@@ -12,10 +12,21 @@
 #include "Macros.h"
 #include "../io/INIFile.h"
 #include "../utils/MString.h"
+#include "../service/Service.h"
+#include "../utils/Logger.h"
+#include "../globals/Globals.h"
+#include "../utils/Exception.h"
+#include "../utils/IStringArray.h"
+#include "../io/DynamicByteBuffer.h"
+#include "../io/File.h"
 
 #define STR_NOT_SET "NOT_SET"
 #define STR_ZERO "0"
 #define STR_ONE "1"
+
+#define USER_CONFIG_FILENAME "userconfig.bin"
+#define CONTAINER_DISPLAY_NAME "GameConfig"
+#define CONTAINER_NAME "GameConfigContainer"
 
 //private to definition
 typedef struct CvarData
@@ -27,9 +38,23 @@ typedef struct CvarData
 	char mValue[EE_FILENAME_MAX];
 } CvarData;
 
-static struct { char* key; CvarData value; } *sh_cvars;
 static bool _mHasInit;
+static bool _mHasLoadedSaveDataCvars;
+static struct { char* key; CvarData value; } *sh_cvars;
+static struct { char* key; CvarData value; } *sh_user_defaults;
 
+static void Init(void)
+{
+	if (_mHasInit)
+	{
+		return;
+	}
+
+	sh_new_arena(sh_cvars);
+	sh_new_arena(sh_user_defaults);
+
+	_mHasInit = true;
+}
 static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenSet)
 {
 	int64_t index = shgeti(sh_cvars, key);
@@ -52,17 +77,71 @@ static void SetupCvarForSet(CvarData* cvar, const char* key)
 	cvar->mDoNotRefreshCachedNumber = false;
 	Utils_strlcpy(cvar->mKey, key, EE_FILENAME_MAX);
 }
-
-static void Init()
+static void CopyToUserDefaults(void)
 {
-	if (_mHasInit)
+	shfree(sh_user_defaults);
+	sh_new_arena(sh_user_defaults);
+
+	for (int i = 0; i < shlen(sh_cvars); i += 1)
 	{
-		return;
+		if (Utils_StringStartsWith(sh_cvars[i].key, CVARS_PREFIX_USER_CONFIG))
+		{
+			shput(sh_user_defaults, sh_cvars[i].key, sh_cvars[i].value);
+		}
+	}
+}
+static bool ReadDataCvars2(const char* pathWithoutExtension, const char* debugName, bool isBinary)
+{
+	const char* extension = Utils_GetExtension(isBinary);
+	MString* path = NULL;
+	MString_Combine2(&path, pathWithoutExtension, extension);
+	bool successfullyReadTheFile = false;
+	bool lookForTextVersion = false;
+	if (File_Exists(MString_GetText(path)))
+	{
+		BufferReader* reader = BufferReader_CreateFromPath(MString_GetText(path));
+		Cvars_Read(isBinary, reader);
+		BufferReader_Dispose(reader);
+		{
+			MString* tempString = NULL;
+			MString_Combine3(&tempString, debugName, " data dir cvars loaded from ", MString_GetText(path));
+			Logger_LogInformation(MString_GetText(tempString));
+			MString_Dispose(&tempString);
+		}
+		successfullyReadTheFile = true;
+	}
+	else
+	{
+		{
+			MString* tempString = NULL;
+			MString_Combine3(&tempString, debugName, " data dir cvars missing at ", MString_GetText(path));
+			Logger_LogInformation(MString_GetText(tempString));
+			MString_Dispose(&tempString);
+		}
+		if (isBinary)
+		{
+			lookForTextVersion = true;
+		}
+		else
+		{
+			successfullyReadTheFile = false;
+		}
 	}
 
-	sh_new_arena(sh_cvars);
+	MString_Dispose(&path);
 
-	_mHasInit = true;
+	if (lookForTextVersion)
+	{
+		return ReadDataCvars2(pathWithoutExtension, debugName, false);
+	}
+	else
+	{
+		return successfullyReadTheFile;
+	}
+}
+static bool ReadDataCvars(const char* pathWithoutExtension, const char* debugName)
+{
+	return ReadDataCvars2(pathWithoutExtension, debugName, Utils_IsBinaryForDebugFlag());
 }
 
 void Cvars_FlipAsBool(const char* key)
@@ -168,13 +247,13 @@ bool Cvars_GetAsBool(const char* key)
 		return true;
 	}
 }
-void Cvars_Read(const char* path)
+void Cvars_Read(bool isBinary, BufferReader* br)
 {
 	//
 	Init();
 	//
 
-	INIFile* ini = INIFile_Create_From_Binary(path);
+	INIFile* ini = INIFile_Create_From_Binary(br);
 	int64_t len = INIFile_GetLength(ini);
 	for (int i = 0; i < len; i += 1)
 	{
@@ -184,7 +263,7 @@ void Cvars_Read(const char* path)
 	}
 	INIFile_Dispose(ini);
 }
-int64_t Cvars_Length()
+int64_t Cvars_Length(void)
 {
 	//
 	Init();
@@ -192,10 +271,255 @@ int64_t Cvars_Length()
 
 	return shlen(sh_cvars);
 }
-void Cvars_SaveUserConfig()
+void Cvars_SaveUserConfig(void)
 {
 	//
 	Init();
 	//
-	//TODO
+
+	Cvars_SaveUserConfig2(true);
+}
+void Cvars_SaveUserConfig2(bool showSavingAnimation)
+{
+	//
+	Init();
+	//
+
+	if (Cvars_GetAsBool(CVARS_ENGINE_SAVING_SAVES_DISABLED) || Globals_IsSavingUserDataDisabled())
+	{
+		return;
+	}
+
+	Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, USER_CONFIG_FILENAME, Cvars_CreateBufferFromUserConfigs());
+
+	if (showSavingAnimation)
+	{
+		Utils_JustSaved();
+		Logger_LogInformation("User config file saved");
+	}
+}
+FixedByteBuffer* Cvars_CreateBufferFromUserConfigs(void)
+{
+	//
+	Init();
+	//
+
+	DynamicByteBuffer* writer = DynamicByteBuffer_Create();
+	IStringArray* prefixes = IStringArray_Create();
+	IStringArray_Add(prefixes, CVARS_PREFIX_USER_CONFIG);
+	Cvars_Write2(true, writer, prefixes, NULL);
+	FixedByteBuffer* fbb = DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(writer);
+	writer = NULL;
+	IStringArray_Dispose(prefixes);
+	return fbb;
+}
+void Cvars_CreateSaveDirectories(void)
+{
+	//
+	Init();
+	//
+	// 
+	//WILLNOTDO 06262023 PC SPECIFIC AND PROBABLY NOT NEEDED ANYMORE
+
+	/*
+	if (GetAsBool(ENGINE_SAVING_SAVES_DISABLED))
+	{
+	return;
+	}
+	*/
+}
+void Cvars_LoadInitialCvars(void)
+{
+	//
+	Init();
+	//
+
+	Cvars_Set(CVARS_ENGINE_ORGANIZATION_NAME, GLOBAL_CVARS_ENGINE_ORGANIZATION_NAME);
+
+	Cvars_LoadDataDirCvars();
+
+	Logger_LogInformation("Version:");
+	Logger_LogInformation(Cvars_Get(CVARS_ENGINE_VERSION));
+
+	//OeUtils::SetTileSize(GetAsInt(ENGINE_TILE_SIZE)); //Not needed, using defines
+
+	MString* pathToFinalConfigInData = NULL;
+	pathToFinalConfigInData = File_Combine2("data", "finalconfig");
+	ReadDataCvars2(MString_GetText(pathToFinalConfigInData), "Data Final", false);
+
+	const char* pathToFinalConfigInRoot = "finalconfig";
+	ReadDataCvars2(pathToFinalConfigInRoot, "Data Final", false);
+
+	CopyToUserDefaults();
+
+	bool isLoadingSaveDataDisabled = Cvars_GetAsBool(CVARS_ENGINE_LOADING_SAVE_DATA_DISABLED) || Globals_IsLoadingUserDataDisabled();
+	if (Service_PlatformUsesLocalStorageForSaveData() && !isLoadingSaveDataDisabled) //Load at launch time for local storage platforms like Steam
+	{
+		Cvars_CreateSaveDirectories();
+		if (!Cvars_LoadSaveCvarsFromBlob())
+		{
+			Cvars_SaveUserConfig2(false);
+			Logger_LogInformation("Need to test frame rate because this is the first game launch");
+			Globals_SetAsNeedToTestFrameRate();
+		}
+#if EDITOR
+		//WILLNOTDO 06262023 EDITOR
+		/*
+		if (!ReadSaveCvarsFromStorageContainer("editorconfig.ini", "Editor"))
+		{
+			SaveEditorConfig(false);
+		}
+		*/
+#endif
+		_mHasLoadedSaveDataCvars = true;
+	}
+
+	if (isLoadingSaveDataDisabled)
+	{
+		_mHasLoadedSaveDataCvars = true;
+	}
+
+	ReadDataCvars2(MString_GetText(pathToFinalConfigInData), "Data Final", false); //Override user cvars with these
+	ReadDataCvars2(pathToFinalConfigInRoot, "Data Final", false);
+
+	MString_Dispose(&pathToFinalConfigInData);
+}
+void Cvars_CopyFromUserDefaults(void)
+{
+	//
+	Init();
+	//
+
+	for (int i = 0; i < shlen(sh_user_defaults); i += 1)
+	{
+		Cvars_Set(sh_user_defaults[i].key, sh_user_defaults[i].value.mValue);
+	}
+}
+bool Cvars_LoadSaveCvarsFromBlob(void)
+{
+	//
+	Init();
+	//
+
+	BufferRequest request = Service_AskToRetrieveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, USER_CONFIG_FILENAME);
+	if (request.mIsBufferReady)
+	{
+		_mHasLoadedSaveDataCvars = true;
+		if (request.mBuffer == NULL)
+		{
+			return false;
+		}
+		else
+		{
+			//try
+			//{
+			BufferReader* reader = BufferReader_Create(request.mBuffer);
+			Cvars_Read(true, reader);
+			BufferReader_Dispose(reader);
+			return true;
+			/* }
+			catch (...)
+			{
+				OeLogger::LogError("Unable to read cvar data!");
+				return;
+			}*/
+		}
+	}
+	return false;
+}
+bool Cvars_HasLoadedSaveDataCvars(void)
+{
+	return _mHasLoadedSaveDataCvars;
+}
+void Cvars_ClearCvars(void)
+{
+	_mHasInit = false;
+	_mHasLoadedSaveDataCvars = false;
+	shfree(sh_cvars);
+	shfree(sh_user_defaults);
+
+	//
+	Init();
+	//
+}
+void Cvars_LoadDataDirCvars(void)
+{
+	//
+	Init();
+	//
+
+	{
+		MString* dataEngineConfig = File_Combine2("data", "engineconfig");
+		ReadDataCvars(MString_GetText(dataEngineConfig), "Data Engine");
+		MString_Dispose(&dataEngineConfig);
+	}
+
+	{
+		MString* dataUserConfig = File_Combine2("data", "userconfig");
+		ReadDataCvars(MString_GetText(dataUserConfig), "Data User");
+		MString_Dispose(&dataUserConfig);
+	}
+
+#if EDITOR
+	{
+		MString* dataEditorConfig = File_Combine2("data", "editorconfig");
+		ReadDataCvars(MString_GetText(dataEditorConfig), "Data Editor");
+		MString_Dispose(&dataEditorConfig);
+	}
+#endif
+}
+void Cvars_Write(bool isBinary, DynamicByteBuffer* writer)
+{
+	//
+	Init();
+	//
+
+	Cvars_Write2(isBinary, writer, NULL, NULL);
+}
+void Cvars_Write2(bool isBinary, DynamicByteBuffer* writer, IStringArray* includePrefixes, IStringArray* excludePrefixes)
+{
+	//
+	Init();
+	//
+
+	if (!isBinary)
+	{
+		Exception_Run("Text writer not implemented for cvars", false);
+		return;
+	}
+
+	for (int i = 0; i < shlen(sh_cvars); i += 1)
+	{
+		CvarData* cvar = &sh_cvars[i].value;
+
+		bool write = true;
+		if (IStringArray_Length(includePrefixes) > 0)
+		{
+			write = false;
+			for (int i = 0; i < IStringArray_Length(includePrefixes); i += 1)
+			{
+				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(includePrefixes, i)))
+				{
+					write = true;
+				}
+			}
+		}
+		if (IStringArray_Length(excludePrefixes) > 0)
+		{
+			for (int i = 0; i < IStringArray_Length(excludePrefixes); i += 1)
+			{
+				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(excludePrefixes, i)))
+				{
+					write = false;
+				}
+			}
+		}
+		if (write)
+		{
+			DynamicByteBuffer_WriteString(writer, cvar->mKey, EE_FILENAME_MAX);
+			DynamicByteBuffer_WriteString(writer, cvar->mValue, EE_FILENAME_MAX);
+		}
+	}
+
+	DynamicByteBuffer_WriteEOF(writer);
 }

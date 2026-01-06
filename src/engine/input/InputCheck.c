@@ -16,6 +16,8 @@
 #include "../utils/Logger.h"
 #include "../utils/Utils.h"
 #include "../utils/MString.h"
+#include "../io/DynamicByteBuffer.h"
+#include "../io/BufferReader.h"
 
 static MString* _mTempString;
 
@@ -374,8 +376,24 @@ const char* InputCheck_GetName(InputCheck* data)
 	//}
 	//return OeStrings::Get("GEN_BIND_NOT_SET");
 }
-//void Write(InputCheck* data, const char* begin, std::shared_ptr<OeIniWriter> writer);
-//void Read(InputCheck* data, const char* begin, std::shared_ptr<OeIniReader> reader);
+void InputCheck_Write(InputCheck* data, DynamicByteBuffer* writer)
+{
+	DynamicByteBuffer_WriteI32(writer, data->mType);
+	DynamicByteBuffer_WriteI32(writer, data->mKey);
+	DynamicByteBuffer_WriteI32(writer, data->mMouseButton);
+	DynamicByteBuffer_WriteI32(writer, data->mButton);
+	DynamicByteBuffer_WriteI32(writer, data->mAxis);
+	DynamicByteBuffer_WriteI32(writer, data->mAxisDirection);
+}
+void InputCheck_Read(InputCheck* data, BufferReader* reader)
+{
+	data->mType = BufferReader_ReadI32(reader);
+	data->mKey = BufferReader_ReadI32(reader);
+	data->mMouseButton = BufferReader_ReadI32(reader);
+	data->mButton = BufferReader_ReadI32(reader);
+	data->mAxis = BufferReader_ReadI32(reader);
+	data->mAxisDirection = BufferReader_ReadI32(reader);
+}
 bool InputCheck_IsGlyphImage(InputCheck* data)
 {
 	if ((data->mType == INPUTCHECK_TYPE_AXIS) || (data->mType == INPUTCHECK_TYPE_BUTTON))

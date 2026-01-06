@@ -7,6 +7,8 @@
 #include "DynamicByteBuffer.h"
 
 #include "../utils/Utils.h"
+#include "../utils/Logger.h"
+#include "../utils/Exception.h"
 
 #define INITIAL_CAPACITY 1024
 
@@ -94,6 +96,27 @@ void DynamicByteBuffer_WriteBoolean(DynamicByteBuffer* dbb, bool value)
 	uint8_t valueToWrite = value ? 1 : 0;
 	WriteSomething(dbb, &valueToWrite, sizeof(uint8_t));
 }
+void DynamicByteBuffer_WriteEOF(DynamicByteBuffer* dbb)
+{
+
+}
+void DynamicByteBuffer_WriteString(DynamicByteBuffer* dbb, const char* str, size_t maxlen)
+{
+	size_t str_len = Utils_strnlen(str, maxlen);
+
+	if ((maxlen > 0xFF) || (str_len > 0xFF))
+	{
+		Exception_Run("Cannot write string longer than byte length to DBB!!!", true);
+		return;
+	}
+
+	DynamicByteBuffer_WriteU8(dbb, (uint8_t)str_len);
+
+	for (int i = 0; i < str_len; i += 1)
+	{
+		DynamicByteBuffer_WriteU8(dbb, str[i]);
+	}
+}
 uint8_t* DynamicByteBuffer_GetBuffer(const DynamicByteBuffer* dbb)
 {
 	return dbb->mBuffer;
@@ -106,7 +129,7 @@ void DynamicByteBuffer_SetLength(DynamicByteBuffer* dbb, uint64_t value)
 {
 	dbb->mLength = value;
 }
-FixedByteBuffer* DynamicByteBuffer_ConvertToFixedByteBufferAndDispose(DynamicByteBuffer* dbb)
+FixedByteBuffer* DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(DynamicByteBuffer* dbb)
 {
 	FixedByteBuffer* fbb = FixedByteBuffer_Create(dbb->mLength);
 	uint8_t* toBuffer = FixedByteBuffer_GetBuffer(fbb);

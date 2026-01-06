@@ -175,7 +175,11 @@ BufferReader* BufferReader_CreateFromPath(const char* path)
 {
 	return BufferReader_Create(File_ReadAll(path));
 }
-void BufferReader_Dispose(BufferReader* br, bool doNotDisposeBuffer)
+void BufferReader_Dispose(BufferReader* br)
+{
+	BufferReader_Dispose2(br, false);
+}
+void BufferReader_Dispose2(BufferReader* br, bool doNotDisposeBuffer)
 {
 	_mRefs -= 1;
 

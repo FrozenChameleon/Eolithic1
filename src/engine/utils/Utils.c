@@ -867,6 +867,28 @@ void Utils_GetStringWithNewLines(const char* str, const char* font, int32_t widt
 		}
 	} while (!isDone);
 }
+const char* Utils_GetExtension(bool isBinary)
+{
+	if (isBinary)
+	{
+		return UTILS_EXTENSION_BIN;
+	}
+	else
+	{
+		return UTILS_EXTENSION_INI;
+	}
+}
+bool Utils_IsBinaryForDebugFlag()
+{
+	if (Globals_IsDebugFileMode())
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
 static void BuilderHelper(char* buffer, int index, int32_t val)
 {
 	if (val < 10)

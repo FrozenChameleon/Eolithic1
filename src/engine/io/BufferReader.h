@@ -45,5 +45,6 @@ MString* BufferReader_ReadMString(BufferReader* br);
 bool BufferReader_HasNext(BufferReader* br);
 BufferReader* BufferReader_Create(FixedByteBuffer* fbb);
 BufferReader* BufferReader_CreateFromPath(const char* path);
-void BufferReader_Dispose(BufferReader* br, bool doNotDisposeBuffer);
+void BufferReader_Dispose(BufferReader* br);
+void BufferReader_Dispose2(BufferReader* br, bool doNotDisposeBuffer);
 uint64_t BufferReader_GetRefs();

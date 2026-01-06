@@ -134,7 +134,7 @@ void DatReader_Dispose(DatReader* dr)
 {
 	_mRefs -= 1;
 
-	BufferReader_Dispose(dr->_mReader, false);
+	BufferReader_Dispose(dr->_mReader);
 
 	Utils_free(dr);
 }

@@ -102,3 +102,5 @@ void Utils_GetSplitCSV(const char* str, IStringArray* addToHere);
 bool Utils_IsStringUnderWidth(const char* str, const char* font, int32_t start, int32_t currentIndex, int32_t width);
 int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width);
 void Utils_GetStringWithNewLines(const char* str, const char* font, int32_t width, MString** assignToThis);
+const char* Utils_GetExtension(bool isBinary);
+bool Utils_IsBinaryForDebugFlag();

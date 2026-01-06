@@ -3863,9 +3863,8 @@ void Do_SaveGame()
 }
 void Do_SaveUserConfig()
 {
-	//TODOCvars_SaveUserConfig();
+	Cvars_SaveUserConfig();
 }
-
 
 //IS REGION
 bool Is_IntersectingCameraExtended(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered)

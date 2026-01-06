@@ -9,6 +9,7 @@
 typedef struct BufferWriter BufferWriter;
 typedef struct BufferReader BufferReader;
 typedef struct SpriteBatch SpriteBatch;
+typedef struct DynamicByteBuffer DynamicByteBuffer;
 
 enum
 {
@@ -36,8 +37,8 @@ extern InputAction INPUTACTION_DUMMY_ACTION;
 
 void InputAction_ClearPolledInput(InputAction* action);
 void InputAction_Init(const char* name, InputAction* action);
-void InputAction_Write(InputAction* action, const char* begin, BufferWriter* writer);
-void InputAction_Read(InputAction* action, const char* begin, BufferReader* reader);
+void InputAction_Write(InputAction* action, DynamicByteBuffer* writer);
+void InputAction_Read(InputAction* action, BufferReader* reader);
 void InputAction_Update(InputAction* action, InputPlayer* input);
 void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
 	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);

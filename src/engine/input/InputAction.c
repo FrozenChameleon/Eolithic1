@@ -32,27 +32,25 @@ void InputAction_Init(const char* name, InputAction* action)
 	Utils_strlcpy(action->mName, name, EE_FILENAME_MAX);
 	action->mTimerDoubleTap = Timer_Create(INPUTACTION_DOUBLE_TAP_LENGTH);
 }
-void InputAction_Write(InputAction* action, const char* begin, BufferWriter* writer)
+void InputAction_Write(InputAction* action, DynamicByteBuffer* writer)
 {
-	/*writer->WriteString(begin + "name", action->mName);
+	DynamicByteBuffer_WriteString(writer, action->mName, EE_FILENAME_MAX);
 
-	writer->WriteInt32(begin + "check_length", InputChecks_LENGTH);
-	for (int i = 0; i < InputChecks_LENGTH; i++)
+	DynamicByteBuffer_WriteI32(writer, INPUTCHECKS_LENGTH);
+	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
-		std_string newBegin = begin + std_to_string(i) + "_";
-		InputCheck_Write(InputChecks_Get(&action->mChecks, i), newBegin, writer);
-	}*/
+		InputCheck_Write(InputChecks_Get(&action->mChecks, i), writer);
+	}
 }
-void InputAction_Read(InputAction* action, const char* begin, BufferReader* reader)
+void InputAction_Read(InputAction* action, BufferReader* reader)
 {
-	/*action->mName = reader->ReadString(begin + "name");
+	BufferReader_ReadString(reader, action->mName, EE_FILENAME_MAX);
 
-	int count = reader->ReadInt32(begin + "check_length");
+	int count = BufferReader_ReadI32(reader);
 	for (int i = 0; i < count; i++)
 	{
-		std_string newBegin = begin + std_to_string(i) + "_";
-		InputCheck_Read(InputChecks_Get(&action->mChecks, i), newBegin, reader);
-	}*/
+		InputCheck_Read(InputChecks_Get(&action->mChecks, i), reader);
+	}
 }
 void InputAction_Update(InputAction* action, InputPlayer* input)
 {

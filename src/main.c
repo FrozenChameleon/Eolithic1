@@ -16,17 +16,10 @@
 
 int main(int argc, char* args[])
 {
-	MString* enginePath = File_Combine2("data", "engineconfig.bin");
-	Cvars_Read(MString_GetText(enginePath));
-	MString_Dispose(&enginePath);
+	Cvars_LoadInitialCvars();
 
-	MString* userPath = File_Combine2("data", "userconfig.bin");
-	Cvars_Read(MString_GetText(userPath));
-	MString_Dispose(&userPath);
-
-	//Globals_DisableAudioPermanently();
 	//RecordingTool_EnableFromArgumentsPlayback(RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SESSION_NORMAL);
-	Globals_TurnOnAutoMode(true);
+	//Globals_TurnOnAutoMode(true);
 
 	Game_Run();
 

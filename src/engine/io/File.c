@@ -10,6 +10,7 @@
 #include "../utils/Utils.h"
 #include "../utils/Macros.h"
 #include "../utils/Exception.h"
+#include "../utils/Cvars.h"
 
 #ifdef _WIN32
 #define PATH_SEPARATOR '\\'
@@ -79,7 +80,8 @@ const char* File_GetPrefPath()
 {
 	if (_mPrefPath == NULL)
 	{
-		_mPrefPath = SDL_GetPrefPath("IcedLizardGames", "TestApp");
+		const char* organization = Cvars_Get(CVARS_ENGINE_ORGANIZATION_NAME);
+		_mPrefPath = SDL_GetPrefPath(Cvars_Get(CVARS_ENGINE_ORGANIZATION_NAME), Cvars_Get(CVARS_ENGINE_SAVE_NAME));
 	}
 
 	return _mPrefPath;
@@ -178,7 +180,11 @@ IStringArray* File_ReadAllToStrings(BufferReader* br)
 static void CombineHelper(MString** str, const char* addedPath)
 {
 	MString* newStr = *str;
-	MString_AddAssignChar(&newStr, PATH_SEPARATOR);
+	char lastCharacter = MString_GetLastChar(newStr);
+	if (lastCharacter != PATH_SEPARATOR)
+	{
+		MString_AddAssignChar(&newStr, PATH_SEPARATOR);
+	}
 	MString_AddAssignString(&newStr, addedPath);
 	*str = newStr;
 }

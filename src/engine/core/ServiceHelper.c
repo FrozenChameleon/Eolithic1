@@ -71,8 +71,6 @@ static bool LoadEverythingHelper()
 		}
 	}
 
-	loadedConfig = true;
-	/*
 	if (!Service_PlatformUsesLocalStorageForSaveData()) //Cvars are loaded immediately if local storage
 	{
 		if (!Cvars_HasLoadedSaveDataCvars())
@@ -88,10 +86,7 @@ static bool LoadEverythingHelper()
 	{
 		loadedConfig = true;
 	}
-	*/
 
-	loadedBindings = true;
-	/*
 	if (Input_HasInit())
 	{
 		if (!InputBindings_HaveAllPlayersLoadedBindings())
@@ -103,7 +98,6 @@ static bool LoadEverythingHelper()
 			loadedBindings = true;
 		}
 	}
-	*/
 
 	if (loadedSaves && loadedConfig && loadedBindings)
 	{

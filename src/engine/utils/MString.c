@@ -99,6 +99,15 @@ char* MString_GetText(const MString* str)
 
 	return str->text;
 }
+char MString_GetLastChar(const MString* str)
+{
+	if ((str == NULL) || (str->len <= 0))
+	{
+		return '\0';
+	}
+
+	return str->text[str->len - 1];
+}
 int32_t MString_GetLength(const MString* str)
 {
 	if (str == NULL)

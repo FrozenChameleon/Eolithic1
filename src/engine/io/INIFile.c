@@ -18,14 +18,13 @@ typedef struct INIFile
 	struct { char* key; char* value; } *sh_values;
 } IniFile;
 
-INIFile* INIFile_Create_From_Binary(const char* path)
+INIFile* INIFile_Create_From_Binary(BufferReader* br)
 {
 	_mRefs += 1;
 
 	INIFile* ini = Utils_malloc(sizeof(INIFile));
 	Utils_memset(ini, 0, sizeof(INIFile));
 	sh_new_arena(ini->sh_values);
-	BufferReader* br = BufferReader_CreateFromPath(path);
 	while (BufferReader_HasNext(br))
 	{
 		char* key = Utils_CreateStringBuffer(EE_FILENAME_MAX);
@@ -34,7 +33,6 @@ INIFile* INIFile_Create_From_Binary(const char* path)
 		BufferReader_ReadString(br, value, EE_FILENAME_MAX);
 		shput(ini->sh_values, key, value);
 	}
-	BufferReader_Dispose(br, false);
 	return ini;
 }
 void INIFile_Dispose(INIFile* ini)

@@ -42,8 +42,7 @@ static FixedByteBuffer* CreateBufferFromSaveData()
 {
 	DynamicByteBuffer* dbb = DynamicByteBuffer_Create();
 	GameHelper_WriteGameSaveData(_mData, dbb);
-	FixedByteBuffer* fbb = DynamicByteBuffer_ConvertToFixedByteBufferAndDispose(dbb);
-	return fbb;
+	return DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(dbb);
 }
 
 void* GameSaveManager_GetCurrentSaveData()
@@ -100,7 +99,7 @@ void GameSaveManager_Load()
 			GameSaveManager_ResetSaveData();
 			BufferReader* reader = BufferReader_Create(request.mBuffer);
 			GameHelper_ReadGameSaveData(_mData, reader);
-			BufferReader_Dispose(reader, false);
+			BufferReader_Dispose(reader);
 			_mWasDataJustLoaded = true;
 			Logger_LogInformation("Loaded game save data successfully!");
 			return;

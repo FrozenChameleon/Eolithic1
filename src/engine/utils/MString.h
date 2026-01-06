@@ -7,6 +7,7 @@ typedef struct MString MString;
 typedef struct BufferReader BufferReader;
 
 char* MString_GetText(const MString* str);
+char MString_GetLastChar(const MString* str);
 int32_t MString_GetLength(const MString* str);
 int32_t MString_GetCapacity(const MString* str);
 bool MString_EqualToString(const MString* str, const char* otherStr);
