@@ -1,8 +1,10 @@
 #pragma once
 
+#include "../../engine/utils/Macros.h"
+
 typedef struct AnchorData
 {
-	const char* mAnchorName;
+	char mAnchorName[EE_FILENAME_MAX];
 	int mAnchorNumber;
 	int mAnchorEntityNumber;
 } AnchorData;

@@ -4,28 +4,15 @@
 #include "../utils/Logger.h"
 #include "../utils/Exception.h"
 
-static void ResizePack(ComponentPack* pack, int32_t newCapacity)
+static void GrowComponentPackIfNecessary(ComponentPack* pack, int32_t newCapacity)
 {
-	Entity* newEntities = Utils_malloc(sizeof(Entity) * newCapacity);
-	Utils_memset(newEntities, 0, sizeof(Entity) * newCapacity);
-	if (pack->Entities != NULL)
+	if (pack->_mCapacity >= newCapacity)
 	{
-		Utils_memcpy(newEntities, pack->Entities, sizeof(Entity) * pack->_mCapacity);
-		Utils_free(pack->Entities);
-		pack->Entities = NULL;
+		return;
 	}
 
-	uint8_t* newComponents = Utils_malloc(pack->mComponentSizeInBytes * newCapacity);
-	if (pack->Components != NULL)
-	{
-		Utils_memcpy(newComponents, pack->Components, pack->mComponentSizeInBytes * pack->_mCapacity);
-		Utils_free(pack->Components);
-		pack->Components = NULL;
-	}
-
-	pack->Entities = newEntities;
-	pack->Components = newComponents;
-
+	pack->Entities = Utils_grow(pack->Entities, sizeof(Entity) * pack->_mCapacity, sizeof(Entity) * newCapacity);
+	pack->Components = Utils_grow(pack->Components, pack->mComponentSizeInBytes * pack->_mCapacity, pack->mComponentSizeInBytes * newCapacity);
 	pack->_mCapacity = newCapacity;
 }
 
@@ -35,16 +22,12 @@ void ComponentPack_LogNothingEntityWarning(ComponentPack* pack)
 }
 void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int32_t initialSize)
 {
-	initialSize = 1024; //TODO REMOVE THIS
-
 	Utils_memset(pack, 0, sizeof(ComponentPack));
 
 	pack->mComponentSizeInBytes = componentSizeInBytes;
-	pack->_mMaximumCapacity = 0;
-	pack->_mLength = 0;
 	pack->_mDummy = Utils_malloc(componentSizeInBytes);
 
-	ResizePack(pack, initialSize);
+	GrowComponentPackIfNecessary(pack, initialSize);
 }
 void* ComponentPack_TryGetFirstSetComponent(ComponentPack* pack, bool* wasSuccessful)
 {
@@ -230,7 +213,7 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 
 	Logger_LogInformation("Component pack is expanding for pack: PUT SOMETHING HERE");
 
-	ResizePack(pack, pack->_mCapacity * 2);
+	GrowComponentPackIfNecessary(pack, pack->_mCapacity * 2);
 
 	return ComponentPack_Set2(pack, entity, isNotExclusive);
 }
@@ -285,13 +268,10 @@ void ComponentPack_CopyTo(ComponentPack* from, ComponentPack* to)
 	to->_mLength = from->_mLength;
 	to->_mMaximumCapacity = from->_mMaximumCapacity;
 
-	if (from->_mCapacity != to->_mCapacity) //Mismatch?
-	{
-		ResizePack(to, from->_mCapacity);
-	}
+	GrowComponentPackIfNecessary(to, from->_mCapacity);
 
-	Utils_memcpy(to->Entities, from->Entities, from->_mCapacity);  //Copy all entity data!
-	Utils_memcpy(to->Components, from->Components, from->_mLength); //Only copy active length of components...
+	Utils_memcpy(to->Entities, from->Entities, sizeof(Entity) * from->_mCapacity);  //Copy all entity data!
+	Utils_memcpy(to->Components, from->Components, (from->mComponentSizeInBytes * from->_mLength)); //Only copy active length of components...
 }
 ComponentPack* ComponentPack_CreateCopy(ComponentPack* pack)
 {
@@ -302,13 +282,7 @@ ComponentPack* ComponentPack_CreateCopy(ComponentPack* pack)
 void ComponentPack_Dispose(ComponentPack* pack)
 {
 	Utils_free(pack->_mDummy);
-	pack->_mDummy = NULL;
-
 	Utils_free(pack->Entities);
-	pack->Entities = NULL;
-
 	Utils_free(pack->Components);
-	pack->Components = NULL;
-
 	Utils_memset(pack, 0, sizeof(pack));
 }

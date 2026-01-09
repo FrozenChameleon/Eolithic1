@@ -541,7 +541,7 @@ void Do_InitPermanentThingsByGridCoordinates3(int x, int32_t y, const char* only
 	for (int k = 0; k < dataArray.size(); k++)
 	{
 		ThingInstance* instance = &dataArray[k];
-		if (onlyWithThisName == STR_NOTHING)
+		if (Utils_StringEqualTo(onlyWithThisName, STR_NOTHING))
 		{
 			Do_BuildThingFromData(x, y, instance);
 		}
@@ -1374,7 +1374,7 @@ void Do_SetPosition(Entity entity, float x, float y)
 void Do_SetName(Entity entity, const char* name)
 {
 	Name* component = Get_Component(C_Name, entity);
-	component->mName = name;
+	Utils_strlcpy(component->mName, name, EE_FILENAME_MAX);
 }
 void Do_SetDrawOffset(Entity entity, int32_t x, int32_t y)
 {

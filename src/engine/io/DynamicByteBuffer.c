@@ -29,10 +29,7 @@ static void CheckLength(DynamicByteBuffer* dbb, size_t size)
 	}
 
 	uint64_t newCapacity = dbb->mCapacity * 2;
-	uint8_t* tempBuffer = Utils_malloc(sizeof(uint8_t) * newCapacity);
-	Utils_memcpy(tempBuffer, dbb->mBuffer, dbb->mCapacity);
-	Utils_free(dbb->mBuffer);
-	dbb->mBuffer = tempBuffer;
+	dbb->mBuffer = Utils_grow(dbb->mBuffer, sizeof(uint8_t) * dbb->mCapacity, sizeof(uint8_t) * newCapacity);
 	dbb->mCapacity = newCapacity;
 }
 

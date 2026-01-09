@@ -8,6 +8,7 @@
 #include "../render/Sheet.h"
 #include "../input/Input.h"
 #include "../input/InputPlayer.h"
+#include "../utils/Utils.h"
 
 #define BLOOD_SPRAY_DENSITY 100
 #define FINAL_BOSS_DEATH 777
@@ -121,7 +122,7 @@ void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationN
 	Do_SetPosition(entity, position.X, position.Y);
 	SpecialMcFinalBossEffect* component = Do_InitComponent(C_SpecialMcFinalBossEffect, entity);
 	component->mPosition = position;
-	component->mAnimationName = animationName;
+	Utils_strlcpy(component->mAnimationName, animationName, EE_FILENAME_MAX);
 	component->mBloodOffset = bloodOffset;
 	component->mDisableShaking = disableShaking;
 	component->mBloodCutoff = bloodCutoff;

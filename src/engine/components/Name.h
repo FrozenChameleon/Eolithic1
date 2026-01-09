@@ -1,7 +1,9 @@
 #pragma once
 
+#include "../utils/Macros.h"
+
 typedef struct Name
 {
-	const char* mName;
+	char mName[EE_FILENAME_MAX];
 } Name;
 

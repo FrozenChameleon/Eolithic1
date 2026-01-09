@@ -95,7 +95,7 @@ void GameHelper_DrawStateSystems(SpriteBatch* spriteBatch);
 void GameHelper_DrawHudStateSystems(SpriteBatch* spriteBatch);
 void GameHelper_DrawDebugHudStateSystems(SpriteBatch* spriteBatch);
 void GameHelper_CreateGameStates();
-GameStateData* GameHelper_CreateGameStateData(const char* name);
+void GameHelper_InitGameStateData(const char* name, GameStateData* initThis);
 void* GameHelper_CreateGameSaveData();
 void GameHelper_InitGameState(const char* levelToLoad);
 void GameHelper_CreateStateSystems();

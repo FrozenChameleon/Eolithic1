@@ -12,7 +12,7 @@ typedef struct SpecialMcFinalBossEffect
 	Timer mTimerBleed;
 	Timer mTimerLine;
 	Animation mAnimation;
-	const char* mAnimationName;
+	char mAnimationName[EE_FILENAME_MAX];
 	Vector2 mBloodOffset;
 	bool mDisableShaking;
 	int mBloodCutoff;

@@ -43,6 +43,8 @@ void Utils_FreeArena(int32_t allocationArena);
 void* Utils_malloc(size_t size);
 void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);
+//Grow mem to newSize if bigger than oldSize. If valid, returns newly zero initialized mem.
+void* Utils_grow(void* mem, size_t oldSize, size_t newSize);
 size_t Utils_strlen(const char* str);
 size_t Utils_strnlen(const char* str, size_t maxlen);
 size_t Utils_strlcpy(char* dst, const char* src, size_t maxlen);

@@ -20,9 +20,9 @@ void GameState_SaveComponentSizesHelper(bool isBinary)
 void GameState_ClearReplayCache(GameState* gs)
 {
 	gs->_mCurrentReplayFrame = 0;
-	if (!gs->_mReplayDataManager._mIsActive)
+	if (gs->_mReplayDataManager != NULL)
 	{
-		ReplayDataManager_Clear(&gs->_mReplayDataManager);
+		ReplayDataManager_Clear(gs->_mReplayDataManager);
 	}
 	DebugRewindTester_Reset();
 }
@@ -43,7 +43,7 @@ void GameState_Ctor(GameState* gs, const char* name, bool disableRewinding)
 	GameStateData_Ctor(&gs->_mForGameState);
 	if (!disableRewinding)
 	{
-		gs->_mReplayDataManager._mIsActive = true;
+		gs->_mReplayDataManager = ReplayDataManager_Create(name);
 	}
 /*#if EDITOR
 	_mHasSavedDebugSaveState = false;
@@ -129,8 +129,7 @@ void GameState_Update(GameState* gs)
 	}
 	else
 	{
-		//TODO C99 bool isRewindingThisFrame = OeGameHelper::HandleRewindBeforeUpdatingStateSystems();
-		bool isRewindingThisFrame = false;
+		bool isRewindingThisFrame = GameHelper_HandleRewindBeforeUpdatingStateSystems();
 		if (!isRewindingThisFrame)
 		{
 			GameHelper_UpdateStateSystems();
@@ -163,7 +162,7 @@ bool GameState_Rewind(GameState* gs)
 		return false;
 	}
 
-	uint64_t lowestFrame = ReplayDataManager_GetLowestReplayFrame(&gs->_mReplayDataManager);
+	uint64_t lowestFrame = ReplayDataManager_GetLowestReplayFrame(gs->_mReplayDataManager);
 	if (gs->_mCurrentReplayFrame <= lowestFrame)
 	{
 		return false;
@@ -171,7 +170,7 @@ bool GameState_Rewind(GameState* gs)
 
 	gs->_mCurrentReplayFrame -= 1;
 
-	ReplayDataManager_RewindToSnapshot(&gs->_mReplayDataManager, gs->_mCurrentReplayFrame, &gs->_mData);
+	ReplayDataManager_RewindToSnapshot(gs->_mReplayDataManager, gs->_mCurrentReplayFrame, &gs->_mData);
 
 	GameStateManager_UpdateLastRenderPosition();
 
@@ -179,16 +178,16 @@ bool GameState_Rewind(GameState* gs)
 }
 void GameState_GiveReplayInput(GameState* gs, const GameStateInputData* inputData)
 {
-	if (!gs->_mReplayDataManager._mIsActive)
+	if (gs->_mReplayDataManager == NULL)
 	{
 		return;
 	}
 
-	ReplayDataManager_GiveReplayInput(&gs->_mReplayDataManager, gs->_mCurrentReplayFrame, inputData);
+	ReplayDataManager_GiveReplayInput(gs->_mReplayDataManager, gs->_mCurrentReplayFrame, inputData);
 }
 const GameStateInputData* GameState_GetReplayInput(GameState* gs)
 {
-	return ReplayDataManager_GetReplayInput(&gs->_mReplayDataManager);
+	return ReplayDataManager_GetReplayInput(gs->_mReplayDataManager);
 }
 void GameState_ClearReplayCacheNextFrame(GameState* gs)
 {
@@ -225,7 +224,7 @@ Entity GameState_GetEntityInPlay(GameState* gs, int32_t entityNumber)
 }
 void GameState_UpdateReplayFrame(GameState* gs)
 {
-	ReplayDataManager_Snapshot(&gs->_mReplayDataManager, gs->_mCurrentReplayFrame, &gs->_mData);
+	ReplayDataManager_Snapshot(gs->_mReplayDataManager, gs->_mCurrentReplayFrame, &gs->_mData);
 }
 bool GameState_HasCreatedForGameSaveState(GameState* gs)
 {
@@ -251,7 +250,7 @@ void GameState_UseForGameSaveState(GameState* gs)
 }
 int GameState_GetRemainingRewindTime(GameState* gs)
 {
-	return (int)(gs->_mCurrentReplayFrame - ReplayDataManager_GetLowestReplayFrame(&gs->_mReplayDataManager));
+	return (int)(gs->_mCurrentReplayFrame - ReplayDataManager_GetLowestReplayFrame(gs->_mReplayDataManager));
 }
 bool GameState_IsThereAnyRewindTimeRemaining(GameState* gs)
 {
@@ -260,7 +259,7 @@ bool GameState_IsThereAnyRewindTimeRemaining(GameState* gs)
 float GameState_GetPercentageOfRemainingRewindTime(GameState* gs)
 {
 	int current = GameState_GetRemainingRewindTime(gs);
-	int max = REPLAY_DATA_MANAGER_REPLAY_BUFFER_SIZE;
+	int max = REPLAYDATAMANAGER_REPLAY_BUFFER_SIZE;
 	return ((float)current / max);
 }
 ComponentPack* GameState_GetComponentPack(GameState* gs, ComponentType ctype)

@@ -270,10 +270,9 @@ void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input)
 		InputBindings_SetupButton(data, 1, s, ACTIONLIST_GAME_MENU_BACK, BUTTONS_B);
 	}
 }
-GameStateData* GameHelper_CreateGameStateData(const char* name)
+void GameHelper_InitGameStateData(const char* name, GameStateData* initThis)
 {
-	GameStateData* temp = Utils_calloc(1, sizeof(GameStateData));
-
+	GameStateData_Ctor(initThis);
 	/*
 	if (!_mComponentSizes.count(name))
 	{
@@ -290,8 +289,6 @@ GameStateData* GameHelper_CreateGameStateData(const char* name)
 	*/
 
 	//CreateGameStateDataHelper(temp, _mComponentSizes[name]);
-
-	return temp;
 }
 void GameHelper_InitPoolsForEngine()
 {

@@ -19,7 +19,7 @@ typedef struct GameState
 	const char* _mName;
 	GameStateData _mData;
 	GameStateData _mForGameState;
-	ReplayDataManager _mReplayDataManager;
+	ReplayDataManager* _mReplayDataManager;
 #if EDITOR
 	bool _mHasSavedDebugSaveState;
 	GameStateData _mDebugSaveState;

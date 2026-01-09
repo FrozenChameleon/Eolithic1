@@ -75,10 +75,10 @@ const char* Utils_GetCurrentUserLanguageCode()
 		return ENGLISH_LANGUAGE_CODE;
 	}
 
-	if (_mCultureLanguage == STR_NOTHING)
+	if (Utils_StringEqualTo(_mCultureLanguage, STR_NOTHING))
 	{
 		const std::string& platformLanguage = OeService::GetPlatformLanguage();
-		if (platformLanguage != STR_NOTHING)
+		if (!Utils_StringEqualTo(platformLanguage, STR_NOTHING))
 		{
 			_mCultureLanguage = platformLanguage;
 		}
@@ -209,6 +209,21 @@ void Utils_free(void* mem)
 {
 	_mMallocRefs -= 1;
 	SDL_free(mem);
+}
+void* Utils_grow(void* mem, size_t oldSize, size_t newSize)
+{
+	if (oldSize >= newSize)
+	{
+		return mem;
+	}
+
+	void* newMemory = Utils_calloc(1, newSize);
+	if (mem != NULL)
+	{
+		Utils_memcpy(newMemory, mem, oldSize);
+		Utils_free(mem);
+	}
+	return newMemory;
 }
 size_t Utils_strlen(const char* str)
 {
