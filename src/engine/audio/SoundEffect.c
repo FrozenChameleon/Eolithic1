@@ -13,7 +13,7 @@
 #include "../globals/Globals.h"
 #include "../core/GameUpdater.h"
 #include "../utils/Logger.h"
-#include "../resources/SoundEffectManager.h"
+#include "../resources/ResourceManagerList.h"
 
 #define SFX_INSTANCE_LIMIT 128
 
@@ -260,7 +260,7 @@ void SoundEffect_PlaySound(const char* sound)
 }
 static SoundEffectInstance* SetupNextInstance(const char* sound)
 {
-	SoundEffect* data = SoundEffectManager_GetResourceData(sound);
+	SoundEffect* data = ResourceManager_GetResourceData(ResourceManagerList_SoundEffect(), sound);
 	if (data == NULL)
 	{
 		return NULL;

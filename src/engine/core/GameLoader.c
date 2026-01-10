@@ -22,23 +22,7 @@
 #include "../render/DrawTool.h"
 #include "../utils/Cvars.h"
 #include "../service/Service.h"
-#include "../resources/AnimTileManager.h"
-#include "../resources/BmFontManager.h"
-#include "../resources/LevelDataManager.h"
-#include "../resources/MusicManager.h"
-#include "../resources/ParticleManager.h"
-#include "../resources/PropManager.h"
-#include "../resources/ShaderProgramManager.h"
-#include "../resources/SoundEffectManager.h"
-#include "../resources/TextureManager.h"
-#include "../resources/TextureFontManager.h"
-#include "../resources/TextureMovieManager.h"
-#include "../resources/TextureOffsetManager.h"
-#include "../resources/ThingSettingsManager.h"
-#include "../resources/TilesetOffsetManager.h"
-#include "../resources/MovieManager.h"
-#include "../resources/MovieTimingManager.h"
-#include "../resources/TTFontManager.h"
+#include "../resources/ResourceManagerList.h"
 
 enum
 {
@@ -157,6 +141,7 @@ static bool LoadStart()
 	GameHelper_OnLoadingStart();
 	GameHelper_SetupPlatformTypes();
 	Strings_Init();
+	ResourceManagerList_Init();
 	//ResourceManagers_CreateManagers();
 	//Tuning_SetCurrentDifficulty(Cvars_GetAsInt(CVARS_ENGINE_DEFAULT_DIFFICULTY));
 	Logger_LogInformation("Loading started");
@@ -164,23 +149,7 @@ static bool LoadStart()
 }
 static bool LoadResources()
 {
-	AnimTileManager_LoadAllFromDat();
-	BmFontManager_LoadAllFromDat();
-	MusicManager_LoadAllFromDat();
-	ParticleManager_LoadAllFromDat();
-	PropManager_LoadAllFromDat();
-	ShaderProgramManager_LoadAllFromDat();
-	SoundEffectManager_LoadAllFromDat();
-	TextureManager_LoadAllFromDat();
-	TextureFontManager_LoadAllFromDat();
-	TextureMovieManager_LoadAllFromDat();
-	TextureOffsetManager_LoadAllFromDat();
-	TTFontManager_LoadAllFromDat();
-	TilesetOffsetManager_LoadAllFromDat();
-	ThingSettingsManager_LoadAllFromDat();
-	MovieManager_LoadAllFromDat();
-	MovieTimingManager_LoadAllFromDat();
-	LevelDataManager_LoadAllFromDat();
+	ResourceManagerList_LoadAllFromDat();
 	return true;
 }
 static bool LoadAfterResources()

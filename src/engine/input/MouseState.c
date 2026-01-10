@@ -29,7 +29,7 @@ void MouseData_CopyFrom(MouseData* md, const MouseData* otherData)
 }
 void MouseData_Clear(MouseData* md)
 {
-	md->_mMousePosition = Point_Zero;
+	md->_mMousePosition = Vector2_Zero;
 	md->_mScrollWheelValue = 0;
 	MouseData_ClearOnlyButtonData(md);
 }
@@ -39,11 +39,7 @@ void MouseData_ClearOnlyButtonData(MouseData* md)
 }
 void MouseData_Poll(MouseData* md)
 {
-	float tempMouseX = 0;
-	float tempMouseY = 0;
-	Uint32 mouseButtonState = SDL_GetMouseState(&tempMouseX, &tempMouseY); //TODO MAKE MOUSE ALL FLOATS
-	md->_mMousePosition.X = (int32_t)tempMouseX;
-	md->_mMousePosition.Y = (int32_t)tempMouseY;
+	Uint32 mouseButtonState = SDL_GetMouseState(&md->_mMousePosition.X, &md->_mMousePosition.Y); //TODO MAKE MOUSE ALL FLOATS
 
 	//_mScrollWheelValue = _mScrollWheelValue;
 
@@ -72,11 +68,11 @@ int32_t MouseData_GetScrollWheelValue(const MouseData* md)
 {
 	return _mScrollWheelValue;
 }
-int32_t MouseData_GetMouseX(const MouseData* md)
+float MouseData_GetMouseX(const MouseData* md)
 {
 	return md->_mMousePosition.X;
 }
-int32_t MouseData_GetMouseY(const MouseData* md)
+float MouseData_GetMouseY(const MouseData* md)
 {
 	return md->_mMousePosition.Y;
 }
@@ -164,19 +160,19 @@ int32_t MouseState_GetScrollWheelValue()
 {
 	return MouseData_GetScrollWheelValue(&_mThisFrame);
 }
-int32_t MouseState_GetMouseX()
+float MouseState_GetMouseX()
 {
 	return MouseData_GetMouseX(&_mThisFrame);
 }
-int32_t MouseState_GetMouseY()
+float MouseState_GetMouseY()
 {
 	return MouseData_GetMouseY(&_mThisFrame);
 }
-int32_t MouseState_GetDifferenceMouseX()
+float MouseState_GetDifferenceMouseX()
 {
 	return MouseState_GetMouseX() - MouseData_GetMouseX(&_mLastFrame);
 }
-int32_t MouseState_GetDifferenceMouseY()
+float MouseState_GetDifferenceMouseY()
 {
 	return MouseState_GetMouseY() - MouseData_GetMouseY(&_mLastFrame);
 }

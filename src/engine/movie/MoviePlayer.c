@@ -16,8 +16,9 @@
 #include "MovieOperationWait.h"
 #include "MovieOperationFadeText.h"
 #include "../render/Color.h"
-#include "../resources/MovieManager.h"
-#include "../resources/MovieTimingManager.h"
+#include "../movie/Movie.h"
+#include "../movie/MovieTiming.h"
+#include "../resources/ResourceManagerList.h"
 #include "../../third_party/stb_ds.h"
 #include "MovieGlobals.h"
 
@@ -880,16 +881,18 @@ void MoviePlayer_Init(bool useSwappedImages, int scale, const char* movieName)
 
 	_mData->_mScale = scale;
 
-	if (!MovieManager_HasResource(movieName))
+	ResourceManager* movieMan = ResourceManagerList_Movie();
+	if (!ResourceManager_HasResource(movieMan, movieName))
 	{
 		_mData->_mIsComplete = true;
 	}
 	else
 	{
-		_mData->_mReader = MovieManager_GetResourceData(movieName)->mMovieData;
-		if (MovieTimingManager_HasResource(movieName))
+		_mData->_mReader = ((Movie*)ResourceManager_GetResourceData(movieMan, movieName))->mMovieData;
+		ResourceManager* movieTimingMan = ResourceManagerList_MovieTiming();
+		if (ResourceManager_HasResource(movieTimingMan, movieName))
 		{
-			_mData->_mTimingsToUse = MovieTimingManager_GetResourceData(movieName);
+			_mData->_mTimingsToUse = ResourceManager_GetResourceData(movieTimingMan, movieName);
 		}
 	}
 }

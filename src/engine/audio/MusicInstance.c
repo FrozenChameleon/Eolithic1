@@ -7,7 +7,7 @@
 #include "MusicInstance.h"
 #include "../utils/Timer.h"
 #include "../utils/Utils.h"
-#include "../resources/MusicManager.h"
+#include "../resources/ResourceManagerList.h"
 #include "Music.h"
 #include "../utils/Macros.h"
 
@@ -102,7 +102,7 @@ void MusicInstance_Play(MusicInstance* mi, const char* nextTrack, bool isLooping
 
 	MusicInstance_Stop(mi);
 
-	Music* data = MusicManager_GetResourceData(mi->_mCurrentTrack);
+	Music* data = ResourceManager_GetResourceData(ResourceManagerList_Music(), mi->_mCurrentTrack);
 	bool success = SoundEffectInstance_Setup(&mi->_mCurrentMusicInstance, nextTrack, data->_mWaveFileData);
 	if (!success)
 	{

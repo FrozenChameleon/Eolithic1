@@ -4,7 +4,8 @@
 #include "../utils/Logger.h"
 #include "Renderer.h"
 #include "../globals/Align.h"
-#include "../resources/BmFontManager.h"
+#include "../font/BmFont.h"
+#include "../resources/ResourceManagerList.h"
 #include "../utils/MString.h"
 #include "../../third_party/stb_ds.h"
 
@@ -175,7 +176,7 @@ RenderCommandString* SpriteBatch_DrawString3(SpriteBatch* sb, const char* font, 
 {
 	ClampDepth(&depth);
 
-	BmFont* bitmapFont = BmFontManager_GetResourceData(font);
+	BmFont* bitmapFont = ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 	if (bitmapFont == NULL)
 	{
 		Logger_LogError("MISSING FONT FOR DRAW: ");

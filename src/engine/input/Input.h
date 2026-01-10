@@ -11,6 +11,7 @@
 #include "../math/Vector2.h"
 #include "../math/Rectangle.h"
 #include "../math/Point.h"
+#include "../components/Camera.h"
 
 typedef struct InputPlayer InputPlayer;
 typedef struct ControllerState ControllerState;
@@ -70,20 +71,20 @@ InputPlayer* Input_GetPlayer(int32_t i);
 ControllerState* Input_GetController(int32_t number);
 InputAction* Input_GetPlayerOneAction(const char* name);
 InputAction* Input_GetPlayerAction(int32_t playerNumber, const char* name);
-//Vector2 GetCameraAdjustedMouse(const Camera* camera);
+Vector2 Input_GetCameraAdjustedMouse(const Camera* camera);
 bool Input_JustScrolledUp();
 bool Input_JustScrolledDown();
-int32_t Input_GetDifferenceMouseX();
-int32_t Input_GetDifferenceMouseY();
-int32_t Input_GetMouseX();
-int32_t Input_GetMouseY();
-Point Input_GetMouse();
+float Input_GetDifferenceMouseX();
+float Input_GetDifferenceMouseY();
+float Input_GetMouseX();
+float Input_GetMouseY();
+Vector2 Input_GetMouse();
 Vector2 Input_GetScaledMouseForRetroScreen();
 float Input_GetScaledMouseForRetroScreenX();
 float Input_GetScaledMouseForRetroScreenY();
-//Vector2 GetCameraAdjustedMouseForRetroScreen(const Camera* camera);
-//float GetCameraAdjustedMouseForRetroScreenX(const Camera* camera);
-//float GetCameraAdjustedMouseForRetroScreenY(const Camera* camera);
+Vector2 Input_GetCameraAdjustedMouseForRetroScreen(const Camera* camera);
+float Input_GetCameraAdjustedMouseForRetroScreenX(const Camera* camera);
+float Input_GetCameraAdjustedMouseForRetroScreenY(const Camera* camera);
 bool Input_MouseHasChangedPosition();
 bool Input_IsLeftMousePressed();
 bool Input_IsLeftMouseTapped();

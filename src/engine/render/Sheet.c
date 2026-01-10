@@ -9,10 +9,10 @@
 #include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "../../third_party/stb_ds.h"
-#include "../resources/TextureManager.h"
-#include "../resources/TextureOffsetManager.h"
+#include "../resources/ResourceManagerList.h"
 #include "../globals/Globals.h"
 #include "SpriteBatch.h"
+#include "../render/TextureOffset.h"
 
 #define DEBUG_SHEET_NAME "DEBUG_ERROR_777"
 
@@ -61,10 +61,11 @@ void Sheet_BuildSheets()
 
 	Init();
 
-	int64_t textureManLen = TextureManager_Length();
+	ResourceManager* textureMan = ResourceManagerList_Texture();
+	int64_t textureManLen = ResourceManager_Length(textureMan);
 	for (int i = 0; i < textureManLen; i += 1)
 	{
-		Resource* resource = TextureManager_GetResourceByIndex(i);
+		Resource* resource = ResourceManager_GetResourceByIndex(textureMan, i);
 		if (resource->mData == NULL)
 		{
 			continue;
@@ -82,16 +83,17 @@ void Sheet_BuildSheets()
 
 	if (!Globals_IsDebugFileMode() || GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS)
 	{
-		int64_t textureOffsetLen = TextureOffsetManager_Length();
+		ResourceManager* textureOffsetMan = ResourceManagerList_TextureOffset();
+		int64_t textureOffsetLen = ResourceManager_Length(textureOffsetMan);
 		for (int i = 0; i < textureOffsetLen; i += 1)
 		{
-			Resource* resource = TextureOffsetManager_GetResourceByIndex(i);
-			if (resource->mData == NULL)
+			Resource* texOffsetResource = ResourceManager_GetResourceByIndex(textureOffsetMan, i);
+			if (texOffsetResource->mData == NULL)
 			{
 				continue;
 			}
 
-			TextureOffset* texOffset = (TextureOffset*)resource->mData;
+			TextureOffset* texOffset = (TextureOffset*)texOffsetResource->mData;
 			int64_t infoLen = arrlen(texOffset->arr_offsets);
 			for (int i = 0; i < infoLen; i += 1)
 			{
@@ -101,7 +103,7 @@ void Sheet_BuildSheets()
 				sheet->mSheetName = info->mVirtualName;
 				sheet->mUnderlyingTextureName = info->mFilenameWithoutExtension;
 				sheet->mRectangle = info->mRect;
-				sheet->mTextureResource = TextureManager_GetResource(info->mFilenameWithoutExtension);
+				sheet->mTextureResource = ResourceManager_GetResource(textureMan, info->mFilenameWithoutExtension);
 				arrput(arr_sheet_list, sheet);
 				shput(sh_sheet_map, sheet->mSheetName, sheet);
 			}

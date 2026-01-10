@@ -35,6 +35,7 @@ static bool _mPausedMusic;
 static bool _mWasNotInFocus;
 static bool _mWasShowingControllerLostConnectionMessage;
 static FPSTool _mFpsToolUpdate;
+static char _mBufferForFPSString[EE_SAFE_BUFFER_LEN_FOR_INT];
 
 static void SetDebugAutoSpeed(bool value)
 {
@@ -528,20 +529,19 @@ static void UpdateLoop(double delta)
 
 const char* GameUpdater_GetFpsString()
 {
-	//TODO C99
-	return "";
-	/*int number;
+	int number;
 	if (_mIsDebugAutoSpeedOn)
 	{
-		float speed = GetAutoSpeedUpdateSpeed();
+		float speed = GameUpdater_GetAutoSpeedUpdateSpeed();
 		number = (int)speed;
 	}
 	else
 	{
 		number = Renderer_GetFPS();
 	}
-	number = OeMath_Min(number, 9999);
-	return Utils_GetStringFromNumber(number);*/
+	number = Math_MinInt(number, 9999);
+	Utils_IntToString(number, _mBufferForFPSString, EE_SAFE_BUFFER_LEN_FOR_INT);
+	return _mBufferForFPSString;
 }
 float GameUpdater_GetAutoSpeedUpdateSpeed()
 {
@@ -603,11 +603,15 @@ void GameUpdater_DebugReloadMap()
 	//TODO C99
 	/*
 	Get_LevelDataResource()->Reload();
-	OeLogger_LogInformation("Map Reloaded (Full) [" + Get_LevelDataResource()->GetPath() + "][" +
-		Get_LevelData()->mLevelName + "]");
-	OeGlobals_DEBUG_QUICK_PLAYER_POSITION = Vector2_Zero;
-	OeGameStateManager_SetupReloadMap();
 	*/
+	{
+		MString* tempString = NULL;
+		MString_Combine5(&tempString, "Map Reloaded (Full) [", MString_GetText(Get_LevelDataResource()->mFileNameWithoutExtension), "][", Get_LevelFileName(), "]");
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+	GLOBALS_DEBUG_QUICK_PLAYER_POSITION = Vector2_Zero;
+	GameStateManager_SetupReloadMap();
 }
 void GameUpdater_DebugSaveMap()
 {

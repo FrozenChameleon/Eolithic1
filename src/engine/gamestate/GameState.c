@@ -8,7 +8,7 @@
 #include "../utils/Cvars.h"
 #include "../core/GameHelper.h"
 #include "../leveldata/Particle.h"
-#include "../resources/ParticleManager.h"
+#include "../resources/ResourceManagerList.h"
 #include "../leveldata/ParticleInstance.h"
 #include "../leveldata/ParticleInstanceSys.h"
 #include "../utils/Logger.h"
@@ -68,7 +68,7 @@ void GameState_SaveComponentSizes(GameState* gs)
 
 ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name, float x, float y)
 {
-	Particle* particleData = ParticleManager_GetResourceData(name);
+	Particle* particleData = ResourceManager_GetResourceData(ResourceManagerList_Particle(), name);
 	if (particleData == NULL)
 	{
 		Logger_LogInformation("Particle missing:");

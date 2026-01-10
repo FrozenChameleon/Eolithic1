@@ -1,8 +1,8 @@
 #include "GlobalSysUpdateManagers.h"
 
-#include "../resources/AnimTileManager.h"
-#include "../resources/PropManager.h"
-//#include "../resources/OeResourceManagers.h"
+#include "../leveldata/AnimTile.h"
+#include "../leveldata/Prop.h"
+#include "../resources/ResourceManagerList.h"
 
 /*
 static void UpdateProps()
@@ -14,18 +14,20 @@ static void UpdateProps()
 static void Update(void* givenData)
 {
 	{
-		int64_t len = AnimTileManager_Length();
+		ResourceManager* animTileMan = ResourceManagerList_AnimTile();
+		int64_t len = ResourceManager_Length(animTileMan);
 		for (int i = 0; i < len; i += 1)
 		{
-			AnimTile_UpdateResource(AnimTileManager_GetResourceDataByIndex(i));
+			AnimTile_UpdateResource(ResourceManager_GetResourceDataByIndex(animTileMan, i));
 		}
 	}
 
 	{
-		int64_t len = PropManager_Length();
+		ResourceManager* propMan = ResourceManagerList_Prop();
+		int64_t len = ResourceManager_Length(propMan);
 		for (int i = 0; i < len; i += 1)
 		{
-			Prop_UpdateResource(PropManager_GetResourceDataByIndex(i));
+			Prop_UpdateResource(ResourceManager_GetResourceDataByIndex(propMan, i));
 		}
 	}
 	//WILLNOTDO 06262023 (EDITOR) 2023

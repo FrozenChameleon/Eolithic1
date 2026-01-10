@@ -16,7 +16,7 @@
 #include "../render/DrawTool.h"
 #include "../resources/Resource.h"
 #include "../../GlobalDefs.h"
-#include "../resources/PropManager.h"
+#include "../resources/ResourceManagerList.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -27,7 +27,7 @@ static Prop* GetThePropData(PropInstance* prop)
 {
 	if (prop->INTERNAL_mCachedPropData == NULL)
 	{
-		prop->INTERNAL_mCachedPropData = PropManager_GetResourceData(prop->mName);
+		prop->INTERNAL_mCachedPropData = ResourceManager_GetResourceData(ResourceManagerList_Prop(), prop->mName);
 	}
 
 	return prop->INTERNAL_mCachedPropData;

@@ -227,15 +227,15 @@ void Do_ImprintTiles2(Vector2 position, int32_t type, int32_t width, int32_t hei
 void Do_ImprintTiles3(Vector2 position, int32_t type, int32_t width, int32_t height, int32_t offsetX, int32_t offsetY);
 void Do_ImprintTiles4(int type, float x, float y, int32_t width, int32_t height);
 void Do_FlipX(Entity entity);
-void Do_SetFlipX(Entity entity, bool value);
-void Do_SetFlipX2(Entity entity, float value);
-void Do_SetFlipX3(Entity entity, double value);
-void Do_SetFlipX4(Entity entity, int32_t value);
+void Do_SetFlipXBool(Entity entity, bool value);
+void Do_SetFlipXFloat(Entity entity, float value);
+void Do_SetFlipXDouble(Entity entity, double value);
+void Do_SetFlipXInt(Entity entity, int32_t value);
 void Do_FlipY(Entity entity);
-void Do_SetFlipY(Entity entity, bool value);
-void Do_SetFlipY2(Entity entity, float value);
-void Do_SetFlipY3(Entity entity, double value);
-void Do_SetFlipY4(Entity entity, int32_t value);
+void Do_SetFlipYBool(Entity entity, bool value);
+void Do_SetFlipYFloat(Entity entity, float value);
+void Do_SetFlipYDouble(Entity entity, double value);
+void Do_SetFlipYInt(Entity entity, int32_t value);
 
 void Do_AddCameraShake(int timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY);
 void Do_ShakeCamera(int minX, int32_t maxX, int32_t minY, int32_t maxY);

@@ -52,7 +52,8 @@
 #include "../core/Func.h"
 #include "../gamestate/GameStateManager.h"
 #include "../render/DrawTool.h"
-#include "../resources/AnimTileManager.h"
+#include "../leveldata/AnimTile.h"
+#include "../resources/ResourceManagerList.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -691,7 +692,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 			}
 			else if (Utils_strnlen(drawTile->mAnimation, EE_FILENAME_MAX) > 0)
 			{
-				AnimTile* animTile = AnimTileManager_GetResourceData(drawTile->mAnimation);
+				AnimTile* animTile = ResourceManager_GetResourceData(ResourceManagerList_AnimTile(), drawTile->mAnimation);
 				if (animTile == NULL)
 				{
 					Renderer_Draw(DrawTool_GetSinglePixel(), Rectangle_Create((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), Color_Red);

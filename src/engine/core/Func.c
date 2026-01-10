@@ -71,7 +71,6 @@
 #include "float.h"
 #include "../utils/Logger.h"
 #include "../../third_party/stb_ds.h"
-#include "../resources/ThingSettingsManager.h"
 #include "../gamestate/EntitySearch.h"
 #include "../components/Camera.h"
 #include "../components/DrawActor.h"
@@ -80,6 +79,7 @@
 #include "../components/MoveGetter.h"
 #include "../components/SceneCameraData.h"
 #include "../components/NodeMovingKit.h"
+#include "../resources/ResourceManagerList.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
@@ -1605,43 +1605,43 @@ void Do_ImprintTiles4(int type, float x, float y, int32_t width, int32_t height)
 }
 void Do_FlipX(Entity entity)
 {
-	Do_SetFlipX4(entity, !Is_FlipX(entity));
+	Do_SetFlipXBool(entity, !Is_FlipX(entity));
 }
-void Do_SetFlipX(Entity entity, bool value)
+void Do_SetFlipXBool(Entity entity, bool value)
 {
 	Get_DrawActor(entity)->mIsFlipX = value;
 }
-void Do_SetFlipX2(Entity entity, float value)
+void Do_SetFlipXFloat(Entity entity, float value)
 {
-	Do_SetFlipX(entity, value < 0);
+	Do_SetFlipXBool(entity, value < 0);
 }
-void Do_SetFlipX3(Entity entity, double value)
+void Do_SetFlipXDouble(Entity entity, double value)
 {
-	Do_SetFlipX(entity, value < 0);
+	Do_SetFlipXBool(entity, value < 0);
 }
-void Do_SetFlipX4(Entity entity, int32_t value)
+void Do_SetFlipXInt(Entity entity, int32_t value)
 {
-	Do_SetFlipX(entity, value < 0);
+	Do_SetFlipXBool(entity, value < 0);
 }
 void Do_FlipY(Entity entity)
 {
-	Do_SetFlipY(entity, !Is_FlipY(entity));
+	Do_SetFlipYBool(entity, !Is_FlipY(entity));
 }
-void Do_SetFlipY(Entity entity, bool value)
+void Do_SetFlipYBool(Entity entity, bool value)
 {
 	Get_DrawActor(entity)->mIsFlipY = value;
 }
-void Do_SetFlipY2(Entity entity, float value)
+void Do_SetFlipYFloat(Entity entity, float value)
 {
-	Do_SetFlipY(entity, value < 0);
+	Do_SetFlipYBool(entity, value < 0);
 }
-void Do_SetFlipY3(Entity entity, double value)
+void Do_SetFlipYDouble(Entity entity, double value)
 {
-	Do_SetFlipY(entity, value < 0);
+	Do_SetFlipYBool(entity, value < 0);
 }
-void Do_SetFlipY4(Entity entity, int32_t value)
+void Do_SetFlipYInt(Entity entity, int32_t value)
 {
-	Do_SetFlipY(entity, value < 0);
+	Do_SetFlipYBool(entity, value < 0);
 }
 void Do_AddCameraShake(int timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
@@ -1674,11 +1674,11 @@ void Do_FaceSomewhere2(Entity entity, float x, bool reverse)
 {
 	if (Get_DirectionToSomewhereX(entity, x) == -1)
 	{
-		Do_SetFlipX(entity, reverse ? false : true);
+		Do_SetFlipXBool(entity, reverse ? false : true);
 	}
 	else
 	{
-		Do_SetFlipX(entity, reverse ? true : false);
+		Do_SetFlipXBool(entity, reverse ? true : false);
 	}
 }
 /*
@@ -3769,7 +3769,7 @@ Entity Do_BuildActor5(int gridPositionX, int32_t gridPositionY, float initialPos
 }
 Entity Do_BuildActor6(int gridPositionX, int32_t gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name, Entity parent)
 {
-	ThingSettings* settings = ThingSettingsManager_GetResourceData(name);
+	ThingSettings* settings = ResourceManager_GetResourceData(ResourceManagerList_ThingSettings(), name);
 	if (settings == NULL)
 	{
 		Logger_LogError("Unable to build entity:");

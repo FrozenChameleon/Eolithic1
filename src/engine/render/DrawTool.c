@@ -3,21 +3,20 @@
 #include "SpriteBatch.h"
 #include "../math/Math.h"
 #include "../math/Point.h"
-#include "../resources/TextureManager.h"
-#include "../resources/BmFontManager.h"
+#include "../resources/ResourceManagerList.h"
 
 static Resource* _mSinglePixel;
 
 static BmFont* GetFont(const char* font)
 {
-	return BmFontManager_GetResourceData(font);
+	return ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 }
 
 Texture* DrawTool_GetSinglePixel()
 {
 	if (_mSinglePixel == NULL)
 	{
-		_mSinglePixel = TextureManager_GetResource("one_by_one_pixel");
+		_mSinglePixel = ResourceManager_GetResource(ResourceManagerList_Texture(), "one_by_one_pixel");
 		if (_mSinglePixel == NULL)
 		{
 			return NULL;

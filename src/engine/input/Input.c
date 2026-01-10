@@ -337,7 +337,13 @@ InputAction* Input_GetPlayerAction(int32_t playerNumber, const char* name)
 {
 	return InputPlayer_GetAction(&_mPlayers[playerNumber], name);
 }
-//Vector2 GetCameraAdjustedMouse(const Camera* camera);
+Vector2 Input_GetCameraAdjustedMouse(const Camera* camera)
+{
+	Vector2 temp;
+	temp.X = (Input_GetMouseX() * camera->mWorldZoom) + Camera_GetLeftFloat(camera);
+	temp.Y = (Input_GetMouseY() * camera->mWorldZoom) + Camera_GetTopFloat(camera);
+	return temp;
+}
 bool Input_JustScrolledUp()
 {
 	return MouseState_JustScrolledUp();
@@ -346,33 +352,37 @@ bool Input_JustScrolledDown()
 {
 	return MouseState_JustScrolledDown();
 }
-int32_t Input_GetDifferenceMouseX()
+float Input_GetDifferenceMouseX()
 {
 	return MouseState_GetDifferenceMouseX();
 }
-int32_t Input_GetDifferenceMouseY()
+float Input_GetDifferenceMouseY()
 {
 	return MouseState_GetDifferenceMouseY();
 }
-int32_t Input_GetMouseX()
+float Input_GetMouseX()
 {
 	return MouseState_GetMouseX();
 }
-int32_t Input_GetMouseY()
+float Input_GetMouseY()
 {
 	return MouseState_GetMouseY();
 }
-Point Input_GetMouse()
+Vector2 Input_GetMouse()
 {
-	Point temp;
+	Vector2 temp;
 	temp.X = Input_GetMouseX();
 	temp.Y = Input_GetMouseY();
 	return temp;
 }
 Vector2 Input_GetScaledMouseForRetroScreen()
 {
-	//TODOC99
-	return Vector2_Zero;
+	float mouseX = Input_GetMouseX();
+	float mouseY = Input_GetMouseY();
+	Point screenOffset = Renderer_GetScreenOffset();
+	Vector2 retroScreenScale = Renderer_GetScreenScale();
+	return Vector2_Create((mouseX - screenOffset.X) * retroScreenScale.X,
+		(mouseY - screenOffset.Y) * retroScreenScale.Y);
 }
 float Input_GetScaledMouseForRetroScreenX()
 {
@@ -382,9 +392,23 @@ float Input_GetScaledMouseForRetroScreenY()
 {
 	return Input_GetScaledMouseForRetroScreen().X;
 }
-//Vector2 GetCameraAdjustedMouseForRetroScreen(const Camera* camera);
-//float GetCameraAdjustedMouseForRetroScreenX(const Camera* camera);
-//float GetCameraAdjustedMouseForRetroScreenY(const Camera* camera);
+Vector2 Input_GetCameraAdjustedMouseForRetroScreen(const Camera* camera)
+{
+	Vector2 temp;
+	temp.X = (Input_GetScaledMouseForRetroScreenX() * camera->mWorldZoom) + Camera_GetLeftFloat(camera);
+	temp.Y = (Input_GetScaledMouseForRetroScreenY() * camera->mWorldZoom) + Camera_GetTopFloat(camera);
+	return temp;
+}
+float Input_GetCameraAdjustedMouseForRetroScreenX(const Camera* camera)
+{
+	Vector2 cameraAdjustedMouseForRetroScreen = Input_GetCameraAdjustedMouseForRetroScreen(camera);
+	return cameraAdjustedMouseForRetroScreen.X;
+}
+float Input_GetCameraAdjustedMouseForRetroScreenY(const Camera* camera)
+{
+	Vector2 cameraAdjustedMouseForRetroScreen = Input_GetCameraAdjustedMouseForRetroScreen(camera);
+	return cameraAdjustedMouseForRetroScreen.Y;
+}
 bool Input_MouseHasChangedPosition()
 {
 	if ((Input_GetDifferenceMouseX() == 0) && (Input_GetDifferenceMouseY() == 0))

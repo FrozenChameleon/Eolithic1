@@ -1,13 +1,13 @@
 #include "BmFont.h"
 
 #include "FontMap.h"
+#include "../font/BmFont.h"
 #include "../render/Texture.h"
 #include "../render/RenderTtFont.h"
 #include "../render/Renderer.h"
-#include "../resources/BmFontManager.h"
 #include "../../third_party/stb_ds.h"
-#include "../resources/TextureFontManager.h"
-#include "../resources/TTFontManager.h"
+#include "../resources/ResourceManagerList.h"
+#include "../font/TtFont.h"
 
 #define FONT_EXTENSION ".fnt"
 //TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_Combine("data", "fonts") };
@@ -34,7 +34,7 @@ bool BmFont_UpdateFontTexture(BmFont* bmf)
 {
 	if (bmf->_mFontTexture == NULL)
 	{
-		Texture* tex = TextureFontManager_GetResourceData(bmf->_mFontName);
+		Texture* tex = ResourceManager_GetResourceData(ResourceManagerList_FontTexture(), bmf->_mFontName);
 		if (tex == NULL)
 		{
 			bmf->_mFontTexture = NULL;
@@ -61,7 +61,7 @@ void BmFont_Init(BmFont* bmf, BufferReader* br, const char* fontName)
 }
 BmFont* BmFont_GetBmFont(BmFont* bmf, const char* font)
 {
-	return BmFontManager_GetResourceData(font);
+	return ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 }
 const FontMapData* BmFont_GetReplacement(BmFont* bmf)
 {
@@ -71,7 +71,7 @@ const FontMapData* BmFont_GetReplacement(BmFont* bmf)
 #if !DISABLE_TT_FONT
 static TTFont* BmFont_GetTTFont(const char* font)
 {
-	return TTFontManager_GetResourceData(font);
+	return ResourceManager_GetResourceData(ResourceManagerList_TTFont(), font);
 }
 #endif
 
@@ -93,7 +93,6 @@ Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont)
 	#endif
 	return Renderer_RenderBmFont(false, bmf, text, COLOR_WHITE, Vector2_Zero);
 }
-
 
 /*
 const char* BmFont_GetFontExtension()

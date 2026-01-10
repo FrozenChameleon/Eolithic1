@@ -4,18 +4,19 @@
 #include "../render/Texture.h"
 #include "../render/Color.h"
 #include "../render/Sheet.h"
-#include "../resources/TextureMovieManager.h"
+#include "../resources/ResourceManagerList.h"
 
 static Sheet* CreateNewSheetForMovieImage(const char* image)
 {
-	const char* internedKey = TextureMovieManager_GetKey(image);
+	ResourceManager* movieTextureMan = ResourceManagerList_MovieTexture();
+	const char* internedKey = ResourceManager_GetKey(movieTextureMan, image);
 	if (internedKey == NULL)
 	{
 		return NULL;
 	}
 
 	Sheet* temp = Utils_callocArena(1, sizeof(Sheet), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
-	temp->mTextureResource = TextureMovieManager_GetResource(internedKey);
+	temp->mTextureResource = ResourceManager_GetResource(movieTextureMan, internedKey);
 	temp->mSheetName = internedKey;
 	temp->mUnderlyingTextureName = internedKey;
 	temp->mRectangle = ((Texture*)temp->mTextureResource->mData)->mBounds;
@@ -48,7 +49,7 @@ void MovieImage_Init2(MovieImage* mi, int scale, const char* baseImage, int fram
 		for (int i = 0; i < frames; i += 1)
 		{
 			const char* currentImage = IStringArray_Get(images, i);
-			Resource* resource = TextureMovieManager_GetResource(currentImage);
+			Resource* resource = ResourceManager_GetResource(ResourceManagerList_MovieTexture(), currentImage);
 			if (resource == NULL)
 			{
 				mi->mSheetsForAnimation[i] = Sheet_GetDefaultSheet();

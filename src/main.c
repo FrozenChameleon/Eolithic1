@@ -20,6 +20,7 @@ int main(int argc, char* args[])
 
 	//RecordingTool_EnableFromArgumentsPlayback(RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SESSION_NORMAL);
 	//Globals_TurnOnAutoMode(true);
+
 	Game_Run();
 
 	return 0;

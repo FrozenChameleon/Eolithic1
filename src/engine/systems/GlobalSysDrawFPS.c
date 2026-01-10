@@ -45,16 +45,13 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 		return;
 	}
 
-	//TODO C99
-	/*
 	const char* stringToDraw = GameUpdater_GetFpsString();
-	Rectangle bounds = OeDrawTool_GetBounds(stringToDraw, _mFont);
+	Rectangle bounds = DrawTool_GetBounds(stringToDraw, _mFont);
 	int shadowOffset = 1;
-	float x = _mOffsetFromCorner;
-	float y = OeUtils_GetInternalRenderHeight() - bounds.Height - shadowOffset - _mOffsetFromCorner;
-	spriteBatch->DrawString(_mFont, stringToDraw, OeColors_BLACK, 200, Vector2(x + shadowOffset, y + shadowOffset));
-	spriteBatch->DrawString(_mFont, stringToDraw, OeColors_WHITE, 200, Vector2(x, y));
-	*/
+	float x = (float)_mOffsetFromCorner;
+	float y = (float)(Utils_GetInternalRenderHeight() - bounds.Height - shadowOffset - _mOffsetFromCorner);
+	SpriteBatch_DrawString(spriteBatch, _mFont, stringToDraw, COLOR_BLACK, 200, Vector2_Create(x + shadowOffset, y + shadowOffset));
+	SpriteBatch_DrawString(spriteBatch, _mFont, stringToDraw, COLOR_WHITE, 200, Vector2_Create(x, y));
 }
 
 System* GlobalSysDrawFPS_CreateSystem()
