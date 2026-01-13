@@ -29,7 +29,7 @@ typedef struct Rectangle
 
 const extern Rectangle Rectangle_Empty;
 
-Rectangle Rectangle_Create(int x, int32_t y, int32_t width, int32_t height);
+Rectangle Rectangle_Create(int32_t x, int32_t y, int32_t width, int32_t height);
 void Rectangle_Init(Rectangle* value, int32_t x, int32_t y, int32_t width, int32_t height);
 bool Rectangle_EqualTo(const Rectangle* value1, const Rectangle* value2);
 bool Rectangle_NotEqual(const Rectangle* value1, const Rectangle* value2);

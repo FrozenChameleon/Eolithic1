@@ -167,7 +167,7 @@ void DrawActorSys_BeforeUpdateRoutine(void)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(drawActorPack, &iter))
 	{
-		DrawActor* component = ComponentPack_GetComponentAtIndex(drawActorPack, iter.mIndex);
+		DrawActor* component = iter.mComponent;
 		RealUpdateRoutine(iter.mEntity, component, camera, bodyPack, isUpdateDisabledPack, fakePositionPack, stateInfos, renderInfos);
 	}
 }

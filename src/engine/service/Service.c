@@ -123,7 +123,7 @@ BufferRequest Service_AskToRetrieveBufferForPC(bool isPurelyGameSaveData, const 
 
 	{
 		MString* savePath = NULL;
-		savePath = File_Combine2(prefPath, path);
+		File_PathCombine2(&savePath, prefPath, path);
 		rwop = SDL_IOFromFile(MString_GetText(savePath), "rb");
 		MString_Dispose(&savePath);
 	}
@@ -160,7 +160,7 @@ int Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* containerDisp
 	SDL_IOStream* rwop = NULL;
 	{
 		MString* savePath = NULL;
-		savePath = File_Combine2(prefPath, path);
+		File_PathCombine2(&savePath, prefPath, path);
 		rwop = SDL_IOFromFile(MString_GetText(savePath), "wb");
 		MString_Dispose(&savePath);
 	}

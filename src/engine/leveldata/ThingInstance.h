@@ -20,7 +20,7 @@ extern const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD;
 
 typedef struct ThingInstance
 {
-	MString* mName;
+	char mName[EE_FILENAME_MAX];
 	Point* arr_nodes;
 	StringPair* arr_settings;
 } ThingInstance;

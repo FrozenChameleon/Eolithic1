@@ -18,7 +18,7 @@ static int32_t _mCurrentGameState;
 static int32_t _mCurrentGameStateForRenderCamera;
 static int32_t _mNextGameState;
 static uint64_t _mTicksSinceMapLoad;
-static MString* _mMapToLoad;
+static char _mMapToLoad[EE_FILENAME_MAX];
 static bool _mJustChangedGameStateThisFrame;
 static System** arr_global_systems;
 static System** arr_state_systems;
@@ -32,7 +32,7 @@ void GameStateManager_Ctor()
 		return;
 	}
 
-	MString_Assign(&_mMapToLoad, EE_STR_EMPTY);
+	Utils_strlcpy(_mMapToLoad, EE_STR_EMPTY, EE_FILENAME_MAX);
 	GameState_Ctor(&_mGameState, "WHATEVER", false);
 
 	_mHasRunCtor = true;
@@ -162,12 +162,12 @@ void GameStateManager_DebugForceLoadMapNow(const char* map)
 void GameStateManager_SetupLoadMap(const char* s)
 {
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
-	MString_Assign(&_mMapToLoad, s);
+	Utils_strlcpy(_mMapToLoad, s, EE_FILENAME_MAX);
 }
 void GameStateManager_SetupReloadMap()
 {
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
-	MString_Assign(&_mMapToLoad, GameStateManager_GetCurrentFileName());
+	Utils_strlcpy(_mMapToLoad, GameStateManager_GetCurrentFileName(), EE_FILENAME_MAX);
 }
 const char* GameStateManager_GetCurrentFileName()
 {
@@ -277,14 +277,14 @@ void GameStateManager_HandleGameStateChange()
 void GameStateManager_HandleLoadNextMap()
 {
 	bool isMapLoad = false;
-	if (!MString_EqualToString(_mMapToLoad, EE_STR_EMPTY))
+	if (!Utils_StringEqualTo(_mMapToLoad, EE_STR_EMPTY))
 	{
 		isMapLoad = true;
 	}
 
 	if (RecordingTool_LoadNextRecordingIfAtEndOfRecording(isMapLoad))
 	{
-		MString_Assign(&_mMapToLoad, EE_STR_EMPTY);
+		Utils_strlcpy(_mMapToLoad, EE_STR_EMPTY, EE_FILENAME_MAX);
 		return;
 	}
 
@@ -293,8 +293,8 @@ void GameStateManager_HandleLoadNextMap()
 		return;
 	}
 
-	GameStateManager_LoadMap(MString_GetText(_mMapToLoad));
-	MString_Assign(&_mMapToLoad, EE_STR_EMPTY);
+	GameStateManager_LoadMap(_mMapToLoad);
+	Utils_strlcpy(_mMapToLoad, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
 bool GameStateManager_JustChangedGameStateThisFrame()
 {

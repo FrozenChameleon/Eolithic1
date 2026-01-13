@@ -439,7 +439,8 @@ static void Read(const char* recordingFilenameWithoutExtension)
 
 	BufferReader* br = NULL;
 	{
-		MString* path = File_Combine3("data", "recordings", MString_GetText(_mLastReadRecordingFilename));
+		MString* path = NULL;
+		File_PathCombine3(&path, "data", "recordings", MString_GetText(_mLastReadRecordingFilename));
 		br = BufferReader_CreateFromPath(MString_GetText(path));
 		MString_Dispose(&path);
 	}

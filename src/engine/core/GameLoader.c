@@ -24,6 +24,8 @@
 #include "../service/Service.h"
 #include "../resources/ResourceManagerList.h"
 
+#define LOADER_TICK_TIME (1.0 / 60.0)
+
 enum
 {
 	FPS_TARGET_FOR_HIGH_FPS = 75
@@ -95,40 +97,63 @@ static void QuickStart()
 	}
 	FinishLoading();
 }
-static void LoadTextures()
+static void FindTextureFiles()
 {
-	/*
-	for (int i = 0; i < 99; i += 1)
+	int counter = 0;
+	bool needToStop = false;
+	while(!needToStop)
 	{
-		const char* preloader = "preloader_" + std_to_string(i) + ".png";
-		const char* path = File_Combine("data", preloader);
-		if (File_Exists(path))
+		if (counter > 100) //Safety.
 		{
-			Texture* tex = Renderer_GetTextureData(path, File_ReadAll(path));
+			return;
+		}
+
+		MString* path = NULL;
+
+		{
+			MString* preloader = NULL;
+			MString_Combine3(&preloader, "preloader_", Utils_IntToStringGlobalBuffer(counter), ".png");
+			File_PathCombine2(&path, "data", MString_GetText(preloader));
+			MString_Dispose(&preloader);
+		}
+
+		if (File_Exists(MString_GetText(path)))
+		{
+			Texture* tex = Renderer_GetTextureData(MString_GetText(path), File_ReadAll(MString_GetText(path)));
 			arrput(arr_preloader_textures, tex);
 		}
 		else
 		{
-			break;
+			needToStop = true;
 		}
-	}
-	*/
 
-	/*
-	SharedFixedChar260* fixedChar = Utils_CreateSharedFixedChar260();
-	const char* fileFinalPath = File_Combine2(fixedChar, "data", "preloaderFinal.png");
-	if (File_Exists(fileFinalPath))
+		MString_Dispose(&path);
+
+		counter += 1;
+	}
+}
+static void LoadTextures()
+{
+	FindTextureFiles();
+
+	MString* fileFinalPath = NULL;
+	MString* fileFinalBPath = NULL;
+
+	File_PathCombine2(&fileFinalPath, "data", "preloaderFinal.png");
+	if (File_Exists(MString_GetText(fileFinalPath)))
 	{
-		_mPreloaderTextureFinal = Renderer_GetTextureData(fileFinalPath, File_ReadAll(fileFinalPath));
+		_mPreloaderTextureFinal = Renderer_GetTextureData(MString_GetText(fileFinalPath), File_ReadAll(MString_GetText(fileFinalPath)));
 	}
 	_mPreloaderTextureFinalToDisplay = _mPreloaderTextureFinal;
 
-	const char* fileFinalBPath = File_Combine("data", "preloaderFinalB.png");
-	if (File_Exists(fileFinalBPath))
+	File_PathCombine2(&fileFinalBPath, "data", "preloaderFinalB.png");
+	if (File_Exists(MString_GetText(fileFinalBPath)))
 	{
-		_mPreloaderTextureFinalB = Renderer_GetTextureData(fileFinalBPath, File_ReadAll(fileFinalBPath));
+		_mPreloaderTextureFinalB = Renderer_GetTextureData(MString_GetText(fileFinalBPath), File_ReadAll(MString_GetText(fileFinalBPath)));
 	}
-	*/
+
+	MString_Dispose(&fileFinalPath);
+	MString_Dispose(&fileFinalBPath);
 }
 static bool LoadStart()
 {
@@ -142,7 +167,6 @@ static bool LoadStart()
 	GameHelper_SetupPlatformTypes();
 	Strings_Init();
 	ResourceManagerList_Init();
-	//ResourceManagers_CreateManagers();
 	//Tuning_SetCurrentDifficulty(Cvars_GetAsInt(CVARS_ENGINE_DEFAULT_DIFFICULTY));
 	Logger_LogInformation("Loading started");
 	return true;
@@ -260,46 +284,50 @@ static void StepTestFPS(double delta)
 		_mFps += 1;
 	}
 }
-static void StepBlink(double delta, double tickTime)
+static void StepBlink(double delta)
 {
 	_mDeltaAccumulator += delta;
-	if (_mDeltaAccumulator >= tickTime)
+	if (_mDeltaAccumulator < LOADER_TICK_TIME)
 	{
-		if (_mBlinkTimer.mCurrent == 0)
+		return;
+	}
+
+	if (_mBlinkTimer.mCurrent == 0)
+	{
+		SoundEffect_PlaySound("preloaderBlink");
+	}
+	if (_mBlinkTimer.mCurrent == 10)
+	{
+		if (_mPreloaderTextureFinalB != NULL)
 		{
-			SoundEffect_PlaySound("preloaderBlink");
-		}
-		if (_mBlinkTimer.mCurrent == 10)
-		{
-			if (_mPreloaderTextureFinalB != NULL)
-			{
-				_mPreloaderTextureFinalToDisplay = _mPreloaderTextureFinalB;
-			}
-		}
-		if (Timer_Update(&_mBlinkTimer))
-		{
-			_mStep = STEP_FADE_OUT;
-		}
-		else
-		{
-			_mDeltaAccumulator -= tickTime;
+			_mPreloaderTextureFinalToDisplay = _mPreloaderTextureFinalB;
 		}
 	}
+	if (Timer_Update(&_mBlinkTimer))
+	{
+		_mStep = STEP_FADE_OUT;
+	}
+	else
+	{
+		_mDeltaAccumulator -= LOADER_TICK_TIME;
+	}
 }
-static void StepFadeOut(double delta, double tickTime)
+static void StepFadeOut(double delta)
 {
 	_mDeltaAccumulator += delta;
-	if (_mDeltaAccumulator >= tickTime)
+	if (_mDeltaAccumulator < LOADER_TICK_TIME)
 	{
-		if (Timer_Update(&_mFadeOutTimer))
-		{
-			DisposeTextures();
-			FinishLoading();
-		}
-		else
-		{
-			_mDeltaAccumulator -= tickTime;
-		}
+		return;
+	}
+
+	if (Timer_Update(&_mFadeOutTimer))
+	{
+		DisposeTextures();
+		FinishLoading();
+	}
+	else
+	{
+		_mDeltaAccumulator -= LOADER_TICK_TIME;
 	}
 }
 
@@ -327,7 +355,6 @@ void GameLoader_Update(double delta)
 	}
 	else
 	{
-		double tickTime = 1.0 / 60.0;
 		switch (_mStep)
 		{
 		case STEP_LOADING:
@@ -337,10 +364,10 @@ void GameLoader_Update(double delta)
 			StepTestFPS(delta);
 			break;
 		case STEP_BLINK:
-			StepBlink(delta, tickTime);
+			StepBlink(delta);
 			break;
 		case STEP_FADE_OUT:
-			StepFadeOut(delta, tickTime);
+			StepFadeOut(delta);
 			break;
 		case STEP_WAIT_ON_SERVICE:
 			if (!Service_IsWaitingOnServiceToFinishLoading(delta))
@@ -411,7 +438,7 @@ void GameLoader_Draw(SpriteBatch* spriteBatch)
 
 	Rectangle destRect = { (int)(offset.X), (int)(offset.Y), internalWidth, internalHeight };
 
-	//TODO C99 spriteBatch->DrawRectangle(tex, Color_White, 100, NULL, destRect, tex->GetRectangle(), 0, false, false, Vector2_Zero);
+	SpriteBatch_DrawRectangle(spriteBatch, tex, COLOR_WHITE, 100, NULL, destRect, tex->mBounds, 0, false, false, Vector2_Zero);
 
 	if (_mStep == STEP_FADE_OUT)
 	{

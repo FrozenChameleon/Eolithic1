@@ -6,54 +6,60 @@
 
 #include "Window.h"
 
-#include "../utils/Cvars.h"
 #include "SDL3/SDL.h"
+#include "Game.h"
+#include "../utils/Cvars.h"
 #include "../utils/Logger.h"
 #include "../globals/Globals.h"
 #include "../audio/SoundEffectInstance.h"
 #include "../render/Texture.h"
 #include "../render/Renderer.h"
 #include "../input/ControllerState.h"
-#include "Game.h"
 #include "../service/Service.h"
-#if RENDER_FNA3D
-#include <FNA3D.h>
-#endif
 #include "../../DebugDefs.h"
 #include "../io/File.h"
 #include "../utils/Utils.h"
+#include "../../third_party/stb_ds.h"
+#if RENDER_FNA3D
+#include <FNA3D.h>
+#endif
 
+static Rectangle* arr_display_modes_bounds;
 static bool _mHasWindowInit;
 static bool _mHasLoadedIcon;
 static bool _mIsWindowActive;
 static SDL_Window* _mWindowContext;
 
-static uint32_t GetWindowFlagForFullscreen()
+static SDL_DisplayID GetCurrentDisplayID()
 {
-	bool useFullscreen = Window_IsFullscreen();
+	return SDL_GetDisplayForWindow(_mWindowContext);
+}
+
+static bool IsFullscreenRightNow()
+{
+#ifdef DEBUG_DEF_FORCE_FULLSCREEN_OFF
+	return false;
+#elif DEBUG_DEF_FORCE_FULLSCREEN_ON
+	return true;
+#else
+	bool isFullscreen = Window_IsFullscreen();
 
 	if (!_mHasWindowInit && Service_PlatformForcesWindowedModeOnBoot())
 	{
-		useFullscreen = false;
+		isFullscreen = false;
 	}
 
 	if (Service_PlatformForcesFullscreen())
 	{
-		useFullscreen = true;
+		isFullscreen = true;
 	}
 
-#ifdef DEBUG_DEF_FORCE_FULLSCREEN_OFF
-	useFullscreen = false;
+	return isFullscreen;
 #endif
-
-#ifdef DEBUG_DEF_FORCE_FULLSCREEN_ON
-	useFullscreen = true;
-#endif
-
-	//TODO REMOVE THIS C99
-	return SDL_WINDOW_RESIZABLE;
-
-	if (useFullscreen)
+}
+static uint32_t GetWindowFlagForFullscreen()
+{
+	if (IsFullscreenRightNow())
 	{
 		return SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN;
 	}
@@ -112,7 +118,7 @@ int Window_Init()
 
 	uint32_t flags = GetWindowFlagForFullscreen();
 	flags = flags | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS;
-#if RENDER_FNA3D
+#ifdef RENDER_FNA3D
 	//SDL_SetHint("FNA3D_FORCE_DRIVER", "OpenGL");
 	//SDL_SetHint("FNA3D_OPENGL_FORCE_CORE_PROFILE", "1");
 	flags = flags | FNA3D_PrepareWindowAttributes();
@@ -139,7 +145,7 @@ void Window_UpdateFullscreen()
 {
 	Rectangle proposedWindowBounds = GetProposedWindowBounds();
 	SDL_SetWindowSize(_mWindowContext, proposedWindowBounds.Width, proposedWindowBounds.Height);
-	SDL_SetWindowFullscreen(_mWindowContext, GetWindowFlagForFullscreen());
+	SDL_SetWindowFullscreen(_mWindowContext, IsFullscreenRightNow());
 }
 void Window_SetWindowPositionToCentered()
 {
@@ -179,7 +185,7 @@ Rectangle Window_GetDisplayBounds()
 {
 	Rectangle returnRect = { 0 };
 	SDL_Rect displayBounds = { 0 };
-	int success = SDL_GetDisplayBounds(0, &displayBounds);
+	int success = SDL_GetDisplayBounds(GetCurrentDisplayID(), &displayBounds);
 	if (success < 0)
 	{
 		Logger_LogInformation("Unable to get display bounds");
@@ -193,25 +199,31 @@ Rectangle Window_GetDisplayBounds()
 	returnRect.Height = displayBounds.h;
 	return returnRect;
 }
-void Window_GetAllDisplayModeBounds(Rectangle* displayModeBounds)
+Rectangle* Window_GetAllDisplayModeBounds(int32_t* length)
 {
-	//TODO C99
-	/*
-	displayModeBounds.clear();
-	int numDisplayModes = SDL_GetNumDisplayModes(0);
-	if (numDisplayModes < 0)
+	if (arr_display_modes_bounds != NULL)
 	{
-		Logger_LogInformation("Unable to get num display modes");
-		return;
+		*length = (int32_t)arrlen(arr_display_modes_bounds);
+		return arr_display_modes_bounds;
 	}
 
-	for (int i = 0; i < numDisplayModes; i += 1)
+	
+	int count;
+	SDL_DisplayMode** modes = SDL_GetFullscreenDisplayModes(GetCurrentDisplayID(), &count);
+	if (modes == NULL)
 	{
-		SDL_DisplayMode displayMode = SDL_DisplayMode();
-		SDL_GetDisplayMode(0, i, &displayMode);
-		displayModeBounds.push_back(Rectangle(0, 0, displayMode.w, displayMode.h));
+		Logger_LogInformation("Unable to get num display modes");
+		return NULL;
 	}
-	*/
+
+	for (int i = 0; i < count; i += 1)
+	{
+		SDL_DisplayMode* displayMode = modes[i];
+		arrput(arr_display_modes_bounds, Rectangle_Create(0, 0, displayMode->w, displayMode->h));
+	}
+
+	*length = (int32_t)arrlen(arr_display_modes_bounds);
+	return arr_display_modes_bounds;
 }
 bool Window_IsWindowActive()
 {
@@ -238,10 +250,15 @@ void Window_LoadIcon()
 	}
 
 	const char* gameName = Cvars_Get(CVARS_ENGINE_NAME);
-	MString* sharedPath = File_Combine2(File_GetBasePath(), gameName);
-	MString_AddAssignString(&sharedPath, ".bmp");
-	SDL_Surface* icon = SDL_LoadBMP(MString_GetText(sharedPath));
-	MString_Dispose(&sharedPath);
+	SDL_Surface* icon = NULL;
+
+	{
+		MString* sharedPath = NULL;
+		File_PathCombine2(&sharedPath, File_GetBasePath(), gameName);
+		MString_AddAssignString(&sharedPath, ".bmp");
+		SDL_Surface* icon = SDL_LoadBMP(MString_GetText(sharedPath));
+		MString_Dispose(&sharedPath);
+	}
 
 	if (icon == NULL)
 	{

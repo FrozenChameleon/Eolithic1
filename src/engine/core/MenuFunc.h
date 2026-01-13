@@ -98,18 +98,19 @@ enum MenuCatDebug
 	MENUFUNC_DEBUG_TOGGLE_AUTO_SPEED = 7706,
 };
 
-extern int32_t MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE;
-extern Rectangle MENUFUNC_TEMP_WINDOW_SIZE;
-
 void MenuFunc_Init();
 
+Rectangle MenuFunc_GetTempWindowSize();
+void MenuFunc_SetTempWindowSize(Rectangle value);
+int32_t MenuFunc_GetTempWindowSizeMultiple();
+void MenuFunc_SetTempWindowSizeMultiple(int32_t value);
 void MenuFunc_GameResetAllOptionsToDefaults();
 void MenuFunc_DebugGodModeToggle();
 void MenuFunc_DebugResetAchievements();
 void MenuFunc_DebugUnlockNextAchievement();
-void MenuFunc_ToggleNextUserLanguage();
-const char* MenuFunc_GetUserLanguageName();
-bool MenuFunc_WentBackThisFrame();
+//void MenuFunc_ToggleNextUserLanguage(); //UNUSED
+//const char* MenuFunc_GetUserLanguageName(); //UNUSED
+//bool MenuFunc_WentBackThisFrame(); //UNUSED
 void MenuFunc_SoundStopSoundTestMusic();
 void MenuFunc_SoundChangeSoundTextMusic(int direction);
 void MenuFunc_SoundChangeSoundTextSfx(int direction);
@@ -119,7 +120,7 @@ const char* MenuFunc_GetCurrentSoundTestMusic();
 const char* MenuFunc_GetCurrentSoundTestMusicAsNumber();
 const char* MenuFunc_GetCurrentSoundTestSfx();
 const char* MenuFunc_GetCurrentSoundTestSfxAsNumber();
-const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2);
+//const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2); //UNUSED
 const char* MenuFunc_GetChangeWindowSizeMultipleString();
 const char* MenuFunc_GetChangeWindowSizeString();
 const char* MenuFunc_GetInternalResolutionMultipleString();
@@ -129,11 +130,10 @@ void MenuFunc_VideoApplyWindowSizeMultiple();
 void MenuFunc_VideoApplyWindowSize();
 void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue);
 void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderValue);
-const char* MenuFunc_StringHelperBorder(int value);
-const char* MenuFunc_StringHelperBool(bool value);
+//const char* MenuFunc_StringHelperBorder(int value); //UNUSED
 const char* MenuFunc_StringHelperFloat(float value);
 const char* MenuFunc_StringHelperInt(int value);
-void MenuFunc_InputDeadzoneToggle();
+//void MenuFunc_InputDeadzoneToggle(); //UNUSED
 int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue);
 void MenuFunc_VideoVsyncToggle();
 void MenuFunc_InputRumbleToggle();

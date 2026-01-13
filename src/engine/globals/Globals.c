@@ -135,21 +135,25 @@ void Globals_DisableSavingUserData()
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_SAVING
 	return;
-#endif
-
+#else
 	_mIsSavingUserDataDisabled = true;
+#endif
 }
 bool Globals_IsSavingUserDataDisabled()
 {
+#ifdef DEBUG_DEF_DISABLE_SAVING
+	return true;
+#else
 	return _mIsSavingUserDataDisabled;
+#endif
 }
 void Globals_DisableAchievements()
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_ACHIEVEMENTS
 	return;
-#endif
-
+#else
 	_mAreAchievementsDisabled = true;
+#endif
 }
 bool Globals_AreAchievementsDisabled()
 {
@@ -159,21 +163,25 @@ void Globals_DisableLoadingUserData()
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_LOADING
 	return;
-#endif
-
+#else
 	_mIsLoadingUserDataDisabled = true;
+#endif
 }
 bool Globals_IsLoadingUserDataDisabled()
 {
+#ifdef DEBUG_DEF_DISABLE_LOADING
+	return true;
+#else
 	return _mIsLoadingUserDataDisabled;
+#endif
 }
 void Globals_DisableLeaderboards()
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_LEADERBOARDS
 	return;
-#endif
-
+#else
 	Service_DisableLeaderboards();
+#endif
 }
 bool Globals_AreLeaderboardDisabled()
 {

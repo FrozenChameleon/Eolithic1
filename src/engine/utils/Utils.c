@@ -21,10 +21,13 @@
 #include "../globals/Globals.h"
 #include "../utils/IStringArray.h"
 #include "../render/DrawTool.h"
+#include "../core/Window.h"
 
+static MString* _mTempString;
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
 static int64_t _mSaveFrames;
+static Rectangle* arr_resolutions;
 
 #define LARGE_CHAR_BUFFER_LEN 8192
 static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
@@ -303,25 +306,25 @@ int32_t Utils_DoubleToString(double value, char* buffer, size_t maxlen)
 {
 	return SDL_snprintf(buffer, maxlen, "%.17g", value); //17 FROM DBL_DECIMAL_DIG in float.h
 }
-char* Utils_UInt64ToStringStaticBuffer(uint64_t value)
+char* Utils_UInt64ToStringGlobalBuffer(uint64_t value)
 {
 	ResetLargeCharBuffer();
 	Utils_UInt64ToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
 }
-char* Utils_IntToStringStaticBuffer(int32_t value)
+char* Utils_IntToStringGlobalBuffer(int32_t value)
 {
 	ResetLargeCharBuffer();
 	Utils_IntToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
 }
-char* Utils_FloatToStringStaticBuffer(float value)
+char* Utils_FloatToStringGlobalBuffer(float value)
 {
 	ResetLargeCharBuffer();
 	Utils_FloatToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
 }
-char* Utils_DoubleToStringStaticBuffer(double value)
+char* Utils_DoubleToStringGlobalBuffer(double value)
 {
 	ResetLargeCharBuffer();
 	Utils_DoubleToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
@@ -365,7 +368,9 @@ void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet)
 }
 void Utils_ToggleFullscreenButton()
 {
-	//TODO
+	Utils_ToggleFullscreen();
+
+	Utils_SetFullscreenCvar(Window_IsFullscreen());
 }
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex)
 {
@@ -904,6 +909,192 @@ bool Utils_IsBinaryForDebugFlag()
 		return true;
 	}
 }
+void Utils_ToggleFullscreen()
+{
+	if (!Window_IsFullscreen())
+	{
+		Utils_InvokeFullscreenMode();
+	}
+	else
+	{
+		Utils_InvokeWindowedMode();
+	}
+}
+void Utils_SetFullscreenCvar(bool value)
+{
+	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, value);
+}
+void Utils_InvokeWindowedMode()
+{
+	Utils_SetFullscreenCvar(false);
+	Window_UpdateFullscreen();
+	Window_SetWindowPositionToCentered();
+	Renderer_ApplyChanges();
+}
+void Utils_InvokeFullscreenMode()
+{
+	Utils_SetFullscreenCvar(true);
+	Window_UpdateFullscreen();
+	Renderer_ApplyChanges();
+}
+void Utils_ToggleVsyncButton()
+{
+	Cvars_FlipAsBool(CVARS_USER_IS_VSYNC);
+
+	Renderer_UpdateVsync();
+	Renderer_ApplyChanges();
+}
+Rectangle Utils_GetProposedWindowSize()
+{
+	int windowSizeMul = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE);
+	int windowSizeWidth = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
+	int windowSizeHeight = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT);
+	if (windowSizeWidth > 0 && windowSizeHeight > 0)
+	{
+		return Rectangle_Create(0, 0, windowSizeWidth, windowSizeHeight);
+	}
+	else
+	{
+		return Rectangle_Create(0, 0, windowSizeMul * Utils_GetWindowSizeMulWidth(), windowSizeMul * Utils_GetWindowSizeMulHeight());
+	}
+}
+int Utils_GetWindowSizeMulWidth()
+{
+	int width = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
+	int overrideWidth = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_WIDTH);
+	if (overrideWidth > 0)
+	{
+		width = overrideWidth;
+	}
+	return width;
+}
+int Utils_GetWindowSizeMulHeight()
+{
+	int height = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
+	int overrideHeight = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_HEIGHT);
+	if (overrideHeight > 0)
+	{
+		height = overrideHeight;
+	}
+	return height;
+}
+static bool CheckResolutionsForDuplicates(const Rectangle* valids, int32_t validsLength, int width, int height)
+{
+	for (int i = 0; i < validsLength; i += 1)
+	{
+		const Rectangle* rect = &valids[i];
+		if ((rect->Width == width) && (rect->Height == height))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+Rectangle* Utils_GetWindowResolutions(bool filterAspectRatio, int32_t* length)
+{
+	if (arr_resolutions != NULL)
+	{
+		*length = (int32_t)arrlen(arr_resolutions);
+		return arr_resolutions;
+	}
+
+	int internalWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
+	int internalHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
+
+	Rectangle* arrValids = NULL;
+	arrput(arrValids, Rectangle_Create(0, 0, internalWidth, internalHeight));
+	if ((internalWidth >= 1280) && (internalHeight >= 720)) //Hack for MCDX
+	{
+		arrput(arrValids, Rectangle_Create(0, 0, internalWidth /= 2, internalHeight /= 2));
+	}
+
+	Rectangle currentBounds = Window_GetDisplayBounds();
+	int32_t displayModeBoundsLength = 0;
+	Rectangle* displayModeBounds = Window_GetAllDisplayModeBounds(&displayModeBoundsLength);
+
+	float wantedAspectRatio = (16.0f / 9.0f);
+	for (int i = 0; i < displayModeBoundsLength; i += 1)
+	{
+		Rectangle bounds = displayModeBounds[i];
+		float aspectRatio = ((float)bounds.Width / (float)bounds.Height);
+		if (!filterAspectRatio || (Math_fabsf(wantedAspectRatio - aspectRatio) < .01f))
+		{
+			int width = bounds.Width;
+			int height = bounds.Height;
+			if ((width != currentBounds.Width) || (height != currentBounds.Height))
+			{
+				if (CheckResolutionsForDuplicates(arrValids, (int32_t)arrlen(arrValids), width, height))
+				{
+					arrput(arrValids, Rectangle_Create(0, 0, width, height));
+				}
+			}
+		}
+	}
+
+	int safetyCounter = 0;
+	while (arrlen(arrValids) > 0)
+	{
+		int lowest = INT_MAX;
+		int index = -1;
+		for (int i = 0; i < arrlen(arrValids); i += 1)
+		{
+			Rectangle rect = arrValids[i];
+			int value = rect.Width * rect.Height;
+			if (value < lowest)
+			{
+				lowest = value;
+				index = i;
+			}
+		}
+		arrput(arr_resolutions, arrValids[index]);
+		arrdel(arrValids, index);
+		safetyCounter += 1;
+		if (safetyCounter >= 100000)
+		{
+			break;
+		}
+	}
+
+	*length = (int32_t)arrlen(arr_resolutions);
+	return arr_resolutions;
+}
+void ConvertTimeHelper(int32_t time)
+{
+	if (time < 10)
+	{
+		MString_AddAssignString(&_mTempString, "0");
+		MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(time));
+	}
+	else
+	{
+		MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(time));
+	}
+}
+const char* Utils_ConvertFramesToTimeDisplay(int32_t val)
+{
+	int32_t subseconds = (int32_t)(Utils_GetSubseconds(val));
+	int32_t seconds = Utils_GetSeconds(val);
+	int32_t minutes = Utils_GetMinutes(val);
+	int32_t hours = Utils_GetHours(val);
+	if (hours >= 24)
+	{
+		hours = 23;
+		minutes = 59;
+		seconds = 59;
+		subseconds = 99;
+	}
+
+	MString_Assign(&_mTempString, "");
+	ConvertTimeHelper(hours);
+	MString_AddAssignString(&_mTempString, ":");
+	ConvertTimeHelper(minutes);
+	MString_AddAssignString(&_mTempString, ":");
+	ConvertTimeHelper(seconds);
+	MString_AddAssignString(&_mTempString, ":");
+	ConvertTimeHelper(subseconds);
+	return MString_GetText(_mTempString);
+}
+
 static void BuilderHelper(char* buffer, int index, int32_t val)
 {
 	if (val < 10)

@@ -47,7 +47,7 @@ void LevelCameraData_Read(LevelCameraData* lcd, int32_t version, BufferReader* r
 	lcd->mIsRightFrozen = BufferReader_ReadBoolean(reader);
 	lcd->mIsDownFrozen = BufferReader_ReadBoolean(reader);
 	lcd->mIsLeftFrozen = BufferReader_ReadBoolean(reader);
-	lcd->mScript = BufferReader_ReadMString(reader);
+	BufferReader_ReadString(reader, lcd->mScript, EE_FILENAME_MAX);
 	if (version >= 2)
 	{
 		lcd->mId = BufferReader_ReadI32(reader);
@@ -59,9 +59,9 @@ void LevelCameraData_Read(LevelCameraData* lcd, int32_t version, BufferReader* r
 	}
 	if (version >= 4)
 	{
-		for (int i = 0; i < LEVELCAMERADATA_STRING_DATA_LIMIT; i++)
+		for (int i = 0; i < LEVELCAMERADATA_STRING_DATA_LIMIT; i += 1)
 		{
-			lcd->mStringData[i] = BufferReader_ReadMString(reader);
+			BufferReader_ReadString(reader, lcd->mStringData[i], EE_FILENAME_MAX);
 		}
 	}
 }

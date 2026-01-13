@@ -32,7 +32,7 @@ void BufferWriter_WriteDouble(BufferWriter* br);
 void BufferWriter_WriteJustTheStringLength(BufferWriter* br, uint8_t stringLength);
 void BufferWriter_WriteJustTheStringData(BufferWriter* br, uint8_t stringLength, char* dst, size_t maxlen);
 void BufferWriter_WriteString(BufferWriter* br, char* dst, size_t maxlen);
-MString* BufferWriter_WriteStringToMString(BufferWriter* br);
+void BufferWriter_WriteStringToMString(MString** assignToThis, BufferWriter* br);
 void BufferWriter_WriteEOF(BufferWriter* br);
 bool BufferWriter_HasNext(BufferWriter* br);
 BufferWriter* BufferWriter_Create();

@@ -140,9 +140,8 @@ void BufferWriter_WriteString(BufferWriter* br, char* dst, size_t maxlen)
 	//uint8_t stringLength = BufferWriter_WriteJustTheStringLength(br);
 	//BufferWriter_WriteJustTheStringData(br, stringLength, dst, maxlen);
 }
-MString* BufferWriter_WriteStringToMString(BufferWriter* br)
+void BufferWriter_WriteStringToMString(MString** assignToThis, BufferWriter* br)
 {
-	return NULL;
 	/*
 	int32_t newStringLength = BufferWriter_WriteJustTheStringLength(br);
 	int32_t newStrCapacity = newStringLength + 1;

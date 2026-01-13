@@ -14,7 +14,7 @@
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
-//static const std_string TILE_OFFSET_DIRECTORY = OeFile_Combine("data", "gfx", "generated_tilesets");
+//static const std_string TILE_OFFSET_DIRECTORY = OeFile_PathCombine("data", "gfx", "generated_tilesets");
 
 void DrawTile_Init(DrawTile* drawTile)
 {

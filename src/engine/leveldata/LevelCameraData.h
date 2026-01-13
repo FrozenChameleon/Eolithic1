@@ -29,14 +29,14 @@ typedef struct LevelCameraData
 	bool mIsRightFrozen;
 	bool mIsDownFrozen;
 	bool mIsLeftFrozen;
-	MString* mScript;
+	char mScript[EE_FILENAME_MAX];
 	int mId;
 	bool mIsTransition;
 	int mNumberTransitionTo;
 	int mNumberTransitionFrom;
 	bool mIsTransitionX;
 	bool mIsTransitionY;
-	MString* mStringData[LEVELCAMERADATA_STRING_DATA_LIMIT];
+	char mStringData[LEVELCAMERADATA_STRING_DATA_LIMIT][EE_FILENAME_MAX];
 } LevelCameraData;
 
 //void LevelCameraData_Ctor1();

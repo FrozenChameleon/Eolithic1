@@ -30,7 +30,7 @@ const char* Platform_GetPreferredLocalesEFIGS()
 		}
 	}
 
-	SDL_free(locales);
+	Utils_free(locales);
 
 	_mHasTriedToGetPreferredLocale = true;
 

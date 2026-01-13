@@ -278,7 +278,7 @@ void GameHelper_InitGameStateData(const char* name, GameStateData* initThis)
 	{
 		bool isBinary = true;
 		std_string extension = OeUtils_GetExtension(isBinary);
-		std_string filePath = OeFile_Combine("data", "componentsizes_" + name + extension);
+		std_string filePath = OeFile_PathCombine("data", "componentsizes_" + name + extension);
 		if (!OeFile_FileExists(filePath))
 		{
 			return temp;

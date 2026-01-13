@@ -345,7 +345,7 @@ static void Update(void* givenData)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		if (ParticleInstanceSys_UpdateRoutine(ComponentPack_GetComponentAtIndex(pack, iter.mIndex)))
+		if (ParticleInstanceSys_UpdateRoutine(iter.mComponent))
 		{
 			Do_UnsetAtIndexAndRemoveDummyEntityIfLast(pack, iter.mIndex);
 		}

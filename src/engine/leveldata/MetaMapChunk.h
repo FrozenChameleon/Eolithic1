@@ -18,6 +18,6 @@ typedef struct MetaMapChunk
 	Resource* _mLevelDataResource;
 	int mMyId;
 	Color mColor;
-	MString* mFileName;
+	char mFileName[EE_FILENAME_MAX];
 } MetaMapChunk;
 

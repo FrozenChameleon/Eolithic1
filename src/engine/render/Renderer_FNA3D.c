@@ -713,9 +713,14 @@ void Renderer_UpdateTextureData(Texture* texture, int32_t x, int32_t y, int32_t 
 }
 static void LoadShader(Effect* effect, const char* shaderName)
 {
-	MString* path = File_Combine3(File_GetBasePath(), "data", shaderName);
-	SDL_IOStream* effectFile = SDL_IOFromFile(MString_GetText(path), "rb");
-	MString_Dispose(&path);
+	SDL_IOStream* effectFile = NULL;
+
+	{
+		MString* path = NULL;
+		File_PathCombine3(&path, File_GetBasePath(), "data", shaderName);
+		effectFile = SDL_IOFromFile(MString_GetText(path), "rb");
+		MString_Dispose(&path);
+	}
 
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_END);
 	int64_t effectCodeLength = SDL_TellIO(effectFile);
@@ -966,13 +971,29 @@ void Renderer_ResetBackBuffer()
 	_mDeviceParams.backBufferHeight = _mActualBufferBounds.Height;
 
 	Logger_LogInformation("Back Buffer has been reset");
-	//Logger_LogInformation("Actual buffer bounds: " + std::to_string(_mActualBufferBounds.Width) + "x" + std::to_string(_mActualBufferBounds.Height));
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "Actual buffer bounds: ");
+		MString_AddAssignInt(&tempString, _mActualBufferBounds.Width);
+		MString_AddAssignString(&tempString, "x");
+		MString_AddAssignInt(&tempString, _mActualBufferBounds.Height);
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
 
 	FNA3D_ResetBackbuffer(_mDeviceContext, &_mDeviceParams);
 
 	if (IsOffscreenTargetNeeded())
 	{
-		//Logger_LogInformation("Virtual buffer bounds: " + std::to_string(_mVirtualBufferBounds.Width) + "x" + std::to_string(_mVirtualBufferBounds.Height));
+		{
+			MString* tempString = NULL;
+			MString_Assign(&tempString, "Virtual buffer bounds: ");
+			MString_AddAssignInt(&tempString, _mVirtualBufferBounds.Width);
+			MString_AddAssignString(&tempString, "x");
+			MString_AddAssignInt(&tempString, _mVirtualBufferBounds.Height);
+			Logger_LogInformation(MString_GetText(tempString));
+			MString_Dispose(&tempString);
+		}
 
 		if (_mOffscreenTarget.mTextureData != NULL)
 		{

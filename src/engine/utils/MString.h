@@ -26,7 +26,7 @@ void MString_AddAssignMString(MString** str, const MString* addThisStr);
 void MString_AddAssignString(MString** str, const char* addThisStr);
 void MString_Truncate(MString** str, int32_t newLength);
 void MString_Dispose(MString** str);
-MString* MString_Read(BufferReader* br);
+void MString_Read(MString** str, BufferReader* br);
 uint64_t MString_GetRefs();
 void MString_Combine2(MString** str, const char* str1, const char* str2);
 void MString_Combine3(MString** str, const char* str1, const char* str2, const char* str3);

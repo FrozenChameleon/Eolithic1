@@ -211,7 +211,7 @@ Entity Get_Player2(int number)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		PlayerNumber* playerNumber = ComponentPack_GetComponentAtIndex(pack, iter.mIndex);
+		PlayerNumber* playerNumber = iter.mComponent;
 		if (playerNumber->mTag == number)
 		{
 			return iter.mEntity;
@@ -2673,7 +2673,7 @@ Resource* Get_LevelDataResource()
 }
 const char* Get_LevelFileName()
 {
-	return MString_GetText(Get_LevelDataResource()->mFileNameWithoutExtension);
+	return Get_LevelDataResource()->mFileNameWithoutExtension;
 }
 Rectangle Get_BodyRectangle(Entity entity)
 {

@@ -16,11 +16,11 @@ const char* VolumeData_GetFilePath(VolumeData* vd, bool isBinary)
 	std_string extension = OeUtils_GetExtension(isBinary);
 	if (_mIsMusic)
 	{
-		return OeFile_Combine("data", "musicvolume" + extension);
+		return OeFile_PathCombine("data", "musicvolume" + extension);
 	}
 	else
 	{
-		return OeFile_Combine("data", "sfxvolume" + extension);
+		return OeFile_PathCombine("data", "sfxvolume" + extension);
 	}*/
 }
 void VolumeData_SaveHelper(VolumeData* vd, bool isBinary)

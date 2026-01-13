@@ -334,6 +334,8 @@ void Cvars_LoadInitialCvars(void)
 	Init();
 	//
 
+	MString* pathToFinalConfigInData = NULL;
+
 	Cvars_Set(CVARS_ENGINE_ORGANIZATION_NAME, GLOBAL_CVARS_ENGINE_ORGANIZATION_NAME);
 
 	Cvars_LoadDataDirCvars();
@@ -343,8 +345,7 @@ void Cvars_LoadInitialCvars(void)
 
 	//OeUtils::SetTileSize(GetAsInt(ENGINE_TILE_SIZE)); //Not needed, using defines
 
-	MString* pathToFinalConfigInData = NULL;
-	pathToFinalConfigInData = File_Combine2("data", "finalconfig");
+	File_PathCombine2(&pathToFinalConfigInData, "data", "finalconfig");
 	ReadDataCvars2(MString_GetText(pathToFinalConfigInData), "Data Final", false);
 
 	const char* pathToFinalConfigInRoot = "finalconfig";
@@ -449,20 +450,23 @@ void Cvars_LoadDataDirCvars(void)
 	//
 
 	{
-		MString* dataEngineConfig = File_Combine2("data", "engineconfig");
+		MString* dataEngineConfig = NULL;
+		File_PathCombine2(&dataEngineConfig, "data", "engineconfig");
 		ReadDataCvars(MString_GetText(dataEngineConfig), "Data Engine");
 		MString_Dispose(&dataEngineConfig);
 	}
 
 	{
-		MString* dataUserConfig = File_Combine2("data", "userconfig");
+		MString* dataUserConfig = NULL;
+		File_PathCombine2(&dataUserConfig, "data", "userconfig");
 		ReadDataCvars(MString_GetText(dataUserConfig), "Data User");
 		MString_Dispose(&dataUserConfig);
 	}
 
 #if EDITOR
 	{
-		MString* dataEditorConfig = File_Combine2("data", "editorconfig");
+		MString* dataEditorConfig = NULL;
+		File_PathCombine2(&dataEditorConfig, "data", "editorconfig");
 		ReadDataCvars(MString_GetText(dataEditorConfig), "Data Editor");
 		MString_Dispose(&dataEditorConfig);
 	}

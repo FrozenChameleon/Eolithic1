@@ -10,7 +10,7 @@
 #include "../font/TtFont.h"
 
 #define FONT_EXTENSION ".fnt"
-//TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_Combine("data", "fonts") };
+//TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_PathCombine("data", "fonts") };
 
 int BmFont_GetBaseHeight(BmFont* bmf)
 {

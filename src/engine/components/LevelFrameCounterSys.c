@@ -12,7 +12,7 @@ static void Update(void* givenData)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		((LevelFrameCounter*)ComponentPack_GetComponentAtIndex(pack, iter.mIndex))->mCounter += 1;
+		((LevelFrameCounter*)iter.mComponent)->mCounter += 1;
 	}
 }
 

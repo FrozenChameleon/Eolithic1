@@ -12,7 +12,7 @@
 
 Rectangle Window_GetWindowSize();
 Rectangle Window_GetDisplayBounds();
-void Window_GetAllDisplayModeBounds(Rectangle* displayModeBounds);
+Rectangle* Window_GetAllDisplayModeBounds(int32_t* length);
 int Window_Init();
 bool Window_IsFullscreen();
 void Window_UpdateFullscreen();

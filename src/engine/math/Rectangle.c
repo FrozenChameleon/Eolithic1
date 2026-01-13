@@ -17,7 +17,7 @@
 
 const Rectangle Rectangle_Empty = { 0 };
 
-Rectangle Rectangle_Create(int x, int32_t y, int32_t width, int32_t height)
+Rectangle Rectangle_Create(int32_t x, int32_t y, int32_t width, int32_t height)
 {
 	Rectangle rect;
 	rect.X = x;

@@ -20,16 +20,15 @@
 #include "../../third_party/stb_ds.h"
 #include "../utils/Macros.h"
 
-int MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = 0;
-Rectangle MENUFUNC_TEMP_WINDOW_SIZE = { 0 };
-
-static bool SUPPRESS_MENU_SOUNDS;
-static int32_t SOUND_TEST_CURRENT_SOUND;
-static int32_t SOUND_TEST_CURRENT_MUSIC;
+static bool _mSuppressMenuSounds;
+static int32_t _mSoundTestCurrentSound;
+static int32_t _mSoundTestCurrentMusic;
 static StringPair* MUSIC_LIST;
 static StringPair* SOUND_LIST;
-static bool LOADED_OPTIONS_MENU;
-static uint64_t WENT_BACK_FRAME;
+static bool _mLoadedOptionsMenu;
+static MString* _mTempString;
+static int32_t _mTempWindowSizeMultiple;
+static Rectangle _mTempWindowSize;
 
 static bool _mHasInit;
 void MenuFunc_Init()
@@ -44,9 +43,25 @@ void MenuFunc_Init()
 	_mHasInit = true;
 }
 
+Rectangle MenuFunc_GetTempWindowSize()
+{
+	return _mTempWindowSize;
+}
+void MenuFunc_SetTempWindowSize(Rectangle value)
+{
+	_mTempWindowSize = value;
+}
+int32_t MenuFunc_GetTempWindowSizeMultiple()
+{
+	return _mTempWindowSizeMultiple;
+}
+void MenuFunc_SetTempWindowSizeMultiple(int32_t value)
+{
+	_mTempWindowSizeMultiple = value;
+}
 void MenuFunc_GameResetAllOptionsToDefaults()
 {
-	//TODO C99 Cvars_CopyFromUserDefaults();
+	Cvars_CopyFromUserDefaults();
 	Window_UpdateFullscreen();
 	Renderer_UpdateVsync();
 	Renderer_ApplyChanges();
@@ -57,25 +72,25 @@ void MenuFunc_DebugGodModeToggle()
 }
 void MenuFunc_DebugResetAchievements()
 {
-	//TODO C99 Service_ResetAchievements();
+	Service_ResetAchievements();
 }
 void MenuFunc_DebugUnlockNextAchievement()
 {
 	AchievementHandler_DebugUnlockNextAchievement();
 }
-void MenuFunc_ToggleNextUserLanguage()
+/*void MenuFunc_ToggleNextUserLanguage() //UNUSED
 {
-	//TODO C99 Utils_ToggleNextUserLanguage(false);
-}
-const char* MenuFunc_GetUserLanguageName()
+	Utils_ToggleNextUserLanguage(false);
+}*/
+/*const char* MenuFunc_GetUserLanguageName() //UNUSED
 {
 	return NULL;
 	//TODO C99 return Utils_GetUserLanguageName();
-}
-bool MenuFunc_WentBackThisFrame()
+}*/
+/*bool MenuFunc_WentBackThisFrame() //UNUSED
 {
 	return WENT_BACK_FRAME == GameUpdater_GetGlobalTicks();
-}
+}*/
 void MenuFunc_SoundStopSoundTestMusic()
 {
 	Do_StopMusic();
@@ -104,58 +119,57 @@ static void HandleSoundTestDirectionLogic(int* value, const int32_t direction, c
 void MenuFunc_SoundChangeSoundTextMusic(int direction)
 {
 	UNUSED(direction);
-	//TODO C99 HandleSoundTestDirectionLogic(&SOUND_TEST_CURRENT_MUSIC, direction, MUSIC_LIST.size());
+	//TODO C99 HandleSoundTestDirectionLogic(&_mSoundTestCurrentMusic, direction, MUSIC_LIST.size());
 }
 void MenuFunc_SoundChangeSoundTextSfx(int direction)
 {
 	UNUSED(direction);
-	//TODO C99 HandleSoundTestDirectionLogic(&SOUND_TEST_CURRENT_SOUND, direction, SOUND_LIST.size());
+	//TODO C99 HandleSoundTestDirectionLogic(&_mSoundTestCurrentSound, direction, SOUND_LIST.size());
 }
 void MenuFunc_SoundPlaySoundTestSfx()
 {
 	Do_StopAllSounds();
-	//TODO C99 Do_PlaySound(SOUND_LIST[SOUND_TEST_CURRENT_SOUND].mValue);
+	//TODO C99 Do_PlaySound(SOUND_LIST[_mSoundTestCurrentSound].mValue);
 }
 void MenuFunc_SoundPlaySoundTestMusic()
 {
-	//TODO C99 Do_PlayMusic(MUSIC_LIST[SOUND_TEST_CURRENT_MUSIC].mValue, true, true);
+	//TODO C99 Do_PlayMusic(MUSIC_LIST[_mSoundTestCurrentMusic].mValue, true, true);
 }
 const char* MenuFunc_GetCurrentSoundTestMusic()
 {
-	return NULL;
-	//TODO C99 return MUSIC_LIST[SOUND_TEST_CURRENT_MUSIC].mKey;
+	return EE_STR_NOT_SET;
+	//TODO C99 return MUSIC_LIST[_mSoundTestCurrentMusic].mKey;
 }
 const char* MenuFunc_GetCurrentSoundTestMusicAsNumber()
 {
-	return NULL;
+	return EE_STR_NOT_SET;
 /*#if EDITOR
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
 		return GetCurrentSoundTestMusic();
 	}
 #endif*/
-	//TODO C99 return Utils_GetStringFromNumberWithZerosTens(SOUND_TEST_CURRENT_MUSIC);
+	//TODO C99 return Utils_GetStringFromNumberWithZerosTens(_mSoundTestCurrentMusic);
 }
 const char* MenuFunc_GetCurrentSoundTestSfx()
 {
-	return NULL;
-	//TODO C99 return SOUND_LIST[SOUND_TEST_CURRENT_SOUND].mKey;
+	return EE_STR_NOT_SET;
+	//TODO C99 return SOUND_LIST[_mSoundTestCurrentSound].mKey;
 }
 const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 {
-	return NULL;
+	return EE_STR_NOT_SET;
 /*#if EDITOR
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
 		return GetCurrentSoundTestSfx();
 	}
 #endif*/
-	//TODO C99 return OeUtils_GetStringFromNumberWithZerosHundreds(SOUND_TEST_CURRENT_SOUND);
+	//TODO C99 return OeUtils_GetStringFromNumberWithZerosHundreds(_mSoundTestCurrentSound);
 }
-const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2)
+/*const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2) //UNUSED
 {
-	return NULL;
-	/*std_string strToDraw = "";
+	std_string strToDraw = "";
 	switch (action)
 	{
 	case MENUFUNC_SOUND_STOP_SOUND_TEST_MUSIC:
@@ -265,43 +279,48 @@ const char* MenuFunc_GetGenericText(int action, const char* data1, const char* d
 		strToDraw = StringHelperBool(Cvars_GetAsBool(Cvars_USER_IS_LINEAR_FILTER_ALLOWED));
 		break;
 	}
-	return strToDraw;*/
-}
+	return strToDraw;
+}*/
 const char* MenuFunc_GetChangeWindowSizeMultipleString()
 {
-	return NULL;
-
-	//TODO C99
-	/*
-	return "<" + std_to_string(TEMP_WINDOW_SIZE_MULTIPLE) + "X: " + std_to_string((OeUtils_GetWindowSizeMulWidth() * TEMP_WINDOW_SIZE_MULTIPLE)) +
-		"x" + std_to_string((OeUtils_GetWindowSizeMulHeight() * TEMP_WINDOW_SIZE_MULTIPLE)) + ">";*/
+	MString_Assign(&_mTempString, "<");
+	MString_AddAssignInt(&_mTempString, _mTempWindowSizeMultiple);
+	MString_AddAssignString(&_mTempString, "X: ");
+	MString_AddAssignInt(&_mTempString, Utils_GetWindowSizeMulWidth() * _mTempWindowSizeMultiple);
+	MString_AddAssignString(&_mTempString, "x");
+	MString_AddAssignInt(&_mTempString, Utils_GetWindowSizeMulHeight() * _mTempWindowSizeMultiple);
+	MString_AddAssignString(&_mTempString, ">");
+	return  MString_GetText(_mTempString);
 }
 const char* MenuFunc_GetChangeWindowSizeString()
 {
-	return NULL;
-
-	//TODO C99
-/*
-	return "<" + std_to_string(TEMP_WINDOW_SIZE.Width) + "X" + std_to_string(TEMP_WINDOW_SIZE.Height) + ">";*/
+	MString_Assign(&_mTempString, "<");
+	MString_AddAssignInt(&_mTempString, _mTempWindowSize.Width);
+	MString_AddAssignString(&_mTempString, "X");
+	MString_AddAssignInt(&_mTempString, _mTempWindowSize.Height);
+	MString_AddAssignString(&_mTempString, ">");
+	return  MString_GetText(_mTempString);
 }
 const char* MenuFunc_GetInternalResolutionMultipleString()
 {
-	return NULL;
-
-	/*int mul = Cvars_GetAsInt(Cvars_USER_INTERNAL_RESOLUTION_MULTIPLE);
-	std_string mulString = "";
+	int mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
+	MString_Assign(&_mTempString, "");
 	if (mul > 0)
 	{
-		mulString = "<" + std_to_string(mul) + "x: " + std_to_string((Cvars_GetAsInt(Cvars_ENGINE_INTERNAL_RENDER_WIDTH) * mul)) +
-			"x" + std_to_string((Cvars_GetAsInt(Cvars_ENGINE_INTERNAL_RENDER_HEIGHT) * mul)) + ">";
+		MString_Assign(&_mTempString, "<");
 	}
 	else
 	{
-		mul = OeRenderer_GetRenderTargetScale();
-		mulString = "<Auto " + std_to_string(mul) + "x: " + std_to_string(Cvars_GetAsInt(Cvars_ENGINE_INTERNAL_RENDER_WIDTH) * mul) +
-			"x" + std_to_string(Cvars_GetAsInt(Cvars_ENGINE_INTERNAL_RENDER_HEIGHT) * mul) + ">";
+		mul = Renderer_GetRenderTargetScale();
+		MString_Assign(&_mTempString, "<Auto ");
 	}
-	return mulString;*/
+	MString_AddAssignInt(&_mTempString, mul);
+	MString_AddAssignString(&_mTempString, "x: ");
+	MString_AddAssignInt(&_mTempString, Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH) * mul);
+	MString_AddAssignString(&_mTempString, "x");
+	MString_AddAssignInt(&_mTempString, Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT) * mul);
+	MString_AddAssignString(&_mTempString, ">");
+	return MString_GetText(_mTempString);
 }
 void MenuFunc_SoundStopSoundTestSfx()
 {
@@ -314,36 +333,37 @@ void MenuFunc_VideoFixedTimeStepToggle()
 void MenuFunc_VideoApplyWindowSizeMultiple()
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, false);
-	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE);
+	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, _mTempWindowSizeMultiple);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH, -1);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, -1);
-	//TODO C99 Utils_InvokeWindowedMode();
+	Utils_InvokeWindowedMode();
 }
 void MenuFunc_VideoApplyWindowSize()
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, false);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, 1);
-	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH, MENUFUNC_TEMP_WINDOW_SIZE.Width);
-	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, MENUFUNC_TEMP_WINDOW_SIZE.Height);
-	//TODO C99 OeUtils_InvokeWindowedMode();
+	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH, _mTempWindowSize.Width);
+	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, _mTempWindowSize.Height);
+	Utils_InvokeWindowedMode();
 }
 void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
 {
-	/*std_vector<Rectangle> resolutions = OeUtils_GetWindowResolutions(true);
-	if (resolutions.size() == 0)
+	int32_t resolutionsLength = 0;
+	Rectangle* resolutions = Utils_GetWindowResolutions(true, &resolutionsLength);
+	if (resolutionsLength == 0)
 	{
 		return;
 	}
-
+	
 	int me = -1;
-	if (TEMP_WINDOW_SIZE.Width == -1)
+	if (_mTempWindowSize.Width == -1)
 	{
-		TEMP_WINDOW_SIZE = OeUtils_GetProposedWindowSize();
+		_mTempWindowSize = Utils_GetProposedWindowSize();
 	}
 
-	for (int i = 0; i < resolutions.size(); i += 1)
+	for (int i = 0; i < resolutionsLength; i += 1)
 	{
-		if (resolutions[i] == TEMP_WINDOW_SIZE)
+		if (Rectangle_EqualTo(&resolutions[i], &_mTempWindowSize))
 		{
 			me = i;
 			break;
@@ -352,20 +372,20 @@ void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
 
 	if (me == -1)
 	{
-		TEMP_WINDOW_SIZE = resolutions[resolutions.size() - 1];
+		_mTempWindowSize = resolutions[resolutionsLength - 1];
 		return;
 	}
 
 	int next = me + direction;
 	if (next < 0)
 	{
-		next = resolutions.size() - 1;
+		next = (resolutionsLength - 1);
 	}
-	if (next > resolutions.size() - 1)
+	if (next > (resolutionsLength - 1))
 	{
 		next = 0;
 	}
-	TEMP_WINDOW_SIZE = resolutions[next];*/
+	_mTempWindowSize = resolutions[next];
 }
 void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderValue)
 {
@@ -373,41 +393,39 @@ void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderV
 	int min = 1;
 	if (forcedSliderValue != -1)
 	{
-		MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = (int)(maxValue * (forcedSliderValue / 100.0f));
-		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE < min)
+		_mTempWindowSizeMultiple = (int)(maxValue * (forcedSliderValue / 100.0f));
+		if (_mTempWindowSizeMultiple < min)
 		{
-			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = min;
+			_mTempWindowSizeMultiple = min;
 		}
 	}
 	else if (direction != 0)
 	{
-		MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE += direction;
-		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE > maxValue)
+		_mTempWindowSizeMultiple += direction;
+		if (_mTempWindowSizeMultiple > maxValue)
 		{
-			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = maxValue;
+			_mTempWindowSizeMultiple = maxValue;
 		}
-		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE < min)
+		if (_mTempWindowSizeMultiple < min)
 		{
-			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = min;
+			_mTempWindowSizeMultiple = min;
 		}
 	}
 	else
 	{
-		MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE++;
-		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE > maxValue)
+		_mTempWindowSizeMultiple += 1;
+		if (_mTempWindowSizeMultiple > maxValue)
 		{
-			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = min;
+			_mTempWindowSizeMultiple = min;
 		}
-		if (MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE < min)
+		if (_mTempWindowSizeMultiple < min)
 		{
-			MENUFUNC_TEMP_WINDOW_SIZE_MULTIPLE = maxValue;
+			_mTempWindowSizeMultiple = maxValue;
 		}
 	}
 }
-const char* MenuFunc_StringHelperBorder(int value)
+/*const char* MenuFunc_StringHelperBorder(int value) //UNUSED
 {
-	return NULL;
-	/*
 	std_string str = "";
 
 	switch (value)
@@ -447,8 +465,8 @@ const char* MenuFunc_StringHelperBorder(int value)
 		break;
 	}
 
-	return str;*/
-}
+	return str;
+}*/
 const char* MenuFunc_StringHelperBool(bool value)
 {
 	if (value)
@@ -462,30 +480,32 @@ const char* MenuFunc_StringHelperBool(bool value)
 }
 const char* MenuFunc_StringHelperFloat(float value)
 {
-	return NULL;
-	//TODO C99 return "<" + std_to_string(value) + ">";
+	MString_Assign(&_mTempString, "<");
+	MString_AddAssignFloat(&_mTempString, value);
+	MString_AddAssignString(&_mTempString, ">");
+	return MString_GetText(_mTempString);
 }
 const char* MenuFunc_StringHelperInt(int value)
 {
-	return NULL;
-	//TODO C99 return "<" + std_to_string(value) + ">";
+	MString_Assign(&_mTempString, "<");
+	MString_AddAssignInt(&_mTempString, value);
+	MString_AddAssignString(&_mTempString, ">");
+	return MString_GetText(_mTempString);
 }
-void MenuFunc_InputDeadzoneToggle()
+/*void MenuFunc_InputDeadzoneToggle()
 {
-	/*
-	float temp = Cvars_GetAsFloat(Cvars_USER_CONTROLLER_RADIAL_DEADZONE);
+	float temp = Cvars_GetAsFloat(CVARS_USER_CONTROLLER_RADIAL_DEADZONE);
 	temp += .1f;
-	temp = OeMath.RoundToTenths(temp);
-	float min = .1f;
-	float max = .9f;
+	temp = Math_RoundToTenths(temp);
+	float min = 0.1f;
+	float max = 0.9f;
 	if (temp > max)
 	{
 	temp = min;
 	}
 	Cvars_Set(Cvars_USER_CONTROLLER_RADIAL_DEADZONE, temp);
 	OeUniverse.SaveUserConfig();
-	*/
-}
+}*/
 int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue)
 {
 	int returnValue = 0;
@@ -541,7 +561,7 @@ int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSli
 }
 void MenuFunc_VideoVsyncToggle()
 {
-	//TODO C99 Utils_ToggleVsyncButton();
+	Utils_ToggleVsyncButton();
 }
 void MenuFunc_InputRumbleToggle()
 {
@@ -582,7 +602,7 @@ void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t force
 	}
 	else
 	{
-		current++;
+		current += 1;
 		if (current > maxValue)
 		{
 			current = 0;
@@ -601,7 +621,7 @@ void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t force
 int MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
 {
 	int value = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
-	value++;
+	value += 1;
 	int min = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RESOLUTION_MUL_MAX_MIN);
 	if (value < min)
 	{
@@ -612,14 +632,14 @@ int MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
 int MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue()
 {
 	Rectangle displayBounds = Window_GetDisplayBounds();
-	int width = 1280; //TODO C99 Utils_GetWindowSizeMulWidth();
-	int height = 720; //TODO C99  Utils_GetWindowSizeMulHeight();
+	int width = Utils_GetWindowSizeMulWidth();
+	int height = Utils_GetWindowSizeMulHeight();
 	int maxWidth = displayBounds.Width / width;
 	int maxHeight = displayBounds.Height / height;
 	int maxValue = maxWidth > maxHeight ? maxHeight : maxWidth;
 	if (maxValue * width == displayBounds.Width && maxValue * height == displayBounds.Height) //don't show a perfect match resolution
 	{
-		maxValue--;
+		maxValue -= 1;
 	}
 	if (maxValue < 1)
 	{
@@ -718,7 +738,7 @@ void MenuFunc_GameBorderToggle()
 }
 void MenuFunc_VideoFullscreenToggle()
 {
-	//TODO C99 Utils_ToggleFullscreenButton();
+	Utils_ToggleFullscreenButton();
 }
 void MenuFunc_PlayMenuSoundSelect()
 {
@@ -746,7 +766,7 @@ void MenuFunc_PlayMenuSoundLeft()
 }
 void MenuFunc_PlayMenuSoundHelper(const char* soundToPlay)
 {
-	if (SUPPRESS_MENU_SOUNDS)
+	if (_mSuppressMenuSounds)
 	{
 		return;
 	}
@@ -758,10 +778,10 @@ void MenuFunc_PlayMenuSoundHelper(const char* soundToPlay)
 }
 void MenuFunc_SaveIfLoadedOptionsMenu()
 {
-	if (LOADED_OPTIONS_MENU)
+	if (_mLoadedOptionsMenu)
 	{
 		Do_SaveGame();
 		Do_SaveUserConfig();
-		LOADED_OPTIONS_MENU = false;
+		_mLoadedOptionsMenu = false;
 	}
 }

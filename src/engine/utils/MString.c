@@ -271,15 +271,13 @@ void MString_Dispose(MString** str)
 	Utils_free((*str));
 	*str = NULL;
 }
-MString* MString_Read(BufferReader* br)
+void MString_Read(MString** str, BufferReader* br)
 {
 	uint8_t newStringLength = BufferReader_ReadJustTheStringLength(br);
 	int32_t newStrCapacity = newStringLength + 1;
-	MString* strToReturn = NULL;
-	MString_AssignEmpty(&strToReturn, newStrCapacity);
-	strToReturn->len = newStringLength;
-	BufferReader_ReadJustTheStringData(br, newStringLength, MString_GetText(strToReturn), newStrCapacity);
-	return strToReturn;
+	MString_AssignEmpty(str, newStrCapacity);
+	(*str)->len = newStringLength;
+	BufferReader_ReadJustTheStringData(br, newStringLength, MString_GetText(*str), newStrCapacity);
 }
 uint64_t MString_GetRefs()
 {

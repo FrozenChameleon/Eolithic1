@@ -44,7 +44,7 @@ bool DatReader_HasNext(const DatReader* dr)
 {
 	return (dr->_mCurrent < dr->_mCount);
 }
-MString* DatReader_NextFilePath(DatReader* dr)
+void DatReader_NextFilePath(MString** assignToThis, DatReader* dr)
 {
 	for (int32_t i = 0; i < arrlen(dr->arr_last_strings); i += 1)
 	{
@@ -55,25 +55,24 @@ MString* DatReader_NextFilePath(DatReader* dr)
 	int32_t length = BufferReader_ReadI32(dr->_mReader);
 	for (int32_t i = 0; i < length; i += 1)
 	{
-		MString* temp = BufferReader_ReadMString(dr->_mReader);
+		MString* temp = NULL;
+		BufferReader_ReadMString(&temp, dr->_mReader);
 		arrput(dr->arr_last_strings, temp);
 	}
 
-	MString* strToReturn = NULL;
-	MString_Assign(&strToReturn, "");
+	MString_Assign(assignToThis, "");
 	int64_t len = arrlen(dr->arr_last_strings);
 	for (int i = 0; i < len; i += 1)
 	{
-		MString_AddAssignString(&strToReturn, MString_GetText(dr->arr_last_strings[i]));
+		MString_AddAssignString(assignToThis, MString_GetText(dr->arr_last_strings[i]));
 		if (i < (len - 1))
 		{
-			File_AppendPathSeparator(&strToReturn);
+			File_AppendPathSeparator(assignToThis);
 		}
 	}
 
 	DatInfo* currentInfo = GetCurrentDatInfo(dr);
-	MString_Assign(&currentInfo->mPath, MString_GetText(strToReturn));
-	return strToReturn;
+	MString_Assign(&currentInfo->mPath, MString_GetText(*assignToThis));
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 {

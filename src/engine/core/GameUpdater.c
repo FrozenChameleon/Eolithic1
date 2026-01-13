@@ -606,7 +606,7 @@ void GameUpdater_DebugReloadMap()
 	*/
 	{
 		MString* tempString = NULL;
-		MString_Combine5(&tempString, "Map Reloaded (Full) [", MString_GetText(Get_LevelDataResource()->mFileNameWithoutExtension), "][", Get_LevelFileName(), "]");
+		MString_Combine5(&tempString, "Map Reloaded (Full) [", Get_LevelDataResource()->mFileNameWithoutExtension, "][", Get_LevelFileName(), "]");
 		Logger_LogInformation(MString_GetText(tempString));
 		MString_Dispose(&tempString);
 	}

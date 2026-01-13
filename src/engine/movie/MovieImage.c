@@ -17,8 +17,8 @@ static Sheet* CreateNewSheetForMovieImage(const char* image)
 
 	Sheet* temp = Utils_callocArena(1, sizeof(Sheet), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	temp->mTextureResource = ResourceManager_GetResource(movieTextureMan, internedKey);
-	temp->mSheetName = internedKey;
-	temp->mUnderlyingTextureName = internedKey;
+	Utils_strlcpy(temp->mSheetName, internedKey, EE_FILENAME_MAX);
+	Utils_strlcpy(temp->mUnderlyingTextureName, internedKey, EE_FILENAME_MAX);
 	temp->mRectangle = ((Texture*)temp->mTextureResource->mData)->mBounds;
 	return temp;
 }

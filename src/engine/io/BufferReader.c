@@ -149,9 +149,9 @@ void BufferReader_ReadString(BufferReader* br, char* dst, size_t maxlen)
 	uint8_t stringLength = BufferReader_ReadJustTheStringLength(br);
 	BufferReader_ReadJustTheStringData(br, stringLength, dst, maxlen);
 }
-MString* BufferReader_ReadMString(BufferReader* br)
+void BufferReader_ReadMString(MString** assignToThis, BufferReader* br)
 {
-	return MString_Read(br);
+	MString_Read(assignToThis, br);
 }
 bool BufferReader_HasNext(BufferReader* br)
 {

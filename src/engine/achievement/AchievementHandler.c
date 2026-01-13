@@ -66,8 +66,8 @@ void AchievementHandler_AddAchievement(bool isHidden, const char* name, const ch
 	description;
 	if (_mIsUsingMask)
 	{
-		MString_Combine3(&nameToUse, "ACHIEVEMENT_", Utils_IntToStringStaticBuffer(current), "_NAME");
-		MString_Combine3(&descriptionToUse, "ACHIEVEMENT_", Utils_IntToStringStaticBuffer(current), "_DESCRIPTION");
+		MString_Combine3(&nameToUse, "ACHIEVEMENT_", Utils_IntToStringGlobalBuffer(current), "_NAME");
+		MString_Combine3(&descriptionToUse, "ACHIEVEMENT_", Utils_IntToStringGlobalBuffer(current), "_DESCRIPTION");
 	}
 	Achievement achievement;
 	Achievement_Init(&achievement, condition, name, description, lockedDescription, image, isHidden);

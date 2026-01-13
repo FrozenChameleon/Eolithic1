@@ -70,7 +70,7 @@ void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, i
 	Vector2 textPos = Vector2_Create(pos.X, pos.Y - HALF_TILE_SIZE);
 	int depth = 100;
 	Color textColor = COLOR_RED;
-	SpriteBatch_DrawString2(spriteBatch, font, Utils_IntToStringStaticBuffer(lineNumber), textColor, depth, textPos, align, align);
+	SpriteBatch_DrawString2(spriteBatch, font, Utils_IntToStringGlobalBuffer(lineNumber), textColor, depth, textPos, align, align);
 	if (line->mEnterDownOnly)
 	{
 		textPos.Y -= HALF_TILE_SIZE;
@@ -130,7 +130,7 @@ void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, i
 	{
 		textPos.Y -= HALF_TILE_SIZE;
 		MString* tempString = NULL;
-		MString_Combine2(&tempString, "Override Speed From Player: ", Utils_IntToStringStaticBuffer(line->mOverrideSpeedFromPlayer));
+		MString_Combine2(&tempString, "Override Speed From Player: ", Utils_IntToStringGlobalBuffer(line->mOverrideSpeedFromPlayer));
 		SpriteBatch_DrawString2(spriteBatch, font, MString_GetText(tempString), textColor, depth, textPos, align, align);
 		MString_Dispose(&tempString);
 	}
@@ -138,7 +138,7 @@ void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, i
 	{
 		textPos.Y -= HALF_TILE_SIZE;
 		MString* tempString = NULL;
-		MString_Combine2(&tempString, "Override Speed From Minecart: ", Utils_IntToStringStaticBuffer(line->mOverrideSpeedFromMinecart));
+		MString_Combine2(&tempString, "Override Speed From Minecart: ", Utils_IntToStringGlobalBuffer(line->mOverrideSpeedFromMinecart));
 		SpriteBatch_DrawString2(spriteBatch, font, MString_GetText(tempString), textColor, depth, textPos, align, align);
 		MString_Dispose(&tempString);
 	}

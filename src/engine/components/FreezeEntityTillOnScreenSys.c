@@ -13,7 +13,7 @@ static void Update(void* givenData)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		FreezeEntityTillOnScreen* freezeData = ComponentPack_GetComponentAtIndex(pack, iter.mIndex);
+		FreezeEntityTillOnScreen* freezeData = iter.mComponent;
 		const Rectangle* freezeRect = &freezeData->mRectangle;
 		if (Camera_IntersectsCameraRectMul(camera, freezeRect, CAMERA_EXTENDED_CAMERA))
 		{

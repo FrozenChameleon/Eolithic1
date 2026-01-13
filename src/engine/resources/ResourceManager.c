@@ -67,14 +67,14 @@ Resource* ResourceManager_LoadAssetFromStreamAndCreateResource(ResourceManager* 
 	Resource* resource = Utils_malloc(sizeof(Resource));
 	Utils_memset(resource, 0, sizeof(Resource));
 	MString_Assign(&resource->mPath, path);
-	MString_Assign(&resource->mFileNameWithoutExtension, filenameWithoutExtension);
+	Utils_strlcpy(resource->mFileNameWithoutExtension, filenameWithoutExtension, EE_FILENAME_MAX);
 	resource->mID = rm->_mResourceCounter;
 	rm->_mResourceCounter += 1;
 	if (rm->_mFromStream != NULL)
 	{
-		resource->mData = rm->_mFromStream(MString_GetText(resource->mPath), MString_GetText(resource->mFileNameWithoutExtension), br);
+		resource->mData = rm->_mFromStream(MString_GetText(resource->mPath), resource->mFileNameWithoutExtension, br);
 	}
-	shput(rm->sh_resources, MString_GetText(resource->mFileNameWithoutExtension), resource);
+	shput(rm->sh_resources, resource->mFileNameWithoutExtension, resource);
 	return resource;
 }
 const char* ResourceManager_GetDatFileName(ResourceManager* rm)
@@ -83,7 +83,8 @@ const char* ResourceManager_GetDatFileName(ResourceManager* rm)
 }
 void ResourceManager_LoadAllFromDat(ResourceManager* rm)
 {
-	MString* path = File_Combine2("data", ResourceManager_GetDatFileName(rm));
+	MString* path = NULL;
+	File_PathCombine2(&path, "data", ResourceManager_GetDatFileName(rm));
 	if (!File_Exists(MString_GetText(path)))
 	{
 		Logger_printf("Unable to load from dat: %s\n", MString_GetText(path));
@@ -94,9 +95,12 @@ void ResourceManager_LoadAllFromDat(ResourceManager* rm)
 	DatReader* dr = DatReader_Create(MString_GetText(path));
 	while (DatReader_HasNext(dr))
 	{
-		MString* nextPath = DatReader_NextFilePath(dr);
-		MString* fileName = File_GetFileName(MString_GetText(nextPath));
-		MString* fileNameWithoutExtension = File_GetFileNameWithoutExtension(MString_GetText(nextPath));
+		MString* nextPath = NULL;
+		MString* fileName = NULL;
+		MString* fileNameWithoutExtension = NULL;
+		DatReader_NextFilePath(&nextPath, dr);
+		File_GetFileName(&fileName, MString_GetText(nextPath));
+		File_GetFileNameWithoutExtension(&fileNameWithoutExtension, MString_GetText(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
 		ResourceManager_LoadAssetFromStreamAndCreateResource(rm, br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
 		BufferReader_Dispose(br);

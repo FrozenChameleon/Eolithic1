@@ -15,5 +15,5 @@ typedef struct Resource
 	void* mData;
 	ResourceID mID;
 	MString* mPath;
-	MString* mFileNameWithoutExtension;
+	char mFileNameWithoutExtension[EE_FILENAME_MAX];
 } Resource;

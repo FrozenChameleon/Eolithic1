@@ -21,7 +21,7 @@ static const char* TAG_IS_ANIMATION = "is_animation";
 static const char* TAG_TEXTURE_NAME = "texture_name";
 static const char* TAG_TILESET_FILTER = "tileset_filter";
 
-//static const std_vector<std_string> PROPS_DIRECTORY = { OeFile_Combine("data", "props") };
+//static const std_vector<std_string> PROPS_DIRECTORY = { OeFile_PathCombine("data", "props") };
 
 enum
 {
@@ -61,7 +61,7 @@ void Prop_Draw(Prop* p, SpriteBatch* spriteBatch, int32_t depth, Point position,
 	if (showInfo)
 	{
 		DrawTool_DrawRectangle2(spriteBatch, COLOR_GREEN, 200, Rectangle_Create(position.X, position.Y, TILE_SIZE / 4, TILE_SIZE / 4), 0, false);
-		SpriteBatch_DrawString2(spriteBatch, "editor", Utils_IntToStringStaticBuffer(depth), COLOR_YELLOW, 200,
+		SpriteBatch_DrawString2(spriteBatch, "editor", Utils_IntToStringGlobalBuffer(depth), COLOR_YELLOW, 200,
 			Vector2_Create(position.X + (scaledWidth / 2), position.Y + (scaledHeight / 2)), ALIGN_CENTER, ALIGN_CENTER);
 	}
 	else

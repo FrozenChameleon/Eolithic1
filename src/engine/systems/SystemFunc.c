@@ -25,7 +25,7 @@ void SystemFunc_UpdateHelper(ComponentType ctype, void(*updateRoutine)(Entity en
 	{
 		if (!Is_UpdateDisabled(iter.mEntity))
 		{
-			updateRoutine(iter.mEntity, ComponentPack_GetComponentAtIndex(pack, iter.mIndex));
+			updateRoutine(iter.mEntity, iter.mComponent);
 		}
 	}
 }
@@ -42,7 +42,7 @@ void SystemFunc_DrawHelper(ComponentType ctype, void(*drawRoutine)(Entity owner,
 	{
 		if (!Is_DrawDisabled(iter.mEntity))
 		{
-			drawRoutine(iter.mEntity, ComponentPack_GetComponentAtIndex(pack, iter.mIndex), spriteBatch);
+			drawRoutine(iter.mEntity, iter.mComponent, spriteBatch);
 		}
 	}
 }
@@ -57,7 +57,7 @@ void SystemFunc_DrawHudHelper(ComponentType ctype, void(*drawHudRoutine)(Entity 
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		drawHudRoutine(iter.mEntity, ComponentPack_GetComponentAtIndex(pack, iter.mIndex), spriteBatch);
+		drawHudRoutine(iter.mEntity, iter.mComponent, spriteBatch);
 	}
 }
 void SystemFunc_DrawDebugHudHelper(ComponentType ctype, void(*drawDebugHudRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch), SpriteBatch* spriteBatch)
@@ -71,7 +71,7 @@ void SystemFunc_DrawDebugHudHelper(ComponentType ctype, void(*drawDebugHudRoutin
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		drawDebugHudRoutine(iter.mEntity, ComponentPack_GetComponentAtIndex(pack, iter.mIndex), spriteBatch);
+		drawDebugHudRoutine(iter.mEntity, iter.mComponent, spriteBatch);
 	}
 }
 void SystemFunc_UpdateLastRenderPositionHelper(ComponentType ctype, GameState* gameState, void(*updateLastRenderPositionsRoutine)(void* data))
@@ -85,7 +85,7 @@ void SystemFunc_UpdateLastRenderPositionHelper(ComponentType ctype, GameState* g
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		updateLastRenderPositionsRoutine(ComponentPack_GetComponentAtIndex(pack, iter.mIndex));
+		updateLastRenderPositionsRoutine(iter.mComponent);
 	}
 }
 void SystemFunc_ReceiveBroadcastHelper(ComponentType ctype, void(*receiveBroadcastRoutine)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3), int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
@@ -99,6 +99,6 @@ void SystemFunc_ReceiveBroadcastHelper(ComponentType ctype, void(*receiveBroadca
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		receiveBroadcastRoutine(iter.mEntity, ComponentPack_GetComponentAtIndex(pack, iter.mIndex), broadcastType, packet1, packet2, packet3);
+		receiveBroadcastRoutine(iter.mEntity, iter.mComponent, broadcastType, packet1, packet2, packet3);
 	}
 }

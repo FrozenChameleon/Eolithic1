@@ -16,24 +16,24 @@
 
 void File_AppendPathSeparator(MString** str);
 FixedByteBuffer* File_ReadAll(const char* path);
-MString* File_ReadAllToBigString(BufferReader* br);
+void File_ReadAllToBigString(MString** assignToThis, BufferReader* br);
 bool File_Exists(const char* path);
 const char* File_GetBasePath();
 const char* File_GetPrefPath();
 
-MString* File_GetFileName(const char* path);
-MString* File_GetFileNameWithoutExtension(const char* path);
+void File_GetFileName(MString** assignToThis, const char* path);
+void File_GetFileNameWithoutExtension(MString** assignToThis, const char* path);
 IStringArray* File_ReadAllToStrings(BufferReader* br);
 
-MString* File_Combine2(const char* path1, const char* path2);
-MString* File_Combine3(const char* path1, const char* path2, const char* path3);
-MString* File_Combine4(const char* path1, const char* path2, const char* path3, const char* path4);
-MString* File_Combine5(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5);
-MString* File_Combine6(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6);
-MString* File_Combine7(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7);
-MString* File_Combine8(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+void File_PathCombine2(MString** assignToThis, const char* path1, const char* path2);
+void File_PathCombine3(MString** assignToThis, const char* path1, const char* path2, const char* path3);
+void File_PathCombine4(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4);
+void File_PathCombine5(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5);
+void File_PathCombine6(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6);
+void File_PathCombine7(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7);
+void File_PathCombine8(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
 	const char* path8);
-MString* File_Combine9(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+void File_PathCombine9(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
 	const char* path8, const char* path9);
-MString* File_Combine10(const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
+void File_PathCombine10(MString** assignToThis, const char* path1, const char* path2, const char* path3, const char* path4, const char* path5, const char* path6, const char* path7,
 	const char* path8, const char* path9, const char* path10);

@@ -112,7 +112,8 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 	int stateCount = BufferReader_ReadI32(br);
 	for (int i = 0; i < stateCount; i += 1)
 	{
-		MString* key1 = BufferReader_ReadMString(br);
+		MString* key1 = NULL;
+		BufferReader_ReadMString(&key1, br);
 
 		ThingGraphicsEntry* entry = NULL;
 		sh_new_arena(entry);
@@ -120,7 +121,8 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 		int phaseCount = BufferReader_ReadI32(br);
 		for (int j = 0; j < phaseCount; j += 1)
 		{
-			MString* key2 = BufferReader_ReadMString(br);
+			MString* key2 = NULL;
+			BufferReader_ReadMString(&key2, br);
 
 			ImageData* arr_images = NULL;
 

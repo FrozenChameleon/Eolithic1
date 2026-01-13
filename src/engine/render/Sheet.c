@@ -36,8 +36,8 @@ static void InitSheet(Sheet* sheet)
 {
 	Utils_memset(sheet, 0, sizeof(Sheet));
 
-	sheet->mSheetName = EE_STR_EMPTY;
-	sheet->mUnderlyingTextureName = EE_STR_EMPTY;
+	Utils_strlcpy(sheet->mSheetName, EE_STR_EMPTY, EE_FILENAME_MAX);
+	Utils_strlcpy(sheet->mUnderlyingTextureName, EE_STR_EMPTY, EE_FILENAME_MAX);
 	sheet->mRectangle = Rectangle_Empty;
 	sheet->mTextureResource = NULL;
 }
@@ -73,8 +73,8 @@ void Sheet_BuildSheets()
 
 		Sheet* sheet = Utils_malloc(sizeof(Sheet));
 		InitSheet(sheet);
-		sheet->mUnderlyingTextureName = MString_GetText(resource->mFileNameWithoutExtension);
-		sheet->mSheetName = sheet->mUnderlyingTextureName;
+		Utils_strlcpy(sheet->mUnderlyingTextureName, resource->mFileNameWithoutExtension, EE_FILENAME_MAX);
+		Utils_strlcpy(sheet->mSheetName, sheet->mUnderlyingTextureName, EE_FILENAME_MAX);
 		sheet->mTextureResource = resource->mData;
 		sheet->mRectangle = ((Texture*)sheet->mTextureResource)->mBounds;
 		arrput(arr_sheet_list, sheet);
@@ -100,8 +100,8 @@ void Sheet_BuildSheets()
 				TextureOffsetInfo* info = &texOffset->arr_offsets[i];
 				Sheet* sheet = Utils_malloc(sizeof(Sheet));
 				InitSheet(sheet);
-				sheet->mSheetName = info->mVirtualName;
-				sheet->mUnderlyingTextureName = info->mFilenameWithoutExtension;
+				Utils_strlcpy(sheet->mSheetName, info->mVirtualName, EE_FILENAME_MAX);
+				Utils_strlcpy(sheet->mUnderlyingTextureName, info->mFilenameWithoutExtension, EE_FILENAME_MAX);
 				sheet->mRectangle = info->mRect;
 				sheet->mTextureResource = ResourceManager_GetResource(textureMan, info->mFilenameWithoutExtension);
 				arrput(arr_sheet_list, sheet);

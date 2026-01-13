@@ -32,20 +32,20 @@ static MString* _mTempString;
 const char* PlayerBindingData_GetFilePlayerPath(PlayerBindingData* pbd)
 {
 	MString_Assign(&_mTempString, "player");
-	MString_AddAssignString(&_mTempString, Utils_IntToStringStaticBuffer(pbd->_mPlayerNumber));
+	MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber));
 	MString_AddAssignString(&_mTempString, ".bin");
 	return MString_GetText(_mTempString);
 }
 void PlayerBindingData_LogLoadSuccess(PlayerBindingData* pbd)
 {
 	MString_Assign(&_mTempString, "Bindings have been loaded for player #");
-	MString_AddAssignString(&_mTempString, Utils_IntToStringStaticBuffer(pbd->_mPlayerNumber));
+	MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber));
 	Logger_LogInformation(MString_GetText(_mTempString));
 }
 void PlayerBindingData_LogLoadFailure(PlayerBindingData* pbd)
 {
 	MString_Assign(&_mTempString, "Unable to load bindings for player #");
-	MString_AddAssignString(&_mTempString, Utils_IntToStringStaticBuffer(pbd->_mPlayerNumber));
+	MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber));
 	Logger_LogInformation(MString_GetText(_mTempString));
 }
 void PlayerBindingData_LoadFromStream(PlayerBindingData* pbd, BufferReader* reader)
@@ -191,7 +191,7 @@ void PlayerBindingData_Save(PlayerBindingData* pbd)
 	Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename, PlayerBindingData_CreateBufferFromBindings(pbd));
 	{
 		MString* tempString = NULL;
-		MString_Combine4(&tempString, "Bindings have been saved for player #", Utils_IntToStringStaticBuffer(pbd->_mPlayerNumber), ", ", filename);
+		MString_Combine4(&tempString, "Bindings have been saved for player #", Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber), ", ", filename);
 		Logger_LogInformation(MString_GetText(tempString));
 		MString_Dispose(&tempString);
 	}

@@ -346,7 +346,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(_mImprintPack, &iter))
 	{
-		CollisionEngineSys_ImprintToCollisionGridHelper(data, ComponentPack_GetComponentAtIndex(_mImprintPack, iter.mIndex));
+		CollisionEngineSys_ImprintToCollisionGridHelper(data, iter.mComponent);
 	}
 	//
 
@@ -354,7 +354,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 	iter = PackIterator_Begin;
 	while (ComponentPack_Next(bodyPack, &iter))
 	{
-		Body* body = ComponentPack_GetComponentAtIndex(bodyPack, iter.mIndex);
+		Body* body = iter.mComponent;
 		if (!body->mIsDisabled)
 		{
 			CollisionEngineSys_HandleBodiesHousekeepingHelper(data, body);

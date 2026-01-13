@@ -19,8 +19,8 @@ typedef struct ShaderProgram ShaderProgram;
 
 typedef struct Sheet
 {
-	const char* mSheetName;
-	const char* mUnderlyingTextureName;
+	char mSheetName[EE_FILENAME_MAX];
+	char mUnderlyingTextureName[EE_FILENAME_MAX];
 	Rectangle mRectangle;
 	Resource* mTextureResource;
 } Sheet;
