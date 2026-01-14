@@ -18,6 +18,7 @@
 #include "../utils/MString.h"
 #include "../io/DynamicByteBuffer.h"
 #include "../io/BufferReader.h"
+#include "../utils/Strings.h"
 
 static MString* _mTempString;
 
@@ -362,19 +363,32 @@ bool InputCheck_IsAnalog(InputCheck* data)
 }
 const char* InputCheck_GetName(InputCheck* data)
 {
-	return "TODO C99";
-	//switch (data->mType)
-	//{
-	//case TYPE_KEY:
-	//	return OeStrings::Get("GEN_BIND_KEY") + ": " + Keys::GetKeyName(static_cast<Keys::Key>(data->mKey));
-	//case TYPE_MOUSEBUTTON:
-	//	return OeStrings::Get("GEN_BIND_MOUSE") + ": " + GetNameTypeMouseButton(data);
-	//case TYPE_BUTTON:
-	//	return "Button: " + GetNameTypeButton(data);
-	//case TYPE_AXIS:
-	//	return GetNameTypeAxis(data);
-	//}
-	//return OeStrings::Get("GEN_BIND_NOT_SET");
+	switch (data->mType)
+	{
+	case INPUTCHECK_TYPE_KEY:
+	{
+		MString_Assign(&_mTempString, Strings_Get("GEN_BIND_KEY"));
+		MString_AddAssignString(&_mTempString, ": ");
+		MString_AddAssignString(&_mTempString, Keys_GetKeyName(data->mKey));
+		return MString_GetText(_mTempString);
+	}
+	case INPUTCHECK_TYPE_MOUSEBUTTON:
+	{
+		MString_Assign(&_mTempString, Strings_Get("GEN_BIND_MOUSE"));
+		MString_AddAssignString(&_mTempString, ": ");
+		MString_AddAssignString(&_mTempString, InputCheck_GetNameTypeMouseButton(data));
+		return MString_GetText(_mTempString);
+	}
+	case INPUTCHECK_TYPE_BUTTON:
+	{
+		MString_Assign(&_mTempString, "Button: ");
+		MString_AddAssignString(&_mTempString, InputCheck_GetNameTypeButton(data));
+		return MString_GetText(_mTempString);
+	}
+	case INPUTCHECK_TYPE_AXIS:
+		return InputCheck_GetNameTypeAxis(data);
+	}
+	return Strings_Get("GEN_BIND_NOT_SET");
 }
 void InputCheck_Write(InputCheck* data, DynamicByteBuffer* writer)
 {

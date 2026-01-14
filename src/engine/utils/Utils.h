@@ -12,6 +12,7 @@
 
 typedef struct IStringArray IStringArray;
 typedef struct MString MString;
+typedef struct InputCheck InputCheck;
 
 #define UTILS_ENGLISH_LANGUAGE_CODE "en"
 #define UTILS_FRENCH_LANGUAGE_CODE "fr"
@@ -116,3 +117,10 @@ int Utils_GetWindowSizeMulWidth();
 int Utils_GetWindowSizeMulHeight();
 Rectangle* Utils_GetWindowResolutions(bool filterAspectRatio, int32_t* length);
 const char* Utils_ConvertFramesToTimeDisplay(int32_t val);
+void Utils_DeleteBinding(int player, int index, const char* dataName);
+bool Utils_UpdateBinding(int player, int index, const char* dataName, bool isController, bool isBoth);
+bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool isBoth, bool blockMouse);
+int Utils_GetKeyboardForBind();
+int Utils_GetMouseButtonForBind();
+const char* Utils_GetStringFromNumberWithZerosHundreds(int32_t val);
+const char* Utils_GetStringFromNumberWithZerosTens(int32_t val);

@@ -49,7 +49,7 @@ static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 	for (int i = 0; i < len; i += 1)
 	{
 		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
-		if (temp->mName == name)
+		if (Utils_StringEqualTo(temp->mName, name))
 		{
 			return temp->mTime;
 		}
@@ -129,7 +129,7 @@ void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t 
 	for (int i = 0; i < len; i += 1)
 	{
 		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
-		if (temp->mName == name)
+		if (Utils_StringEqualTo(temp->mName, name))
 		{
 			temp->mTime = time;
 			return;

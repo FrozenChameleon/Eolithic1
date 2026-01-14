@@ -36,7 +36,6 @@ Resource* GameHelper_GetDefaultLevelDataResource();
 LevelData* GameHelper_GetDefaultLevelData();
 void GameHelper_UpdateLastRenderPositionNormally();
 Camera* GameHelper_GetDefaultCameraForRender();
-StringPair* GameHelper_AddSound(StringPair* arr_list, const char* key, const char* value);
 float GameHelper_GetDefaultPostGameBrightness();
 void GameHelper_UpdateGlobalSystemsNormally();
 void GameHelper_DrawGlobalSystemsNormally(SpriteBatch* spriteBatch);

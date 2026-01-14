@@ -33,7 +33,7 @@ void Service_Init();
 bool Service_IsPlatformSteam();
 void Service_ResetAchievements();
 int Service_GetPlatformType();
-void Service_SetAchievementMap(int* map);
+void Service_SetAchievementMap(int32_t* achievementMap, int32_t achievementMapLength);
 BufferRequest Service_AskToRetrieveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path);
 void Service_SaveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
 	FixedByteBuffer* buffer);

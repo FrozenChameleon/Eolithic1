@@ -6,13 +6,19 @@
 
 #include "ShaderProgram.h"
 #include "../utils/Utils.h"
+#include "Renderer.h"
 
-ShaderProgram* ShaderProgram_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
+static ShaderProgram _mShaderProgramFullRed;
+static ShaderProgram _mShaderProgramFullRed2;
+
+ShaderProgram* ShaderProgram_GetShaderFullRed()
 {
-	return NULL;
+	_mShaderProgramFullRed.mShaderType = RENDERER_SHADER_TYPE_WHITE_HIT_FLASH;
+	return &_mShaderProgramFullRed;
 }
-
-void ShaderProgram_Dispose(ShaderProgram* sp)
+ShaderProgram* ShaderProgram_GetShaderFullRed2()
 {
-	Utils_free(sp);
+	_mShaderProgramFullRed2.mShaderType = RENDERER_SHADER_TYPE_WHITE_HIT_FLASH;
+	_mShaderProgramFullRed2.mIsTotalWhiteHitFlash = true;
+	return &_mShaderProgramFullRed2;
 }

@@ -37,6 +37,10 @@
 #include "../gamestate/GameStateManager.h"
 #include "../gamesave/GameSaveManager.h"
 #include "../font/FontMap.h"
+#include "../input/ControllerState.h"
+#include "../utils/Logger.h"
+#include "GameHelper.h"
+#include "MenuFunc.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -82,8 +86,12 @@ int32_t Game_Init()
 		return 0;
 	}
 
-	int initStatus = 0;
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD))
+	{
+		return Exception_Run("Unable to init SDL!", false);
+	}
 
+	int initStatus = 0;
 	initStatus = Window_Init();
 	if (initStatus < 0)
 	{
@@ -120,7 +128,10 @@ int32_t Game_Init()
 	Input_Init();
 	GameStateManager_Ctor();
 	GameSaveManager_Init();
-	
+	GameHelper_Initialize();
+	MenuFunc_Init();
+	Music_Init();
+
 	_mHasInit = true;
 
 	return initStatus;
@@ -183,13 +194,13 @@ void Game_PollEvents() //Derived from FNA
 			// 120 units per notch. Because reasons.
 			//OeMouseState_INTERNAL_SetScrollWheelValue(e.wheel.y * 120);
 		}
-		if (e.type ==  SDL_EVENT_GAMEPAD_ADDED)
+		if (e.type == SDL_EVENT_GAMEPAD_ADDED)
 		{
-			//OeControllerState_AddControllerInstance(e.cdevice.which);
+			ControllerState_AddControllerInstance(e.cdevice.which);
 		}
 		else if (e.type == SDL_EVENT_GAMEPAD_REMOVED)
 		{
-			//OeControllerState_RemoveControllerInstance(e.cdevice.which);
+			ControllerState_RemoveControllerInstance(e.cdevice.which);
 		}
 		else if (e.type == SDL_EVENT_WINDOW_FOCUS_GAINED) // Various Window Events...
 		{

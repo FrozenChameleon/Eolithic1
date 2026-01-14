@@ -23,8 +23,8 @@
 static bool _mSuppressMenuSounds;
 static int32_t _mSoundTestCurrentSound;
 static int32_t _mSoundTestCurrentMusic;
-static StringPair* MUSIC_LIST;
-static StringPair* SOUND_LIST;
+static StringPair* arr_music_list;
+static StringPair* arr_sound_list;
 static bool _mLoadedOptionsMenu;
 static MString* _mTempString;
 static int32_t _mTempWindowSizeMultiple;
@@ -38,7 +38,7 @@ void MenuFunc_Init()
 		return;
 	}
 
-	GameHelper_SetupMusicAndSfxList(MUSIC_LIST, SOUND_LIST);
+	GameHelper_SetupMusicAndSfxList(arr_music_list, arr_sound_list);
 
 	_mHasInit = true;
 }
@@ -95,7 +95,7 @@ void MenuFunc_SoundStopSoundTestMusic()
 {
 	Do_StopMusic();
 }
-static void HandleSoundTestDirectionLogic(int* value, const int32_t direction, const int32_t len)
+static void HandleSoundTestDirectionLogic(int* value, int32_t direction, int32_t len)
 {
 	if (direction == 1)
 	{
@@ -118,54 +118,48 @@ static void HandleSoundTestDirectionLogic(int* value, const int32_t direction, c
 }
 void MenuFunc_SoundChangeSoundTextMusic(int direction)
 {
-	UNUSED(direction);
-	//TODO C99 HandleSoundTestDirectionLogic(&_mSoundTestCurrentMusic, direction, MUSIC_LIST.size());
+	HandleSoundTestDirectionLogic(&_mSoundTestCurrentMusic, direction, (int32_t)arrlen(arr_music_list));
 }
 void MenuFunc_SoundChangeSoundTextSfx(int direction)
 {
-	UNUSED(direction);
-	//TODO C99 HandleSoundTestDirectionLogic(&_mSoundTestCurrentSound, direction, SOUND_LIST.size());
+	HandleSoundTestDirectionLogic(&_mSoundTestCurrentSound, direction, (int32_t)arrlen(arr_sound_list));
 }
 void MenuFunc_SoundPlaySoundTestSfx()
 {
 	Do_StopAllSounds();
-	//TODO C99 Do_PlaySound(SOUND_LIST[_mSoundTestCurrentSound].mValue);
+	Do_PlaySound(arr_sound_list[_mSoundTestCurrentSound].mValue);
 }
 void MenuFunc_SoundPlaySoundTestMusic()
 {
-	//TODO C99 Do_PlayMusic(MUSIC_LIST[_mSoundTestCurrentMusic].mValue, true, true);
+	Do_PlayMusic2(arr_music_list[_mSoundTestCurrentMusic].mValue, true, true);
 }
 const char* MenuFunc_GetCurrentSoundTestMusic()
 {
-	return EE_STR_NOT_SET;
-	//TODO C99 return MUSIC_LIST[_mSoundTestCurrentMusic].mKey;
+	return arr_music_list[_mSoundTestCurrentMusic].mKey;
 }
 const char* MenuFunc_GetCurrentSoundTestMusicAsNumber()
 {
-	return EE_STR_NOT_SET;
-/*#if EDITOR
+#if EDITOR
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
-		return GetCurrentSoundTestMusic();
+		return MenuFunc_GetCurrentSoundTestMusic();
 	}
-#endif*/
-	//TODO C99 return Utils_GetStringFromNumberWithZerosTens(_mSoundTestCurrentMusic);
+#endif
+	return Utils_GetStringFromNumberWithZerosTens(_mSoundTestCurrentMusic);
 }
 const char* MenuFunc_GetCurrentSoundTestSfx()
 {
-	return EE_STR_NOT_SET;
-	//TODO C99 return SOUND_LIST[_mSoundTestCurrentSound].mKey;
+	return arr_sound_list[_mSoundTestCurrentSound].mKey;
 }
 const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 {
-	return EE_STR_NOT_SET;
-/*#if EDITOR
+#if EDITOR
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
-		return GetCurrentSoundTestSfx();
+		return MenuFunc_GetCurrentSoundTestSfx();
 	}
-#endif*/
-	//TODO C99 return OeUtils_GetStringFromNumberWithZerosHundreds(_mSoundTestCurrentSound);
+#endif
+	return Utils_GetStringFromNumberWithZerosHundreds(_mSoundTestCurrentSound);
 }
 /*const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2) //UNUSED
 {
@@ -784,4 +778,18 @@ void MenuFunc_SaveIfLoadedOptionsMenu()
 		Do_SaveUserConfig();
 		_mLoadedOptionsMenu = false;
 	}
+}
+void MenuFunc_SoundTestAddSoundEffect(const char* key, const char* value)
+{
+	StringPair pair;
+	Utils_strlcpy(pair.mKey, key, EE_FILENAME_MAX);
+	Utils_strlcpy(pair.mValue, value, EE_FILENAME_MAX);
+	arrput(arr_sound_list, pair);
+}
+void MenuFunc_SoundTestAddMusic(const char* key, const char* value)
+{
+	StringPair pair;
+	Utils_strlcpy(pair.mKey, key, EE_FILENAME_MAX);
+	Utils_strlcpy(pair.mValue, value, EE_FILENAME_MAX);
+	arrput(arr_music_list, pair);
 }

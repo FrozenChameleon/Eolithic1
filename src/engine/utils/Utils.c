@@ -22,12 +22,23 @@
 #include "../utils/IStringArray.h"
 #include "../render/DrawTool.h"
 #include "../core/Window.h"
+#include "../input/InputBindings.h"
+#include "../input/KeyList.h"
+#include "../input/ButtonList.h"
+#include "../input/MouseState.h"
+#include "../input/KeyboardState.h"
 
+static bool _mPolled;
 static MString* _mTempString;
 static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
 static int64_t _mSaveFrames;
 static Rectangle* arr_resolutions;
+
+#define MISSING_NUMBER "?"
+
+#define NUMBERS_WITH_ZEROS_HUNDREDS_LEN 1000
+#define NUMBERS_WITH_ZEROS_TENS_LEN 100
 
 #define LARGE_CHAR_BUFFER_LEN 8192
 static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
@@ -65,7 +76,7 @@ const char* Utils_GetCurrentUserLanguageCode()
 
 	if (!_mHasCachedValidLanguages)
 	{
-		const std::vector<std::string>& listOfLanguages = OeResourceManagers::StringsTextManager.GetKeyList();
+		const std_vector<std_string>& listOfLanguages = OeResourceManagers_StringsTextManager.GetKeyList();
 		for (int i = 0; i < listOfLanguages.size(); i += 1)
 		{
 			_mCachedValidLanguages.push_back(listOfLanguages[i]);
@@ -80,7 +91,7 @@ const char* Utils_GetCurrentUserLanguageCode()
 
 	if (Utils_StringEqualTo(_mCultureLanguage, STR_NOTHING))
 	{
-		const std::string& platformLanguage = OeService::GetPlatformLanguage();
+		const std_string& platformLanguage = OeService_GetPlatformLanguage();
 		if (!Utils_StringEqualTo(platformLanguage, STR_NOTHING))
 		{
 			_mCultureLanguage = platformLanguage;
@@ -92,7 +103,7 @@ const char* Utils_GetCurrentUserLanguageCode()
 		}
 	}
 
-	std::string currentLanguage = OeCvars::Get(OeCvars::USER_LANGUAGE);
+	std_string currentLanguage = OeCvars_Get(OeCvars_USER_LANGUAGE);
 	if (currentLanguage == LANGUAGE_SYSTEM)
 	{
 		currentLanguage = _mCultureLanguage;
@@ -277,18 +288,12 @@ bool Utils_ParseBoolean(const char* str)
 }
 bool Utils_StringEqualTo(const char* str1, const char* str2)
 {
-	if ((str1 == NULL) && (str2 == NULL))
-	{
-		return true;
-	}
-	else if ((str1 == NULL) || (str2 == NULL))
+	if ((str1 == NULL) || (str2 == NULL)) //A NULL pointer is not a valid string!
 	{
 		return false;
 	}
-	else
-	{
-		return (SDL_strcmp(str1, str2) == 0);
-	}
+
+	return (SDL_strcmp(str1, str2) == 0);
 }
 int32_t Utils_UInt64ToString(uint64_t value, char* buffer, size_t maxlen)
 {
@@ -722,7 +727,7 @@ int32_t Utils_GetAmountOfDigits(int32_t n)
 void Utils_GetSplitCSV(const char* str, IStringArray* addToHere)
 {
 	ResetLargeCharBuffer();
-	//std::vector<std::string> strings = {};
+	//std_vector<std_string> strings = {};
 
 	bool startedNewString = true;
 	bool isEscaped = false;
@@ -1094,7 +1099,6 @@ const char* Utils_ConvertFramesToTimeDisplay(int32_t val)
 	ConvertTimeHelper(subseconds);
 	return MString_GetText(_mTempString);
 }
-
 static void BuilderHelper(char* buffer, int index, int32_t val)
 {
 	if (val < 10)
@@ -1129,4 +1133,191 @@ void Utils_UpdateFramesToTimeDisplay(char* buffer, int32_t val)
 	BuilderHelper(buffer, 6, seconds);
 	buffer[8] = ':';
 	BuilderHelper(buffer, 9, subseconds);
+}
+void Utils_DeleteBinding(int player, int index, const char* dataName)
+{
+	InputAction* data = InputBindings_GetActionFromBindings(player, dataName);
+
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "Player #");
+		MString_AddAssignInt(&tempString, player);
+		MString_AddAssignString(&tempString, " Index #");
+		MString_AddAssignInt(&tempString, index);
+		MString_AddAssignString(&tempString, " Name: ");
+		MString_AddAssignString(&tempString, dataName);
+		MString_AddAssignString(&tempString, " has been deleted");
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+
+	InputCheck dummyCheck = { 0 };
+	InputChecks_Set(&data->mChecks, index, dummyCheck);
+	InputBindings_SaveAllBindings();
+}
+bool Utils_UpdateBinding(int player, int index, const char* dataName, bool isController, bool isBoth)
+{
+	InputAction* data = InputBindings_GetActionFromBindings(player, dataName);
+
+	if (Input_IsTildePressed() || Input_IsEscapePressed() || Input_IsDeletePressed() || Input_IsPressedByAnyPlayer(ACTIONLIST_GAME_START)) //Forbidden bindings
+	{
+		_mPolled = false;
+		return true;
+	}
+
+	bool inputtedThisFrame = false;
+	InputCheck check;
+	bool blockMouse = Utils_StringStartsWith(dataName, "GAME_MENU_");
+	if (Utils_StringEqualTo(dataName, "GAME_START"))
+	{
+		blockMouse = true;
+	}
+	bool isValid = Utils_GetInputCheckForBind(&check, isController, isBoth, blockMouse);
+
+	if (isValid && !_mPolled)
+	{
+		{
+			MString* tempString = NULL;
+			MString_Assign(&tempString, "Player #");
+			MString_AddAssignInt(&tempString, player);
+			MString_AddAssignString(&tempString, " Index #");
+			MString_AddAssignInt(&tempString, index);
+			MString_AddAssignString(&tempString, " Name: ");
+			MString_AddAssignString(&tempString, dataName);
+			MString_AddAssignString(&tempString, " has been set to ");
+			MString_AddAssignString(&tempString, InputCheck_GetName(&check));
+			Logger_LogInformation(MString_GetText(tempString));
+			MString_Dispose(&tempString);
+		}
+		//
+		InputChecks_Set(&data->mChecks, index, check);
+		inputtedThisFrame = true;
+		_mPolled = true;
+	}
+
+	if (!inputtedThisFrame && _mPolled)
+	{
+		InputBindings_SaveAllBindings();
+		_mPolled = false;
+		return true;
+	}
+
+	return false;
+}
+bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool isBoth, bool blockMouse)
+{
+	if (!isController || isBoth)
+	{
+		int keyBind = Utils_GetKeyboardForBind();
+		if (keyBind != -1)
+		{
+			*inputCheck = InputCheck_CreateCheckKey(KeyList_GetArray()[keyBind]);
+			return true;
+		}
+		if (!blockMouse)
+		{
+			int mouseButtonBind = Utils_GetMouseButtonForBind();
+			if (mouseButtonBind != -1)
+			{
+				*inputCheck = InputCheck_CreateCheckMouseButton(mouseButtonBind);
+				return true;
+			}
+		}
+	}
+
+	if (isController || isBoth)
+	{
+		for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+		{
+			ControllerState* controllerState = ControllerStates_GetController(i);
+
+			for (int j = 0; j < INPUTCHECK_AXIS_AMOUNT; j += 1)
+			{
+				int releaseDirection = ControllerState_IsAnalogReleased(controllerState, j, 0.5f);
+				if (releaseDirection != 0)
+				{
+					*inputCheck = InputCheck_CreateCheckAxis(j, releaseDirection);
+					return true;
+				}
+			}
+
+			const int32_t* buttons = ButtonList_GetArray();
+			int32_t buttonsLength = ButtonList_GetArrayLength();
+			for (int j = 0; j < buttonsLength; j += 1)
+			{
+				int button = buttons[j];
+				if (ControllerState_IsButtonReleased(controllerState, button))
+				{
+					*inputCheck = InputCheck_CreateCheckButton(button);
+					return true;
+				}
+			}
+		}
+	}
+
+	Utils_memset(inputCheck, 0, sizeof(InputCheck));
+	return false;
+}
+int Utils_GetKeyboardForBind()
+{
+	int32_t keysLength = KeyList_GetArrayLength();
+	const int32_t* keys = KeyList_GetArray();
+	for (int i = 0; i < keysLength; i += 1) //Keys
+	{
+		if (KeyboardState_IsKeyReleased(keys[i]))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+int Utils_GetMouseButtonForBind()
+{
+	int len = MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS;
+	for (int i = 0; i < len; i += 1)
+	{
+		if (MouseState_IsButtonReleased(i))
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+const char* Utils_GetStringFromNumberWithZerosHundreds(int32_t val)
+{
+	if ((val < 0) || (val > (NUMBERS_WITH_ZEROS_HUNDREDS_LEN - 1)))
+	{
+		return MISSING_NUMBER;
+	}
+	else
+	{
+		MString_Assign(&_mTempString, EE_STR_EMPTY);
+		if (val < 10)
+		{
+			MString_AddAssignInt(&_mTempString, 0);
+		}
+		if (val < 100)
+		{
+			MString_AddAssignInt(&_mTempString, 0);
+		}
+		MString_AddAssignInt(&_mTempString, val);
+		return MString_GetText(_mTempString);
+	}
+}
+const char* Utils_GetStringFromNumberWithZerosTens(int32_t val)
+{
+	if ((val < 0) || (val > (NUMBERS_WITH_ZEROS_TENS_LEN - 1)))
+	{
+		return MISSING_NUMBER;
+	}
+	else
+	{
+		MString_Assign(&_mTempString, EE_STR_EMPTY);
+		if (val < 10)
+		{
+			MString_AddAssignInt(&_mTempString, 0);
+		}
+		MString_AddAssignInt(&_mTempString, val);
+		return MString_GetText(_mTempString);
+	}
 }

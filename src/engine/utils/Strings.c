@@ -17,7 +17,6 @@ static IStringMap* _mMap;
 static MappingInfo* arr_info_list;
 
 static bool _mHasInit;
-static char _mTemp[10];
 
 void Strings_Init()
 {

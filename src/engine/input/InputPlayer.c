@@ -239,24 +239,27 @@ ControllerState* InputPlayer_GetController(InputPlayer* ip)
 {
 	return Input_GetController(ip->_mInputDeviceNumber);
 }
+
+
 void InputPlayer_Vibrate(InputPlayer* ip, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
 #ifdef DEBUG_DEF_DISABLE_RUMBLE
 	return;
-#endif
-
+#else
 	if (GameUpdater_IsDebugAutoSpeedOn() || Cvars_GetAsBool(CVARS_USER_IS_RUMBLE_DISABLED) || !InputPlayer_IsUsingController(ip)
 		|| (priority < ip->_mRumblePriority) || GameState_IsRewinding(GameStateManager_GetGameState()))
 	{
 		return;
-}
+	}
 
 	InputPlayer_SetVibration(ip, leftMotor, rightMotor);
 	ip->_mRumblePriority = priority;
 	ip->_mCounterRumble = frames;
 	ip->_mRumbleLeftMotor = leftMotor;
 	ip->_mRumbleRightMotor = rightMotor;
+#endif
 }
+
 bool InputPlayer_MyControllerLostConnection(InputPlayer* ip)
 {
 	if (!InputPlayer_IsUsingController(ip))

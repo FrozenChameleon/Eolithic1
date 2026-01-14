@@ -18,20 +18,23 @@
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
+#define RESOLUTION_LIMIT 40
+#define CORNER_CHECKS_LEN 8
+
 #define USE_SCREEN_DISTANCE_CULL
 #ifdef USE_SCREEN_DISTANCE_CULL
 static const int32_t SCREEN_DISTANCE_CULL_WIDTH = (1280 * BODY_PHYSICS_SCALER);
 static const int32_t SCREEN_DISTANCE_CULL_HEIGHT = (720 * BODY_PHYSICS_SCALER);
 #endif
 
-#define RESOLUTION_LIMIT 40
-#define CORNER_CHECKS_LEN 8
-
 static const Color mDebugColorActive = { 0, 255, 0, 191 };
 static const Color mDebugColorTouched = { 127, 0, 127, 191 };
 static const Color mDebugColor = { 128, 128, 128, 127 };
 static const Color mDebugGridColor = { 255, 0, 0, 51 };
 static Body** arr_bodies;
+
+DrawRectangle* arr_debug_node_rectangles;
+DrawRectangle* arr_debug_many_rectangles;
 
 static bool _mCornerChecks[CORNER_CHECKS_LEN];
 static ComponentPack* _mImprintPack;
@@ -232,40 +235,6 @@ bool CollisionEngineSys_IsPointSafe(CollisionEngine* data, int32_t x, int32_t y)
 
 	return true;
 }
-/*
-void CollisionEngineSys_SortPathNodes(CollisionEngine* data, std_vector<std_shared_ptr<OePathNode>>& nodes)
-{
-	//for (int i = 0; i < nodes.Count; i += 1)
-	//{
-	//	OePathNode node = nodes[i];
-	//	int index = data.mTempNodes.Count;
-	//	for (int j = 0; j < data.mTempNodes.Count; j += 1)
-	//	{
-	//		OePathNode tempNode = data.mTempNodes[j];
-	//		if (node.mTotalDistance <= tempNode.mTotalDistance)
-	//		{
-	//			index = j;
-	//			break;
-	//		}
-	//	}
-	//	data.mTempNodes.Insert(index, node);
-	//}
-	//
-	//nodes.Clear();
-	//
-	//for (int i = 0; i < data.mTempNodes.Count; i += 1)
-	//{
-	//	nodes.Add(data.mTempNodes[i]);
-	//}
-	//
-	//data.mTempNodes.Clear();
-}
-int CollisionEngineSys_GetIndexOfNode(OePathNode givenNode, std_vector<std_shared_ptr<OePathNode>>& nodes)
-{
-	return 0;
-	//return OeListTools.GetIndexOfValue(givenNode, nodes);
-}
-*/
 bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float checkY, int32_t directionX, int32_t directionY, Body* body, bool isVertical)
 {
 	Point point = CollisionEngineSys_GetCollisionGridPosition(checkX, checkY);
@@ -373,7 +342,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 		body->mPhysicsVelocity = Vector2_Zero;
 	}
 
-	arrsetlen(data->arr_debug_many_rectangles, 0);
+	arrsetlen(arr_debug_many_rectangles, 0);
 
 	CollisionEngineSys_DebugGenerateDebugRectangles(data);
 
@@ -1325,12 +1294,12 @@ void CollisionEngineSys_InitRoutine(Entity owner, CollisionEngine* data)
 }
 void CollisionEngineSys_DrawRoutine(Entity owner, CollisionEngine* data, SpriteBatch* spriteBatch)
 {
-	if (arrlen(data->arr_debug_many_rectangles) <= 0)
+	if (arrlen(arr_debug_many_rectangles) <= 0)
 	{
 		return;
 	}
 
-	SpriteBatch_DrawManyRectangle(spriteBatch, 100, data->arr_debug_many_rectangles);
+	SpriteBatch_DrawManyRectangle(spriteBatch, 100, arr_debug_many_rectangles);
 }
 void CollisionEngineSys_DrawTiles(GameState* scene)
 {
@@ -1350,7 +1319,7 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 		DrawRectangle drawRect;
 		Rectangle bodyRect = Body_GetRect(body);
 		DrawRectangle_Init(&drawRect, drawColor, bodyRect);
-		arrput(data->arr_debug_many_rectangles, drawRect);
+		arrput(arr_debug_many_rectangles, drawRect);
 	}
 
 	//for (int i = 0; i < data->mDebugNodeRectangles.size(); i += 1)
@@ -1406,7 +1375,7 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 			Rectangle tempRectangle = { rectX, rectY, rectWidth, rectHeight };
 			DrawRectangle tempDrawRectangle;
 			DrawRectangle_Init(&tempDrawRectangle, color, tempRectangle);
-			arrput(data->arr_debug_many_rectangles, tempDrawRectangle);
+			arrput(arr_debug_many_rectangles, tempDrawRectangle);
 		}
 	}
 	//End Draw Tiles

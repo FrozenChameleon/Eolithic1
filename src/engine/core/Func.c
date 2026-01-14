@@ -1237,11 +1237,9 @@ void Do_SetupShaderSingleColorReplace2(ShaderProgram* program, uint8_t targetR, 
 
 void Do_SetupShaderMultiColorLength(ShaderProgram* program, int32_t length)
 {
-	/*
-	program->mShaderType = OeRenderer_SHADER_TYPE_MULTI_COLOR_REPLACE;
+	program->mShaderType = RENDERER_SHADER_TYPE_MULTI_COLOR_REPLACE;
 	program->mMultiColorReplaceLength = length;
-	program->mMultiColorReplace = std_vector<uint8_t>(length * 6);
-	*/
+	Utils_memset(program->mMultiColorReplace, 0, sizeof(uint8_t) * SHADER_PROGRAM_MAX_REPLACE_LENGTH);
 }
 
 ShaderProgram* Do_CreateShader(const char* name)
@@ -1259,9 +1257,8 @@ void Do_SetupShaderMultiColor(ShaderProgram* program, int32_t i, uint8_t targetR
 void Do_SetupShaderMultiColor2(ShaderProgram* program, int32_t i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
 	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB, uint8_t alpha)
 {
-	/*
-	program->mShaderType = OeRenderer_SHADER_TYPE_MULTI_COLOR_REPLACE;
-	int off = i * 6;
+	program->mShaderType = RENDERER_SHADER_TYPE_MULTI_COLOR_REPLACE;
+	int32_t off = i * SHADER_PROGRAM_MAX_REPLACE_ENTRY_OFFSET;
 	program->mMultiColorReplace[off] = targetR;
 	program->mMultiColorReplace[off + 1] = targetG;
 	program->mMultiColorReplace[off + 2] = targetB;
@@ -1269,7 +1266,6 @@ void Do_SetupShaderMultiColor2(ShaderProgram* program, int32_t i, uint8_t target
 	program->mMultiColorReplace[off + 4] = replaceG;
 	program->mMultiColorReplace[off + 5] = replaceB;
 	program->mMultiColorReplaceAlpha = alpha;
-	*/
 }
 
 Body* Do_InitBody(Entity entity, int32_t width, int32_t height)
@@ -1460,7 +1456,7 @@ void Do_SynchronizeAnimation2(Animation* anim)
 }
 void Do_Vibrate(int player, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
-	//TODO Input_GetPlayer(player)->Vibrate(priority, frames, leftMotor, rightMotor);
+	InputPlayer_Vibrate(Input_GetPlayerOne(player), priority, frames, leftMotor, rightMotor);
 }
 void Do_Vibrate2(Entity entity, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {

@@ -46,7 +46,7 @@
 #include <mojoshader_effects.h>
 #include "../../GlobalDefs.h"
 
-#define MULTI_COLOR_REPLACE_LEN 24
+#define MULTI_COLOR_REPLACE_LEN SHADER_PROGRAM_MAX_REPLACE_LENGTH
 #define TRANSFORM_DEST_LEN 16
 
 typedef struct Effect
@@ -308,23 +308,18 @@ static FNA3D_BlendState GetBlendStateFromBlendState(BlendState value)
 }
 static void ApplyWhiteHitFlashShader(Effect* white)
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i += 1)
 	{
 		_mMultiColorReplaceData[i] = 1.0f;
 	}
 
 #ifdef GLOBAL_DEF_GAME_IS_MUTE_CRIMSON_DX
-	//TODO C99
-	/*
 	ShaderProgram* globalShaderProgram = Renderer_GetGlobalShaderProgram();
 	if (globalShaderProgram != NULL)
 	{
-		if (globalShaderProgram->mMultiColorReplace.size() >= 6)
-		{
-			_mMultiColorReplaceData[0] = (float)(globalShaderProgram->mMultiColorReplace[3]) / 0xFF; //Replace color with first target color
-			_mMultiColorReplaceData[1] = (float)(globalShaderProgram->mMultiColorReplace[4]) / 0xFF;
-			_mMultiColorReplaceData[2] = (float)(globalShaderProgram->mMultiColorReplace[5]) / 0xFF;
-		}
+		_mMultiColorReplaceData[0] = (float)(globalShaderProgram->mMultiColorReplace[3]) / 0xFF; //Replace color with first target color
+		_mMultiColorReplaceData[1] = (float)(globalShaderProgram->mMultiColorReplace[4]) / 0xFF;
+		_mMultiColorReplaceData[2] = (float)(globalShaderProgram->mMultiColorReplace[5]) / 0xFF;
 	}
 	else
 	{
@@ -332,7 +327,6 @@ static void ApplyWhiteHitFlashShader(Effect* white)
 		_mMultiColorReplaceData[1] = 0.19f;
 		_mMultiColorReplaceData[2] = 0.13f;
 	}
-	*/
 #endif
 
 	for (int i = 0; i < white->mData->param_count; i++)
@@ -349,14 +343,17 @@ static void ApplyWhiteHitFlashShader(Effect* white)
 }
 static void ApplyMultiColorReplaceShader(Effect* multi, ShaderProgram* shaderProgram)
 {
-	int colorLength = shaderProgram->mMultiColorReplaceLength;
-	//TODO C99
-	/*
-	for (int i = 0; i < shaderProgram->mMultiColorReplace.size(); i += 1)
+	int32_t colorLength = (int32_t)shaderProgram->mMultiColorReplaceLength * SHADER_PROGRAM_MAX_REPLACE_ENTRY_OFFSET;
+	if (colorLength > MULTI_COLOR_REPLACE_LEN)
+	{
+		Logger_LogInformation("Asking for too many colors for color replace!");
+		return;
+	}
+
+	for (int i = 0; i < colorLength; i += 1)
 	{
 		_mMultiColorReplaceData[i] = (float)(shaderProgram->mMultiColorReplace[i]) / 0xFF;
 	}
-	*/
 	float colorReplaceAlpha = (float)(shaderProgram->mMultiColorReplaceAlpha) / 0xFF;
 
 	for (int i = 0; i < multi->mData->param_count; i++)

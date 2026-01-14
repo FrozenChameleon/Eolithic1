@@ -12,6 +12,8 @@
 #include "ButtonList.h"
 #include "../math/Math.h"
 #include "../utils/Cvars.h"
+#include "../core/Game.h"
+#include "../service/Service.h"
 
 bool ControllerData_IsConnected(const ControllerData* cd)
 {
@@ -212,12 +214,11 @@ void ControllerState_Poll(ControllerState* cs)
 
 	ControllerData_PollControllerStatus(&cs->_mThisFrame, cs->_mIndex);
 
-	//TODO C99
-	//if (Cvars_GetAsBool(ENGINE_DISABLE_CONTROLLER) ||
-	//	(!OeGame::IsGameActive() && OeService::PlatformStopsPollingInputWhenGameIsNotActive()))
-	//{
-	//	return;
-	//}
+	if (Cvars_GetAsBool(CVARS_ENGINE_DISABLE_CONTROLLER) ||
+		(!Game_IsActive() && Service_PlatformStopsPollingInputWhenGameIsNotActive()))
+	{
+		return;
+	}
 
 	ControllerData_PollInput(&cs->_mThisFrame, cs->_mIsButtonMuted, cs->_mIsAnalogMuted);
 }

@@ -101,7 +101,6 @@ void ControllerData_PollInput(ControllerData* cd, bool* isButtonMutedArray, bool
 	for (int i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i++)
 	{
 		cd->_mIsButtonPressed[i] = SDL_GetGamepadButton(device, ButtonToSDL(ButtonList_GetButton(i)));
-
 		if (isButtonMutedArray[i])
 		{
 			if (cd->_mIsButtonPressed[i])
@@ -157,7 +156,7 @@ void ControllerState_SetVibration(ControllerState* cs, float leftMotor, float ri
 	SDL_RumbleGamepad(GetDevice(cs->_mIndex), left, right, 0);
 }
 
-int32_t ControllerState_AddControllerInstance(ControllerState* cs, int32_t dev)
+int32_t ControllerState_AddControllerInstance(int32_t dev)
 {
 	//Adapted from FNA/src/FNAPlatform/SDL2_FNAPlatform.cs
 
@@ -204,7 +203,7 @@ int32_t ControllerState_AddControllerInstance(ControllerState* cs, int32_t dev)
 
 	return which;
 }
-int32_t ControllerState_RemoveControllerInstance(ControllerState* cs, int32_t dev)
+int32_t ControllerState_RemoveControllerInstance(int32_t dev)
 {
 	//Adapted from FNA/src/FNAPlatform/SDL2_FNAPlatform.cs
 

@@ -42,8 +42,8 @@ void MusicInstance_HandleFadeOut(MusicInstance* mi, float musicVolume)
 			{
 				SoundEffectInstance_SetVolume(&mi->_mCurrentMusicInstance, musicVolume);
 			}
-			mi->_mCurrentTrack = mi->_mNextTrack;
-			mi->_mNextTrack = EE_STR_EMPTY;
+			Utils_strlcpy(mi->_mCurrentTrack, mi->_mNextTrack, EE_FILENAME_MAX);
+			Utils_strlcpy(mi->_mNextTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
 			MusicInstance_Play(mi, mi->_mCurrentTrack, true, mi->_mWillFadeIn, 0);
 			if (mi->_mWillFadeIn)
 			{
@@ -65,9 +65,9 @@ void MusicInstance_Init(MusicInstance* mi)
 {
 	Utils_memset(mi, 0, sizeof(MusicInstance));
 	Timer_Init(&mi->_mFadeTimer, 180);
-	mi->_mPreviousTrack = EE_STR_EMPTY;
-	mi->_mCurrentTrack = EE_STR_EMPTY;
-	mi->_mNextTrack = EE_STR_EMPTY;
+	Utils_strlcpy(mi->_mPreviousTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
+	Utils_strlcpy(mi->_mCurrentTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
+	Utils_strlcpy(mi->_mNextTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
 
 bool MusicInstance_IsLooped(MusicInstance* mi)
@@ -88,13 +88,13 @@ const char* MusicInstance_PreviousTrack(MusicInstance* mi)
 }
 void MusicInstance_Play(MusicInstance* mi, const char* nextTrack, bool isLooping, bool isUsingForcedVolume, float forcedVolume)
 {
-	mi->_mPreviousTrack = mi->_mCurrentTrack;
+	Utils_strlcpy(mi->_mPreviousTrack, mi->_mCurrentTrack, EE_FILENAME_MAX);
 	if (Utils_StringEqualTo(mi->_mPreviousTrack, EE_STR_EMPTY))
 	{
-		mi->_mPreviousTrack = nextTrack;
+		Utils_strlcpy(mi->_mPreviousTrack, nextTrack, EE_FILENAME_MAX);
 	}
 
-	mi->_mCurrentTrack = nextTrack;
+	Utils_strlcpy(mi->_mCurrentTrack, nextTrack, EE_FILENAME_MAX);
 	if (Utils_StringEqualTo(mi->_mCurrentTrack, EE_STR_EMPTY))
 	{
 		return;
@@ -183,7 +183,7 @@ void MusicInstance_SetupFadeIn(MusicInstance* mi, int32_t fadeInTime)
 void MusicInstance_SetupFadeOut(MusicInstance* mi, const char* nextTrack, int32_t fadeOutTime)
 {
 	Timer_Reset(&mi->_mFadeTimer);
-	mi->_mNextTrack = nextTrack;
+	Utils_strlcpy(mi->_mNextTrack, nextTrack, EE_FILENAME_MAX);
 	mi->_mState = STATE_FADE_OUT;
 	mi->_mFadeTimer.mLimit = fadeOutTime;
 }
@@ -193,9 +193,9 @@ bool MusicInstance_IsFadingOut(MusicInstance* mi)
 }
 void MusicInstance_ClearTrackNames(MusicInstance* mi)
 {
-	mi->_mPreviousTrack = EE_STR_EMPTY;
-	mi->_mCurrentTrack = EE_STR_EMPTY;
-	mi->_mNextTrack = EE_STR_EMPTY;
+	Utils_strlcpy(mi->_mPreviousTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
+	Utils_strlcpy(mi->_mCurrentTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
+	Utils_strlcpy(mi->_mNextTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
 bool MusicInstance_IsPlaying(MusicInstance* mi)
 {

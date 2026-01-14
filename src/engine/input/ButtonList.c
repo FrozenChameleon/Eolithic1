@@ -8,39 +8,51 @@
 
 #include "Buttons.h"
 
-int32_t ButtonList_GetButton(int index)
+#define AMOUNT_OF_BUTTONS 14
+
+static bool _mHasInit;
+static int32_t _mArray[AMOUNT_OF_BUTTONS];
+
+static void Init()
 {
-	switch (index)
+	if (_mHasInit)
 	{
-	case 0:
-		return BUTTONS_DPadUp;
-	case 1:
-		return BUTTONS_DPadDown;
-	case 2:
-		return BUTTONS_DPadLeft;
-	case 3:
-		return BUTTONS_DPadRight;
-	case 4:
-		return BUTTONS_Start;
-	case 5:
-		return BUTTONS_Back;
-	case 6:
-		return BUTTONS_LeftStick;
-	case 7:
-		return BUTTONS_RightStick;
-	case 8:
-		return BUTTONS_LeftShoulder;
-	case 9:
-		return BUTTONS_RightShoulder;
-	case 10:
-		return BUTTONS_A;
-	case 11:
-		return BUTTONS_B;
-	case 12:
-		return BUTTONS_X;
-	case 13:
-		return BUTTONS_Y;
+		return;
 	}
 
-	return -1;
+	_mArray[0] = BUTTONS_DPadUp;
+	_mArray[1] = BUTTONS_DPadDown;
+	_mArray[2] = BUTTONS_DPadLeft;
+	_mArray[3] = BUTTONS_DPadRight;
+	_mArray[4] = BUTTONS_Start;
+	_mArray[5] = BUTTONS_Back;
+	_mArray[6] = BUTTONS_LeftStick;
+	_mArray[7] = BUTTONS_RightStick;
+	_mArray[8] = BUTTONS_LeftShoulder;
+	_mArray[9] = BUTTONS_RightShoulder;
+	_mArray[10] = BUTTONS_A;
+	_mArray[11] = BUTTONS_B;
+	_mArray[12] = BUTTONS_X;
+	_mArray[13] = BUTTONS_Y;
+
+	_mHasInit = true;
+}
+
+int32_t ButtonList_GetButton(int index)
+{
+	Init();
+
+	return _mArray[index];
+}
+
+
+const int32_t* ButtonList_GetArray()
+{
+	Init();
+
+	return _mArray;
+}
+int32_t ButtonList_GetArrayLength()
+{
+	return AMOUNT_OF_BUTTONS;
 }

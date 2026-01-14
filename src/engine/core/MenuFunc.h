@@ -167,3 +167,5 @@ void MenuFunc_PlayMenuSoundDown();
 void MenuFunc_PlayMenuSoundLeft();
 void MenuFunc_PlayMenuSoundHelper(const char* soundToPlay);
 void MenuFunc_SaveIfLoadedOptionsMenu();
+void MenuFunc_SoundTestAddSoundEffect(const char* key, const char* value);
+void MenuFunc_SoundTestAddMusic(const char* key, const char* value);

@@ -13,6 +13,7 @@
 #include "../components/FakePosition.h"
 #include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
+#include "../utils/Logger.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -185,7 +186,14 @@ DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int32_t state)
 			}
 		}
 	}
-	//TODO C99 Logger_LogError("State Not Available: " + OeUtils_ToString(state) + " on " + Get_Name(owner));
+
+	{
+		MString* tempString = NULL;
+		MString_Combine4(&tempString, "State Not Available: ", Utils_IntToStringGlobalBuffer(state), " on ", Get_Name(owner));
+		Logger_LogError(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+
 	return ComponentPack_GetComponentAtIndex(drawStateInfos, 0);
 }
 void DrawActorSys_SetDepthOverride(Entity owner, int32_t state, int32_t value)
@@ -349,7 +357,18 @@ Animation* DrawActorSys_GetAnimation(Entity owner, int32_t state, int32_t phase)
 			}
 		}
 	}
-	//TODO C99 Logger_LogError("Unable to get Animation: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
+
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "Unable to get Animation: ");
+		MString_AddAssignInt(&tempString, state);
+		MString_AddAssignString(&tempString, ",");
+		MString_AddAssignInt(&tempString, phase);
+		MString_AddAssignString(&tempString, "!");
+		Logger_LogError(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+
 	return &EmptyAnimation;
 }
 ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int32_t state, int32_t phase)
@@ -366,7 +385,18 @@ ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int32_t 
 			}
 		}
 	}
-	//TODO C99 Logger_LogError("Unable to get Image Data Render: " + OeUtils_ToString(state) + "," + OeUtils_ToString(phase) + "!");
+
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "Unable to get Image Data Render: ");
+		MString_AddAssignInt(&tempString, state);
+		MString_AddAssignString(&tempString, ",");
+		MString_AddAssignInt(&tempString, phase);
+		MString_AddAssignString(&tempString, "!");
+		Logger_LogError(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+
 	return &EmptyRender;
 }
 void DrawActorSys_ResetCurrentAnimation(Entity owner, int32_t state)

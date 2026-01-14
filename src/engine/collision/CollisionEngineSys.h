@@ -15,8 +15,6 @@ bool CollisionEngineSys_ResolvePush(CollisionEngine* data, Body* pushingBody, Bo
 void CollisionEngineSys_HandleNullDividePlusPushing(CollisionEngine* data, Body* pushingBody, Body* pushedBody, bool isVertical);
 void CollisionEngineSys_ImprintToCollisionGridHelper(CollisionEngine* data, CollisionImprintData* imprint);
 bool CollisionEngineSys_IsPointSafe(CollisionEngine* data, int32_t x, int32_t y);
-//void SortPathNodes(CollisionEngine* data, std::vector<std::shared_ptr<OePathNode>>& nodes);
-//int GetIndexOfNode(OePathNode givenNode, std::vector<std::shared_ptr<OePathNode>>& nodes);
 bool CollisionEngineSys_CheckPoint(CollisionEngine* data, float checkX, float checkY, int32_t directionX, int32_t directionY, Body* body, bool isVertical);
 
 void CollisionEngineSys_DisableDynamicGravity(void);
@@ -57,7 +55,6 @@ void CollisionEngineSys_ApplyBodyVelocity(CollisionEngine* data, Body* body, boo
 void CollisionEngineSys_InitRoutine(Entity owner, CollisionEngine* data);
 void CollisionEngineSys_DrawRoutine(Entity owner, CollisionEngine* data, SpriteBatch* spriteBatch);
 void CollisionEngineSys_DrawTiles(GameState* scene);
-//void CollisionEngineSys_DebugDrawNodes(CollisionEngine* data);
 void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data);
 
 System* CollisionEngineSys_CreateSystem(void);

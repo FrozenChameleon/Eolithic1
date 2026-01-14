@@ -48,7 +48,18 @@ void Achievement_UnlockAchievement(bool doNotCertify, Achievement* achievement, 
 	}
 
 	achievement->mIsUnlocked = true;
-	Logger_printf("Achievement %d - %s has been unlocked", index, achievement->mName);
+
+	{
+		MString* tempString = NULL;
+		MString_Assign(&tempString, "Achievement ");
+		MString_AddAssignInt(&tempString, index);
+		MString_AddAssignString(&tempString, " - ");
+		MString_AddAssignString(&tempString, achievement->mName);
+		MString_AddAssignString(&tempString, " has been unlocked!");
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
+
 	if (!doNotCertify)
 	{
 		Achievement_CertifyAchievement(achievement, index);

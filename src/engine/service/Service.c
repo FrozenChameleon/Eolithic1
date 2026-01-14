@@ -14,13 +14,14 @@
 
 //Achievements
 static bool _mIsOnLeaderboardMenuRightNow;
-static int* _mAchievementMap;
+static int32_t _mAchievementMapLength;
+static int32_t* _mAchievementMap;
 
 //Leaderboard Retrieving
-static int _mLeaderboardAmountOfRowsToRetrieve;
-static int _mLeaderboardRequestQueueState;
-static int _mLeaderboardRequestQueuedPage;
-static int _mLeaderboardRequestDirection;
+static int32_t _mLeaderboardAmountOfRowsToRetrieve;
+static int32_t _mLeaderboardRequestQueueState;
+static int32_t _mLeaderboardRequestQueuedPage;
+static int32_t _mLeaderboardRequestDirection;
 static double _mLeaderboardRequestDelayCounter;
 static LeaderboardRequestData _mLeaderboardRequest;
 static LeaderboardEntry* arr_leaderboard_entries;
@@ -29,8 +30,8 @@ static bool _mIsTheLeaderboardReady;
 //Leaderboard Sending
 static bool _mSilenceLeaderboardStatusNotifications;
 static bool _mAreLeaderboardDisabled;
-static int _mLeaderboardSendStatus;
-static int _mLeaderboardSendStatusFrames;
+static int32_t _mLeaderboardSendStatus;
+static int32_t _mLeaderboardSendStatusFrames;
 
 //private
 bool Service_IsLeaderboardRequestQueued()
@@ -202,9 +203,10 @@ void Service_SetLeaderboardAmountOfRowsToRetrieve(int range)
 {
 	_mLeaderboardAmountOfRowsToRetrieve = range;
 }
-void Service_SetAchievementMap(int* map)
+void Service_SetAchievementMap(int32_t* achievementMap, int32_t achievementMapLength)
 {
-	_mAchievementMap = map;
+	_mAchievementMap = achievementMap;
+	_mAchievementMapLength = achievementMapLength;
 }
 void Service_Update(double delta)
 {

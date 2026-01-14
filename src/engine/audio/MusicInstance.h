@@ -15,9 +15,9 @@ typedef struct MusicInstance
 	int _mState;
 	bool _mPaused;
 	bool _mWillFadeIn;
-	const char* _mPreviousTrack;
-	const char* _mCurrentTrack;
-	const char* _mNextTrack;
+	char _mPreviousTrack[EE_FILENAME_MAX];
+	char _mCurrentTrack[EE_FILENAME_MAX];
+	char _mNextTrack[EE_FILENAME_MAX];
 	Timer _mFadeTimer;
 	SoundEffectInstance _mCurrentMusicInstance;
 } MusicInstance;

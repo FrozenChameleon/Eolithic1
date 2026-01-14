@@ -73,11 +73,6 @@ Camera* GameHelper_GetDefaultCameraForRender()
 {
 	return GameStateManager_GetFirstSetComponent(C_Camera);
 }
-StringPair* GameHelper_AddSound(StringPair* arr_list, const char* key, const char* value)
-{
-	return NULL;
-	//TODO C99 list.push_back(OeStringPair(key, value));
-}
 float GameHelper_GetDefaultPostGameBrightness()
 {
 	return 1;
