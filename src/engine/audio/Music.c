@@ -11,6 +11,8 @@
 #include "MusicInstance.h"
 #include "../globals/Globals.h"
 #include "../utils/Macros.h"
+#include "../utils/Cvars.h"
+#include "SoundEffect.h"
 
  //static const std::string MUSIC_EXTENSION = ".wav";
  //static const std::vector<std::string> MUSIC_DIR = { OeFile::Combine("data", "music") };
@@ -49,12 +51,18 @@ void Music_Init(void)
 	}
 
 	MusicInstance_Init(&_mCurrentMusic);
+	VolumeData_Init(&_mVolumeData, true);
 
 	_mHasInit = true;
 }
 float Music_GetVolumeForMusic(const char* name)
 {
-	return 1.0f;
+	if (IsDisabledPermanently() || _mIsMusicMuted)
+	{
+		return 0;
+	}
+
+	return SoundEffect_GetVolumeHelper(CVARS_USER_VOLUME_MUSIC, name, &_mVolumeData);
 }
 bool Music_IsPlaying(void)
 {

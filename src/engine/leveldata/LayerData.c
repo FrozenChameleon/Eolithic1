@@ -7,7 +7,6 @@
 #include "LayerData.h"
 
 #include "../io/BufferReader.h"
-#include "../io/BufferWriter.h"
 
 const char* LayerData_GetNameSpeedX(LayerData* layer, int32_t i)
 {

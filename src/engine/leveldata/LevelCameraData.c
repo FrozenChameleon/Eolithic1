@@ -10,7 +10,6 @@
 #include "float.h"
 #include "../render/Color.h"
 #include "../io/BufferReader.h"
-#include "../io/BufferWriter.h"
 //#include "OeMetaMapChunk.h"
 #include "../render/SpriteBatch.h"
 #include "../math/PointRectangle.h"

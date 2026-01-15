@@ -4,6 +4,7 @@
 #include "../utils/Utils.h"
 #include "../io/File.h"
 #include "../utils/IStrings.h"
+#include "../utils/IStringArray.h"
 
 TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {

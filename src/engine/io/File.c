@@ -11,6 +11,9 @@
 #include "../utils/Macros.h"
 #include "../utils/Exception.h"
 #include "../utils/Cvars.h"
+#include "FixedByteBuffer.h"
+#include "BufferReader.h"
+#include "../utils/IStringArray.h"
 
 #ifdef _WIN32
 #define PATH_SEPARATOR '\\'

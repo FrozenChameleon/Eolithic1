@@ -6,7 +6,6 @@
 #include "../render/Color.h"
 #include "../render/Sheet.h"
 #include "../io/BufferReader.h"
-#include "../io/BufferWriter.h"
 #include "../render/DrawTool.h"
 #include "../globals/Align.h"
 #include "../utils/Logger.h"

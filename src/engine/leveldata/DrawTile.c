@@ -3,7 +3,6 @@
 #include "../math/Points.h"
 #include "../globals/Globals.h"
 #include "../render/SpriteBatch.h"
-#include "../io/BufferWriter.h"
 #include "../io/BufferReader.h"
 #include "../io/File.h"
 #include "AnimTile.h"

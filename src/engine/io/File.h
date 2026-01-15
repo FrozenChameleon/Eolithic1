@@ -6,13 +6,12 @@
 
 #pragma once
 
-#include "stdbool.h"
-#include "stdint.h"
-#include "FixedByteBuffer.h"
 #include "../utils/Macros.h"
-#include "BufferReader.h"
-#include "../utils/IStringArray.h"
 #include "../utils/MString.h"
+
+typedef struct FixedByteBuffer FixedByteBuffer;
+typedef struct BufferReader BufferReader;
+typedef struct IStringArray IStringArray;
 
 void File_AppendPathSeparator(MString** str);
 FixedByteBuffer* File_ReadAll(const char* path);

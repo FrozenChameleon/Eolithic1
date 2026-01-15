@@ -10,9 +10,9 @@
 #include "../core/GameHelper.h"
 #include "../service/Service.h"
 #include "../io/BufferReader.h"
-#include "../io/BufferWriter.h"
 #include "../utils/Utils.h"
 #include "../utils/IStringArray.h"
+#include "../io/DynamicByteBuffer.h"
 
 #define CONTAINER_DISPLAY_NAME "GameBindings"
 #define CONTAINER_NAME "GameBindingsContainer"

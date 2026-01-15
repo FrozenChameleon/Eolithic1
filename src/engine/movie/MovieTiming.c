@@ -2,6 +2,7 @@
 
 #include "../io/File.h"
 #include "../utils/Utils.h"
+#include "../utils/IStringArray.h"
 
 /*
 static const std::string TIMING_EXTENSION = ".txt";

@@ -4,6 +4,7 @@
 #include "Macros.h"
 
 typedef struct IStringMap IStringMap;
+typedef struct BufferReader BufferReader;
 
 IStringMap* IStringMap_Create();
 void IStringMap_Clear(IStringMap* sm);
@@ -12,5 +13,7 @@ void IStringMap_Add(IStringMap* sm, const char* key, const char* value);
 const char* IStringMap_Get(IStringMap* sm, const char* key);
 bool IStringMap_Contains(IStringMap* sm, const char* key);
 int64_t IStringMap_Length(IStringMap* sm);
-const char* IStringMap_GetByIndex(IStringMap* sm, int32_t index);
+const char* IStringMap_GetKeyByIndex(IStringMap* sm, int32_t index);
+const char* IStringMap_GetValueByIndex(IStringMap* sm, int32_t index);
 uint64_t IStringMap_GetRefs();
+void IStringMap_Load(IStringMap* sm, BufferReader* br);

@@ -6,6 +6,7 @@
 //#include "../utils/OeIniReader.h"
 //#include "../utils/OeIniWriter.h"
 #include "../../third_party/stb_ds.h"
+#include "../io/BufferReader.h"
 
 //TODO C99 static const std::vector<std::string> THINGS_DIRECTORY = { OeFile::Combine("data", "things") };
 

@@ -10,7 +10,6 @@
 #include "../../third_party/stb_ds.h"
 #include "Utils.h"
 #include "Macros.h"
-#include "../io/INIFile.h"
 #include "../utils/MString.h"
 #include "../service/Service.h"
 #include "../utils/Logger.h"
@@ -19,6 +18,8 @@
 #include "../utils/IStringArray.h"
 #include "../io/DynamicByteBuffer.h"
 #include "../io/File.h"
+#include "../io/BufferReader.h"
+#include "../utils/IStringMap.h"
 
 #define STR_NOT_SET "NOT_SET"
 #define STR_ZERO "0"
@@ -253,15 +254,15 @@ void Cvars_Read(bool isBinary, BufferReader* br)
 	Init();
 	//
 
-	INIFile* ini = INIFile_Create_From_Binary(br);
-	int64_t len = INIFile_GetLength(ini);
-	for (int i = 0; i < len; i += 1)
+	IStringMap* sm = IStringMap_Create();
+	IStringMap_Load(sm, br);
+	for (int32_t i = 0; i < IStringMap_Length(sm); i += 1)
 	{
-		const char* key = INIFile_GetKey(ini, i);
-		const char* value = INIFile_GetValue(ini, i);
+		const char* key = IStringMap_GetKeyByIndex(sm, i);
+		const char* value = IStringMap_GetValueByIndex(sm, i);
 		Cvars_Set(key, value);
 	}
-	INIFile_Dispose(ini);
+	IStringMap_Dispose(sm);
 }
 int64_t Cvars_Length(void)
 {

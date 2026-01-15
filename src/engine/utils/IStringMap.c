@@ -1,5 +1,7 @@
 #include "IStringMap.h"
 
+#include "../io/BufferReader.h"
+#include "../utils/MString.h"
 #include "../utils/Utils.h"
 #include "../../third_party/stb_ds.h"
 #include "IStrings.h"
@@ -54,11 +56,28 @@ int64_t IStringMap_Length(IStringMap* sm)
 {
 	return shlen(sm->sh_values);
 }
-const char* IStringMap_GetByIndex(IStringMap* sm, int32_t index)
+const char* IStringMap_GetKeyByIndex(IStringMap* sm, int32_t index)
+{
+	return sm->sh_values[index].key;
+}
+const char* IStringMap_GetValueByIndex(IStringMap* sm, int32_t index)
 {
 	return sm->sh_values[index].value;
 }
 uint64_t IStringMap_GetRefs()
 {
 	return _mRefs;
+}
+void IStringMap_Load(IStringMap* sm, BufferReader* br)
+{
+	while (BufferReader_HasNext(br))
+	{
+		MString* key = NULL;
+		MString* value = NULL;
+		BufferReader_ReadMString(&key, br);
+		BufferReader_ReadMString(&value, br);
+		IStringMap_Add(sm, MString_GetText(key), MString_GetText(value));
+		MString_Dispose(&key);
+		MString_Dispose(&value);
+	}
 }

@@ -14,6 +14,8 @@
 #include "../core/GameUpdater.h"
 #include "../utils/Logger.h"
 #include "../resources/ResourceManagerList.h"
+#include "../utils/Cvars.h"
+#include "../gamestate/GameStateManager.h"
 
 #define SFX_INSTANCE_LIMIT 128
 
@@ -32,6 +34,19 @@ static uint64_t _mCurrentFrame;
 static VolumeData _mVolumeData;
 static bool _mIsSfxMuted;
 static SoundEffectPlaybackTimeBuffer* arr_sound_effect_playback_time_buffer;
+static bool _mHasInit;
+
+void SoundEffect_Init(void)
+{
+	if (_mHasInit)
+	{
+		return;
+	}
+
+	VolumeData_Init(&_mVolumeData, false);
+
+	_mHasInit = true;
+}
 
 static float GetVolumeForSoundEffect(const char* sound)
 {
@@ -40,8 +55,7 @@ static float GetVolumeForSoundEffect(const char* sound)
 		return 0;
 	}
 
-	return 1.0f;
-	//return OeSoundEffect::GetVolumeHelper(OeCvars::USER_VOLUME_SFX, sound, &_mVolumeData);
+	return SoundEffect_GetVolumeHelper(CVARS_USER_VOLUME_SFX, sound, &_mVolumeData);
 }
 static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 {
@@ -115,6 +129,7 @@ void SoundEffect_Dispose(SoundEffect* music)
 
 	Utils_free(music);
 }
+
 uint64_t SoundEffect_GetDefaultSoundPlaybackTimeBuffer(void)
 {
 	return DEFAULT_SOUND_PLAYBACK_TIME_BUFFER;
@@ -344,21 +359,20 @@ void SoundEffect_LoopSound(const char* sound, int32_t loopNumber)
 }
 float SoundEffect_GetVolumeHelper(const char* cvar, const char* name, VolumeData* volumeData)
 {
-	if (IsDisabledPermanently() || (Utils_StringEqualTo(name, EE_STR_EMPTY)))
+	if (IsDisabledPermanently() || (name == NULL) || (Utils_StringEqualTo(name, EE_STR_EMPTY)))
 	{
 		return 0;
 	}
 
-	return 1.0f;
-	//float userVolume = Cvars_GetAsInt(cvar) / 100.0f;
-	//float userVolumeMaster = Cvars::GetAsInt(OeCvars::USER_VOLUME_MASTER) / 100.0f;
-	//float clipVolume = volumeData->GetVolume(name) / 100.0f;
-	//float rewindingVolume = 1.0f;
-	//if (OeGameStateManager::ActiveGameState()->IsRewinding())
-	//{
-	//	rewindingVolume = 0.6f;
-	//}
-	//return clipVolume * userVolume * userVolumeMaster * rewindingVolume;
+	float userVolume = Cvars_GetAsInt(cvar) / 100.0f;
+	float userVolumeMaster = Cvars_GetAsInt(CVARS_USER_VOLUME_MASTER) / 100.0f;
+	float clipVolume = VolumeData_GetVolume(volumeData, name) / 100.0f;
+	float rewindingVolume = 1.0f;
+	if (GameState_IsRewinding(GameStateManager_GetGameState()))
+	{
+		rewindingVolume = 0.6f;
+	}
+	return clipVolume * userVolume * userVolumeMaster * rewindingVolume;
 }
 const char* SoundEffect_GetExtension(void)
 {

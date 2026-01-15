@@ -6,78 +6,63 @@
 
 #include "VolumeData.h"
 
-#include "../utils/Utils.h"
 #include "../io/File.h"
-#include "../io/INIFile.h"
-
-const char* VolumeData_GetFilePath(VolumeData* vd, bool isBinary)
-{
-	return NULL;/*
-	std_string extension = OeUtils_GetExtension(isBinary);
-	if (_mIsMusic)
-	{
-		return OeFile_PathCombine("data", "musicvolume" + extension);
-	}
-	else
-	{
-		return OeFile_PathCombine("data", "sfxvolume" + extension);
-	}*/
-}
-void VolumeData_SaveHelper(VolumeData* vd, bool isBinary)
-{
-	//WILLNOTDO 05152023
-	/*
-	using (OeIniWriter writer = new OeIniWriter(GetFilePath(isBinary)))
-	{
-	writer.WriteDictionaryStringInt(_mVolumeMap);
-	}
-	*/
-}
+#include "../utils/Utils.h"
+#include "../utils/IStringMap.h"
+#include "../../third_party/stb_ds.h"
+#include "../io/BufferReader.h"
 
 void VolumeData_Init(VolumeData* vd, bool isMusic)
 {
 	Utils_memset(vd, 0, sizeof(VolumeData));
 
 	vd->_mIsMusic = isMusic;
+	sh_new_arena(vd->sh_volume_map);
+
 }
 
 int VolumeData_GetVolume(VolumeData* vd, const char* name)
 {
-	return 0;
-	/*
-	if (!_mVolumeMap.count(name))
+	int64_t loc = shgeti(vd->sh_volume_map, name);
+	if (loc < 0)
 	{
 		return 100;
 	}
 	else
 	{
-		return _mVolumeMap[name];
+		return vd->sh_volume_map[loc].value;
 	}
-	*/
 }
-void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume)
+/*void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume)
 {
-	//_mVolumeMap[name] = volume;
-}
-void VolumeData_Save(VolumeData* vd)
-{
-	//WILLNOTDO 05152023
-	//SaveHelper(true);
-	//SaveHelper(false);
-}
+	shput(vd->sh_volume_map, name, volume);
+}*/
 void VolumeData_Load(VolumeData* vd)
 {
-	/*
-	std_string filePath = GetFilePath(OeUtils_IsBinaryForDebugFlag());
-	if (OeFile_FileExists(filePath))
+	MString* path = NULL;
+	if (vd->_mIsMusic)
 	{
-		std_shared_ptr<OeIniReader> reader = OeIniReader_CreateNewOeIniReader(filePath);
-		_mVolumeMap = reader->ReadAsStringIntDictionary();
+		File_PathCombine2(&path, "data", "musicvolume.bin");
 	}
 	else
 	{
-		Save();
+		File_PathCombine2(&path, "data", "sfxvolume.bin");
 	}
-	*/
+
+	if (File_Exists(MString_GetText(path)))
+	{
+		BufferReader* br = BufferReader_CreateFromPath(MString_GetText(path));
+		int count = BufferReader_ReadI32(br);
+		for (int i = 0; i < count; i += 1)
+		{
+			MString* key = NULL;
+			BufferReader_ReadMString(&key, br);
+			int volume = BufferReader_ReadI32(br);
+			shput(vd->sh_volume_map, MString_GetText(key), volume);
+		}
+		BufferReader_Dispose(br);
+	}
+
+	MString_Dispose(&path);
 }
 

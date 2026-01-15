@@ -131,6 +131,7 @@ int32_t Game_Init()
 	GameHelper_Initialize();
 	MenuFunc_Init();
 	Music_Init();
+	SoundEffect_Init();
 
 	_mHasInit = true;
 

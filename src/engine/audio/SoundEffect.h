@@ -17,6 +17,7 @@ typedef struct SoundEffect
 	WaveFileData* _mWaveFileData;
 } SoundEffect;
 
+void SoundEffect_Init(void);
 uint64_t SoundEffect_GetDefaultSoundPlaybackTimeBuffer(void);
 void SoundEffect_SetDefaultSoundPlaybackTimeBuffer(uint64_t value);
 void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t time);

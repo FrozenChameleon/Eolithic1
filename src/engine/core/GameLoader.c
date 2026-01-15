@@ -181,8 +181,8 @@ static bool LoadAfterResources()
 	Sheet_BuildSheets();
 	Animation_BuildAnimations();
 	GameHelper_BuildAchievementList();
-	//SoundEffect_GetVolumeData()->Load();
-	//Music_GetVolumeData()->Load();
+	VolumeData_Load(SoundEffect_GetVolumeData());
+	VolumeData_Load(Music_GetVolumeData());
 	GameHelper_InitPoolsForEngine();
 	GameHelper_InitPoolsForGame();
 	GameHelper_OnLoadingAfterResources();
