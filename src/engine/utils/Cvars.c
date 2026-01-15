@@ -68,8 +68,13 @@ static CvarData* GetCvarData(const char* key, const char* valueIfCvarHasNotBeenS
 		Utils_strlcpy(cvar.mKey, key, EE_FILENAME_MAX);
 		Utils_strlcpy(cvar.mValue, valueIfCvarHasNotBeenSet, EE_FILENAME_MAX);
 		shput(sh_cvars, key, cvar);
+		index = shgeti(sh_cvars, key);
+		if (index == -1)
+		{
+			return NULL; //Something is seriously wrong!
+		}
 	}
-	return &shgetp(sh_cvars, key)->value;
+	return &sh_cvars[index].value;
 }
 static void SetupCvarForSet(CvarData* cvar, const char* key)
 {

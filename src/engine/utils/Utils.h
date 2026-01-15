@@ -48,7 +48,9 @@ void Utils_free(void* mem);
 void* Utils_grow(void* mem, size_t oldSize, size_t newSize);
 size_t Utils_strlen(const char* str);
 size_t Utils_strnlen(const char* str, size_t maxlen);
+//Returns length of src excluding null terminator after copying.
 size_t Utils_strlcpy(char* dst, const char* src, size_t maxlen);
+//Returns length of src + dst excluding null terminator after appending.
 size_t Utils_strlcat(char* dst, const char* src, size_t maxlen);
 bool Utils_ParseBooleanFromChar(const char* str);
 float Utils_ParseFloat(const char* str);
@@ -63,9 +65,6 @@ char* Utils_UInt64ToStringGlobalBuffer(uint64_t value);
 char* Utils_IntToStringGlobalBuffer(int32_t value);
 char* Utils_FloatToStringGlobalBuffer(float value);
 char* Utils_DoubleToStringGlobalBuffer(double value);
-char* Utils_CreateStringBuffer(size_t length);
-char* Utils_CreateStringCopy(const char* str);
-void Utils_FreeString(char* str);
 void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet);
 void Utils_ResetArrayAsInt(int32_t* values, size_t len, int32_t valueToSet);
 void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet);

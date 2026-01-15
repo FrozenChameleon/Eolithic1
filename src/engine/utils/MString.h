@@ -15,7 +15,7 @@ bool MString_EqualTo(const MString* str, const MString* otherStr);
 void MString_Assign(MString** str, const char* toThis);
 void MString_AssignMString(MString** str, MString* toThis);
 void MString_Clear(MString** str);
-void MString_AssignEmpty(MString** str, int32_t size);
+void MString_AssignEmpty(MString** str, int32_t capacity);
 void MString_AssignSubString(MString** str, const char* fromThis, int32_t startIndex, int32_t length);
 void MString_AddAssignInt(MString** str, int32_t addThisInt);
 void MString_AddAssignUInt64(MString** str, uint64_t addThisUInt64);

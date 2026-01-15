@@ -30,7 +30,6 @@
 
 static bool _mPolled;
 static MString* _mTempString;
-static uint64_t _mStringRefs;
 static uint64_t _mMallocRefs;
 static int64_t _mSaveFrames;
 static Rectangle* arr_resolutions;
@@ -133,10 +132,6 @@ bool Utils_IsCurrentLanguageEnglish()
 uint64_t Utils_GetMallocRefs()
 {
 	return _mMallocRefs;
-}
-uint64_t Utils_GetStringRefs()
-{
-	return _mStringRefs;
 }
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len)
 {
@@ -334,21 +329,6 @@ char* Utils_DoubleToStringGlobalBuffer(double value)
 	ResetLargeCharBuffer();
 	Utils_DoubleToString(value, _mLargeCharBuffer, LARGE_CHAR_BUFFER_LEN);
 	return _mLargeCharBuffer;
-}
-char* Utils_CreateStringBuffer(size_t length)
-{
-	_mStringRefs += 1;
-	return Utils_malloc(sizeof(char) * length);
-}
-char* Utils_CreateStringCopy(const char* str)
-{
-	_mStringRefs += 1;
-	return SDL_strdup(str);
-}
-void Utils_FreeString(char* str)
-{
-	_mStringRefs -= 1;
-	Utils_free(str);
 }
 void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet)
 {

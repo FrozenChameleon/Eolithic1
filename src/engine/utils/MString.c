@@ -17,7 +17,11 @@ typedef struct MString
 
 static uint64_t _mRefs;
 
-static char _mTempBuffer[EE_SAFE_BUFFER_LEN_FOR_DOUBLE];
+#define STRING_BUFFER_LEN 8192
+#define NUMBER_BUFFER_LEN EE_SAFE_BUFFER_LEN_FOR_DOUBLE
+
+static char _mStringBuffer[STRING_BUFFER_LEN];
+static char _mNumberBuffer[NUMBER_BUFFER_LEN];
 
 #ifdef FIND_THE_LEAKS
 typedef struct LeakTest
@@ -30,34 +34,41 @@ static LeakTest* _mLeakTest;
 static bool _mHasLeakTestBegun;
 #endif
 
-static void ClearTempBuffer()
+static void ClearNumberBuffer()
 {
-	Utils_memset(_mTempBuffer, 0, EE_SAFE_BUFFER_LEN_FOR_DOUBLE * sizeof(char));
+	Utils_memset(_mNumberBuffer, 0, NUMBER_BUFFER_LEN * sizeof(char));
+}
+static void ClearStringBuffer()
+{
+	Utils_memset(_mStringBuffer, 0, STRING_BUFFER_LEN * sizeof(char));
 }
 
-static MString* MString_CreateEmpty(int32_t size)
+//Returns length of src excluding null terminator after copying.
+static size_t ClearStringBufferAndThenCopyToIt(const char* copyThis)
 {
+	ClearStringBuffer();
+	return Utils_strlcpy(_mStringBuffer, copyThis, STRING_BUFFER_LEN);
+}
+
+static MString* MString_CreateEmpty(int32_t capacity)
+{
+	if (capacity <= 0)
+	{
+		capacity = 1;
+	}
+
 	_mRefs += 1;
-	MString* mstring = Utils_calloc(1, sizeof(MString));
+	MString* m_string = Utils_calloc(1, sizeof(MString));
 #ifdef FIND_THE_LEAKS
 	if (_mHasLeakTestBegun)
 	{
 		hmput(_mLeakTest, mstring, 0);
 	}
 #endif
-	mstring->text = Utils_calloc(1, size);
-	mstring->len = 0;
-	mstring->capacity = size;
-	return mstring;
-}
-static MString* MString_Create(const char* fromThisStr)
-{
-	int32_t strLen = (int32_t)Utils_strlen(fromThisStr);
-	MString* mstring = MString_CreateEmpty(strLen + 1);
-	Utils_strlcpy(mstring->text, fromThisStr, strLen + 1);
-	mstring->len = strLen;
-	mstring->capacity = strLen + 1;
-	return mstring;
+	m_string->text = Utils_calloc(1, capacity);
+	m_string->len = 0;
+	m_string->capacity = capacity;
+	return m_string;
 }
 static bool CheckDoublePointerSafetyForComparison(MString** str)
 {
@@ -87,7 +98,35 @@ static void CheckAndReplaceNullString(MString** str)
 		return;
 	}
 
-	*str = MString_Create(EE_STR_EMPTY);
+	*str = MString_CreateEmpty(1);
+}
+static void GrowMStringIfNeeded(MString* str, size_t newCapacity)
+{
+	if (str == NULL)
+	{
+		Logger_LogWarning("Cannot grow NULL MString!");
+		return;
+	}
+
+	if (str->capacity >= newCapacity)
+	{
+		return;
+	}
+
+	str->text = Utils_grow(str->text, str->capacity, newCapacity);
+
+	str->capacity = (int32_t)newCapacity;
+}
+static void ClearMString(MString* str)
+{
+	if (str == NULL)
+	{
+		Logger_LogWarning("Cannot clear NULL MString!");
+		return;
+	}
+
+	Utils_memset(str->text, 0, str->capacity);
+	str->len = 0;
 }
 
 char* MString_GetText(const MString* str)
@@ -136,12 +175,16 @@ bool MString_EqualTo(const MString* str, const MString* otherStr)
 }
 void MString_Assign(MString** str, const char* toThis)
 {
+	//
 	CheckAndReplaceNullString(str);
+	//
 
-	MString* oldStr = *str;
-	MString* newStr = MString_Create(toThis);
-	MString_Dispose(&oldStr);
-	*str = newStr;
+	MString* currentString = *str;
+	size_t newLen = ClearStringBufferAndThenCopyToIt(toThis);
+	size_t newCapacity = newLen + 1;
+	ClearMString(currentString);
+	GrowMStringIfNeeded(currentString, newCapacity);
+	currentString->len = (int32_t)Utils_strlcpy(currentString->text, _mStringBuffer, currentString->capacity);
 }
 void MString_AssignMString(MString** str, MString* toThis)
 {
@@ -151,65 +194,64 @@ void MString_Clear(MString** str)
 {
 	MString_Assign(str, EE_STR_EMPTY);
 }
-void MString_AssignEmpty(MString** str, int32_t size)
+void MString_AssignEmpty(MString** str, int32_t capacity)
 {
 	CheckAndReplaceNullString(str);
 
-	MString* oldStr = *str;
-	MString* newStr = MString_CreateEmpty(size);
-	MString_Dispose(&oldStr);
-	*str = newStr;
+	MString* currentString = *str;
+	ClearMString(currentString);
+	GrowMStringIfNeeded(currentString, capacity);
 }
 void MString_AssignSubString(MString** str, const char* fromThis, int32_t startIndex, int32_t length)
 {
 	CheckAndReplaceNullString(str);
 
-	MString* oldStr = *str;
-	MString* newStr = MString_Create(fromThis);
-	Utils_memset(newStr->text, 0, newStr->capacity);
-	Utils_strlcpy(newStr->text, fromThis + startIndex, length + 1);
-	newStr->len = length;
-	MString_Dispose(&oldStr);
-	*str = newStr;
+	if ((length + 1) > STRING_BUFFER_LEN)
+	{
+		Logger_LogWarning("SubString is too large for MString!");
+		return;
+	}
+
+	MString* currentString = *str;
+	ClearStringBuffer(); //Manually copying to string buffer.
+	size_t newLen = Utils_strlcpy(_mStringBuffer, fromThis + startIndex, length + 1); //
+	size_t newCapacity = newLen + 1;
+	ClearMString(currentString);
+	GrowMStringIfNeeded(currentString, newCapacity);
+	currentString->len = (int32_t)Utils_strlcpy(currentString->text, _mStringBuffer, currentString->capacity);
 }
 void MString_AddAssignInt(MString** str, int32_t addThisInt)
 {
-	ClearTempBuffer();
-	Utils_IntToString(addThisInt, _mTempBuffer, EE_SAFE_BUFFER_LEN_FOR_DOUBLE);
-	MString_AddAssignString(str, _mTempBuffer);
+	ClearNumberBuffer();
+	Utils_IntToString(addThisInt, _mNumberBuffer, NUMBER_BUFFER_LEN);
+	MString_AddAssignString(str, _mNumberBuffer);
 }
 void MString_AddAssignUInt64(MString** str, uint64_t addThisUInt64)
 {
-	ClearTempBuffer();
-	Utils_UInt64ToString(addThisUInt64, _mTempBuffer, EE_SAFE_BUFFER_LEN_FOR_DOUBLE);
-	MString_AddAssignString(str, _mTempBuffer);
+	ClearNumberBuffer();
+	Utils_UInt64ToString(addThisUInt64, _mNumberBuffer, NUMBER_BUFFER_LEN);
+	MString_AddAssignString(str, _mNumberBuffer);
 }
 void MString_AddAssignFloat(MString** str, float addThisSingle)
 {
-	ClearTempBuffer();
-	Utils_FloatToString(addThisSingle, _mTempBuffer, EE_SAFE_BUFFER_LEN_FOR_DOUBLE);
-	MString_AddAssignString(str, _mTempBuffer);
+	ClearNumberBuffer();
+	Utils_FloatToString(addThisSingle, _mNumberBuffer, NUMBER_BUFFER_LEN);
+	MString_AddAssignString(str, _mNumberBuffer);
 }
 void MString_AddAssignDouble(MString** str, double addThisDouble)
 {
-	ClearTempBuffer();
-	Utils_DoubleToString(addThisDouble, _mTempBuffer, EE_SAFE_BUFFER_LEN_FOR_DOUBLE);
-	MString_AddAssignString(str, _mTempBuffer);
+	ClearNumberBuffer();
+	Utils_DoubleToString(addThisDouble, _mNumberBuffer, NUMBER_BUFFER_LEN);
+	MString_AddAssignString(str, _mNumberBuffer);
 }
 void MString_AddAssignChar(MString** str, char addThisChar)
 {
 	CheckAndReplaceNullString(str);
 
-	MString* oldStr = *str;
-	size_t newLen = oldStr->len + 1;
-	size_t newCapacity = newLen + 1;
-	MString* newStr = MString_CreateEmpty((int32_t)newCapacity);
-	Utils_strlcpy(newStr->text, oldStr->text, oldStr->len + 1);
-	newStr->text[newLen - 1] = addThisChar;
-	newStr->text[newLen] = '\0';
-	newStr->len = (int32_t)newLen;
-	MString_Dispose(&oldStr);
-	*str = newStr;
+	char tempString[2];
+	tempString[0] = addThisChar;
+	tempString[1] = '\0';
+	MString_AddAssignString(str, tempString);
 }
 void MString_AddAssignMString(MString** str, const MString* addThisStr)
 {
@@ -219,17 +261,12 @@ void MString_AddAssignString(MString** str, const char* addThisStr)
 {
 	CheckAndReplaceNullString(str);
 
-	MString* oldStr = *str;
-	size_t addThisStrLen = Utils_strlen(addThisStr);
-	size_t newLen = oldStr->len + addThisStrLen;
+	MString* currentString = *str;
+	size_t addThisStrLen = ClearStringBufferAndThenCopyToIt(addThisStr);
+	size_t newLen = currentString->len + addThisStrLen;
 	size_t newCapacity = newLen + 1;
-	MString* newStr = MString_CreateEmpty((int32_t)newCapacity);
-	Utils_strlcpy(newStr->text, oldStr->text, oldStr->len + 1);
-	Utils_strlcpy(newStr->text + oldStr->len, addThisStr, addThisStrLen + 1);
-	newStr->len = (int32_t)newLen;
-	newStr->text[newLen] = '\0';
-	MString_Dispose(&oldStr);
-	*str = newStr;
+	GrowMStringIfNeeded(currentString, newCapacity);
+	currentString->len = (int32_t)Utils_strlcat(currentString->text, _mStringBuffer, newCapacity);
 }
 void MString_Truncate(MString** str, int32_t newLength)
 {

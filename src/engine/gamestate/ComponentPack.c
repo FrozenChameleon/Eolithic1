@@ -4,7 +4,7 @@
 #include "../utils/Logger.h"
 #include "../utils/Exception.h"
 
-static void GrowComponentPackIfNecessary(ComponentPack* pack, int32_t newCapacity)
+static void GrowComponentPackIfNeeded(ComponentPack* pack, int32_t newCapacity)
 {
 	if (pack->_mCapacity >= newCapacity)
 	{
@@ -27,7 +27,7 @@ void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int32_
 	pack->mComponentSizeInBytes = componentSizeInBytes;
 	pack->_mDummy = Utils_malloc(componentSizeInBytes);
 
-	GrowComponentPackIfNecessary(pack, initialSize);
+	GrowComponentPackIfNeeded(pack, initialSize);
 }
 void* ComponentPack_TryGetFirstSetComponent(ComponentPack* pack, bool* wasSuccessful)
 {
@@ -213,7 +213,7 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 
 	Logger_LogInformation("Component pack is expanding for pack: PUT SOMETHING HERE");
 
-	GrowComponentPackIfNecessary(pack, pack->_mCapacity * 2);
+	GrowComponentPackIfNeeded(pack, pack->_mCapacity * 2);
 
 	return ComponentPack_Set2(pack, entity, isNotExclusive);
 }
@@ -268,7 +268,7 @@ void ComponentPack_CopyTo(ComponentPack* from, ComponentPack* to)
 	to->_mLength = from->_mLength;
 	to->_mMaximumCapacity = from->_mMaximumCapacity;
 
-	GrowComponentPackIfNecessary(to, from->_mCapacity);
+	GrowComponentPackIfNeeded(to, from->_mCapacity);
 
 	Utils_memcpy(to->Entities, from->Entities, sizeof(Entity) * from->_mCapacity);  //Copy all entity data!
 	Utils_memcpy(to->Components, from->Components, (from->mComponentSizeInBytes * from->_mLength)); //Only copy active length of components...
