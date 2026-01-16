@@ -3,7 +3,16 @@
 #include "../utils/Utils.h"
 #include "../utils/Logger.h"
 #include "../utils/Exception.h"
+#include "../utils/MString.h"
 
+static const char* GetPackComponentName(ComponentPack* pack)
+{
+	return ComponentType_GetComponentName(pack->_mComponentType);
+}
+static void LogNothingEntityWarning(ComponentPack* pack)
+{
+	Logger_LogWarning("Attempted to use a nothing entity in a component pack");
+}
 static void GrowComponentPackIfNeeded(ComponentPack* pack, int32_t newCapacity)
 {
 	if (pack->_mCapacity >= newCapacity)
@@ -12,20 +21,17 @@ static void GrowComponentPackIfNeeded(ComponentPack* pack, int32_t newCapacity)
 	}
 
 	pack->Entities = Utils_grow(pack->Entities, sizeof(Entity) * pack->_mCapacity, sizeof(Entity) * newCapacity);
-	pack->Components = Utils_grow(pack->Components, pack->mComponentSizeInBytes * pack->_mCapacity, pack->mComponentSizeInBytes * newCapacity);
+	pack->Components = Utils_grow(pack->Components, pack->_mComponentSizeInBytes * pack->_mCapacity, pack->_mComponentSizeInBytes * newCapacity);
 	pack->_mCapacity = newCapacity;
 }
 
-void ComponentPack_LogNothingEntityWarning(ComponentPack* pack)
-{
-	Logger_LogWarning("Attempted to use a nothing entity in a component pack");
-}
-void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int32_t initialSize)
+void ComponentPack_Init(ComponentType ctype, ComponentPack* pack, size_t componentSizeInBytes, int32_t initialSize)
 {
 	Utils_memset(pack, 0, sizeof(ComponentPack));
 
-	pack->mComponentSizeInBytes = componentSizeInBytes;
-	pack->_mDummy = Utils_malloc(componentSizeInBytes);
+	pack->_mComponentType = ctype;
+	pack->_mComponentSizeInBytes = componentSizeInBytes;
+	pack->_mDummy = Utils_calloc(1, componentSizeInBytes);
 
 	GrowComponentPackIfNeeded(pack, initialSize);
 }
@@ -35,7 +41,7 @@ void* ComponentPack_TryGetFirstSetComponent(ComponentPack* pack, bool* wasSucces
 	if (loc != -1)
 	{
 		*wasSuccessful = true;
-		return pack->Components + (loc * pack->mComponentSizeInBytes);
+		return pack->Components + (loc * pack->_mComponentSizeInBytes);
 	}
 	else
 	{
@@ -49,7 +55,7 @@ void* ComponentPack_TryGetComponent(ComponentPack* pack, Entity entity, bool* wa
 	if (loc != -1)
 	{
 		*wasSuccessful = true;
-		return pack->Components + (loc * pack->mComponentSizeInBytes);
+		return pack->Components + (loc * pack->_mComponentSizeInBytes);
 	}
 	else
 	{
@@ -114,7 +120,7 @@ int ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber)
 {
 	if (entityNumber == ENTITY_NOTHING)
 	{
-		ComponentPack_LogNothingEntityWarning(pack);
+		LogNothingEntityWarning(pack);
 		return -1;
 	}
 
@@ -141,11 +147,16 @@ void* ComponentPack_GetFirstSetComponent(ComponentPack* pack)
 	int loc = ComponentPack_GetFirstSetEntityLocation(pack);
 	if (loc != -1)
 	{
-		return pack->Components + (loc * pack->mComponentSizeInBytes);
+		return pack->Components + (loc * pack->_mComponentSizeInBytes);
 	}
 	else
 	{
-		Exception_Run("Cannot retrieve any component in pack: Camera", false);
+		{
+			MString* tempString = NULL;
+			MString_Combine2(&tempString, "Reached maximum capacity for pack: ", GetPackComponentName(pack));
+			Exception_Run(MString_GetText(tempString), false);
+			MString_Dispose(&tempString);
+		}
 		return pack->Components;
 	}
 }
@@ -156,7 +167,13 @@ Entity ComponentPack_GetFirstSetEntity(ComponentPack* pack)
 	{
 		return pack->Entities[loc];
 	}
-	Exception_Run("Cannot retrieve any entity in pack: Camera", false);
+
+	{
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Cannot retrieve any entity in pack: ", GetPackComponentName(pack));
+		Exception_Run(MString_GetText(tempString), false);
+		MString_Dispose(&tempString);
+	}
 	return ENTITY_NOTHING;
 }
 void* ComponentPack_GetComponent2(ComponentPack* pack, Entity entity, bool isNotExclusive)
@@ -169,13 +186,13 @@ void* ComponentPack_GetComponent(ComponentPack* pack, Entity entity)
 }
 void* ComponentPack_GetComponentAtIndex(ComponentPack* pack, int32_t index)
 {
-	return pack->Components + (index * pack->mComponentSizeInBytes);
+	return pack->Components + (index * pack->_mComponentSizeInBytes);
 }
 void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive)
 {
 	if (entity == ENTITY_NOTHING)
 	{
-		ComponentPack_LogNothingEntityWarning(pack);
+		LogNothingEntityWarning(pack);
 		return pack->Components;
 	}
 
@@ -184,7 +201,7 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 		int loc = ComponentPack_GetEntityLocation(pack, entity);
 		if (loc != -1)
 		{
-			return pack->Components + (loc * pack->mComponentSizeInBytes);
+			return pack->Components + (loc * pack->_mComponentSizeInBytes);
 		}
 	}
 
@@ -201,17 +218,25 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 		}
 		pack->Entities[i] = entity;
 		void* componentToReturn = ComponentPack_GetComponentAtIndex(pack, i);
-		Utils_memset(componentToReturn, 0, pack->mComponentSizeInBytes);
+		Utils_memset(componentToReturn, 0, pack->_mComponentSizeInBytes);
 		return componentToReturn;
 	}
 
 	if ((pack->_mMaximumCapacity > 0) && (pack->_mCapacity >= pack->_mMaximumCapacity))
 	{
-		Logger_LogInformation("Reached maximum capacity for pack: PUT SOMETHING HERE");
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Reached maximum capacity for pack name: ", GetPackComponentName(pack));
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
 		return &pack->_mDummy;
 	}
 
-	Logger_LogInformation("Component pack is expanding for pack: PUT SOMETHING HERE");
+	{
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Component pack is expanding for pack: ", GetPackComponentName(pack));
+		Logger_LogInformation(MString_GetText(tempString));
+		MString_Dispose(&tempString);
+	}
 
 	GrowComponentPackIfNeeded(pack, pack->_mCapacity * 2);
 
@@ -225,7 +250,7 @@ void ComponentPack_Unset(ComponentPack* pack, int32_t entityNumber)
 {
 	if (entityNumber == ENTITY_NOTHING)
 	{
-		ComponentPack_LogNothingEntityWarning(pack);
+		LogNothingEntityWarning(pack);
 		return;
 	}
 
@@ -265,17 +290,20 @@ void ComponentPack_UnsetAll(ComponentPack* pack)
 }
 void ComponentPack_CopyTo(ComponentPack* from, ComponentPack* to)
 {
-	to->_mLength = from->_mLength;
+	to->_mComponentSizeInBytes = from->_mComponentSizeInBytes;
+	to->_mComponentType = from->_mComponentType;
 	to->_mMaximumCapacity = from->_mMaximumCapacity;
 
+	to->_mLength = from->_mLength;
 	GrowComponentPackIfNeeded(to, from->_mCapacity);
 
 	Utils_memcpy(to->Entities, from->Entities, sizeof(Entity) * from->_mCapacity);  //Copy all entity data!
-	Utils_memcpy(to->Components, from->Components, (from->mComponentSizeInBytes * from->_mLength)); //Only copy active length of components...
+	Utils_memcpy(to->Components, from->Components, (from->_mComponentSizeInBytes * from->_mLength)); //Copy all component data!
 }
 ComponentPack* ComponentPack_CreateCopy(ComponentPack* pack)
 {
-	ComponentPack* copyPack = Utils_malloc(sizeof(ComponentPack));
+	ComponentPack* copyPack = Utils_calloc(1, sizeof(ComponentPack));
+	ComponentPack_Init(pack->_mComponentType, copyPack, pack->_mComponentSizeInBytes, 1);
 	ComponentPack_CopyTo(pack, copyPack);
 	return copyPack;
 }

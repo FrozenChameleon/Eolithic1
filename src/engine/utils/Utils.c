@@ -221,17 +221,24 @@ void Utils_free(void* mem)
 }
 void* Utils_grow(void* mem, size_t oldSize, size_t newSize)
 {
-	if (oldSize >= newSize)
+	if (newSize == 0) //0 is not a valid size.
+	{
+		newSize = 1;
+	}
+
+	if ((mem != NULL) && (oldSize >= newSize)) //Will never return NULL pointer.
 	{
 		return mem;
 	}
 
 	void* newMemory = Utils_calloc(1, newSize);
-	if (mem != NULL)
+
+	if (mem != NULL) //Copy data if previous exists.
 	{
 		Utils_memcpy(newMemory, mem, oldSize);
 		Utils_free(mem);
 	}
+
 	return newMemory;
 }
 size_t Utils_strlen(const char* str)

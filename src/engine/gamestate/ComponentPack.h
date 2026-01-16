@@ -1,22 +1,23 @@
 #pragma once
 
+#include "ComponentType.h"
 #include "../utils/Macros.h"
 #include "../components/Camera.h"
 #include "PackIterator.h"
 
 typedef struct ComponentPack
 {
+	size_t _mComponentSizeInBytes; //Fixed to all of same type.
+	ComponentType _mComponentType;
 	int32_t _mMaximumCapacity;
-	int32_t _mLength;
-	int32_t _mCapacity;
 	uint8_t* _mDummy;
+	int32_t _mLength; //Change per instance of pack in memory.
+	int32_t _mCapacity;
 	Entity* Entities;
 	uint8_t* Components;
-	size_t mComponentSizeInBytes;
 } ComponentPack;
 
-void ComponentPack_LogNothingEntityWarning(ComponentPack* pack);
-void ComponentPack_Init(ComponentPack* pack, size_t componentSizeInBytes, int32_t initialSize);
+void ComponentPack_Init(ComponentType ctype, ComponentPack* pack, size_t componentSizeInBytes, int32_t initialSize);
 void* ComponentPack_TryGetFirstSetComponent(ComponentPack* pack, bool* wasSuccessful);
 void* ComponentPack_TryGetComponent(ComponentPack* pack, Entity entity, bool* wasSuccessful);
 bool ComponentPack_HasComponent(ComponentPack* pack, Entity entity);

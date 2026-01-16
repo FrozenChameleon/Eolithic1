@@ -17,7 +17,7 @@ typedef struct MString
 
 static uint64_t _mRefs;
 
-#define STRING_BUFFER_LEN 8192
+#define STRING_BUFFER_LEN 4096
 #define NUMBER_BUFFER_LEN EE_SAFE_BUFFER_LEN_FOR_DOUBLE
 
 static char _mStringBuffer[STRING_BUFFER_LEN];

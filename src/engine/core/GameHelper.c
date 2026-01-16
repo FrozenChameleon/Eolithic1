@@ -268,6 +268,7 @@ void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input)
 void GameHelper_InitGameStateData(const char* name, GameStateData* initThis)
 {
 	GameStateData_Ctor(initThis);
+
 	/*
 	if (!_mComponentSizes.count(name))
 	{

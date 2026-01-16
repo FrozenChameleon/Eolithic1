@@ -1,6 +1,6 @@
-CrComBossData
-CrComCameraData
-CrComChallengeMode
+CrComBossData=48
+CrComCameraData=16
+CrComChallengeMode=9
 CrComDoomTimer
 CrComEnemyKitData
 CrComGameOver
@@ -11,7 +11,7 @@ CrComPostBrightness
 CrComResetLevel
 CrComSharedData
 CrComShowLevelName
-CrEffectBloodData
+CrEffectBloodData=1
 CrEffectFloodData
 CrEffectWindData
 CrModePlayMovieData
@@ -122,12 +122,12 @@ TagIsBlockingLineOfSight
 MoveGetter
 NodeMovingKit
 HitFlashKit
-MirrorEffect
 Move
 TagIsIgnoringTransitions
 TagIsExtraBody
 TagIsEnemy
 StunFrames
-Random32
 IntTag
-DrawLineOfSight
+^Random32
+^DrawLineOfSight
+^MirrorEffect

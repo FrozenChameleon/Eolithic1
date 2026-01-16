@@ -2,7 +2,8 @@
 
 #pragma once
 
-#define COMPONENT_TYPE_LEN 133
+#define COMPONENT_TYPE_UNUSED_COMPONENT_RANGE 20000
+#define COMPONENT_TYPE_LEN 119
 
 typedef enum ComponentType
 {
@@ -125,18 +126,20 @@ typedef enum ComponentType
     C_TagIsInPlay = 116,
     C_TagIsPlayer = 117,
     C_TagIsUpdateDisabled = 118,
-    C_SceneCameraData = 119,
-    C_TagIsBlockingLineOfSight = 120,
-    C_MoveGetter = 121,
-    C_NodeMovingKit = 122,
-    C_HitFlashKit = 123,
-    C_MirrorEffect = 124,
-    C_Move = 125,
-    C_TagIsIgnoringTransitions = 126,
-    C_TagIsExtraBody = 127,
-    C_TagIsEnemy = 128,
-    C_StunFrames = 129,
-    C_Random32 = 130,
-    C_IntTag = 131,
-    C_DrawLineOfSight = 132,
+    C_MirrorEffect = 20000,
+    C_SceneCameraData = 20001,
+    C_TagIsIgnoringTransitions = 20002,
+    C_TagIsExtraBody = 20003,
+    C_TagIsEnemy = 20004,
+    C_TagIsBlockingLineOfSight = 20005,
+    C_StunFrames = 20006,
+    C_Random32 = 20007,
+    C_NodeMovingKit = 20008,
+    C_MoveGetter = 20009,
+    C_Move = 20010,
+    C_IntTag = 20011,
+    C_HitFlashKit = 20012,
+    C_DrawLineOfSight = 20013,
 } ComponentType;
+
+const char* ComponentType_GetComponentName(ComponentType ctype);

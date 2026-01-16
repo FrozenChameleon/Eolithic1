@@ -34,7 +34,6 @@ enum
 const char* Utils_GetCurrentUserLanguageCode();
 bool Utils_IsCurrentLanguageEnglish();
 uint64_t Utils_GetMallocRefs();
-uint64_t Utils_GetStringRefs();
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);
 void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);
 void Utils_memset(void* _Dst, int32_t _Val, size_t _Size);
@@ -44,7 +43,7 @@ void Utils_FreeArena(int32_t allocationArena);
 void* Utils_malloc(size_t size);
 void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);
-//Grow mem to newSize if bigger than oldSize. If valid, returns newly zero initialized mem.
+//Grow mem to newSize if bigger than oldSize, or if mem is NULL. On growth, returns new zero initialized mem. 0 is not valid for newSize, it will be forced to 1.
 void* Utils_grow(void* mem, size_t oldSize, size_t newSize);
 size_t Utils_strlen(const char* str);
 size_t Utils_strnlen(const char* str, size_t maxlen);

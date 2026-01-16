@@ -19,7 +19,7 @@ int main(int argc, char* args[])
 	Cvars_LoadInitialCvars();
 
 	//RecordingTool_EnableFromArgumentsPlayback(RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SESSION_NORMAL);
-	Globals_TurnOnAutoMode(false);
+	//Globals_TurnOnAutoMode(false);
 
 	Game_Run();
 
