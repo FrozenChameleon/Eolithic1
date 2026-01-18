@@ -22,7 +22,7 @@ void Cvars_SetAsFloat(const char* key, float value);
 void Cvars_Set(const char* key, const char* value);
 const char* Cvars_Get(const char* key);
 float Cvars_GetAsFloat(const char* key);
-int Cvars_GetAsInt(const char* key);
+int32_t Cvars_GetAsInt(const char* key);
 bool Cvars_GetAsBool(const char* key);
 void Cvars_Read(bool isBinary, BufferReader* br);
 int64_t Cvars_Length(void);

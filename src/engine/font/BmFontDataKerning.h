@@ -2,7 +2,7 @@
 
 typedef struct BmFontDataKerning
 {
-	int First;
-	int Second;
-	int Amount;
+	int32_t First;
+	int32_t Second;
+	int32_t Amount;
 } BmFontDataKerning;

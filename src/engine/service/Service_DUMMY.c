@@ -7,19 +7,19 @@
 #include "../utils/Strings.h"
 
 //protected
-void Service_UpdateScoreKeepBestHelper(const char* leaderboard, int score, bool isAscending, bool isMilliseconds)
+void Service_UpdateScoreKeepBestHelper(const char* leaderboard, int32_t score, bool isAscending, bool isMilliseconds)
 {
 
 }
-int Service_GetMinimumRank()
+int32_t Service_GetMinimumRank()
 {
 	return 0;
 }
-int Service_GetMaximumRank()
+int32_t Service_GetMaximumRank()
 {
 	return 0;
 }
-void Service_RetrieveLeaderboardEntriesHelper(int leaderboardPage, bool isInitialRequest, int direction)
+void Service_RetrieveLeaderboardEntriesHelper(int32_t leaderboardPage, bool isInitialRequest, int32_t direction)
 {
 }
 
@@ -51,7 +51,7 @@ bool Service_HasSignedIn()
 void Service_HandleException(const char* e)
 {
 }
-void Service_HandleSetAchievement(int i, const char* achievement)
+void Service_HandleSetAchievement(int32_t i, const char* achievement)
 {
 }
 void Service_HandleApplicationExit()
@@ -63,7 +63,7 @@ void Service_Create()
 void Service_UpdateHelper(double delta)
 {
 }
-void Service_Resize(int width, int height)
+void Service_Resize(int32_t width, int32_t height)
 {
 }
 void Service_Pause()
@@ -80,7 +80,7 @@ bool Service_IsOverlayEnabled()
 	return false;
 }
 
-int Service_GetPlatformType()
+int32_t Service_GetPlatformType()
 {
 	return PLATFORM_STEAM;
 }
@@ -151,7 +151,7 @@ bool Service_PlatformForcesSpecificGlyph()
 {
 	return false;
 }
-int Service_PlatformGetForcedSpecificGlyph()
+int32_t Service_PlatformGetForcedSpecificGlyph()
 {
 	return -1;
 }
@@ -202,7 +202,7 @@ bool Service_PlatformHidesWindowSizeOption()
 {
 	return false;
 }
-int Service_PlatformAchievementCrawlingTime()
+int32_t Service_PlatformAchievementCrawlingTime()
 {
 	return 5;
 }
@@ -238,7 +238,7 @@ bool Service_ShowSignInFailure()
 {
 	return false;
 }
-int Service_PlatformCrashText()
+int32_t Service_PlatformCrashText()
 {
 	return PLATFORM_CRASH_TEXT_WITH_LOG;
 }

@@ -53,7 +53,7 @@ RenderCommandSheet* ImageDataInstance_DrawInterpolated2(ImageDataInstance* rende
 
 	float newRotation = render->mData->mInitialRotation + rotation;
 
-	int newDepth = render->mData->mDepth;
+	int32_t newDepth = render->mData->mDepth;
 	if (overrideDepth != -1)
 	{
 		newDepth = overrideDepth;

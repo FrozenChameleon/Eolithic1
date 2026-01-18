@@ -6,10 +6,10 @@ void MoveGetter_Setup(MoveGetter* mg, const char* name, int32_t movesToRemember)
 {
 	/*
 	mg->mDebugName = name;
-	mg->mLastMoves = std_vector<int>(movesToRemember);
+	mg->mLastMoves = std_vector<int32_t>(movesToRemember);
 	OeUtils_ResetArrayToNegativeOneAsInt(mLastMoves);*/
 }
-void MoveGetter_SetAsFixedOrder(MoveGetter* mg, const int* order)
+void MoveGetter_SetAsFixedOrder(MoveGetter* mg, const int32_t* order)
 {
 	/*
 	mIsFixedOrder = true;
@@ -28,7 +28,7 @@ void MoveGetter_OverflowCheck(MoveGetter* mg)
 	}
 
 	bool reset = true;
-	for (int i = 0; i < mLastMoves.size(); i++)
+	for (int32_t i = 0; i < mLastMoves.size(); i += 1)
 	{
 		if (mLastMoves[i] == -1)
 		{
@@ -41,7 +41,7 @@ void MoveGetter_OverflowCheck(MoveGetter* mg)
 		OeUtils_ResetArrayToNegativeOneAsInt(mLastMoves);
 	}*/
 }
-int MoveGetter_GetLastMove(MoveGetter* mg)
+int32_t MoveGetter_GetLastMove(MoveGetter* mg)
 {
 	return 0;
 	//return mLastMoves[0];

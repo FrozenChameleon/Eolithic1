@@ -30,7 +30,7 @@ static void ClampDepth(int32_t* depth)
 
 void SpriteBatch_DisposePinnedStrings()
 {
-	for (int i = 0; i < arrlen(arr_pinned_strings); i += 1)
+	for (int32_t i = 0; i < arrlen(arr_pinned_strings); i += 1)
 	{
 		MString* pinnedString = arr_pinned_strings[i];
 		MString_Dispose(&pinnedString);
@@ -42,7 +42,7 @@ void SpriteBatch_Init(SpriteBatch* sb)
 {
 	Utils_memset(sb, 0, sizeof(SpriteBatch));
 
-	for (int i = 0; i < SPRITEBATCH_RENDER_STREAMS_LEN; i += 1)
+	for (int32_t i = 0; i < SPRITEBATCH_RENDER_STREAMS_LEN; i += 1)
 	{
 		sb->_mRenderStreams[i]._mBuffer = DynamicByteBuffer_Create();
 	}

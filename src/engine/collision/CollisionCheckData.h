@@ -2,7 +2,7 @@
 
 typedef struct CollisionCheckData
 {
-	int mCollisionToReport;
+	int32_t mCollisionToReport;
 	bool mDisableCollision;
 } CollisionCheckData;
 

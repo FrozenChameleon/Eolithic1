@@ -14,7 +14,7 @@ TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWi
 	IStringArray* lines = File_ReadAllToStrings(br);
 	size_t linesLen = IStringArray_Length(lines);
 
-	for (int i = 0; i < linesLen; i += 1)
+	for (int32_t i = 0; i < linesLen; i += 1)
 	{
 		const char* line = IStringArray_Get(lines, i);
 		IStringArray* spaceSplit = IStringArray_Create();

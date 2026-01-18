@@ -2,15 +2,15 @@
 
 typedef struct BmFontDataChar
 {
-	int ID;
-	int X;
-	int Y;
-	int Width;
-	int Height;
-	int XOffset;
-	int YOffset;
-	int XAdvance;
-	int Page;
-	int Chnl;
+	int32_t ID;
+	int32_t X;
+	int32_t Y;
+	int32_t Width;
+	int32_t Height;
+	int32_t XOffset;
+	int32_t YOffset;
+	int32_t XAdvance;
+	int32_t Page;
+	int32_t Chnl;
 } BmFontDataChar;
 

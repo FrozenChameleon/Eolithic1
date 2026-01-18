@@ -22,7 +22,7 @@ static Sheet* CreateNewSheetForMovieImage(const char* image)
 	temp->mRectangle = ((Texture*)temp->mTextureResource->mData)->mBounds;
 	return temp;
 }
-void MovieImage_Init(MovieImage* mi, int scale, const char* image)
+void MovieImage_Init(MovieImage* mi, int32_t scale, const char* image)
 {
 	Utils_memset(mi, 0, sizeof(MovieImage));
 
@@ -32,7 +32,7 @@ void MovieImage_Init(MovieImage* mi, int scale, const char* image)
 
 	mi->mSheetForImage = CreateNewSheetForMovieImage(image);
 }
-void MovieImage_Init2(MovieImage* mi, int scale, const char* baseImage, int frames, int flip)
+void MovieImage_Init2(MovieImage* mi, int32_t scale, const char* baseImage, int32_t frames, int32_t flip)
 {
 	Utils_memset(mi, 0, sizeof(MovieImage));
 
@@ -46,7 +46,7 @@ void MovieImage_Init2(MovieImage* mi, int scale, const char* baseImage, int fram
 		mi->mSheetsForAnimationLen = frames;
 		mi->mSheetsForAnimation = Utils_callocArena(mi->mSheetsForAnimationLen, sizeof(Sheet*), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 
-		for (int i = 0; i < frames; i += 1)
+		for (int32_t i = 0; i < frames; i += 1)
 		{
 			const char* currentImage = IStringArray_Get(images, i);
 			Resource* resource = ResourceManager_GetResource(ResourceManagerList_MovieTexture(), currentImage);
@@ -75,7 +75,7 @@ void MovieImage_SetIsLoopingDisabled(MovieImage* mi, bool value)
 		mi->mAnimation.mIsLoopingDisabled = value;
 	}
 }
-void MovieImage_SetLoopPoint(MovieImage* mi, int value)
+void MovieImage_SetLoopPoint(MovieImage* mi, int32_t value)
 {
 	mi->mAnimation.mAnimationLoopPoint = value;
 }

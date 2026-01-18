@@ -76,7 +76,7 @@ const char* Utils_GetCurrentUserLanguageCode()
 	if (!_mHasCachedValidLanguages)
 	{
 		const std_vector<std_string>& listOfLanguages = OeResourceManagers_StringsTextManager.GetKeyList();
-		for (int i = 0; i < listOfLanguages.size(); i += 1)
+		for (int32_t i = 0; i < listOfLanguages.size(); i += 1)
 		{
 			_mCachedValidLanguages.push_back(listOfLanguages[i]);
 		}
@@ -109,7 +109,7 @@ const char* Utils_GetCurrentUserLanguageCode()
 	}
 
 	bool isValid = false;
-	for (int i = 0; i < _mCachedValidLanguages.size(); i += 1)
+	for (int32_t i = 0; i < _mCachedValidLanguages.size(); i += 1)
 	{
 		if (_mCachedValidLanguages[i] == currentLanguage)
 		{
@@ -198,7 +198,7 @@ void Utils_FreeArena(int32_t allocationArena)
 		return;
 	}
 
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		Utils_free(hm_allocation_arenas[index].value[i]);
 	}
@@ -218,6 +218,14 @@ void Utils_free(void* mem)
 {
 	_mMallocRefs -= 1;
 	SDL_free(mem);
+}
+void* Utils_realloc(void* mem, size_t size)
+{
+	if (mem == NULL)
+	{
+		_mMallocRefs += 1;
+	}
+	return SDL_realloc(mem, size);
 }
 void* Utils_grow(void* mem, size_t oldSize, size_t newSize)
 {
@@ -339,21 +347,21 @@ char* Utils_DoubleToStringGlobalBuffer(double value)
 }
 void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet)
 {
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		values[i] = valueToSet;
 	}
 }
 void Utils_ResetArrayAsInt(int32_t* values, size_t len, int32_t valueToSet)
 {
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		values[i] = valueToSet;
 	}
 }
 void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet)
 {
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		values[i] = valueToSet;
 	}
@@ -368,7 +376,7 @@ int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen,
 {
 	int32_t len = (int32_t)Utils_strnlen(strInThis, maxlen);
 	int32_t loc = -1;
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (strInThis[i] == findThis)
 		{
@@ -412,19 +420,19 @@ Rectangle Utils_GetInternalRenderRectangle()
 	Rectangle rect = { 0, 0, Utils_GetInternalRenderWidth(), Utils_GetInternalRenderHeight() };
 	return rect;
 }
-int Utils_GetInternalWidth()
+int32_t Utils_GetInternalWidth()
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
 }
-int Utils_GetInternalHeight()
+int32_t Utils_GetInternalHeight()
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
 }
-int Utils_GetInternalRenderWidth()
+int32_t Utils_GetInternalRenderWidth()
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
 }
-int Utils_GetInternalRenderHeight()
+int32_t Utils_GetInternalRenderHeight()
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
 }
@@ -442,8 +450,8 @@ void Utils_SplitString(const char* str, size_t maxlen, char delim, IStringArray*
 	ResetLargeCharBuffer();
 
 	size_t len = Utils_strnlen(str, maxlen);
-	int counter = 0;
-	for (int i = 0; i < (len + 1); i += 1) //Add +1 to len because...
+	int32_t counter = 0;
+	for (int32_t i = 0; i < (len + 1); i += 1) //Add +1 to len because...
 	{
 		if ((str[i] == delim) || (i == len)) //We need to make sure we get the stuff at the end...
 		{
@@ -459,7 +467,7 @@ void Utils_SplitString(const char* str, size_t maxlen, char delim, IStringArray*
 		}
 	}
 }
-char Utils_GetCharFromNumber(int val)
+char Utils_GetCharFromNumber(int32_t val)
 {
 	if (val == -1)
 	{
@@ -491,7 +499,7 @@ char Utils_GetCharFromNumber(int val)
 	}
 	return '0';
 }
-int Utils_Get1DArrayPosFor2DArray(int i, int32_t j, int32_t width)
+int32_t Utils_Get1DArrayPosFor2DArray(int32_t i, int32_t j, int32_t width)
 {
 	return i + (j * width);
 }
@@ -522,10 +530,10 @@ bool Utils_CharIsDigit(char c)
 	}
 	return false;
 }
-bool Utils_ArrContainsInt(int* arr_values, int32_t containsThis)
+bool Utils_ArrContainsInt(int32_t* arr_values, int32_t containsThis)
 {
 	int64_t len = arrlen(arr_values);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (arr_values[i] == containsThis)
 		{
@@ -611,7 +619,7 @@ int32_t Utils_ParseDirection(const char* s)
 }
 const char* Utils_GetGlyphType()
 {
-	int controllerType = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
+	int32_t controllerType = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
 	if (Service_PlatformForcesSpecificGlyph())
 	{
 		const char* strForcedGlyph = ControllerState_PlatformGetForcedSpecificGlyphAsString();
@@ -642,11 +650,11 @@ float Utils_GetSubseconds(int32_t val)
 {
 	return (val % 60) * (100.0f / 60.0f);
 }
-int Utils_GetMinutes(int32_t val)
+int32_t Utils_GetMinutes(int32_t val)
 {
-	int minutes = 0;
+	int32_t minutes = 0;
 
-	int seconds = val / 60;
+	int32_t seconds = val / 60;
 	if (seconds >= 60)
 	{
 		minutes = seconds / 60;
@@ -658,14 +666,14 @@ int Utils_GetMinutes(int32_t val)
 
 	return minutes;
 }
-int Utils_GetHours(int32_t val)
+int32_t Utils_GetHours(int32_t val)
 {
-	int hours = 0;
+	int32_t hours = 0;
 
-	int seconds = val / 60;
+	int32_t seconds = val / 60;
 	if (seconds >= 60)
 	{
-		int minutes = seconds / 60;
+		int32_t minutes = seconds / 60;
 		if (minutes >= 60)
 		{
 			hours = minutes / 60;
@@ -674,9 +682,9 @@ int Utils_GetHours(int32_t val)
 
 	return hours;
 }
-int Utils_GetSeconds(int32_t val)
+int32_t Utils_GetSeconds(int32_t val)
 {
-	int seconds = val / 60;
+	int32_t seconds = val / 60;
 
 	if (seconds >= 60)
 	{
@@ -724,7 +732,7 @@ void Utils_GetSplitCSV(const char* str, IStringArray* addToHere)
 
 	size_t strLen = Utils_strlen(str);
 	int32_t addCounter = 0;
-	for (int i = 0; i < strLen; i += 1)
+	for (int32_t i = 0; i < strLen; i += 1)
 	{
 		suppressAdd = false;
 
@@ -810,7 +818,7 @@ int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width
 {
 	size_t strSize = Utils_strlen(str);
 
-	int start = Utils_StringLastIndexOf('\n', str, strSize);
+	int32_t start = Utils_StringLastIndexOf('\n', str, strSize);
 	if (start == -1)
 	{
 		start = 0;
@@ -820,8 +828,8 @@ int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width
 		start += 1;
 	}
 
-	int last = -1;
-	for (int i = start; i < strSize; i += 1)
+	int32_t last = -1;
+	for (int32_t i = start; i < strSize; i += 1)
 	{
 		if (str[i] != ' ')
 		{
@@ -938,9 +946,9 @@ void Utils_ToggleVsyncButton()
 }
 Rectangle Utils_GetProposedWindowSize()
 {
-	int windowSizeMul = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE);
-	int windowSizeWidth = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
-	int windowSizeHeight = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT);
+	int32_t windowSizeMul = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE);
+	int32_t windowSizeWidth = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
+	int32_t windowSizeHeight = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT);
 	if (windowSizeWidth > 0 && windowSizeHeight > 0)
 	{
 		return Rectangle_Create(0, 0, windowSizeWidth, windowSizeHeight);
@@ -950,29 +958,29 @@ Rectangle Utils_GetProposedWindowSize()
 		return Rectangle_Create(0, 0, windowSizeMul * Utils_GetWindowSizeMulWidth(), windowSizeMul * Utils_GetWindowSizeMulHeight());
 	}
 }
-int Utils_GetWindowSizeMulWidth()
+int32_t Utils_GetWindowSizeMulWidth()
 {
-	int width = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
-	int overrideWidth = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_WIDTH);
+	int32_t width = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
+	int32_t overrideWidth = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_WIDTH);
 	if (overrideWidth > 0)
 	{
 		width = overrideWidth;
 	}
 	return width;
 }
-int Utils_GetWindowSizeMulHeight()
+int32_t Utils_GetWindowSizeMulHeight()
 {
-	int height = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
-	int overrideHeight = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_HEIGHT);
+	int32_t height = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
+	int32_t overrideHeight = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_HEIGHT);
 	if (overrideHeight > 0)
 	{
 		height = overrideHeight;
 	}
 	return height;
 }
-static bool CheckResolutionsForDuplicates(const Rectangle* valids, int32_t validsLength, int width, int height)
+static bool CheckResolutionsForDuplicates(const Rectangle* valids, int32_t validsLength, int32_t width, int32_t height)
 {
-	for (int i = 0; i < validsLength; i += 1)
+	for (int32_t i = 0; i < validsLength; i += 1)
 	{
 		const Rectangle* rect = &valids[i];
 		if ((rect->Width == width) && (rect->Height == height))
@@ -990,8 +998,8 @@ Rectangle* Utils_GetWindowResolutions(bool filterAspectRatio, int32_t* length)
 		return arr_resolutions;
 	}
 
-	int internalWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
-	int internalHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
+	int32_t internalWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
+	int32_t internalHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
 
 	Rectangle* arrValids = NULL;
 	arrput(arrValids, Rectangle_Create(0, 0, internalWidth, internalHeight));
@@ -1005,14 +1013,14 @@ Rectangle* Utils_GetWindowResolutions(bool filterAspectRatio, int32_t* length)
 	Rectangle* displayModeBounds = Window_GetAllDisplayModeBounds(&displayModeBoundsLength);
 
 	float wantedAspectRatio = (16.0f / 9.0f);
-	for (int i = 0; i < displayModeBoundsLength; i += 1)
+	for (int32_t i = 0; i < displayModeBoundsLength; i += 1)
 	{
 		Rectangle bounds = displayModeBounds[i];
 		float aspectRatio = ((float)bounds.Width / (float)bounds.Height);
 		if (!filterAspectRatio || (Math_fabsf(wantedAspectRatio - aspectRatio) < .01f))
 		{
-			int width = bounds.Width;
-			int height = bounds.Height;
+			int32_t width = bounds.Width;
+			int32_t height = bounds.Height;
 			if ((width != currentBounds.Width) || (height != currentBounds.Height))
 			{
 				if (CheckResolutionsForDuplicates(arrValids, (int32_t)arrlen(arrValids), width, height))
@@ -1023,15 +1031,15 @@ Rectangle* Utils_GetWindowResolutions(bool filterAspectRatio, int32_t* length)
 		}
 	}
 
-	int safetyCounter = 0;
+	int32_t safetyCounter = 0;
 	while (arrlen(arrValids) > 0)
 	{
-		int lowest = INT_MAX;
-		int index = -1;
-		for (int i = 0; i < arrlen(arrValids); i += 1)
+		int32_t lowest = INT_MAX;
+		int32_t index = -1;
+		for (int32_t i = 0; i < arrlen(arrValids); i += 1)
 		{
 			Rectangle rect = arrValids[i];
-			int value = rect.Width * rect.Height;
+			int32_t value = rect.Width * rect.Height;
 			if (value < lowest)
 			{
 				lowest = value;
@@ -1086,7 +1094,7 @@ const char* Utils_ConvertFramesToTimeDisplay(int32_t val)
 	ConvertTimeHelper(subseconds);
 	return MString_GetText(_mTempString);
 }
-static void BuilderHelper(char* buffer, int index, int32_t val)
+static void BuilderHelper(char* buffer, int32_t index, int32_t val)
 {
 	if (val < 10)
 	{
@@ -1101,10 +1109,10 @@ static void BuilderHelper(char* buffer, int index, int32_t val)
 }
 void Utils_UpdateFramesToTimeDisplay(char* buffer, int32_t val)
 {
-	int subseconds = (int)Utils_GetSubseconds(val);
-	int seconds = Utils_GetSeconds(val);
-	int minutes = Utils_GetMinutes(val);
-	int hours = Utils_GetHours(val);
+	int32_t subseconds = (int32_t)Utils_GetSubseconds(val);
+	int32_t seconds = Utils_GetSeconds(val);
+	int32_t minutes = Utils_GetMinutes(val);
+	int32_t hours = Utils_GetHours(val);
 	if (hours >= 24)
 	{
 		hours = 23;
@@ -1121,7 +1129,7 @@ void Utils_UpdateFramesToTimeDisplay(char* buffer, int32_t val)
 	buffer[8] = ':';
 	BuilderHelper(buffer, 9, subseconds);
 }
-void Utils_DeleteBinding(int player, int index, const char* dataName)
+void Utils_DeleteBinding(int32_t player, int32_t index, const char* dataName)
 {
 	InputAction* data = InputBindings_GetActionFromBindings(player, dataName);
 
@@ -1142,7 +1150,7 @@ void Utils_DeleteBinding(int player, int index, const char* dataName)
 	InputChecks_Set(&data->mChecks, index, dummyCheck);
 	InputBindings_SaveAllBindings();
 }
-bool Utils_UpdateBinding(int player, int index, const char* dataName, bool isController, bool isBoth)
+bool Utils_UpdateBinding(int32_t player, int32_t index, const char* dataName, bool isController, bool isBoth)
 {
 	InputAction* data = InputBindings_GetActionFromBindings(player, dataName);
 
@@ -1195,7 +1203,7 @@ bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool 
 {
 	if (!isController || isBoth)
 	{
-		int keyBind = Utils_GetKeyboardForBind();
+		int32_t keyBind = Utils_GetKeyboardForBind();
 		if (keyBind != -1)
 		{
 			*inputCheck = InputCheck_CreateCheckKey(KeyList_GetArray()[keyBind]);
@@ -1203,7 +1211,7 @@ bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool 
 		}
 		if (!blockMouse)
 		{
-			int mouseButtonBind = Utils_GetMouseButtonForBind();
+			int32_t mouseButtonBind = Utils_GetMouseButtonForBind();
 			if (mouseButtonBind != -1)
 			{
 				*inputCheck = InputCheck_CreateCheckMouseButton(mouseButtonBind);
@@ -1214,13 +1222,13 @@ bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool 
 
 	if (isController || isBoth)
 	{
-		for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+		for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 		{
 			ControllerState* controllerState = ControllerStates_GetController(i);
 
-			for (int j = 0; j < INPUTCHECK_AXIS_AMOUNT; j += 1)
+			for (int32_t j = 0; j < INPUTCHECK_AXIS_AMOUNT; j += 1)
 			{
-				int releaseDirection = ControllerState_IsAnalogReleased(controllerState, j, 0.5f);
+				int32_t releaseDirection = ControllerState_IsAnalogReleased(controllerState, j, 0.5f);
 				if (releaseDirection != 0)
 				{
 					*inputCheck = InputCheck_CreateCheckAxis(j, releaseDirection);
@@ -1230,9 +1238,9 @@ bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool 
 
 			const int32_t* buttons = ButtonList_GetArray();
 			int32_t buttonsLength = ButtonList_GetArrayLength();
-			for (int j = 0; j < buttonsLength; j += 1)
+			for (int32_t j = 0; j < buttonsLength; j += 1)
 			{
-				int button = buttons[j];
+				int32_t button = buttons[j];
 				if (ControllerState_IsButtonReleased(controllerState, button))
 				{
 					*inputCheck = InputCheck_CreateCheckButton(button);
@@ -1245,11 +1253,11 @@ bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool 
 	Utils_memset(inputCheck, 0, sizeof(InputCheck));
 	return false;
 }
-int Utils_GetKeyboardForBind()
+int32_t Utils_GetKeyboardForBind()
 {
 	int32_t keysLength = KeyList_GetArrayLength();
 	const int32_t* keys = KeyList_GetArray();
-	for (int i = 0; i < keysLength; i += 1) //Keys
+	for (int32_t i = 0; i < keysLength; i += 1) //Keys
 	{
 		if (KeyboardState_IsKeyReleased(keys[i]))
 		{
@@ -1258,10 +1266,10 @@ int Utils_GetKeyboardForBind()
 	}
 	return -1;
 }
-int Utils_GetMouseButtonForBind()
+int32_t Utils_GetMouseButtonForBind()
 {
-	int len = MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS;
-	for (int i = 0; i < len; i += 1)
+	int32_t len = MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS;
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (MouseState_IsButtonReleased(i))
 		{

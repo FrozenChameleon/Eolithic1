@@ -16,7 +16,7 @@ typedef struct MetaMapChunk
 {
 	Point _mPosition;
 	Resource* _mLevelDataResource;
-	int mMyId;
+	int32_t mMyId;
 	Color mColor;
 	char mFileName[EE_FILENAME_MAX];
 } MetaMapChunk;

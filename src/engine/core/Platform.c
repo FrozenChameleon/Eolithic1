@@ -14,9 +14,9 @@ const char* Platform_GetPreferredLocalesEFIGS()
 		return _mPreferredLocale;
 	}
 
-	int locales_count = 0;
+	int32_t locales_count = 0;
 	SDL_Locale** locales = SDL_GetPreferredLocales(&locales_count);
-	for (int i = 0; i < locales_count; i += 1)
+	for (int32_t i = 0; i < locales_count; i += 1)
 	{
 		const char* newLocale = locales[i]->language;
 		if (Utils_StringEqualTo(newLocale, UTILS_ENGLISH_LANGUAGE_CODE) ||
@@ -30,7 +30,7 @@ const char* Platform_GetPreferredLocalesEFIGS()
 		}
 	}
 
-	Utils_free(locales);
+	SDL_free(locales);
 
 	_mHasTriedToGetPreferredLocale = true;
 

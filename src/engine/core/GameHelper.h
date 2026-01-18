@@ -12,14 +12,14 @@
 
 typedef struct IntIntPair
 {
-	int key;
-	int value;
+	int32_t key;
+	int32_t value;
 } IntIntPair;
 
 typedef struct CharIntPair
 {
 	char* key;
-	int value;
+	int32_t value;
 } CharIntPair;
 
 typedef struct SpriteBatch SpriteBatch;
@@ -103,12 +103,12 @@ void GameHelper_InitPoolsForEngine();
 void GameHelper_InitPoolsForGame();
 float GameHelper_GetGravityDecelerationMax();
 float GameHelper_GetGravityDeceleration();
-ComponentType GameHelper_BuildControllerComponent(int number, Entity entity);
+ComponentType GameHelper_BuildControllerComponent(int32_t number, Entity entity);
 IStringArray* GameHelper_GetControllerComponentStringArray();
 IntIntPair* GameHelper_GetControllerComponentTypeMap();
 void GameHelper_SetupPlatformTypes();
-bool GameHelper_IsCollisionSolidForLineOfSight(int collision);
-bool GameHelper_IsCollisionSolidForPathFinding(int collision, int32_t currentX, int32_t currentY, int32_t newX, int32_t newY);
+bool GameHelper_IsCollisionSolidForLineOfSight(int32_t collision);
+bool GameHelper_IsCollisionSolidForPathFinding(int32_t collision, int32_t currentX, int32_t currentY, int32_t newX, int32_t newY);
 void GameHelper_DefaultBindings(IStringArray* strings, InputAction* input);
 void GameHelper_SetupMusicAndSfxList(StringPair* music, StringPair* sfx);
 const char* GameHelper_ReturnInputDisplayMask(const char* displayName);

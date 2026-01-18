@@ -7,8 +7,8 @@ typedef struct Sheet Sheet;
 
 typedef struct SpecialMcDeathEffect
 {
-	int mDisplayType;
-	int mCounter;
+	int32_t mDisplayType;
+	int32_t mCounter;
 	float mSectionWidth;
 	float mSectionHeight;
 	float mSpeed;

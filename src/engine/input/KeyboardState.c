@@ -19,7 +19,7 @@ static KeyboardData _mThisFrame;
 static KeyboardData _mLastFrame;
 static bool _mHasInit;
 
-static SDL_Scancode GetScanCode(int key)
+static SDL_Scancode GetScanCode(int32_t key)
 {
 	//Mapped from FNA
 	switch (key)
@@ -271,9 +271,9 @@ static SDL_Scancode GetScanCode(int key)
 
 int32_t KeyboardData_GetLoc(int32_t key)
 {
-	const int* keyArray = KeyList_GetArray();
+	const int32_t* keyArray = KeyList_GetArray();
 	int32_t keyArrayLength = KeyList_GetArrayLength();
-	for (int i = 0; i < keyArrayLength; i += 1)
+	for (int32_t i = 0; i < keyArrayLength; i += 1)
 	{
 		if (key == keyArray[i])
 		{
@@ -316,12 +316,12 @@ void KeyboardData_Clear(KeyboardData* kd)
 }
 void KeyboardData_Poll(KeyboardData* kd)
 {
-	const int* keyArray = KeyList_GetArray();
+	const int32_t* keyArray = KeyList_GetArray();
 	int32_t keyArrayLength = KeyList_GetArrayLength();
 
 	const bool* currentKeyStates = SDL_GetKeyboardState(NULL);
 
-	for (int i = 0; i < keyArrayLength; i += 1)
+	for (int32_t i = 0; i < keyArrayLength; i += 1)
 	{
 		SDL_Scancode scanCode = GetScanCode(keyArray[i]);
 
@@ -351,7 +351,7 @@ void KeyboardData_Poll(KeyboardData* kd)
 }
 void KeyboardData_CopyFrom(KeyboardData* kd, const KeyboardData* otherData)
 {
-	for (int i = 0; i < KEYS_AMOUNT_OF_KEYS; i += 1)
+	for (int32_t i = 0; i < KEYS_AMOUNT_OF_KEYS; i += 1)
 	{
 		kd->_mIsKeyDown[i] = otherData->_mIsKeyDown[i];
 	}
@@ -409,8 +409,8 @@ bool KeyboardState_IsKeyReleased(int32_t key)
 }
 bool KeyboardState_IsAnyKeyReleased()
 {
-	int len = KEYS_AMOUNT_OF_KEYS;
-	for (int i = 0; i < len; i += 1)
+	int32_t len = KEYS_AMOUNT_OF_KEYS;
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (KeyboardData_IsKeyPressedAtLoc(&_mLastFrame, i) && !KeyboardData_IsKeyPressedAtLoc(&_mThisFrame, i))
 		{
@@ -421,8 +421,8 @@ bool KeyboardState_IsAnyKeyReleased()
 }
 bool KeyboardState_IsAnyKeyTapped()
 {
-	int len = KEYS_AMOUNT_OF_KEYS;
-	for (int i = 0; i < len; i += 1)
+	int32_t len = KEYS_AMOUNT_OF_KEYS;
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (!KeyboardData_IsKeyPressedAtLoc(&_mLastFrame, i) && KeyboardData_IsKeyPressedAtLoc(&_mThisFrame, i))
 		{
@@ -433,8 +433,8 @@ bool KeyboardState_IsAnyKeyTapped()
 }
 bool KeyboardState_IsAnyKeyPressed()
 {
-	int len = KEYS_AMOUNT_OF_KEYS;
-	for (int i = 0; i < len; i += 1)
+	int32_t len = KEYS_AMOUNT_OF_KEYS;
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (KeyboardData_IsKeyPressedAtLoc(&_mThisFrame, i))
 		{

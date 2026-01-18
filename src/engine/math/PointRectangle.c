@@ -22,13 +22,13 @@ void PointRectangle_CorrectPoints(PointRectangle* prect)
 {
 	if (prect->mPointTwo.X < prect->mPointOne.X)
 	{
-		int tempX = prect->mPointOne.X;
+		int32_t tempX = prect->mPointOne.X;
 		prect->mPointOne.X = prect->mPointTwo.X;
 		prect->mPointTwo.X = tempX;
 	}
 	if (prect->mPointTwo.Y < prect->mPointOne.Y)
 	{
-		int tempY = prect->mPointOne.Y;
+		int32_t tempY = prect->mPointOne.Y;
 		prect->mPointOne.Y = prect->mPointTwo.Y;
 		prect->mPointTwo.Y = tempY;
 	}
@@ -47,14 +47,14 @@ Rectangle PointRectangle_GetRectangle(PointRectangle* prect)
 }
 Rectangle PointRectangle_GetRectanglePoint(Point pointOne, Point pointTwo)
 {
-	int diffX = pointTwo.X - pointOne.X;
-	int diffY = pointTwo.Y - pointOne.Y;
+	int32_t diffX = pointTwo.X - pointOne.X;
+	int32_t diffY = pointTwo.Y - pointOne.Y;
 
-	int x = diffX < 0 ? pointTwo.X : pointOne.X;
-	int y = diffY < 0 ? pointTwo.Y : pointOne.Y;
+	int32_t x = diffX < 0 ? pointTwo.X : pointOne.X;
+	int32_t y = diffY < 0 ? pointTwo.Y : pointOne.Y;
 
-	int width = Math_abs(diffX);
-	int height = Math_abs(diffY);
+	int32_t width = Math_abs(diffX);
+	int32_t height = Math_abs(diffY);
 
 	Rectangle tempRect = { x, y, width, height };
 	return tempRect;

@@ -194,7 +194,7 @@ void ResourceManagerList_Init(void)
 }
 void ResourceManagerList_LoadAllFromDat()
 {
-	for (int i = 0; i < MANAGERS_LEN; i += 1)
+	for (int32_t i = 0; i < MANAGERS_LEN; i += 1)
 	{
 		if (_mManagers[i]._mHasInit)
 		{

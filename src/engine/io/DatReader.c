@@ -16,8 +16,8 @@ static uint64_t _mRefs;
 
 typedef struct DatReader
 {
-	int _mCurrent;
-	int _mCount;
+	int32_t _mCurrent;
+	int32_t _mCount;
 	bool _mHasInit;
 	MString* _mPath;
 	DatInfo* arr_dat_info;
@@ -62,7 +62,7 @@ void DatReader_NextFilePath(MString** assignToThis, DatReader* dr)
 
 	MString_Assign(assignToThis, "");
 	int64_t len = arrlen(dr->arr_last_strings);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		MString_AddAssignString(assignToThis, MString_GetText(dr->arr_last_strings[i]));
 		if (i < (len - 1))
@@ -117,9 +117,9 @@ DatReader* DatReader_Create(const char* path)
 	dr->_mReader = BufferReader_CreateFromPath(path);
 	MString_Assign(&dr->_mPath, path);
 	
-	int version = BufferReader_ReadI32(dr->_mReader);
+	int32_t version = BufferReader_ReadI32(dr->_mReader);
 	dr->_mCount = BufferReader_ReadI32(dr->_mReader);
-	for (int i = 0; i < dr->_mCount; i += 1)
+	for (int32_t i = 0; i < dr->_mCount; i += 1)
 	{
 		DatInfo temp = { 0 };
 		arrput(dr->arr_dat_info, temp);

@@ -27,8 +27,8 @@ static void DrawRoutine(Entity owner, SpecialMcFinalBossEffect* data, SpriteBatc
 
 	Rectangle rect = sheet->mRectangle;
 
-	int width = rect.Width;
-	int height = rect.Height;
+	int32_t width = rect.Width;
+	int32_t height = rect.Height;
 
 	if (height >= data->mLineCounter)
 	{
@@ -47,14 +47,14 @@ static void UpdateRoutine(Entity owner, SpecialMcFinalBossEffect* data)
 	}
 
 	Rectangle rect = Animation_GetCurrentSheet(&data->mAnimation)->mRectangle;
-	int height = rect.Height;
-	int cutoff = data->mBloodCutoff;
+	int32_t height = rect.Height;
+	int32_t cutoff = data->mBloodCutoff;
 
 	if (height - cutoff > data->mLineCounter)
 	{
 		if (Timer_Update(&data->mTimerBleed))
 		{
-			for (int i = 0; i < BLOOD_SPRAY_DENSITY; i++)
+			for (int32_t i = 0; i < BLOOD_SPRAY_DENSITY; i += 1)
 			{
 				ParticleInstance* instance = Do_AddParticle4("FINALBLOODSPLOSION", 
 					data->mPosition.X + data->mBloodOffset.X, data->mPosition.Y + data->mBloodOffset.Y);
@@ -96,7 +96,7 @@ static void UpdateRoutine(Entity owner, SpecialMcFinalBossEffect* data)
 		}
 		else
 		{
-			int temp = height - data->mLineCounter;
+			int32_t temp = height - data->mLineCounter;
 			percent = temp / (float)cutoff;
 		}
 		InputPlayer_Vibrate(Input_GetPlayerOne(), 999, 2, percent, percent);
@@ -116,7 +116,7 @@ static void DrawHudRoutine(Entity owner, SpecialMcFinalBossEffect* data, SpriteB
 }
 
 void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationName, Vector2 bloodOffset, bool disableShaking, 
-	int bloodCutoff, int32_t forcedDirection)
+	int32_t bloodCutoff, int32_t forcedDirection)
 {
 	Entity entity = Do_BuildNewEntity("MC Final Boss Effect");
 	Do_SetPosition(entity, position.X, position.Y);

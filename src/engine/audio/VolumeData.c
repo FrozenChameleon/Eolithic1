@@ -4,6 +4,8 @@
  * See LICENSE for details.
  */
 
+#ifndef AUDIO_DUMMY
+
 #include "VolumeData.h"
 
 #include "../io/File.h"
@@ -18,10 +20,9 @@ void VolumeData_Init(VolumeData* vd, bool isMusic)
 
 	vd->_mIsMusic = isMusic;
 	sh_new_arena(vd->sh_volume_map);
-
 }
 
-int VolumeData_GetVolume(VolumeData* vd, const char* name)
+int32_t VolumeData_GetVolume(VolumeData* vd, const char* name)
 {
 	int64_t loc = shgeti(vd->sh_volume_map, name);
 	if (loc < 0)
@@ -52,12 +53,12 @@ void VolumeData_Load(VolumeData* vd)
 	if (File_Exists(MString_GetText(path)))
 	{
 		BufferReader* br = BufferReader_CreateFromPath(MString_GetText(path));
-		int count = BufferReader_ReadI32(br);
-		for (int i = 0; i < count; i += 1)
+		int32_t count = BufferReader_ReadI32(br);
+		for (int32_t i = 0; i < count; i += 1)
 		{
 			MString* key = NULL;
 			BufferReader_ReadMString(&key, br);
-			int volume = BufferReader_ReadI32(br);
+			int32_t volume = BufferReader_ReadI32(br);
 			shput(vd->sh_volume_map, MString_GetText(key), volume);
 		}
 		BufferReader_Dispose(br);
@@ -66,3 +67,4 @@ void VolumeData_Load(VolumeData* vd)
 	MString_Dispose(&path);
 }
 
+#endif

@@ -9,7 +9,7 @@ typedef struct MovieOperationWait
 	Timer mTimerWait;
 } MovieOperationWait;
 
-void MovieOperationWait_Init(MovieOperationWait* wait, int timeLimit);
+void MovieOperationWait_Init(MovieOperationWait* wait, int32_t timeLimit);
 
 void MovieOperationWait_SpeedUp(MovieOperationWait* wait);
 void MovieOperationWait_Update(MovieOperationWait* wait);

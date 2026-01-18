@@ -2,7 +2,7 @@
 
 typedef struct BounceData
 {
-	int mBounces;
+	int32_t mBounces;
 	float mVelocity;
 	bool mIsNotFirstFrame;
 	bool mWasUsed;

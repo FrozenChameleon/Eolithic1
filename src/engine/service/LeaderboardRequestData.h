@@ -4,7 +4,7 @@
 
 typedef struct LeaderboardRequestData
 {
-	int mScopeType;
+	int32_t mScopeType;
 	bool mIsAscending;
 	bool mIsMilliseconds;
 	char mName[EE_FILENAME_MAX];

@@ -2,7 +2,7 @@
 
 #include "../utils/Utils.h"
 
-void MovieOperationPan_Init(MovieOperationPan* pan, MovieImage* image, Vector2 speed, int time)
+void MovieOperationPan_Init(MovieOperationPan* pan, MovieImage* image, Vector2 speed, int32_t time)
 {
 	Utils_memset(pan, 0, sizeof(MovieOperationPan));
 

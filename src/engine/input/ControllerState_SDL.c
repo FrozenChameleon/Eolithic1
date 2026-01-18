@@ -36,10 +36,10 @@ static struct { int32_t key; int32_t value; } *hm_INTERNAL_instanceList = NULL; 
 
 static SDL_Gamepad* GetDevice(PlayerIndex index)
 {
-	int indexToUse = index;
+	int32_t indexToUse = index;
 	return INTERNAL_devices[indexToUse];
 }
-static SDL_GamepadButton ButtonToSDL(int button)
+static SDL_GamepadButton ButtonToSDL(int32_t button)
 {
 	switch (button)
 	{
@@ -98,7 +98,7 @@ void ControllerData_PollInput(ControllerData* cd, bool* isButtonMutedArray, bool
 
 	SDL_Gamepad* device = GetDevice(cd->_mIndex);
 
-	for (int i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i++)
+	for (int32_t i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i += 1)
 	{
 		cd->_mIsButtonPressed[i] = SDL_GetGamepadButton(device, ButtonToSDL(ButtonList_GetButton(i)));
 		if (isButtonMutedArray[i])
@@ -121,7 +121,7 @@ void ControllerData_PollInput(ControllerData* cd, bool* isButtonMutedArray, bool
 	cd->_mAnalogData[AXES_ANALOG_LEFT_TRIGGER] = (float)(SDL_GetGamepadAxis(device, SDL_GAMEPAD_AXIS_LEFT_TRIGGER)) / 32767.0f;
 	cd->_mAnalogData[AXES_ANALOG_RIGHT_TRIGGER] = (float)(SDL_GetGamepadAxis(device, SDL_GAMEPAD_AXIS_RIGHT_TRIGGER)) / 32767.0f;
 
-	for (int i = 0; i < AXES_AMOUNT_OF_AXIS; i += 1)
+	for (int32_t i = 0; i < AXES_AMOUNT_OF_AXIS; i += 1)
 	{
 		if (isAnalogMutedArray[i])
 		{
@@ -160,8 +160,8 @@ int32_t ControllerState_AddControllerInstance(int32_t dev)
 {
 	//Adapted from FNA/src/FNAPlatform/SDL2_FNAPlatform.cs
 
-	int which = -1;
-	for (int i = 0; i < DEVICES_ARRAY_LENGTH; i++)
+	int32_t which = -1;
+	for (int32_t i = 0; i < DEVICES_ARRAY_LENGTH; i += 1)
 	{
 		if (INTERNAL_devices[i] == NULL)
 		{
@@ -207,10 +207,10 @@ int32_t ControllerState_RemoveControllerInstance(int32_t dev)
 {
 	//Adapted from FNA/src/FNAPlatform/SDL2_FNAPlatform.cs
 
-	int output = -1;
+	int32_t output = -1;
 
 	int64_t instanceListLen = hmlen(hm_INTERNAL_instanceList);
-	for (int i = 0; i < instanceListLen; i += 1)
+	for (int32_t i = 0; i < instanceListLen; i += 1)
 	{
 		if (hm_INTERNAL_instanceList->key == dev)
 		{
@@ -253,7 +253,7 @@ bool ControllerState_PlatformIsForcingCustomInputActions(int32_t player)
 {
 	return false;
 }
-//std::vector<OeInputAction>& OeControllerState_GetForcedCustomInputActions(int player)
+//std::vector<OeInputAction>& OeControllerState_GetForcedCustomInputActions(int32_t player)
 //{
 //	return _mDummyAction;
 //}

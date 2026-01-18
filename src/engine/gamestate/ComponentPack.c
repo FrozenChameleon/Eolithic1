@@ -37,7 +37,7 @@ void ComponentPack_Init(ComponentType ctype, ComponentPack* pack, size_t compone
 }
 void* ComponentPack_TryGetFirstSetComponent(ComponentPack* pack, bool* wasSuccessful)
 {
-	int loc = ComponentPack_GetFirstSetEntityLocation(pack);
+	int32_t loc = ComponentPack_GetFirstSetEntityLocation(pack);
 	if (loc != -1)
 	{
 		*wasSuccessful = true;
@@ -51,7 +51,7 @@ void* ComponentPack_TryGetFirstSetComponent(ComponentPack* pack, bool* wasSucces
 }
 void* ComponentPack_TryGetComponent(ComponentPack* pack, Entity entity, bool* wasSuccessful)
 {
-	int loc = ComponentPack_GetEntityLocation(pack, entity);
+	int32_t loc = ComponentPack_GetEntityLocation(pack, entity);
 	if (loc != -1)
 	{
 		*wasSuccessful = true;
@@ -75,7 +75,7 @@ void* ComponentPack_GetDummy(ComponentPack* pack)
 {
 	return &pack->_mDummy;
 }
-int ComponentPack_Length(ComponentPack* pack)
+int32_t ComponentPack_Length(ComponentPack* pack)
 {
 	return pack->_mLength;
 }
@@ -105,9 +105,9 @@ bool ComponentPack_Next(ComponentPack* pack, PackIterator* iter)
 
 	return false;
 }
-int ComponentPack_GetFirstSetEntityLocation(ComponentPack* pack)
+int32_t ComponentPack_GetFirstSetEntityLocation(ComponentPack* pack)
 {
-	for (int i = 0; i < pack->_mLength; i += 1)
+	for (int32_t i = 0; i < pack->_mLength; i += 1)
 	{
 		if (pack->Entities[i] != ENTITY_NOTHING)
 		{
@@ -116,7 +116,7 @@ int ComponentPack_GetFirstSetEntityLocation(ComponentPack* pack)
 	}
 	return -1;
 }
-int ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber)
+int32_t ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber)
 {
 	if (entityNumber == ENTITY_NOTHING)
 	{
@@ -124,7 +124,7 @@ int ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber)
 		return -1;
 	}
 
-	for (int i = 0; i < pack->_mLength; i += 1)
+	for (int32_t i = 0; i < pack->_mLength; i += 1)
 	{
 		if (pack->Entities[i] == entityNumber)
 		{
@@ -144,7 +144,7 @@ bool ComponentPack_IsAnyEntityInPack(ComponentPack* pack)
 }
 void* ComponentPack_GetFirstSetComponent(ComponentPack* pack)
 {
-	int loc = ComponentPack_GetFirstSetEntityLocation(pack);
+	int32_t loc = ComponentPack_GetFirstSetEntityLocation(pack);
 	if (loc != -1)
 	{
 		return pack->Components + (loc * pack->_mComponentSizeInBytes);
@@ -162,7 +162,7 @@ void* ComponentPack_GetFirstSetComponent(ComponentPack* pack)
 }
 Entity ComponentPack_GetFirstSetEntity(ComponentPack* pack)
 {
-	int loc = ComponentPack_GetFirstSetEntityLocation(pack);
+	int32_t loc = ComponentPack_GetFirstSetEntityLocation(pack);
 	if (loc != -1)
 	{
 		return pack->Entities[loc];
@@ -198,14 +198,14 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 
 	if (!isNotExclusive)
 	{
-		int loc = ComponentPack_GetEntityLocation(pack, entity);
+		int32_t loc = ComponentPack_GetEntityLocation(pack, entity);
 		if (loc != -1)
 		{
 			return pack->Components + (loc * pack->_mComponentSizeInBytes);
 		}
 	}
 
-	for (int i = 0; i < pack->_mCapacity; i += 1)
+	for (int32_t i = 0; i < pack->_mCapacity; i += 1)
 	{
 		if (pack->Entities[i] != ENTITY_NOTHING)
 		{
@@ -254,7 +254,7 @@ void ComponentPack_Unset(ComponentPack* pack, int32_t entityNumber)
 		return;
 	}
 
-	for (int i = 0; i < pack->_mLength; i += 1)
+	for (int32_t i = 0; i < pack->_mLength; i += 1)
 	{
 		if (pack->Entities[i] == entityNumber)
 		{
@@ -268,7 +268,7 @@ void ComponentPack_UnsetAtIndex(ComponentPack* pack, int32_t index)
 
 	if (pack->_mLength == (index + 1))
 	{
-		for (int i = (pack->_mCapacity - 1); i >= 0; i -= 1) //Need to find new last entity
+		for (int32_t i = (pack->_mCapacity - 1); i >= 0; i -= 1) //Need to find new last entity
 		{
 			if (pack->Entities[i] != ENTITY_NOTHING)
 			{
@@ -282,7 +282,7 @@ void ComponentPack_UnsetAtIndex(ComponentPack* pack, int32_t index)
 }
 void ComponentPack_UnsetAll(ComponentPack* pack)
 {
-	for (int i = 0; i < pack->_mCapacity; i += 1)
+	for (int32_t i = 0; i < pack->_mCapacity; i += 1)
 	{
 		pack->Entities[i] = ENTITY_NOTHING;
 	}

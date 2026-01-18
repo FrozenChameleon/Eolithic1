@@ -10,7 +10,7 @@ void OeComMoveGetterSys::SetupSystem()
 	_mInitRoutine = InitRoutine;
 	_mUpdateRoutine = UpdateRoutine;
 }
-int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
+int32_t OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 {
 	if (data->mMoves.size() <= 1)
 	{
@@ -24,7 +24,7 @@ int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 
 	if (data->mIsFixedOrder)
 	{
-		int fixedMoveToReturn = data->mFixedOrderMoves[data->mMovesCounter];
+		int32_t fixedMoveToReturn = data->mFixedOrderMoves[data->mMovesCounter];
 		data->mMovesCounter++;
 		if (data->mMovesCounter >= data->mFixedOrderMoves.size())
 		{
@@ -33,9 +33,9 @@ int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 		return fixedMoveToReturn;
 	}
 
-	int currentMove = -1;
+	int32_t currentMove = -1;
 	bool good;
-	int counter = 0;
+	int32_t counter = 0;
 	do //get the new one
 	{
 		if (counter == 100)
@@ -49,14 +49,14 @@ int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 		}
 		currentMove = OeRandom::NextInt(random, data->mMoves.size());
 		good = true;
-		for (int i = 0; i < data->mLastMoves.size(); i++)
+		for (int32_t i = 0; i < data->mLastMoves.size(); i += 1)
 		{
 			if (data->mLastMoves[i] == currentMove)
 			{
 				good = false;
 			}
 		}
-		for (int i = 0; i < data->mConstraints.size(); i++)
+		for (int32_t i = 0; i < data->mConstraints.size(); i += 1)
 		{
 			if (currentMove == data->mConstraints[i])
 			{
@@ -70,7 +70,7 @@ int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 		counter++;
 	} while (!good);
 
-	for (int i = data->mLastMoves.size() - 1; i > 0; i--) //push the old ones
+	for (int32_t i = data->mLastMoves.size() - 1; i > 0; i--) //push the old ones
 	{
 		data->mLastMoves[i] = data->mLastMoves[i - 1];
 		data->mLastMoves[i - 1] = -1;
@@ -90,7 +90,7 @@ int OeComMoveGetterSys::GetMove(OeComMoveGetter* data, OeRandom* random)
 void OeComMoveGetterSys::InitRoutine(OeEntity owner, OeComMoveGetter* data)
 {
 	data->mMoves = std::vector<std::string>();
-	data->mConstraints = std::vector<int>();
+	data->mConstraints = std::vector<int32_t>();
 	data->mDebugMyId = DEBUG_ID_COUNTER;
 	DEBUG_ID_COUNTER++;
 	data->mLastMove = -1;

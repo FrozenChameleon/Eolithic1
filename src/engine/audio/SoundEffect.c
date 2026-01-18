@@ -4,6 +4,8 @@
  * See LICENSE for details.
  */
 
+#ifndef AUDIO_DUMMY
+
 #include "SoundEffect.h"
 #include "../utils/Macros.h"
 #include "SoundEffectInstance.h"
@@ -44,6 +46,7 @@ void SoundEffect_Init(void)
 	}
 
 	VolumeData_Init(&_mVolumeData, false);
+	VolumeData_Load(&_mVolumeData);
 
 	_mHasInit = true;
 }
@@ -60,7 +63,7 @@ static float GetVolumeForSoundEffect(const char* sound)
 static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 {
 	int64_t len = arrlen(arr_sound_effect_playback_time_buffer);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
 		if (Utils_StringEqualTo(temp->mName, name))
@@ -73,16 +76,16 @@ static uint64_t GetPlaybackTimeBufferForSoundEffect(const char* name)
 }
 static bool IsRewinding(void)
 {
-	//if (OeGameStateManager::ActiveGameState()->IsRewinding())
-	//{
-	//	return true;
-	//}
+	if (GameState_IsRewinding(GameStateManager_GetGameState()))
+	{
+		return true;
+	}
 	return false;
 }
 static uint64_t GetLastFramePlayed(const char* sound)
 {
 	uint64_t highest = 0;
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		if (Utils_StringEqualTo(sound, SoundEffectInstance_GetName(instance)))
@@ -97,7 +100,7 @@ static uint64_t GetLastFramePlayed(const char* sound)
 }
 static bool RefreshLoopStatus(const char* sound, int32_t loopNumber)
 {
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		if (Utils_StringEqualTo(sound, SoundEffectInstance_GetName(instance)))
@@ -141,7 +144,7 @@ void SoundEffect_SetDefaultSoundPlaybackTimeBuffer(uint64_t value)
 void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t time)
 {
 	int64_t len = arrlen(arr_sound_effect_playback_time_buffer);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		SoundEffectPlaybackTimeBuffer* temp = &arr_sound_effect_playback_time_buffer[i];
 		if (Utils_StringEqualTo(temp->mName, name))
@@ -164,10 +167,6 @@ uint64_t SoundEffect_GetCurrentFrame(void)
 {
 	return _mCurrentFrame;
 }
-VolumeData* SoundEffect_GetVolumeData(void)
-{
-	return &_mVolumeData;
-}
 void SoundEffect_Tick(void)
 {
 	if (IsDisabledPermanently())
@@ -175,7 +174,7 @@ void SoundEffect_Tick(void)
 		return;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		if (!_mLoopStatus[i])
@@ -188,7 +187,7 @@ void SoundEffect_Tick(void)
 		_mLoopStatus[i] = false;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		SoundEffectInstance_Update(instance);
@@ -197,28 +196,28 @@ void SoundEffect_Tick(void)
 
 	_mCurrentFrame++;
 }
-void SoundEffect_PauseAllSounds(int priority)
+void SoundEffect_PauseAllSounds(int32_t priority)
 {
 	if (IsDisabledPermanently() || IsRewinding() || priority <= _mSoundPausePriority)
 	{
 		return;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance_Pause(&_mInstances[i]);
 	}
 
 	_mSoundPausePriority = priority;
 }
-void SoundEffect_ResumeAllSounds(int priority)
+void SoundEffect_ResumeAllSounds(int32_t priority)
 {
 	if (IsDisabledPermanently() || IsRewinding() || priority < _mSoundPausePriority)
 	{
 		return;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance_Resume(&_mInstances[i]);
 	}
@@ -231,7 +230,7 @@ void SoundEffect_StopAllPausedSounds(void)
 		return;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		if (SoundEffectInstance_State(instance) == SOUNDSTATE_PAUSED)
@@ -247,7 +246,7 @@ void SoundEffect_StopSound(const char* sound)
 		return;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		if (Utils_StringEqualTo(sound, SoundEffectInstance_GetName(instance)))
@@ -263,7 +262,7 @@ void SoundEffect_StopAllSounds(void)
 		return;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance_Stop(&_mInstances[i]);
 	}
@@ -281,7 +280,7 @@ static SoundEffectInstance* SetupNextInstance(const char* sound)
 		return NULL;
 	}
 
-	for (int i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
+	for (int32_t i = 0; i < SFX_INSTANCE_LIMIT; i += 1)
 	{
 		SoundEffectInstance* instance = &_mInstances[i];
 		if (!SoundEffectInstance_IsSetup(instance) || (SoundEffectInstance_State(instance) == SOUNDSTATE_STOPPED))
@@ -382,3 +381,5 @@ const char* SoundEffect_GetDirectories(void)
 {
 	return NULL;
 }
+
+#endif

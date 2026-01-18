@@ -2,6 +2,6 @@
 
 typedef struct StepCounter
 {
-	int mCounter;
+	int32_t mCounter;
 } StepCounter;
 

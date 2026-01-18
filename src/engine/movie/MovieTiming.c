@@ -37,7 +37,7 @@ MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithou
 		int32_t len = (int32_t)IStringArray_Length(lotsOfStrings);
 		mt->timings = Utils_calloc(len, sizeof(int32_t));
 		mt->len = len;
-		for (int i = 0; i < len; i += 1)
+		for (int32_t i = 0; i < len; i += 1)
 		{
 			int32_t theTiming = Utils_ParseInt(IStringArray_Get(lotsOfStrings, i));
 			mt->timings[i] = theTiming;

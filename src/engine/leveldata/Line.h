@@ -31,8 +31,8 @@ typedef struct Line
 	bool mOneWayRight;
 	bool mOneWayDown;
 	bool mOneWayLeft;
-	int mOverrideSpeedFromPlayer;
-	int mOverrideSpeedFromMinecart;
+	int32_t mOverrideSpeedFromPlayer;
+	int32_t mOverrideSpeedFromMinecart;
 } Line;
 
 Point Line_GetMiddle(Point begin, Point end);
@@ -44,12 +44,12 @@ bool Line_DoLinesConnect(Line* line1, Line* line2);
 Point Line_GetJunction(Line* line1, Line* line2);
 void Line_CorrectPoints(Line* line);
 bool Line_IsVertical(Line* line);
-int Line_GetReal(int point);
+int32_t Line_GetReal(int32_t point);
 Point Line_GetRealPoint(Point point);
 Point Line_GetRealBegin(Line* line);
 Point Line_GetRealEnd(Line* line);
 //void Write(Line* line, std::shared_ptr<OeIniWriter> writer);
-void Line_Read(int version, Line* line, BufferReader* reader);
+void Line_Read(int32_t version, Line* line, BufferReader* reader);
 Rectangle Line_GetTouchBounds(Line* line, int32_t inflation);
 //std::string ToString();
 

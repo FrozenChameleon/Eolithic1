@@ -19,9 +19,9 @@ typedef struct MString MString;
 
 typedef struct ParticleInstance
 {
-	int mCounter;
-	int mFlickerStart;
-	int mInfluencedDepth;
+	int32_t mCounter;
+	int32_t mFlickerStart;
+	int32_t mInfluencedDepth;
 	float mInfluencedRotation;
 	bool mAttachedThingFollowFlipX;
 	bool mIsFlickering;
@@ -44,7 +44,7 @@ typedef struct ParticleInstance
 	Timer mTimerTimeToLive;
 	Timer mTimerFlicker;
 	Animation mAnimation;
-	int mAttachedEntity;
+	int32_t mAttachedEntity;
 	void* mAttachedThing;
 	Particle* mParticle;
 	Sheet* mSheet;

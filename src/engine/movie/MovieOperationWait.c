@@ -3,7 +3,7 @@
 #include "../utils/Utils.h"
 #include "MovieGlobals.h"
 
-void MovieOperationWait_Init(MovieOperationWait* wait, int timeLimit)
+void MovieOperationWait_Init(MovieOperationWait* wait, int32_t timeLimit)
 {
 	Utils_memset(wait, 0, sizeof(MovieOperationWait));
 

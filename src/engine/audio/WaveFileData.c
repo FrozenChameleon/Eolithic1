@@ -13,7 +13,10 @@
   * See monoxna.LICENSE for details.
   */
 
+#ifndef AUDIO_DUMMY
+
 #include "WaveFileData.h"
+
 #include "../utils/Utils.h"
 #include "../utils/Exception.h"
 
@@ -27,7 +30,7 @@ void ReadFourChar(BufferReader* br, char* sig)
 	sig[3] = 'X';
 	sig[4] = '\0';
 
-	for (int i = 0; i < 4; i += 1)
+	for (int32_t i = 0; i < 4; i += 1)
 	{
 		sig[i] = BufferReader_ReadU8(br);
 	}
@@ -63,7 +66,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 		ReadFourChar(br, format_signature);
 	}
 
-	int format_chunk_size = BufferReader_ReadI32(br);
+	int32_t format_chunk_size = BufferReader_ReadI32(br);
 
 	WaveFileData* waveData = Utils_malloc(sizeof(WaveFileData));
 	Utils_memset(waveData, 0, sizeof(WaveFileData));
@@ -114,14 +117,14 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 			BufferReader_ReadU32(br); // SMPTE Format
 			BufferReader_ReadU32(br); // SMPTE Offset
 			uint32_t numSampleLoops = BufferReader_ReadU32(br);
-			int samplerData = BufferReader_ReadI32(br);
+			int32_t samplerData = BufferReader_ReadI32(br);
 
 			for (int32_t i = 0; i < ((int32_t)numSampleLoops); i += 1)
 			{
 				BufferReader_ReadU32(br); // Cue Point ID
 				BufferReader_ReadU32(br); // Type
-				int start = BufferReader_ReadI32(br);
-				int end = BufferReader_ReadI32(br);
+				int32_t start = BufferReader_ReadI32(br);
+				int32_t end = BufferReader_ReadI32(br);
 				BufferReader_ReadU32(br); // Fraction
 				BufferReader_ReadU32(br); // Play Count
 
@@ -156,3 +159,5 @@ void WaveFileData_Dispose(WaveFileData* waveFileData)
 
 	Utils_free(waveFileData);
 }
+
+#endif

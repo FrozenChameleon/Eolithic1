@@ -27,7 +27,7 @@ static char _mNumberBuffer[NUMBER_BUFFER_LEN];
 typedef struct LeakTest
 { 
 	MString* key; 
-	int value;
+	int32_t value;
 } LeakTest;
 
 static LeakTest* _mLeakTest;
@@ -279,7 +279,7 @@ void MString_Truncate(MString** str, int32_t newLength)
 		return;
 	}
 
-	for (int i = 0; i < actualStr->capacity; i += 1)
+	for (int32_t i = 0; i < actualStr->capacity; i += 1)
 	{
 		if (i >= newLength)
 		{
@@ -360,7 +360,7 @@ void MString_DebugPrintLeakInfo()
 #ifdef FIND_THE_LEAKS
 	_mHasLeakTestBegun = true;
 	int64_t len = hmlen(_mLeakTest);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		Logger_printf(MString_GetText(_mLeakTest[i].key));
 		Logger_printf("\n");

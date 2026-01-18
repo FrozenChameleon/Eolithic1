@@ -112,15 +112,15 @@ void MenuFunc_DebugUnlockNextAchievement();
 //const char* MenuFunc_GetUserLanguageName(); //UNUSED
 //bool MenuFunc_WentBackThisFrame(); //UNUSED
 void MenuFunc_SoundStopSoundTestMusic();
-void MenuFunc_SoundChangeSoundTextMusic(int direction);
-void MenuFunc_SoundChangeSoundTextSfx(int direction);
+void MenuFunc_SoundChangeSoundTextMusic(int32_t direction);
+void MenuFunc_SoundChangeSoundTextSfx(int32_t direction);
 void MenuFunc_SoundPlaySoundTestSfx();
 void MenuFunc_SoundPlaySoundTestMusic();
 const char* MenuFunc_GetCurrentSoundTestMusic();
 const char* MenuFunc_GetCurrentSoundTestMusicAsNumber();
 const char* MenuFunc_GetCurrentSoundTestSfx();
 const char* MenuFunc_GetCurrentSoundTestSfxAsNumber();
-//const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2); //UNUSED
+//const char* MenuFunc_GetGenericText(int32_t action, const char* data1, const char* data2); //UNUSED
 const char* MenuFunc_GetChangeWindowSizeMultipleString();
 const char* MenuFunc_GetChangeWindowSizeString();
 const char* MenuFunc_GetInternalResolutionMultipleString();
@@ -128,20 +128,20 @@ void MenuFunc_SoundStopSoundTestSfx();
 void MenuFunc_VideoFixedTimeStepToggle();
 void MenuFunc_VideoApplyWindowSizeMultiple();
 void MenuFunc_VideoApplyWindowSize();
-void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue);
-void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderValue);
-//const char* MenuFunc_StringHelperBorder(int value); //UNUSED
+void MenuFunc_VideoChangeWindowSize(int32_t direction, int32_t forcedSliderValue);
+void MenuFunc_VideoChangeWindowSizeMultiple(int32_t direction, int32_t forcedSliderValue);
+//const char* MenuFunc_StringHelperBorder(int32_t value); //UNUSED
 const char* MenuFunc_StringHelperFloat(float value);
-const char* MenuFunc_StringHelperInt(int value);
+const char* MenuFunc_StringHelperInt(int32_t value);
 //void MenuFunc_InputDeadzoneToggle(); //UNUSED
-int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue);
+int32_t MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue);
 void MenuFunc_VideoVsyncToggle();
 void MenuFunc_InputRumbleToggle();
 void MenuFunc_VideoShowFpsToggle();
 void MenuFunc_VideoShowInGameTimerToggle();
-void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t forcedSliderValue);
-int MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue();
-int MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
+void MenuFunc_VideoInternalResolutionMultipleToggle(int32_t direction, int32_t forcedSliderValue);
+int32_t MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue();
+int32_t MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
 void MenuFunc_VideoLinearFilterToggle();
 void MenuFunc_SoundMuteOnFocusToggle();
 void MenuFunc_GamePauseOnFocusToggle();
@@ -155,7 +155,7 @@ void MenuFunc_GameBorderFrameToggle();
 void MenuFunc_GameScreenshakeToggle();
 void MenuFunc_ActionLoadSaveSlot(const char* save, const char* level);
 void MenuFunc_VideoRefreshSyncToggle();
-void MenuFunc_VideoDrawModeToggle(int direction);
+void MenuFunc_VideoDrawModeToggle(int32_t direction);
 void MenuFunc_InputControllerTypeToggle();
 void MenuFunc_GameBorderToggle();
 void MenuFunc_VideoFullscreenToggle();

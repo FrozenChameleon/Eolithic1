@@ -95,7 +95,7 @@ void MenuFunc_SoundStopSoundTestMusic()
 {
 	Do_StopMusic();
 }
-static void HandleSoundTestDirectionLogic(int* value, int32_t direction, int32_t len)
+static void HandleSoundTestDirectionLogic(int32_t* value, int32_t direction, int32_t len)
 {
 	if (direction == 1)
 	{
@@ -106,7 +106,7 @@ static void HandleSoundTestDirectionLogic(int* value, int32_t direction, int32_t
 		*value -= 1;
 	}
 
-	int lim = len - 1;
+	int32_t lim = len - 1;
 	if (*value < 0)
 	{
 		*value = 0;
@@ -116,11 +116,11 @@ static void HandleSoundTestDirectionLogic(int* value, int32_t direction, int32_t
 		*value = lim;
 	}
 }
-void MenuFunc_SoundChangeSoundTextMusic(int direction)
+void MenuFunc_SoundChangeSoundTextMusic(int32_t direction)
 {
 	HandleSoundTestDirectionLogic(&_mSoundTestCurrentMusic, direction, (int32_t)arrlen(arr_music_list));
 }
-void MenuFunc_SoundChangeSoundTextSfx(int direction)
+void MenuFunc_SoundChangeSoundTextSfx(int32_t direction)
 {
 	HandleSoundTestDirectionLogic(&_mSoundTestCurrentSound, direction, (int32_t)arrlen(arr_sound_list));
 }
@@ -161,7 +161,7 @@ const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 #endif
 	return Utils_GetStringFromNumberWithZerosHundreds(_mSoundTestCurrentSound);
 }
-/*const char* MenuFunc_GetGenericText(int action, const char* data1, const char* data2) //UNUSED
+/*const char* MenuFunc_GetGenericText(int32_t action, const char* data1, const char* data2) //UNUSED
 {
 	std_string strToDraw = "";
 	switch (action)
@@ -297,7 +297,7 @@ const char* MenuFunc_GetChangeWindowSizeString()
 }
 const char* MenuFunc_GetInternalResolutionMultipleString()
 {
-	int mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
+	int32_t mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
 	MString_Assign(&_mTempString, "");
 	if (mul > 0)
 	{
@@ -340,7 +340,7 @@ void MenuFunc_VideoApplyWindowSize()
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, _mTempWindowSize.Height);
 	Utils_InvokeWindowedMode();
 }
-void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
+void MenuFunc_VideoChangeWindowSize(int32_t direction, int32_t forcedSliderValue)
 {
 	int32_t resolutionsLength = 0;
 	Rectangle* resolutions = Utils_GetWindowResolutions(true, &resolutionsLength);
@@ -349,13 +349,13 @@ void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
 		return;
 	}
 	
-	int me = -1;
+	int32_t me = -1;
 	if (_mTempWindowSize.Width == -1)
 	{
 		_mTempWindowSize = Utils_GetProposedWindowSize();
 	}
 
-	for (int i = 0; i < resolutionsLength; i += 1)
+	for (int32_t i = 0; i < resolutionsLength; i += 1)
 	{
 		if (Rectangle_EqualTo(&resolutions[i], &_mTempWindowSize))
 		{
@@ -370,7 +370,7 @@ void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
 		return;
 	}
 
-	int next = me + direction;
+	int32_t next = me + direction;
 	if (next < 0)
 	{
 		next = (resolutionsLength - 1);
@@ -381,13 +381,13 @@ void MenuFunc_VideoChangeWindowSize(int direction, int32_t forcedSliderValue)
 	}
 	_mTempWindowSize = resolutions[next];
 }
-void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderValue)
+void MenuFunc_VideoChangeWindowSizeMultiple(int32_t direction, int32_t forcedSliderValue)
 {
-	int maxValue = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
-	int min = 1;
+	int32_t maxValue = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
+	int32_t min = 1;
 	if (forcedSliderValue != -1)
 	{
-		_mTempWindowSizeMultiple = (int)(maxValue * (forcedSliderValue / 100.0f));
+		_mTempWindowSizeMultiple = (int32_t)(maxValue * (forcedSliderValue / 100.0f));
 		if (_mTempWindowSizeMultiple < min)
 		{
 			_mTempWindowSizeMultiple = min;
@@ -418,7 +418,7 @@ void MenuFunc_VideoChangeWindowSizeMultiple(int direction, int32_t forcedSliderV
 		}
 	}
 }
-/*const char* MenuFunc_StringHelperBorder(int value) //UNUSED
+/*const char* MenuFunc_StringHelperBorder(int32_t value) //UNUSED
 {
 	std_string str = "";
 
@@ -479,7 +479,7 @@ const char* MenuFunc_StringHelperFloat(float value)
 	MString_AddAssignString(&_mTempString, ">");
 	return MString_GetText(_mTempString);
 }
-const char* MenuFunc_StringHelperInt(int value)
+const char* MenuFunc_StringHelperInt(int32_t value)
 {
 	MString_Assign(&_mTempString, "<");
 	MString_AddAssignInt(&_mTempString, value);
@@ -500,14 +500,14 @@ const char* MenuFunc_StringHelperInt(int value)
 	Cvars_Set(Cvars_USER_CONTROLLER_RADIAL_DEADZONE, temp);
 	OeUniverse.SaveUserConfig();
 }*/
-int MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue)
+int32_t MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t forcedSliderValue)
 {
-	int returnValue = 0;
-	int volume = Cvars_GetAsInt(cvar);
-	int oldVolume = volume;
+	int32_t returnValue = 0;
+	int32_t volume = Cvars_GetAsInt(cvar);
+	int32_t oldVolume = volume;
 	if (forcedSliderValue != -1)
 	{
-		int newVolume = forcedSliderValue;
+		int32_t newVolume = forcedSliderValue;
 		newVolume /= 10;
 		newVolume *= 10;
 		if (newVolume != volume)
@@ -573,14 +573,14 @@ void MenuFunc_VideoShowInGameTimerToggle()
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_SHOWING_IN_GAME_TIMER);
 }
-void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t forcedSliderValue)
+void MenuFunc_VideoInternalResolutionMultipleToggle(int32_t direction, int32_t forcedSliderValue)
 {
-	int maxValue = MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue();
-	int current = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
-	int old = current;
+	int32_t maxValue = MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue();
+	int32_t current = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
+	int32_t old = current;
 	if (forcedSliderValue != -1)
 	{
-		current = (int)(maxValue * (forcedSliderValue / 100.0f));
+		current = (int32_t)(maxValue * (forcedSliderValue / 100.0f));
 	}
 	else if (direction != 0)
 	{
@@ -612,25 +612,25 @@ void MenuFunc_VideoInternalResolutionMultipleToggle(int direction, int32_t force
 		Renderer_ApplyChanges();
 	}
 }
-int MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
+int32_t MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
 {
-	int value = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
+	int32_t value = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
 	value += 1;
-	int min = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RESOLUTION_MUL_MAX_MIN);
+	int32_t min = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RESOLUTION_MUL_MAX_MIN);
 	if (value < min)
 	{
 		value = min;
 	}
 	return value;
 }
-int MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue()
+int32_t MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue()
 {
 	Rectangle displayBounds = Window_GetDisplayBounds();
-	int width = Utils_GetWindowSizeMulWidth();
-	int height = Utils_GetWindowSizeMulHeight();
-	int maxWidth = displayBounds.Width / width;
-	int maxHeight = displayBounds.Height / height;
-	int maxValue = maxWidth > maxHeight ? maxHeight : maxWidth;
+	int32_t width = Utils_GetWindowSizeMulWidth();
+	int32_t height = Utils_GetWindowSizeMulHeight();
+	int32_t maxWidth = displayBounds.Width / width;
+	int32_t maxHeight = displayBounds.Height / height;
+	int32_t maxValue = maxWidth > maxHeight ? maxHeight : maxWidth;
 	if (maxValue * width == displayBounds.Width && maxValue * height == displayBounds.Height) //don't show a perfect match resolution
 	{
 		maxValue -= 1;
@@ -689,16 +689,16 @@ void MenuFunc_GameScreenshakeToggle()
 }
 void MenuFunc_ActionLoadSaveSlot(const char* save, const char* level)
 {
-	int saveSlot = Utils_ParseInt(save);
+	int32_t saveSlot = Utils_ParseInt(save);
 	//OeGameSaveManager_SetSaveSlot(saveSlot);
 	GameStateManager_SetupLoadMap(level);
 }
 void MenuFunc_VideoRefreshSyncToggle()
 {
 }
-void MenuFunc_VideoDrawModeToggle(int direction)
+void MenuFunc_VideoDrawModeToggle(int32_t direction)
 {
-	int current = Cvars_GetAsInt(CVARS_USER_DRAW_MODE);
+	int32_t current = Cvars_GetAsInt(CVARS_USER_DRAW_MODE);
 	current += direction;
 	if (current > RENDERER_DRAWMODE_END_OF_NORMAL_OPTIONS)
 	{
@@ -712,7 +712,7 @@ void MenuFunc_VideoDrawModeToggle(int direction)
 }
 void MenuFunc_InputControllerTypeToggle()
 {
-	int current = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
+	int32_t current = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
 	current += 1;
 	if (current > INPUT_CONTROLLER_GLYPH_P4)
 	{
@@ -722,7 +722,7 @@ void MenuFunc_InputControllerTypeToggle()
 }
 void MenuFunc_GameBorderToggle()
 {
-	int current = Cvars_GetAsInt(CVARS_USER_BORDER_TYPE);
+	int32_t current = Cvars_GetAsInt(CVARS_USER_BORDER_TYPE);
 	current += 1;
 	if (current > Cvars_GetAsInt(CVARS_ENGINE_MAX_BORDERS))
 	{

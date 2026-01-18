@@ -9,13 +9,17 @@
 #include "stdint.h"
 #include "stdbool.h"
 
+#ifdef AUDIO_DUMMY
+typedef struct VolumeData VolumeData;
+#else
 typedef struct VolumeData
 {
 	struct { char* key; int32_t value; }* sh_volume_map;
 	bool _mIsMusic;
 } VolumeData;
+#endif
 
 void VolumeData_Init(VolumeData* vd, bool isMusic);
-int VolumeData_GetVolume(VolumeData* vd, const char* name);
+int32_t VolumeData_GetVolume(VolumeData* vd, const char* name);
 //void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume); //Unused
 void VolumeData_Load(VolumeData* vd);

@@ -31,8 +31,8 @@ void DrawTool_DrawRectangle(SpriteBatch* spriteBatch, Color color, int32_t depth
 }
 void DrawTool_DrawRectangle2(SpriteBatch* spriteBatch, Color color, int32_t depth, Rectangle destinationRect, float rotation, bool isCenter)
 {
-	int newX = destinationRect.X;
-	int newY = destinationRect.Y;
+	int32_t newX = destinationRect.X;
+	int32_t newY = destinationRect.Y;
 	if (isCenter)
 	{
 		newX -= destinationRect.Width / 2;
@@ -69,8 +69,8 @@ void DrawTool_DrawLine3(SpriteBatch* spriteBatch, Color color, int32_t depth, in
 {
 	double distance = Math_GetLineDistance(x1, y1, x2, y2);
 	double seg = (x2 - x1) / distance;
-	int counter = 0;
-	for (int i = 0; i < distance; i++)
+	int32_t counter = 0;
+	for (int32_t i = 0; i < distance; i += 1)
 	{
 		float x;
 		float y;
@@ -86,7 +86,7 @@ void DrawTool_DrawLine3(SpriteBatch* spriteBatch, Color color, int32_t depth, in
 		}
 		if ((counter + offset) % delay == 0)
 		{
-			DrawTool_DrawRectangle2(spriteBatch, color, depth, Rectangle_Create((int)x, (int)y, size, size), 0, true);
+			DrawTool_DrawRectangle2(spriteBatch, color, depth, Rectangle_Create((int32_t)x, (int32_t)y, size, size), 0, true);
 		}
 		counter += 1;
 	}

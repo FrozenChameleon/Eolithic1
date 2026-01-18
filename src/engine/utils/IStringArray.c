@@ -47,7 +47,7 @@ void IStringArray_Add(IStringArray* sa, const char* str)
 bool IStringArray_Contains(IStringArray* sa, const char* containsThis)
 {
 	int64_t len = IStringArray_Length(sa);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		const char* tempStr = IStringArray_Get(sa, i);
 		if (Utils_StringEqualTo(tempStr, containsThis))

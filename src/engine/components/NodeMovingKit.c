@@ -21,7 +21,7 @@ bool OeComNodeMovingKit::IsOnTarget()
 {
 	return mIsOnTarget;
 }
-int OeComNodeMovingKit::GetCurrentNode()
+int32_t OeComNodeMovingKit::GetCurrentNode()
 {
 	return mCurrentNode;
 }
@@ -29,7 +29,7 @@ bool OeComNodeMovingKit::IsComplete()
 {
 	return mIsComplete;
 }
-int OeComNodeMovingKit::GetDistanceToNextNodeY(OeEntity owner)
+int32_t OeComNodeMovingKit::GetDistanceToNextNodeY(OeEntity owner)
 {
 	if (mCurrentNode >= Get_AmountOfNodes(owner))
 	{
@@ -38,7 +38,7 @@ int OeComNodeMovingKit::GetDistanceToNextNodeY(OeEntity owner)
 
 	Point point = Get_Node(owner, mCurrentNode);
 
-	return static_cast<int>(OeMath::Abs(Get_Y(owner) - point.Y));
+	return static_cast<int32_t>(OeMath::Abs(Get_Y(owner) - point.Y));
 }
 void OeComNodeMovingKit::HandleNodeMoving(OeEntity owner)
 {

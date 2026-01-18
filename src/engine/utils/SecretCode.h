@@ -22,5 +22,5 @@ enum SecretCodeButtons
 	SECRETCODES_AMOUNT_OF_SECRET_BUTTONS = 6
 };
 
-bool SecretCodes_UpdateSecretCode(SecretCode* data, bool (*code)(int));
-bool SecretCodes_Check(int buttonToCheck, int32_t currentDepth);
+bool SecretCodes_UpdateSecretCode(SecretCode* data, bool (*code)(int32_t));
+bool SecretCodes_Check(int32_t buttonToCheck, int32_t currentDepth);

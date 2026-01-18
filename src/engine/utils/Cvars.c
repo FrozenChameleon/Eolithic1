@@ -88,7 +88,7 @@ static void CopyToUserDefaults(void)
 	shfree(sh_user_defaults);
 	sh_new_arena(sh_user_defaults);
 
-	for (int i = 0; i < shlen(sh_cvars); i += 1)
+	for (int32_t i = 0; i < shlen(sh_cvars); i += 1)
 	{
 		if (Utils_StringStartsWith(sh_cvars[i].key, CVARS_PREFIX_USER_CONFIG))
 		{
@@ -229,13 +229,13 @@ float Cvars_GetAsFloat(const char* key)
 		return data->mCachedNumber;
 	}
 }
-int Cvars_GetAsInt(const char* key)
+int32_t Cvars_GetAsInt(const char* key)
 {
 	//
 	Init();
 	//
 
-	return (int)(Cvars_GetAsFloat(key));
+	return (int32_t)(Cvars_GetAsFloat(key));
 }
 bool Cvars_GetAsBool(const char* key)
 {
@@ -397,7 +397,7 @@ void Cvars_CopyFromUserDefaults(void)
 	Init();
 	//
 
-	for (int i = 0; i < shlen(sh_user_defaults); i += 1)
+	for (int32_t i = 0; i < shlen(sh_user_defaults); i += 1)
 	{
 		Cvars_Set(sh_user_defaults[i].key, sh_user_defaults[i].value.mValue);
 	}
@@ -498,7 +498,7 @@ void Cvars_Write2(bool isBinary, DynamicByteBuffer* writer, IStringArray* includ
 		return;
 	}
 
-	for (int i = 0; i < shlen(sh_cvars); i += 1)
+	for (int32_t i = 0; i < shlen(sh_cvars); i += 1)
 	{
 		CvarData* cvar = &sh_cvars[i].value;
 
@@ -506,7 +506,7 @@ void Cvars_Write2(bool isBinary, DynamicByteBuffer* writer, IStringArray* includ
 		if (IStringArray_Length(includePrefixes) > 0)
 		{
 			write = false;
-			for (int i = 0; i < IStringArray_Length(includePrefixes); i += 1)
+			for (int32_t i = 0; i < IStringArray_Length(includePrefixes); i += 1)
 			{
 				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(includePrefixes, i)))
 				{
@@ -516,7 +516,7 @@ void Cvars_Write2(bool isBinary, DynamicByteBuffer* writer, IStringArray* includ
 		}
 		if (IStringArray_Length(excludePrefixes) > 0)
 		{
-			for (int i = 0; i < IStringArray_Length(excludePrefixes); i += 1)
+			for (int32_t i = 0; i < IStringArray_Length(excludePrefixes); i += 1)
 			{
 				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(excludePrefixes, i)))
 				{

@@ -4,6 +4,6 @@
 
 typedef struct BmFontDataPage
 {
-	int ID;
+	int32_t ID;
 	char File[EE_FILENAME_MAX];
 } BmFontDataPage;

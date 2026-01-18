@@ -19,7 +19,7 @@ void SpecialShakeCameraSys_Setup(ShakeCamera* data, int32_t timerLimit, int32_t 
 	data->mMinY = minY;
 	data->mMaxY = maxY;
 }
-void SpecialShakeCameraSys_Create(int timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
+void SpecialShakeCameraSys_Create(int32_t timerLimit, int32_t minX, int32_t maxX, int32_t minY, int32_t maxY)
 {
 	Entity entity = Do_BuildNewEntity("Shake Camera");
 	Do_InitComponent(C_ShakeCamera, entity);

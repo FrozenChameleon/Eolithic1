@@ -16,8 +16,8 @@ typedef struct Prop
 	Animation _mAnimation;
 	Sheet* _mSheet;
 	bool mIsAdditive;
-	int mScaler;
-	int mFlipSpeed;
+	int32_t mScaler;
+	int32_t mFlipSpeed;
 	bool mIsAnimation;
 	char mTextureName[EE_FILENAME_MAX];
 	char mTilesetFilter[EE_FILENAME_MAX];

@@ -59,7 +59,7 @@ const char* Strings_Get(const char* key)
 if (OeGlobals.DEBUG_IS_GOD_MODE)
 {
 string debugString = "";
-for (int i = 0; i < returnValue.Length; i++)
+for (int32_t i = 0; i < returnValue.Length; i += 1)
 {
 debugString += "-";
 }

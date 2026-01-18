@@ -7,7 +7,7 @@ void Pause_Update(Pause* p)
 		p->mIsComplete = true;
 	}
 }
-bool Pause_IsAtPoint(const Pause* p, int value)
+bool Pause_IsAtPoint(const Pause* p, int32_t value)
 {
 	if (value == p->mPoint)
 	{

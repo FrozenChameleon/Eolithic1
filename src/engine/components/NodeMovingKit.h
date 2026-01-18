@@ -12,8 +12,8 @@ enum
 
 typedef struct NodeMovingKit
 {
-	int mType;
-	int mCurrentNode;
+	int32_t mType;
+	int32_t mCurrentNode;
 	bool mIsOnTarget;
 	bool mBackwards;
 	bool mIsComplete;
@@ -23,8 +23,8 @@ typedef struct NodeMovingKit
 /*
 void Setup(OeEntity owner, int32_t type, bool moveContacts);
 bool IsOnTarget();
-int GetCurrentNode();
+int32_t GetCurrentNode();
 bool IsComplete();
-int GetDistanceToNextNodeY(OeEntity owner);
+int32_t GetDistanceToNextNodeY(OeEntity owner);
 void HandleNodeMoving(OeEntity owner);
 void HandleNodeMoving(OeEntity owner, float speed);*/

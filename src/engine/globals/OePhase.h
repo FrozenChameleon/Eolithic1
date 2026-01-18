@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdint.h"
 #include "limits.h"
 
 typedef enum DrawPhase
@@ -167,7 +168,7 @@ typedef enum DrawPhase
 typedef struct DrawPhaseMap
 {
 	char* key;
-	int value;
+	int32_t value;
 } DrawPhaseMap;
 
 DrawPhaseMap* OePhase_GetShDrawPhaseMap();

@@ -5,7 +5,7 @@
 #include "../render/SpriteBatch.h"
 #include "../utils/Utils.h"
 
-void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, const char* font, Vector2 position, int rampSpeed, int holdTime, bool isTextCentered)
+void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, const char* font, Vector2 position, int32_t rampSpeed, int32_t holdTime, bool isTextCentered)
 {
 	Utils_memset(fade, 0, sizeof(MovieOperationFadeText));
 

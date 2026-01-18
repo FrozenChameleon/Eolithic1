@@ -48,7 +48,7 @@ enum InputCheckAxisInfo
 	INPUTCHECK_AXIS_RIGHT_TRIGGER = 5
 };
 
-float InputCheck_CorrectAnalogForDirection(int direction, float value);
+float InputCheck_CorrectAnalogForDirection(int32_t direction, float value);
 bool InputCheck_CheckTypeAxis(InputCheck* data);
 bool InputCheck_IsAxisTriggers(InputCheck* data);
 bool InputCheck_CheckTypeButton(InputPlayer* playerInput, InputCheck* data);
@@ -70,7 +70,7 @@ bool InputCheck_IsGlyphImage(InputCheck* data);
 bool InputCheck_IsController(InputCheck* data);
 const char* InputCheck_GetGlyphString(InputCheck* data);
 const char* InputCheck_GetGlyphStringForController(const char* value);
-InputCheck InputCheck_CreateCheckKey(int key);
-InputCheck InputCheck_CreateCheckMouseButton(int mouseButton);
-InputCheck InputCheck_CreateCheckButton(int button);
-InputCheck InputCheck_CreateCheckAxis(int axis, int32_t direction);
+InputCheck InputCheck_CreateCheckKey(int32_t key);
+InputCheck InputCheck_CreateCheckMouseButton(int32_t mouseButton);
+InputCheck InputCheck_CreateCheckButton(int32_t button);
+InputCheck InputCheck_CreateCheckAxis(int32_t axis, int32_t direction);

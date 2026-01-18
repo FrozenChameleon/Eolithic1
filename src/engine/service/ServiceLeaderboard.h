@@ -7,23 +7,23 @@
 //supposed to be private
 bool Service_IsLeaderboardRequestQueued();
 bool Service_IsLeaderboardRateLimited();
-int Service_GetPageThatYouAreOn();
+int32_t Service_GetPageThatYouAreOn();
 
 //supposed to be protected
 void Service_NullLeaderboardEntries();
 void Service_CreateLeaderboardEntries();
-int Service_GetLeaderboardAmountOfRowsToRetrieve();
-void Service_SetLeaderboardSendStatus(int status);
-void Service_SetLeaderboardSendStatus2(int status, int frames);
-void Service_UpdateScoreKeepBestHelper(const char* leaderboard, int score, bool isAscending, bool isMilliseconds);
+int32_t Service_GetLeaderboardAmountOfRowsToRetrieve();
+void Service_SetLeaderboardSendStatus(int32_t status);
+void Service_SetLeaderboardSendStatus2(int32_t status, int32_t frames);
+void Service_UpdateScoreKeepBestHelper(const char* leaderboard, int32_t score, bool isAscending, bool isMilliseconds);
 const char* Service_GetCurrentLeaderboardName();
-int Service_GetCurrentLeaderboardScope();
+int32_t Service_GetCurrentLeaderboardScope();
 bool Service_IsCurrentLeaderboardAscending();
 bool Service_IsCurrentLeaderboardMilliseconds();
-int Service_GetHighestPossiblePage();
-void Service_RetrieveLeaderboardEntriesHelper(int leaderboardPage, bool isInitialRequest, int direction);
-int Service_GetMinimumRank();
-int Service_GetMaximumRank();
+int32_t Service_GetHighestPossiblePage();
+void Service_RetrieveLeaderboardEntriesHelper(int32_t leaderboardPage, bool isInitialRequest, int32_t direction);
+int32_t Service_GetMinimumRank();
+int32_t Service_GetMaximumRank();
 void Service_ReadyLeaderboard(const LeaderboardEntry* entries, size_t entries_len);
 const LeaderboardRequestData* Service_GetLeaderboardRequestData();
 
@@ -53,22 +53,22 @@ typedef enum ServiceLeaderboardQueueState
 void Service_ResetLeaderboardRequestStuff();
 void Service_SetSilenceLeaderboardSendStatusNotification(bool value);
 void Service_FlushStatsToServiceForXbox();
-void Service_SetLeaderboardAmountOfRowsToRetrieve(int range);
+void Service_SetLeaderboardAmountOfRowsToRetrieve(int32_t range);
 bool Service_IsSimplifiedLeaderboard();
 bool Service_IsShowingLeaderboardCannotConnectError();
 void Service_DisableLeaderboards();
 bool Service_AreLeaderboardDisabled();
-void Service_UpdateScoreKeepBest(const char* leaderboard, int score, bool isAscending, bool isMilliseconds);
-void Service_RetrieveLeaderboardEntries(const char* leaderboard, int scopeType, bool isAscending, bool isMilliseconds);
-int Service_CheckLeaderboardSendStatus(bool update);
-void Service_SimulateSendingLeaderboardStatus(int frames, int status);
+void Service_UpdateScoreKeepBest(const char* leaderboard, int32_t score, bool isAscending, bool isMilliseconds);
+void Service_RetrieveLeaderboardEntries(const char* leaderboard, int32_t scopeType, bool isAscending, bool isMilliseconds);
+int32_t Service_CheckLeaderboardSendStatus(bool update);
+void Service_SimulateSendingLeaderboardStatus(int32_t frames, int32_t status);
 bool Service_IsLeaderboardRetrievalInProgress();
 LeaderboardEntry* Service_GetLeaderboardEntries();
-LeaderboardEntry Service_GetLeaderboardEntry(int i);
+LeaderboardEntry Service_GetLeaderboardEntry(int32_t i);
 bool Service_IsLeaderboardReady();
 int64_t Service_GetLeaderboardEntryCount();
-int Service_GetCurrentHighestRank();
-int Service_GetCurrentLowestRank();
+int32_t Service_GetCurrentHighestRank();
+int32_t Service_GetCurrentLowestRank();
 bool Service_IsLeaderboardNullOrEmpty();
 bool Service_CanLeaderboardGoLeft();
 bool Service_CanLeaderboardGoRight();

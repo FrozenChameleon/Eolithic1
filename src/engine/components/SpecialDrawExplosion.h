@@ -7,7 +7,7 @@ typedef struct Sheet Sheet;
 
 typedef struct SpecialDrawExplosion
 {
-	int mCounter;
+	int32_t mCounter;
 	Vector2 mInitialPosition;
 	float mSectionWidth;
 	float mSectionHeight;
@@ -15,7 +15,7 @@ typedef struct SpecialDrawExplosion
 	float mOffsetsY[3];
 	float mWidths[3];
 	bool mDraw;
-	int mSides[3]; //Was booleans...
+	int32_t mSides[3]; //Was booleans...
 	Sheet* mSheetReference;
 	Timer mTimer;
 } SpecialDrawExplosion;

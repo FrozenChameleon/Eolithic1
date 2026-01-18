@@ -26,6 +26,6 @@ void BmFontData_ReadCommon(BmFontData* bmfd, IStringArray* tagSplit);
 void BmFontData_ReadPage(BmFontData* bmfd, IStringArray* tagSplit);
 void BmFontData_ReadChar(BmFontData* bmfd, IStringArray* tagSplit);
 void BmFontData_ReadKerning(BmFontData* bmfd, IStringArray* tagSplit);
-int BmFontData_FindInt(const char* key, IStringArray* tagSplit);
+int32_t BmFontData_FindInt(const char* key, IStringArray* tagSplit);
 const char* BmFontData_FindString(const char* key, IStringArray* tagSplit);
 void BmFontData_Init(BmFontData* bmfd, BufferReader* br);

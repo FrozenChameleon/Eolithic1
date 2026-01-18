@@ -4,6 +4,8 @@
  * See LICENSE for details.
  */
 
+#ifndef AUDIO_DUMMY
+
 #include "Music.h"
 
 #include "../utils/Utils.h"
@@ -13,6 +15,7 @@
 #include "../utils/Macros.h"
 #include "../utils/Cvars.h"
 #include "SoundEffect.h"
+#include "../gamestate/GameStateManager.h"
 
  //static const std::string MUSIC_EXTENSION = ".wav";
  //static const std::vector<std::string> MUSIC_DIR = { OeFile::Combine("data", "music") };
@@ -27,10 +30,10 @@ static bool _mHasInit;
 
 static bool IsRewinding(void)
 {
-	//if (OeGameStateManager::ActiveGameState()->IsRewinding())
-	//{
-	//	return true;
-	//}
+	if (GameState_IsRewinding(GameStateManager_GetGameState()))
+	{
+		return true;
+	}
 	return false;
 }
 static bool IsDisabledPermanently(void)
@@ -52,6 +55,7 @@ void Music_Init(void)
 
 	MusicInstance_Init(&_mCurrentMusic);
 	VolumeData_Init(&_mVolumeData, true);
+	VolumeData_Load(&_mVolumeData);
 
 	_mHasInit = true;
 }
@@ -114,11 +118,7 @@ void Music_SetDoNotAllowUpdatesWhilePaused(bool value)
 {
 	_mDoNotAllowUpdatesWhilePaused = value;
 }
-VolumeData* Music_GetVolumeData(void)
-{
-	return &_mVolumeData;
-}
-void Music_PauseMusic(int priority)
+void Music_PauseMusic(int32_t priority)
 {
 	if (IsDisabledPermanently() || IsRewinding() || (priority <= _mMusicPausePriority))
 	{
@@ -128,7 +128,7 @@ void Music_PauseMusic(int priority)
 	MusicInstance_Pause(&_mCurrentMusic);
 	_mMusicPausePriority = priority;
 }
-void Music_ResumeMusic(int priority)
+void Music_ResumeMusic(int32_t priority)
 {
 	if (IsDisabledPermanently() || IsRewinding() || (priority < _mMusicPausePriority))
 	{
@@ -204,7 +204,7 @@ void Music_StopMusic(void)
 	MusicInstance_Stop(&_mCurrentMusic);
 	_mMusicPausePriority = -1;
 }
-void Music_FadeOutMusic(int fadeOutTime)
+void Music_FadeOutMusic(int32_t fadeOutTime)
 {
 	if (_mHackToIgnoreNextFadeOutMusic)
 	{
@@ -228,3 +228,5 @@ void Music_Tick(void)
 
 	MusicInstance_Update(&_mCurrentMusic);
 }
+
+#endif

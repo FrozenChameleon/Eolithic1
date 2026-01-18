@@ -17,7 +17,7 @@ void Tile_Init(Tile* t)
 	/*tile->mCollisionType = 0;
 	tile->mInstances = {};
 	tile->mProps = {};
-	for (int i = 0; i < DRAW_LAYER_LENGTH; i++)
+	for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
 	{
 		DrawTile_Init(&tile->mDrawTiles[i]);
 	}*/
@@ -30,19 +30,19 @@ void Tile_Write(Tile* t, BufferWriter* writer)
 	writer->WriteInt32(mCollisionType);
 
 	writer->WriteInt32(DRAW_LAYER_LENGTH);
-	for (int i = 0; i < DRAW_LAYER_LENGTH; i++)
+	for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
 	{
 		OeDrawTile_Write(&mDrawTiles[i], writer);
 	}
 
 	writer->WriteInt32(mInstances.size());
-	for (int i = 0; i < mInstances.size(); i++)
+	for (int32_t i = 0; i < mInstances.size(); i += 1)
 	{
 		mInstances[i].Write(writer);
 	}
 
 	writer->WriteInt32(mProps.size());
-	for (int i = 0; i < mProps.size(); i++)
+	for (int32_t i = 0; i < mProps.size(); i += 1)
 	{
 		OePropInstance_Write(&mProps[i], writer);
 	}
@@ -54,22 +54,22 @@ void Tile_Read(Tile* t, int32_t version, BufferReader* reader)
 	BufferReader_ReadI32(reader); //Unused - Multi Array Collision
 	t->mCollisionType = BufferReader_ReadI32(reader);
 
-	int arrayDrawTilesSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < arrayDrawTilesSize; i += 1)
+	int32_t arrayDrawTilesSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < arrayDrawTilesSize; i += 1)
 	{
 		DrawTile_Read(&t->mDrawTiles[i], version, reader);
 	}
 
-	int arrayThingDataSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < arrayThingDataSize; i++)
+	int32_t arrayThingDataSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < arrayThingDataSize; i += 1)
 	{
 		ThingInstance instance = { 0 };
 		ThingInstance_Read(&instance, version, reader);
 		arrput(t->arr_instances, instance);
 	}
 
-	int arrayPropDataSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < arrayPropDataSize; i++)
+	int32_t arrayPropDataSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < arrayPropDataSize; i += 1)
 	{
 		PropInstance instance = { 0 };
 		PropInstance_Init(&instance);
@@ -83,7 +83,7 @@ void Tile_DeleteCollision(Tile* t)
 }
 void Tile_DeleteDrawTiles(Tile* t)
 {
-	for (int i = 0; i < DRAW_LAYER_LENGTH; i++)
+	for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
 	{
 		Tile_DeleteDrawTiles2(t, i);
 	}
@@ -113,7 +113,7 @@ Tile* Tile_GetClone2(Tile* t, bool limited)
 	bool copyCollision = false;
 	bool copyTiles = false;
 	bool copyLayerOnly = false;
-	int currentLayer = -1;
+	int32_t currentLayer = -1;
 	bool copyProps = false;
 	bool copyThings = false;
 
@@ -133,7 +133,7 @@ Tile* Tile_GetClone2(Tile* t, bool limited)
 
 	if (!limited || copyTiles)
 	{
-		for (int i = 0; i < DRAW_LAYER_LENGTH; i++)
+		for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
 		{
 			if (!limited || !copyLayerOnly || i == currentLayer)
 			{
@@ -144,7 +144,7 @@ Tile* Tile_GetClone2(Tile* t, bool limited)
 
 	if (!limited || copyProps)
 	{
-		for (int i = 0; i < mProps.size(); i++)
+		for (int32_t i = 0; i < mProps.size(); i += 1)
 		{
 			newTile.mProps.push_back(mProps[i]);
 		}
@@ -152,7 +152,7 @@ Tile* Tile_GetClone2(Tile* t, bool limited)
 
 	if (!limited || copyThings)
 	{
-		for (int i = 0; i < mInstances.size(); i++)
+		for (int32_t i = 0; i < mInstances.size(); i += 1)
 		{
 			newTile.mInstances.push_back(mInstances[i]); //WILLNOTDO 05152023 CHECK THIS, ORIGINALLY IT USED "GETCLONE".. SHOULD NOT NEED IT NOW
 		}
@@ -169,7 +169,7 @@ bool Tile_IsEqualTo(Tile* t, Tile* tile2)
 	//	return false;
 	//}
 
-	//for (int i = 0; i < LAYER_AMOUNT; i++)
+	//for (int32_t i = 0; i < LAYER_AMOUNT; i += 1)
 	//{
 	//	if (!OeDrawTile_IsEqualTo(ref mDrawTiles[i], ref tile.mDrawTiles[i]))
 	//	{
@@ -201,7 +201,7 @@ void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera,
 		return;
 	}
 
-	int depth = 100;
+	int32_t depth = 100;
 	if (overrideDepth)
 	{
 		depth = OVERRIDE_DEPTH;
@@ -213,10 +213,10 @@ void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera,
 }
 Rectangle Tile_GetCollisionRectangle(Tile* t, int32_t gridX, int32_t gridY)
 {
-	int rectX = gridX * TILE_SIZE;
-	int rectY = gridY * TILE_SIZE;
-	int rectWidth = TILE_SIZE;
-	int rectHeight = TILE_SIZE;
+	int32_t rectX = gridX * TILE_SIZE;
+	int32_t rectY = gridY * TILE_SIZE;
+	int32_t rectWidth = TILE_SIZE;
+	int32_t rectHeight = TILE_SIZE;
 	if ((t->mCollisionType == GAMEHELPER_PLATFORM_UP) || (t->mCollisionType == GAMEHELPER_PLATFORM_DOWN))
 	{
 		rectHeight /= 2;
@@ -243,7 +243,7 @@ void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, in
 	}
 
 	Color thingColor = Color(255, 0, 0, 127);
-	for (int k = 0; k < mInstances.size(); k++)
+	for (int32_t k = 0; k < mInstances.size(); k++)
 	{
 		if (!overrideDepth)
 		{
@@ -274,7 +274,7 @@ void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const  Camera* camera, i
 
 	Rectangle cameraRect = Camera_GetRectangle(camera, 1.0f);
 	Vector2 position = Vector2_Create((float)(gridX * TILE_SIZE), (float)(gridY * TILE_SIZE));
-	for (int i = 0; i < arr_props_len; i += 1)
+	for (int32_t i = 0; i < arr_props_len; i += 1)
 	{
 		PropInstance* propInstance = &t->arr_props[i];
 

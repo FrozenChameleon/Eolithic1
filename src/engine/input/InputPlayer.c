@@ -80,7 +80,7 @@ void InputPlayer_Init(InputPlayer* ip, int32_t number)
 	//ip->_mRumbleLeftMotor = 0;
 	//ip->_mRumbleRightMotor = 0;
 	//ip->_mActions = std_vector<InputAction>(OeActionList_GetArray().size());
-	for (int i = 0; i < ACTIONLIST_LENGTH; i += 1)
+	for (int32_t i = 0; i < ACTIONLIST_LENGTH; i += 1)
 	{
 		InputAction* currentAction = &ip->_mActions[i];
 		InputAction_Init(ActionList_GetAction(i), currentAction);
@@ -115,7 +115,7 @@ void InputPlayer_DetectInputDevice(InputPlayer* ip, bool isOnRelease)
 		}
 	}
 
-	int controllerNumber;
+	int32_t controllerNumber;
 	if (isOnRelease)
 	{
 		controllerNumber = ControllerStates_GetControllerNumberIfAnyButtonReleased();
@@ -133,7 +133,7 @@ void InputPlayer_DetectInputDevice(InputPlayer* ip, bool isOnRelease)
 		}
 	}
 }
-int InputPlayer_GetDeviceNumber(InputPlayer* ip)
+int32_t InputPlayer_GetDeviceNumber(InputPlayer* ip)
 {
 	return ip->_mInputDeviceNumber;
 }
@@ -169,7 +169,7 @@ bool InputPlayer_IsUsingKeyboard(InputPlayer* ip)
 void InputPlayer_ClearInput(InputPlayer* ip)
 {
 	InputAction* currentActions = InputPlayer_GetCurrentActions(ip);
-	for (int i = 0; i < ACTIONLIST_LENGTH; i++)
+	for (int32_t i = 0; i < ACTIONLIST_LENGTH; i += 1)
 	{
 		InputAction_ClearPolledInput(&currentActions[i]);
 	}
@@ -177,10 +177,10 @@ void InputPlayer_ClearInput(InputPlayer* ip)
 bool InputPlayer_IsPlayerPressingAnything(InputPlayer* ip)
 {
 	InputAction* currentActions = InputPlayer_GetCurrentActions(ip);
-	for (int i = 0; i < ACTIONLIST_LENGTH; i++)
+	for (int32_t i = 0; i < ACTIONLIST_LENGTH; i += 1)
 	{
 		InputAction* action = &currentActions[i];
-		for (int j = 0; j < INPUTCHECKS_LENGTH; j++)
+		for (int32_t j = 0; j < INPUTCHECKS_LENGTH; j++)
 		{
 			if (action->mIsPressed)
 			{
@@ -197,7 +197,7 @@ void InputPlayer_SetBlockMenuInput(InputPlayer* ip, int32_t value)
 void InputPlayer_Update(InputPlayer* ip)
 {
 	InputAction* currentActions = InputPlayer_GetCurrentActions(ip);
-	for (int i = 0; i < ACTIONLIST_LENGTH; i++)
+	for (int32_t i = 0; i < ACTIONLIST_LENGTH; i += 1)
 	{
 		InputAction_Update(&currentActions[i], ip);
 	}

@@ -22,7 +22,7 @@
 
 static MString* _mTempString;
 
-float InputCheck_CorrectAnalogForDirection(int direction, float value)
+float InputCheck_CorrectAnalogForDirection(int32_t direction, float value)
 {
 	int32_t sig = Math_SignumFloat(value);
 	if (((direction == -1) && (sig == 1)) || ((direction == 1) && (sig == -1)))
@@ -444,28 +444,28 @@ const char* InputCheck_GetGlyphStringForController(const char* value)
 	MString_Combine4(&_mTempString, "GLYPH_", Utils_GetGlyphType(), "_", value);
 	return MString_GetText(_mTempString);
 }
-InputCheck InputCheck_CreateCheckKey(int key)
+InputCheck InputCheck_CreateCheckKey(int32_t key)
 {
 	InputCheck tempCheck = { 0 };
 	tempCheck.mType = INPUTCHECK_TYPE_KEY;
 	tempCheck.mKey = key;
 	return tempCheck;
 }
-InputCheck InputCheck_CreateCheckMouseButton(int mouseButton)
+InputCheck InputCheck_CreateCheckMouseButton(int32_t mouseButton)
 {
 	InputCheck tempCheck = { 0 };
 	tempCheck.mType = INPUTCHECK_TYPE_MOUSEBUTTON;
 	tempCheck.mMouseButton = mouseButton;
 	return tempCheck;
 }
-InputCheck InputCheck_CreateCheckButton(int button)
+InputCheck InputCheck_CreateCheckButton(int32_t button)
 {
 	InputCheck tempCheck = { 0 };
 	tempCheck.mType = INPUTCHECK_TYPE_BUTTON;
 	tempCheck.mButton = button;
 	return tempCheck;
 }
-InputCheck InputCheck_CreateCheckAxis(int axis, int32_t direction)
+InputCheck InputCheck_CreateCheckAxis(int32_t axis, int32_t direction)
 {
 	InputCheck tempCheck = { 0 };
 	tempCheck.mType = INPUTCHECK_TYPE_AXIS;

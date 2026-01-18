@@ -13,6 +13,6 @@ typedef struct MovieOperationPan
 	MovieImage* mImage;
 } MovieOperationPan;
 
-void MovieOperationPan_Init(MovieOperationPan* pan, MovieImage* image, Vector2 speed, int time);
+void MovieOperationPan_Init(MovieOperationPan* pan, MovieImage* image, Vector2 speed, int32_t time);
 void MovieOperationPan_SpeedUp(MovieOperationPan* pan);
 void MovieOperationPan_Update(MovieOperationPan* pan);

@@ -109,7 +109,7 @@ void DynamicByteBuffer_WriteString(DynamicByteBuffer* dbb, const char* str, size
 
 	DynamicByteBuffer_WriteU8(dbb, (uint8_t)str_len);
 
-	for (int i = 0; i < str_len; i += 1)
+	for (int32_t i = 0; i < str_len; i += 1)
 	{
 		DynamicByteBuffer_WriteU8(dbb, str[i]);
 	}

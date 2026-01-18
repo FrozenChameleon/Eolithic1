@@ -2,6 +2,6 @@
 
 typedef struct PlayerNumber
 {
-	int mTag;
+	int32_t mTag;
 } PlayerNumber;
 

@@ -16,7 +16,7 @@ static void Update(void* givenData)
 	{
 		ResourceManager* animTileMan = ResourceManagerList_AnimTile();
 		int64_t len = ResourceManager_Length(animTileMan);
-		for (int i = 0; i < len; i += 1)
+		for (int32_t i = 0; i < len; i += 1)
 		{
 			AnimTile_UpdateResource(ResourceManager_GetResourceDataByIndex(animTileMan, i));
 		}
@@ -25,7 +25,7 @@ static void Update(void* givenData)
 	{
 		ResourceManager* propMan = ResourceManagerList_Prop();
 		int64_t len = ResourceManager_Length(propMan);
-		for (int i = 0; i < len; i += 1)
+		for (int32_t i = 0; i < len; i += 1)
 		{
 			Prop_UpdateResource(ResourceManager_GetResourceDataByIndex(propMan, i));
 		}
@@ -34,7 +34,7 @@ static void Update(void* givenData)
 	/*
 #if EDITOR
 	List<IResourceManager> managers = OeResourceManagers.GetManagers();
-	for (int i = 0; i < managers.Count; i++)
+	for (int32_t i = 0; i < managers.Count; i += 1)
 	{
 		managers[i].RefreshAssets();
 	}

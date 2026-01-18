@@ -14,15 +14,15 @@ typedef struct ImageData
 	bool mIsAdditive;
 	Vector2 mOrigin;
 	Point mOffset;
-	int mAnimationLoopPoint;
+	int32_t mAnimationLoopPoint;
 	bool mCanAnimate;
 	bool mAnimationStops;
 	bool mAnimationBlanks;
-	int mFlipSpeed;
-	int mDepth;
+	int32_t mFlipSpeed;
+	int32_t mDepth;
 	float mInitialRotation;
 	char mImage[EE_FILENAME_MAX];
-	int mScaler;
+	int32_t mScaler;
 } ImageData;
 
 void ImageData_Init(ImageData* id);

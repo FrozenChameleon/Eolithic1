@@ -30,10 +30,10 @@ void DrawActorSys_SetImageDataDepth(Entity owner, int32_t state, int32_t phase, 
 void DrawActorSys_SetImageState(Entity owner, DrawActor* data, int32_t state, int32_t phase);
 void DrawActorSys_SetImageState2(Entity owner, DrawActor* data, int32_t state, int32_t newPhase, bool carryAnimationState);
 void DrawActorSys_SetStateRotation(Entity owner, int32_t state, float rotation);
-int DrawActorSys_GetCurrentPhase(Entity owner, int32_t state);
+int32_t DrawActorSys_GetCurrentPhase(Entity owner, int32_t state);
 void DrawActorSys_SetNudge(Entity owner, int32_t state, float x, float y);
 ImageDataInstance* DrawActorSys_GetRender(Entity owner, int32_t state, int32_t phase, int32_t index);
-int DrawActorSys_GetAnimationPosition(Entity owner, int32_t state, int32_t phase);
+int32_t DrawActorSys_GetAnimationPosition(Entity owner, int32_t state, int32_t phase);
 Animation* DrawActorSys_GetCurrentAnimation(Entity owner, int32_t state);
 Animation* DrawActorSys_GetAnimation(Entity owner, int32_t state, int32_t phase);
 ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int32_t state, int32_t phase);

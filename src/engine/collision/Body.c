@@ -66,7 +66,7 @@ void Body_Resize(Body* body, int32_t width, int32_t height)
 }
 void Body_FlipBody(Body* body)
 {
-	int temp = body->mPhysicsWidth;
+	int32_t temp = body->mPhysicsWidth;
 	body->mPhysicsWidth = body->mPhysicsHeight;
 	body->mPhysicsHeight = temp;
 }
@@ -88,8 +88,8 @@ Vector2 Body_GetPosition(Body* body)
 }
 Rectangle Body_GetRect(Body* body)
 {
-	int width = Body_GetWidth(body);
-	int height = Body_GetHeight(body);
+	int32_t width = Body_GetWidth(body);
+	int32_t height = Body_GetHeight(body);
 	Vector2 position = Body_GetPosition(body);
 	Rectangle tempRect;
 	tempRect.X = (int32_t)(position.X - (width / 2));
@@ -100,8 +100,8 @@ Rectangle Body_GetRect(Body* body)
 }
 Rectangle Body_GetPhysicsRect(Body* body)
 {
-	int width = body->mPhysicsWidth;
-	int height = body->mPhysicsHeight;
+	int32_t width = body->mPhysicsWidth;
+	int32_t height = body->mPhysicsHeight;
 	Rectangle tempRect;
 	tempRect.X = (int32_t)(body->mPhysicsPosition.X - (width / 2));
 	tempRect.Y = (int32_t)(body->mPhysicsPosition.Y - (height / 2));
@@ -109,7 +109,7 @@ Rectangle Body_GetPhysicsRect(Body* body)
 	tempRect.Height = height;
 	return tempRect;
 }
-int Body_GetWidth(Body* body)
+int32_t Body_GetWidth(Body* body)
 {
 	return body->mPhysicsWidth / BODY_PHYSICS_SCALER;
 }
@@ -117,7 +117,7 @@ void Body_SetWidth(Body* body, int32_t pixelWidth)
 {
 	body->mPhysicsWidth = pixelWidth * BODY_PHYSICS_SCALER;
 }
-int Body_GetHeight(Body* body)
+int32_t Body_GetHeight(Body* body)
 {
 	return body->mPhysicsHeight / BODY_PHYSICS_SCALER;
 }
@@ -125,11 +125,11 @@ void Body_SetHeight(Body* body, int32_t pixelHeight)
 {
 	body->mPhysicsHeight = pixelHeight * BODY_PHYSICS_SCALER;
 }
-int Body_GetOriginalWidth(Body* body)
+int32_t Body_GetOriginalWidth(Body* body)
 {
 	return body->mPhysicsOriginalWidth / BODY_PHYSICS_SCALER;
 }
-int Body_GetOriginalHeight(Body* body)
+int32_t Body_GetOriginalHeight(Body* body)
 {
 	return body->mPhysicsOriginalHeight / BODY_PHYSICS_SCALER;
 }

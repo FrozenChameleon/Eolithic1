@@ -12,11 +12,11 @@
 #define FONT_EXTENSION ".fnt"
 //TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_PathCombine("data", "fonts") };
 
-int BmFont_GetBaseHeight(BmFont* bmf)
+int32_t BmFont_GetBaseHeight(BmFont* bmf)
 {
 	return bmf->_mFontData.mCommon.Base;
 }
-int BmFont_GetLineHeight(BmFont* bmf)
+int32_t BmFont_GetLineHeight(BmFont* bmf)
 {
 	return bmf->_mFontData.mCommon.LineHeight;
 }
@@ -53,7 +53,7 @@ void BmFont_Init(BmFont* bmf, BufferReader* br, const char* fontName)
 
 	BmFontDataChar* chars = bmf->_mFontData.mChars;
 	int64_t charsLen = arrlen(chars);
-	for (int i = 0; i < charsLen; i += 1)
+	for (int32_t i = 0; i < charsLen; i += 1)
 	{
 		BmFontDataChar fontChar = chars[i];
 		hmput(bmf->hm_font_char_map, fontChar.ID, fontChar);

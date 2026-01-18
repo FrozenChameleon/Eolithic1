@@ -6,7 +6,7 @@
 #include "../../third_party/stb_ds.h"
 
 //static int64_t _mLastWriteTime = 0;
-//static int _mReadCounter = 0;
+//static int32_t _mReadCounter = 0;
 
 static FontMapData* arr_data;
 static char _mPath[EE_FILENAME_MAX];
@@ -210,7 +210,7 @@ const FontMapData* FontMap_GetReplacement(const char* fontName)
 		}
 	}
 
-	for (int i = 0; i < arrlen(arr_data); i += 1)
+	for (int32_t i = 0; i < arrlen(arr_data); i += 1)
 	{
 		FontMapData* data = &arr_data[i];
 		if (IStringArray_Length(data->mLanguages) > 0)

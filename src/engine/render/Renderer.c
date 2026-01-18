@@ -89,7 +89,7 @@ static float GetCurrentDepthForRender()
 	return (1.0f - ((float)(_mCurrentDepth) / 200.0f)); //Max layers is 200
 }
 
-int Renderer_InitSpriteBatch()
+int32_t Renderer_InitSpriteBatch()
 {
 	if (_mHasInitSpriteBatch)
 	{
@@ -136,11 +136,11 @@ Vector2 Renderer_INTERNAL_GetCurrentCameraPosition()
 {
 	return _mCurrentCameraPosition;
 }
-void Renderer_INTERNAL_SetCurrentDepth(int value)
+void Renderer_INTERNAL_SetCurrentDepth(int32_t value)
 {
 	_mCurrentDepth = value;
 }
-int Renderer_INTERNAL_GetCurrentDepth()
+int32_t Renderer_INTERNAL_GetCurrentDepth()
 {
 	return _mCurrentDepth;
 }
@@ -152,10 +152,10 @@ Rectangle Renderer_GetWantedBackBufferBounds()
 		return forcedBackBuffer;
 	}
 
-	int internalRenderWidth = Utils_GetInternalRenderWidth();
-	int internalRenderHeight = Utils_GetInternalRenderHeight();
+	int32_t internalRenderWidth = Utils_GetInternalRenderWidth();
+	int32_t internalRenderHeight = Utils_GetInternalRenderHeight();
 
-	int mul = Renderer_GetRenderTargetScale();
+	int32_t mul = Renderer_GetRenderTargetScale();
 
 #ifdef DEBUG_DEF_FORCE_LOWEST_BACK_BUFFER_SIZE
 	mul = 1;
@@ -177,10 +177,10 @@ void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color
 	colorToUse.A = (float)(fontColor.A) / 0xFF;
 
 	float renderDepth = GetCurrentDepthForRender();
-	for (int i = 0; i < nverts; i += 1)
+	for (int32_t i = 0; i < nverts; i += 1)
 	{
 		VertexPositionColorTexture* vertice = &vertices[pos + i];
-		int offset = i * 2;
+		int32_t offset = i * 2;
 		vertice->Position.X = verts[offset];
 		vertice->Position.Y = verts[offset + 1];
 		vertice->Position.Z = renderDepth;
@@ -532,7 +532,7 @@ void Renderer_DrawManyRectangles(RenderCommandManyRectangle* draw)
 {
 	const std_vector<OeDrawRectangle>& manyRectangles = *draw->mManyRectangles;
 
-	for (int i = 0; i < manyRectangles.size(); i += 1)
+	for (int32_t i = 0; i < manyRectangles.size(); i += 1)
 	{
 		Draw(draw->mTexture, manyRectangles[i].mRectangle,
 			draw->mSourceRectangle, manyRectangles[i].mColor, 0, Vector2_Zero, SpriteEffects_None, draw->mDepth);
@@ -552,14 +552,14 @@ Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* bmf, const char* text,
 		return Rectangle_Empty;
 	}
 
-	int boundsMaxWidth = 0;
-	int boundsWidth = 0;
-	int boundsHeight = BmFont_GetBaseHeight(bmf);
+	int32_t boundsMaxWidth = 0;
+	int32_t boundsWidth = 0;
+	int32_t boundsHeight = BmFont_GetBaseHeight(bmf);
 	float currentX = position.X;
 	float currentY = position.Y;
 
 	int32_t textLen = (int32_t)Utils_strlen(text);
-	for (int i = 0; i < textLen; i += 1)
+	for (int32_t i = 0; i < textLen; i += 1)
 	{
 		if (text[i] == '\n')
 		{
@@ -571,7 +571,7 @@ Rectangle Renderer_RenderBmFont(bool drawTheText, BmFont* bmf, const char* text,
 		else
 		{
 			BmFontDataChar* bmChar = NULL;
-			int charToLookUp = text[i];
+			int32_t charToLookUp = text[i];
 			int64_t charIndex = hmgeti(bmf->hm_font_char_map, charToLookUp);
 			if (charIndex >= 0)
 			{
@@ -633,8 +633,8 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 	Vector2 offsetLastPosition = Vector2_Add(draw->mLastPosition, offset);
 	if (draw->mIsLockedToInt)
 	{
-		offsetPosition = Vector2_Create((float)((int)(offsetPosition.X)), (float)((int)(offsetPosition.Y)));
-		offsetLastPosition = Vector2_Create((float)((int)(offsetLastPosition.X)), (float)((int)(offsetLastPosition.Y)));
+		offsetPosition = Vector2_Create((float)((int32_t)(offsetPosition.X)), (float)((int32_t)(offsetPosition.Y)));
+		offsetLastPosition = Vector2_Create((float)((int32_t)(offsetLastPosition.X)), (float)((int32_t)(offsetLastPosition.Y)));
 	}
 
 	Vector2 finalPos;
@@ -674,14 +674,14 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 	Tile** tileData = draw->mTileData;
 	Rectangle tileDataBounds = draw->mTileDataBounds;
 	Vector2 origin = Vector2_Create(TILE_SIZE / 2, TILE_SIZE / 2);
-	int depth = draw->mDepth;
-	for (int i = draw->mX1; i < draw->mX2; i += 1)
+	int32_t depth = draw->mDepth;
+	for (int32_t i = draw->mX1; i < draw->mX2; i += 1)
 	{
-		for (int j = draw->mY1; j < draw->mY2; j += 1)
+		for (int32_t j = draw->mY1; j < draw->mY2; j += 1)
 		{
 			//Draw The Tile
 			Vector2 position = Vector2_Create((float)(i * TILE_SIZE), (float)(j * TILE_SIZE));
-			int gridPos = i + (j * tileDataBounds.Width);
+			int32_t gridPos = i + (j * tileDataBounds.Width);
 			DrawTile* drawTile = &tileData[gridPos]->mDrawTiles[draw->mLayer];
 			if (drawTile->mPoint.X != -1)
 			{
@@ -695,7 +695,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 				AnimTile* animTile = ResourceManager_GetResourceData(ResourceManagerList_AnimTile(), drawTile->mAnimation);
 				if (animTile == NULL)
 				{
-					Renderer_Draw(DrawTool_GetSinglePixel(), Rectangle_Create((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), Color_Red);
+					Renderer_Draw(DrawTool_GetSinglePixel(), Rectangle_Create((int32_t)position.X, (int32_t)position.Y, TILE_SIZE, TILE_SIZE), Color_Red);
 					continue;
 				}
 
@@ -817,7 +817,7 @@ static void DrawEverythingForwards(RenderStream* draws, double delta, bool drawS
 /*
 static void DrawEverythingBackwards(std_vector<std_vector<DrawInstance>>& draws, double delta, bool drawSheet, bool drawManyRectangle, bool drawString, bool drawTileLayer)
 {
-	for (int i = (draws.size() - 1); i >= 0; i -= 1)
+	for (int32_t i = (draws.size() - 1); i >= 0; i -= 1)
 	{
 		DrawTheDepth(i, draws[i], delta, drawSheet, drawManyRectangle, drawString, drawTileLayer);
 	}
@@ -892,17 +892,17 @@ SpriteEffects Renderer_GetEffects(bool flipX, bool flipY)
 
 	return effects;
 }
-int Renderer_ImageRead(void* context, char* data, int32_t size)
+int32_t Renderer_ImageRead(void* context, char* data, int32_t size)
 {
 	SDL_IOStream* rwop = (SDL_IOStream*)(context);
-	return (int)SDL_ReadIO(rwop, data, size);
+	return (int32_t)SDL_ReadIO(rwop, data, size);
 }
 void Renderer_ImageSkip(void* context, int32_t n)
 {
 	SDL_IOStream* rwop = (SDL_IOStream*)(context);
 	SDL_SeekIO(rwop, n, SDL_IO_SEEK_CUR);
 }
-int Renderer_ImageEndOfFile(void* context)
+int32_t Renderer_ImageEndOfFile(void* context)
 {
 	SDL_IOStream* rwop = (SDL_IOStream*)(context);
 	int64_t size = SDL_GetIOSize(rwop);
@@ -918,9 +918,9 @@ ImagePixelData Renderer_CreateImagePixelData(FixedByteBuffer* blob)
 	cb.read = Renderer_ImageRead;
 	cb.skip = Renderer_ImageSkip;
 
-	int imageWidth;
-	int imageHeight;
-	int imageFormat;
+	int32_t imageWidth;
+	int32_t imageHeight;
+	int32_t imageFormat;
 	uint8_t* imageData;
 
 	imageData = stbi_load_from_callbacks(&cb, rwops, &imageWidth, &imageHeight, &imageFormat, STBI_rgb_alpha);
@@ -960,7 +960,7 @@ uint16_t* Renderer_GetDefaultIndexBufferData()
 		return _mIndexBufferData;
 	}
 
-	for (int i = 0, j = 0; i < MAX_INDICES; i += 6, j += 4)
+	for (int32_t i = 0, j = 0; i < MAX_INDICES; i += 6, j += 4)
 	{
 		_mIndexBufferData[i] = (uint16_t)(j);
 		_mIndexBufferData[i + 1] = (uint16_t)(j + 1);
@@ -987,8 +987,8 @@ void Renderer_UpdateDisplayDimensions()
 	float currentWidth = (float)drawable.Width;
 	float currentHeight = (float)drawable.Height;
 
-	int internalRenderWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
-	int internalRenderHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
+	int32_t internalRenderWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
+	int32_t internalRenderHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
 
 	if (Cvars_GetAsInt(CVARS_USER_DRAW_MODE) == RENDERER_DRAWMODE_PIXELPERFECT)
 	{
@@ -998,7 +998,7 @@ void Renderer_UpdateDisplayDimensions()
 		}
 	}
 
-	int drawMode = Cvars_GetAsInt(CVARS_USER_DRAW_MODE);
+	int32_t drawMode = Cvars_GetAsInt(CVARS_USER_DRAW_MODE);
 	drawMode = RENDERER_DRAWMODE_ASPECT; //Force this for now
 	if ((drawMode == RENDERER_DRAWMODE_ASPECT) || (drawMode == RENDERER_DRAWMODE_SUPERSAMPLE))
 	{
@@ -1039,13 +1039,13 @@ void Renderer_UpdateDisplayDimensions()
 
 	float offsetX = (currentWidth - width) / 2.0f;
 	float offsetY = (currentHeight - height) / 2.0f;
-	_mScreenOffset.X = (int)(offsetX);
-	_mScreenOffset.Y = (int)(offsetY);
+	_mScreenOffset.X = (int32_t)(offsetX);
+	_mScreenOffset.Y = (int32_t)(offsetY);
 
 	_mScreenBounds.X = _mScreenOffset.X;
 	_mScreenBounds.Y = _mScreenOffset.Y;
-	_mScreenBounds.Width = (int)(width);
-	_mScreenBounds.Height = (int)(height);
+	_mScreenBounds.Width = (int32_t)(width);
+	_mScreenBounds.Height = (int32_t)(height);
 }
 Point Renderer_GetScreenOffset()
 {
@@ -1104,23 +1104,23 @@ void Renderer_SetupRenderState()
 	SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
 	GameStateManager_DrawHud(&_mOrangeSpriteBatchHud);
 }
-int Renderer_GetFPS()
+int32_t Renderer_GetFPS()
 {
 	return _mFpsToolDraw.mCurrentFps;
 }
-int Renderer_GetRenderTargetScale()
+int32_t Renderer_GetRenderTargetScale()
 {
-	int internalRenderWidth = Utils_GetInternalRenderWidth();
-	int internalRenderHeight = Utils_GetInternalRenderHeight();
+	int32_t internalRenderWidth = Utils_GetInternalRenderWidth();
+	int32_t internalRenderHeight = Utils_GetInternalRenderHeight();
 
-	int mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
+	int32_t mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
 	if (mul <= 0) //Auto
 	{
 		Rectangle drawableSize = Renderer_GetDrawableSize();
 		if (!Rectangle_IsEmpty(&drawableSize))
 		{
-			int widthCheck = drawableSize.Width / internalRenderWidth;
-			int heightCheck = drawableSize.Height / internalRenderHeight;
+			int32_t widthCheck = drawableSize.Width / internalRenderWidth;
+			int32_t heightCheck = drawableSize.Height / internalRenderHeight;
 			if (widthCheck >= heightCheck)
 			{
 				mul = widthCheck;

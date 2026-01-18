@@ -31,16 +31,16 @@
 
 static struct { int32_t key; int32_t value; } _mControllerComponentTypeMap;
 static IStringArray* _mControllerComponentStrArray;
-//static std_unordered_map<std_string, std_unordered_map<std_string, int>> _mComponentSizes;
+//static std_unordered_map<std_string, std_unordered_map<std_string, int32_t>> _mComponentSizes;
 
 const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION = 0.233f;
 const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION_MAX = 5.25f;
 const int32_t GAMEHELPER_DEFAULT_MOVING_PLATFORM_LEEWAY = 1;
 
-int GAMEHELPER_PLATFORM_UP = -1;
-int GAMEHELPER_PLATFORM_DOWN = -1;
-int GAMEHELPER_PLATFORM_RIGHT = -1;
-int GAMEHELPER_PLATFORM_LEFT = -1;
+int32_t GAMEHELPER_PLATFORM_UP = -1;
+int32_t GAMEHELPER_PLATFORM_DOWN = -1;
+int32_t GAMEHELPER_PLATFORM_RIGHT = -1;
+int32_t GAMEHELPER_PLATFORM_LEFT = -1;
 
 void GameHelper_DoDefaultSetupThingInstanceSettings(ThingInstance* instance, bool ignoreWarnings)
 {
@@ -63,7 +63,7 @@ void GameHelper_UpdateLastRenderPositionNormally()
 	System** stateSystems = GameStateManager_GetStateSystems();
 	GameState* gameState = GameStateManager_GetGameState();
 
-	for (int i = 0; i < stateSystemsLen; i += 1)
+	for (int32_t i = 0; i < stateSystemsLen; i += 1)
 	{
 		System* stateSys = stateSystems[i];
 		stateSys->_mUpdateLastRenderPosition(stateSys->_mData, gameState);
@@ -81,7 +81,7 @@ void GameHelper_UpdateGlobalSystemsNormally()
 {
 	int32_t globalSystemsLen = GameStateManager_GetGlobalSystemsLen();
 	System** globalSystems = GameStateManager_GetGlobalSystems();
-	for (int i = 0; i < globalSystemsLen; i += 1)
+	for (int32_t i = 0; i < globalSystemsLen; i += 1)
 	{
 		System* globalSys = globalSystems[i];
 		globalSys->_mUpdate(globalSys->_mData);
@@ -91,7 +91,7 @@ void GameHelper_DrawGlobalSystemsNormally(SpriteBatch* spriteBatch)
 {
 	int32_t globalSystemsLen = GameStateManager_GetGlobalSystemsLen();
 	System** globalSystems = GameStateManager_GetGlobalSystems();
-	for (int i = 0; i < globalSystemsLen; i += 1)
+	for (int32_t i = 0; i < globalSystemsLen; i += 1)
 	{
 		System* globalSys = globalSystems[i];
 		globalSys->_mDraw(globalSys->_mData, spriteBatch);
@@ -101,7 +101,7 @@ void GameHelper_DrawHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
 {
 	int32_t globalSystemsLen = GameStateManager_GetGlobalSystemsLen();
 	System** globalSystems = GameStateManager_GetGlobalSystems();
-	for (int i = 0; i < globalSystemsLen; i += 1)
+	for (int32_t i = 0; i < globalSystemsLen; i += 1)
 	{
 		System* globalSys = globalSystems[i];
 		globalSys->_mDrawHud(globalSys->_mData, spriteBatch);
@@ -111,7 +111,7 @@ void GameHelper_DrawDebugHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
 {
 	int32_t globalSystemsLen = GameStateManager_GetGlobalSystemsLen();
 	System** globalSystems = GameStateManager_GetGlobalSystems();
-	for (int i = 0; i < globalSystemsLen; i += 1)
+	for (int32_t i = 0; i < globalSystemsLen; i += 1)
 	{
 		System* globalSys = globalSystems[i];
 		globalSys->_mDrawDebugHud(globalSys->_mData, spriteBatch);
@@ -121,7 +121,7 @@ void GameHelper_UpdateStateSystemsNormally()
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
-	for (int i = 0; i < stateSystemsLen; i += 1)
+	for (int32_t i = 0; i < stateSystemsLen; i += 1)
 	{
 		System* stateSys = stateSystems[i];
 		stateSys->_mUpdate(stateSys->_mData);
@@ -131,7 +131,7 @@ void GameHelper_DrawStateSystemsNormally(SpriteBatch* spriteBatch)
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
-	for (int i = 0; i < stateSystemsLen; i += 1)
+	for (int32_t i = 0; i < stateSystemsLen; i += 1)
 	{
 		System* stateSys = stateSystems[i];
 		stateSys->_mDraw(stateSys->_mData, spriteBatch);
@@ -141,7 +141,7 @@ void GameHelper_DrawHudStateSystemsNormally(SpriteBatch* spriteBatch)
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
-	for (int i = 0; i < stateSystemsLen; i += 1)
+	for (int32_t i = 0; i < stateSystemsLen; i += 1)
 	{
 		System* stateSys = stateSystems[i];
 		stateSys->_mDrawHud(stateSys->_mData, spriteBatch);
@@ -151,7 +151,7 @@ void GameHelper_DrawDebugHudStateSystemsNormally(SpriteBatch* spriteBatch)
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
-	for (int i = 0; i < stateSystemsLen; i += 1)
+	for (int32_t i = 0; i < stateSystemsLen; i += 1)
 	{
 		System* stateSys = stateSystems[i];
 		stateSys->_mDrawDebugHud(stateSys->_mData, spriteBatch);
@@ -200,7 +200,7 @@ void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input)
 {
 	int64_t len = IStringArray_Length(strings);
 
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		const char* s = IStringArray_Get(strings, i);
 
@@ -305,8 +305,8 @@ IStringArray* GameHelper_GetControllerComponentStringArray()
 	{
 		_mControllerComponentStrArray = new List<string>();
 
-		OeDictionary<int, Type> map = GetControllerComponentTypeMap();
-		for (int i = 0; i < map.Values.Count; i += 1)
+		OeDictionary<int32_t, Type> map = GetControllerComponentTypeMap();
+		for (int32_t i = 0; i < map.Values.Count; i += 1)
 		{
 			Type o = map.Values[i];
 			_mControllerComponentStrArray.Add(o.Name);
@@ -322,8 +322,8 @@ IntIntPair* GameHelper_GetControllerComponentTypeMap()
 	/*
 	if (_mControllerComponentTypeMap == null)
 	{
-		_mControllerComponentTypeMap = new OeDictionary<int, Type>();
-		for (int i = 0; i < COMPONENT_SCAN_RANGE; i += 1)
+		_mControllerComponentTypeMap = new OeDictionary<int32_t, Type>();
+		for (int32_t i = 0; i < COMPONENT_SCAN_RANGE; i += 1)
 		{
 			Type type = BuildControllerComponent(i, OeEntity.Nothing);
 			if (type != null)

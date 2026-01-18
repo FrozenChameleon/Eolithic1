@@ -38,7 +38,7 @@ static void Init()
 	_mHasInit = true;
 }
 
-int32_t ButtonList_GetButton(int index)
+int32_t ButtonList_GetButton(int32_t index)
 {
 	Init();
 

@@ -2,6 +2,6 @@
 
 typedef struct IdleCircleData
 {
-	int mIdleDegree;
+	int32_t mIdleDegree;
 } IdleCircleData;
 

@@ -15,7 +15,7 @@
 
 #include "Point.h"
 
-Point Point_Create(int x, int32_t y)
+Point Point_Create(int32_t x, int32_t y)
 {
 	Point point;
 	point.X = x;

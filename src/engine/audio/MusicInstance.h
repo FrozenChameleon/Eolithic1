@@ -9,10 +9,13 @@
 #include "../utils/Timer.h"
 #include "SoundEffectInstance.h"
 
+#ifdef AUDIO_DUMMY
+typedef struct MusicInstance MusicInstance;
+#else
 typedef struct MusicInstance
 {
-	int _mWillFadeInTime;
-	int _mState;
+	int32_t _mWillFadeInTime;
+	int32_t _mState;
 	bool _mPaused;
 	bool _mWillFadeIn;
 	char _mPreviousTrack[EE_FILENAME_MAX];
@@ -21,6 +24,7 @@ typedef struct MusicInstance
 	Timer _mFadeTimer;
 	SoundEffectInstance _mCurrentMusicInstance;
 } MusicInstance;
+#endif
 
 void MusicInstance_HandleFadeIn(MusicInstance* mi, float musicVolume);
 void MusicInstance_HandleFadeOut(MusicInstance* mi, float musicVolume);

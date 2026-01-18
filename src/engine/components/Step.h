@@ -2,6 +2,6 @@
 
 typedef struct Step
 {
-	int mStep;
+	int32_t mStep;
 } Step;
 

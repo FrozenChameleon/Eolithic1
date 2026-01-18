@@ -48,7 +48,7 @@ void OeThingSettings::WriteIni(std::shared_ptr<OeIniWriter> writer)
 
 	writer->WriteInt32(TAG_GRAPHICS_STATE_COUNT, mMapGraphicsData.Count());
 	std::vector<std::string>& firstKeys = mMapGraphicsData.Keys;
-	for (int i = 0; i < firstKeys.size(); i++)
+	for (int32_t i = 0; i < firstKeys.size(); i += 1)
 	{
 		std::string tempState = "state_" + std::to_string(i) + "_";
 		std::string key1 = firstKeys[i];
@@ -57,7 +57,7 @@ void OeThingSettings::WriteIni(std::shared_ptr<OeIniWriter> writer)
 
 		writer->WriteInt32(tempState + "phase_count", innerMap.Count());
 		std::vector<std::string>& secondKeys = mMapGraphicsData[key1].Keys;
-		for (int j = 0; j < secondKeys.size(); j++)
+		for (int32_t j = 0; j < secondKeys.size(); j++)
 		{
 			std::string tempPhase = tempState + "phase_" + std::to_string(j) + "_";
 			std::string key2 = secondKeys[j];
@@ -65,7 +65,7 @@ void OeThingSettings::WriteIni(std::shared_ptr<OeIniWriter> writer)
 
 			std::vector<OeImageData>& arrayOfImages = mMapGraphicsData[key1][key2];
 			writer->WriteInt32(tempPhase + "image_count", arrayOfImages.size());
-			for (int k = 0; k < arrayOfImages.size(); k++)
+			for (int32_t k = 0; k < arrayOfImages.size(); k++)
 			{
 				std::string tempImage = tempPhase + "image_" + std::to_string(k) + "_";
 				arrayOfImages[k].WriteIni(writer, tempImage);
@@ -110,8 +110,8 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 	BufferReader_ReadString(br, ts->mDefaultPhase, EE_FILENAME_MAX);
 	BufferReader_ReadString(br, ts->mPreviewSheet, EE_FILENAME_MAX);
 
-	int stateCount = BufferReader_ReadI32(br);
-	for (int i = 0; i < stateCount; i += 1)
+	int32_t stateCount = BufferReader_ReadI32(br);
+	for (int32_t i = 0; i < stateCount; i += 1)
 	{
 		MString* key1 = NULL;
 		BufferReader_ReadMString(&key1, br);
@@ -119,16 +119,16 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 		ThingGraphicsEntry* entry = NULL;
 		sh_new_arena(entry);
 
-		int phaseCount = BufferReader_ReadI32(br);
-		for (int j = 0; j < phaseCount; j += 1)
+		int32_t phaseCount = BufferReader_ReadI32(br);
+		for (int32_t j = 0; j < phaseCount; j += 1)
 		{
 			MString* key2 = NULL;
 			BufferReader_ReadMString(&key2, br);
 
 			ImageData* arr_images = NULL;
 
-			int imageCount = BufferReader_ReadI32(br);
-			for (int k = 0; k < imageCount; k += 1)
+			int32_t imageCount = BufferReader_ReadI32(br);
+			for (int32_t k = 0; k < imageCount; k += 1)
 			{
 				ImageData data = { 0 };
 				ImageData_Init(&data);

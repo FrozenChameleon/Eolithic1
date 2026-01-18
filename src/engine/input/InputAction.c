@@ -36,7 +36,7 @@ void InputAction_Write(InputAction* action, DynamicByteBuffer* writer)
 	DynamicByteBuffer_WriteString(writer, action->mName, EE_FILENAME_MAX);
 
 	DynamicByteBuffer_WriteI32(writer, INPUTCHECKS_LENGTH);
-	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
+	for (int32_t i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck_Write(InputChecks_Get(&action->mChecks, i), writer);
 	}
@@ -45,8 +45,8 @@ void InputAction_Read(InputAction* action, BufferReader* reader)
 {
 	BufferReader_ReadString(reader, action->mName, EE_FILENAME_MAX);
 
-	int count = BufferReader_ReadI32(reader);
-	for (int i = 0; i < count; i++)
+	int32_t count = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < count; i += 1)
 	{
 		InputCheck_Read(InputChecks_Get(&action->mChecks, i), reader);
 	}
@@ -60,7 +60,7 @@ void InputAction_Update(InputAction* action, InputPlayer* input)
 	action->mAnalogValue = 0;
 	action->mWasAnalog = false;
 
-	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
+	for (int32_t i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck* check = InputChecks_Get(&action->mChecks, i);
 
@@ -90,7 +90,7 @@ void InputAction_Update(InputAction* action, InputPlayer* input)
 		}
 	}
 
-	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
+	for (int32_t i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck* check = InputChecks_Get(&action->mChecks, i);
 		if (InputCheck_IsAnalog(check))
@@ -147,13 +147,13 @@ void InputAction_Update(InputAction* action, InputPlayer* input)
 
 	action->mIsPressedOrReleased = action->mIsPressed || action->mIsReleased;
 }
-void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
-	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph)
+void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int32_t depth, const char* font,
+	Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph)
 {
 	InputAction_DrawCurrentGlyph2(action, spriteBatch, depth, font, color, color, centerX, centerY, alignmentX, alignmentY, x, y, scale, forceControllerGlyph);
 }
-void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
-	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y,
+void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch, int32_t depth, const char* font,
+	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y,
 	Vector2 scale, bool forceControllerGlyph)
 {
 	bool isController = InputPlayer_IsUsingController(Input_GetPlayerOne());
@@ -161,7 +161,7 @@ void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch
 	{
 		isController = true;
 	}
-	for (int i = 0; i < INPUTCHECKS_LENGTH; i += 1)
+	for (int32_t i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck* check = InputChecks_Get(&action->mChecks, i);
 		if (!InputCheck_IsDummy(check))
@@ -187,7 +187,7 @@ Rectangle InputAction_GetCurrentGlyphRectangle(InputAction* action, const char* 
 	{
 		isController = true;
 	}
-	for (int i = 0; i < INPUTCHECKS_LENGTH; i++)
+	for (int32_t i = 0; i < INPUTCHECKS_LENGTH; i += 1)
 	{
 		InputCheck* check = InputChecks_Get(&action->mChecks, i);
 		if (!InputCheck_IsDummy(check))
@@ -201,7 +201,7 @@ Rectangle InputAction_GetCurrentGlyphRectangle(InputAction* action, const char* 
 	}
 	return Rectangle_Create(0, 0, 0, 0);
 }
-Rectangle InputAction_GetGlyphRectangle(InputAction* action, int index, const char* font)
+Rectangle InputAction_GetGlyphRectangle(InputAction* action, int32_t index, const char* font)
 {
 	InputCheck* check = InputChecks_Get(&action->mChecks, index);
 	const char* glyphString = InputCheck_GetGlyphString(check);
@@ -222,7 +222,7 @@ Rectangle InputAction_GetGlyphRectangle(InputAction* action, int index, const ch
 		return rect;
 	}
 }
-void InputAction_DrawGlyph(InputAction* action, int index, SpriteBatch* spriteBatch, int depth, const char* font, Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale)
+void InputAction_DrawGlyph(InputAction* action, int32_t index, SpriteBatch* spriteBatch, int32_t depth, const char* font, Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale)
 {
 	InputCheck* check = InputChecks_Get(&action->mChecks, index);
 	const char* glyphString = InputCheck_GetGlyphString(check);

@@ -69,7 +69,7 @@ void ThingInstance_Init(ThingInstance* ti)
 StringPair ThingInstance_GetSetting(ThingInstance* ti, const char* key)
 {
 	int64_t len = arrlen(ti->arr_settings);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		StringPair pair = ti->arr_settings[i];
 		if (Utils_StringEqualTo(pair.mKey, key))
@@ -81,7 +81,7 @@ StringPair ThingInstance_GetSetting(ThingInstance* ti, const char* key)
 }
 void ThingInstance_SetSetting(ThingInstance* ti, const char* key, const char* value)
 {
-	/*for (int i = 0; i < mSettings.size(); i++)
+	/*for (int32_t i = 0; i < mSettings.size(); i += 1)
 	{
 		OeStringPair* pair = &mSettings[i];
 		if (pair->mKey == key)
@@ -99,13 +99,13 @@ void ThingInstance_Write(ThingInstance* ti, BufferWriter* writer)
 	writer->WriteSingle(0); //Unused - Offset Y
 
 	writer->WriteInt32(mNodes.size());
-	for (int i = 0; i < mNodes.size(); i++)
+	for (int32_t i = 0; i < mNodes.size(); i += 1)
 	{
 		OePoints_Write(mNodes[i], writer);
 	}
 
 	writer->WriteInt32(mSettings.size());
-	for (int i = 0; i < mSettings.size(); i++)
+	for (int32_t i = 0; i < mSettings.size(); i += 1)
 	{
 		OeStringPair_Write(&mSettings[i], writer);
 	}*/
@@ -120,16 +120,16 @@ void ThingInstance_Read(ThingInstance* ti, int32_t version, BufferReader* reader
 	BufferReader_ReadFloat(reader); //Unused - Offset X
 	BufferReader_ReadFloat(reader); //Unused - Offset Y
 
-	int sizeNode = BufferReader_ReadI32(reader);
-	for (int i = 0; i < sizeNode; i++)
+	int32_t sizeNode = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < sizeNode; i += 1)
 	{
 		Point point = { 0 };
 		Points_Read(&point, reader);
 		arrput(ti->arr_nodes, point);
 	}
 
-	int sizeSettings = BufferReader_ReadI32(reader);
-	for (int i = 0; i < sizeSettings; i++)
+	int32_t sizeSettings = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < sizeSettings; i += 1)
 	{
 		StringPair pair = { 0 };
 		StringPair_Read(&pair, reader);
@@ -152,7 +152,7 @@ void ThingInstance_SetupSettings(ThingInstance* instance, bool ignoreWarnings)
 		return;
 	}
 
-	OeDictionary<int, Type> controllerComponentTypeMap = OeGameHelper_GetControllerComponentTypeMap();
+	OeDictionary<int32_t, Type> controllerComponentTypeMap = OeGameHelper_GetControllerComponentTypeMap();
 	if (!controllerComponentTypeMap.Keys.Contains(settings.mRoutineId))
 	{
 		return;
@@ -186,7 +186,7 @@ void ThingInstance_SetupSettings(ThingInstance* instance, bool ignoreWarnings)
 
 void ThingInstance_RemoveUnrelatedPairs(ThingInstance* instance, StringPair* arr_from, StringPair* arr_to, bool ignoreWarnings)
 {
-	/*for (int i = 0; i < instance->mSettings.size(); i++)
+	/*for (int32_t i = 0; i < instance->mSettings.size(); i += 1)
 	{
 		OeStringPair& pair = arrayTo[i];
 		if (!Contains(pair, arrayFrom))
@@ -202,7 +202,7 @@ void ThingInstance_RemoveUnrelatedPairs(ThingInstance* instance, StringPair* arr
 }
 void ThingInstance_AddMissingPairs(StringPair* arr_from, StringPair* arr_to, bool ignoreWarnings)
 {
-	/*for (int i = 0; i < arrayFrom.size(); i++)
+	/*for (int32_t i = 0; i < arrayFrom.size(); i += 1)
 	{
 		const OeStringPair& pair = arrayFrom[i];
 		if (!Contains(pair, arrayTo))
@@ -217,7 +217,7 @@ void ThingInstance_AddMissingPairs(StringPair* arr_from, StringPair* arr_to, boo
 }
 bool ThingInstance_Contains(StringPair* pair, StringPair* arr_string_pairs)
 {
-	/*for (int i = 0; i < arrayOfStringPairs.size(); i++)
+	/*for (int32_t i = 0; i < arrayOfStringPairs.size(); i += 1)
 	{
 		const const char*& keyOne = arrayOfStringPairs[i].mKey;
 		const const char*& keyTwo = pair.mKey;
@@ -236,12 +236,12 @@ ThingInstance* ThingInstance_GetClone(ThingInstance* ti)
 
 	copy.mName = mName;
 
-	for (int i = 0; i < mNodes.size(); i++)
+	for (int32_t i = 0; i < mNodes.size(); i += 1)
 	{
 		copy.mNodes.push_back(mNodes[i]);
 	}
 
-	for (int i = 0; i < mSettings.size(); i++)
+	for (int32_t i = 0; i < mSettings.size(); i += 1)
 	{
 		copy.mSettings.push_back(mSettings[i]);
 	}
@@ -263,7 +263,7 @@ bool ThingInstance_IsEqualTo(ThingInstance* ti, ThingInstance* instance)
 	{
 		return false;
 	}
-	for (int i = 0; i < mNodes.size(); i++)
+	for (int32_t i = 0; i < mNodes.size(); i += 1)
 	{
 		if (mNodes[i] != instance->mNodes[i])
 		{
@@ -311,20 +311,20 @@ void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color colo
 
 	if (isSelected)
 	{
-		int tileSize = TILE_SIZE
-		int halfTileSize = OeUtils.GetHalfTileSize();
-		for (int i = 0; i < mNodes.Count; i++)
+		int32_t tileSize = TILE_SIZE
+		int32_t halfTileSize = OeUtils.GetHalfTileSize();
+		for (int32_t i = 0; i < mNodes.Count; i += 1)
 		{
 			Point nodeOne = mNodes[i];
 
-			int nodeOnePositionX = position.X + nodeOne.X * tileSize + halfTileSize;
-			int nodeOnePositionY = position.Y + nodeOne.Y * tileSize + halfTileSize;
+			int32_t nodeOnePositionX = position.X + nodeOne.X * tileSize + halfTileSize;
+			int32_t nodeOnePositionY = position.Y + nodeOne.Y * tileSize + halfTileSize;
 
 			OeDrawTool.DrawRectangle(spriteBatch, OeColors.PINK, depth + 5, new Rectangle(nodeOnePositionX, nodeOnePositionY, tileSize, tileSize), 0, true);
 			spriteBatch.DrawString("editor", i.ToString(), OeColors.BLUE, 200,
 				new Vector2(nodeOnePositionX, nodeOnePositionY), OeAlign.CENTER, OeAlign.CENTER);
 
-			int size = 1;
+			int32_t size = 1;
 			if (i == 0)
 			{
 				OeDrawTool.DrawLine(spriteBatch, OeColors.RED, 100, 4, 0, size, nodeOnePositionX, nodeOnePositionY, center.X, center.Y);
@@ -332,8 +332,8 @@ void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color colo
 			else if (i > 0)
 			{
 				Point nodeTwo = mNodes[i - 1];
-				int nodeTwoPositionX = position.X + nodeTwo.X * tileSize + halfTileSize;
-				int nodeTwoPositionY = position.Y + nodeTwo.Y * tileSize + halfTileSize;
+				int32_t nodeTwoPositionX = position.X + nodeTwo.X * tileSize + halfTileSize;
+				int32_t nodeTwoPositionY = position.Y + nodeTwo.Y * tileSize + halfTileSize;
 				OeDrawTool.DrawLine(spriteBatch, OeColors.BLUE, 100, 4, 0, size, nodeOnePositionX, nodeOnePositionY, nodeTwoPositionX, nodeTwoPositionY);
 			}
 			if (i == mNodes.Count - 1 && mNodes.Count > 1)
@@ -348,21 +348,21 @@ const char* ThingInstance_GetName(ThingInstance* ti)
 {
 	return ti->mName;
 }
-int ThingInstance_GetLeft(ThingInstance* ti, float positionX)
+int32_t ThingInstance_GetLeft(ThingInstance* ti, float positionX)
 {
 	float value = positionX + HALF_TILE_SIZE - ThingInstance_GetWidth(ti) / 2;
-	return (int)value;
+	return (int32_t)value;
 }
-int ThingInstance_GetTop(ThingInstance* ti, float positionY)
+int32_t ThingInstance_GetTop(ThingInstance* ti, float positionY)
 {
 	float value = positionY + HALF_TILE_SIZE - ThingInstance_GetHeight(ti) / 2;
-	return (int)value;
+	return (int32_t)value;
 }
-int ThingInstance_GetWidth(ThingInstance* ti)
+int32_t ThingInstance_GetWidth(ThingInstance* ti)
 {
 	return TILE_SIZE;
 }
-int ThingInstance_GetHeight(ThingInstance* ti)
+int32_t ThingInstance_GetHeight(ThingInstance* ti)
 {
 	return TILE_SIZE;
 }

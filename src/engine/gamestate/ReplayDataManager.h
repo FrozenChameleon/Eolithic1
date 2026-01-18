@@ -15,9 +15,9 @@ typedef struct ReplayDataManager ReplayDataManager;
 
 ReplayDataManager* ReplayDataManager_Create(const char* name);
 void ReplayDataManager_Dispose(ReplayDataManager* rdm);
-int ReplayDataManager_GetIndexFromReplayFrame(ReplayDataManager* rdm, uint64_t replayFrame);
-int ReplayDataManager_GetIndexForLowestFrame(ReplayDataManager* rdm);
-int ReplayDataManager_GetIndexForLowestFrame2(ReplayDataManager* rdm, bool mustBeKeyFrame);
+int32_t ReplayDataManager_GetIndexFromReplayFrame(ReplayDataManager* rdm, uint64_t replayFrame);
+int32_t ReplayDataManager_GetIndexForLowestFrame(ReplayDataManager* rdm);
+int32_t ReplayDataManager_GetIndexForLowestFrame2(ReplayDataManager* rdm, bool mustBeKeyFrame);
 void ReplayDataManager_RewindLoop(ReplayDataManager* rdm, bool justStarted, GameStateData* actualCurrentGameState);
 uint64_t ReplayDataManager_GetLowestReplayFrame(ReplayDataManager* rdm);
 void ReplayDataManager_RewindToSnapshot(ReplayDataManager* rdm, uint64_t replayFrameToRewindTo, GameStateData* actualCurrentGameState);

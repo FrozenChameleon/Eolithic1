@@ -9,7 +9,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-void Logger_SetLevel(int level);
+void Logger_SetLevel(int32_t level);
 void Logger_LogInformation(const char* message);
 void Logger_LogInformationSilently(const char* message);
 void Logger_LogWarning(const char* message);

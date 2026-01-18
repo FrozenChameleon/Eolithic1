@@ -8,7 +8,7 @@
 
 void EntitySearch_AddEntityToSearch(EntitySearch* search, Entity addThis)
 {
-	for (int i = 0; i < search->cap; i += 1)
+	for (int32_t i = 0; i < search->cap; i += 1)
 	{
 		if (search->entities[i] == ENTITY_NOTHING)
 		{
@@ -39,12 +39,12 @@ EntitySearch* EntitySearch_CreateNewBlankSearchSetCapacity(int32_t cap)
 EntitySearch* EntitySearch_CreateNewBlankSearch()
 {
 	GameState* activeGameState = Get_ActiveGameState();
-	int amountOfEntitiesInPlay = GameState_GetAmountOfEntitiesInPlay(activeGameState);
+	int32_t amountOfEntitiesInPlay = GameState_GetAmountOfEntitiesInPlay(activeGameState);
 	return EntitySearch_CreateNewBlankSearchSetCapacity(amountOfEntitiesInPlay * 2);
 }
 EntitySearch* EntitySearch_SearchForEntitiesWithThisName(const EntitySearch* lookThroughThis, EntitySearch* addToThis, const char* name, bool isReverse)
 {
-	for (int i = 0; i < lookThroughThis->len; i += 1)
+	for (int32_t i = 0; i < lookThroughThis->len; i += 1)
 	{
 		Entity entity = lookThroughThis->entities[i];
 		const char* entityName = Get_Name(entity);
@@ -57,7 +57,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisName(const EntitySearch* loo
 }
 EntitySearch* EntitySearch_SearchForEntitiesWithThisParentNumber(const EntitySearch* lookThroughThis, EntitySearch* addToThis, int32_t value, bool isReverse)
 {
-	for (int i = 0; i < lookThroughThis->len; i += 1)
+	for (int32_t i = 0; i < lookThroughThis->len; i += 1)
 	{
 		Entity entity = lookThroughThis->entities[i];
 		if (EntitySearch_Check(Get_ParentNumber(entity) == value, isReverse))
@@ -69,7 +69,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisParentNumber(const EntitySea
 }
 EntitySearch* EntitySearch_SearchForEntitiesWithThisIntTag(const EntitySearch* lookThroughThis, EntitySearch* addToThis, int32_t value, bool isReverse)
 {
-	for (int i = 0; i < lookThroughThis->len; i += 1)
+	for (int32_t i = 0; i < lookThroughThis->len; i += 1)
 	{
 		Entity entity = lookThroughThis->entities[i];
 		if (EntitySearch_Check(Get_IntTag(entity) == value, isReverse))
@@ -81,7 +81,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisIntTag(const EntitySearch* l
 }
 EntitySearch* EntitySearch_SearchForEntitiesWithThisComponent(ComponentType ctype, const EntitySearch* lookThroughThis, EntitySearch* addToThis, bool isReverse)
 {
-	for (int i = 0; i < lookThroughThis->len; i += 1)
+	for (int32_t i = 0; i < lookThroughThis->len; i += 1)
 	{
 		Entity entity = lookThroughThis->entities[i];
 		bool hasComponent = GameStateManager_HasComponent(ctype, entity);
@@ -96,7 +96,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisComponent(ComponentType ctyp
 EntitySearch* EntitySearch_CreateNewAllEntitySearch()
 {
 	GameState* activeGameState = Get_ActiveGameState();
-	int amountOfEntitiesInPlay = GameState_GetAmountOfEntitiesInPlay(activeGameState);
+	int32_t amountOfEntitiesInPlay = GameState_GetAmountOfEntitiesInPlay(activeGameState);
 	EntitySearch* search = EntitySearch_CreateNewBlankSearchSetCapacity(amountOfEntitiesInPlay);
 	GameState_FillListWithEntitiesInPlay(activeGameState, search);
 	return search;

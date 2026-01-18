@@ -99,7 +99,7 @@ static void QuickStart()
 }
 static void FindTextureFiles()
 {
-	int counter = 0;
+	int32_t counter = 0;
 	bool needToStop = false;
 	while(!needToStop)
 	{
@@ -159,7 +159,7 @@ static bool LoadStart()
 {
 	GameHelper_CreateGlobalSystems();
 	GameHelper_CreateStateSystems();
-	/*for (int i = 0; i < GameStateManager_StateSystems.size(); i += 1)
+	/*for (int32_t i = 0; i < GameStateManager_StateSystems.size(); i += 1)
 	{
 		GameStateManager_StateSystems[i]->InitStringSettingsHere();
 	}*/
@@ -181,8 +181,6 @@ static bool LoadAfterResources()
 	Sheet_BuildSheets();
 	Animation_BuildAnimations();
 	GameHelper_BuildAchievementList();
-	VolumeData_Load(SoundEffect_GetVolumeData());
-	VolumeData_Load(Music_GetVolumeData());
 	GameHelper_InitPoolsForEngine();
 	GameHelper_InitPoolsForGame();
 	GameHelper_OnLoadingAfterResources();
@@ -385,7 +383,7 @@ static void RunShaderStutterFix(SpriteBatch* spriteBatch, Texture* tex, Vector2 
 {
 	//Running this to preempt various pipeline states 
 	Rectangle rect = { 0, 0, 32, 32 };
-	for (int i = 0; i < 2; i += 1)
+	for (int32_t i = 0; i < 2; i += 1)
 	{
 		RenderCommandSheet* instance = SpriteBatch_Draw(spriteBatch, tex, Color_White, 0, NULL, offset, rect, Vector2_One, 0, false, false, Vector2_Zero);
 		switch (i)
@@ -424,8 +422,8 @@ void GameLoader_Draw(SpriteBatch* spriteBatch)
 		tex = _mPreloaderTextureFinalB;
 	}
 
-	int internalWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
-	int internalHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
+	int32_t internalWidth = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
+	int32_t internalHeight = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
 	Vector2 offset = { (float)(-internalWidth / 2), (float)(-internalHeight / 2) };
 
 	if (_mStep == STEP_LOADING)
@@ -436,7 +434,7 @@ void GameLoader_Draw(SpriteBatch* spriteBatch)
 		}
 	}
 
-	Rectangle destRect = { (int)(offset.X), (int)(offset.Y), internalWidth, internalHeight };
+	Rectangle destRect = { (int32_t)(offset.X), (int32_t)(offset.Y), internalWidth, internalHeight };
 
 	SpriteBatch_DrawRectangle(spriteBatch, tex, COLOR_WHITE, 100, NULL, destRect, tex->mBounds, 0, false, false, Vector2_Zero);
 

@@ -24,7 +24,7 @@
 
 typedef struct DoubleClickData
 {
-	int mTimeSinceLastTap;
+	int32_t mTimeSinceLastTap;
 	bool mIsTapped;
 	bool mIsDoubleClicked;
 } DoubleClickData;
@@ -32,9 +32,9 @@ typedef struct DoubleClickData
 typedef struct OverrideDeadzoneData
 {
 	bool mIsOverriding;
-	int mRadialDeadzone;
-	int mOuterDeadzone;
-	int mAxialDeadzone;
+	int32_t mRadialDeadzone;
+	int32_t mOuterDeadzone;
+	int32_t mAxialDeadzone;
 } OverrideDeadzoneData;
 
 bool INPUT_FLAG_IS_ON_MENU = false;
@@ -128,8 +128,8 @@ void Input_MuteAllInput()
 }
 bool Input_IsAnythingPressedByAnyPlayer()
 {
-	int amountOfActiveInput = Input_GetAmountOfActivePlayers();
-	for (int i = 0; i < amountOfActiveInput; i++)
+	int32_t amountOfActiveInput = Input_GetAmountOfActivePlayers();
+	for (int32_t i = 0; i < amountOfActiveInput; i += 1)
 	{
 		if (InputPlayer_IsPlayerPressingAnything(&_mPlayers[i]))
 		{
@@ -152,8 +152,8 @@ bool Input_IsAnythingPressedByAnyPlayer()
 }
 bool Input_IsPressedByAnyPlayer(const char* action)
 {
-	int amountOfActiveInput = Input_GetAmountOfActivePlayers();
-	for (int i = 0; i < amountOfActiveInput; i += 1)
+	int32_t amountOfActiveInput = Input_GetAmountOfActivePlayers();
+	for (int32_t i = 0; i < amountOfActiveInput; i += 1)
 	{
 		if (Input_GetPlayerAction(i, action)->mIsPressed)
 		{
@@ -164,8 +164,8 @@ bool Input_IsPressedByAnyPlayer(const char* action)
 }
 bool Input_IsReleasedByAnyPlayer(const char* action)
 {
-	int amountOfActiveInput = Input_GetAmountOfActivePlayers();
-	for (int i = 0; i < amountOfActiveInput; i += 1)
+	int32_t amountOfActiveInput = Input_GetAmountOfActivePlayers();
+	for (int32_t i = 0; i < amountOfActiveInput; i += 1)
 	{
 		if (Input_GetPlayerAction(i, action)->mIsReleased)
 		{
@@ -176,8 +176,8 @@ bool Input_IsReleasedByAnyPlayer(const char* action)
 }
 bool Input_IsTappedByAnyPlayer(const char* action)
 {
-	int amountOfActiveInput = Input_GetAmountOfActivePlayers();
-	for (int i = 0; i < amountOfActiveInput; i += 1)
+	int32_t amountOfActiveInput = Input_GetAmountOfActivePlayers();
+	for (int32_t i = 0; i < amountOfActiveInput; i += 1)
 	{
 		if (Input_GetPlayerAction(i, action)->mIsTapped)
 		{
@@ -188,11 +188,11 @@ bool Input_IsTappedByAnyPlayer(const char* action)
 }
 int32_t Input_GetLongestTimeHeldByAnyPlayer(const char* action)
 {
-	int amountOfActiveInput = Input_GetAmountOfActivePlayers();
-	int longestTimeHeld = 0;
-	for (int i = 0; i < amountOfActiveInput; i += 1)
+	int32_t amountOfActiveInput = Input_GetAmountOfActivePlayers();
+	int32_t longestTimeHeld = 0;
+	for (int32_t i = 0; i < amountOfActiveInput; i += 1)
 	{
-		int timeHeld = Input_GetPlayerAction(i, action)->mTimeHeld;
+		int32_t timeHeld = Input_GetPlayerAction(i, action)->mTimeHeld;
 		if (Input_GetPlayerAction(i, action)->mTimeHeld > longestTimeHeld)
 		{
 			longestTimeHeld = timeHeld;
@@ -202,8 +202,8 @@ int32_t Input_GetLongestTimeHeldByAnyPlayer(const char* action)
 }
 int32_t Input_GetAmountOfActivePlayers()
 {
-	int amount = 1;
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	int32_t amount = 1;
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (i != 0)
 		{
@@ -254,7 +254,7 @@ void Input_Update(bool doNotUpdateMasterRecording)
 		InputPlayer_DetectInputDevice(&_mPlayers[INPUT_PLAYER_1], false);
 	}
 
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		InputPlayer_Update(&_mPlayers[i]);
 	}
@@ -263,7 +263,7 @@ void Input_Update(bool doNotUpdateMasterRecording)
 }
 bool Input_IsAnyPlayerUsingThisDeviceNumber(int32_t deviceNumber)
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i++)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (InputPlayer_GetDeviceNumber(&_mPlayers[i]) == deviceNumber)
 		{
@@ -515,7 +515,7 @@ bool Input_IsModifierPressed()
 }
 void Input_StopAllRumble()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		InputPlayer_Vibrate(&_mPlayers[i], 999999, 2, 0, 0);
 	}

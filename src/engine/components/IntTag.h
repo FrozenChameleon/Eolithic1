@@ -2,5 +2,5 @@
 
 typedef struct IntTag
 {
-	int mTag;
+	int32_t mTag;
 } IntTag;

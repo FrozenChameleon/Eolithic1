@@ -58,7 +58,7 @@ void LevelCameraData_Read(LevelCameraData* lcd, int32_t version, BufferReader* r
 	}
 	if (version >= 4)
 	{
-		for (int i = 0; i < LEVELCAMERADATA_STRING_DATA_LIMIT; i += 1)
+		for (int32_t i = 0; i < LEVELCAMERADATA_STRING_DATA_LIMIT; i += 1)
 		{
 			BufferReader_ReadString(reader, lcd->mStringData[i], EE_FILENAME_MAX);
 		}

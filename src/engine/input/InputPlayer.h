@@ -13,11 +13,11 @@ typedef struct ControllerState ControllerState;
 
 typedef struct InputPlayer
 {
-	int _mPlayerNumber;
-	int _mIsBlockedForPlayerSelect;
-	int _mInputDeviceNumber;
-	int _mCounterRumble;
-	int _mRumblePriority;
+	int32_t _mPlayerNumber;
+	int32_t _mIsBlockedForPlayerSelect;
+	int32_t _mInputDeviceNumber;
+	int32_t _mCounterRumble;
+	int32_t _mRumblePriority;
 	float _mRumbleLeftMotor;
 	float _mRumbleRightMotor;
 	InputAction _mActions[ACTIONLIST_LENGTH];
@@ -47,7 +47,7 @@ void InputPlayer_SetInputDevice(InputPlayer* ip, int32_t newDeviceNumber);
 InputAction* InputPlayer_GetActionsForBindingsSync(InputPlayer* ip);
 int32_t InputPlayer_GetActionsLength(InputPlayer* ip);
 void InputPlayer_DetectInputDevice(InputPlayer* ip, bool isOnRelease);
-int InputPlayer_GetDeviceNumber(InputPlayer* ip);
+int32_t InputPlayer_GetDeviceNumber(InputPlayer* ip);
 bool InputPlayer_IsInputDeviceSet(InputPlayer* ip);
 void InputPlayer_RemoveInputDevice(InputPlayer* ip);
 bool InputPlayer_IsUsingController(InputPlayer* ip);

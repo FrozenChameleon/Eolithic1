@@ -111,13 +111,13 @@ double BufferReader_ReadDouble(BufferReader* br)
 	Utils_memcpy(&dst, &source, sizeof(double));
 	return dst;
 }
-int* BufferReader_ReadIntArray2D(BufferReader* br, int32_t width, int32_t height)
+int32_t* BufferReader_ReadIntArray2D(BufferReader* br, int32_t width, int32_t height)
 {
-	int totalArrayLen = (width * height);
-	int* readToThis = Utils_malloc(totalArrayLen * sizeof(int));
-	for (int i = 0; i < width; i += 1)
+	int32_t totalArrayLen = (width * height);
+	int32_t* readToThis = Utils_malloc(totalArrayLen * sizeof(int32_t));
+	for (int32_t i = 0; i < width; i += 1)
 	{
-		for (int j = 0; j < height; j += 1)
+		for (int32_t j = 0; j < height; j += 1)
 		{
 			readToThis[i + (j * width)] = BufferReader_ReadI32(br);
 		}
@@ -131,7 +131,7 @@ uint8_t BufferReader_ReadJustTheStringLength(BufferReader* br)
 void BufferReader_ReadJustTheStringData(BufferReader* br, uint8_t stringLength, char* dst, size_t maxlen)
 {
 	memset(dst, 0, maxlen);
-	for (int i = 0; i < stringLength; i += 1)
+	for (int32_t i = 0; i < stringLength; i += 1)
 	{
 		uint8_t c = BufferReader_ReadU8(br);
 		if (i < maxlen)

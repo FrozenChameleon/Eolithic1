@@ -83,8 +83,8 @@ static void DisposeWriter()
 }
 static int32_t GetAmountInUse()
 {
-	int counter = 0;
-	for (int i = 0; i < TOOL_DATA_LENGTH; i += 1)
+	int32_t counter = 0;
+	for (int32_t i = 0; i < TOOL_DATA_LENGTH; i += 1)
 	{
 		RecordingData* data = &_mData[i];
 		if (data->mIsInUse)
@@ -124,7 +124,7 @@ static RecordingData* GetNext()
 	{
 		return &_mDummy;
 	}
-	for (int i = 0; i < TOOL_DATA_LENGTH; i += 1)
+	for (int32_t i = 0; i < TOOL_DATA_LENGTH; i += 1)
 	{
 		RecordingData* data = &_mData[i];
 		if (!data->mIsInUse)
@@ -144,7 +144,7 @@ static void WriteData()
 	return;
 	}
 
-	int len = GetAmountInUse();
+	int32_t len = GetAmountInUse();
 	if (len == 0)
 	{
 	return;
@@ -158,10 +158,10 @@ static void WriteData()
 	_mWriter.WriteBoolean(_mHeaderData.mUseLeftTrigger);
 	_mWriter.WriteBoolean(_mHeaderData.mUseRightTrigger);
 	_mWriter.WriteInt32(len);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 	ref RecordingData recordingData = ref _mData[i];
-	for (int j = 0; j < _mHeaderData.mAmountOfPlayers; j += 1)
+	for (int32_t j = 0; j < _mHeaderData.mAmountOfPlayers; j += 1)
 	{
 	ref RecordingPlayerData playerData = ref GetPlayerData(ref recordingData, j);
 	if (_mHeaderData.mBoolLength > 0)
@@ -263,7 +263,7 @@ static void WriteData()
 	byte[] memory = ((MemoryStream)_mWriter.GetBinaryWriter().BaseStream).ToArray();
 	using (OeIniWriter writer = new OeIniWriter(true, OeFile.Create(path)))
 	{
-	for (int i = 0; i < memory.Length; i += 1)
+	for (int32_t i = 0; i < memory.Length; i += 1)
 	{
 	writer.WriteByte(memory[i]);
 	}
@@ -277,7 +277,7 @@ static void WriteData()
 	byte[] memory = ((MemoryStream)_mWriter.GetBinaryWriter().BaseStream).ToArray();
 	using (OeIniWriter writer = new OeIniWriter(true, container.CreateFile(path)))
 	{
-	for (int i = 0; i < memory.Length; i += 1)
+	for (int32_t i = 0; i < memory.Length; i += 1)
 	{
 	writer.WriteByte(memory[i]);
 	}
@@ -304,7 +304,7 @@ static void ContinueReadSession(bool isFirst)
 {
 	if (!isFirst)
 	{
-		int threshold = Cvars_GetAsInt(CVARS_ENGINE_RECORDING_FPS_THRESHOLD);
+		int32_t threshold = Cvars_GetAsInt(CVARS_ENGINE_RECORDING_FPS_THRESHOLD);
 		if (_mReaderData.mPerLevelData.mLowestFps <= threshold)
 		{
 			Logger_LogInformation("Low FPS for:");
@@ -355,13 +355,13 @@ static void ContinueReadSession(bool isFirst)
 	ResetRecordingData();
 
 	Logger_LogInformation("Reading next in session");
-	for (int i = 0; i < IStringArray_Length(_mReaderData.mRecordings); i += 1)
+	for (int32_t i = 0; i < IStringArray_Length(_mReaderData.mRecordings); i += 1)
 	{
 		if (i == _mReaderData.mSessionCounter)
 		{
 			Utils_memset(&_mReaderData.mPerLevelData, 0, sizeof(PerMapReaderData));
 			_mReaderData.mIsReadyForNext = true;
-			_mReaderData.mCurrentRecording = IStringArray_Get(_mReaderData.mRecordings, i);
+			Utils_strlcpy(_mReaderData.mCurrentRecording, IStringArray_Get(_mReaderData.mRecordings, i), EE_FILENAME_MAX);
 			_mReaderData.mSessionCounter += 1;
 			return;
 		}
@@ -378,7 +378,7 @@ static void ContinueReadSession(bool isFirst)
 
 	IStringArray_Add(_mDisplayReadout, "Read session has ended");
 
-	for (int i = 0; i < IStringArray_Length(_mDisplayReadout); i += 1)
+	for (int32_t i = 0; i < IStringArray_Length(_mDisplayReadout); i += 1)
 	{
 		Logger_LogInformation(IStringArray_Get(_mDisplayReadout, i));
 	}
@@ -465,12 +465,12 @@ static void Read(const char* recordingFilenameWithoutExtension)
 	_mHeaderData.mUseRightAxis = BufferReader_ReadBoolean(br);
 	_mHeaderData.mUseLeftTrigger = BufferReader_ReadBoolean(br);
 	_mHeaderData.mUseRightTrigger = BufferReader_ReadBoolean(br);
-	int len = BufferReader_ReadI32(br);
-	for (int i = 0; i < len; i += 1)
+	int32_t len = BufferReader_ReadI32(br);
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		RecordingData* recordingData = &_mData[i];
 		recordingData->mIsInUse = true;
-		for (int j = 0; j < _mHeaderData.mAmountOfPlayers; j += 1)
+		for (int32_t j = 0; j < _mHeaderData.mAmountOfPlayers; j += 1)
 		{
 			RecordingPlayerData* playerData = GetPlayerData(recordingData, j);
 			if (_mHeaderData.mBoolLength > 0)
@@ -567,7 +567,7 @@ bool RecordingTool_IsFromArgumentsPlaybackEnabled()
 {
 	return _mFromArgumentsPlaybackState != RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_OFF;
 }
-void RecordingTool_EnableFromArgumentsPlayback(int state)
+void RecordingTool_EnableFromArgumentsPlayback(int32_t state)
 {
 	Globals_DisableSavingAndLoadingAndAchievementsAndLeaderboards();
 	_mFromArgumentsPlaybackState = state;
@@ -587,8 +587,8 @@ void RecordingTool_DrawReadSessionReadout(SpriteBatch* spriteBatch, const char* 
 		return;
 	}
 
-	int distY = 16;
-	int posY = distY;
+	int32_t distY = 16;
+	int32_t posY = distY;
 	if (!MString_EqualToString(_mLastReadRecordingFilename, EE_STR_EMPTY) && (_mToolState == TOOL_STATE_READING))
 	{
 		SpriteBatch_DrawString(spriteBatch, font, MString_GetText(_mLastReadRecordingFilename), Color_Yellow, 100, Vector2_Create(0, (float)posY));
@@ -610,7 +610,7 @@ void RecordingTool_DrawReadSessionReadout(SpriteBatch* spriteBatch, const char* 
 	}
 
 	Vector2 offset = Vector2_Create(0, (float)posY);
-	for (int i = 0; i < IStringArray_Length(_mDisplayReadout); i += 1)
+	for (int32_t i = 0; i < IStringArray_Length(_mDisplayReadout); i += 1)
 	{
 		const char* displayString = IStringArray_Get(_mDisplayReadout, i);
 		Rectangle bounds = DrawTool_GetBounds(displayString, font);
@@ -642,7 +642,7 @@ void RecordingTool_CheckForDebugReadSessionCode()
 	InputAction* action2 = Input_GetPlayerOneAction(ACTIONLIST_GAME_START);
 	InputAction* action3 = Input_GetPlayerOneAction(ACTIONLIST_GAME_LS_UP);
 
-	int time = 60 * 5;
+	int32_t time = 60 * 5;
 	if (action1->mTimeHeld > time && action2->mTimeHeld > time && action3->mTimeHeld > time)
 	{
 		RecordingTool_SetupReadSession(NULL, INT_MAX, false);
@@ -656,9 +656,9 @@ bool RecordingTool_IsReading()
 {
 	return _mToolState == TOOL_STATE_READING;
 }
-RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int32_t playerNumber, int32_t boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger)
+RecordingPlayerData* RecordingTool_Get(int32_t amountOfPlayers, int32_t playerNumber, int32_t boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger)
 {
-	int currentFps = GameUpdater_GetFPS();
+	int32_t currentFps = GameUpdater_GetFPS();
 	if (_mReaderData.mPerLevelData.mLowestFps == 0 || currentFps < _mReaderData.mPerLevelData.mLowestFps)
 	{
 		_mReaderData.mPerLevelData.mLowestFps = currentFps;
@@ -689,7 +689,7 @@ RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int32_t playerNumber
 		}
 		else
 		{
-			int top = GetAmountInUse() - 1;
+			int32_t top = GetAmountInUse() - 1;
 			return GetPlayerData(&_mData[top], playerNumber);
 		}
 	}
@@ -711,7 +711,7 @@ RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int32_t playerNumber
 	}
 	return &_mDummy.mPlayerOne;
 }
-int RecordingTool_GetPlayerReadCounter()
+int32_t RecordingTool_GetPlayerReadCounter()
 {
 	if (_mToolState != TOOL_STATE_READING)
 	{
@@ -720,7 +720,7 @@ int RecordingTool_GetPlayerReadCounter()
 
 	return _mReaderData.mPerLevelData.mPlayerReadCounter;
 }
-void RecordingTool_SetPlayerReadCounter(int value)
+void RecordingTool_SetPlayerReadCounter(int32_t value)
 {
 	if (_mToolState != TOOL_STATE_READING)
 	{
@@ -733,7 +733,7 @@ bool RecordingTool_IsRunning()
 {
 	return _mToolState != TOOL_STATE_OFF;
 }
-void RecordingTool_SetupWriteSession(int priority, const char* mapToLoad)
+void RecordingTool_SetupWriteSession(int32_t priority, const char* mapToLoad)
 {
 	if (!ServiceHelper_HasLoadedEverything())
 	{
@@ -878,7 +878,7 @@ bool RecordingTool_IsGoFastFlagSet()
 {
 	return _mGoFastFlag;
 }
-void RecordingTool_TickReadSessionSuccessCounter(int successNumber)
+void RecordingTool_TickReadSessionSuccessCounter(int32_t successNumber)
 {
 	if (_mToolState == TOOL_STATE_READING)
 	{
@@ -911,7 +911,7 @@ void RecordingTool_RewriteAllRecordings()
 	/*
 	  InitData();
 	string[] files = OeFile.GetFiles(OeFile.Combine("data", "recordings"));
-	for (int i = 0; i < files.Length; i += 1)
+	for (int32_t i = 0; i < files.Length; i += 1)
 	{
 		ResetAllData();
 		string fileNameWithoutExtension = OeFile.GetFileNameWithoutExtension(files[i]);
@@ -921,7 +921,7 @@ void RecordingTool_RewriteAllRecordings()
 	}
 	*/
 }
-int RecordingTool_GetCurrentRecordingVersion()
+int32_t RecordingTool_GetCurrentRecordingVersion()
 {
 	if (!RecordingTool_IsReading())
 	{

@@ -19,6 +19,9 @@
 #include "../io/FixedByteBuffer.h"
 #include "../io/BufferReader.h"
 
+#ifdef AUDIO_DUMMY
+typedef struct WaveFileData WaveFileData;
+#else
 typedef struct WaveFileData
 {
 	// Sample data
@@ -38,6 +41,7 @@ typedef struct WaveFileData
 	int32_t samplerLoopEnd;
 	//
 } WaveFileData;
+#endif
 
 void ReadFourChar(BufferReader* br, char* sig);
 WaveFileData* WaveFileData_FromStream(BufferReader* br);

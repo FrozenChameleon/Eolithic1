@@ -41,9 +41,9 @@ typedef struct RecordingData
 
 typedef struct PerMapReaderData
 {
-	int mLowestFps;
-	int mPlayerReadCounter;
-	int mReaderFailsafe;
+	int32_t mLowestFps;
+	int32_t mPlayerReadCounter;
+	int32_t mReaderFailsafe;
 	bool mWasSessionSuccessCounterTicked;
 	bool mIsAtEndOfRecording;
 } PerMapReaderData;
@@ -51,23 +51,23 @@ typedef struct PerMapReaderData
 typedef struct ReaderData
 {
 	PerMapReaderData mPerLevelData;
-	int mSessionCounter;
+	int32_t mSessionCounter;
 	bool mIsReadyForNext;
-	const char* mCurrentRecording;
+	char mCurrentRecording[EE_FILENAME_MAX];
 	IStringArray* mRecordings;
 } ReaderData;
 
 typedef struct HeaderData
 {
 	char mLevelFileName[EE_FILENAME_MAX];
-	int mAmountOfPlayers;
-	int mBoolLength;
+	int32_t mAmountOfPlayers;
+	int32_t mBoolLength;
 	bool mUseLeftAxis;
 	bool mUseRightAxis;
 	bool mUseLeftTrigger;
 	bool mUseRightTrigger;
-	int mSuccessNumber;
-	int mRecordingVersion;
+	int32_t mSuccessNumber;
+	int32_t mRecordingVersion;
 } HeaderData;
 
 enum FromArguments
@@ -81,20 +81,20 @@ enum FromArguments
 
 const char* RecordingTool_GetCurrentRecordingName();
 bool RecordingTool_IsFromArgumentsPlaybackEnabled();
-void RecordingTool_EnableFromArgumentsPlayback(int state);
+void RecordingTool_EnableFromArgumentsPlayback(int32_t state);
 bool RecordingTool_IsDisplayingSessionReadout();
 void RecordingTool_DrawReadSessionReadout(SpriteBatch* spriteBatch, const char* font);
 void RecordingTool_CheckForDebugReadSessionCode();
 bool RecordingTool_IsWriting();
 bool RecordingTool_IsReading();
-RecordingPlayerData* RecordingTool_Get(int amountOfPlayers, int32_t playerNumber, int32_t boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger);
-int RecordingTool_GetPlayerReadCounter();
-void RecordingTool_SetPlayerReadCounter(int value);
+RecordingPlayerData* RecordingTool_Get(int32_t amountOfPlayers, int32_t playerNumber, int32_t boolLength, bool useLeftAxis, bool useRightAxis, bool useLeftTrigger, bool useRightTrigger);
+int32_t RecordingTool_GetPlayerReadCounter();
+void RecordingTool_SetPlayerReadCounter(int32_t value);
 bool RecordingTool_IsRunning();
-void RecordingTool_SetupWriteSession(int priority, const char* mapToLoad);
+void RecordingTool_SetupWriteSession(int32_t priority, const char* mapToLoad);
 bool RecordingTool_LoadNextRecordingIfAtEndOfRecording(bool isMapLoad);
 void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int32_t priority, bool goFast);
 bool RecordingTool_IsGoFastFlagSet();
-void RecordingTool_TickReadSessionSuccessCounter(int successNumber);
+void RecordingTool_TickReadSessionSuccessCounter(int32_t successNumber);
 void RecordingTool_RewriteAllRecordings();
-int RecordingTool_GetCurrentRecordingVersion();
+int32_t RecordingTool_GetCurrentRecordingVersion();

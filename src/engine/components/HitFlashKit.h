@@ -4,7 +4,7 @@
 
 typedef struct HitFlashKit
 {
-	int mState;
+	int32_t mState;
 	bool mIsDisabled;
 	bool mShowHitFlash;
 	Timer mHitFlashTimer;

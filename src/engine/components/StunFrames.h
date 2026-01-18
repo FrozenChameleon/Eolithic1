@@ -2,6 +2,6 @@
 
 typedef struct StunFrames
 {
-	int mTag;
+	int32_t mTag;
 } StunFrames;
 

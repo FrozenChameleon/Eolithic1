@@ -29,17 +29,17 @@ Point Points_HalfTileSize()
 {
 	return Points_ToPointFromInt(HALF_TILE_SIZE);
 }
-Point Points_ToPointFromInt(int value)
+Point Points_ToPointFromInt(int32_t value)
 {
 	Point temp = { value, value };
 	return temp;
 }
 Point Points_ToPointFromVector2(Vector2 value)
 {
-	Point temp = { (int)value.X, (int)value.Y };
+	Point temp = { (int32_t)value.X, (int32_t)value.Y };
 	return temp;
 }
-Point Points_GetEightWay(int direction)
+Point Points_GetEightWay(int32_t direction)
 {
 	switch (direction)
 	{
@@ -63,7 +63,7 @@ Point Points_GetEightWay(int direction)
 		return Point_Zero;
 	}
 }
-Point Points_GetFourWay(int direction)
+Point Points_GetFourWay(int32_t direction)
 {
 	switch (direction)
 	{
@@ -81,11 +81,11 @@ Point Points_GetFourWay(int direction)
 }
 void Points_Rotate(Point* point, int32_t degree)
 {
-	int amount = degree / 90;
+	int32_t amount = degree / 90;
 
-	for (int i = 0; i < amount; i++)
+	for (int32_t i = 0; i < amount; i += 1)
 	{
-		int tempX = point->X;
+		int32_t tempX = point->X;
 		point->X = point->Y;
 		point->Y = -tempX;
 	}
@@ -146,7 +146,7 @@ float Points_GetDegree(Point point)
 		return -1;
 	}
 }
-int Points_GetFourWayInt(Point point)
+int32_t Points_GetFourWayInt(Point point)
 {
 	if (Points_IsUp(point))
 	{
@@ -245,8 +245,8 @@ void Points_SetDirectionFromEightWayInt(Point* point, int32_t direction)
 }
 void Points_RotateClockwise(Point* point, int32_t amount)
 {
-	int value = Points_GetEightWayInt(*point);
-	for (int i = 0; i < amount; i++)
+	int32_t value = Points_GetEightWayInt(*point);
+	for (int32_t i = 0; i < amount; i += 1)
 	{
 		value += 1;
 		if (value > POINTS_EIGHTWAY_UPLEFT)
@@ -258,8 +258,8 @@ void Points_RotateClockwise(Point* point, int32_t amount)
 }
 void Points_RotateCounterClockwise(Point* point, int32_t amount)
 {
-	int value = Points_GetEightWayInt(*point);
-	for (int i = 0; i < amount; i++)
+	int32_t value = Points_GetEightWayInt(*point);
+	for (int32_t i = 0; i < amount; i += 1)
 	{
 		value -= 1;
 		if (value < 0)
@@ -349,7 +349,7 @@ bool Points_IsUpLeft(Point point)
 {
 	return (point.X == -1) && (point.Y == -1);
 }
-int Points_GetEightWayInt(Point point)
+int32_t Points_GetEightWayInt(Point point)
 {
 	if (Points_IsUp(point))
 	{
@@ -390,18 +390,18 @@ int Points_GetEightWayInt(Point point)
 }
 void Points_SetFromDegree(Point* point, int32_t degree)
 {
-	int offset = 22;
-	int halfOffset = offset / 2;
+	int32_t offset = 22;
+	int32_t halfOffset = offset / 2;
 
-	int firstUp = 360;
-	int secondUp = 0;
-	int upRight = 45;
-	int right = 90;
-	int downRight = 135;
-	int down = 180;
-	int downLeft = 225;
-	int left = 270;
-	int upLeft = 315;
+	int32_t firstUp = 360;
+	int32_t secondUp = 0;
+	int32_t upRight = 45;
+	int32_t right = 90;
+	int32_t downRight = 135;
+	int32_t down = 180;
+	int32_t downLeft = 225;
+	int32_t left = 270;
+	int32_t upLeft = 315;
 
 	if (degree >= (firstUp - halfOffset) || degree <= (secondUp + halfOffset)) //UP
 	{

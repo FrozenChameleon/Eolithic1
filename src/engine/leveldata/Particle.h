@@ -14,10 +14,10 @@
 typedef struct Particle
 {
 	bool mIsBlendStateAdditive;
-	int mExtraPasses;
+	int32_t mExtraPasses;
 
-	int mMiscTTLMin;
-	int mMiscTTLMax;
+	int32_t mMiscTTLMin;
+	int32_t mMiscTTLMax;
 	bool mMiscDoesDieOffscreen;
 
 	Vector2 mOffsetMinimum;
@@ -26,18 +26,18 @@ typedef struct Particle
 	bool mOffsetIsNegativeY;
 
 	bool mFlickerIsFlicker;
-	int mFlickerMinimumStart;
-	int mFlickerMaximumStart;
-	int mFlickerMinimumSpeed;
-	int mFlickerMaximumSpeed;
+	int32_t mFlickerMinimumStart;
+	int32_t mFlickerMaximumStart;
+	int32_t mFlickerMinimumSpeed;
+	int32_t mFlickerMaximumSpeed;
 
 	Vector2 mConstantMinimum;
 	Vector2 mConstantMaximum;
 	bool mConstantIsNegativeX;
 	bool mConstantIsNegativeY;
 	bool mConstantIsFluctuating;
-	int mConstantFluctuateIntervalMin;
-	int mConstantFluctuateIntervalMax;
+	int32_t mConstantFluctuateIntervalMin;
+	int32_t mConstantFluctuateIntervalMax;
 
 	Vector2 mCurveTotalMinimum;
 	Vector2 mCurveTotalMaximum;
@@ -51,19 +51,19 @@ typedef struct Particle
 	bool mCurveFluctuateKeepSpeed;
 	bool mCurveFluctuateResetRate;
 	bool mCurveFluctuateResetTotal;
-	int mCurveFluctuateIntervalMin;
-	int mCurveFluctuateIntervalMax;
+	int32_t mCurveFluctuateIntervalMin;
+	int32_t mCurveFluctuateIntervalMax;
 
-	int mTextureDepth;
+	int32_t mTextureDepth;
 	char mTextureName[EE_FILENAME_MAX];
-	int mTextureFlipSpeed;
+	int32_t mTextureFlipSpeed;
 	bool mTextureIsAnimation;
-	int mScaler;
-	int mTextureLoopPoint;
+	int32_t mScaler;
+	int32_t mTextureLoopPoint;
 	bool mTextureDoesAnimationStop;
 
-	int mPreviewAmount;
-	int mPreviewInterval;
+	int32_t mPreviewAmount;
+	int32_t mPreviewInterval;
 } Particle;
 
 void Particle_Read(Particle* p, BufferReader* br);

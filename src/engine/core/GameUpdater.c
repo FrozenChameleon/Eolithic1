@@ -125,8 +125,8 @@ static void Cheats()
 		{
 			Globals_ToggleGodMode();
 		}
-		int timeToStart = 60;
-		int timeInterval = 5;
+		int32_t timeToStart = 60;
+		int32_t timeInterval = 5;
 		bool timeGo = false;
 		if ((_mDebugTimeHeld == 0) || ((_mDebugTimeHeld >= timeToStart) && (_mDebugTimeHeld % timeInterval == 0)))
 		{
@@ -278,7 +278,7 @@ static void Tick()
 static bool HandleDebugPauseAndStep()
 {
 	/*
-	int readFrame = OeControllerStates_GetMasterRecordingReadFrame(); //For specific frame stops
+	int32_t readFrame = OeControllerStates_GetMasterRecordingReadFrame(); //For specific frame stops
 	if (readFrame == 137600)
 	{
 		OeGlobals_DEBUG_IS_PAUSED = true;
@@ -463,7 +463,7 @@ static void UpdateLoop(double delta)
 	double stepLength = Utils_GetNormalStepLength();
 	bool interpolated = GameUpdater_IsInterpolated();
 
-	int fixedTimeStepTicks = 1;
+	int32_t fixedTimeStepTicks = 1;
 	if (!_mIsDebugAutoSpeedOn)
 	{
 		if ((RecordingTool_IsReading() && RecordingTool_IsGoFastFlagSet()) || (Input_IsPlayingMasterRecording() && INPUT_FLAG_IS_PLAYING_MASTER_RECORDING_FAST))
@@ -500,7 +500,7 @@ static void UpdateLoop(double delta)
 	if (!interpolated)
 	{
 		_mDeltaAccumulator = 0;
-		for (int i = 0; i < fixedTimeStepTicks; i++)
+		for (int32_t i = 0; i < fixedTimeStepTicks; i += 1)
 		{
 			Tick();
 			ticked = true;
@@ -529,11 +529,11 @@ static void UpdateLoop(double delta)
 
 const char* GameUpdater_GetFpsString()
 {
-	int number;
+	int32_t number;
 	if (_mIsDebugAutoSpeedOn)
 	{
 		float speed = GameUpdater_GetAutoSpeedUpdateSpeed();
-		number = (int)speed;
+		number = (int32_t)speed;
 	}
 	else
 	{
@@ -547,7 +547,7 @@ float GameUpdater_GetAutoSpeedUpdateSpeed()
 {
 	return GameUpdater_GetFPS() / 60.0f;
 }
-int GameUpdater_GetFPS()
+int32_t GameUpdater_GetFPS()
 {
 	return _mFpsToolUpdate.mCurrentFps;
 }

@@ -9,6 +9,6 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-int32_t ButtonList_GetButton(int index);
+int32_t ButtonList_GetButton(int32_t index);
 const int32_t* ButtonList_GetArray();
 int32_t ButtonList_GetArrayLength();

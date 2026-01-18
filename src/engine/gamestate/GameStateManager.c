@@ -112,11 +112,11 @@ void GameStateManager_InitDefaultPauseState()
 	}
 	*/
 }
-void GameStateManager_SetGameState(int value)
+void GameStateManager_SetGameState(int32_t value)
 {
 	GameStateManager_SetGameState2(value, false);
 }
-void GameStateManager_SetGameState2(int value, bool forceNow)
+void GameStateManager_SetGameState2(int32_t value, bool forceNow)
 {
 	_mNextGameState = value;
 	if (forceNow)
@@ -124,11 +124,11 @@ void GameStateManager_SetGameState2(int value, bool forceNow)
 		GameStateManager_HandleGameStateChange();
 	}
 }
-void GameStateManager_DebugDrawInfoHelper(int* counter, SpriteBatch* spriteBatch, const char* text)
+void GameStateManager_DebugDrawInfoHelper(int32_t* counter, SpriteBatch* spriteBatch, const char* text)
 {
 	//TODO C99
 	/*
-	int dist = 24;
+	int32_t dist = 24;
 	std::string font = "editor";
 	spriteBatch->DrawString(font, text, OeColors::YELLOW, 100, Vector2(0, *counter * dist));
 	*counter += 1;
@@ -138,7 +138,7 @@ InputPlayer* GameStateManager_GetPlayerInput(Entity thing)
 {
 	return NULL;
 	//WILLOTDO 05152023
-	//int playerNumber = OeFunc.Get_PlayerNumber(thing);
+	//int32_t playerNumber = OeFunc.Get_PlayerNumber(thing);
 	//return OeInput.GetPlayer(playerNumber);
 }
 Camera* GameStateManager_GetCurrentRenderCamera()
@@ -188,8 +188,6 @@ _mMapToLoad = filename;
 }
 void GameStateManager_LoadMap(const char* mapToLoad)
 {
-	Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
-
 	if(mapToLoad == NULL)
 	{
 		Logger_LogWarning("Attempted to load NULL map!");
@@ -237,6 +235,8 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 		}
 	}
 	*/
+
+	Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 
 	GameState_Load(&_mGameState, mapToLoad);
 
@@ -304,15 +304,15 @@ void GameStateManager_HandleJustChangedGameStateThisFrame()
 {
 	_mJustChangedGameStateThisFrame = false;
 }
-void GameStateManager_SetCurrentGameStateForRenderCamera(int value)
+void GameStateManager_SetCurrentGameStateForRenderCamera(int32_t value)
 {
 	_mCurrentGameStateForRenderCamera = value;
 }
-int GameStateManager_GetCurrentGameState()
+int32_t GameStateManager_GetCurrentGameState()
 {
 	return _mCurrentGameState;
 }
-void GameStateManager_SetCurrentGameState(int value)
+void GameStateManager_SetCurrentGameState(int32_t value)
 {
 	_mCurrentGameState = value;
 }
@@ -324,11 +324,11 @@ uint64_t GameStateManager_GetTicksSinceMapLoad()
 {
 	return _mTicksSinceMapLoad;
 }
-int GameStateManager_GetUniqueMapSeed()
+int32_t GameStateManager_GetUniqueMapSeed()
 {
 	return _mUniqueMapSeed;
 }
-void GameStateManager_SetUniqueMapSeed(int value)
+void GameStateManager_SetUniqueMapSeed(int32_t value)
 {
 	_mUniqueMapSeed = value;
 }

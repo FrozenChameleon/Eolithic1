@@ -23,10 +23,10 @@ void* ComponentPack_TryGetComponent(ComponentPack* pack, Entity entity, bool* wa
 bool ComponentPack_HasComponent(ComponentPack* pack, Entity entity);
 void ComponentPack_SetMaximumCapacity(ComponentPack* pack, int32_t value);
 void* ComponentPack_GetDummy(ComponentPack* pack);
-int ComponentPack_Length(ComponentPack* pack);
+int32_t ComponentPack_Length(ComponentPack* pack);
 bool ComponentPack_Next(ComponentPack* pack, PackIterator* iter);
-int ComponentPack_GetFirstSetEntityLocation(ComponentPack* pack );
-int ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber);
+int32_t ComponentPack_GetFirstSetEntityLocation(ComponentPack* pack );
+int32_t ComponentPack_GetEntityLocation(ComponentPack* pack, int32_t entityNumber);
 bool ComponentPack_IsAnyEntityInPack(ComponentPack* pack );
 void* ComponentPack_GetFirstSetComponent(ComponentPack* pack );
 Entity ComponentPack_GetFirstSetEntity(ComponentPack* pack);

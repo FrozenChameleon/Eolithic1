@@ -4,6 +4,8 @@
  * See LICENSE for details.
  */
 
+#ifndef AUDIO_DUMMY
+
 #include "MusicInstance.h"
 #include "../utils/Timer.h"
 #include "../utils/Utils.h"
@@ -68,6 +70,7 @@ void MusicInstance_Init(MusicInstance* mi)
 	Utils_strlcpy(mi->_mPreviousTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
 	Utils_strlcpy(mi->_mCurrentTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
 	Utils_strlcpy(mi->_mNextTrack, EE_STR_EMPTY, EE_FILENAME_MAX);
+	mi->_mCurrentMusicInstance._mIsMusic = true;
 }
 
 bool MusicInstance_IsLooped(MusicInstance* mi)
@@ -201,3 +204,5 @@ bool MusicInstance_IsPlaying(MusicInstance* mi)
 {
 	return (SoundEffectInstance_State(&mi->_mCurrentMusicInstance) == SOUNDSTATE_PLAYING);
 }
+
+#endif

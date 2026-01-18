@@ -16,7 +16,7 @@ static bool HasInit()
 static void InitAnimation()
 {
 	const char* spriteSheet = Cvars_Get(CVARS_ENGINE_SAVE_ICON);
-	int flipTimer = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_FLIP_SPEED);
+	int32_t flipTimer = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_FLIP_SPEED);
 	Animation_Init(&_mSaveIcon, spriteSheet, flipTimer);
 }
 
@@ -47,9 +47,9 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 
 	if (Utils_CheckSave(false))
 	{
-		int scale = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_SCALE);
-		int offsetX = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_OFFSET_X);
-		int offsetY = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_OFFSET_Y);
+		int32_t scale = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_SCALE);
+		int32_t offsetX = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_OFFSET_X);
+		int32_t offsetY = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_OFFSET_Y);
 		Sheet* sheet = Animation_GetCurrentSheet(&_mSaveIcon);
 		Rectangle rect = sheet->mRectangle;
 		rect.Width *= scale;

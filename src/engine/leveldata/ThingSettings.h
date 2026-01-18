@@ -26,9 +26,9 @@ typedef struct ThingGraphicsData
 
 typedef struct ThingSettings
 {
-	int mRoutineId;
-	int mCollisionWidth;
-	int mCollisionHeight;
+	int32_t mRoutineId;
+	int32_t mCollisionWidth;
+	int32_t mCollisionHeight;
 	bool mDoNotDispose;
 	bool mHasAI;
 	bool mHasDrawing;

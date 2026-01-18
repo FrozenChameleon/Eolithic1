@@ -5,7 +5,7 @@
 typedef struct CollisionImprintData
 {
 	Point mPosition;
-	int mWidth;
-	int mHeight;
-	int mType;
+	int32_t mWidth;
+	int32_t mHeight;
+	int32_t mType;
 } CollisionImprintData;

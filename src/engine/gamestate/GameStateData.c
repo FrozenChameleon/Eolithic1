@@ -20,7 +20,7 @@ ComponentPack* GameStateData_GetComponentPack(GameStateData* gsd, ComponentType 
 void GameStateData_Reset(GameStateData* gsd)
 {
 	gsd->mEntityCounter = GAME_STATE_DATA_INITIAL_ENTITY_NUMBER;
-	for (int i = 0; i < COMPONENT_TYPE_LEN; i += 1)
+	for (int32_t i = 0; i < COMPONENT_TYPE_LEN; i += 1)
 	{
 		ComponentPack_UnsetAll(&gsd->mComponentPacks[i]);
 	}
@@ -28,7 +28,7 @@ void GameStateData_Reset(GameStateData* gsd)
 Entity GameStateData_GetEntityInPlay(GameStateData* gsd, Entity entityNumber)
 {
 	ComponentPack* pack = GameStateData_GetComponentPack(gsd, C_TagIsInPlay);
-	int loc = ComponentPack_GetEntityLocation(pack, entityNumber);
+	int32_t loc = ComponentPack_GetEntityLocation(pack, entityNumber);
 	if (loc == -1)
 	{
 		return ENTITY_NOTHING;
@@ -37,7 +37,7 @@ Entity GameStateData_GetEntityInPlay(GameStateData* gsd, Entity entityNumber)
 }
 void GameStateData_RemoveEntity(GameStateData* gsd, Entity entity)
 {
-	for (int i = 0; i < COMPONENT_TYPE_LEN; i += 1)
+	for (int32_t i = 0; i < COMPONENT_TYPE_LEN; i += 1)
 	{
 		ComponentPack_Unset(&gsd->mComponentPacks[i], entity);
 	}
@@ -51,7 +51,7 @@ void GameStateData_FillListWithEntitiesInPlay(GameStateData* gsd, EntitySearch* 
 		return;
 	}
 
-	int counter = 0;
+	int32_t counter = 0;
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
@@ -81,7 +81,7 @@ Entity GameStateData_BuildNewEntity(GameStateData* gsd)
 void GameStateData_CopyTo(GameStateData* from, GameStateData* to)
 {
 	to->mEntityCounter = from->mEntityCounter;
-	for (int i = 0; i < COMPONENT_TYPE_LEN; i += 1)
+	for (int32_t i = 0; i < COMPONENT_TYPE_LEN; i += 1)
 	{
 		ComponentPack_CopyTo(&from->mComponentPacks[i], &to->mComponentPacks[i]);
 	}
@@ -122,9 +122,9 @@ void* GameStateData_SetAndInit(GameStateData* gsd, ComponentType ctype, Entity e
 }
 void GameStateData_Init(GameStateData* gsd, ComponentType ctype, Entity entity)
 {
-	int len = GameStateManager_GetStateSystemsLen();
+	int32_t len = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		System* stateSys = stateSystems[i];
 		stateSys->_mInit(stateSys->_mData, ctype, entity);

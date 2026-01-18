@@ -11,7 +11,7 @@
 
 char mTextTypeSound[EE_FILENAME_MAX];
 
-int MovieOperationText_GetSpeedToIncrease(MovieOperationText* text)
+int32_t MovieOperationText_GetSpeedToIncrease(MovieOperationText* text)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_CUTSCENE_INTL_TEXT_SPEED_INCREASE);
 }
@@ -32,7 +32,7 @@ void MovieOperationText_NormalUpdate(MovieOperationText* text)
 			{
 				Do_PlaySound(mTextTypeSound);
 			}
-			for (int i = 0; i < text->mRate; i += 1)
+			for (int32_t i = 0; i < text->mRate; i += 1)
 			{
 				if (!text->mIsPaused)
 				{
@@ -59,7 +59,7 @@ void MovieOperationText_NormalUpdate(MovieOperationText* text)
 	}
 	else
 	{
-		for (int i = 0; i < TEXT_PAUSES_LEN; i += 1)
+		for (int32_t i = 0; i < TEXT_PAUSES_LEN; i += 1)
 		{
 			Pause* pause = &text->mPauses[i];
 			if (!pause->mIsLoaded)
@@ -78,9 +78,9 @@ void MovieOperationText_NormalUpdate(MovieOperationText* text)
 		}
 	}
 }
-void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int point)
+void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int32_t point)
 {
-	for (int j = 0; j < PLAY_SOUNDS_LEN; j += 1)
+	for (int32_t j = 0; j < PLAY_SOUNDS_LEN; j += 1)
 	{
 		PlaySound* playSound = &text->mPlaySounds[j];
 		if (!playSound->mIsLoaded)
@@ -90,7 +90,7 @@ void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int point)
 
 		PlaySound_PlayTheSoundIfAtPoint(playSound, point);
 	}
-	for (int j = 0; j < TEXT_PAUSES_LEN; j += 1)
+	for (int32_t j = 0; j < TEXT_PAUSES_LEN; j += 1)
 	{
 		Pause* pause = &text->mPauses[j];
 		if (!pause->mIsLoaded)
@@ -106,7 +106,7 @@ void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int point)
 }
 
 void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const char* str, const char* font, Vector2 position,
-	int speed, int rate, int wait, const char* color, bool isTextCentered)
+	int32_t speed, int32_t rate, int32_t wait, const char* color, bool isTextCentered)
 {
 	Utils_memset(text, 0, sizeof(MovieOperationText));
 
@@ -129,10 +129,10 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 	{
 		if (Utils_StringContains(text->mTotalString, "{") && Utils_StringContains(text->mTotalString, "}"))
 		{
-			int begin = Utils_StringIndexOf('{', text->mTotalString, EE_FILENAME_MAX, false);
-			int end = Utils_StringIndexOf('}', text->mTotalString, EE_FILENAME_MAX, false);
+			int32_t begin = Utils_StringIndexOf('{', text->mTotalString, EE_FILENAME_MAX, false);
+			int32_t end = Utils_StringIndexOf('}', text->mTotalString, EE_FILENAME_MAX, false);
 
-			int off = begin + 1;
+			int32_t off = begin + 1;
 			MString* total = NULL;
 			MString_AssignSubString(&total, text->mTotalString, off, end - off);
 
@@ -142,7 +142,7 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 				MString* sound = NULL;
 				MString_AssignSubString(&sound, MString_GetText(total), 1, totalLen - 1);
 				bool wasFound = false;
-				for (int i = 0; i < PLAY_SOUNDS_LEN; i += 1)
+				for (int32_t i = 0; i < PLAY_SOUNDS_LEN; i += 1)
 				{
 					PlaySound* ps = &text->mPlaySounds[i];
 					if (!ps->mIsLoaded)
@@ -165,9 +165,9 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 				int32_t totalLen = MString_GetLength(total);
 				MString* number = NULL;
 				MString_AssignSubString(&number, MString_GetText(total), 1, totalLen - 1);
-				int pauseTime = Utils_ParseInt(MString_GetText(number));
+				int32_t pauseTime = Utils_ParseInt(MString_GetText(number));
 				bool wasFound = false;
-				for (int i = 0; i < TEXT_PAUSES_LEN; i += 1)
+				for (int32_t i = 0; i < TEXT_PAUSES_LEN; i += 1)
 				{
 					Pause* p = &text->mPauses[i];
 					if (!p->mIsLoaded)
@@ -264,7 +264,7 @@ void MovieOperationText_Update(MovieOperationText* text)
 {
 	text->mSpeedIncreaseCounter += 1;
 
-	int loops = 1;
+	int32_t loops = 1;
 	if (text->mIsSpeedIncreased)
 	{
 		if ((text->mSpeedIncreaseCounter % MovieOperationText_GetSpeedToIncrease(text)) == 0)
@@ -273,7 +273,7 @@ void MovieOperationText_Update(MovieOperationText* text)
 		}
 	}
 
-	for (int i = 0; i < loops; i += 1)
+	for (int32_t i = 0; i < loops; i += 1)
 	{
 		if (text->mStringShown)
 		{

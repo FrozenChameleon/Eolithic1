@@ -50,12 +50,12 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 
 	shput(sh_draw_tile_offset, tilesetName, NULL);
 
-	int originalWidth = Utils_ParseInt(IStringArray_Get(strings, 0));
-	int originalHeight = Utils_ParseInt(IStringArray_Get(strings, 1));
+	int32_t originalWidth = Utils_ParseInt(IStringArray_Get(strings, 0));
+	int32_t originalHeight = Utils_ParseInt(IStringArray_Get(strings, 1));
 	shput(sh_draw_tile_original, tilesetName, Point_Create(originalWidth, originalHeight));
 
 	int64_t stringsLen = IStringArray_Length(strings);
-	for (int i = 2; i < stringsLen; i += 1)
+	for (int32_t i = 2; i < stringsLen; i += 1)
 	{
 		const char* nextLine = IStringArray_Get(strings, i);
 		if (Utils_StringEqualTo(nextLine, EE_STR_EMPTY))
@@ -120,8 +120,8 @@ void TilesetOffset_LoadOffsetPoint(DrawTile* drawTile, const char* tilesetName)
 	HmInnerMap* hm_offset_map_ref = sh_draw_tile_offset[offset_index].value;
 	int64_t hm_offset_map_ref_len = hmlen(hm_offset_map_ref);
 
-	int offset = sh_draw_tile_original[original_index].value.X / TILE_SIZE;
-	int loc = (drawTile->mPoint.X / TILE_SIZE) + ((drawTile->mPoint.Y / TILE_SIZE) * offset);
+	int32_t offset = sh_draw_tile_original[original_index].value.X / TILE_SIZE;
+	int32_t loc = (drawTile->mPoint.X / TILE_SIZE) + ((drawTile->mPoint.Y / TILE_SIZE) * offset);
 	if (loc > (hm_offset_map_ref_len - 1))
 	{
 		Logger_LogInformation("Offset point location mismatch.");

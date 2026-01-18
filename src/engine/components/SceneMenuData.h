@@ -2,8 +2,8 @@
 
 typedef struct SceneMenuData
 {
-	int mCounterID;
-	int mSelectedID;
-	int mBlockedID;
+	int32_t mCounterID;
+	int32_t mSelectedID;
+	int32_t mBlockedID;
 } SceneMenuData;
 

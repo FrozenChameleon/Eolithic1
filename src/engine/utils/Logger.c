@@ -14,7 +14,7 @@ static const char* _mMessageStr = "INFORMATION : ";
 static const char* _mWarningStr = "WARNING : ";
 static const char* _mErrorStr = "ERROR : ";
 
-void Logger_SetLevel(int level)
+void Logger_SetLevel(int32_t level)
 {
 
 }

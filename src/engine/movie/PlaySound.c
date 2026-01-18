@@ -3,7 +3,7 @@
 #include "../utils/Utils.h"
 #include "../core/Func.h"
 
-void PlaySound_PlayTheSoundIfAtPoint(const PlaySound* ps, int value)
+void PlaySound_PlayTheSoundIfAtPoint(const PlaySound* ps, int32_t value)
 {
 	if (value == ps->mPoint)
 	{

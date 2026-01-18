@@ -11,11 +11,11 @@
 
 typedef struct RewindTesterData
 {
-	int mBeginLevelFrameCount;
-	int mEndLevelFrameCount;
-	int mStoredPlayerReadCounter;
-	int mState;
-	int mCounter;
+	int32_t mBeginLevelFrameCount;
+	int32_t mEndLevelFrameCount;
+	int32_t mStoredPlayerReadCounter;
+	int32_t mState;
+	int32_t mCounter;
 	bool mIsRewinding;
 } RewindTesterData;
 
@@ -53,11 +53,11 @@ void DebugRewindTester_Update()
 	}
 
 #ifdef DEBUG_DEF_USE_REWIND_TESTER
-	int rewindInterval = DEBUG_DEF_REWIND_TESTER_REWIND_INTERVAL;
-	int rewindLength = DEBUG_DEF_REWIND_TESTER_REWIND_LENGTH;
+	int32_t rewindInterval = DEBUG_DEF_REWIND_TESTER_REWIND_INTERVAL;
+	int32_t rewindLength = DEBUG_DEF_REWIND_TESTER_REWIND_LENGTH;
 #else 
-	int rewindInterval = 0;
-	int rewindLength = 0;
+	int32_t rewindInterval = 0;
+	int32_t rewindLength = 0;
 #endif
 
 	switch (_mData.mState)

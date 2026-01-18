@@ -176,7 +176,7 @@ void DrawBatch_Init(DrawBatch* db)
 	db->mLength = 0;
 	memset(&db->mDrawState, 0, sizeof(DrawState));
 }
-int DrawBatch_GetEndPositionInVertexBuffer(const DrawBatch* db)
+int32_t DrawBatch_GetEndPositionInVertexBuffer(const DrawBatch* db)
 {
 	return db->mOffset + db->mLength;
 }
@@ -308,7 +308,7 @@ static FNA3D_BlendState GetBlendStateFromBlendState(BlendState value)
 }
 static void ApplyWhiteHitFlashShader(Effect* white)
 {
-	for (int i = 0; i < 3; i += 1)
+	for (int32_t i = 0; i < 3; i += 1)
 	{
 		_mMultiColorReplaceData[i] = 1.0f;
 	}
@@ -329,7 +329,7 @@ static void ApplyWhiteHitFlashShader(Effect* white)
 	}
 #endif
 
-	for (int i = 0; i < white->mData->param_count; i++)
+	for (int32_t i = 0; i < white->mData->param_count; i += 1)
 	{
 		const char* paramName = white->mData->params[i].value.name;
 		if (Utils_StringEqualTo(SHADER_PARAMETER_COLOR_REPLACE_0, paramName))
@@ -350,18 +350,18 @@ static void ApplyMultiColorReplaceShader(Effect* multi, ShaderProgram* shaderPro
 		return;
 	}
 
-	for (int i = 0; i < colorLength; i += 1)
+	for (int32_t i = 0; i < colorLength; i += 1)
 	{
 		_mMultiColorReplaceData[i] = (float)(shaderProgram->mMultiColorReplace[i]) / 0xFF;
 	}
 	float colorReplaceAlpha = (float)(shaderProgram->mMultiColorReplaceAlpha) / 0xFF;
 
-	for (int i = 0; i < multi->mData->param_count; i++)
+	for (int32_t i = 0; i < multi->mData->param_count; i += 1)
 	{
 		const char* paramName = multi->mData->params[i].value.name;
 		if (Utils_StringEqualTo(SHADER_PARAMETER_COLOR_LENGTH, paramName))
 		{
-			Utils_memcpy(multi->mData->params[i].value.values, &colorLength, sizeof(int) * 1);
+			Utils_memcpy(multi->mData->params[i].value.values, &colorLength, sizeof(int32_t) * 1);
 		}
 		else if (Utils_StringEqualTo(SHADER_PARAMETER_COLOR_TARGET_0, paramName))
 		{
@@ -483,14 +483,14 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		FNA3D_VerifySampler(_mDeviceContext, 0, texture, &_mSamplerState);
 	}
 
-	int isTotalWhiteHitFlash = 0;
-	int shaderType = RENDERER_SHADER_TYPE_SPRITE_EFFECT;
+	int32_t isTotalWhiteHitFlash = 0;
+	int32_t shaderType = RENDERER_SHADER_TYPE_SPRITE_EFFECT;
 	if (shaderProgram != NULL)
 	{
 		isTotalWhiteHitFlash = shaderProgram->mIsTotalWhiteHitFlash;
 		shaderType = shaderProgram->mShaderType;
 	}
-	int performAlphaTest = 0;
+	int32_t performAlphaTest = 0;
 	if (!IsDepthBufferDisabled())
 	{
 		if (_mDepthStencilState.depthBufferWriteEnable == 1)
@@ -504,14 +504,14 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 	bool hasSetTheAlphaTest = false;
 	bool hasSetTheIsTotalWhiteHitFlash = false;
 
-	for (int i = 0; i < _mEffect.mData->param_count; i++)
+	for (int32_t i = 0; i < _mEffect.mData->param_count; i += 1)
 	{
 		const char* paramName = _mEffect.mData->params[i].value.name;
 		if (!hasSetTheIsTotalWhiteHitFlash)
 		{
 			if (Utils_StringEqualTo(SHADER_PARAMETER_IS_TOTAL_WHITE_HIT_FLASH, paramName))
 			{
-				Utils_memcpy(_mEffect.mData->params[i].value.values, &isTotalWhiteHitFlash, sizeof(int) * 1);
+				Utils_memcpy(_mEffect.mData->params[i].value.values, &isTotalWhiteHitFlash, sizeof(int32_t) * 1);
 				hasSetTheIsTotalWhiteHitFlash = true;
 				continue;
 			}
@@ -520,7 +520,7 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		{
 			if (Utils_StringEqualTo(SHADER_PARAMETER_PERFORM_ALPHA_TEST, paramName))
 			{
-				Utils_memcpy(_mEffect.mData->params[i].value.values, &performAlphaTest, sizeof(int) * 1);
+				Utils_memcpy(_mEffect.mData->params[i].value.values, &performAlphaTest, sizeof(int32_t) * 1);
 				hasSetTheAlphaTest = true;
 				continue;
 			}
@@ -538,7 +538,7 @@ static void SetupRenderState(Vector2 cameraPos, Vector2 scale, BlendState blendS
 		{
 			if (Utils_StringEqualTo(SHADER_PARAMETER_SHADER_TYPE, paramName))
 			{
-				Utils_memcpy(_mEffect.mData->params[i].value.values, &shaderType, sizeof(int) * 1);
+				Utils_memcpy(_mEffect.mData->params[i].value.values, &shaderType, sizeof(int32_t) * 1);
 				hasSetTheShaderType = true;
 				continue;
 			}
@@ -587,7 +587,7 @@ static void NextBatch(bool keepDrawState)
 		drawState = _mCurrentDrawBatch.mDrawState;
 	}
 
-	//int end = _mCurrentDrawBatch.GetEndPositionInVertexBuffer();
+	//int32_t end = _mCurrentDrawBatch.GetEndPositionInVertexBuffer();
 	if (_mCurrentDrawBatch.mLength > 0)
 	{
 		DrawTheBatch(_mCurrentDrawBatch);
@@ -651,7 +651,7 @@ void Renderer_DrawVertexPositionColorTexture4(Texture* texture, const VertexPosi
 
 	CheckBatchSize(true);
 
-	int pos = DrawBatch_GetEndPositionInVertexBuffer(&_mCurrentDrawBatch);
+	int32_t pos = DrawBatch_GetEndPositionInVertexBuffer(&_mCurrentDrawBatch);
 
 	_mCurrentDrawBatch.mLength += VERTICES_IN_SPRITE;
 
@@ -661,9 +661,9 @@ Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
 {
 	SDL_IOStream* rwops = SDL_IOFromMem(FixedByteBuffer_GetBuffer(blob), FixedByteBuffer_GetLength(blob));
 
-	int w;
-	int h;
-	int len;
+	int32_t w;
+	int32_t h;
+	int32_t len;
 	uint8_t* imageData = FNA3D_Image_Load(Renderer_ImageRead, Renderer_ImageSkip, Renderer_ImageEndOfFile, rwops, &w, &h, &len, -1, -1, 0);
 
 	SDL_CloseIO(rwops);
@@ -686,7 +686,7 @@ Texture* Renderer_GetNewTextureData(const char* path, int32_t width, int32_t hei
 
 	if (clearTexture)
 	{
-		int dataLength = width * height * 4;
+		int32_t dataLength = width * height * 4;
 		uint8_t* clearData = Utils_malloc(sizeof(uint8_t) * dataLength);
 		memset(clearData, 0, dataLength);
 		FNA3D_SetTextureData2D(_mDeviceContext, texture, 0, 0, width, height, 0, clearData, dataLength);
@@ -729,7 +729,7 @@ static void LoadShader(Effect* effect, const char* shaderName)
 	Utils_free(effectCode);
 	effectCode = NULL;
 }
-int Renderer_Init(void* deviceWindowHandle)
+int32_t Renderer_Init(void* deviceWindowHandle)
 {
 	_mInternalWidth = (float)Utils_GetInternalWidth();
 	_mInternalHeight = (float)Utils_GetInternalHeight();

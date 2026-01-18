@@ -43,11 +43,11 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 		//	OeLogger_LogInformation("Correcting custom data amount...");
 
 		//	string[] newCustom = new string[CUSTOM_DATA_AMOUNT];
-		//	for (int i = 0; i < newCustom.Length; i++)
+		//	for (int32_t i = 0; i < newCustom.Length; i += 1)
 		//	{
 		//		newCustom[i] = OeUtils_NOT_SET;
 		//	}
-		//	for (int i = 0; i < mStringData.Length; i++)
+		//	for (int32_t i = 0; i < mStringData.Length; i += 1)
 		//	{
 		//		newCustom[i] = mStringData[i];
 		//	}
@@ -83,15 +83,15 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 }
 void LevelData_ReadHeader(LevelData* ld, BufferReader* reader)
 {
-	int version = BufferReader_ReadI32(reader); // <-
+	int32_t version = BufferReader_ReadI32(reader); // <-
 
 	ld->_mIsMetaMap = BufferReader_ReadBoolean(reader); // <- Add these two to CometStriker/Mute Crimson+ for parity
 
 	BufferReader_ReadString(reader, ld->mLevelName, EE_FILENAME_MAX);
 	BufferReader_ReadString(reader, ld->mTilesetName, EE_FILENAME_MAX);
 
-	int customDataSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < customDataSize; i++)
+	int32_t customDataSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < customDataSize; i += 1)
 	{
 		BufferReader_ReadString(reader, ld->mStringData[i], EE_FILENAME_MAX);
 	}
@@ -99,38 +99,38 @@ void LevelData_ReadHeader(LevelData* ld, BufferReader* reader)
 	BufferReader_ReadFloat(reader); //Unused - Player Position X
 	BufferReader_ReadFloat(reader); //Unused - Player Position Y
 
-	int layerDataSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < layerDataSize; i++)
+	int32_t layerDataSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < layerDataSize; i += 1)
 	{
 		LayerData_ReadIni(&ld->mLayerData[i], i, reader);
 	}
 }
 void LevelData_ReadData(LevelData* ld, BufferReader* reader)
 {
-	int version = BufferReader_ReadI32(reader);
+	int32_t version = BufferReader_ReadI32(reader);
 
 	if (version >= 3)
 	{
-		int temp = BufferReader_ReadI32(reader); //Unused - Thing Instance ID Counter
+		int32_t temp = BufferReader_ReadI32(reader); //Unused - Thing Instance ID Counter
 	}
 
-	int saveTileSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < saveTileSize; i++)
+	int32_t saveTileSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < saveTileSize; i += 1)
 	{
 		Tile* tile = Utils_calloc(1, sizeof(Tile));
 		Tile_Read(tile, version, reader);
 		arrput(ld->arr_save_tiles, tile);
 	}
 
-	int gridWidth = BufferReader_ReadI32(reader);
-	int gridHeight = BufferReader_ReadI32(reader);
+	int32_t gridWidth = BufferReader_ReadI32(reader);
+	int32_t gridHeight = BufferReader_ReadI32(reader);
 
 	ld->_mGridSize.Width = gridWidth;
 	ld->_mGridSize.Height = gridHeight;
 	ld->_mSaveTileMap = BufferReader_ReadIntArray2D(reader, gridWidth, gridHeight);
 
-	int cameraDataSize = BufferReader_ReadI32(reader);
-	for (int i = 0; i < cameraDataSize; i++)
+	int32_t cameraDataSize = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < cameraDataSize; i += 1)
 	{
 		LevelCameraData cameraData = { 0 };
 		LevelCameraData_Read(&cameraData, version, reader);
@@ -139,8 +139,8 @@ void LevelData_ReadData(LevelData* ld, BufferReader* reader)
 
 	if (version >= 5)
 	{
-		int lineInfoSize = BufferReader_ReadI32(reader);
-		for (int i = 0; i < lineInfoSize; i++)
+		int32_t lineInfoSize = BufferReader_ReadI32(reader);
+		for (int32_t i = 0; i < lineInfoSize; i += 1)
 		{
 			Line line = { 0 };
 			Line_Read(version, &line, reader);
@@ -155,10 +155,10 @@ void LevelData_LoadSetupOffsets(LevelData* ld)
 		return;
 	}
 	
-	for (int i = 0; i < arrlen(ld->arr_save_tiles); i += 1)
+	for (int32_t i = 0; i < arrlen(ld->arr_save_tiles); i += 1)
 	{
 		Tile* t = ld->arr_save_tiles[i];
-		for (int j = 0; j < LEVELDATA_LAYER_DATA_LENGTH; j += 1)
+		for (int32_t j = 0; j < LEVELDATA_LAYER_DATA_LENGTH; j += 1)
 		{
 			TilesetOffset_LoadOffsetPoint(&t->mDrawTiles[j], ld->mTilesetName);
 		}
@@ -167,16 +167,16 @@ void LevelData_LoadSetupOffsets(LevelData* ld)
 bool LevelData_LoadSetupTileData(LevelData* ld)
 {
 	Tile** tiles = ld->arr_save_tiles;
-	int* map = ld->_mSaveTileMap;
-	int gridWidth = LevelData_GetGridSizeWidth(ld);
-	int gridHeight = LevelData_GetGridSizeHeight(ld);
-	int tileDataLen = gridWidth * gridHeight;
+	int32_t* map = ld->_mSaveTileMap;
+	int32_t gridWidth = LevelData_GetGridSizeWidth(ld);
+	int32_t gridHeight = LevelData_GetGridSizeHeight(ld);
+	int32_t tileDataLen = gridWidth * gridHeight;
 	ld->mTileData = Utils_calloc(tileDataLen, sizeof(LevelData*));
-	for (int i = 0; i < gridWidth; i++)
+	for (int32_t i = 0; i < gridWidth; i += 1)
 	{
-		for (int j = 0; j < gridHeight; j++)
+		for (int32_t j = 0; j < gridHeight; j++)
 		{
-			int gridPos = LevelData_GetTilePos1D(ld, i, j);
+			int32_t gridPos = LevelData_GetTilePos1D(ld, i, j);
 			//WILLNOTDO 06262023 DEBUG
 			/*
 			if (OeGlobals_IsDebugFileMode())
@@ -193,7 +193,7 @@ bool LevelData_LoadSetupTileData(LevelData* ld)
 			else
 			{
 			*/
-			int tileLocInSaveTiles = map[gridPos];
+			int32_t tileLocInSaveTiles = map[gridPos];
 			Tile* tileToSet = tiles[tileLocInSaveTiles];
 			ld->mTileData[gridPos] = tileToSet;
 			//}
@@ -202,39 +202,39 @@ bool LevelData_LoadSetupTileData(LevelData* ld)
 
 	return true;
 }
-int LevelData_GetGridSizeWidth(LevelData* ld)
+int32_t LevelData_GetGridSizeWidth(LevelData* ld)
 {
 	return ld->_mGridSize.Width;
 }
-int LevelData_GetGridSizeHeight(LevelData* ld)
+int32_t LevelData_GetGridSizeHeight(LevelData* ld)
 {
 	return ld->_mGridSize.Height;
 }
-int LevelData_GetGridSizeX(LevelData* ld)
+int32_t LevelData_GetGridSizeX(LevelData* ld)
 {
 	return ld->_mGridSize.Width;
 }
-int LevelData_GetGridSizeY(LevelData* ld)
+int32_t LevelData_GetGridSizeY(LevelData* ld)
 {
 	return ld->_mGridSize.Height;
 }
-int LevelData_GetRealSizeWidth(LevelData* ld)
+int32_t LevelData_GetRealSizeWidth(LevelData* ld)
 {
 	return ld->_mGridSize.Width * TILE_SIZE;
 }
-int LevelData_GetRealSizeHeight(LevelData* ld)
+int32_t LevelData_GetRealSizeHeight(LevelData* ld)
 {
 	return ld->_mGridSize.Height * TILE_SIZE;
 }
-int LevelData_GetRealSizeX(LevelData* ld)
+int32_t LevelData_GetRealSizeX(LevelData* ld)
 {
 	return ld->_mGridSize.Width * TILE_SIZE;
 }
-int LevelData_GetRealSizeY(LevelData* ld)
+int32_t LevelData_GetRealSizeY(LevelData* ld)
 {
 	return ld->_mGridSize.Height * TILE_SIZE;
 }
-int LevelData_GetTilePos1D(LevelData* ld, int32_t i, int32_t j)
+int32_t LevelData_GetTilePos1D(LevelData* ld, int32_t i, int32_t j)
 {
 	return i + (j * ld->_mGridSize.Width);
 }
@@ -267,15 +267,15 @@ int32_t* LevelData_CreateCollisionArray(LevelData* ld)
 }
 int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld)
 {
-	return Utils_calloc(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t));
+	return Utils_callocArena(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t), UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 }
 void LevelData_ImprintToCollisionArray(LevelData* ld, int32_t x, int32_t y, int32_t* collisionArray)
 {
-	int width = ld->_mGridSize.Width;
-	int height = ld->_mGridSize.Height;
-	for (int i = 0; i < width; i += 1)
+	int32_t width = ld->_mGridSize.Width;
+	int32_t height = ld->_mGridSize.Height;
+	for (int32_t i = 0; i < width; i += 1)
 	{
-		for (int j = 0; j < height; j += 1)
+		for (int32_t j = 0; j < height; j += 1)
 		{
 			collisionArray[LevelData_GetTilePos1D(ld, x + i, y + j)] = ld->mTileData[LevelData_GetTilePos1D(ld, i, j)]->mCollisionType;
 		}
@@ -320,15 +320,15 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 		return;
 	}
 
-	int x1 = Camera_GetX1Mul(camera, mul);
-	int x2 = Camera_GetX2Mul(camera, ld->_mGridSize.Width, mul);
-	int y1 = Camera_GetY1Mul(camera, mul);
-	int y2 = Camera_GetY2Mul(camera, ld->_mGridSize.Height, mul);
+	int32_t x1 = Camera_GetX1Mul(camera, mul);
+	int32_t x2 = Camera_GetX2Mul(camera, ld->_mGridSize.Width, mul);
+	int32_t y1 = Camera_GetY1Mul(camera, mul);
+	int32_t y2 = Camera_GetY2Mul(camera, ld->_mGridSize.Height, mul);
 
-	for (int i = 0; i < LEVELDATA_LAYER_DATA_LENGTH; i++)
+	for (int32_t i = 0; i < LEVELDATA_LAYER_DATA_LENGTH; i += 1)
 	{
 		Color color = COLOR_WHITE;
-		int depth = ld->mLayerData[i].mDepth;
+		int32_t depth = ld->mLayerData[i].mDepth;
 		if (preferredLayer != -1)
 		{
 			if (preferredLayer == i)
@@ -375,16 +375,16 @@ void LevelData_DrawProps(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 	}
 #endif
 
-	int dist = Cvars_GetAsInt(CVARS_ENGINE_PROP_DISTANCE);
+	int32_t dist = Cvars_GetAsInt(CVARS_ENGINE_PROP_DISTANCE);
 
-	int x1 = Camera_GetX1Mul(camera, (float)dist);
-	int x2 = Camera_GetX2Mul(camera, LevelData_GetGridSizeWidth(ld), (float)dist);
-	int y1 = Camera_GetY1Mul(camera, (float)dist);
-	int y2 = Camera_GetY2Mul(camera, LevelData_GetGridSizeHeight(ld), (float)dist);
+	int32_t x1 = Camera_GetX1Mul(camera, (float)dist);
+	int32_t x2 = Camera_GetX2Mul(camera, LevelData_GetGridSizeWidth(ld), (float)dist);
+	int32_t y1 = Camera_GetY1Mul(camera, (float)dist);
+	int32_t y2 = Camera_GetY2Mul(camera, LevelData_GetGridSizeHeight(ld), (float)dist);
 
-	for (int i = x1; i < x2; i += 1)
+	for (int32_t i = x1; i < x2; i += 1)
 	{
-		for (int j = y1; j < y2; j += 1)
+		for (int32_t j = y1; j < y2; j += 1)
 		{
 			Tile* t = ld->mTileData[LevelData_GetTilePos1D(ld, i, j)];
 			Tile_DrawProps2(t, spriteBatch, camera, i, j, false, drawInfo);

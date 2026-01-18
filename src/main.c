@@ -13,13 +13,14 @@
 #include "engine/io/File.h"
 #include "engine/globals/Globals.h"
 #include "engine/input/RecordingTool.h"
+#include "engine/utils/Utils.h"
 
-int main(int argc, char* args[])
+int32_t main(int32_t argc, char* args[])
 {
 	Cvars_LoadInitialCvars();
 
 	//RecordingTool_EnableFromArgumentsPlayback(RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SESSION_NORMAL);
-	//Globals_TurnOnAutoMode(false);
+	Globals_TurnOnAutoMode(false);
 
 	Game_Run();
 

@@ -36,6 +36,6 @@ void ResourceManager_LoadAllFromDat(ResourceManager* rm);
 void ResourceManager_Dispose(ResourceManager* rm, const char* filenameWithoutExtension);
 void ResourceManager_DisposeAll(ResourceManager* rm);
 int64_t ResourceManager_Length(ResourceManager* rm);
-Resource* ResourceManager_GetResourceByIndex(ResourceManager* rm, int index);
-void* ResourceManager_GetResourceDataByIndex(ResourceManager* rm, int index);
+Resource* ResourceManager_GetResourceByIndex(ResourceManager* rm, int32_t index);
+void* ResourceManager_GetResourceDataByIndex(ResourceManager* rm, int32_t index);
 const char* ResourceManager_GetKey(ResourceManager* rm, const char* filenameWithoutExtension);

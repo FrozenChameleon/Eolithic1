@@ -5,7 +5,7 @@
 typedef struct AnchorData
 {
 	char mAnchorName[EE_FILENAME_MAX];
-	int mAnchorNumber;
-	int mAnchorEntityNumber;
+	int32_t mAnchorNumber;
+	int32_t mAnchorEntityNumber;
 } AnchorData;
 

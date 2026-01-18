@@ -11,7 +11,7 @@ void BmFontData_Load(BmFontData* bmfd, BufferReader* br)
 {
 	IStringArray* listOfStrings = File_ReadAllToStrings(br);
 
-	for (int i = 0; i < IStringArray_Length(listOfStrings); i += 1)
+	for (int32_t i = 0; i < IStringArray_Length(listOfStrings); i += 1)
 	{
 		const char* line = IStringArray_Get(listOfStrings, i);
 		if (Utils_StringEqualTo(line, EE_STR_EMPTY))
@@ -137,7 +137,7 @@ void BmFontData_ReadKerning(BmFontData* bmfd, IStringArray* tagSplit)
 	bmKerning.Amount = BmFontData_FindInt("amount", tagSplit);
 	arrput(bmfd->mKernings, bmKerning);
 }
-int BmFontData_FindInt(const char* key, IStringArray* tagSplit)
+int32_t BmFontData_FindInt(const char* key, IStringArray* tagSplit)
 {
 	const char* str = BmFontData_FindString(key, tagSplit);
 	if (Utils_StringEqualTo(str, DUMMY_STR_NOTHING))
@@ -149,13 +149,13 @@ int BmFontData_FindInt(const char* key, IStringArray* tagSplit)
 }
 const char* BmFontData_FindString(const char* key, IStringArray* tagSplit)
 {
-	for (int32_t i = 0; i < IStringArray_Length(tagSplit); i++)
+	for (int32_t i = 0; i < IStringArray_Length(tagSplit); i += 1)
 	{
 		const char* str = IStringArray_Get(tagSplit, i);
 		bool strContains = Utils_StringContains(str, key);
 		if (strContains)
 		{
-			int index = Utils_StringIndexOf('=', str, Utils_strlen(str), false);
+			int32_t index = Utils_StringIndexOf('=', str, Utils_strlen(str), false);
 			if (index != -1)
 			{
 				int32_t strLen = (int32_t)Utils_strlen(str);

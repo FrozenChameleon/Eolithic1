@@ -35,8 +35,8 @@ static void UpdateLostControllerConnectionStatus()
 	return;
 #endif
 
-	int len = INPUT_MAXIMUM_PLAYER_COUNT;
-	for (int i = 0; i < len; i += 1)
+	int32_t len = INPUT_MAXIMUM_PLAYER_COUNT;
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		if (InputPlayer_MyControllerLostConnection(Input_GetPlayer(i)))
 		{
@@ -134,7 +134,7 @@ void ServiceHelper_Update(double delta)
 }
 bool ServiceHelper_HasPlayerHasLostControllerConnection()
 {
-	int playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
+	int32_t playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
 	if (playerThatLostConnection != -1)
 	{
 		return true;
@@ -144,9 +144,9 @@ bool ServiceHelper_HasPlayerHasLostControllerConnection()
 		return false;
 	}
 }
-int ServiceHelper_GetPlayerThatLostControllerConnection()
+int32_t ServiceHelper_GetPlayerThatLostControllerConnection()
 {
-	for (int i = 0; i < PLAYER_LOST_CONTROLLER_CONNECTION_LENGTH; i++)
+	for (int32_t i = 0; i < PLAYER_LOST_CONTROLLER_CONNECTION_LENGTH; i += 1)
 	{
 		if (_mPlayerHasLostControllerConnection[i])
 		{
@@ -157,13 +157,13 @@ int ServiceHelper_GetPlayerThatLostControllerConnection()
 }
 void ServiceHelper_HandlePlayerLostControllerConnection()
 {
-	int playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
+	int32_t playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
 	if (playerThatLostConnection == -1)
 	{
 		return;
 	}
 
-	int controllerTapped = ControllerStates_GetControllerNumberIfAnyButtonTapped();
+	int32_t controllerTapped = ControllerStates_GetControllerNumberIfAnyButtonTapped();
 	if ((controllerTapped != -1) || KeyboardState_IsAnyKeyTapped() || MouseState_IsAnyButtonTapped())
 	{
 		_mPlayerHasLostControllerConnection[playerThatLostConnection] = false;

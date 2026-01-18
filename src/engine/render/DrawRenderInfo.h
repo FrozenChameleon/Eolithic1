@@ -4,8 +4,8 @@
 
 typedef struct DrawRenderInfo
 {
-	int mState;
-	int mPhase;
+	int32_t mState;
+	int32_t mPhase;
 	ImageDataInstance mRender;
 } DrawRenderInfo;
 

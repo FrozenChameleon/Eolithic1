@@ -40,7 +40,7 @@ const char* ACTIONLIST_GAME_MENU_RIGHT = "GAME_MENU_RIGHT";
 const char* ACTIONLIST_GAME_MENU_DOWN = "GAME_MENU_DOWN";
 const char* ACTIONLIST_GAME_MENU_LEFT = "GAME_MENU_LEFT";
 
-const char* ActionList_GetAction(int index)
+const char* ActionList_GetAction(int32_t index)
 {
 	switch (index)
 	{

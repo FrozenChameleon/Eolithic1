@@ -12,10 +12,14 @@
 #include "VolumeData.h"
 #include "../io/BufferReader.h"
 
+#ifdef AUDIO_DUMMY
+typedef struct SoundEffect SoundEffect;
+#else
 typedef struct SoundEffect
 {
 	WaveFileData* _mWaveFileData;
 } SoundEffect;
+#endif
 
 void SoundEffect_Init(void);
 uint64_t SoundEffect_GetDefaultSoundPlaybackTimeBuffer(void);
@@ -23,10 +27,9 @@ void SoundEffect_SetDefaultSoundPlaybackTimeBuffer(uint64_t value);
 void SoundEffect_SetPlaybackTimeBufferForSoundEffect(const char* name, uint64_t time);
 void SoundEffect_SetSfxMuted(bool value);
 uint64_t SoundEffect_GetCurrentFrame(void);
-VolumeData* SoundEffect_GetVolumeData(void);
 void SoundEffect_Tick(void);
-void SoundEffect_PauseAllSounds(int priority);
-void SoundEffect_ResumeAllSounds(int priority);
+void SoundEffect_PauseAllSounds(int32_t priority);
+void SoundEffect_ResumeAllSounds(int32_t priority);
 void SoundEffect_StopAllPausedSounds(void);
 void SoundEffect_StopSound(const char* sound);
 void SoundEffect_StopAllSounds(void);

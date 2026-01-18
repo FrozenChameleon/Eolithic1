@@ -6,7 +6,7 @@
 
 typedef struct SpecialMcFinalBossEffect
 {
-	int mLineCounter;
+	int32_t mLineCounter;
 	Point mRandomOffset;
 	Vector2 mPosition;
 	Timer mTimerBleed;
@@ -15,7 +15,7 @@ typedef struct SpecialMcFinalBossEffect
 	char mAnimationName[EE_FILENAME_MAX];
 	Vector2 mBloodOffset;
 	bool mDisableShaking;
-	int mBloodCutoff;
-	int mForcedDirection;
+	int32_t mBloodCutoff;
+	int32_t mForcedDirection;
 } SpecialMcFinalBossEffect;
 

@@ -13,7 +13,7 @@
 Rectangle Window_GetWindowSize();
 Rectangle Window_GetDisplayBounds();
 Rectangle* Window_GetAllDisplayModeBounds(int32_t* length);
-int Window_Init();
+int32_t Window_Init();
 bool Window_IsFullscreen();
 void Window_UpdateFullscreen();
 void Window_SetWindowPositionToCentered();

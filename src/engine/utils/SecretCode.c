@@ -10,7 +10,7 @@ static bool _mTempButtons[SECRETCODES_AMOUNT_OF_SECRET_BUTTONS];
 
 const SecretCode SecretCode_Nothing = { 0 };
 
-bool SecretCodes_UpdateSecretCode(SecretCode* data, bool(*code)(int))
+bool SecretCodes_UpdateSecretCode(SecretCode* data, bool(*code)(int32_t))
 {
 #ifdef GLOBAL_DEF_DISABLE_CHEAT_CODES
 	return false;
@@ -31,12 +31,12 @@ bool SecretCodes_UpdateSecretCode(SecretCode* data, bool(*code)(int))
 	return isUnlocked;
 #endif
 }
-bool SecretCodes_Check(int buttonToCheck, int32_t currentDepth)
+bool SecretCodes_Check(int32_t buttonToCheck, int32_t currentDepth)
 {
 #ifdef GLOBAL_DEF_DISABLE_CHEAT_CODES
 	return false;
 #else
-	int tempDepth = _mTempCodeDepth;
+	int32_t tempDepth = _mTempCodeDepth;
 	_mTempCodeDepth += 1;
 	if (currentDepth != tempDepth)
 	{
@@ -52,7 +52,7 @@ bool SecretCodes_Check(int buttonToCheck, int32_t currentDepth)
 
 	bool isTargetTapped = false;
 	bool isNotTargetTapped = false;
-	for (int i = 0; i < SECRETCODES_AMOUNT_OF_SECRET_BUTTONS; i += 1)
+	for (int32_t i = 0; i < SECRETCODES_AMOUNT_OF_SECRET_BUTTONS; i += 1)
 	{
 		bool isTapped = _mTempButtons[i];
 		if (i == buttonToCheck)

@@ -107,7 +107,7 @@ static void File_GetFileNameHelper(MString** assignToThis, const char* path, boo
 	char* returnStrText = MString_GetText(*assignToThis);
 
 	int32_t counter = 0;
-	for (int i = (loc + 1); i < len; i += 1)
+	for (int32_t i = (loc + 1); i < len; i += 1)
 	{
 		if (removeTheExtension)
 		{
@@ -135,8 +135,8 @@ IStringArray* File_ReadAllToStrings(BufferReader* br)
 	uint64_t len = BufferReader_GetSize(br);
 	uint8_t* bufferData = BufferReader_GetBufferData(br);
 	IStringArray* sa = IStringArray_Create();
-	int counter = 0;
-	for (int i = 0; i < (len + 1); i += 1) //Add +1 to len because...
+	int32_t counter = 0;
+	for (int32_t i = 0; i < (len + 1); i += 1) //Add +1 to len because...
 	{
 		if (counter >= LARGE_CHAR_BUFFER_LEN)
 		{

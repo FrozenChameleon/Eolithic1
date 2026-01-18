@@ -26,14 +26,14 @@ typedef enum DrawState
 typedef struct DrawStateMap
 {
 	char* key;
-	int value;
+	int32_t value;
 } DrawStateMap;
 
 DrawStateMap* OeState_GetShDrawStateMap();
 
 /*
 const std::vector<std::string>& OeState_GetDrawStateArray();
-std::unordered_map<std::string, int>& OeState_GetDrawStateMap();
+std::unordered_map<std::string, int32_t>& OeState_GetDrawStateMap();
 const std::string& OeState_GetDefaultState();
 void OeState_Init();
 */

@@ -85,7 +85,7 @@ float Math_ToRadians(float value)
 {
 	return MathHelper_ToRadians(value);
 }
-int32_t Math_abs(int value)
+int32_t Math_abs(int32_t value)
 {
 	return SDL_abs(value);
 }
@@ -169,7 +169,7 @@ double Math_MaxDouble(double valueA, double valueB)
 	}
 	return valueA;
 }
-int Math_GetDistanceInt(int32_t x1, int32_t x2)
+int32_t Math_GetDistanceInt(int32_t x1, int32_t x2)
 {
 	return Math_abs(x1 - x2);
 }
@@ -199,7 +199,7 @@ double Math_pow(double x, double y)
 {
 	return SDL_pow(x, y);
 }
-int Math_ClampInt(int value, int32_t lowerBound, int32_t upperBound)
+int32_t Math_ClampInt(int32_t value, int32_t lowerBound, int32_t upperBound)
 {
 	value = Math_MinInt(value, upperBound);
 	value = Math_MaxInt(value, lowerBound);

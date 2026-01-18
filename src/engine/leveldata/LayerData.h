@@ -15,7 +15,7 @@ typedef struct LayerData
 {
 	float mSpeedX;
 	float mSpeedY;
-	int mDepth;
+	int32_t mDepth;
 } LayerData;
 
 const char* LayerData_GetNameSpeedX(LayerData* layer, int32_t i);

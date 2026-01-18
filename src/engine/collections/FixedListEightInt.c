@@ -11,7 +11,7 @@
 
 void FixedListEightInt_AddAll(FixedListEightInt* from, FixedListEightInt* to)
 {
-	for (int i = 0; i < from->_mCount; i += 1)
+	for (int32_t i = 0; i < from->_mCount; i += 1)
 	{
 		FixedListEightInt_Add(to, FixedListEightInt_Get(from, i));
 	}
@@ -26,7 +26,7 @@ void FixedListEightInt_Clear(FixedListEightInt* flei)
 }
 bool FixedListEightInt_Contains(const FixedListEightInt* flei, int32_t value)
 {
-	for (int i = 0; i < flei->_mCount; i += 1)
+	for (int32_t i = 0; i < flei->_mCount; i += 1)
 	{
 		if (flei->_mValues[i] == value)
 		{

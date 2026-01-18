@@ -11,16 +11,16 @@
 
 typedef struct DrawInstance
 {
-	int mType;
-	int mAlignmentX;
-	int mAlignmentY;
-	int mX1;
-	int mX2;
-	int mY1;
-	int mY2;
-	int mLayer;
-	int mExtraPasses;
-	int mDepth;
+	int32_t mType;
+	int32_t mAlignmentX;
+	int32_t mAlignmentY;
+	int32_t mX1;
+	int32_t mX2;
+	int32_t mY1;
+	int32_t mY2;
+	int32_t mLayer;
+	int32_t mExtraPasses;
+	int32_t mDepth;
 	float mRotation;
 	bool mIsInterpolated;
 	bool mIsRectangle;

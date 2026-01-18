@@ -2,6 +2,6 @@
 
 typedef struct LevelFrameCounter
 {
-	int mCounter;
+	int32_t mCounter;
 } LevelFrameCounter;
 

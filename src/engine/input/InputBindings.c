@@ -50,9 +50,9 @@ void PlayerBindingData_LogLoadFailure(PlayerBindingData* pbd)
 }
 void PlayerBindingData_LoadFromStream(PlayerBindingData* pbd, BufferReader* reader)
 {
-	int version = BufferReader_ReadI32(reader);
-	int count = BufferReader_ReadI32(reader);
-	for (int i = 0; i < count; i += 1)
+	int32_t version = BufferReader_ReadI32(reader);
+	int32_t count = BufferReader_ReadI32(reader);
+	for (int32_t i = 0; i < count; i += 1)
 	{
 		InputAction data;
 		InputAction_Init(EE_STR_NOT_SET, &data);
@@ -65,7 +65,7 @@ FixedByteBuffer* PlayerBindingData_CreateBufferFromBindings(PlayerBindingData* p
 	DynamicByteBuffer* writer = DynamicByteBuffer_Create();
 	DynamicByteBuffer_WriteI32(writer, CURRENT_DATA_VERSION);
 	DynamicByteBuffer_WriteI32(writer, PLAYERBINDINGDATA_BINDINGS_LEN);
-	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
 		InputAction_Write(&pbd->_mBindings[i], writer);
 	}
@@ -74,24 +74,24 @@ FixedByteBuffer* PlayerBindingData_CreateBufferFromBindings(PlayerBindingData* p
 	return DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(writer);
 }
 
-void PlayerBindingData_Init(PlayerBindingData* pbd, IStringArray* actionList, int playerNumber)
+void PlayerBindingData_Init(PlayerBindingData* pbd, IStringArray* actionList, int32_t playerNumber)
 {
 	Utils_memset(pbd, 0, sizeof(PlayerBindingData));
 	pbd->_mPlayerNumber = playerNumber;
 }
 
-void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, IStringArray* actions, int indexStart, int length)
+void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, IStringArray* actions, int32_t indexStart, int32_t length)
 {
 	InputAction* defaultActions = InputBindings_GetDefaultActions();
-	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
-		for (int j = 0; j < IStringArray_Length(actions); j += 1)
+		for (int32_t j = 0; j < IStringArray_Length(actions); j += 1)
 		{
 			if (Utils_StringEqualTo(pbd->_mBindings[i].mName, IStringArray_Get(actions, j)))
 			{
 				InputAction* currentAction = &pbd->_mBindings[i];
 				InputAction* defaultAction = &defaultActions[i];
-				for (int k = indexStart; k < indexStart + length; k++)
+				for (int32_t k = indexStart; k < indexStart + length; k++)
 				{
 					InputCheck* defaultCheck = InputChecks_Get(&defaultAction->mChecks, k);
 					InputChecks_Set(&currentAction->mChecks, k, *defaultCheck);
@@ -102,15 +102,15 @@ void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, ISt
 
 	//TODO C99 Logger_LogInformation("Player #" + std_to_string(_mPlayerNumber) + " certain bindings (" + std_to_string(indexStart) + "-" + std_to_string((indexStart + (length - 1))) + ") have been reset to default");
 }
-bool PlayerBindingData_DoBindingsExistFor(PlayerBindingData* pbd, const char* action, int indexStart, int length)
+bool PlayerBindingData_DoBindingsExistFor(PlayerBindingData* pbd, const char* action, int32_t indexStart, int32_t length)
 {
-	int dummyCounter = 0;
-	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
+	int32_t dummyCounter = 0;
+	for (int32_t i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
 		if (Utils_StringEqualTo(pbd->_mBindings[i].mName, action))
 		{
 			InputAction* currentAction = &pbd->_mBindings[i];
-			for (int j = indexStart; j < indexStart + length; j++)
+			for (int32_t j = indexStart; j < indexStart + length; j++)
 			{
 				InputCheck* check = InputChecks_Get(&currentAction->mChecks, j);
 				if (check->mType == INPUTCHECK_TYPE_DUMMY)
@@ -140,7 +140,7 @@ InputAction* PlayerBindingData_GetBindings(PlayerBindingData* pbd)
 }
 void PlayerBindingData_ResetToDefault(PlayerBindingData* pbd)
 {
-	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
 		pbd->_mBindings[i] = _mDefaultBindings[i];
 	}
@@ -204,7 +204,7 @@ static bool IsMirroringBindingsDisabled()
 }
 static void ResetAllPlayerBindingsToDefault()
 {
-	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		PlayerBindingData_ResetToDefault(&_mPlayerBindings[i]);
 	}
@@ -212,7 +212,7 @@ static void ResetAllPlayerBindingsToDefault()
 static void CreateDefaultBindings(InputAction* inputData, IStringArray* strings)
 {
 	Utils_memset(inputData, 0, sizeof(InputAction) * PLAYERBINDINGDATA_BINDINGS_LEN);
-	for (int i = 0; i < IStringArray_Length(strings); i += 1)
+	for (int32_t i = 0; i < IStringArray_Length(strings); i += 1)
 	{
 		InputAction_Init(IStringArray_Get(strings, i), &inputData[i]);
 	}
@@ -220,7 +220,7 @@ static void CreateDefaultBindings(InputAction* inputData, IStringArray* strings)
 }
 static void CopyActions(const InputAction* copyFrom, InputAction* copyTo)
 {
-	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
 		copyTo[i] = copyFrom[i];
 	}
@@ -228,7 +228,7 @@ static void CopyActions(const InputAction* copyFrom, InputAction* copyTo)
 static void UpdateAllBindingsToMatchPlayerOne()
 {
 	InputAction* playerOneBindings = PlayerBindingData_GetBindings(&_mPlayerBindings[0]);
-	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		if (i != 0)
 		{
@@ -246,7 +246,7 @@ void InputBindings_Init()
 
 	IStringArray* actionList = ActionList_GetArray();
 	CreateDefaultBindings(_mDefaultBindings, actionList);
-	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		PlayerBindingData_Init(&_mPlayerBindings[i], actionList, i);
 	}
@@ -264,28 +264,28 @@ void InputBindings_ResetAllPlayerBindingsToDefaultAndSave()
 	ResetAllPlayerBindingsToDefault();
 	InputBindings_SaveAllBindings();
 }
-void InputBindings_SetupKey(InputAction* data, int place, const char* s, const char* check, int key)
+void InputBindings_SetupKey(InputAction* data, int32_t place, const char* s, const char* check, int32_t key)
 {
 	if (Utils_StringEqualTo(s, check))
 	{
 		InputChecks_Set(&data->mChecks, place, InputCheck_CreateCheckKey(key));
 	}
 }
-void InputBindings_SetupMouseButton(InputAction* data, int place, const char* s, const char* check, int mouseButton)
+void InputBindings_SetupMouseButton(InputAction* data, int32_t place, const char* s, const char* check, int32_t mouseButton)
 {
 	if (Utils_StringEqualTo(s, check))
 	{
 		InputChecks_Set(&data->mChecks, place, InputCheck_CreateCheckMouseButton(mouseButton));
 	}
 }
-void InputBindings_SetupButton(InputAction* data, int place, const char* s, const char* check, int button)
+void InputBindings_SetupButton(InputAction* data, int32_t place, const char* s, const char* check, int32_t button)
 {
 	if (Utils_StringEqualTo(s, check))
 	{
 		InputChecks_Set(&data->mChecks, place, InputCheck_CreateCheckButton(button));
 	}
 }
-void InputBindings_SetupAxis(InputAction* data, int place, const char* s, const char* check, int axis, int direction)
+void InputBindings_SetupAxis(InputAction* data, int32_t place, const char* s, const char* check, int32_t axis, int32_t direction)
 {
 	if (Utils_StringEqualTo(s, check))
 	{
@@ -294,7 +294,7 @@ void InputBindings_SetupAxis(InputAction* data, int place, const char* s, const 
 }
 bool InputBindings_HaveAllPlayersLoadedBindings()
 {
-	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		if (!PlayerBindingData_HasLoaded(&_mPlayerBindings[i]))
 		{
@@ -309,7 +309,7 @@ void InputBindings_LoadAllPlayerBindings()
 
 	if (Cvars_GetAsBool(CVARS_ENGINE_LOADING_SAVE_DATA_DISABLED) || Globals_IsLoadingUserDataDisabled())
 	{
-		for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+		for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 		{
 			PlayerBindingData_SetAsLoaded(&_mPlayerBindings[i]);
 		}
@@ -321,13 +321,13 @@ void InputBindings_LoadAllPlayerBindings()
 		return;
 	}
 
-	int len = PLAYERBINDINGS_LEN;
+	int32_t len = PLAYERBINDINGS_LEN;
 	if (bindingsAreMirrored)
 	{
 		len = 1;
 	}
 	bool isDone = true;
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		PlayerBindingData* player = &_mPlayerBindings[i];
 		if (!PlayerBindingData_HasLoaded(player))
@@ -342,7 +342,7 @@ void InputBindings_LoadAllPlayerBindings()
 
 	if (isDone)
 	{
-		for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+		for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 		{
 			PlayerBindingData_SetAsLoaded(&_mPlayerBindings[i]);
 		}
@@ -362,12 +362,12 @@ void InputBindings_SaveAllBindings()
 	}
 
 	bool bindingsAreMirrored = !IsMirroringBindingsDisabled();
-	int len = PLAYERBINDINGS_LEN;
+	int32_t len = PLAYERBINDINGS_LEN;
 	if (bindingsAreMirrored)
 	{
 		len = 1;
 	}
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		PlayerBindingData_Save(&_mPlayerBindings[i]);
 	}
@@ -378,38 +378,38 @@ void InputBindings_SaveAllBindings()
 	}
 	InputBindings_SyncAllBindingsToAllPlayers();
 }
-void InputBindings_ResetAllPlayerCertainBindingsToDefaultAndSave(IStringArray* actions, int indexStart, int length)
+void InputBindings_ResetAllPlayerCertainBindingsToDefaultAndSave(IStringArray* actions, int32_t indexStart, int32_t length)
 {
-	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		PlayerBindingData_ResetCertainBindingsToDefault(&_mPlayerBindings[i], actions, indexStart, length);
 	}
 
 	InputBindings_SaveAllBindings();
 }
-bool InputBindings_DoBindingsExistFor(int player, const char* action, int indexStart, int length)
+bool InputBindings_DoBindingsExistFor(int32_t player, const char* action, int32_t indexStart, int32_t length)
 {
 	return PlayerBindingData_DoBindingsExistFor(&_mPlayerBindings[player], action, indexStart, length);
 }
 void InputBindings_SyncAllBindingsToAllPlayers()
 {
-	for (int i = 0; i < PLAYERBINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
 		CopyActions(PlayerBindingData_GetBindings(&_mPlayerBindings[i]), 
 			InputPlayer_GetActionsForBindingsSync(Input_GetPlayer(i)));
 	}
 }
-InputAction* InputBindings_GetBindings(int player)
+InputAction* InputBindings_GetBindings(int32_t player)
 {
 	return PlayerBindingData_GetBindings(&_mPlayerBindings[player]);
 }
-InputAction* InputBindings_GetActionFromBindings(int player, const char* name)
+InputAction* InputBindings_GetActionFromBindings(int32_t player, const char* name)
 {
 	return  InputBindings_GetActionFromArray(PlayerBindingData_GetBindings(&_mPlayerBindings[player]), name);
 }
 InputAction* InputBindings_GetActionFromArray(InputAction* actions, const char* name)
 {
-	for (int i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
+	for (int32_t i = 0; i < PLAYERBINDINGDATA_BINDINGS_LEN; i += 1)
 	{
 		InputAction* action = &actions[i];
 		if (Utils_StringEqualTo(action->mName, name))

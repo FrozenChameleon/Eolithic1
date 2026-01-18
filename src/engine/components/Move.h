@@ -2,6 +2,6 @@
 
 typedef struct Move
 {
-	int mMove;
+	int32_t mMove;
 } Move;
 

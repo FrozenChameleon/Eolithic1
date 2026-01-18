@@ -10,7 +10,7 @@
 
 const Timer Timer_Zero;
 
-Timer Timer_Create(int limit)
+Timer Timer_Create(int32_t limit)
 {
 	Timer timer;
 	timer.mCurrent = 0;
@@ -32,7 +32,7 @@ float Timer_GetInversePercentage(const Timer* timer)
 {
 	return 1.0f - Timer_GetPercentage(timer);
 }
-int Timer_GetRemainingTime(const Timer* timer)
+int32_t Timer_GetRemainingTime(const Timer* timer)
 {
 	return timer->mLimit - timer->mCurrent;
 }
@@ -63,7 +63,7 @@ void Timer_Reset(Timer* timer)
 bool Timer_IsAtPercentage(const Timer* timer, float percent)
 {
 	return false;
-	//int goal = OeMath::Round(timer->mLimit * percent);
+	//int32_t goal = OeMath::Round(timer->mLimit * percent);
 	//if (timer->mCurrent == goal)
 	//{
 	//	return true;
@@ -88,7 +88,7 @@ void Timer_SetToLimit(Timer* timer)
 }
 void Timer_SetAsPercentOfLimit(Timer* timer, float percent)
 {
-	timer->mCurrent = (int)(timer->mLimit * percent);
+	timer->mCurrent = (int32_t)(timer->mLimit * percent);
 }
 void Timer_InverseCurrent(Timer* timer)
 {

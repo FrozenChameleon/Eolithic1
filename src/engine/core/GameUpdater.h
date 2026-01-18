@@ -5,7 +5,7 @@
 
 const char* GameUpdater_GetFpsString();
 float GameUpdater_GetAutoSpeedUpdateSpeed();
-int GameUpdater_GetFPS();
+int32_t GameUpdater_GetFPS();
 bool GameUpdater_IsInterpolated();
 void GameUpdater_Update(double delta);
 void GameUpdater_DebugReloadMap();

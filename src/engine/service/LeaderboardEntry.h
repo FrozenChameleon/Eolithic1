@@ -4,9 +4,9 @@
 
 typedef struct LeaderboardEntry
 {
-	int mGlobalRank;
-	int mDisplayRank;
-	int mScore;
+	int32_t mGlobalRank;
+	int32_t mDisplayRank;
+	int32_t mScore;
 	bool mIsCurrentUser;
 	char mName[EE_FILENAME_MAX];
 } LeaderboardEntry;

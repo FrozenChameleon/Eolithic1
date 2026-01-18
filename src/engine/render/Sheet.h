@@ -55,9 +55,9 @@ RenderCommandSheet* Sheet_DrawInterpolated4(Sheet* sheet, SpriteBatch* spriteBat
 RenderCommandSheet* Sheet_DrawInterpolated5(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenterX, bool isCenterY, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin);
 
-RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenter, ShaderProgram* program,
 	Rectangle destinationRect, float rotation, bool flipX, bool flipY, Vector2 origin);
-RenderCommandSheet* Sheet_DrawSourceRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawSourceRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenter, ShaderProgram* program,
 	Vector2 position, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY);
-RenderCommandSheet* Sheet_DrawSourceRectInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, ShaderProgram* program,
+RenderCommandSheet* Sheet_DrawSourceRectInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenter, ShaderProgram* program,
 	Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY);

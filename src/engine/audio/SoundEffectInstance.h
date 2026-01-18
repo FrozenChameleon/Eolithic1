@@ -21,20 +21,23 @@
 #include "AudioChannels.h"
 #include "SoundState.h"
 
+#ifdef AUDIO_DUMMY
+typedef struct SoundEffectInstance SoundEffectInstance;
+#else
 typedef struct SoundEffectInstance
 {
 	uint64_t _mFramePlayed;
-	int _mLoopNumber;
+	int32_t _mLoopNumber;
 	bool _mHasSetup;
-	int _mCurrentSample;
+	int32_t _mCurrentSample;
 	bool _mIsMusic;
 	bool _mIsLooped;
 	uint8_t* _mBuffer;
-	int _mBufferLength;
+	int32_t _mBufferLength;
 	WaveFileData* _mData;
 	char _mName[EE_FILENAME_MAX];
 	bool _mIsDisposed;
-	int _mSampleRate;
+	int32_t _mSampleRate;
 	AudioChannels _mChannels;
 	SoundState _mInternalState;
 	float _mInternalVolume;
@@ -44,6 +47,7 @@ typedef struct SoundEffectInstance
 	void* _mHandleStorage;
 	void* _mFormatStorage;
 } SoundEffectInstance;
+#endif
 
 bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveFileData* waveFileData);
 bool SoundEffectInstance_IsSetup(const SoundEffectInstance* sei);
@@ -69,4 +73,3 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 int32_t SoundEffectInstance_GetSampleSize(const SoundEffectInstance* sei);
 int32_t SoundEffectInstance_GetTotalSamples(const SoundEffectInstance* sei);
 int64_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei);
-int32_t SoundEffectInstance_InitAudio(void);

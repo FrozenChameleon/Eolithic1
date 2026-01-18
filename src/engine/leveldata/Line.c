@@ -37,17 +37,17 @@ void Line_DrawLineCamera(Line* line, SpriteBatch* spriteBatch, const char* font,
 	Point beginPoint = Line_GetRealBegin(line);
 	Point endPoint = Line_GetRealEnd(line);
 
-	int halfCameraWidth = cameraWidth / 2;
-	int halfCameraHeight = cameraHeight / 2;
+	int32_t halfCameraWidth = cameraWidth / 2;
+	int32_t halfCameraHeight = cameraHeight / 2;
 
 	Point upperLeft = Point_Create(beginPoint.X - halfCameraWidth, beginPoint.Y - halfCameraHeight);
 	Point upperRight = Point_Create(endPoint.X + halfCameraWidth, beginPoint.Y - halfCameraHeight);
 	Point lowerRight = Point_Create(endPoint.X + halfCameraWidth, endPoint.Y + halfCameraHeight);
 	Point lowerLeft = Point_Create(beginPoint.X - halfCameraWidth, endPoint.Y + halfCameraHeight);
 
-	int depth = 200;
-	int lineDelay = 4;
-	int lineThickness = 4;
+	int32_t depth = 200;
+	int32_t lineDelay = 4;
+	int32_t lineThickness = 4;
 	DrawTool_DrawLine(spriteBatch, color, depth, lineDelay, 0, lineThickness, upperLeft, upperRight);
 	DrawTool_DrawLine(spriteBatch, color, depth, lineDelay, 0, lineThickness, upperRight, lowerRight);
 	DrawTool_DrawLine(spriteBatch, color, depth, lineDelay, 0, lineThickness, lowerRight, lowerLeft);
@@ -59,16 +59,16 @@ void Line_DrawLine(Line* line, SpriteBatch* spriteBatch, const char* font, Color
 	Point endPoint = Line_GetRealEnd(line);
 	Line_DrawLineText(line, spriteBatch, font, lineNumber, Vectors_ToVector2(beginPoint));
 	DrawTool_DrawRectangle2(spriteBatch, COLOR_COMETSTRIKER_RED, 100, Rectangle_Create(beginPoint.X, beginPoint.Y, HALF_TILE_SIZE, HALF_TILE_SIZE), 0, true);
-	int lineDelay = 16;
-	int lineThickness = 4;
+	int32_t lineDelay = 16;
+	int32_t lineThickness = 4;
 	DrawTool_DrawLine(spriteBatch, color, 99, lineDelay, offset, lineThickness, beginPoint, endPoint);
 	DrawTool_DrawRectangle2(spriteBatch, COLOR_COMETSTRIKER_BLUE, 100, Rectangle_Create(endPoint.X, endPoint.Y, HALF_TILE_SIZE, HALF_TILE_SIZE), 0, true);
 }
 void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, int32_t lineNumber, Vector2 pos)
 {
-	int align = ALIGN_CENTER;
+	int32_t align = ALIGN_CENTER;
 	Vector2 textPos = Vector2_Create(pos.X, pos.Y - HALF_TILE_SIZE);
-	int depth = 100;
+	int32_t depth = 100;
 	Color textColor = COLOR_RED;
 	SpriteBatch_DrawString2(spriteBatch, font, Utils_IntToStringGlobalBuffer(lineNumber), textColor, depth, textPos, align, align);
 	if (line->mEnterDownOnly)
@@ -203,7 +203,7 @@ bool Line_IsVertical(Line* line)
 {
 	return Math_GetDistanceInt(line->mBegin.X, line->mEnd.X) < Math_GetDistanceInt(line->mBegin.Y, line->mEnd.Y);
 }
-int Line_GetReal(int point)
+int32_t Line_GetReal(int32_t point)
 {
 	return (point * TILE_SIZE) + HALF_TILE_SIZE;
 }
@@ -242,7 +242,7 @@ Point Line_GetRealEnd(Line* line)
 	writer->WriteInt32(line->mOverrideSpeedFromPlayer);
 	writer->WriteInt32(line->mOverrideSpeedFromMinecart);
 }*/
-void Line_Read(int version, Line* line, BufferReader* reader)
+void Line_Read(int32_t version, Line* line, BufferReader* reader)
 {
 	Points_Read(&line->mBegin, reader);
 	Points_Read(&line->mEnd, reader);

@@ -5,7 +5,7 @@
 
 typedef struct MirrorEffect
 {
-	int mDepth;
+	int32_t mDepth;
 	bool mIsOn;
 	Timer mTimer;
 	Color mColor;

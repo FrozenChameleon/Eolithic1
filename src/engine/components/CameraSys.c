@@ -26,8 +26,8 @@ void CameraSys_InitCamera(Camera* data)
 	data->mHingeSpeedLimit.X = 3.0f;
 	data->mHingeSpeedLimit.Y = 3.0f;
 
-	int width = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
-	int height = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
+	int32_t width = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
+	int32_t height = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
 	Camera_Resize(data, width, height);
 }
 void CameraSys_UpdateRoutine(Entity owner, Camera* data)
@@ -50,8 +50,8 @@ void CameraSys_UpdateCamera(Camera* data)
 
 	if (data->mIsHingedCamera)
 	{
-		int halfWidth = Camera_GetWidth(data) / 2;
-		int halfHeight = Camera_GetHeight(data) / 2;
+		int32_t halfWidth = Camera_GetWidth(data) / 2;
+		int32_t halfHeight = Camera_GetHeight(data) / 2;
 		if (data->mHingeGateLeft != -1)
 		{
 			if ((data->mTargetPosition.X - halfWidth) < data->mHingeGateLeft)

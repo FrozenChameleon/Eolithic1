@@ -26,7 +26,7 @@ void Random32_SetSeed(Random32* data, uint32_t seed)
 		data->mState = seed;
 	}
 
-	for (int i = 0; i < INITIAL_SHIFTS; i += 1)
+	for (int32_t i = 0; i < INITIAL_SHIFTS; i += 1)
 	{
 		Random32_Shift(data);
 	}

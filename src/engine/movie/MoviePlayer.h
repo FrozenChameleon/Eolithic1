@@ -3,7 +3,7 @@
 #include "../math/Vector2.h"
 #include "MovieImage.h"
 
-void MoviePlayer_Init(bool useSwappedImages, int scale, const char* movieName);
+void MoviePlayer_Init(bool useSwappedImages, int32_t scale, const char* movieName);
 
 void MoviePlayer_DisableSpeedUp();
 void MoviePlayer_SetComplete();

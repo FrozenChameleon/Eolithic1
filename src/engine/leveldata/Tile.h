@@ -19,7 +19,7 @@ enum
 
 typedef struct Tile
 {
-	int mCollisionType;
+	int32_t mCollisionType;
 	DrawTile mDrawTiles[DRAW_LAYER_LENGTH];
 	ThingInstance* arr_instances;
 	PropInstance* arr_props;

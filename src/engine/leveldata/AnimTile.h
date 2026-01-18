@@ -15,26 +15,26 @@
 typedef struct AnimTile
 {
 	bool _mIsSetup;
-	int _mWrapSpeedCounter;
+	int32_t _mWrapSpeedCounter;
 	Point _mWrapOffset;
 	Animation _mAnimation;
 	Sheet* _mWrapSheet;
 
 	bool mIsAdditive;
-	int mScaler;
+	int32_t mScaler;
 	bool mIsFlipX;
 	bool mIsFlipY;
-	int mFlipSpeed;
+	int32_t mFlipSpeed;
 	float mRotation;
 	char mTextureName[EE_FILENAME_MAX];
 	char mTilesetFilter[EE_FILENAME_MAX];
 	bool mIsWrap;
 	char mWrapTextureName[EE_FILENAME_MAX];
 	bool mIsWrapX;
-	int mWrapSpeedX;
+	int32_t mWrapSpeedX;
 	bool mIsWrapY;
-	int mWrapSpeedY;
-	int mWrapSpeedDelay;
+	int32_t mWrapSpeedY;
+	int32_t mWrapSpeedDelay;
 } AnimTile;
 
 void AnimTile_Read(AnimTile* at, BufferReader* br);

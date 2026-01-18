@@ -4,9 +4,9 @@
 
 typedef struct ShakeCamera
 {
-	int mMinX;
-	int mMaxX;
-	int mMinY;
-	int mMaxY;
+	int32_t mMinX;
+	int32_t mMaxX;
+	int32_t mMinY;
+	int32_t mMaxY;
 	Timer mTimer;
 } ShakeCamera;

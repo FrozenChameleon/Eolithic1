@@ -9,4 +9,4 @@ typedef struct PlaySound
 	char mSound[EE_FILENAME_MAX];
 } PlaySound;
 
-void PlaySound_PlayTheSoundIfAtPoint(const PlaySound* ps, int value);
+void PlaySound_PlayTheSoundIfAtPoint(const PlaySound* ps, int32_t value);

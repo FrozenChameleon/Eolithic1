@@ -44,8 +44,8 @@ typedef struct TtFontState
 typedef struct ImagePixelData
 {
 	uint8_t* mData;
-	int mWidth;
-	int mHeight;
+	int32_t mWidth;
+	int32_t mHeight;
 } ImagePixelData;
 
 typedef struct PositionFloat3
@@ -126,18 +126,18 @@ void Renderer_INTERNAL_SetCurrentBlendState(BlendState value);
 BlendState Renderer_INTERNAL_GetCurrentBlendState();
 void Renderer_INTERNAL_SetCurrentCameraPosition(Vector2 value);
 Vector2 Renderer_INTERNAL_GetCurrentCameraPosition();
-void Renderer_INTERNAL_SetCurrentDepth(int value);
-int Renderer_INTERNAL_GetCurrentDepth();
+void Renderer_INTERNAL_SetCurrentDepth(int32_t value);
+int32_t Renderer_INTERNAL_GetCurrentDepth();
 Rectangle Renderer_GetWantedBackBufferBounds();
-int Renderer_Init(void* deviceWindowHandle);
-int Renderer_InitSpriteBatch();
+int32_t Renderer_Init(void* deviceWindowHandle);
+int32_t Renderer_InitSpriteBatch();
 Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob);
 Texture* Renderer_GetNewTextureData(const char* path, int32_t width, int32_t height, bool clearTexture);
 void Renderer_UpdateTextureData(Texture* texture, int32_t x, int32_t y, int32_t w, int32_t h, int32_t level, void* data, int32_t dataLength);
 SpriteEffects Renderer_GetEffects(bool flipX, bool flipY);
-int Renderer_ImageRead(void* context, char* data, int32_t size);
+int32_t Renderer_ImageRead(void* context, char* data, int32_t size);
 void Renderer_ImageSkip(void* context, int32_t n);
-int Renderer_ImageEndOfFile(void* context);
+int32_t Renderer_ImageEndOfFile(void* context);
 ImagePixelData Renderer_CreateImagePixelData(FixedByteBuffer* blob);
 void* Renderer_CreateSurface(FixedByteBuffer* blob);
 void Renderer_BeforeCommit();
@@ -191,5 +191,5 @@ Vector2 Renderer_GetScreenScale();
 Rectangle Renderer_GetScreenBounds();
 void Renderer_SetupCommit(double delta);
 void Renderer_SetupRenderState();
-int Renderer_GetFPS();
-int Renderer_GetRenderTargetScale(); //TODO 2023 REMOVE THESE!
+int32_t Renderer_GetFPS();
+int32_t Renderer_GetRenderTargetScale(); //TODO 2023 REMOVE THESE!

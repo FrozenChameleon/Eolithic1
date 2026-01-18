@@ -18,7 +18,7 @@ typedef struct SpriteBatch SpriteBatch;
 typedef struct PropInstance
 {
 	Prop* INTERNAL_mCachedPropData;
-	int mDepth;
+	int32_t mDepth;
 	float mScale;
 	float mRotation;
 	bool mFlipX;

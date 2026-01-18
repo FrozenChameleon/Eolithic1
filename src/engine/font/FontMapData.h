@@ -8,17 +8,17 @@ typedef struct FontMapData
 {
 	char mNote[EE_FILENAME_MAX];
 	char mFontName[EE_FILENAME_MAX];
-	int mFontSize;
+	int32_t mFontSize;
 	char mReplace[EE_FILENAME_MAX];
 	Vector2 mOffset;
 	bool mIsBitmap;
-	int mLineSpacing;
-	int mEffect;
-	int mEffectAmount;
-	int mCharacterSpacing;
-	int mScaleFactor;
+	int32_t mLineSpacing;
+	int32_t mEffect;
+	int32_t mEffectAmount;
+	int32_t mCharacterSpacing;
+	int32_t mScaleFactor;
 	IStringArray* mLanguages;
-	int mOverrideBoundsHeight;
+	int32_t mOverrideBoundsHeight;
 } FontMapData;
 
 void FontMapData_Init(FontMapData* fmd);

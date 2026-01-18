@@ -10,7 +10,7 @@ typedef struct MovieOperationFadeText
 {
 	MOVIE_OPERATION_HEADER
 	Vector2 mPosition;
-	int mRamp;
+	int32_t mRamp;
 	bool mIsRampingDown;
 	bool mIsRamping;
 	char mStringToShow[EE_FILENAME_MAX];
@@ -20,7 +20,7 @@ typedef struct MovieOperationFadeText
 	bool mIsCentered;
 } MovieOperationFadeText;
 
-void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, const char* font, Vector2 position, int rampSpeed, int holdTime, bool isTextCentered);
+void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, const char* font, Vector2 position, int32_t rampSpeed, int32_t holdTime, bool isTextCentered);
 void MovieOperationFadeText_Update(MovieOperationFadeText* fade);
 void MovieOperationFadeText_DrawHud(MovieOperationFadeText* fade, SpriteBatch* spriteBatch);
 void MovieOperationFadeText_SpeedUp(MovieOperationFadeText* fade);

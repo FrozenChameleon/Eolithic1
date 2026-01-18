@@ -6,11 +6,13 @@
 
 #pragma once
 
+#include "stdint.h"
+
 #define ACTIONLIST_LENGTH 30
 
 typedef struct IStringArray IStringArray;
 
-const char* ActionList_GetAction(int index);
+const char* ActionList_GetAction(int32_t index);
 IStringArray* ActionList_GetArray();
 
 extern const char* ACTIONLIST_GAME_A;

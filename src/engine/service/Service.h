@@ -8,9 +8,9 @@
 #include "../input/InputBindings.h"
 
 //supposed to be protected
-const int* Service_GetAchievementMap();
+const int32_t* Service_GetAchievementMap();
 BufferRequest Service_AskToRetrieveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path);
-int Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
+int32_t Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
 	FixedByteBuffer* buffer);
 
 //supposed to be public
@@ -32,7 +32,7 @@ typedef enum ServicePlatform
 void Service_Init();
 bool Service_IsPlatformSteam();
 void Service_ResetAchievements();
-int Service_GetPlatformType();
+int32_t Service_GetPlatformType();
 void Service_SetAchievementMap(int32_t* achievementMap, int32_t achievementMapLength);
 BufferRequest Service_AskToRetrieveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path);
 void Service_SaveBuffer(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path,
@@ -45,12 +45,12 @@ bool Service_IsOverlayEnabled();
 void Service_Create();
 void Service_Update(double delta);
 void Service_UpdateHelper(double delta);
-void Service_Resize(int width, int height);
+void Service_Resize(int32_t width, int32_t height);
 void Service_Pause();
 void Service_Resume();
 void Service_Dispose();
 void Service_HandleException(const char* e);
-void Service_HandleSetAchievement(int index, const char* achievement);
+void Service_HandleSetAchievement(int32_t index, const char* achievement);
 void Service_HandleApplicationExit();
 bool Service_PlatformDisablesKeyboardUse();
 bool Service_IsSingleUserApplication();
@@ -66,7 +66,7 @@ bool Service_PlatformHidesMenuBindings();
 bool Service_PlatformHidesFocusLossToggles();
 bool Service_PlatformHidesResetAllData();
 bool Service_PlatformForcesSpecificGlyph();
-int Service_PlatformGetForcedSpecificGlyph();
+int32_t Service_PlatformGetForcedSpecificGlyph();
 bool Service_PlatformForcesNintendoGlyphs();
 bool Service_PlatformDisablesWritingRecordings();
 bool Service_PlatformUsesLocalStorageForSaveData();
@@ -77,14 +77,14 @@ bool Service_PlatformForcesFullscreen();
 bool Service_PlatformDisablesSimultaneousInputForController();
 bool Service_PlatformShowsControllerDisconnectScreen();
 bool Service_PlatformHidesWindowSizeOption();
-int Service_PlatformAchievementCrawlingTime();
+int32_t Service_PlatformAchievementCrawlingTime();
 bool Service_PlatformDoesNotDoNormalPausing();
 bool Service_PlatformGoesToPauseMenuWhenGameIsNotActive();
 bool Service_PlatformMutesInputWhenGameIsNotActive();
 bool Service_PlatformStopsPollingInputWhenGameIsNotActive();
 const char* Service_GetPlatformLanguage();
 bool Service_ShowSignInFailure();
-int Service_PlatformCrashText();
+int32_t Service_PlatformCrashText();
 void Service_LogMessage(const char* message);
 bool Service_IsOnlineRightNow();
 bool Service_AreNetworkFeaturesAreAvailableRightNow(bool isSilent);

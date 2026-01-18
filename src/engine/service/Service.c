@@ -42,10 +42,10 @@ bool Service_IsLeaderboardRateLimited()
 {
 	return _mLeaderboardRequestDelayCounter < Service_GetPlatformLeaderboardDelayTime();
 }
-int Service_GetPageThatYouAreOn()
+int32_t Service_GetPageThatYouAreOn()
 {
-	int adjustedLowerRank = Service_GetCurrentLowestRank() - 1;
-	int page = adjustedLowerRank / Service_GetLeaderboardAmountOfRowsToRetrieve();
+	int32_t adjustedLowerRank = Service_GetCurrentLowestRank() - 1;
+	int32_t page = adjustedLowerRank / Service_GetLeaderboardAmountOfRowsToRetrieve();
 	return page;
 }
 
@@ -59,15 +59,15 @@ void Service_CreateLeaderboardEntries()
 {
 	//TODO ?_mLeaderboardEntries = std_vector<OeLeaderboardEntry>();
 }
-int Service_GetLeaderboardAmountOfRowsToRetrieve()
+int32_t Service_GetLeaderboardAmountOfRowsToRetrieve()
 {
 	return _mLeaderboardAmountOfRowsToRetrieve;
 }
-void Service_SetLeaderboardSendStatus(int status)
+void Service_SetLeaderboardSendStatus(int32_t status)
 {
 	Service_SetLeaderboardSendStatus2(status, DEFAULT_SEND_STATUS_TIME);
 }
-void Service_SetLeaderboardSendStatus2(int status, int frames)
+void Service_SetLeaderboardSendStatus2(int32_t status, int32_t frames)
 {
 	if (_mSilenceLeaderboardStatusNotifications)
 	{
@@ -77,7 +77,7 @@ void Service_SetLeaderboardSendStatus2(int status, int frames)
 	_mLeaderboardSendStatus = status;
 	_mLeaderboardSendStatusFrames = frames;
 }
-const int* Service_GetAchievementMap()
+const int32_t* Service_GetAchievementMap()
 {
 	return _mAchievementMap;
 }
@@ -85,7 +85,7 @@ const char* Service_GetCurrentLeaderboardName()
 {
 	return _mLeaderboardRequest.mName;
 }
-int Service_GetCurrentLeaderboardScope()
+int32_t Service_GetCurrentLeaderboardScope()
 {
 	return _mLeaderboardRequest.mScopeType;
 }
@@ -97,14 +97,14 @@ bool Service_IsCurrentLeaderboardMilliseconds()
 {
 	return _mLeaderboardRequest.mIsMilliseconds;
 }
-int Service_GetHighestPossiblePage()
+int32_t Service_GetHighestPossiblePage()
 {
 	return Service_GetMaximumRank() / Service_GetLeaderboardAmountOfRowsToRetrieve();
 }
 void Service_ReadyLeaderboard(const LeaderboardEntry* entries, size_t entries_len)
 {
 	arrsetlen(arr_leaderboard_entries, 0);
-	for (int i = 0; i < entries_len; i += 1)
+	for (int32_t i = 0; i < entries_len; i += 1)
 	{
 		arrput(arr_leaderboard_entries, entries[i]);
 	}
@@ -155,7 +155,7 @@ BufferRequest Service_AskToRetrieveBufferForPC(bool isPurelyGameSaveData, const 
 
 	return request;
 }
-int Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path, FixedByteBuffer* buffer)
+int32_t Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* containerDisplayName, const char* containerName, const char* path, FixedByteBuffer* buffer)
 {
 	const char* prefPath = File_GetPrefPath();
 	SDL_IOStream* rwop = NULL;
@@ -199,7 +199,7 @@ void Service_SetSilenceLeaderboardSendStatusNotification(bool value)
 {
 	_mSilenceLeaderboardStatusNotifications = value;
 }
-void Service_SetLeaderboardAmountOfRowsToRetrieve(int range)
+void Service_SetLeaderboardAmountOfRowsToRetrieve(int32_t range)
 {
 	_mLeaderboardAmountOfRowsToRetrieve = range;
 }
@@ -245,7 +245,7 @@ bool Service_AreLeaderboardDisabled()
 {
 	return _mAreLeaderboardDisabled;
 }
-void Service_UpdateScoreKeepBest(const char* leaderboard, int score, bool isAscending, bool isMilliseconds)
+void Service_UpdateScoreKeepBest(const char* leaderboard, int32_t score, bool isAscending, bool isMilliseconds)
 {
 	if (_mAreLeaderboardDisabled)
 	{
@@ -254,7 +254,7 @@ void Service_UpdateScoreKeepBest(const char* leaderboard, int score, bool isAsce
 
 	Service_UpdateScoreKeepBestHelper(leaderboard, score, isAscending, isMilliseconds);
 }
-void Service_RetrieveLeaderboardEntries(const char* leaderboard, int scopeType, bool isAscending, bool isMilliseconds)
+void Service_RetrieveLeaderboardEntries(const char* leaderboard, int32_t scopeType, bool isAscending, bool isMilliseconds)
 {
 	if (_mAreLeaderboardDisabled)
 	{
@@ -291,7 +291,7 @@ void Service_RetrieveLeaderboardEntries(const char* leaderboard, int scopeType, 
 		_mLeaderboardRequestDelayCounter = 0;
 	}
 }
-int Service_CheckLeaderboardSendStatus(bool update)
+int32_t Service_CheckLeaderboardSendStatus(bool update)
 {
 	if (_mLeaderboardSendStatusFrames > 0)
 	{
@@ -306,7 +306,7 @@ int Service_CheckLeaderboardSendStatus(bool update)
 	}
 	return _mLeaderboardSendStatus;
 }
-void Service_SimulateSendingLeaderboardStatus(int frames, int status)
+void Service_SimulateSendingLeaderboardStatus(int32_t frames, int32_t status)
 {
 	_mLeaderboardSendStatusFrames = frames;
 	_mLeaderboardSendStatus = status;
@@ -315,7 +315,7 @@ LeaderboardEntry* Service_GetLeaderboardEntries()
 {
 	return arr_leaderboard_entries;
 }
-LeaderboardEntry Service_GetLeaderboardEntry(int i)
+LeaderboardEntry Service_GetLeaderboardEntry(int32_t i)
 {
 	return arr_leaderboard_entries[i];
 }
@@ -343,17 +343,17 @@ int64_t Service_GetLeaderboardEntryCount()
 {
 	return arrlen(arr_leaderboard_entries);
 }
-int Service_GetCurrentHighestRank()
+int32_t Service_GetCurrentHighestRank()
 {
 	if (!_mIsTheLeaderboardReady)
 	{
 		return 0;
 	}
 
-	int highest = INT_MIN;
-	for (int i = 0; i < arrlen(arr_leaderboard_entries); i += 1)
+	int32_t highest = INT_MIN;
+	for (int32_t i = 0; i < arrlen(arr_leaderboard_entries); i += 1)
 	{
-		int rank = arr_leaderboard_entries[i].mGlobalRank;
+		int32_t rank = arr_leaderboard_entries[i].mGlobalRank;
 		if (rank > highest)
 		{
 			highest = rank;
@@ -361,17 +361,17 @@ int Service_GetCurrentHighestRank()
 	}
 	return highest;
 }
-int Service_GetCurrentLowestRank()
+int32_t Service_GetCurrentLowestRank()
 {
 	if (!_mIsTheLeaderboardReady)
 	{
 		return 0;
 	}
 
-	int lowest = INT_MAX;
-	for (int i = 0; i < arrlen(arr_leaderboard_entries); i += 1)
+	int32_t lowest = INT_MAX;
+	for (int32_t i = 0; i < arrlen(arr_leaderboard_entries); i += 1)
 	{
-		int rank = arr_leaderboard_entries[i].mGlobalRank;
+		int32_t rank = arr_leaderboard_entries[i].mGlobalRank;
 		if (rank < lowest)
 		{
 			lowest = rank;
@@ -438,9 +438,9 @@ void Service_LeaderboardGoRight()
 		return;
 	}
 
-	int leaderboardPage = Service_GetPageThatYouAreOn();
+	int32_t leaderboardPage = Service_GetPageThatYouAreOn();
 	leaderboardPage++;
-	int highestPossiblePage = Service_GetHighestPossiblePage();
+	int32_t highestPossiblePage = Service_GetHighestPossiblePage();
 	if (leaderboardPage > highestPossiblePage)
 	{
 		leaderboardPage = highestPossiblePage;
@@ -457,7 +457,7 @@ void Service_LeaderboardGoLeft()
 		return;
 	}
 
-	int leaderboardPage = Service_GetPageThatYouAreOn();
+	int32_t leaderboardPage = Service_GetPageThatYouAreOn();
 	leaderboardPage -= 1;
 	if (leaderboardPage < 0)
 	{

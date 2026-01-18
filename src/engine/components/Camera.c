@@ -40,8 +40,8 @@ Vector2 Camera_GetInterpCameraAsVector2(const Camera* camera, double delta)
 #if EDITOR
 	if (Cvars_GetAsBool(CVARS_EDITOR_STRICT_CAMERA))
 	{
-		x = (float)((int)(x));
-		y = (float)((int)(y));
+		x = (float)((int32_t)(x));
+		y = (float)((int32_t)(y));
 	}
 #endif
 
@@ -150,11 +150,11 @@ bool Camera_MoveCameraSomewhere(Camera* camera, bool immediate, float targetX, f
 		return true;
 	}
 }
-int Camera_GetWidthMul(const Camera* camera, float mul)
+int32_t Camera_GetWidthMul(const Camera* camera, float mul)
 {
-	return (int)Camera_GetWidthFloatMul(camera, mul);
+	return (int32_t)Camera_GetWidthFloatMul(camera, mul);
 }
-int Camera_GetWidth(const Camera* camera)
+int32_t Camera_GetWidth(const Camera* camera)
 {
 	return Camera_GetWidthMul(camera, 1);
 }
@@ -166,11 +166,11 @@ float Camera_GetWidthFloat(const Camera* camera)
 {
 	return Camera_GetWidthFloatMul(camera, 1);
 }
-int Camera_GetHeightMul(const Camera* camera, float mul)
+int32_t Camera_GetHeightMul(const Camera* camera, float mul)
 {
-	return (int)Camera_GetHeightFloatMul(camera, mul);
+	return (int32_t)Camera_GetHeightFloatMul(camera, mul);
 }
-int Camera_GetHeight(const Camera* camera)
+int32_t Camera_GetHeight(const Camera* camera)
 {
 	return Camera_GetHeightMul(camera, 1);
 }
@@ -182,11 +182,11 @@ float Camera_GetHeightFloat(const Camera* camera)
 {
 	return Camera_GetHeightFloatMul(camera, 1);
 }
-int Camera_GetLeftMul(const Camera* camera, float mul)
+int32_t Camera_GetLeftMul(const Camera* camera, float mul)
 {
-	return (int)Camera_GetLeftFloatMul(camera, mul);
+	return (int32_t)Camera_GetLeftFloatMul(camera, mul);
 }
-int Camera_GetLeft(const Camera* camera)
+int32_t Camera_GetLeft(const Camera* camera)
 {
 	return Camera_GetLeftMul(camera, 1);
 }
@@ -207,11 +207,11 @@ Vector2 Camera_GetUpperLeftMul(const Camera* camera, float mul)
 	Vector2 tempVec = { Camera_GetLeftFloatMul(camera, mul), Camera_GetTopFloatMul(camera, 1) };
 	return tempVec;
 }
-int Camera_GetTopMul(const Camera* camera, float mul)
+int32_t Camera_GetTopMul(const Camera* camera, float mul)
 {
-	return (int)Camera_GetTopFloatMul(camera, mul);
+	return (int32_t)Camera_GetTopFloatMul(camera, mul);
 }
-int Camera_GetTop(const Camera* camera)
+int32_t Camera_GetTop(const Camera* camera)
 {
 	return Camera_GetTopMul(camera, 1);
 }
@@ -223,11 +223,11 @@ float Camera_GetTopFloat(const Camera* camera)
 {
 	return Camera_GetTopFloatMul(camera, 1);
 }
-int Camera_GetRight(const Camera* camera)
+int32_t Camera_GetRight(const Camera* camera)
 {
 	return Camera_GetLeftMul(camera, 1) + Camera_GetWidthMul(camera, 1);
 }
-int Camera_GetRightMul(const Camera* camera, float mul)
+int32_t Camera_GetRightMul(const Camera* camera, float mul)
 {
 	return Camera_GetLeftMul(camera, mul) + Camera_GetWidthMul(camera, mul);
 }
@@ -239,11 +239,11 @@ float Camera_GetRightFloat(const Camera* camera)
 {
 	return Camera_GetRightFloatMul(camera, 1);
 }
-int Camera_GetBottom(const Camera* camera)
+int32_t Camera_GetBottom(const Camera* camera)
 {
 	return Camera_GetTopMul(camera, 1) + Camera_GetHeightMul(camera, 1);
 }
-int Camera_GetBottomMul(const Camera* camera, float mul)
+int32_t Camera_GetBottomMul(const Camera* camera, float mul)
 {
 	return Camera_GetTopMul(camera, mul) + Camera_GetHeightMul(camera, mul);
 }
@@ -259,7 +259,7 @@ float Camera_GetCenterXFloat(const Camera* camera)
 {
 	return Camera_GetLeftFloat(camera) + (Camera_GetWidthFloat(camera) / 2.0f);
 }
-int Camera_GetCenterX(const Camera* camera)
+int32_t Camera_GetCenterX(const Camera* camera)
 {
 	return Camera_GetLeft(camera) + (Camera_GetWidth(camera) / 2);
 }
@@ -267,39 +267,39 @@ float Camera_GetCenterYFloat(const Camera* camera)
 {
 	return Camera_GetTopFloat(camera) + (Camera_GetHeightFloat(camera) / 2.0f);
 }
-int Camera_GetCenterY(const Camera* camera)
+int32_t Camera_GetCenterY(const Camera* camera)
 {
 	return Camera_GetTop(camera) + (Camera_GetHeight(camera) / 2);
 }
-int Camera_GetX1Mul(const Camera* camera, float mul)
+int32_t Camera_GetX1Mul(const Camera* camera, float mul)
 {
 	return Math_MaxInt((Camera_GetLeftMul(camera, mul) / TILE_SIZE) - 1, 0);
 }
-int Camera_GetX1(const Camera* camera)
+int32_t Camera_GetX1(const Camera* camera)
 {
 	return Camera_GetX1Mul(camera, 1);
 }
-int Camera_GetY1Mul(const Camera* camera, float mul)
+int32_t Camera_GetY1Mul(const Camera* camera, float mul)
 {
 	return Math_MaxInt((Camera_GetTopMul(camera, mul) / TILE_SIZE) - 1, 0);
 }
-int Camera_GetY1(const Camera* camera)
+int32_t Camera_GetY1(const Camera* camera)
 {
 	return Camera_GetY1Mul(camera, 1);
 }
-int Camera_GetX2Mul(const Camera* camera, int32_t gridSizeX, float mul)
+int32_t Camera_GetX2Mul(const Camera* camera, int32_t gridSizeX, float mul)
 {
 	return Math_MinInt(Camera_GetX1Mul(camera, mul) + (Camera_GetWidthMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeX);
 }
-int Camera_GetX2(const Camera* camera, int32_t gridSizeX)
+int32_t Camera_GetX2(const Camera* camera, int32_t gridSizeX)
 {
 	return Camera_GetX2Mul(camera, gridSizeX, 1);
 }
-int Camera_GetY2Mul(const Camera* camera, int32_t gridSizeY, float mul)
+int32_t Camera_GetY2Mul(const Camera* camera, int32_t gridSizeY, float mul)
 {
 	return Math_MinInt(Camera_GetY1Mul(camera, mul) + (Camera_GetHeightMul(camera, mul) / TILE_SIZE) + 2 + 1, gridSizeY);
 }
-int Camera_GetY2(const Camera* camera, int32_t gridSizeY)
+int32_t Camera_GetY2(const Camera* camera, int32_t gridSizeY)
 {
 	return Camera_GetY2Mul(camera, gridSizeY, 1);
 }
@@ -322,11 +322,11 @@ Rectangle Camera_GetRectangle(const Camera* camera, float mul)
 	Rectangle returnRect = { Camera_GetLeftMul(camera, mul), Camera_GetTopMul(camera, mul), Camera_GetWidthMul(camera, mul), Camera_GetHeightMul(camera, mul) };
 	return returnRect;
 }
-int Camera_GetScreenWidthInTiles(const Camera* camera)
+int32_t Camera_GetScreenWidthInTiles(const Camera* camera)
 {
 	return Camera_GetWidth(camera) / TILE_SIZE;
 }
-int Camera_GetScreenHeightInTiles(const Camera* camera)
+int32_t Camera_GetScreenHeightInTiles(const Camera* camera)
 {
 	return Camera_GetHeight(camera) / TILE_SIZE;
 }
@@ -453,10 +453,10 @@ void Camera_ShakeCameraMul(Camera* camera, float mul, int32_t minX, int32_t maxX
 
 	camera->mNewShakeMul = mul;
 	Random32* sharedRandom = Globals_GetSharedRandom();
-	int randomX = Random32_NextInt(sharedRandom, (maxX - minX) + 1);
-	int randomY = Random32_NextInt(sharedRandom, (maxY - minY) + 1);
-	int directionX = Random32_NextBoolean(sharedRandom) ? 1 : -1;
-	int directionY = Random32_NextBoolean(sharedRandom) ? 1 : -1;
+	int32_t randomX = Random32_NextInt(sharedRandom, (maxX - minX) + 1);
+	int32_t randomY = Random32_NextInt(sharedRandom, (maxY - minY) + 1);
+	int32_t directionX = Random32_NextBoolean(sharedRandom) ? 1 : -1;
+	int32_t directionY = Random32_NextBoolean(sharedRandom) ? 1 : -1;
 	camera->mNewShake.X = (minX + randomX) * directionX;
 	camera->mNewShake.Y = (minY + randomY) * directionY;
 }

@@ -63,7 +63,7 @@ void Sheet_BuildSheets()
 
 	ResourceManager* textureMan = ResourceManagerList_Texture();
 	int64_t textureManLen = ResourceManager_Length(textureMan);
-	for (int i = 0; i < textureManLen; i += 1)
+	for (int32_t i = 0; i < textureManLen; i += 1)
 	{
 		Resource* resource = ResourceManager_GetResourceByIndex(textureMan, i);
 		if (resource->mData == NULL)
@@ -85,7 +85,7 @@ void Sheet_BuildSheets()
 	{
 		ResourceManager* textureOffsetMan = ResourceManagerList_TextureOffset();
 		int64_t textureOffsetLen = ResourceManager_Length(textureOffsetMan);
-		for (int i = 0; i < textureOffsetLen; i += 1)
+		for (int32_t i = 0; i < textureOffsetLen; i += 1)
 		{
 			Resource* texOffsetResource = ResourceManager_GetResourceByIndex(textureOffsetMan, i);
 			if (texOffsetResource->mData == NULL)
@@ -95,7 +95,7 @@ void Sheet_BuildSheets()
 
 			TextureOffset* texOffset = (TextureOffset*)texOffsetResource->mData;
 			int64_t infoLen = arrlen(texOffset->arr_offsets);
-			for (int i = 0; i < infoLen; i += 1)
+			for (int32_t i = 0; i < infoLen; i += 1)
 			{
 				TextureOffsetInfo* info = &texOffset->arr_offsets[i];
 				Sheet* sheet = Utils_malloc(sizeof(Sheet));
@@ -126,7 +126,7 @@ IStringArray* Sheet_CreateListOfSheetNames()
 {
 	IStringArray* sa = IStringArray_Create();
 	ptrdiff_t len = shlen(sh_sheet_map);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		const char* sheetName = sh_sheet_map[i].value->mSheetName;
 		IStringArray_Add(sa, sheetName);
@@ -178,8 +178,8 @@ RenderCommandSheet* Sheet_Draw5(Sheet* sheet, SpriteBatch* spriteBatch, Color co
 	Rectangle rect = sheet->mRectangle;
 	float halfWidth = rect.Width / 2.0f;
 	float halfHeight = rect.Height / 2.0f;
-	float newX = isCenterX ? position.X - (int)halfWidth : position.X;
-	float newY = isCenterY ? position.Y - (int)halfHeight : position.Y;
+	float newX = isCenterX ? position.X - (int32_t)halfWidth : position.X;
+	float newY = isCenterY ? position.Y - (int32_t)halfHeight : position.Y;
 	return SpriteBatch_Draw(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(newX, newY),
 		rect, scale, rotation, flipX, flipY, origin);
 }
@@ -213,19 +213,19 @@ RenderCommandSheet* Sheet_DrawInterpolated5(Sheet* sheet, SpriteBatch* spriteBat
 	Rectangle rect = sheet->mRectangle;
 	float halfWidth = rect.Width / 2.0f;
 	float halfHeight = rect.Height / 2.0f;
-	float currentX = isCenterX ? (position.X - (int)halfWidth) : position.X;
-	float currentY = isCenterY ? (position.Y - (int)halfHeight) : position.Y;
-	float lastX = isCenterX ? (lastPosition.X - (int)halfWidth) : lastPosition.X;
-	float lastY = isCenterY ? (lastPosition.Y - (int)halfHeight) : lastPosition.Y;
+	float currentX = isCenterX ? (position.X - (int32_t)halfWidth) : position.X;
+	float currentY = isCenterY ? (position.Y - (int32_t)halfHeight) : position.Y;
+	float lastX = isCenterX ? (lastPosition.X - (int32_t)halfWidth) : lastPosition.X;
+	float lastY = isCenterY ? (lastPosition.Y - (int32_t)halfHeight) : lastPosition.Y;
 	return SpriteBatch_DrawInterpolated(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(currentX, currentY), Vector2_Create(lastX, lastY),
 		rect, scale, rotation, flipX, flipY, origin);
 }
-RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, 
+RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenter, 
 	ShaderProgram* program, Rectangle destinationRect, float rotation, bool flipX, bool flipY, Vector2 origin)
 {
 	Rectangle rect = sheet->mRectangle;
-	int newX = destinationRect.X;
-	int newY = destinationRect.Y;
+	int32_t newX = destinationRect.X;
+	int32_t newY = destinationRect.Y;
 	if (isCenter)
 	{
 		newX -= destinationRect.Width / 2;
@@ -234,25 +234,25 @@ RenderCommandSheet* Sheet_DrawDestinationRect(Sheet* sheet, SpriteBatch* spriteB
 	return SpriteBatch_DrawRectangle(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Rectangle_Create(newX, newY, destinationRect.Width, destinationRect.Height),
 		rect, rotation, flipX, flipY, origin);
 }
-RenderCommandSheet* Sheet_DrawSourceRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter, 
+RenderCommandSheet* Sheet_DrawSourceRect(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenter, 
 	ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY)
 {
 	float halfWidth = sourceRectangle.Width / 2.0f;
 	float halfHeight = sourceRectangle.Height / 2.0f;
-	float newX = isCenter ? position.X - (int)halfWidth : position.X;
-	float newY = isCenter ? position.Y - (int)halfHeight : position.Y;
+	float newX = isCenter ? position.X - (int32_t)halfWidth : position.X;
+	float newY = isCenter ? position.Y - (int32_t)halfHeight : position.Y;
 	return SpriteBatch_Draw(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(newX, newY), sourceRectangle, Vector2_Create2(scale),
 		rotation, flipX, flipY, Vector2_Create((float)(sourceRectangle.Width / 2), (float)(sourceRectangle.Height / 2)));
 }
-RenderCommandSheet* Sheet_DrawSourceRectInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int depth, bool isCenter,
+RenderCommandSheet* Sheet_DrawSourceRectInterpolated(Sheet* sheet, SpriteBatch* spriteBatch, Color color, int32_t depth, bool isCenter,
 	ShaderProgram* program, Vector2 position, Vector2 lastPosition, Rectangle sourceRectangle, float scale, float rotation, bool flipX, bool flipY)
 {
 	float halfWidth = sourceRectangle.Width / 2.0f;
 	float halfHeight = sourceRectangle.Height / 2.0f;
-	float newX = isCenter ? position.X - (int)halfWidth : position.X;
-	float newY = isCenter ? position.Y - (int)halfHeight : position.Y;
-	float lastX = isCenter ? lastPosition.X - (int)halfWidth : lastPosition.X;
-	float lastY = isCenter ? lastPosition.Y - (int)halfHeight : lastPosition.Y;
+	float newX = isCenter ? position.X - (int32_t)halfWidth : position.X;
+	float newY = isCenter ? position.Y - (int32_t)halfHeight : position.Y;
+	float lastX = isCenter ? lastPosition.X - (int32_t)halfWidth : lastPosition.X;
+	float lastY = isCenter ? lastPosition.Y - (int32_t)halfHeight : lastPosition.Y;
 	return SpriteBatch_DrawInterpolated(spriteBatch, Sheet_GetTexture(sheet), color, depth, program, Vector2_Create(newX, newY), Vector2_Create(lastX, lastY),
 		sourceRectangle, Vector2_Create2(scale), rotation, flipX, flipY, Vector2_Create((float)(sourceRectangle.Width / 2), (float)(sourceRectangle.Height / 2)));
 }

@@ -13,8 +13,8 @@
 
 static float ReturnSameSign(float newValue, float oldValue)
 {
-	int newSig = Math_SignumFloat(newValue);
-	int oldSig = Math_SignumFloat(oldValue);
+	int32_t newSig = Math_SignumFloat(newValue);
+	int32_t oldSig = Math_SignumFloat(oldValue);
 
 	if (newSig != oldSig)
 	{
@@ -42,14 +42,14 @@ static float GetValue(float min, float max, bool allowNegative)
 
 	return newValue;
 }
-static int32_t GetValueInt(int min, int32_t max)
+static int32_t GetValueInt(int32_t min, int32_t max)
 {
 	if (max - min <= 0)
 	{
 		return min;
 	}
 
-	int newValue = Random32_NextInt(Globals_GetSharedRandom(), max - min) + min;
+	int32_t newValue = Random32_NextInt(Globals_GetSharedRandom(), max - min) + min;
 
 	return newValue;
 }
@@ -366,10 +366,10 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 	float mul = CAMERA_EXTENDED_CAMERA;
 
 	Camera* camera = Get_Camera();
-	int left = Camera_GetLeftMul(camera, mul);
-	int top = Camera_GetTopMul(camera, mul);
-	int right = Camera_GetRightMul(camera, mul);
-	int bottom = Camera_GetBottomMul(camera, mul);
+	int32_t left = Camera_GetLeftMul(camera, mul);
+	int32_t top = Camera_GetTopMul(camera, mul);
+	int32_t right = Camera_GetRightMul(camera, mul);
+	int32_t bottom = Camera_GetBottomMul(camera, mul);
 
 	ComponentPack* pack = Get_ComponentPack(C_ParticleInstance);
 	PackIterator iter = PackIterator_Begin;

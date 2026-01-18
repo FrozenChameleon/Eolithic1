@@ -22,7 +22,7 @@ void MouseData_CopyFrom(MouseData* md, const MouseData* otherData)
 {
 	md->_mMousePosition = otherData->_mMousePosition;
 	_mScrollWheelValue = otherData->_mScrollWheelValue;
-	for (int i = 0; i < MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS; i += 1)
+	for (int32_t i = 0; i < MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS; i += 1)
 	{
 		md->_mIsButtonDown[i] = otherData->_mIsButtonDown[i];
 	}
@@ -49,7 +49,7 @@ void MouseData_Poll(MouseData* md)
 	md->_mIsButtonDown[MOUSEBUTTONS_MOUSE_XBUTTON1] = (mouseButtonState & SDL_BUTTON_MASK(SDL_BUTTON_X1));
 	md->_mIsButtonDown[MOUSEBUTTONS_MOUSE_XBUTTON2] = (mouseButtonState & SDL_BUTTON_MASK(SDL_BUTTON_X2));
 
-	for (int i = 0; i < MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS; i += 1)
+	for (int32_t i = 0; i < MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS; i += 1)
 	{
 		if (_mIsButtonMuted[i])
 		{

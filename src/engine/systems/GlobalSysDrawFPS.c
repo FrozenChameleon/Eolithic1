@@ -14,7 +14,7 @@ static int32_t _mDoNotDrawThisCounter = TIME_TO_STOP_DRAWING;
 static int32_t _mOffsetFromCorner;
 static const char* _mFont = "game";
 
-void GlobalSysDrawFPS_SetOffsetFromCorner(int offset)
+void GlobalSysDrawFPS_SetOffsetFromCorner(int32_t offset)
 {
 	_mOffsetFromCorner = offset;
 }
@@ -47,7 +47,7 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 
 	const char* stringToDraw = GameUpdater_GetFpsString();
 	Rectangle bounds = DrawTool_GetBounds(stringToDraw, _mFont);
-	int shadowOffset = 1;
+	int32_t shadowOffset = 1;
 	float x = (float)_mOffsetFromCorner;
 	float y = (float)(Utils_GetInternalRenderHeight() - bounds.Height - shadowOffset - _mOffsetFromCorner);
 	SpriteBatch_DrawString(spriteBatch, _mFont, stringToDraw, COLOR_BLACK, 200, Vector2_Create(x + shadowOffset, y + shadowOffset));

@@ -18,7 +18,7 @@ enum
 
 typedef struct InputAction
 {
-	int mTimeHeld;
+	int32_t mTimeHeld;
 	float mAnalogValue;
 	bool mWasAnalog;
 	bool mIsPressed;
@@ -40,13 +40,13 @@ void InputAction_Init(const char* name, InputAction* action);
 void InputAction_Write(InputAction* action, DynamicByteBuffer* writer);
 void InputAction_Read(InputAction* action, BufferReader* reader);
 void InputAction_Update(InputAction* action, InputPlayer* input);
-void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
-	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);
-void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch, int depth, const char* font,
-	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y,
+void InputAction_DrawCurrentGlyph(InputAction* action, SpriteBatch* spriteBatch, int32_t depth, const char* font,
+	Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale, bool forceControllerGlyph);
+void InputAction_DrawCurrentGlyph2(InputAction* action, SpriteBatch* spriteBatch, int32_t depth, const char* font,
+	Color colorForText, Color colorForSheet, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y,
 	Vector2 scale, bool forceControllerGlyph);
 Rectangle InputAction_GetCurrentGlyphRectangle(InputAction* action, const char* font, bool forceControllerGlyph);
-Rectangle InputAction_GetGlyphRectangle(InputAction* action, int index, const char* font);
-void InputAction_DrawGlyph(InputAction* action, int index, SpriteBatch* spriteBatch, int depth, const char* font,
-	Color color, bool centerX, bool centerY, int alignmentX, int alignmentY, float x, float y, Vector2 scale);
+Rectangle InputAction_GetGlyphRectangle(InputAction* action, int32_t index, const char* font);
+void InputAction_DrawGlyph(InputAction* action, int32_t index, SpriteBatch* spriteBatch, int32_t depth, const char* font,
+	Color color, bool centerX, bool centerY, int32_t alignmentX, int32_t alignmentY, float x, float y, Vector2 scale);
 const char* InputAction_ToString(InputAction* action);

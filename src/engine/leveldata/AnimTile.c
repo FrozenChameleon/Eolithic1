@@ -88,7 +88,7 @@ void AnimTile_UpdateResource(AnimTile* at)
 }
 void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int32_t depth, int32_t x, int32_t y, float rotation, bool flipX, bool flipY)
 {
-	int scaler = at->mScaler;
+	int32_t scaler = at->mScaler;
 
 	bool flippingX = flipX ? !at->mIsFlipX : at->mIsFlipX;
 	bool flippingY = flipY ? !at->mIsFlipY : at->mIsFlipY;

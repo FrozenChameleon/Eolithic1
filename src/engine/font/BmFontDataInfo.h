@@ -5,19 +5,19 @@
 typedef struct BmFontDataInfo
 {
 	char Face[EE_FILENAME_MAX];
-	int Size;
-	int Bold;
-	int Italic;
+	int32_t Size;
+	int32_t Bold;
+	int32_t Italic;
 	char Charset[EE_FILENAME_MAX];
-	int Unicode;
-	int StretchH;
-	int Smooth;
-	int AA;
-	int PaddingUp;
-	int PaddingRight;
-	int PaddingDown;
-	int PaddingLeft;
-	int SpacingHoriz;
-	int SpacingVert;
-	int Outline;
+	int32_t Unicode;
+	int32_t StretchH;
+	int32_t Smooth;
+	int32_t AA;
+	int32_t PaddingUp;
+	int32_t PaddingRight;
+	int32_t PaddingDown;
+	int32_t PaddingLeft;
+	int32_t SpacingHoriz;
+	int32_t SpacingVert;
+	int32_t Outline;
 } BmFontDataInfo;

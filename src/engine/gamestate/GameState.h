@@ -59,7 +59,7 @@ bool GameState_HasCreatedForGameSaveState(GameState* gs);
 void GameState_ClearForGameSaveState(GameState* gs);
 void GameState_CreateForGameSaveState(GameState* gs);
 void GameState_UseForGameSaveState(GameState* gs);
-int GameState_GetRemainingRewindTime(GameState* gs);
+int32_t GameState_GetRemainingRewindTime(GameState* gs);
 bool GameState_IsThereAnyRewindTimeRemaining(GameState* gs);
 float GameState_GetPercentageOfRemainingRewindTime(GameState* gs);
 ComponentPack* GameState_GetComponentPack(GameState* gs, ComponentType ctype);

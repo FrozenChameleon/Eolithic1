@@ -35,13 +35,13 @@ typedef struct MovieOperationText
 	bool mIsCentered;
 } MovieOperationText;
 
-int MovieOperationText_GetSpeedToIncrease(MovieOperationText* text);
+int32_t MovieOperationText_GetSpeedToIncrease(MovieOperationText* text);
 void MovieOperationText_EndUpdate(MovieOperationText* text);
 void MovieOperationText_NormalUpdate(MovieOperationText* text);
-void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int point);
+void MovieOperationText_TextCommandsCheck(MovieOperationText* text, int32_t point);
 
 void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const char* str, const char* font, Vector2 position, 
-	int speed, int rate, int wait, const char* color, bool isTextCentered);
+	int32_t speed, int32_t rate, int32_t wait, const char* color, bool isTextCentered);
 
 void MovieOperationText_SpeedUp(MovieOperationText* text);
 void MovieOperationText_Update(MovieOperationText* text);

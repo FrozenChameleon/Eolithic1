@@ -22,7 +22,6 @@
 #include "../utils/Stopwatch.h"
 #include "../render/Renderer.h"
 #include "../input/Input.h"
-#include "../audio/SoundEffectInstance.h"
 #include "../utils/Exception.h"
 #include "../audio/Music.h"
 #include "../audio/SoundEffect.h"
@@ -41,6 +40,7 @@
 #include "../utils/Logger.h"
 #include "GameHelper.h"
 #include "MenuFunc.h"
+#include  "../audio/AudioEngine.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -91,7 +91,7 @@ int32_t Game_Init()
 		return Exception_Run("Unable to init SDL!", false);
 	}
 
-	int initStatus = 0;
+	int32_t initStatus = 0;
 	initStatus = Window_Init();
 	if (initStatus < 0)
 	{
@@ -106,7 +106,7 @@ int32_t Game_Init()
 	Renderer_InitSpriteBatch();
 	Renderer_ApplyChanges();
 
-	initStatus = SoundEffectInstance_InitAudio();
+	initStatus = AudioEngine_Init();
 	if (initStatus < 0)
 	{
 		return Exception_Run("Unable to init platform renderer!", false);

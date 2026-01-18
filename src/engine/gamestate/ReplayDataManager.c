@@ -14,7 +14,7 @@ static GameStateInputData _mDummy;
 typedef struct ReplayDataManager
 {
 	bool _mIsActive;
-	int _mLength;
+	int32_t _mLength;
 	uint64_t _mReplayFrames[REPLAYDATAMANAGER_REPLAY_BUFFER_SIZE];
 	GameStateInputData _mReplayInputData[REPLAYDATAMANAGER_REPLAY_BUFFER_SIZE];
 	GameStateData _mReplayGameStateData[REPLAYDATAMANAGER_REPLAYGAMESTATEDATA_LEN];
@@ -22,9 +22,9 @@ typedef struct ReplayDataManager
 	uint64_t _mDebugRewindLoopReplayFrame;
 } ReplayDataManager;
 
-int ReplayDataManager_GetIndexFromReplayFrame(ReplayDataManager* rdm, uint64_t replayFrame)
+int32_t ReplayDataManager_GetIndexFromReplayFrame(ReplayDataManager* rdm, uint64_t replayFrame)
 {
-	for (int i = 0; i < rdm->_mLength; i += 1)
+	for (int32_t i = 0; i < rdm->_mLength; i += 1)
 	{
 		if (rdm->_mReplayFrames[i] == replayFrame)
 		{
@@ -33,15 +33,15 @@ int ReplayDataManager_GetIndexFromReplayFrame(ReplayDataManager* rdm, uint64_t r
 	}
 	return -1;
 }
-int ReplayDataManager_GetIndexForLowestFrame(ReplayDataManager* rdm)
+int32_t ReplayDataManager_GetIndexForLowestFrame(ReplayDataManager* rdm)
 {
 	return ReplayDataManager_GetIndexForLowestFrame2(rdm, false);
 }
-int ReplayDataManager_GetIndexForLowestFrame2(ReplayDataManager* rdm, bool mustBeKeyFrame)
+int32_t ReplayDataManager_GetIndexForLowestFrame2(ReplayDataManager* rdm, bool mustBeKeyFrame)
 {
-	int lowestIndex = -1;
+	int32_t lowestIndex = -1;
 	uint64_t lowestFrame = UINT64_MAX;
-	for (int i = 0; i < rdm->_mLength; i += 1)
+	for (int32_t i = 0; i < rdm->_mLength; i += 1)
 	{
 		if (rdm->_mReplayFrames[i] < lowestFrame)
 		{
@@ -62,7 +62,7 @@ int ReplayDataManager_GetIndexForLowestFrame2(ReplayDataManager* rdm, bool mustB
 ReplayDataManager* ReplayDataManager_Create(const char* name)
 {
 	ReplayDataManager* rdm = Utils_calloc(1, sizeof(ReplayDataManager));
-	for (int i = 0; i < REPLAYDATAMANAGER_REPLAYGAMESTATEDATA_LEN; i += 1)
+	for (int32_t i = 0; i < REPLAYDATAMANAGER_REPLAYGAMESTATEDATA_LEN; i += 1)
 	{
 		GameHelper_InitGameStateData(name, &rdm->_mReplayGameStateData[i]);
 	}
@@ -74,7 +74,7 @@ void ReplayDataManager_Dispose(ReplayDataManager* rdm)
 }
 void ReplayDataManager_RewindLoop(ReplayDataManager* rdm, bool justStarted, GameStateData* actualCurrentGameState)
 {
-	int index;
+	int32_t index;
 	if (justStarted)
 	{
 		index = ReplayDataManager_GetIndexForLowestFrame2(rdm, true);
@@ -104,7 +104,7 @@ void ReplayDataManager_RewindLoop(ReplayDataManager* rdm, bool justStarted, Game
 }
 uint64_t ReplayDataManager_GetLowestReplayFrame(ReplayDataManager* rdm)
 {
-	int lowestIndex = ReplayDataManager_GetIndexForLowestFrame2(rdm, true);
+	int32_t lowestIndex = ReplayDataManager_GetIndexForLowestFrame2(rdm, true);
 	if (lowestIndex == -1)
 	{
 		return 0;
@@ -114,9 +114,9 @@ uint64_t ReplayDataManager_GetLowestReplayFrame(ReplayDataManager* rdm)
 }
 void ReplayDataManager_RewindToSnapshot(ReplayDataManager* rdm, uint64_t replayFrameToRewindTo, GameStateData* actualCurrentGameState)
 {
-	int simulations = 1;
+	int32_t simulations = 1;
 	uint64_t targetFrame = replayFrameToRewindTo;
-	int targetIndex = ReplayDataManager_GetIndexFromReplayFrame(rdm, targetFrame);
+	int32_t targetIndex = ReplayDataManager_GetIndexFromReplayFrame(rdm, targetFrame);
 	if (targetIndex < 0)
 	{
 		return;
@@ -133,7 +133,7 @@ void ReplayDataManager_RewindToSnapshot(ReplayDataManager* rdm, uint64_t replayF
 		}
 	}
 
-	for (int i = 0; i < simulations; i += 1)
+	for (int32_t i = 0; i < simulations; i += 1)
 	{
 		rdm->_mReplayFrameToGivePlayer = targetFrame;
 		if (i == 0)
@@ -146,7 +146,7 @@ void ReplayDataManager_RewindToSnapshot(ReplayDataManager* rdm, uint64_t replayF
 }
 void ReplayDataManager_Snapshot(ReplayDataManager* rdm, uint64_t currentReplayFrame, GameStateData* actualCurrentGameState)
 {
-	int index = ReplayDataManager_GetIndexFromReplayFrame(rdm, currentReplayFrame);
+	int32_t index = ReplayDataManager_GetIndexFromReplayFrame(rdm, currentReplayFrame);
 	if (index < 0)
 	{
 		if (rdm->_mLength < REPLAYDATAMANAGER_REPLAY_BUFFER_SIZE)
@@ -172,7 +172,7 @@ void ReplayDataManager_Snapshot(ReplayDataManager* rdm, uint64_t currentReplayFr
 }
 void ReplayDataManager_GiveReplayInput(ReplayDataManager* rdm, uint64_t currentReplayFrame, const GameStateInputData* replayInputData)
 {
-	int index = ReplayDataManager_GetIndexFromReplayFrame(rdm, currentReplayFrame);
+	int32_t index = ReplayDataManager_GetIndexFromReplayFrame(rdm, currentReplayFrame);
 	if (index >= 0)
 	{
 		rdm->_mReplayInputData[index] = *replayInputData;
@@ -180,7 +180,7 @@ void ReplayDataManager_GiveReplayInput(ReplayDataManager* rdm, uint64_t currentR
 }
 const GameStateInputData* ReplayDataManager_GetReplayInput(ReplayDataManager* rdm)
 {
-	int index = ReplayDataManager_GetIndexFromReplayFrame(rdm, rdm->_mReplayFrameToGivePlayer);
+	int32_t index = ReplayDataManager_GetIndexFromReplayFrame(rdm, rdm->_mReplayFrameToGivePlayer);
 	if (index < 0)
 	{
 		return &_mDummy;

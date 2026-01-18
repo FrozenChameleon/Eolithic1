@@ -52,18 +52,18 @@ void ControllerStates_Write()
 }
 void ControllerStates_Poll()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		ControllerState_Poll(&_mControllerStates[i]);
 	}
 }
-ControllerState* ControllerStates_GetController(int number)
+ControllerState* ControllerStates_GetController(int32_t number)
 {
 	return &_mControllerStates[number];
 }
 bool ControllerStates_IsAnyButtonPressedOnAnyController()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (ControllerState_IsAnyButtonPressed(&_mControllerStates[i]))
 		{
@@ -74,7 +74,7 @@ bool ControllerStates_IsAnyButtonPressedOnAnyController()
 }
 bool ControllerStates_IsAnyButtonTappedOnAnyController()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (ControllerState_IsAnyButtonTapped(&_mControllerStates[i]))
 		{
@@ -83,9 +83,9 @@ bool ControllerStates_IsAnyButtonTappedOnAnyController()
 	}
 	return false;
 }
-bool ControllerStates_IsButtonPressedOnAnyController(int button)
+bool ControllerStates_IsButtonPressedOnAnyController(int32_t button)
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (ControllerState_IsButtonPressed(&_mControllerStates[i], button))
 		{
@@ -94,9 +94,9 @@ bool ControllerStates_IsButtonPressedOnAnyController(int button)
 	}
 	return false;
 }
-int ControllerStates_GetControllerNumberIfAnyButtonReleased()
+int32_t ControllerStates_GetControllerNumberIfAnyButtonReleased()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (ControllerState_IsAnyButtonReleased(&_mControllerStates[i]))
 		{
@@ -105,9 +105,9 @@ int ControllerStates_GetControllerNumberIfAnyButtonReleased()
 	}
 	return -1;
 }
-int ControllerStates_GetControllerNumberIfAnyButtonTapped()
+int32_t ControllerStates_GetControllerNumberIfAnyButtonTapped()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		if (ControllerState_IsAnyButtonTapped(&_mControllerStates[i]))
 		{
@@ -118,16 +118,16 @@ int ControllerStates_GetControllerNumberIfAnyButtonTapped()
 }
 void ControllerStates_MuteInput()
 {
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		ControllerState_MuteInput(&_mControllerStates[i]);
 	}
 }
-float ControllerStates_GetHighestAnalogDataValue(int loc)
+float ControllerStates_GetHighestAnalogDataValue(int32_t loc)
 {
-	int index = -1;
+	int32_t index = -1;
 	float highest = -999;
-	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
 		float value = Math_fabsf(ControllerState_GetAnalogData(&_mControllerStates[i], loc));
 		if (value > highest)
@@ -138,11 +138,11 @@ float ControllerStates_GetHighestAnalogDataValue(int loc)
 	}
 	return ControllerState_GetAnalogData(&_mControllerStates[index], loc);
 }
-int ControllerStates_GetMasterRecordingReadFrame()
+int32_t ControllerStates_GetMasterRecordingReadFrame()
 {
 	return _mMasterRecordingReadFrame;
 }
-int ControllerStates_GetCurrentMasterRecordingVersion()
+int32_t ControllerStates_GetCurrentMasterRecordingVersion()
 {
 	if (!Input_IsPlayingMasterRecording())
 	{

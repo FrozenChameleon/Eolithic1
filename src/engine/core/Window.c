@@ -11,7 +11,6 @@
 #include "../utils/Cvars.h"
 #include "../utils/Logger.h"
 #include "../globals/Globals.h"
-#include "../audio/SoundEffectInstance.h"
 #include "../render/Texture.h"
 #include "../render/Renderer.h"
 #include "../input/ControllerState.h"
@@ -81,8 +80,8 @@ static Rectangle GetProposedWindowBounds()
 		return returnRect;
 	}
 
-	int windowSizeWidthFromCvar = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
-	int windowSizeHeightFromCvar = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT);
+	int32_t windowSizeWidthFromCvar = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
+	int32_t windowSizeHeightFromCvar = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT);
 	if ((windowSizeWidthFromCvar > 0) && (windowSizeHeightFromCvar > 0)) //Fixed resolutions from CVAR
 	{
 		returnRect.Width = windowSizeWidthFromCvar;
@@ -91,7 +90,7 @@ static Rectangle GetProposedWindowBounds()
 	}
 	else //Scaler resolutions from CVAR
 	{
-		int windowMul = Cvars_GetAsInt("usr_window_size_multiple");
+		int32_t windowMul = Cvars_GetAsInt("usr_window_size_multiple");
 #ifdef DEBUG_DEF_FORCED_WINDOW_MUL
 		if (DEBUG_DEF_FORCED_WINDOW_MUL > 0)
 		{
@@ -104,7 +103,7 @@ static Rectangle GetProposedWindowBounds()
 	}
 }
 
-int Window_Init()
+int32_t Window_Init()
 {
 	if (_mHasWindowInit)
 	{
@@ -185,7 +184,7 @@ Rectangle Window_GetDisplayBounds()
 {
 	Rectangle returnRect = { 0 };
 	SDL_Rect displayBounds = { 0 };
-	int success = SDL_GetDisplayBounds(GetCurrentDisplayID(), &displayBounds);
+	int32_t success = SDL_GetDisplayBounds(GetCurrentDisplayID(), &displayBounds);
 	if (success < 0)
 	{
 		Logger_LogInformation("Unable to get display bounds");
@@ -208,7 +207,7 @@ Rectangle* Window_GetAllDisplayModeBounds(int32_t* length)
 	}
 
 	
-	int count;
+	int32_t count;
 	SDL_DisplayMode** modes = SDL_GetFullscreenDisplayModes(GetCurrentDisplayID(), &count);
 	if (modes == NULL)
 	{
@@ -216,7 +215,7 @@ Rectangle* Window_GetAllDisplayModeBounds(int32_t* length)
 		return NULL;
 	}
 
-	for (int i = 0; i < count; i += 1)
+	for (int32_t i = 0; i < count; i += 1)
 	{
 		SDL_DisplayMode* displayMode = modes[i];
 		arrput(arr_display_modes_bounds, Rectangle_Create(0, 0, displayMode->w, displayMode->h));

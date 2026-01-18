@@ -248,9 +248,9 @@ void GameState_UseForGameSaveState(GameState* gs)
 
 	GameStateData_CopyTo(&gs->_mForGameState, &gs->_mData);
 }
-int GameState_GetRemainingRewindTime(GameState* gs)
+int32_t GameState_GetRemainingRewindTime(GameState* gs)
 {
-	return (int)(gs->_mCurrentReplayFrame - ReplayDataManager_GetLowestReplayFrame(gs->_mReplayDataManager));
+	return (int32_t)(gs->_mCurrentReplayFrame - ReplayDataManager_GetLowestReplayFrame(gs->_mReplayDataManager));
 }
 bool GameState_IsThereAnyRewindTimeRemaining(GameState* gs)
 {
@@ -258,8 +258,8 @@ bool GameState_IsThereAnyRewindTimeRemaining(GameState* gs)
 }
 float GameState_GetPercentageOfRemainingRewindTime(GameState* gs)
 {
-	int current = GameState_GetRemainingRewindTime(gs);
-	int max = REPLAYDATAMANAGER_REPLAY_BUFFER_SIZE;
+	int32_t current = GameState_GetRemainingRewindTime(gs);
+	int32_t max = REPLAYDATAMANAGER_REPLAY_BUFFER_SIZE;
 	return ((float)current / max);
 }
 ComponentPack* GameState_GetComponentPack(GameState* gs, ComponentType ctype)

@@ -7,10 +7,10 @@ typedef struct ShaderProgram ShaderProgram;
 
 typedef struct DrawActor
 {
-	int mExtraPasses;
-	int mDefaultDrawState;
-	int mDefaultDrawPhase;
-	int mUniversalDepthOverride;
+	int32_t mExtraPasses;
+	int32_t mDefaultDrawState;
+	int32_t mDefaultDrawPhase;
+	int32_t mUniversalDepthOverride;
 	float mRotation;
 	float mOnScreenCheckMul;
 	bool mIsFlipX;

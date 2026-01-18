@@ -2,6 +2,6 @@
 
 typedef struct ParentNumber
 {
-	int mTag;
+	int32_t mTag;
 } ParentNumber;
 

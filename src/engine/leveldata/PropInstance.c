@@ -84,7 +84,7 @@ void PropInstance_Draw4(PropInstance* prop, SpriteBatch* spriteBatch, int32_t de
 
 	if (propData == NULL)
 	{
-		DrawTool_DrawRectangle2(spriteBatch, COLOR_BLUE, 100, Rectangle_Create((int)position.X, (int)position.Y, TILE_SIZE, TILE_SIZE), 0, false);
+		DrawTool_DrawRectangle2(spriteBatch, COLOR_BLUE, 100, Rectangle_Create((int32_t)position.X, (int32_t)position.Y, TILE_SIZE, TILE_SIZE), 0, false);
 	}
 	else
 	{
@@ -132,13 +132,13 @@ Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position)
 		propSheet = NULL;
 	}
 
-	int width;
-	int height;
+	int32_t width;
+	int32_t height;
 	if (propSheet != NULL)
 	{
 		const Rectangle* rect = &propSheet->mRectangle;
-		width = (int)(rect->Width * propData->mScaler * prop->mScale);
-		height = (int)(rect->Height * propData->mScaler * prop->mScale);
+		width = (int32_t)(rect->Width * propData->mScaler * prop->mScale);
+		height = (int32_t)(rect->Height * propData->mScaler * prop->mScale);
 	}
 	else
 	{
@@ -146,8 +146,8 @@ Rectangle PropInstance_GetRectangle(PropInstance* prop, Vector2 position)
 		height = TILE_SIZE;
 	}
 
-	return Rectangle_Create((int)(position.X + prop->mOffset.X),
-		(int)(position.Y + prop->mOffset.Y),
+	return Rectangle_Create((int32_t)(position.X + prop->mOffset.X),
+		(int32_t)(position.Y + prop->mOffset.Y),
 		width, height);
 }
 bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
@@ -164,15 +164,15 @@ bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
 		//Color[] colors1d = new Color[texture.Width * texture.Height];
 		//texture.GetData(colors1d);
 		//Color[, ] colors2d = new Color[texture.Width, texture.Height];
-		//for (int i = 0; i < texture.Width; i++)
+		//for (int32_t i = 0; i < texture.Width; i += 1)
 		//{
-		//	for (int j = 0; j < texture.Height; j++)
+		//	for (int32_t j = 0; j < texture.Height; j++)
 		//	{
 		//		colors2d[i, j] = colors1d[i + j * texture.Width];
 		//	}
 		//}
-		//int targetX = relativeMouse.X / propData.mScaler;
-		//int targetY = relativeMouse.Y / propData.mScaler;
+		//int32_t targetX = relativeMouse.X / propData.mScaler;
+		//int32_t targetY = relativeMouse.Y / propData.mScaler;
 		//if (prop->mFlipX)
 		//{
 		//	targetX = texture.Width - targetX;

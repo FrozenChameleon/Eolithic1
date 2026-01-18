@@ -20,8 +20,8 @@ typedef struct LevelCameraData
 	MetaMapChunk* mAttachedChunk;
 	PointRectangle mVolumeTrigger;
 	PointRectangle mVolumeBounds;
-	int mDirectionX;
-	int mDirectionY;
+	int32_t mDirectionX;
+	int32_t mDirectionY;
 	bool mIsPersistent;
 	bool mIsDualX;
 	bool mIsDualY;
@@ -30,10 +30,10 @@ typedef struct LevelCameraData
 	bool mIsDownFrozen;
 	bool mIsLeftFrozen;
 	char mScript[EE_FILENAME_MAX];
-	int mId;
+	int32_t mId;
 	bool mIsTransition;
-	int mNumberTransitionTo;
-	int mNumberTransitionFrom;
+	int32_t mNumberTransitionTo;
+	int32_t mNumberTransitionFrom;
 	bool mIsTransitionX;
 	bool mIsTransitionY;
 	char mStringData[LEVELCAMERADATA_STRING_DATA_LIMIT][EE_FILENAME_MAX];

@@ -78,7 +78,7 @@ void Animation_DebugTest()
 	Animation anim;
 	Animation_Init(&anim, "demonDeath_00", 3);
 	const char* sheetName = anim.mSheets[15]->mSheetName;
-	int hello = 0;
+	int32_t hello = 0;
 
 	Animation_BuildAnimations();
 
@@ -340,7 +340,7 @@ void Animation_CreateAnimationStringArray(IStringArray* listToAddTo, const char*
 		int32_t currentNumber = i;
 
 		double placeAsDouble = Math_pow(10, digits - 1);
-		int32_t place = (int)placeAsDouble;
+		int32_t place = (int32_t)placeAsDouble;
 		do
 		{
 			for (int32_t j = 0; j < digits; j += 1)

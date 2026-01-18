@@ -70,11 +70,11 @@ void ControllerData_Clear(ControllerData* cd)
 void ControllerData_CopyFrom(ControllerData* cd, const ControllerData* otherData)
 {
 	cd->_mIsConnected = otherData->_mIsConnected;
-	for (int i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i++)
+	for (int32_t i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i += 1)
 	{
 		cd->_mIsButtonPressed[i] = otherData->_mIsButtonPressed[i];
 	}
-	for (int i = 0; i < AXES_AMOUNT_OF_AXIS; i++)
+	for (int32_t i = 0; i < AXES_AMOUNT_OF_AXIS; i += 1)
 	{
 		cd->_mAnalogData[i] = otherData->_mAnalogData[i];
 	}
@@ -85,7 +85,7 @@ bool ControllerData_IsButtonPressedAtLoc(const ControllerData* cd, int32_t loc)
 }
 bool ControllerData_IsButtonPressed(const ControllerData* cd, int32_t button)
 {
-	for (int i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i++)
+	for (int32_t i = 0; i < BUTTONS_AMOUNT_OF_BUTTONS; i += 1)
 	{
 		if (button == ButtonList_GetButton(i))
 		{

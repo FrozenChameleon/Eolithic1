@@ -126,7 +126,7 @@ void ResourceManager_Dispose(ResourceManager* rm, const char* filenameWithoutExt
 void ResourceManager_DisposeAll(ResourceManager* rm)
 {
 	int64_t len = shlen(rm->sh_resources);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		ResourceManager_Dispose(rm, rm->sh_resources[i].key);
 	}
@@ -140,11 +140,11 @@ int64_t ResourceManager_Length(ResourceManager* rm)
 {
 	return shlen(rm->sh_resources);
 }
-Resource* ResourceManager_GetResourceByIndex(ResourceManager* rm, int index)
+Resource* ResourceManager_GetResourceByIndex(ResourceManager* rm, int32_t index)
 {
 	return rm->sh_resources[index].value;
 }
-void* ResourceManager_GetResourceDataByIndex(ResourceManager* rm, int index)
+void* ResourceManager_GetResourceDataByIndex(ResourceManager* rm, int32_t index)
 {
 	return rm->sh_resources[index].value->mData;
 }

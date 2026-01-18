@@ -13,6 +13,8 @@
   * See monoxna.LICENSE for details.
   */
 
+#ifdef AUDIO_FAUDIO
+
 #include "SoundEffectInstance.h"
 
 #include "FAudio.h"
@@ -20,9 +22,8 @@
 #include "../utils/Exception.h"
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
-
-static FAudio* _mFAudioContext;
-static FAudioMasteringVoice* _mMasteringVoiceContext;
+#include "AudioEngine.h"
+#include "../gamestate/GameStateManager.h"
 
 static FAudioWaveFormatEx* GetFormat(SoundEffectInstance* instance)
 {
@@ -56,7 +57,9 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	arrfree(sei->arr_queued_sizes);
 	//
 
+	bool isMusic = sei->_mIsMusic; //Hack to keep this flag even after memset!
 	Utils_memset(sei, 0, sizeof(SoundEffectInstance));
+	sei->_mIsMusic = isMusic;
 
 	sei->_mHasSetup = true;
 	Utils_strlcpy(sei->_mName, name, EE_FILENAME_MAX);
@@ -160,7 +163,7 @@ void SoundEffectInstance_Play(SoundEffectInstance* sei)
 	FAudioWaveFormatEx* format = GetFormat(sei);
 	/* Create handle */
 	FAudioSourceVoice* handle = NULL;
-	FAudio_CreateSourceVoice(_mFAudioContext, &handle, format, FAUDIO_VOICE_USEFILTER, FAUDIO_DEFAULT_FREQ_RATIO, NULL, NULL, NULL);
+	FAudio_CreateSourceVoice(AudioEngine_GetContext(), &handle, format, FAUDIO_VOICE_USEFILTER, FAUDIO_DEFAULT_FREQ_RATIO, NULL, NULL, NULL);
 	sei->_mHandleStorage = handle;
 
 	if (handle == NULL)
@@ -244,21 +247,20 @@ void SoundEffectInstance_Update(SoundEffectInstance* sei)
 		}
 	}
 
-	int sampleSize = sei->_mData->nBlockAlign;
-	int totalSamples = sei->_mData->mWaveDataLength / sampleSize;
-	int maxBufferSamples = sei->_mBufferLength / sampleSize;
-	//bool isReverse = OeGameStateManager::ActiveGameState()->IsRewinding(); //Read game state to determine reverse or not
-	//if (!isMusic)
-	//{
-	//	isReverse = false;
-//	}
-	bool isReverse = false;
+	int32_t sampleSize = sei->_mData->nBlockAlign;
+	int32_t totalSamples = sei->_mData->mWaveDataLength / sampleSize;
+	int32_t maxBufferSamples = sei->_mBufferLength / sampleSize;
+	bool isReverse = GameState_IsRewinding(GameStateManager_GetGameState()); //Read game state to determine reverse or not
+	if (!sei->_mIsMusic)
+	{
+		isReverse = false;
+	}
 	if (isReverse)
 	{
-		//if (!OeGameStateManager::ActiveGameState()->IsThereAnyRewindTimeRemaining())
-	//	{
-	//		return;
-	//	}
+		if (!GameState_IsThereAnyRewindTimeRemaining(GameStateManager_GetGameState()))
+		{
+			return;
+		}
 	}
 
 	if (sei->_mInternalState != SOUNDSTATE_PLAYING)
@@ -417,7 +419,7 @@ void SoundEffectInstance_QueueInitialBuffers(SoundEffectInstance* sei)
 	FAudioSourceVoice* handle = GetHandle(sei);
 	FAudioBuffer buffer = { 0 };
 	int64_t len = arrlen(sei->arr_queued_buffers);
-	for (int i = 0; i < len; i += 1)
+	for (int32_t i = 0; i < len; i += 1)
 	{
 		buffer.AudioBytes = sei->arr_queued_sizes[i];
 		buffer.pAudioData = sei->arr_queued_buffers[i];
@@ -441,7 +443,7 @@ void SoundEffectInstance_ClearBuffers(SoundEffectInstance* sei)
 		return;
 	}
 
-	for (int i = 0; i < arrlen(sei->arr_queued_buffers); i += 1)
+	for (int32_t i = 0; i < arrlen(sei->arr_queued_buffers); i += 1)
 	{
 		Utils_free(sei->arr_queued_buffers[i]);
 	}
@@ -459,18 +461,18 @@ void SoundEffectInstance_FillBuffer(SoundEffectInstance* sei, bool isReverse, in
 
 	Utils_memset(sei->_mBuffer, 0, sizeof(uint8_t) * sei->_mBufferLength);
 
-	int sampleSize = SoundEffectInstance_GetSampleSize(sei);
-	int totalSamples = SoundEffectInstance_GetTotalSamples(sei);
-	int byteCount = 0;
-	for (int i = 0; i < amountOfSamples; i += 1)
+	int32_t sampleSize = SoundEffectInstance_GetSampleSize(sei);
+	int32_t totalSamples = SoundEffectInstance_GetTotalSamples(sei);
+	int32_t byteCount = 0;
+	for (int32_t i = 0; i < amountOfSamples; i += 1)
 	{
 		if ((isReverse && (sei->_mCurrentSample > 0)) || 
 			(!isReverse && sei->_mCurrentSample < (totalSamples - 1)))
 		{
-			for (int j = 0; j < sampleSize; j += 1)
+			for (int32_t j = 0; j < sampleSize; j += 1)
 			{
-				int bufferLoc = i * sampleSize + j;
-				int dataLoc = sei->_mCurrentSample * sampleSize + j;
+				int32_t bufferLoc = i * sampleSize + j;
+				int32_t dataLoc = sei->_mCurrentSample * sampleSize + j;
 				
 				sei->_mBuffer[bufferLoc] = FixedByteBuffer_GetBuffer(sei->_mData->mWaveData)[dataLoc];
 				byteCount += 1;
@@ -552,24 +554,5 @@ int64_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
 
 	return arrlen(sei->arr_queued_buffers);
 }
-int32_t SoundEffectInstance_InitAudio(void)
-{
-	if (_mFAudioContext != NULL)
-	{
-		return 0;
-	}
 
-	if (FAudioCreate(&_mFAudioContext, 0, FAUDIO_DEFAULT_PROCESSOR))
-	{
-		Logger_LogError("Unable to init FAudio!");
-		return -1;
-	}
-
-	if (FAudio_CreateMasteringVoice(_mFAudioContext, &_mMasteringVoiceContext, FAUDIO_DEFAULT_CHANNELS, FAUDIO_DEFAULT_SAMPLERATE, 0, 0, NULL))
-	{
-		Logger_LogError("Unable to create mastering voice!");
-		return -1;
-	}
-
-	return 0;
-}
+#endif

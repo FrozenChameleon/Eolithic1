@@ -63,7 +63,7 @@ void RenderTtFont_Create(const char* name, FixedByteBuffer* data)
 		shput(_mContexts, name, fontContext);
 	}
 
-	int font = fonsAddFontMem(fontContext, name, FixedByteBuffer_GetBuffer(fbbClone), (int)FixedByteBuffer_GetLength(fbbClone), 0);
+	int32_t font = fonsAddFontMem(fontContext, name, FixedByteBuffer_GetBuffer(fbbClone), (int32_t)FixedByteBuffer_GetLength(fbbClone), 0);
 
 	fonsSetFont(fontContext, font);
 }
@@ -83,12 +83,12 @@ void RenderTtFont_Draw(const FontMapData* replacement, const char* text, Color c
 	Vector2 renderPosition = Vector2_Add(position, replacement->mOffset);
 	Vector2 linePosition = Vector2_Zero;
 	float scaleFactor = (float)replacement->mScaleFactor;
-	int lineSpacing = replacement->mOverrideBoundsHeight;
+	int32_t lineSpacing = replacement->mOverrideBoundsHeight;
 
 	MString* textToDraw = NULL;
 	MString_Assign(&textToDraw, "");
 	size_t textSize = Utils_strlen(text);
-	for (int i = 0; i < textSize; i += 1)
+	for (int32_t i = 0; i < textSize; i += 1)
 	{
 		if (text[i] == '\n')
 		{
