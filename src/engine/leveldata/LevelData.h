@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "../utils/Macros.h"
 #include "Line.h"
 #include "Tile.h"
 #include "MetaMap.h"
@@ -14,7 +15,6 @@
 #include "../math/Rectangle.h"
 #include "../render/DrawRectangle.h"
 #include "../utils/MString.h"
-#include "../utils/Macros.h"
 
 typedef struct BufferReader BufferReader;
 typedef struct SpriteBatch SpriteBatch;

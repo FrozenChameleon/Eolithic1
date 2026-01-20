@@ -1,4 +1,4 @@
-#if SERVICE_DUMMY
+#ifdef SERVICE_DUMMY
 
 #include "SDL3/SDL.h"
 #include "Service.h"

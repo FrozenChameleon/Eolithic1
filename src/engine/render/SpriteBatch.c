@@ -70,7 +70,7 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
 	command->mType = RENDERER_TYPE_SHEET;
-	command->mDepth = depth;
+	command->mDepth = (uint8_t)depth;
 	command->mFlipX = flipX;
 	command->mFlipY = flipY;
 	command->mIsRectangle = false;
@@ -104,7 +104,7 @@ RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* textu
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
 	command->mType = RENDERER_TYPE_SHEET;
-	command->mDepth = depth;
+	command->mDepth = (uint8_t)depth;
 	command->mFlipX = flipX;
 	command->mFlipY = flipY;
 	command->mIsRectangle = false;
@@ -131,7 +131,7 @@ RenderCommandManyRectangle* SpriteBatch_DrawManyRectangle(SpriteBatch* sb, int32
 
 	RenderCommandManyRectangle* command = RenderStream_GetRenderCommandManyRectangleUninitialized(&sb->_mRenderStreams[depth]);
 	command->mType = RENDERER_TYPE_MANY_RECTANGLE;
-	command->mDepth = depth;
+	command->mDepth = (uint8_t)depth;
 	command->mManyRectangles = manyRectangles;
 	command->mTexture = DrawTool_GetSinglePixel();
 
@@ -150,8 +150,8 @@ RenderCommandTileLayer* SpriteBatch_DrawLayer(SpriteBatch* sb, Texture* tileset,
 
 	RenderCommandTileLayer* command = RenderStream_GetRenderCommandLayerUninitialized(&sb->_mRenderStreams[depth]);
 	command->mType = RENDERER_TYPE_TILE_LAYER;
-	command->mDepth = depth;
-	command->mLayer = layer;
+	command->mDepth = (uint8_t)depth;
+	command->mLayer = (uint8_t)layer;
 	command->mX1 = x1;
 	command->mX2 = x2;
 	command->mY1 = y1;
@@ -187,19 +187,19 @@ RenderCommandString* SpriteBatch_DrawString3(SpriteBatch* sb, const char* font, 
 
 	RenderCommandString* command = RenderStream_GetRenderCommandStringUninitialized(&sb->_mRenderStreams[depth]);
 	command->mType = RENDERER_TYPE_STRING;
-	command->mDepth = depth;
+	command->mDepth = (uint8_t)depth;
 	command->mIsInterpolated = false;
 	command->mIsLockedToInt = isLockedToInt;
 	command->mDoNotReplaceFont = false;
-	command->mAlignmentX = alignmentX;
-	command->mAlignmentY = alignmentY;
+	command->mAlignmentX = (int16_t)alignmentX;
+	command->mAlignmentY = (int16_t)alignmentY;
 	command->mPosition = position;
 	command->mLastPosition = Vector2_Zero;
 	command->mColor = color;
 	command->mFont = bitmapFont;
 	MString* tempString = NULL;
-	MString_Assign(&tempString, str);
-	command->mString = MString_GetText(tempString);
+	MString_AssignString(&tempString, str);
+	command->mString = MString_Text(tempString);
 	arrput(arr_pinned_strings, tempString);
 
 	return command;
@@ -218,7 +218,7 @@ RenderCommandSheet* SpriteBatch_DrawRectangle(SpriteBatch* sb, Texture* texture,
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
 	command->mType = RENDERER_TYPE_SHEET;
-	command->mDepth = depth;
+	command->mDepth = (uint8_t)depth;
 	command->mFlipX = flipX;
 	command->mFlipY = flipY;
 	command->mIsRectangle = true;

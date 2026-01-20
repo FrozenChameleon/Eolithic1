@@ -1,5 +1,6 @@
 #include "ThingInstance.h"
 
+#include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "../io/BufferReader.h"
 //#include "ThingSettings.h"
@@ -11,7 +12,6 @@
 #include "../core/GameHelper.h"
 #include "../resources/Resource.h"
 #include "../utils/Utils.h"
-#include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
@@ -61,9 +61,8 @@ static std_vector<OeStringPair>& GetGlobalThingSettings()
 
 void ThingInstance_Init(ThingInstance* ti)
 {
-	/*mName = OeUtils_NOT_SET;
-	mNodes = {};
-	mSettings = {};*/
+	Utils_memset(ti, 0, sizeof(ThingInstance));
+	Utils_strlcpy(ti->mName, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
 
 StringPair ThingInstance_GetSetting(ThingInstance* ti, const char* key)

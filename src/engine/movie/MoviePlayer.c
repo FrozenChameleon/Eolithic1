@@ -156,43 +156,43 @@ static MovieTextData GetTextData(IStringArray* arguments)
 static MovieOperationText* CreateNewMovieOperationText(bool isMappedText, const char* str, const char* font, Vector2 position,
 	int32_t speed, int32_t rate, int32_t wait, const char* color, bool isTextCentered)
 {
-	MovieOperationText* text = Utils_mallocArena(sizeof(MovieOperationText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationText* text = Utils_MallocArena(sizeof(MovieOperationText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationText_Init(text, isMappedText, str, font, position, speed, rate, wait, color, isTextCentered);
 	return text;
 }
 static MovieOperationFadeText* CreateNewMovieOperationFadeText(const char* str, const char* font, Vector2 position, int32_t rampSpeed, int32_t holdTime, bool isTextCentered)
 {
-	MovieOperationFadeText* fadeText = Utils_mallocArena(sizeof(MovieOperationFadeText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationFadeText* fadeText = Utils_MallocArena(sizeof(MovieOperationFadeText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationFadeText_Init(fadeText, str, font, position, rampSpeed, holdTime, isTextCentered);
 	return fadeText;
 }
 static MovieOperationPan* CreateNewMovieOperationPan(MovieImage* image, Vector2 speed, int32_t time)
 {
-	MovieOperationPan* pan = Utils_mallocArena(sizeof(MovieOperationPan), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationPan* pan = Utils_MallocArena(sizeof(MovieOperationPan), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationPan_Init(pan, image, speed, time);
 	return pan;
 }
 static MovieOperationShake* CreateNewMovieOperationShake(const char* key, MovieImage* image, int32_t min, int32_t max, int32_t time)
 {
-	MovieOperationShake* shake = Utils_mallocArena(sizeof(MovieOperationShake), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationShake* shake = Utils_MallocArena(sizeof(MovieOperationShake), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationShake_Init(shake, key, image, min, max, time);
 	return shake;
 }
 static MovieOperationWait* CreateNewMovieOperationWait(int32_t timeLimit)
 {
-	MovieOperationWait* wait = Utils_mallocArena(sizeof(MovieOperationWait), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationWait* wait = Utils_MallocArena(sizeof(MovieOperationWait), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationWait_Init(wait, timeLimit);
 	return wait;
 }
 static MovieImage* CreateNewMovieImage(int32_t scale, const char* image)
 {
-	MovieImage* mi = Utils_mallocArena(sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieImage* mi = Utils_MallocArena(sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieImage_Init(mi, scale, image);
 	return mi;
 }
 static MovieImage* CreateNewMovieImage2(int32_t scale, const char* baseImage, int32_t frames, int32_t flip)
 {
-	MovieImage* mi = Utils_mallocArena(sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieImage* mi = Utils_MallocArena(sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieImage_Init2(mi, scale, baseImage, frames, flip);
 	return mi;
 }
@@ -571,7 +571,7 @@ static void OperationGiveTime()
 {
 	MString* temp = NULL;
 	MString_AddAssignInt(&temp, _mData->_mFrameCounter);
-	Logger_LogInformation(MString_GetText(temp));
+	Logger_LogInformation(MString_Text(temp));
 	MString_Dispose(&temp);
 }
 static void OperationFadeText(const char* operation, IStringArray* arguments)
@@ -994,8 +994,8 @@ void MoviePlayer_Update2(bool doNotAllowMovieSkip)
 							MString_AssignSubString(&operation, line, 0, firstIndex);
 							MString_AssignSubString(&argumentString, line, firstIndex + 1, (int32_t)(lineSize - firstIndex - 2));
 							arguments = IStringArray_Create();
-							Utils_GetSplitCSV(MString_GetText(argumentString), arguments);
-							AddOperation(MString_GetText(operation), arguments);
+							Utils_GetSplitCSV(MString_Text(argumentString), arguments);
+							AddOperation(MString_Text(operation), arguments);
 							MString_Dispose(&operation);
 							MString_Dispose(&argumentString);
 							IStringArray_Dispose(arguments);
@@ -1087,7 +1087,7 @@ void MoviePlayer_DrawHud(SpriteBatch* spriteBatch)
 	{
 		MovieImage_DrawHud(_mData->sh_images[i].value, spriteBatch);
 	}
-#if EDITOR
+#ifdef EDITOR_MODE
 	//TODO C99
 	/*
 	int32_t targetY = 150;

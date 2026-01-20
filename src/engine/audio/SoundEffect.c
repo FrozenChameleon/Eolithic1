@@ -6,8 +6,8 @@
 
 #ifndef AUDIO_DUMMY
 
-#include "SoundEffect.h"
 #include "../utils/Macros.h"
+#include "SoundEffect.h"
 #include "SoundEffectInstance.h"
 #include "../utils/Utils.h"
 #include "../../third_party/stb_ds.h"
@@ -288,7 +288,11 @@ static SoundEffectInstance* SetupNextInstance(const char* sound)
 			bool success = SoundEffectInstance_Setup(instance, sound, data->_mWaveFileData);
 			if (!success)
 			{
-				Logger_printf("Unable to setup sound effect %s", sound);
+				MString* tempString = NULL;
+				MString_AssignString(&tempString, "Unable to setup sound effect: ");
+				MString_AddAssignString(&tempString, sound);
+				Logger_LogInformation(MString_Text(tempString));
+				MString_Dispose(&tempString);
 				return NULL;
 			}
 			else
@@ -383,3 +387,5 @@ const char* SoundEffect_GetDirectories(void)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

@@ -89,6 +89,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 	while (!Utils_StringEqualTo(data_signature, "data")) //ToLowerInvariant... normally
 	{
 		int32_t bytesToRead = BufferReader_ReadI32(br);
+		BufferReader_Seek(br, bytesToRead, BUFFER_READER_SEEK_FROM_CURRENT);
 		ReadFourChar(br, data_signature);
 	}
 	if (!Utils_StringEqualTo(data_signature, "data"))
@@ -161,3 +162,5 @@ void WaveFileData_Dispose(WaveFileData* waveFileData)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

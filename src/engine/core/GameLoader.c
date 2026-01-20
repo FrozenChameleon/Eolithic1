@@ -73,7 +73,7 @@ static void UpdateLoadingJob()
 }
 static void FinishLoading()
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	//WILLNOTDO 06142023
 	/*
 	GuiThingViewer.Init();
@@ -113,13 +113,13 @@ static void FindTextureFiles()
 		{
 			MString* preloader = NULL;
 			MString_Combine3(&preloader, "preloader_", Utils_IntToStringGlobalBuffer(counter), ".png");
-			File_PathCombine2(&path, "data", MString_GetText(preloader));
+			File_PathCombine2(&path, "data", MString_Text(preloader));
 			MString_Dispose(&preloader);
 		}
 
-		if (File_Exists(MString_GetText(path)))
+		if (File_Exists(MString_Text(path)))
 		{
-			Texture* tex = Renderer_GetTextureData(MString_GetText(path), File_ReadAll(MString_GetText(path)));
+			Texture* tex = Renderer_GetTextureData(MString_Text(path), File_ReadAll(MString_Text(path)));
 			arrput(arr_preloader_textures, tex);
 		}
 		else
@@ -140,16 +140,16 @@ static void LoadTextures()
 	MString* fileFinalBPath = NULL;
 
 	File_PathCombine2(&fileFinalPath, "data", "preloaderFinal.png");
-	if (File_Exists(MString_GetText(fileFinalPath)))
+	if (File_Exists(MString_Text(fileFinalPath)))
 	{
-		_mPreloaderTextureFinal = Renderer_GetTextureData(MString_GetText(fileFinalPath), File_ReadAll(MString_GetText(fileFinalPath)));
+		_mPreloaderTextureFinal = Renderer_GetTextureData(MString_Text(fileFinalPath), File_ReadAll(MString_Text(fileFinalPath)));
 	}
 	_mPreloaderTextureFinalToDisplay = _mPreloaderTextureFinal;
 
 	File_PathCombine2(&fileFinalBPath, "data", "preloaderFinalB.png");
-	if (File_Exists(MString_GetText(fileFinalBPath)))
+	if (File_Exists(MString_Text(fileFinalBPath)))
 	{
-		_mPreloaderTextureFinalB = Renderer_GetTextureData(MString_GetText(fileFinalBPath), File_ReadAll(MString_GetText(fileFinalBPath)));
+		_mPreloaderTextureFinalB = Renderer_GetTextureData(MString_Text(fileFinalBPath), File_ReadAll(MString_Text(fileFinalBPath)));
 	}
 
 	MString_Dispose(&fileFinalPath);
@@ -208,7 +208,13 @@ static void SetupLoadingJobs()
 }
 static void HandleFps()
 {
-	Logger_printf("Frame rate was %i", _mFps);
+	{
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Frame rate was ");
+		MString_AddAssignInt(&tempString, _mFps);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 
 	if (!Cvars_GetAsBool(CVARS_USER_IS_FIXED_TIMESTEP_ENABLED) || !Cvars_GetAsBool(CVARS_USER_IS_VSYNC))
 	{

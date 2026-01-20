@@ -8,7 +8,7 @@
 
 #include "Utils.h"
 
-const Timer Timer_Zero;
+const Timer Timer_Zero = { 0, 0 };
 
 Timer Timer_Create(int32_t limit)
 {

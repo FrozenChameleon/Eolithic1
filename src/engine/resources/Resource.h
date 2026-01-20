@@ -6,8 +6,8 @@
 
 #pragma once
 
-#include "stdint.h"
 #include "../utils/Macros.h"
+#include "stdint.h"
 #include "../utils/MString.h"
 
 typedef struct Resource

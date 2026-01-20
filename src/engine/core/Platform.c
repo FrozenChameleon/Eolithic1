@@ -1,8 +1,8 @@
 #include "Platform.h"
 
+#include "../utils/Macros.h"
 #include "SDL3/SDL.h"
 #include "../utils/Utils.h"
-#include "../utils/Macros.h"
 
 static bool _mHasTriedToGetPreferredLocale;
 static char _mPreferredLocale[EE_FILENAME_MAX];

@@ -102,3 +102,5 @@ const char* SoundEffect_GetDirectories(void)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

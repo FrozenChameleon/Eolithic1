@@ -6,10 +6,8 @@
 
 #pragma once
 
-#include "stdint.h"
-#include "stdbool.h"
-#include "../render/Sheet.h"
 #include "../utils/Macros.h"
+#include "../render/Sheet.h"
 #include "../utils/MString.h"
 
 typedef bool(*Achievement_ConditionFunc);

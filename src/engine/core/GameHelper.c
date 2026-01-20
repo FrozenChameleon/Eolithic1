@@ -172,7 +172,7 @@ void GameHelper_CreateDefaultGameStates()
 }
 void GameHelper_CreateDefaultGlobalSystems()
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	/* //WILLNOTDO 06242023 DEBUG STUFF
 	GameStateManager_AddGlobalSystem(GlobalSysMetaMapHack_CreateSystem()));
 	GameStateManager_AddGlobalSystem(GlobalSysUpdateFontMap_CreateSystem()));

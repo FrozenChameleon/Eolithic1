@@ -154,7 +154,7 @@ void* ComponentPack_GetFirstSetComponent(ComponentPack* pack)
 		{
 			MString* tempString = NULL;
 			MString_Combine2(&tempString, "Reached maximum capacity for pack: ", GetPackComponentName(pack));
-			Exception_Run(MString_GetText(tempString), false);
+			Exception_Run(MString_Text(tempString), false);
 			MString_Dispose(&tempString);
 		}
 		return pack->Components;
@@ -171,7 +171,7 @@ Entity ComponentPack_GetFirstSetEntity(ComponentPack* pack)
 	{
 		MString* tempString = NULL;
 		MString_Combine2(&tempString, "Cannot retrieve any entity in pack: ", GetPackComponentName(pack));
-		Exception_Run(MString_GetText(tempString), false);
+		Exception_Run(MString_Text(tempString), false);
 		MString_Dispose(&tempString);
 	}
 	return ENTITY_NOTHING;
@@ -226,7 +226,7 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 	{
 		MString* tempString = NULL;
 		MString_Combine2(&tempString, "Reached maximum capacity for pack name: ", GetPackComponentName(pack));
-		Logger_LogInformation(MString_GetText(tempString));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 		return &pack->_mDummy;
 	}
@@ -234,7 +234,7 @@ void* ComponentPack_Set2(ComponentPack* pack, Entity entity, bool isNotExclusive
 	{
 		MString* tempString = NULL;
 		MString_Combine2(&tempString, "Component pack is expanding for pack: ", GetPackComponentName(pack));
-		Logger_LogInformation(MString_GetText(tempString));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 

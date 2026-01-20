@@ -1,5 +1,6 @@
 #include "ServiceHelper.h"
 
+#include "../utils/Macros.h"
 #include "../core/Game.h"
 #include "../service/Service.h"
 #include "../input/Input.h"
@@ -11,7 +12,6 @@
 #include "../input/RecordingTool.h"
 #include "../gamesave/GameSaveManager.h"
 #include "../input/InputBindings.h"
-#include "../../DebugDefs.h"
 
 enum { PLAYER_LOST_CONTROLLER_CONNECTION_LENGTH = 4 };
 

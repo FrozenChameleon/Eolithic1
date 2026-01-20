@@ -8,8 +8,8 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 	if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
-#if EDITOR
-		//WILLNOTDO 06262023 (EDITOR) 2023 OeEditor.Draw(spriteBatch);
+#ifdef EDITOR_MODE
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 OeEditor.Draw(spriteBatch);
 #endif
 	}
 	else
@@ -21,8 +21,8 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 {
 	if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
-#if EDITOR
-		//WILLNOTDO 06262023 (EDITOR) 2023 OeEditor.DrawHud(spriteBatch);
+#ifdef EDITOR_MODE
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 OeEditor.DrawHud(spriteBatch);
 #endif
 	}
 	else
@@ -32,24 +32,24 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 }
 /*void OeGlobalSysDefaultState_DrawDebugHud(OeSpriteBatch* spriteBatch)
 {
-#if EDITOR
-	//WILLNOTDO 06262023 (EDITOR) 2023 OeGameStateManager.ActiveGameState.DrawDebugHud(spriteBatch);
+#ifdef EDITOR_MODE
+	//WILLNOTDO 06262023 (EDITOR_MODE) 2023 OeGameStateManager.ActiveGameState.DrawDebugHud(spriteBatch);
 #endif
 }*/
 static void Update(void* givenData)
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 	{
-		//WILLNOTDO 06262023 (EDITOR) 2023 OeEditor.Update();
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 OeEditor.Update();
 	}
 	else
 	{
-		//WILLNOTDO 06262023 (EDITOR) 2023 OeGuiThingViewer.Update();
-		//WILLNOTDO 06262023 (EDITOR) 2023 if (!OeConsole.IsPresent())
-		//WILLNOTDO 06262023 (EDITOR) 2023 {
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 OeGuiThingViewer.Update();
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 if (!OeConsole.IsPresent())
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 {
 		GameState_Update(GameStateManager_GetGameState());
-		//WILLNOTDO 06262023 (EDITOR) 2023 }
+		//WILLNOTDO 06262023 (EDITOR_MODE) 2023 }
 	}
 #else
 	GameState_Update(GameStateManager_GetGameState());

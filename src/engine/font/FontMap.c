@@ -1,8 +1,8 @@
 #include "FontMap.h"
 
+#include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "../utils/Cvars.h"
-#include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
 
 //static int64_t _mLastWriteTime = 0;
@@ -228,7 +228,7 @@ const FontMapData* FontMap_GetReplacement(const char* fontName)
 
 	return NULL;
 }
-/*#if EDITOR
+/*#ifdef EDITOR_MODE
 void FontMap_Update()
 {
 #ifdef GLOBAL_DEF_GAME_IS_MUTE_CRIMSON_DX

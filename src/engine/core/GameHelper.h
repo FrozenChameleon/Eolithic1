@@ -66,7 +66,7 @@ extern int32_t GAMEHELPER_PLATFORM_DOWN;
 extern int32_t GAMEHELPER_PLATFORM_RIGHT;
 extern int32_t GAMEHELPER_PLATFORM_LEFT;
 
-#if EDITOR
+#ifdef EDITOR_MODE
 void GameHelper_OnDebugFastResetPlusMove();
 #endif
 void GameHelper_Initialize();

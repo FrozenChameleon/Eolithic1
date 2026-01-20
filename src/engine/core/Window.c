@@ -6,6 +6,7 @@
 
 #include "Window.h"
 
+#include "../utils/Macros.h"
 #include "SDL3/SDL.h"
 #include "Game.h"
 #include "../utils/Cvars.h"
@@ -15,11 +16,10 @@
 #include "../render/Renderer.h"
 #include "../input/ControllerState.h"
 #include "../service/Service.h"
-#include "../../DebugDefs.h"
 #include "../io/File.h"
 #include "../utils/Utils.h"
 #include "../../third_party/stb_ds.h"
-#if RENDER_FNA3D
+#ifdef RENDER_FNA3D
 #include <FNA3D.h>
 #endif
 
@@ -255,7 +255,7 @@ void Window_LoadIcon()
 		MString* sharedPath = NULL;
 		File_PathCombine2(&sharedPath, File_GetBasePath(), gameName);
 		MString_AddAssignString(&sharedPath, ".bmp");
-		SDL_Surface* icon = SDL_LoadBMP(MString_GetText(sharedPath));
+		icon = SDL_LoadBMP(MString_Text(sharedPath));
 		MString_Dispose(&sharedPath);
 	}
 

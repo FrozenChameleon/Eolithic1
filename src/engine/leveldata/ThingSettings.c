@@ -136,12 +136,12 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 				arrput(arr_images, data);
 			}
 
-			shput(entry, MString_GetText(key2), arr_images);
+			shput(entry, MString_Text(key2), arr_images);
 
 			MString_Dispose(&key2);
 		}
 
-		shput(ts->sh_graphics_data, MString_GetText(key1), entry);
+		shput(ts->sh_graphics_data, MString_Text(key1), entry);
 
 		MString_Dispose(&key1);
 	}

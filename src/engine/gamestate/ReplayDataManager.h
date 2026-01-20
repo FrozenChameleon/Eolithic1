@@ -3,7 +3,6 @@
 #include "../utils/Macros.h"
 #include "GameStateInputData.h"
 #include "GameStateData.h"
-#include "../../GlobalDefs.h"
 
 enum
 {

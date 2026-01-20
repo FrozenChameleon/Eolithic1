@@ -7,12 +7,12 @@
 
 static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
-//#if EDITOR
+//#ifdef EDITOR_MODE
 	SystemFunc_DrawHelper(C_DrawLineOfSight, DrawLineOfSightSys_DrawRoutine, spriteBatch);
 //#endif
 }
 
-//#if EDITOR
+//#ifdef EDITOR_MODE
 void DrawLineOfSightSys_DrawRoutine(Entity owner, DrawLineOfSight* data, SpriteBatch* spriteBatch)
 {
 	if (!GLOBALS_DEBUG_SHOW_INGAME_COLLISION)

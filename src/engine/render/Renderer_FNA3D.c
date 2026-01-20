@@ -13,10 +13,12 @@
   * See monoxna.LICENSE for details.
   */
 
+#ifdef RENDER_FNA3D
+
 #include "Renderer.h"
 
+#include "../utils/Macros.h"
 #include "RendererMacros.h"
-#include "../../DebugDefs.h"
 #include "../service/Service.h"
 #include "../core/Game.h"
 #include "../utils/Cvars.h"
@@ -35,8 +37,7 @@
 #include "../math/Matrix.h"
 #include "../math/MathHelper.h"
 #include "../io/File.h"
-#include "RenderTtFont.h"
-#include "../utils/Utils.h"
+#include "RenderTTFont.h"
 #include "FNA3D.h"
 #include "FNA3D_Image.h"
 #include "SDL3/SDL.h"
@@ -44,7 +45,6 @@
 #define MOJOSHADER_EFFECT_SUPPORT
 #include <mojoshader.h>
 #include <mojoshader_effects.h>
-#include "../../GlobalDefs.h"
 
 #define MULTI_COLOR_REPLACE_LEN SHADER_PROGRAM_MAX_REPLACE_LENGTH
 #define TRANSFORM_DEST_LEN 16
@@ -581,7 +581,7 @@ static void DrawTheBatch(DrawBatch drawBatch)
 }
 static void NextBatch(bool keepDrawState)
 {
-	DrawState drawState;
+	DrawState drawState = { 0 };
 	if (keepDrawState)
 	{
 		drawState = _mCurrentDrawBatch.mDrawState;
@@ -603,7 +603,7 @@ void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoo
 {
 	NextBatch(false);
 
-	const TtFontState* fontState = Renderer_GetTtFontState();
+	const TTFontState* fontState = Renderer_GetTTFontState();
 
 	float scaleFactor = fontState->mScaleFactor;
 
@@ -613,7 +613,7 @@ void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoo
 	Vector2 cameraPos = Vector2_MulFloat(offsetPosition, scaleFactor);
 	SetupRenderState(cameraPos, scaler, BLENDSTATE_NONPREMULTIPLIED, (FNA3D_Texture*)(texture->mTextureData), Renderer_INTERNAL_GetCurrentShaderProgram());
 
-	Renderer_SetupVerticesForTtFont(_mVertexBuffer.mVertices, fontState->mColor, 0, verts, tcoords, colors, nverts);
+	Renderer_SetupVerticesForTTFont(_mVertexBuffer.mVertices, fontState->mColor, 0, verts, tcoords, colors, nverts);
 
 	VertexBufferInstance_SetData(&_mVertexBuffer, 0, nverts);
 
@@ -695,7 +695,7 @@ Texture* Renderer_GetNewTextureData(const char* path, int32_t width, int32_t hei
 
 	Texture* tex = Utils_malloc(sizeof(Texture));
 	memset(tex, 0, sizeof(Texture));
-	MString_Assign(&tex->mPath, path);
+	MString_AssignString(&tex->mPath, path);
 	tex->mBounds.Width = width;
 	tex->mBounds.Height = height;
 	tex->mTextureData = texture;
@@ -715,7 +715,7 @@ static void LoadShader(Effect* effect, const char* shaderName)
 	{
 		MString* path = NULL;
 		File_PathCombine3(&path, File_GetBasePath(), "data", shaderName);
-		effectFile = SDL_IOFromFile(MString_GetText(path), "rb");
+		effectFile = SDL_IOFromFile(MString_Text(path), "rb");
 		MString_Dispose(&path);
 	}
 
@@ -970,11 +970,11 @@ void Renderer_ResetBackBuffer()
 	Logger_LogInformation("Back Buffer has been reset");
 	{
 		MString* tempString = NULL;
-		MString_Assign(&tempString, "Actual buffer bounds: ");
+		MString_AssignString(&tempString, "Actual buffer bounds: ");
 		MString_AddAssignInt(&tempString, _mActualBufferBounds.Width);
 		MString_AddAssignString(&tempString, "x");
 		MString_AddAssignInt(&tempString, _mActualBufferBounds.Height);
-		Logger_LogInformation(MString_GetText(tempString));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 
@@ -984,11 +984,11 @@ void Renderer_ResetBackBuffer()
 	{
 		{
 			MString* tempString = NULL;
-			MString_Assign(&tempString, "Virtual buffer bounds: ");
+			MString_AssignString(&tempString, "Virtual buffer bounds: ");
 			MString_AddAssignInt(&tempString, _mVirtualBufferBounds.Width);
 			MString_AddAssignString(&tempString, "x");
 			MString_AddAssignInt(&tempString, _mVirtualBufferBounds.Height);
-			Logger_LogInformation(MString_GetText(tempString));
+			Logger_LogInformation(MString_Text(tempString));
 			MString_Dispose(&tempString);
 		}
 
@@ -1015,3 +1015,7 @@ Rectangle Renderer_GetDrawableSize()
 	//FNA3D_GetDrawableSize(_mDeviceWindowHandle, &drawableSize.Width, &drawableSize.Height);
 	return drawableSize;
 }
+
+#endif
+
+typedef int compiler_warning_compliance;

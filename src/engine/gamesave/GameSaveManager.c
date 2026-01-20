@@ -1,5 +1,6 @@
 #include "GameSaveManager.h"
 
+#include "../utils/Macros.h"
 #include "../core/GameHelper.h"
 #include "../core/Game.h"
 #include "../utils/Logger.h"
@@ -7,7 +8,6 @@
 #include "../utils/Utils.h"
 #include "../service/Service.h"
 #include "../globals/Globals.h"
-#include "../../GlobalDefs.h"
 #include "../io/FixedByteBuffer.h"
 #include "../io/DynamicByteBuffer.h"
 #include "../io/BufferReader.h"

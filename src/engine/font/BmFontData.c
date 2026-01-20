@@ -160,7 +160,7 @@ const char* BmFontData_FindString(const char* key, IStringArray* tagSplit)
 			{
 				int32_t strLen = (int32_t)Utils_strlen(str);
 				MString_AssignSubString(&_mTempString, str, index + 1, strLen - index - 1);
-				return MString_GetText(_mTempString);
+				return MString_Text(_mTempString);
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 #include "MString.h"
 
+#include "Macros.h"
 #include "Utils.h"
 #include "Logger.h"
-#include "Macros.h"
 #include "../io/BufferReader.h"
 #include "../../third_party/stb_ds.h"
 
@@ -108,6 +108,11 @@ static void GrowMStringIfNeeded(MString* str, size_t newCapacity)
 		return;
 	}
 
+	if (newCapacity == 0) //Cannot ever be a capacity of 0.
+	{
+		newCapacity = 1;
+	}
+
 	if (str->capacity >= newCapacity)
 	{
 		return;
@@ -129,7 +134,11 @@ static void ClearMString(MString* str)
 	str->len = 0;
 }
 
-char* MString_GetText(const MString* str)
+uint64_t MString_GetRefs()
+{
+	return _mRefs;
+}
+char* MString_Text(const MString* str)
 {
 	if (str == NULL)
 	{
@@ -147,7 +156,7 @@ char MString_GetLastChar(const MString* str)
 
 	return str->text[str->len - 1];
 }
-int32_t MString_GetLength(const MString* str)
+int32_t MString_Length(const MString* str)
 {
 	if (str == NULL)
 	{
@@ -156,7 +165,7 @@ int32_t MString_GetLength(const MString* str)
 
 	return str->len;
 }
-int32_t MString_GetCapacity(const MString* str)
+int32_t MString_Capacity(const MString* str)
 {
 	if (str == NULL)
 	{
@@ -167,13 +176,13 @@ int32_t MString_GetCapacity(const MString* str)
 }
 bool MString_EqualToString(const MString* str, const char* otherStr)
 {
-	return Utils_StringEqualTo(MString_GetText(str), otherStr);
+	return Utils_StringEqualTo(MString_Text(str), otherStr);
 }
 bool MString_EqualTo(const MString* str, const MString* otherStr)
 {
-	return Utils_StringEqualTo(MString_GetText(str), MString_GetText(otherStr));
+	return Utils_StringEqualTo(MString_Text(str), MString_Text(otherStr));
 }
-void MString_Assign(MString** str, const char* toThis)
+void MString_AssignString(MString** str, const char* toThis)
 {
 	//
 	CheckAndReplaceNullString(str);
@@ -188,11 +197,11 @@ void MString_Assign(MString** str, const char* toThis)
 }
 void MString_AssignMString(MString** str, MString* toThis)
 {
-	MString_Assign(str, MString_GetText(toThis));
+	MString_AssignString(str, MString_Text(toThis));
 }
 void MString_Clear(MString** str)
 {
-	MString_Assign(str, EE_STR_EMPTY);
+	MString_AssignString(str, EE_STR_EMPTY);
 }
 void MString_AssignEmpty(MString** str, int32_t capacity)
 {
@@ -220,6 +229,10 @@ void MString_AssignSubString(MString** str, const char* fromThis, int32_t startI
 	GrowMStringIfNeeded(currentString, newCapacity);
 	currentString->len = (int32_t)Utils_strlcpy(currentString->text, _mStringBuffer, currentString->capacity);
 }
+void MString_AddAssignBool(MString** str, bool addThisBool)
+{
+	MString_AddAssignInt(str, addThisBool ? 1 : 0);
+}
 void MString_AddAssignInt(MString** str, int32_t addThisInt)
 {
 	ClearNumberBuffer();
@@ -232,10 +245,10 @@ void MString_AddAssignUInt64(MString** str, uint64_t addThisUInt64)
 	Utils_UInt64ToString(addThisUInt64, _mNumberBuffer, NUMBER_BUFFER_LEN);
 	MString_AddAssignString(str, _mNumberBuffer);
 }
-void MString_AddAssignFloat(MString** str, float addThisSingle)
+void MString_AddAssignFloat(MString** str, float addThisFloat)
 {
 	ClearNumberBuffer();
-	Utils_FloatToString(addThisSingle, _mNumberBuffer, NUMBER_BUFFER_LEN);
+	Utils_FloatToString(addThisFloat, _mNumberBuffer, NUMBER_BUFFER_LEN);
 	MString_AddAssignString(str, _mNumberBuffer);
 }
 void MString_AddAssignDouble(MString** str, double addThisDouble)
@@ -255,7 +268,7 @@ void MString_AddAssignChar(MString** str, char addThisChar)
 }
 void MString_AddAssignMString(MString** str, const MString* addThisStr)
 {
-	MString_AddAssignString(str, MString_GetText(addThisStr));
+	MString_AddAssignString(str, MString_Text(addThisStr));
 }
 void MString_AddAssignString(MString** str, const char* addThisStr)
 {
@@ -314,15 +327,12 @@ void MString_Read(MString** str, BufferReader* br)
 	int32_t newStrCapacity = newStringLength + 1;
 	MString_AssignEmpty(str, newStrCapacity);
 	(*str)->len = newStringLength;
-	BufferReader_ReadJustTheStringData(br, newStringLength, MString_GetText(*str), newStrCapacity);
+	BufferReader_ReadJustTheStringData(br, newStringLength, MString_Text(*str), newStrCapacity);
 }
-uint64_t MString_GetRefs()
-{
-	return _mRefs;
-}
+
 void MString_Combine2(MString** str, const char* str1, const char* str2)
 {
-	MString_Assign(str, str1);
+	MString_AssignString(str, str1);
 	MString_AddAssignString(str, str2);
 }
 void MString_Combine3(MString** str, const char* str1, const char* str2, const char* str3)
@@ -362,7 +372,7 @@ void MString_DebugPrintLeakInfo()
 	int64_t len = hmlen(_mLeakTest);
 	for (int32_t i = 0; i < len; i += 1)
 	{
-		Logger_printf(MString_GetText(_mLeakTest[i].key));
+		Logger_printf(MString_Text(_mLeakTest[i].key));
 		Logger_printf("\n");
 	}
 #endif

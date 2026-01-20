@@ -1,3 +1,5 @@
+//Defs should be included by including "/engine/utils/Macros.h"
+
 #pragma once
 
 #define GLOBAL_DEF_PARTICLE_LIMIT 4096

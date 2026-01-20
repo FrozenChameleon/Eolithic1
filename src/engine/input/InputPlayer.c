@@ -1,5 +1,6 @@
 #include "InputPlayer.h"
 
+#include "../utils/Macros.h"
 #include "InputBindings.h"
 #include "ActionList.h"
 #include "Input.h"
@@ -10,7 +11,6 @@
 #include "KeyboardState.h"
 #include "MouseState.h"
 #include "ControllerStates.h"
-#include "../../DebugDefs.h"
 #include "../service/Service.h"
 #include "../gamestate/GameStateManager.h"
 #include "../gamestate/GameState.h"
@@ -275,7 +275,7 @@ bool InputPlayer_MyControllerLostConnection(InputPlayer* ip)
 
 	return false;
 }
-#if EDITOR
+#ifdef EDITOR_MODE
 void InputPlayer_DebugSetDevice(InputPlayer* ip, int32_t deviceNumber)
 {
 	ip->_mInputDeviceNumber = deviceNumber;

@@ -1,5 +1,6 @@
 #include "Func.h"
 
+#include "../utils/Macros.h"
 #include "../components/FreezeEntityTillOnScreen.h"
 #include "../components/TagIsPlayer.h"
 #include "../components/Camera.h"
@@ -64,21 +65,12 @@
 #include "../leveldata/LevelData.h"
 #include "../globals/Directions.h"
 #include "../leveldata/ThingSettings.h"
-//#include "../resources/ResourceManagers.h"
 #include "../render/Renderer.h"
-#include "../../GlobalDefs.h"
 #include "../gamestate/GameStateManager.h"
 #include "float.h"
 #include "../utils/Logger.h"
 #include "../../third_party/stb_ds.h"
 #include "../gamestate/EntitySearch.h"
-#include "../components/Camera.h"
-#include "../components/DrawActor.h"
-#include "../components/HitFlashKit.h"
-#include "../components/MirrorEffect.h"
-#include "../components/MoveGetter.h"
-#include "../components/SceneCameraData.h"
-#include "../components/NodeMovingKit.h"
 #include "../resources/ResourceManagerList.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
@@ -655,13 +647,13 @@ void Do_FreezeEntityTillOnScreen2(Entity entity, bool facesPlayer, bool isFacing
 void Do_TurnOnMirrorEffect(Entity entity)
 {
 	MirrorEffect* mirrorEffect = Get_Component(C_MirrorEffect, entity);
-	//mirrorEffect->SetOn();
+	MirrorEffect_SetOn(mirrorEffect);
 }
 
 void Do_TurnOffMirrorEffect(Entity entity)
 {
 	MirrorEffect* mirrorEffect = Get_Component(C_MirrorEffect, entity);
-	//mirrorEffect->SetOff();
+	MirrorEffect_SetOff(mirrorEffect);
 }
 
 void Do_ActivateHitFlashKit(Entity entity)
@@ -1422,7 +1414,7 @@ Vector2 Get_MoveCircleAroundPositionDestination(float degree, float degreeOffset
 }
 void Do_DefaultQuickDebugCamera(Entity entity)
 {
-	//WILLNOTDO, EDITOR STUFF
+	//WILLNOTDO, EDITOR_MODE STUFF
 	/*
 	Vector2 debug = Globals_DEBUG_QUICK_PLAYER_POSITION;
 	if (debug.X != -1 && debug.Y != -1)
@@ -2096,7 +2088,7 @@ Random32* Get_SharedRandom()
 }
 void Do_SetDebugForcedMove(Entity entity)
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	int32_t forcedMove = Get_DebugForcedMove(entity);
 	if (forcedMove >= 0)
 	{
@@ -2106,7 +2098,7 @@ void Do_SetDebugForcedMove(Entity entity)
 }
 int32_t Get_DebugForcedMove(Entity entity)
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	int32_t forceMove = Get_TuningAsInt(entity, "DEBUG_FORCED_MOVE");
 	if (forceMove < 1)
 	{

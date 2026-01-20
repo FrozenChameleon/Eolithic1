@@ -8,11 +8,11 @@
 
 #include "Music.h"
 
+#include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "VolumeData.h"
 #include "MusicInstance.h"
 #include "../globals/Globals.h"
-#include "../utils/Macros.h"
 #include "../utils/Cvars.h"
 #include "SoundEffect.h"
 #include "../gamestate/GameStateManager.h"
@@ -230,3 +230,5 @@ void Music_Tick(void)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

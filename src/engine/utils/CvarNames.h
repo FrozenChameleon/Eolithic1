@@ -118,8 +118,8 @@
 #define CVARS_USER_LANGUAGE "usr_language"
 #define CVARS_USER_IS_USING_ALT_FONT "usr_is_using_alt_font"
 
-#if EDITOR
-//EDITOR
+#ifdef EDITOR_MODE
+//EDITOR_MODE
 #define CVARS_PREFIX_EDITOR_CONFIG "edt_"
 #define CVARS_EDITOR_USE_MAGENTA "edt_use_magenta"
 #define CVARS_EDITOR_STRICT_CAMERA "edt_strict_camera"

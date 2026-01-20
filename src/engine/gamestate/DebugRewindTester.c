@@ -1,6 +1,6 @@
 #include "DebugRewindTester.h"
 
-#include "../../DebugDefs.h"
+#include "../utils/Macros.h"
 #include "../core/Func.h"
 #include "../input/RecordingTool.h"
 #include "../utils/Logger.h"

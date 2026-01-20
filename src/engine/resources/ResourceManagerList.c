@@ -14,7 +14,7 @@
 #include "../leveldata/Particle.h"
 #include "../movie/MovieTiming.h"
 #include "../movie/Movie.h"
-#include "../font/TtFont.h"
+#include "../font/TTFont.h"
 #include "../leveldata/ThingSettings.h"
 
 #define MANAGERS_LEN 50

@@ -15,9 +15,16 @@
 #include "../io/DatReader.h"
 #include "../utils/IStrings.h"
 
+static void PrintHelper(const char* str1, const char* str2)
+{
+	MString* tempString = NULL;
+	MString_Combine2(&tempString, str1, str2);
+	Logger_LogInformation(MString_Text(tempString));
+	MString_Dispose(&tempString);
+}
 static void PrintResourceType(ResourceManager* rm)
 {
-	Logger_printf("Resource type: %s\n", rm->_mResourceType);
+	PrintHelper("Resource type: ", rm->_mResourceType);
 }
 
 void ResourceManager_Init(ResourceManager* rm)
@@ -45,7 +52,7 @@ Resource* ResourceManager_GetResource(ResourceManager* rm, const char* filenameW
 	Resource* resource = shget(rm->sh_resources, filenameWithoutExtension);
 	if (resource == NULL)
 	{
-		Logger_printf("Unable to get resource: %s", filenameWithoutExtension);
+		PrintHelper("Unable to get resource: ", filenameWithoutExtension);
 		return NULL;
 	}
 	
@@ -56,7 +63,7 @@ void* ResourceManager_GetResourceData(ResourceManager* rm, const char* filenameW
 	Resource* resource = ResourceManager_GetResource(rm, filenameWithoutExtension);
 	if (resource == NULL)
 	{
-		Logger_printf("Unable to get resource data: %s", filenameWithoutExtension);
+		PrintHelper("Unable to get resource data: ", filenameWithoutExtension);
 		return NULL;
 	}
 
@@ -66,13 +73,13 @@ Resource* ResourceManager_LoadAssetFromStreamAndCreateResource(ResourceManager* 
 {
 	Resource* resource = Utils_malloc(sizeof(Resource));
 	Utils_memset(resource, 0, sizeof(Resource));
-	MString_Assign(&resource->mPath, path);
+	MString_AssignString(&resource->mPath, path);
 	Utils_strlcpy(resource->mFileNameWithoutExtension, filenameWithoutExtension, EE_FILENAME_MAX);
 	resource->mID = rm->_mResourceCounter;
 	rm->_mResourceCounter += 1;
 	if (rm->_mFromStream != NULL)
 	{
-		resource->mData = rm->_mFromStream(MString_GetText(resource->mPath), resource->mFileNameWithoutExtension, br);
+		resource->mData = rm->_mFromStream(MString_Text(resource->mPath), resource->mFileNameWithoutExtension, br);
 	}
 	shput(rm->sh_resources, resource->mFileNameWithoutExtension, resource);
 	return resource;
@@ -85,24 +92,24 @@ void ResourceManager_LoadAllFromDat(ResourceManager* rm)
 {
 	MString* path = NULL;
 	File_PathCombine2(&path, "data", ResourceManager_GetDatFileName(rm));
-	if (!File_Exists(MString_GetText(path)))
+	if (!File_Exists(MString_Text(path)))
 	{
-		Logger_printf("Unable to load from dat: %s\n", MString_GetText(path));
+		PrintHelper("Unable to load from dat: ", MString_Text(path));
 		PrintResourceType(rm);
 		return;
 	}
 	
-	DatReader* dr = DatReader_Create(MString_GetText(path));
+	DatReader* dr = DatReader_Create(MString_Text(path));
 	while (DatReader_HasNext(dr))
 	{
 		MString* nextPath = NULL;
 		MString* fileName = NULL;
 		MString* fileNameWithoutExtension = NULL;
 		DatReader_NextFilePath(&nextPath, dr);
-		File_GetFileName(&fileName, MString_GetText(nextPath));
-		File_GetFileNameWithoutExtension(&fileNameWithoutExtension, MString_GetText(nextPath));
+		File_GetFileName(&fileName, MString_Text(nextPath));
+		File_GetFileNameWithoutExtension(&fileNameWithoutExtension, MString_Text(nextPath));
 		BufferReader* br = DatReader_NextStream(dr, false);
-		ResourceManager_LoadAssetFromStreamAndCreateResource(rm, br, MString_GetText(fileNameWithoutExtension), MString_GetText(path));
+		ResourceManager_LoadAssetFromStreamAndCreateResource(rm, br, MString_Text(fileNameWithoutExtension), MString_Text(path));
 		BufferReader_Dispose(br);
 		MString_Dispose(&nextPath);
 		MString_Dispose(&fileName);
@@ -154,7 +161,7 @@ const char* ResourceManager_GetKey(ResourceManager* rm, const char* filenameWith
 	int64_t index = shgeti(rm->sh_resources, filenameWithoutExtension);
 	if (index < 0)
 	{
-		Logger_printf("Unable to get key: %s", filenameWithoutExtension);
+		PrintHelper("Unable to get key: ", filenameWithoutExtension);
 		return NULL;
 	}
 

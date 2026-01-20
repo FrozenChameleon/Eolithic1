@@ -5,6 +5,6 @@
 #include "../render/Color.h"
 #include "../math/Rectangle.h"
 
-void RenderTtFont_Create(const char* name, FixedByteBuffer* data);
-void RenderTtFont_Draw(const FontMapData* replacement, const char* text, Color color, Vector2 position);
-Rectangle RenderTtFont_GetBounds(const FontMapData* replacement, const char* text);
+void RenderTTFont_Create(const char* name, FixedByteBuffer* data);
+void RenderTTFont_Draw(const FontMapData* replacement, const char* text, Color color, Vector2 position);
+Rectangle RenderTTFont_GetBounds(const FontMapData* replacement, const char* text);

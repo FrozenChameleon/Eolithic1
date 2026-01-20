@@ -60,11 +60,11 @@ void DatReader_NextFilePath(MString** assignToThis, DatReader* dr)
 		arrput(dr->arr_last_strings, temp);
 	}
 
-	MString_Assign(assignToThis, "");
+	MString_AssignString(assignToThis, "");
 	int64_t len = arrlen(dr->arr_last_strings);
 	for (int32_t i = 0; i < len; i += 1)
 	{
-		MString_AddAssignString(assignToThis, MString_GetText(dr->arr_last_strings[i]));
+		MString_AddAssignString(assignToThis, MString_Text(dr->arr_last_strings[i]));
 		if (i < (len - 1))
 		{
 			File_AppendPathSeparator(assignToThis);
@@ -72,7 +72,7 @@ void DatReader_NextFilePath(MString** assignToThis, DatReader* dr)
 	}
 
 	DatInfo* currentInfo = GetCurrentDatInfo(dr);
-	MString_Assign(&currentInfo->mPath, MString_GetText(*assignToThis));
+	MString_AssignString(&currentInfo->mPath, MString_Text(*assignToThis));
 }
 BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 {
@@ -115,9 +115,9 @@ DatReader* DatReader_Create(const char* path)
 	DatReader* dr = Utils_calloc(1, sizeof(DatReader));
 
 	dr->_mReader = BufferReader_CreateFromPath(path);
-	MString_Assign(&dr->_mPath, path);
+	MString_AssignString(&dr->_mPath, path);
 	
-	int32_t version = BufferReader_ReadI32(dr->_mReader);
+	BufferReader_ReadI32(dr->_mReader); //VERSION
 	dr->_mCount = BufferReader_ReadI32(dr->_mReader);
 	for (int32_t i = 0; i < dr->_mCount; i += 1)
 	{

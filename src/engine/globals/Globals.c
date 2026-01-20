@@ -6,6 +6,7 @@
 
 #include "Globals.h"
 
+#include "../utils/Macros.h"
 #include "../utils/Logger.h"
 #include "../service/Service.h"
 #include "../utils/Utils.h"
@@ -13,8 +14,6 @@
 #include "../input/ControllerStates.h"
 #include "../input/RecordingTool.h"
 #include "time.h"
-#include "../../GlobalDefs.h"
-#include "../../DebugDefs.h"
 
 static bool _mIsAutoMode;
 static bool _mIsAutoModeFixed;
@@ -246,12 +245,11 @@ uint32_t Globals_GetTimeForRandomSeed()
 void Globals_ToggleGodMode()
 {
 	GLOBALS_DEBUG_IS_GOD_MODE = !GLOBALS_DEBUG_IS_GOD_MODE;
-	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
-		Logger_LogInformation("God Mode: ON");
-	}
-	else
-	{
-		Logger_LogInformation("God Mode: OFF");
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "God Mode: ");
+		MString_AddAssignBool(&tempString, GLOBALS_DEBUG_IS_GOD_MODE);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
 	}
 }

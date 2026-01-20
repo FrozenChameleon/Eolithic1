@@ -367,23 +367,23 @@ const char* InputCheck_GetName(InputCheck* data)
 	{
 	case INPUTCHECK_TYPE_KEY:
 	{
-		MString_Assign(&_mTempString, Strings_Get("GEN_BIND_KEY"));
+		MString_AssignString(&_mTempString, Strings_Get("GEN_BIND_KEY"));
 		MString_AddAssignString(&_mTempString, ": ");
 		MString_AddAssignString(&_mTempString, Keys_GetKeyName(data->mKey));
-		return MString_GetText(_mTempString);
+		return MString_Text(_mTempString);
 	}
 	case INPUTCHECK_TYPE_MOUSEBUTTON:
 	{
-		MString_Assign(&_mTempString, Strings_Get("GEN_BIND_MOUSE"));
+		MString_AssignString(&_mTempString, Strings_Get("GEN_BIND_MOUSE"));
 		MString_AddAssignString(&_mTempString, ": ");
 		MString_AddAssignString(&_mTempString, InputCheck_GetNameTypeMouseButton(data));
-		return MString_GetText(_mTempString);
+		return MString_Text(_mTempString);
 	}
 	case INPUTCHECK_TYPE_BUTTON:
 	{
-		MString_Assign(&_mTempString, "Button: ");
+		MString_AssignString(&_mTempString, "Button: ");
 		MString_AddAssignString(&_mTempString, InputCheck_GetNameTypeButton(data));
-		return MString_GetText(_mTempString);
+		return MString_Text(_mTempString);
 	}
 	case INPUTCHECK_TYPE_AXIS:
 		return InputCheck_GetNameTypeAxis(data);
@@ -442,7 +442,7 @@ const char* InputCheck_GetGlyphString(InputCheck* data)
 const char* InputCheck_GetGlyphStringForController(const char* value)
 {
 	MString_Combine4(&_mTempString, "GLYPH_", Utils_GetGlyphType(), "_", value);
-	return MString_GetText(_mTempString);
+	return MString_Text(_mTempString);
 }
 InputCheck InputCheck_CreateCheckKey(int32_t key)
 {

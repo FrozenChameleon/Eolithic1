@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../utils/Macros.h"
-#include "stdint.h"
 
 typedef struct IStrings IStrings;
 

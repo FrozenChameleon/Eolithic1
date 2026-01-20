@@ -5,12 +5,13 @@
  */
 
 #include "AnimTile.h"
+
+#include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "../io/File.h"
 #include "../render/SpriteBatch.h"
 #include "../render/Sheet.h"
 #include "../render/BlendState.h"
-#include "../../GlobalDefs.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 

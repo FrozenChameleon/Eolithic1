@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GameState.h"
 #include "../utils/Macros.h"
+#include "GameState.h"
 #include "../systems/System.h"
 
 typedef struct InputPlayer InputPlayer;
@@ -80,6 +80,6 @@ Entity GameStateManager_GetFirstSetEntity(ComponentType ctype);
 void* GameStateManager_TryGetComponent(ComponentType ctype, Entity entity, bool* wasSuccessful);
 void* GameStateManager_TryGetFirstSetComponent(ComponentType ctype, bool* wasSuccessful);
 
-#if EDITOR
+#ifdef EDITOR_MODE
 void GameStateManager_SaveComponentSizes();
 #endif

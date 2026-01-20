@@ -1,6 +1,6 @@
-#include "TtFont.h"
+#include "TTFont.h"
 
-#include "../render/RenderTtFont.h"
+#include "../render/RenderTTFont.h"
 #include "../io/File.h"
 #include "../utils/Utils.h"
 #include "../io/BufferReader.h"
@@ -25,7 +25,7 @@ OeTTFont* OeTTFont::FromStream(OeTTFont* (*createNew)(), bool loadedFromDat, con
 
 TTFont* TTFont_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	RenderTtFont_Create(filenameWithoutExtension, BufferReader_GetBuffer(br));
+	RenderTTFont_Create(filenameWithoutExtension, BufferReader_GetBuffer(br));
 	TTFont* ttf = Utils_calloc(1, sizeof(TTFont));
 	return ttf;
 }

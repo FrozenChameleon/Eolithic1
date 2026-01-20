@@ -6,7 +6,6 @@
 
 #include "Utils.h"
 
-#include "stdlib.h"
 #include "float.h"
 #include "../../third_party/stb_ds.h"
 #include "SDL3/SDL.h"
@@ -168,7 +167,7 @@ static void AddToAllocationArenas(int32_t allocationArena, void* memoryAllocatio
 
 	arrput(hm_allocation_arenas[index].value, memoryAllocation);
 }
-void* Utils_mallocArena(size_t size, int32_t allocationArena)
+void* Utils_MallocArena(size_t size, int32_t allocationArena)
 {
 	void* mallocToReturn = Utils_malloc(size);
 
@@ -176,7 +175,7 @@ void* Utils_mallocArena(size_t size, int32_t allocationArena)
 
 	return mallocToReturn;
 }
-void* Utils_callocArena(size_t nmemb, size_t size, int32_t allocationArena)
+void* Utils_CallocArena(size_t nmemb, size_t size, int32_t allocationArena)
 {
 	void* callocToReturn = Utils_calloc(nmemb, size);
 
@@ -802,7 +801,7 @@ bool Utils_IsStringUnderWidth(const char* str, const char* font, int32_t start, 
 {
 	MString* testString = NULL;
 	MString_AssignSubString(&testString, str, start, currentIndex - start);
-	Rectangle bounds = DrawTool_GetBounds(MString_GetText(testString), font);
+	Rectangle bounds = DrawTool_GetBounds(MString_Text(testString), font);
 	MString_Dispose(&testString);
 	if (bounds.Width < width)
 	{
@@ -812,7 +811,6 @@ bool Utils_IsStringUnderWidth(const char* str, const char* font, int32_t start, 
 	{
 		return false;
 	}
-	return false;
 }
 int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width)
 {
@@ -854,7 +852,7 @@ int32_t Utils_GetSpotForNewLine(const char* str, const char* font, int32_t width
 }
 void Utils_GetStringWithNewLines(const char* str, const char* font, int32_t width, MString** assignToThis)
 {
-	MString_Assign(assignToThis, str);
+	MString_AssignString(assignToThis, str);
 
 	if (Utils_StringContains(str, "\n") || Utils_StringContains(str, "\r") || Utils_StringContains(str, "\r\n"))
 	{
@@ -864,15 +862,15 @@ void Utils_GetStringWithNewLines(const char* str, const char* font, int32_t widt
 	bool isDone = false;
 	do
 	{
-		size_t strLen = Utils_strlen(MString_GetText(*assignToThis));
-		int32_t loc = Utils_GetSpotForNewLine(MString_GetText(*assignToThis), font, width);
+		size_t strLen = Utils_strlen(MString_Text(*assignToThis));
+		int32_t loc = Utils_GetSpotForNewLine(MString_Text(*assignToThis), font, width);
 		if (loc != -1)
 		{
 			MString* firstHalf = NULL;
-			MString_AssignSubString(&firstHalf, MString_GetText(*assignToThis), 0, loc);
+			MString_AssignSubString(&firstHalf, MString_Text(*assignToThis), 0, loc);
 
 			MString* secondHalf = NULL;
-			MString_AssignSubString(&secondHalf, MString_GetText(*assignToThis), loc + 1, (int32_t)(strLen - loc - 1));
+			MString_AssignSubString(&secondHalf, MString_Text(*assignToThis), loc + 1, (int32_t)(strLen - loc - 1));
 
 			MString_AssignMString(assignToThis, firstHalf);
 			MString_AddAssignString(assignToThis, "\n");
@@ -1084,7 +1082,7 @@ const char* Utils_ConvertFramesToTimeDisplay(int32_t val)
 		subseconds = 99;
 	}
 
-	MString_Assign(&_mTempString, "");
+	MString_AssignString(&_mTempString, "");
 	ConvertTimeHelper(hours);
 	MString_AddAssignString(&_mTempString, ":");
 	ConvertTimeHelper(minutes);
@@ -1092,7 +1090,7 @@ const char* Utils_ConvertFramesToTimeDisplay(int32_t val)
 	ConvertTimeHelper(seconds);
 	MString_AddAssignString(&_mTempString, ":");
 	ConvertTimeHelper(subseconds);
-	return MString_GetText(_mTempString);
+	return MString_Text(_mTempString);
 }
 static void BuilderHelper(char* buffer, int32_t index, int32_t val)
 {
@@ -1135,14 +1133,14 @@ void Utils_DeleteBinding(int32_t player, int32_t index, const char* dataName)
 
 	{
 		MString* tempString = NULL;
-		MString_Assign(&tempString, "Player #");
+		MString_AssignString(&tempString, "Player #");
 		MString_AddAssignInt(&tempString, player);
 		MString_AddAssignString(&tempString, " Index #");
 		MString_AddAssignInt(&tempString, index);
 		MString_AddAssignString(&tempString, " Name: ");
 		MString_AddAssignString(&tempString, dataName);
 		MString_AddAssignString(&tempString, " has been deleted");
-		Logger_LogInformation(MString_GetText(tempString));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 
@@ -1173,7 +1171,7 @@ bool Utils_UpdateBinding(int32_t player, int32_t index, const char* dataName, bo
 	{
 		{
 			MString* tempString = NULL;
-			MString_Assign(&tempString, "Player #");
+			MString_AssignString(&tempString, "Player #");
 			MString_AddAssignInt(&tempString, player);
 			MString_AddAssignString(&tempString, " Index #");
 			MString_AddAssignInt(&tempString, index);
@@ -1181,7 +1179,7 @@ bool Utils_UpdateBinding(int32_t player, int32_t index, const char* dataName, bo
 			MString_AddAssignString(&tempString, dataName);
 			MString_AddAssignString(&tempString, " has been set to ");
 			MString_AddAssignString(&tempString, InputCheck_GetName(&check));
-			Logger_LogInformation(MString_GetText(tempString));
+			Logger_LogInformation(MString_Text(tempString));
 			MString_Dispose(&tempString);
 		}
 		//
@@ -1286,7 +1284,7 @@ const char* Utils_GetStringFromNumberWithZerosHundreds(int32_t val)
 	}
 	else
 	{
-		MString_Assign(&_mTempString, EE_STR_EMPTY);
+		MString_AssignString(&_mTempString, EE_STR_EMPTY);
 		if (val < 10)
 		{
 			MString_AddAssignInt(&_mTempString, 0);
@@ -1296,7 +1294,7 @@ const char* Utils_GetStringFromNumberWithZerosHundreds(int32_t val)
 			MString_AddAssignInt(&_mTempString, 0);
 		}
 		MString_AddAssignInt(&_mTempString, val);
-		return MString_GetText(_mTempString);
+		return MString_Text(_mTempString);
 	}
 }
 const char* Utils_GetStringFromNumberWithZerosTens(int32_t val)
@@ -1307,12 +1305,12 @@ const char* Utils_GetStringFromNumberWithZerosTens(int32_t val)
 	}
 	else
 	{
-		MString_Assign(&_mTempString, EE_STR_EMPTY);
+		MString_AssignString(&_mTempString, EE_STR_EMPTY);
 		if (val < 10)
 		{
 			MString_AddAssignInt(&_mTempString, 0);
 		}
 		MString_AddAssignInt(&_mTempString, val);
-		return MString_GetText(_mTempString);
+		return MString_Text(_mTempString);
 	}
 }

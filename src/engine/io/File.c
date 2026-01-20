@@ -6,9 +6,9 @@
 
 #include "File.h"
 
+#include "../utils/Macros.h"
 #include "SDL3/SDL.h"
 #include "../utils/Utils.h"
-#include "../utils/Macros.h"
 #include "../utils/Exception.h"
 #include "../utils/Cvars.h"
 #include "FixedByteBuffer.h"
@@ -31,7 +31,7 @@ FixedByteBuffer* File_ReadAll(const char* path)
 {
 	MString* sharedStringBuffer = NULL;
 	File_PathCombine2(&sharedStringBuffer, File_GetBasePath(), path);
-	SDL_IOStream* rwops = SDL_IOFromFile(MString_GetText(sharedStringBuffer), "rb");
+	SDL_IOStream* rwops = SDL_IOFromFile(MString_Text(sharedStringBuffer), "rb");
 	MString_Dispose(&sharedStringBuffer);
 	if (rwops == NULL)
 	{
@@ -52,13 +52,13 @@ void File_ReadAllToBigString(MString** assignToThis, BufferReader* br)
 	uint64_t len = BufferReader_GetSize(br);
 	uint8_t* bufferData = BufferReader_GetBufferData(br);
 	MString_AssignEmpty(assignToThis, (int32_t)(len + 1));
-	Utils_memcpy(MString_GetText(*assignToThis), bufferData, len);
+	Utils_memcpy(MString_Text(*assignToThis), bufferData, len);
 }
 bool File_Exists(const char* path)
 {
 	MString* sharedStringBuffer = NULL;
 	File_PathCombine2(&sharedStringBuffer, File_GetBasePath(), path);
-	SDL_IOStream* file = SDL_IOFromFile(MString_GetText(sharedStringBuffer), "r");
+	SDL_IOStream* file = SDL_IOFromFile(MString_Text(sharedStringBuffer), "r");
 	MString_Dispose(&sharedStringBuffer);
 	if (file != NULL)
 	{
@@ -83,7 +83,6 @@ const char* File_GetPrefPath()
 {
 	if (_mPrefPath == NULL)
 	{
-		const char* organization = Cvars_Get(CVARS_ENGINE_ORGANIZATION_NAME);
 		_mPrefPath = SDL_GetPrefPath(Cvars_Get(CVARS_ENGINE_ORGANIZATION_NAME), Cvars_Get(CVARS_ENGINE_SAVE_NAME));
 	}
 
@@ -104,7 +103,7 @@ static void File_GetFileNameHelper(MString** assignToThis, const char* path, boo
 	}
 
 	MString_AssignEmpty(assignToThis, len + 1);
-	char* returnStrText = MString_GetText(*assignToThis);
+	char* returnStrText = MString_Text(*assignToThis);
 
 	int32_t counter = 0;
 	for (int32_t i = (loc + 1); i < len; i += 1)
@@ -191,7 +190,7 @@ static void CombineHelper(MString** assignToThis, const char* addedPath)
 }
 void File_PathCombine2(MString** assignToThis, const char* path1, const char* path2)
 {
-	MString_Assign(assignToThis, path1);
+	MString_AssignString(assignToThis, path1);
 	CombineHelper(assignToThis, path2);
 }
 void File_PathCombine3(MString** assignToThis, const char* path1, const char* path2, const char* path3)

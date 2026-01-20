@@ -1,6 +1,6 @@
 #include "SecretCode.h"
 
-#include "../../GlobalDefs.h"
+#include "../utils/Macros.h"
 
 //definition private
 static int32_t _mTempCodeDepth;

@@ -6,12 +6,12 @@
 
 #ifndef AUDIO_DUMMY
 
+#include "../utils/Macros.h"
 #include "MusicInstance.h"
 #include "../utils/Timer.h"
 #include "../utils/Utils.h"
 #include "../resources/ResourceManagerList.h"
 #include "Music.h"
-#include "../utils/Macros.h"
 
 void MusicInstance_HandleFadeIn(MusicInstance* mi, float musicVolume)
 {
@@ -206,3 +206,5 @@ bool MusicInstance_IsPlaying(MusicInstance* mi)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

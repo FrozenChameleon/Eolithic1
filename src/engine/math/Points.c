@@ -1,9 +1,9 @@
 #include "Points.h"
 
+#include "../utils/Macros.h"
 #include "limits.h"
 #include "Math.h"
 #include "../utils/Utils.h"
-#include "../../GlobalDefs.h"
 #include "../io/BufferReader.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE

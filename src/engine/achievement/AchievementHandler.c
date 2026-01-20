@@ -60,9 +60,9 @@ void AchievementHandler_AddAchievement(bool isHidden, const char* name, const ch
 {
 	int32_t current = AchievementHandler_GetAchievementsLength();
 	MString* nameToUse = NULL;
-	MString_Assign(&nameToUse, name);
+	MString_AssignString(&nameToUse, name);
 	MString* descriptionToUse = NULL;
-	MString_Assign(&descriptionToUse, description);
+	MString_AssignString(&descriptionToUse, description);
 	description;
 	if (_mIsUsingMask)
 	{
@@ -102,5 +102,5 @@ int32_t AchievementHandler_GetIntegerPercentage(void)
 {
 	float temp = (float)AchievementHandler_GetAmountOfAchievementsComplete() / AchievementHandler_GetAmountOfAchievements();
 	float value = temp * 100.0f;
-	return (int32_t)temp;
+	return (int32_t)value;
 }

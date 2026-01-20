@@ -1,6 +1,5 @@
 #pragma once
 
-#include "stdint.h"
 #include "Macros.h"
 
 typedef struct IStringArray IStringArray;

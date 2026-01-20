@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../gamestate/ComponentType.h"
 #include "../utils/Macros.h"
+#include "../gamestate/ComponentType.h"
 
 //EntitySearch's are created on the "Just This Frame" so they do not need to be manually disposed of.
 typedef struct EntitySearch

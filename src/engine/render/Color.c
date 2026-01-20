@@ -66,17 +66,17 @@ void Color_Init(Color* color)
 }
 void Color_Init3(Color* color, int32_t r, int32_t g, int32_t b)
 {
-	color->R = r;
-	color->G = g;
-	color->B = b;
+	color->R = (uint8_t)r;
+	color->G = (uint8_t)g;
+	color->B = (uint8_t)b;
 	color->A = 255;
 }
 void Color_Init4(Color* color, int32_t r, int32_t g, int32_t b, int32_t alpha)
 {
-	color->R = r;
-	color->G = g;
-	color->B = b;
-	color->A = alpha;
+	color->R = (uint8_t)r;
+	color->G = (uint8_t)g;
+	color->B = (uint8_t)b;
+	color->A = (uint8_t)alpha;
 }
 bool Color_EqualTo(Color value1, Color value2)
 {
@@ -91,7 +91,7 @@ bool Color_NotEqual(Color value1, Color value2)
 }
 Color Color_ToColor(Color color, int32_t alpha)
 {
-	Color tempColor = { color.R, color.G, color.B, alpha };
+	Color tempColor = { color.R, color.G, color.B, (uint8_t)alpha };
 	return tempColor;
 }
 float Color_RedF(Color color)
@@ -120,7 +120,7 @@ Color Color_Create3(int32_t red, int32_t green, int32_t blue)
 }
 Color Color_Create2(Color color, int32_t alpha)
 {
-	color.A = alpha;
+	color.A = (uint8_t)alpha;
 	return color;
 }
 Color Color_Create(Color color)
@@ -130,7 +130,7 @@ Color Color_Create(Color color)
 void Color_Randomize(Color* color)
 {
 	Random32* sharedRandom = Globals_GetSharedRandom();
-	color->R = Random32_NextInt(sharedRandom, 255);
-	color->G = Random32_NextInt(sharedRandom, 255);
-	color->B = Random32_NextInt(sharedRandom, 255);
+	color->R = (uint8_t)Random32_NextInt(sharedRandom, 255);
+	color->G = (uint8_t)Random32_NextInt(sharedRandom, 255);
+	color->B = (uint8_t)Random32_NextInt(sharedRandom, 255);
 }

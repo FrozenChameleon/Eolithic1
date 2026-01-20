@@ -95,9 +95,9 @@ void Sheet_BuildSheets()
 
 			TextureOffset* texOffset = (TextureOffset*)texOffsetResource->mData;
 			int64_t infoLen = arrlen(texOffset->arr_offsets);
-			for (int32_t i = 0; i < infoLen; i += 1)
+			for (int32_t j = 0; j < infoLen; j += 1)
 			{
-				TextureOffsetInfo* info = &texOffset->arr_offsets[i];
+				TextureOffsetInfo* info = &texOffset->arr_offsets[j];
 				Sheet* sheet = Utils_malloc(sizeof(Sheet));
 				InitSheet(sheet);
 				Utils_strlcpy(sheet->mSheetName, info->mVirtualName, EE_FILENAME_MAX);

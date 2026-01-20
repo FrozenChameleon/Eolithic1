@@ -143,7 +143,7 @@ InputPlayer* GameStateManager_GetPlayerInput(Entity thing)
 }
 Camera* GameStateManager_GetCurrentRenderCamera()
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	//WILLOTDO 05152023
 	/*
 	if (OeGlobals.DEBUG_IS_EDITOR_MODE)
@@ -199,7 +199,12 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 		return;
 	}
 
-	Logger_printf("Attempting to load map: %s\n", mapToLoad);
+	{
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Attempting to load map: ", mapToLoad);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 
 	Music_SetDoNotAllowUpdatesWhilePaused(false);
 
@@ -219,7 +224,7 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 		Logger.LogError("Unable to load map " + mapToLoad + ", created new level resource in memory for " + path);
 	}*/
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	GLOBALS_DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD = Cvars_GetAsBool(CVARS_EDITOR_META_MAP_EDIT_TILE_MODE);
 	//WILLNOTDO 05152023 OeConsole.CloseConsole();
 #endif
@@ -248,7 +253,13 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 	Random32_SetSeed(Globals_GetSharedRandom(), (uint32_t)(GameUpdater_GetGlobalTicks()));
 #endif
 
-	Logger_printf("Map loaded: %s\n", mapToLoad);
+	{
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Map loaded: ", mapToLoad);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
+
 	GLOBALS_DEBUG_JUST_LOADED_MAP_NOTIFY_EDITOR = true;
 }
 bool GameStateManager_IsNormalState()
@@ -332,7 +343,7 @@ void GameStateManager_SetUniqueMapSeed(int32_t value)
 {
 	_mUniqueMapSeed = value;
 }
-#if EDITOR
+#ifdef EDITOR_MODE
 void GameStateManager_SaveComponentSizes()
 {
 

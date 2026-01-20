@@ -101,3 +101,5 @@ void OeComMoveGetterSys::UpdateRoutine(OeEntity owner, OeComMoveGetter* data)
 {
 }
 */
+
+typedef int compiler_warning_compliance;

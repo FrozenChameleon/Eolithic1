@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+#include "../utils/Macros.h"
 #include "../core/Func.h"
 #include "../globals/Globals.h"
 #include "../math/Random32.h"
@@ -7,7 +8,6 @@
 #include "../utils/Cvars.h"
 #include "../utils/Utils.h"
 #include "CameraSys.h"
-#include "../../GlobalDefs.h"
 
 const float CAMERA_EXTENDED_CAMERA = 1.333f;
 
@@ -37,7 +37,7 @@ Vector2 Camera_GetInterpCameraAsVector2(const Camera* camera, double delta)
 	x += (camera->mCurrentShake.X * camera->mCurrentShakeMul);
 	y += (camera->mCurrentShake.Y * camera->mCurrentShakeMul);
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (Cvars_GetAsBool(CVARS_EDITOR_STRICT_CAMERA))
 	{
 		x = (float)((int32_t)(x));

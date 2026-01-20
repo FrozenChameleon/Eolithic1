@@ -1,5 +1,6 @@
 #include "MenuFunc.h"
 
+#include "../utils/Macros.h"
 #include "Game.h"
 #include "GameHelper.h"
 #include "../utils/Cvars.h"
@@ -18,7 +19,6 @@
 #include "../core/Window.h"
 #include "Func.h"
 #include "../../third_party/stb_ds.h"
-#include "../utils/Macros.h"
 
 static bool _mSuppressMenuSounds;
 static int32_t _mSoundTestCurrentSound;
@@ -139,7 +139,7 @@ const char* MenuFunc_GetCurrentSoundTestMusic()
 }
 const char* MenuFunc_GetCurrentSoundTestMusicAsNumber()
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
 		return MenuFunc_GetCurrentSoundTestMusic();
@@ -153,7 +153,7 @@ const char* MenuFunc_GetCurrentSoundTestSfx()
 }
 const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
 	{
 		return MenuFunc_GetCurrentSoundTestSfx();
@@ -277,36 +277,36 @@ const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 }*/
 const char* MenuFunc_GetChangeWindowSizeMultipleString()
 {
-	MString_Assign(&_mTempString, "<");
+	MString_AssignString(&_mTempString, "<");
 	MString_AddAssignInt(&_mTempString, _mTempWindowSizeMultiple);
 	MString_AddAssignString(&_mTempString, "X: ");
 	MString_AddAssignInt(&_mTempString, Utils_GetWindowSizeMulWidth() * _mTempWindowSizeMultiple);
 	MString_AddAssignString(&_mTempString, "x");
 	MString_AddAssignInt(&_mTempString, Utils_GetWindowSizeMulHeight() * _mTempWindowSizeMultiple);
 	MString_AddAssignString(&_mTempString, ">");
-	return  MString_GetText(_mTempString);
+	return  MString_Text(_mTempString);
 }
 const char* MenuFunc_GetChangeWindowSizeString()
 {
-	MString_Assign(&_mTempString, "<");
+	MString_AssignString(&_mTempString, "<");
 	MString_AddAssignInt(&_mTempString, _mTempWindowSize.Width);
 	MString_AddAssignString(&_mTempString, "X");
 	MString_AddAssignInt(&_mTempString, _mTempWindowSize.Height);
 	MString_AddAssignString(&_mTempString, ">");
-	return  MString_GetText(_mTempString);
+	return  MString_Text(_mTempString);
 }
 const char* MenuFunc_GetInternalResolutionMultipleString()
 {
 	int32_t mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
-	MString_Assign(&_mTempString, "");
+	MString_AssignString(&_mTempString, "");
 	if (mul > 0)
 	{
-		MString_Assign(&_mTempString, "<");
+		MString_AssignString(&_mTempString, "<");
 	}
 	else
 	{
 		mul = Renderer_GetRenderTargetScale();
-		MString_Assign(&_mTempString, "<Auto ");
+		MString_AssignString(&_mTempString, "<Auto ");
 	}
 	MString_AddAssignInt(&_mTempString, mul);
 	MString_AddAssignString(&_mTempString, "x: ");
@@ -314,7 +314,7 @@ const char* MenuFunc_GetInternalResolutionMultipleString()
 	MString_AddAssignString(&_mTempString, "x");
 	MString_AddAssignInt(&_mTempString, Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT) * mul);
 	MString_AddAssignString(&_mTempString, ">");
-	return MString_GetText(_mTempString);
+	return MString_Text(_mTempString);
 }
 void MenuFunc_SoundStopSoundTestSfx()
 {
@@ -474,17 +474,17 @@ const char* MenuFunc_StringHelperBool(bool value)
 }
 const char* MenuFunc_StringHelperFloat(float value)
 {
-	MString_Assign(&_mTempString, "<");
+	MString_AssignString(&_mTempString, "<");
 	MString_AddAssignFloat(&_mTempString, value);
 	MString_AddAssignString(&_mTempString, ">");
-	return MString_GetText(_mTempString);
+	return MString_Text(_mTempString);
 }
 const char* MenuFunc_StringHelperInt(int32_t value)
 {
-	MString_Assign(&_mTempString, "<");
+	MString_AssignString(&_mTempString, "<");
 	MString_AddAssignInt(&_mTempString, value);
 	MString_AddAssignString(&_mTempString, ">");
-	return MString_GetText(_mTempString);
+	return MString_Text(_mTempString);
 }
 /*void MenuFunc_InputDeadzoneToggle()
 {
@@ -687,12 +687,12 @@ void MenuFunc_GameScreenshakeToggle()
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_SCREENSHAKE_DISABLED);
 }
-void MenuFunc_ActionLoadSaveSlot(const char* save, const char* level)
+/*void MenuFunc_ActionLoadSaveSlot(const char* save, const char* level) //UNUSED
 {
 	int32_t saveSlot = Utils_ParseInt(save);
 	//OeGameSaveManager_SetSaveSlot(saveSlot);
 	GameStateManager_SetupLoadMap(level);
-}
+}*/
 void MenuFunc_VideoRefreshSyncToggle()
 {
 }

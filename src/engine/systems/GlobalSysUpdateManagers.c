@@ -30,9 +30,9 @@ static void Update(void* givenData)
 			Prop_UpdateResource(ResourceManager_GetResourceDataByIndex(propMan, i));
 		}
 	}
-	//WILLNOTDO 06262023 (EDITOR) 2023
+	//WILLNOTDO 06262023 (EDITOR_MODE) 2023
 	/*
-#if EDITOR
+#ifdef EDITOR_MODE
 	List<IResourceManager> managers = OeResourceManagers.GetManagers();
 	for (int32_t i = 0; i < managers.Count; i += 1)
 	{

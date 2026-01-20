@@ -1,6 +1,8 @@
+//Defs should be included by including "/engine/utils/Macros.h"
+
 #pragma once
 
-#include "SharedDefs.h"
+#include "SharedGlobalDefs.h"
 
 #define GLOBAL_DEF_USE_TT_FONT_FOR_LEADERBOARD_USER_NAMES
 //#define GLOBAL_DEF_DISABLE_CHEAT_CODES
@@ -8,7 +10,7 @@
 
 //#define GLOBAL_DEF_RUMBLE_MUL 0.5
 
-#if !EDITOR
+#ifndef EDITOR_MODE
 
 #define GLOBAL_DEF_DISABLE_ALL_LOGGING
 

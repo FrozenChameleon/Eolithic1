@@ -5,12 +5,13 @@
  */
 
 #include "LevelData.h"
+
+#include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "../io/BufferReader.h"
 #include "../globals/Globals.h"
 #include "../math/Points.h"
 #include "../../third_party/stb_ds.h"
-#include "../../GlobalDefs.h"
 #include "../utils/Cvars.h"
 #include "../render/SpriteBatch.h"
 #include "../resources/ResourceManagerList.h"
@@ -83,7 +84,7 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 }
 void LevelData_ReadHeader(LevelData* ld, BufferReader* reader)
 {
-	int32_t version = BufferReader_ReadI32(reader); // <-
+	BufferReader_ReadI32(reader); //VERSION <-
 
 	ld->_mIsMetaMap = BufferReader_ReadBoolean(reader); // <- Add these two to CometStriker/Mute Crimson+ for parity
 
@@ -111,7 +112,7 @@ void LevelData_ReadData(LevelData* ld, BufferReader* reader)
 
 	if (version >= 3)
 	{
-		int32_t temp = BufferReader_ReadI32(reader); //Unused - Thing Instance ID Counter
+		BufferReader_ReadI32(reader); //Unused - Thing Instance ID Counter
 	}
 
 	int32_t saveTileSize = BufferReader_ReadI32(reader);
@@ -267,7 +268,7 @@ int32_t* LevelData_CreateCollisionArray(LevelData* ld)
 }
 int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld)
 {
-	return Utils_callocArena(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t), UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
+	return Utils_CallocArena(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t), UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 }
 void LevelData_ImprintToCollisionArray(LevelData* ld, int32_t x, int32_t y, int32_t* collisionArray)
 {
@@ -298,7 +299,7 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 	int32_t preferredLayer = -1;
 	float mul = 1;
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (!Cvars_GetAsBool(CVARS_EDITOR_SHOW_TILES))
 	{
 		return;
@@ -342,7 +343,7 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 		}
 
 		bool showLayer = true;
-#if EDITOR
+#ifdef EDITOR_MODE
 		//TODO C99 showLayer = Cvars_GetAsBool(Cvars_GetEditorShowLayer(i));
 #endif
 		if (showLayer)
@@ -351,7 +352,7 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 		}
 	}
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	//TODO C99 DrawTileInfo(spriteBatch, preferredLayer, x1, x2, y1, y2);
 #endif
 }
@@ -368,7 +369,7 @@ void LevelData_DrawProps(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 {
 	bool drawInfo = false;
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (!Cvars_GetAsBool(CVARS_EDITOR_SHOW_PROPS))
 	{
 		return;

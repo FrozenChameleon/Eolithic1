@@ -1,5 +1,6 @@
 #include "Prop.h"
 
+#include "../utils/Macros.h"
 #include "../render/SpriteBatch.h"
 #include "../io/File.h"
 #include "../utils/Utils.h"
@@ -9,7 +10,6 @@
 #include "../render/DrawTool.h"
 #include "../globals/Align.h"
 #include "../utils/Logger.h"
-#include "../../GlobalDefs.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 

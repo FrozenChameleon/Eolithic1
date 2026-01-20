@@ -15,6 +15,7 @@
 
 #include "Renderer.h"
 
+#include "../utils/Macros.h"
 #include "../utils/Logger.h"
 #include "RenderStream.h"
 #include "RendererMacros.h"
@@ -44,9 +45,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../third_party/stb_image.h"
 #include "../font/FontMap.h"
-#include "../render/RenderTtFont.h"
-#include "../../DebugDefs.h"
-#include "../../GlobalDefs.h"
+#include "../render/RenderTTFont.h"
 #include "../../third_party/stb_ds.h"
 #include "../collision/CollisionEngineSys.h"
 #include "../core/Func.h"
@@ -68,7 +67,7 @@ static Rectangle _mScreenBounds;
 static Vector2 _mScreenScale;
 static Point _mScreenOffset;
 
-static TtFontState _mFontState;
+static TTFontState _mFontState;
 
 static bool _mIndexBufferDataSet;
 static uint16_t _mIndexBufferData[MAX_INDICES];
@@ -168,7 +167,7 @@ Rectangle Renderer_GetWantedBackBufferBounds()
 	bounds.Height = mul * internalRenderHeight;
 	return bounds;
 }
-void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color fontColor, int32_t pos, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts)
+void Renderer_SetupVerticesForTTFont(VertexPositionColorTexture* vertices, Color fontColor, int32_t pos, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts)
 {
 	ColorFloat4 colorToUse;
 	colorToUse.R = (float)(fontColor.R) / 0xFF;
@@ -189,11 +188,11 @@ void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color
 		vertice->Color = colorToUse;
 	}
 }
-const TtFontState* Renderer_GetTtFontState()
+const TTFontState* Renderer_GetTTFontState()
 {
 	return &_mFontState;
 }
-void Renderer_SetupTtFontState(const TtFontState* fontState)
+void Renderer_SetupTTFontState(const TTFontState* fontState)
 {
 	_mFontState = *fontState;
 }
@@ -649,7 +648,7 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 	}
 
 	bool doNotRender = false;
-	#if !DISABLE_TT_FONT
+	#ifndef DISABLE_TT_FONT
 	const FontMapData* replacement = FontMap_GetReplacement(BmFont_GetFontName(draw->mFont));
 	if ((replacement != NULL) && !draw->mDoNotReplaceFont)
 	{
@@ -660,7 +659,7 @@ void Renderer_DrawString(RenderCommandString* draw, double delta)
 		}
 		else
 		{
-			RenderTtFont_Draw(replacement, strToDraw, draw->mColor, finalPos);
+			RenderTTFont_Draw(replacement, strToDraw, draw->mColor, finalPos);
 		}
 	}
 	#endif

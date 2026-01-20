@@ -6,6 +6,7 @@
 
 #include "PropInstance.h"
 
+#include "../utils/Macros.h"
 #include "../utils/Utils.h"
 #include "../render/SpriteBatch.h"
 #include "../io/BufferReader.h"
@@ -14,7 +15,6 @@
 #include "../render/Color.h"
 #include "../render/DrawTool.h"
 #include "../resources/Resource.h"
-#include "../../GlobalDefs.h"
 #include "../resources/ResourceManagerList.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE

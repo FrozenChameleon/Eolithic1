@@ -1,0 +1,89 @@
+/* EolithicEngine
+ * Copyright 2025 Patrick Derosby
+ * Released under the zlib License.
+ * See LICENSE for details.
+ */
+
+ /* Derived from code by Ethan Lee (Copyright 2009-2024).
+  * Released under the Microsoft Public License.
+  * See fna.LICENSE for details.
+
+  * Derived from code by the Mono.Xna Team (Copyright 2006).
+  * Released under the MIT License.
+  * See monoxna.LICENSE for details.
+  */
+
+#ifdef RENDER_DUMMY
+
+#include "Renderer.h"
+
+void Renderer_BeforeRender()
+{
+}
+void Renderer_AfterRender()
+{
+}
+void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts)
+{
+}
+void Renderer_DrawVertexPositionColorTexture4(Texture* texture, const VertexPositionColorTexture4* sprite)
+{
+}
+Texture* Renderer_GetTextureData(const char* path, FixedByteBuffer* blob)
+{
+	return Renderer_GetNewTextureData(path, 16, 16, false);
+}
+Texture* Renderer_GetNewTextureData(const char* path, int32_t width, int32_t height, bool clearTexture)
+{
+	Texture* tex = Utils_calloc(1, sizeof(Texture));
+	MString_AssignString(&tex->mPath, path);
+	tex->mBounds.Width = width;
+	tex->mBounds.Height = height;
+	tex->mTextureData = NULL;
+	return tex;
+}
+void Renderer_UpdateTextureData(Texture* texture, int32_t x, int32_t y, int32_t w, int32_t h, int32_t level, void* data, int32_t dataLength)
+{
+}
+int32_t Renderer_Init(void* deviceWindowHandle)
+{
+	return 0;
+}
+void Renderer_BeforeCommit()
+{
+}
+void Renderer_AfterCommit()
+{
+}
+void Renderer_FlushBatch()
+{
+}
+void Renderer_EnableDepthBufferWrite()
+{
+}
+void Renderer_DisableDepthBufferWrite()
+{
+}
+void Renderer_UpdateVsync()
+{
+}
+void Renderer_ApplyChanges()
+{
+}
+void Renderer_UpdateViewport()
+{
+}
+void Renderer_UpdateScissor()
+{
+}
+void Renderer_ResetBackBuffer()
+{
+}
+Rectangle Renderer_GetDrawableSize()
+{
+	return Rectangle_Empty;
+}
+
+#endif
+
+typedef int compiler_warning_compliance;

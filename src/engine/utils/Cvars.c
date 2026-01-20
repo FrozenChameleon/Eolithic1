@@ -6,10 +6,9 @@
 
 #include "Cvars.h"
 
-#include "stdio.h"
+#include "Macros.h"
 #include "../../third_party/stb_ds.h"
 #include "Utils.h"
-#include "Macros.h"
 #include "../utils/MString.h"
 #include "../service/Service.h"
 #include "../utils/Logger.h"
@@ -103,15 +102,15 @@ static bool ReadDataCvars2(const char* pathWithoutExtension, const char* debugNa
 	MString_Combine2(&path, pathWithoutExtension, extension);
 	bool successfullyReadTheFile = false;
 	bool lookForTextVersion = false;
-	if (File_Exists(MString_GetText(path)))
+	if (File_Exists(MString_Text(path)))
 	{
-		BufferReader* reader = BufferReader_CreateFromPath(MString_GetText(path));
+		BufferReader* reader = BufferReader_CreateFromPath(MString_Text(path));
 		Cvars_Read(isBinary, reader);
 		BufferReader_Dispose(reader);
 		{
 			MString* tempString = NULL;
-			MString_Combine3(&tempString, debugName, " data dir cvars loaded from ", MString_GetText(path));
-			Logger_LogInformation(MString_GetText(tempString));
+			MString_Combine3(&tempString, debugName, " data dir cvars loaded from ", MString_Text(path));
+			Logger_LogInformation(MString_Text(tempString));
 			MString_Dispose(&tempString);
 		}
 		successfullyReadTheFile = true;
@@ -120,8 +119,8 @@ static bool ReadDataCvars2(const char* pathWithoutExtension, const char* debugNa
 	{
 		{
 			MString* tempString = NULL;
-			MString_Combine3(&tempString, debugName, " data dir cvars missing at ", MString_GetText(path));
-			Logger_LogInformation(MString_GetText(tempString));
+			MString_Combine3(&tempString, debugName, " data dir cvars missing at ", MString_Text(path));
+			Logger_LogInformation(MString_Text(tempString));
 			MString_Dispose(&tempString);
 		}
 		if (isBinary)
@@ -352,7 +351,7 @@ void Cvars_LoadInitialCvars(void)
 	//OeUtils::SetTileSize(GetAsInt(ENGINE_TILE_SIZE)); //Not needed, using defines
 
 	File_PathCombine2(&pathToFinalConfigInData, "data", "finalconfig");
-	ReadDataCvars2(MString_GetText(pathToFinalConfigInData), "Data Final", false);
+	ReadDataCvars2(MString_Text(pathToFinalConfigInData), "Data Final", false);
 
 	const char* pathToFinalConfigInRoot = "finalconfig";
 	ReadDataCvars2(pathToFinalConfigInRoot, "Data Final", false);
@@ -369,8 +368,8 @@ void Cvars_LoadInitialCvars(void)
 			Logger_LogInformation("Need to test frame rate because this is the first game launch");
 			Globals_SetAsNeedToTestFrameRate();
 		}
-#if EDITOR
-		//WILLNOTDO 06262023 EDITOR
+#ifdef EDITOR_MODE
+		//WILLNOTDO 06262023 EDITOR_MODE
 		/*
 		if (!ReadSaveCvarsFromStorageContainer("editorconfig.ini", "Editor"))
 		{
@@ -386,7 +385,7 @@ void Cvars_LoadInitialCvars(void)
 		_mHasLoadedSaveDataCvars = true;
 	}
 
-	ReadDataCvars2(MString_GetText(pathToFinalConfigInData), "Data Final", false); //Override user cvars with these
+	ReadDataCvars2(MString_Text(pathToFinalConfigInData), "Data Final", false); //Override user cvars with these
 	ReadDataCvars2(pathToFinalConfigInRoot, "Data Final", false);
 
 	MString_Dispose(&pathToFinalConfigInData);
@@ -458,22 +457,22 @@ void Cvars_LoadDataDirCvars(void)
 	{
 		MString* dataEngineConfig = NULL;
 		File_PathCombine2(&dataEngineConfig, "data", "engineconfig");
-		ReadDataCvars(MString_GetText(dataEngineConfig), "Data Engine");
+		ReadDataCvars(MString_Text(dataEngineConfig), "Data Engine");
 		MString_Dispose(&dataEngineConfig);
 	}
 
 	{
 		MString* dataUserConfig = NULL;
 		File_PathCombine2(&dataUserConfig, "data", "userconfig");
-		ReadDataCvars(MString_GetText(dataUserConfig), "Data User");
+		ReadDataCvars(MString_Text(dataUserConfig), "Data User");
 		MString_Dispose(&dataUserConfig);
 	}
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	{
 		MString* dataEditorConfig = NULL;
 		File_PathCombine2(&dataEditorConfig, "data", "editorconfig");
-		ReadDataCvars(MString_GetText(dataEditorConfig), "Data Editor");
+		ReadDataCvars(MString_Text(dataEditorConfig), "Data Editor");
 		MString_Dispose(&dataEditorConfig);
 	}
 #endif
@@ -506,9 +505,9 @@ void Cvars_Write2(bool isBinary, DynamicByteBuffer* writer, IStringArray* includ
 		if (IStringArray_Length(includePrefixes) > 0)
 		{
 			write = false;
-			for (int32_t i = 0; i < IStringArray_Length(includePrefixes); i += 1)
+			for (int32_t j = 0; j < IStringArray_Length(includePrefixes); j += 1)
 			{
-				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(includePrefixes, i)))
+				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(includePrefixes, j)))
 				{
 					write = true;
 				}
@@ -516,9 +515,9 @@ void Cvars_Write2(bool isBinary, DynamicByteBuffer* writer, IStringArray* includ
 		}
 		if (IStringArray_Length(excludePrefixes) > 0)
 		{
-			for (int32_t i = 0; i < IStringArray_Length(excludePrefixes); i += 1)
+			for (int32_t j = 0; j < IStringArray_Length(excludePrefixes); j += 1)
 			{
-				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(excludePrefixes, i)))
+				if (Utils_StringStartsWith(cvar->mKey, IStringArray_Get(excludePrefixes, j)))
 				{
 					write = false;
 				}

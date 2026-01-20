@@ -620,7 +620,7 @@ void Input_SetMasterRecordingState(int32_t state)
 
 	_mMasterRecordingState = state;
 }
-#if EDITOR || CHEATS
+#ifdef EDITOR_MODE
 bool Input_IsKeyTapped(int32_t key)
 {
 	return KeyboardState_IsKeyTapped(key);

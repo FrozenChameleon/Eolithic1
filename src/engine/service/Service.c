@@ -1,10 +1,10 @@
 #include "Service.h"
 
+#include "../utils/Macros.h"
 #include "SDL3/SDL.h"
 #include "LeaderboardRequestData.h"
 #include "../io/File.h"
 #include "../utils/Logger.h"
-#include "../../DebugDefs.h"
 #include "../../third_party/stb_ds.h"
 #include "../utils/Utils.h"
 
@@ -125,7 +125,7 @@ BufferRequest Service_AskToRetrieveBufferForPC(bool isPurelyGameSaveData, const 
 	{
 		MString* savePath = NULL;
 		File_PathCombine2(&savePath, prefPath, path);
-		rwop = SDL_IOFromFile(MString_GetText(savePath), "rb");
+		rwop = SDL_IOFromFile(MString_Text(savePath), "rb");
 		MString_Dispose(&savePath);
 	}
 
@@ -162,7 +162,7 @@ int32_t Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* container
 	{
 		MString* savePath = NULL;
 		File_PathCombine2(&savePath, prefPath, path);
-		rwop = SDL_IOFromFile(MString_GetText(savePath), "wb");
+		rwop = SDL_IOFromFile(MString_Text(savePath), "wb");
 		MString_Dispose(&savePath);
 	}
 
@@ -236,10 +236,10 @@ void Service_Update(double delta)
 void Service_DisableLeaderboards()
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_LEADERBOARDS
-	return;
-#endif
-
+	//DO NOTHING
+#else
 	_mAreLeaderboardDisabled = true;
+#endif
 }
 bool Service_AreLeaderboardDisabled()
 {

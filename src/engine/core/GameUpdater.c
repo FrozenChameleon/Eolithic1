@@ -1,5 +1,6 @@
 #include "GameUpdater.h"
 
+#include "../utils/Macros.h"
 #include "../core/ServiceHelper.h"
 #include "../service/Service.h"
 #include "../core/Game.h"
@@ -21,7 +22,6 @@
 #include "../leveldata/LevelData.h"
 #include "../input/ControllerStates.h"
 #include "../io/DynamicByteBuffer.h"
-#include "../../DebugDefs.h"
 #include "../render/Renderer.h"
 #include "../gamestate/GameState.h"
 
@@ -68,8 +68,24 @@ static void HandleAltEnterCheck()
 		_mSuppressFullscreenToggle = false;
 	}
 }
-#if EDITOR
-static int32_t _mDebugTimeHeld = 0;
+#ifdef EDITOR_MODE
+static int32_t _mDebugTimeHeld;
+static void DebugLogGameSpeed()
+{
+	MString* tempString = NULL;
+	MString_AssignString(&tempString, "Game Speed: ");
+	MString_AddAssignDouble(&tempString, Globals_GetDebugGameSpeedAsMul());
+	Logger_LogInformation(MString_Text(tempString));
+	MString_Dispose(&tempString);
+}
+static void DebugLogBoolHelper(const char* info, bool value)
+{
+	MString* tempString = NULL;
+	MString_AssignString(&tempString, info);
+	MString_AddAssignBool(&tempString, value);
+	Logger_LogInformation(MString_Text(tempString));
+	MString_Dispose(&tempString);
+}
 static void Cheats()
 {
 	//WILLNOTDO 05152023
@@ -90,12 +106,12 @@ static void Cheats()
 		{
 			SetDebugAutoSpeed(false);
 			GLOBALS_DEBUG_GAME_LOGIC_SPEED = GLOBALS_DEFAULT_DEBUG_GAME_LOGIC_SPEED;
-			Logger_printf("Auto Speed: %i\n", _mIsDebugAutoSpeedOn);
+			DebugLogBoolHelper("Auto Speed: ", _mIsDebugAutoSpeedOn);
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad2))
 		{
 			GameUpdater_ToggleDebugAutoSpeed();
-			Logger_printf("Auto Speed: %i\n", _mIsDebugAutoSpeedOn);
+			DebugLogBoolHelper("Auto Speed: ", _mIsDebugAutoSpeedOn);
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad3))
 		{
@@ -116,7 +132,7 @@ static void Cheats()
 		if (Input_IsKeyTapped(KEYS_NumPad0))
 		{
 			Globals_DebugSetRenderDisabled(!Globals_DebugIsRenderDisabled());
-			Logger_printf("Render Disabled: %i\n", Globals_DebugIsRenderDisabled());
+			DebugLogBoolHelper("Render Disabled: ", Globals_DebugIsRenderDisabled());
 		}
 	}
 	else
@@ -138,7 +154,7 @@ static void Cheats()
 			{
 				SetDebugAutoSpeed(false);
 				GLOBALS_DEBUG_GAME_LOGIC_SPEED = 100;
-				Logger_printf("Game Speed: %f\n", Globals_GetDebugGameSpeedAsMul());
+				DebugLogGameSpeed();
 			}
 		}
 		else if (Input_IsKeyPressed(KEYS_NumPad1))
@@ -152,7 +168,7 @@ static void Cheats()
 				{
 					GLOBALS_DEBUG_GAME_LOGIC_SPEED = 10;
 				}
-				Logger_printf("Game Speed: %f\n", Globals_GetDebugGameSpeedAsMul());
+				DebugLogGameSpeed();
 			}
 		}
 		else if (Input_IsKeyPressed(KEYS_NumPad2))
@@ -162,7 +178,7 @@ static void Cheats()
 			{
 				SetDebugAutoSpeed(false);
 				GLOBALS_DEBUG_GAME_LOGIC_SPEED += 10;
-				Logger_printf("Game Speed: %f\n", Globals_GetDebugGameSpeedAsMul());
+				DebugLogGameSpeed();
 			}
 		}
 		else
@@ -172,42 +188,42 @@ static void Cheats()
 		if (Input_IsKeyTapped(KEYS_NumPad3))
 		{
 			GLOBALS_DEBUG_IS_PAUSED = !GLOBALS_DEBUG_IS_PAUSED;
-			Logger_printf("Is Paused: %i\n", GLOBALS_DEBUG_IS_PAUSED);
+			DebugLogBoolHelper("Is Paused: ", GLOBALS_DEBUG_IS_PAUSED);
 			return;
 		}
 
 		if (Input_IsKeyTapped(KEYS_NumPad5))
 		{
 			Cvars_FlipAsBool(CVARS_EDITOR_SHOW_PROPS);
-			Logger_printf("Show Props: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_PROPS));
+			DebugLogBoolHelper("Show Props: ", Cvars_GetAsBool(CVARS_EDITOR_SHOW_PROPS));
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad6))
 		{
 			Cvars_FlipAsBool(CVARS_EDITOR_SHOW_THINGS);
-			Logger_printf("Show Things: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_THINGS));
+			DebugLogBoolHelper("Show Things: ", Cvars_GetAsBool(CVARS_EDITOR_SHOW_THINGS));
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad7))
 		{
 			Cvars_FlipAsBool(CVARS_EDITOR_SHOW_TILES);
-			Logger_printf("Show Tiles: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_TILES));
+			DebugLogBoolHelper("Show Tiles: ", Cvars_GetAsBool(CVARS_EDITOR_SHOW_TILES));
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad8))
 		{
 			if (GLOBALS_DEBUG_IS_EDITOR_MODE)
 			{
 				Cvars_FlipAsBool(CVARS_EDITOR_SHOW_COLLISION);
-				Logger_printf("Show Editor Col: %i\n", Cvars_GetAsBool(CVARS_EDITOR_SHOW_COLLISION));
+				DebugLogBoolHelper("Show Editor Col: ", Cvars_GetAsBool(CVARS_EDITOR_SHOW_COLLISION));
 			}
 			else
 			{
 				GLOBALS_DEBUG_SHOW_INGAME_COLLISION = !GLOBALS_DEBUG_SHOW_INGAME_COLLISION;
-				Logger_printf("Show InGame Col: %i\n", GLOBALS_DEBUG_SHOW_INGAME_COLLISION);
+				DebugLogBoolHelper("Show InGame Col: ", GLOBALS_DEBUG_SHOW_INGAME_COLLISION);
 			}
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad9))
 		{
 			GLOBALS_DEBUG_DISABLE_HUD = !GLOBALS_DEBUG_DISABLE_HUD;
-			Logger_printf("Disable Hud: %i\n", GLOBALS_DEBUG_DISABLE_HUD);
+			DebugLogBoolHelper("Disable Hud: ", GLOBALS_DEBUG_DISABLE_HUD);
 		}
 		if (Input_IsKeyTapped(KEYS_F8))
 		{
@@ -270,11 +286,11 @@ static void Tick()
 
 	HandleAltEnterCheck();
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	Cheats();
 #endif
 }
-#if EDITOR
+#ifdef EDITOR_MODE
 static bool HandleDebugPauseAndStep()
 {
 	/*
@@ -327,7 +343,7 @@ static bool HandleDebugPauseAndStep()
 
 	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_LB)->mIsTapped)
 	{
-		//TODO C99 GameStateManager_ActiveGameState()->Rewind();
+		GameState_Rewind(GameStateManager_GetGameState());
 	}
 
 	Renderer_SetupRenderState();
@@ -370,7 +386,7 @@ static bool IsPaused()
 			SoundEffect_SetSfxMuted(false);
 			Music_SetMusicMuted(false);
 
-#if EDITOR
+#ifdef EDITOR_MODE
 			//WILLNOTDO 05152023
 			/*
 			if (OeGlobals_DEBUG_IS_EDITOR_MODE)
@@ -434,7 +450,7 @@ static void UpdateFixedTimeStep()
 	{
 		isFixedTimeStep = false;
 	}
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (OeGlobals_IsDebugGameSpeedSet())
 	{
 		isFixedTimeStep = false;
@@ -449,7 +465,7 @@ static void UpdateFixedTimeStep()
 */
 static void UpdateLoop(double delta)
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (HandleDebugPauseAndStep())
 	{
 		return;
@@ -484,7 +500,7 @@ static void UpdateLoop(double delta)
 		}
 	}
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (!GLOBALS_DEBUG_IS_EDITOR_MODE && Globals_IsDebugGameSpeedSet())
 	{
 		delta *= Globals_GetDebugGameSpeedAsMul();
@@ -563,7 +579,7 @@ bool GameUpdater_IsInterpolated()
 		return false;
 	}
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (Globals_IsDebugGameSpeedSet())
 	{
 		return true;
@@ -607,7 +623,7 @@ void GameUpdater_DebugReloadMap()
 	{
 		MString* tempString = NULL;
 		MString_Combine5(&tempString, "Map Reloaded (Full) [", Get_LevelDataResource()->mFileNameWithoutExtension, "][", Get_LevelFileName(), "]");
-		Logger_LogInformation(MString_GetText(tempString));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 	GLOBALS_DEBUG_QUICK_PLAYER_POSITION = Vector2_Zero;
@@ -617,7 +633,7 @@ void GameUpdater_DebugSaveMap()
 {
 	//WILLNOTDO 05152023
 	/*
-#if EDITOR
+#ifdef EDITOR_MODE
 	Get_LevelDataResource().SaveAsIni();
 	OeEditor.Save();
 	Do_PlaySound("editorSave", 1f);
@@ -637,7 +653,7 @@ void GameUpdater_FastResetPlusMove()
 {
 	//WILLNOTDO 05152023
 	/*
-#if EDITOR
+#ifdef EDITOR_MODE
 	OeGlobals_DEBUG_QUICK_PLAYER_POSITION = Input_GetCameraAdjustedMouse(ref OeEditor.Camera);
 	OeGameStateManager.DebugForceReloadMapNow();
 	OeGameStateManager.SetGameState(OeGameStateManager.GAME_STATE_NORMAL);

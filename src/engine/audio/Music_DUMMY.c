@@ -77,3 +77,5 @@ void Music_Tick(void)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

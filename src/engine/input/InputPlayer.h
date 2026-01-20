@@ -60,6 +60,6 @@ InputAction* InputPlayer_GetAction(InputPlayer* ip, const char* name);
 ControllerState* InputPlayer_GetController(InputPlayer* ip);
 void InputPlayer_Vibrate(InputPlayer* ip, int32_t priority, int32_t frames, float leftMotor, float rightMotor);
 bool InputPlayer_MyControllerLostConnection(InputPlayer* ip);
-#if EDITOR
+#ifdef EDITOR_MODE
 void InputPlayer_DebugSetDevice(InputPlayer* ip, int32_t deviceNumber);
 #endif

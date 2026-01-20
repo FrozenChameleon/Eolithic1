@@ -1,6 +1,8 @@
+//Defs should be included by including "/engine/utils/Macros.h"
+
 #pragma once
 
-#if EDITOR
+#ifdef EDITOR_MODE
 
 #define DEBUG_DEF_BUILT_WITH_DEBUG_DEFS
 #define DEBUG_DEF_ENABLE_CONSOLE_NOTIFICATIONS

@@ -214,10 +214,10 @@ Rectangle InputAction_GetGlyphRectangle(InputAction* action, int32_t index, cons
 	else
 	{
 		MString* tempString = NULL;
-		MString_Assign(&tempString, "[");
+		MString_AssignString(&tempString, "[");
 		MString_AddAssignString(&tempString, glyphString);
 		MString_AddAssignString(&tempString, "]");
-		Rectangle rect = DrawTool_GetBounds(MString_GetText(tempString), font);
+		Rectangle rect = DrawTool_GetBounds(MString_Text(tempString), font);
 		MString_Dispose(&tempString);
 		return rect;
 	}
@@ -233,10 +233,10 @@ void InputAction_DrawGlyph(InputAction* action, int32_t index, SpriteBatch* spri
 	else
 	{
 		MString* tempString = NULL;
-		MString_Assign(&tempString, "[");
+		MString_AssignString(&tempString, "[");
 		MString_AddAssignString(&tempString, glyphString);
 		MString_AddAssignString(&tempString, "]");
-		SpriteBatch_DrawString3(spriteBatch, font, MString_GetText(tempString), color, depth, Vector2_Create(x, y), alignmentX, alignmentY, false);
+		SpriteBatch_DrawString3(spriteBatch, font, MString_Text(tempString), color, depth, Vector2_Create(x, y), alignmentX, alignmentY, false);
 		MString_Dispose(&tempString);
 	}
 }

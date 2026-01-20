@@ -8,6 +8,9 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "../../defs/GlobalDefs.h"
+#include "../../defs/DebugDefs.h"
+#include "../../defs/GameDefs.h"
 
 #define UNUSED(x) (void)(x)
 

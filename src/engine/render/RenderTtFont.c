@@ -1,4 +1,4 @@
-#include "RenderTtFont.h"
+#include "RenderTTFont.h"
 
 #define FONTSTASH_IMPLEMENTATION
 #include "../../third_party/fontstash/fontstash.h"
@@ -34,15 +34,15 @@ static void SetupFontState(FONScontext* fontContext, const FontMapData* replacem
 
 static void DrawTheText(FONScontext* fontContext, const char* textToDraw, Vector2 renderPosition, Vector2 linePosition, Color color, float scaleFactor)
 {
-	TtFontState fontState;
+	TTFontState fontState;
 	fontState.mPosition = Vector2_Add(renderPosition, linePosition);
 	fontState.mColor = color;
 	fontState.mScaleFactor = scaleFactor;
-	Renderer_SetupTtFontState(&fontState);
+	Renderer_SetupTTFontState(&fontState);
 	fonsDrawText(fontContext, 0, 0, textToDraw, NULL);
 }
 
-void RenderTtFont_Create(const char* name, FixedByteBuffer* data)
+void RenderTTFont_Create(const char* name, FixedByteBuffer* data)
 {
 	Init();
 
@@ -67,7 +67,7 @@ void RenderTtFont_Create(const char* name, FixedByteBuffer* data)
 
 	fonsSetFont(fontContext, font);
 }
-void RenderTtFont_Draw(const FontMapData* replacement, const char* text, Color color, Vector2 position)
+void RenderTTFont_Draw(const FontMapData* replacement, const char* text, Color color, Vector2 position)
 {
 	Init();
 
@@ -86,15 +86,15 @@ void RenderTtFont_Draw(const FontMapData* replacement, const char* text, Color c
 	int32_t lineSpacing = replacement->mOverrideBoundsHeight;
 
 	MString* textToDraw = NULL;
-	MString_Assign(&textToDraw, "");
+	MString_AssignString(&textToDraw, "");
 	size_t textSize = Utils_strlen(text);
 	for (int32_t i = 0; i < textSize; i += 1)
 	{
 		if (text[i] == '\n')
 		{
-			DrawTheText(fontContext, MString_GetText(textToDraw), renderPosition, linePosition, color, scaleFactor);
+			DrawTheText(fontContext, MString_Text(textToDraw), renderPosition, linePosition, color, scaleFactor);
 			linePosition.Y += lineSpacing;
-			MString_Assign(&textToDraw, "");
+			MString_AssignString(&textToDraw, "");
 		}
 		else
 		{
@@ -102,14 +102,14 @@ void RenderTtFont_Draw(const FontMapData* replacement, const char* text, Color c
 		}
 	}
 
-	if (MString_GetLength(textToDraw) > 0)
+	if (MString_Length(textToDraw) > 0)
 	{
-		DrawTheText(fontContext, MString_GetText(textToDraw), renderPosition, linePosition, color, scaleFactor);
+		DrawTheText(fontContext, MString_Text(textToDraw), renderPosition, linePosition, color, scaleFactor);
 	}
 
 	MString_Dispose(&textToDraw);
 }
-Rectangle RenderTtFont_GetBounds(const FontMapData* replacement, const char* text)
+Rectangle RenderTTFont_GetBounds(const FontMapData* replacement, const char* text)
 {
 	Init();
 

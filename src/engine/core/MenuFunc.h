@@ -153,7 +153,7 @@ void MenuFunc_ActionExitGame();
 void MenuFunc_ActionLoadLevel(const char* level);
 void MenuFunc_GameBorderFrameToggle();
 void MenuFunc_GameScreenshakeToggle();
-void MenuFunc_ActionLoadSaveSlot(const char* save, const char* level);
+//void MenuFunc_ActionLoadSaveSlot(const char* save, const char* level); //UNUSED
 void MenuFunc_VideoRefreshSyncToggle();
 void MenuFunc_VideoDrawModeToggle(int32_t direction);
 void MenuFunc_InputControllerTypeToggle();

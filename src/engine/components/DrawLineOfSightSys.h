@@ -6,6 +6,6 @@
 typedef struct SpriteBatch SpriteBatch;
 
 System* DrawLineOfSightSys_CreateSystem(void);
-//#if EDITOR
+//#ifdef EDITOR_MODE
 void DrawLineOfSightSys_DrawRoutine(Entity owner, DrawLineOfSight* data, SpriteBatch* spriteBatch);
 //#endif

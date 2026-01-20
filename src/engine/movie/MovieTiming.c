@@ -31,7 +31,7 @@ MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithou
 			MString* bigString = NULL;
 			File_ReadAllToBigString(&bigString, br);
 			lotsOfStrings = IStringArray_Create();
-			Utils_SplitString(MString_GetText(bigString), MString_GetCapacity(bigString), ',', lotsOfStrings);
+			Utils_SplitString(MString_Text(bigString), MString_Capacity(bigString), ',', lotsOfStrings);
 			MString_Dispose(&bigString);
 		}
 		int32_t len = (int32_t)IStringArray_Length(lotsOfStrings);

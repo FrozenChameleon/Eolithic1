@@ -34,12 +34,12 @@
 #include "DrawInstance.h"
 #include "../font/BmFont.h"
 
-typedef struct TtFontState
+typedef struct TTFontState
 {
 	Vector2 mPosition;
 	Color mColor;
 	float mScaleFactor;
-} TtFontState;
+} TTFontState;
 
 typedef struct ImagePixelData
 {
@@ -148,9 +148,9 @@ void Renderer_DisableDepthBufferWrite();
 void Renderer_LogInfo(const char* msg);
 void Renderer_LogWarning(const char* msg);
 void Renderer_LogError(const char* msg);
-void Renderer_SetupVerticesForTtFont(VertexPositionColorTexture* vertices, Color fontColor, int32_t pos, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts);
-const TtFontState* Renderer_GetTtFontState();
-void Renderer_SetupTtFontState(const TtFontState* fontState);
+void Renderer_SetupVerticesForTTFont(VertexPositionColorTexture* vertices, Color fontColor, int32_t pos, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts);
+const TTFontState* Renderer_GetTTFontState();
+void Renderer_SetupTTFontState(const TTFontState* fontState);
 void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts);
 void Renderer_SetupVerticesFromVPCT4(VertexPositionColorTexture* vertices, int32_t pos, const VertexPositionColorTexture4* sprite);
 void Renderer_DrawVertexPositionColorTexture4(Texture* texture, const VertexPositionColorTexture4* sprite);

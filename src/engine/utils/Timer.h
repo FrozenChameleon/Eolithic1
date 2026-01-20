@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "stdint.h"
-#include "stdbool.h"
 #include "Macros.h"
 
 typedef struct Timer

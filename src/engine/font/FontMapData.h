@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../utils/IStringArray.h"
 #include "../utils/Macros.h"
+#include "../utils/IStringArray.h"
 #include "../math/Vector2.h"
 
 typedef struct FontMapData

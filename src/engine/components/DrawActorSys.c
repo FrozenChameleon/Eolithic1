@@ -1,5 +1,6 @@
 #include "DrawActorSys.h"
 
+#include "../utils/Macros.h"
 #include "../core/Func.h"
 #include "../leveldata/ImageData.h"
 #include "../render/DrawRenderInfo.h"
@@ -11,7 +12,6 @@
 #include "../utils/Utils.h"
 #include "../components/TagIsUpdateDisabled.h"
 #include "../components/FakePosition.h"
-#include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
 #include "../utils/Logger.h"
 
@@ -190,7 +190,7 @@ DrawStateInfo* DrawActorSys_GetStateInfo(Entity owner, int32_t state)
 	{
 		MString* tempString = NULL;
 		MString_Combine4(&tempString, "State Not Available: ", Utils_IntToStringGlobalBuffer(state), " on ", Get_Name(owner));
-		Logger_LogError(MString_GetText(tempString));
+		Logger_LogError(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 
@@ -360,12 +360,12 @@ Animation* DrawActorSys_GetAnimation(Entity owner, int32_t state, int32_t phase)
 
 	{
 		MString* tempString = NULL;
-		MString_Assign(&tempString, "Unable to get Animation: ");
+		MString_AssignString(&tempString, "Unable to get Animation: ");
 		MString_AddAssignInt(&tempString, state);
 		MString_AddAssignString(&tempString, ",");
 		MString_AddAssignInt(&tempString, phase);
 		MString_AddAssignString(&tempString, "!");
-		Logger_LogError(MString_GetText(tempString));
+		Logger_LogError(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 
@@ -388,12 +388,12 @@ ImageDataInstance* DrawActorSys_GetCurrentImageDataRender(Entity owner, int32_t 
 
 	{
 		MString* tempString = NULL;
-		MString_Assign(&tempString, "Unable to get Image Data Render: ");
+		MString_AssignString(&tempString, "Unable to get Image Data Render: ");
 		MString_AddAssignInt(&tempString, state);
 		MString_AddAssignString(&tempString, ",");
 		MString_AddAssignInt(&tempString, phase);
 		MString_AddAssignString(&tempString, "!");
-		Logger_LogError(MString_GetText(tempString));
+		Logger_LogError(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 

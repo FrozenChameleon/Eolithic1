@@ -15,7 +15,6 @@
 
 #include "Game.h"
 
-#include "stdio.h"
 #include "SDL3/SDL.h"
 #include "stdbool.h"
 #include "Window.h"
@@ -65,7 +64,7 @@ static bool IsFixedTimeStep()
 		return false;
 	}
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (Globals_IsDebugGameSpeedSet())
 	{
 		return false;
@@ -267,9 +266,9 @@ bool Game_IsActive()
 
 void Game_Update(double gameTime)
 {
-	//WILLNOTDO 06262023 (EDITOR)
+	//WILLNOTDO 06262023 (EDITOR_MODE)
 	/*
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (_mWasGuiDrawMissed)
 	{
 		OeGui.AfterLayout();
@@ -299,7 +298,7 @@ void Game_Update(double gameTime)
 
 	//WILLNOTDO 06262023 2023
 	/*
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (OeGui.IsAnythingHovered())
 	{
 		OeInput.BlockMKBInputForFrames(10);
@@ -310,7 +309,7 @@ void Game_Update(double gameTime)
 
 void Game_Draw(double gameTime)
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (Globals_DebugIsRenderDisabled())
 	{
 		return;
@@ -336,7 +335,7 @@ void Game_Draw(double gameTime)
 	}
 
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	//WILLNOTDO 05152023 OeGui.AfterLayout();
 	//WILLNOTDO 05152023 _mWasGuiDrawMissed = false;
 #endif

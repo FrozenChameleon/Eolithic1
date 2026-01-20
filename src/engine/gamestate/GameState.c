@@ -45,7 +45,7 @@ void GameState_Ctor(GameState* gs, const char* name, bool disableRewinding)
 	{
 		gs->_mReplayDataManager = ReplayDataManager_Create(name);
 	}
-/*#if EDITOR
+/*#ifdef EDITOR_MODE
 	_mHasSavedDebugSaveState = false;
 	_mDebugSaveState = OeGameHelper::CreateGameStateData(name);
 	_mIsRewindLooping = false;
@@ -208,7 +208,7 @@ void GameState_DrawDebugHud(GameState* gs, SpriteBatch* spriteBatch)
 
 void GameState_Load(GameState* gs, const char* levelDataToLoad)
 {
-#if EDITOR
+#ifdef EDITOR_MODE
 	gs->_mIsRewindLooping = false;
 #endif
 

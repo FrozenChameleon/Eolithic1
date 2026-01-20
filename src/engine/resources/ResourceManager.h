@@ -8,8 +8,8 @@
 
 #pragma once
 
-#include "Resource.h"
 #include "../utils/Macros.h"
+#include "Resource.h"
 #include "../io/BufferReader.h"
 
 typedef void* (*ResourceManager_FromStreamFunc)(const char* path, const char* filenameWithoutExtension, BufferReader* br);

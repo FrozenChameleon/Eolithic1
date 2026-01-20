@@ -20,7 +20,7 @@ typedef struct GameState
 	GameStateData _mData;
 	GameStateData _mForGameState;
 	ReplayDataManager* _mReplayDataManager;
-#if EDITOR
+#ifdef EDITOR_MODE
 	bool _mHasSavedDebugSaveState;
 	GameStateData _mDebugSaveState;
 	bool _mIsRewindLooping;
@@ -75,7 +75,7 @@ void* GameState_GetFirstSetComponent(GameState* gs, ComponentType ctype);
 Entity GameState_GetFirstSetEntity(GameState* gs, ComponentType ctype);
 void* GameState_TryGetComponent(GameState* gs, ComponentType ctype, Entity entity, bool* wasSuccessful);
 void* GameState_TryGetFirstSetComponent(GameState* gs, ComponentType ctype, bool* wasSuccessful);
-/*#if EDITOR
+/*#ifdef EDITOR_MODE
 bool GameState_HandleDebugRewindLooping(GameState* gs);
 bool GameState_HandleDebugSaveStates(GameState* gs);
 void GameState_CreateDebugSaveState(GameState* gs);

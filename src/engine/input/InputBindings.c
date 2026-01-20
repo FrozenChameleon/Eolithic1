@@ -31,26 +31,26 @@ static MString* _mTempString;
 
 const char* PlayerBindingData_GetFilePlayerPath(PlayerBindingData* pbd)
 {
-	MString_Assign(&_mTempString, "player");
+	MString_AssignString(&_mTempString, "player");
 	MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber));
 	MString_AddAssignString(&_mTempString, ".bin");
-	return MString_GetText(_mTempString);
+	return MString_Text(_mTempString);
 }
 void PlayerBindingData_LogLoadSuccess(PlayerBindingData* pbd)
 {
-	MString_Assign(&_mTempString, "Bindings have been loaded for player #");
+	MString_AssignString(&_mTempString, "Bindings have been loaded for player #");
 	MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber));
-	Logger_LogInformation(MString_GetText(_mTempString));
+	Logger_LogInformation(MString_Text(_mTempString));
 }
 void PlayerBindingData_LogLoadFailure(PlayerBindingData* pbd)
 {
-	MString_Assign(&_mTempString, "Unable to load bindings for player #");
+	MString_AssignString(&_mTempString, "Unable to load bindings for player #");
 	MString_AddAssignString(&_mTempString, Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber));
-	Logger_LogInformation(MString_GetText(_mTempString));
+	Logger_LogInformation(MString_Text(_mTempString));
 }
 void PlayerBindingData_LoadFromStream(PlayerBindingData* pbd, BufferReader* reader)
 {
-	int32_t version = BufferReader_ReadI32(reader);
+	BufferReader_ReadI32(reader); //VERSION
 	int32_t count = BufferReader_ReadI32(reader);
 	for (int32_t i = 0; i < count; i += 1)
 	{
@@ -192,7 +192,7 @@ void PlayerBindingData_Save(PlayerBindingData* pbd)
 	{
 		MString* tempString = NULL;
 		MString_Combine4(&tempString, "Bindings have been saved for player #", Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber), ", ", filename);
-		Logger_LogInformation(MString_GetText(tempString));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 	Utils_JustSaved();
@@ -420,7 +420,7 @@ InputAction* InputBindings_GetActionFromArray(InputAction* actions, const char* 
 
 	MString* tempStr = NULL;
 	MString_Combine2(&tempStr, "Unable to find action: ", name);
-	Logger_LogError(MString_GetText(tempStr));
+	Logger_LogError(MString_Text(tempStr));
 	MString_Dispose(&tempStr);
 	return &INPUTACTION_DUMMY_ACTION;
 }

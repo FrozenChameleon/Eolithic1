@@ -12,3 +12,5 @@ void* AudioEngine_GetContext()
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

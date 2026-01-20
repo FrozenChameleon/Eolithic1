@@ -1,5 +1,6 @@
 #include "CollisionEngineSys.h"
 
+#include "../utils/Macros.h"
 #include "../render/Color.h"
 #include "../core/GameHelper.h"
 #include "../core/Func.h"
@@ -10,7 +11,6 @@
 #include "../math/Math.h"
 #include "../utils/Utils.h"
 #include "../globals/Globals.h"
-#include "../../GlobalDefs.h"
 #include "../utils/Logger.h"
 #include "../globals/ObjectTypes.h"
 #include "../../third_party/stb_ds.h"
@@ -1075,7 +1075,7 @@ Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPos
 		vec = OeVectors.MaxValue;
 	}
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	if (OeGlobals.DEBUG_SHOW_INGAME_COLLISION)
 	{
 		DebugDrawNodes(ref data);

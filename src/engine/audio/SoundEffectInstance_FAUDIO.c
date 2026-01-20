@@ -73,7 +73,11 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	{
 		if ((sei->_mData->nSamplesPerSec != waveFileData->nSamplesPerSec) || (sei->_mData->nChannels != waveFileData->nChannels))
 		{
-			Logger_printf("Sound effect instance sample/channel mismatch for %s", name);
+			MString* tempString = NULL;
+			MString_AssignString(&tempString, "Sound effect instance sample/channel mismatch for : ");
+			MString_AddAssignString(&tempString, name);
+			Logger_LogInformation(MString_Text(tempString));
+			MString_Dispose(&tempString);
 			init = true;
 		}
 	}
@@ -367,9 +371,8 @@ void SoundEffectInstance_Resume(SoundEffectInstance* sei)
 		return;
 	}
 
-	SoundState state = sei->_mInternalState; // Triggers a query, update
+	//SoundState state = sei->_mInternalState; // Triggers a query, update
 	FAudioSourceVoice* handle = GetHandle(sei);
-
 	if (handle == NULL)
 	{
 		// XNA4 just plays if we've not started yet.
@@ -556,3 +559,5 @@ int64_t SoundEffectInstance_PendingBufferCount(const SoundEffectInstance* sei)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

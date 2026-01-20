@@ -11,9 +11,6 @@ typedef struct BufferReader BufferReader;
 
 typedef struct BmFont
 {
-//#if !DISABLE_TT_FONT
-	//TODO C99 OeTTFont* GetTTFont(const std::string& font);
-//#endif
 	char _mFontName[EE_FILENAME_MAX];
 	BmFontData _mFontData;
 	Texture* _mFontTexture;

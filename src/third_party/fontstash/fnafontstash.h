@@ -51,9 +51,9 @@ static int fnafons__renderCreate(void* userPtr, int width, int height)
 	}
 
 	MString* path = NULL;
-	MString_Assign(&path, "fontdata");
+	MString_AssignString(&path, "fontdata");
 	MString_AddAssignInt(&path, _mFontCounter);
-	fna->tex = Renderer_GetNewTextureData(MString_GetText(path), width, height, true);
+	fna->tex = Renderer_GetNewTextureData(MString_Text(path), width, height, true);
 	MString_Dispose(&path);
 	fna->width = width;
 	fna->height = height;

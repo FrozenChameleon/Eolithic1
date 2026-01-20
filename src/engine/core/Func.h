@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "../utils/Macros.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"

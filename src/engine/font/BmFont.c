@@ -3,11 +3,11 @@
 #include "FontMap.h"
 #include "../font/BmFont.h"
 #include "../render/Texture.h"
-#include "../render/RenderTtFont.h"
+#include "../render/RenderTTFont.h"
 #include "../render/Renderer.h"
 #include "../../third_party/stb_ds.h"
 #include "../resources/ResourceManagerList.h"
-#include "../font/TtFont.h"
+#include "../font/TTFont.h"
 
 #define FONT_EXTENSION ".fnt"
 //TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_PathCombine("data", "fonts") };
@@ -68,7 +68,7 @@ const FontMapData* BmFont_GetReplacement(BmFont* bmf)
 	return FontMap_GetReplacement(bmf->_mFontName);
 }
 
-#if !DISABLE_TT_FONT
+#ifndef DISABLE_TT_FONT
 static TTFont* BmFont_GetTTFont(const char* font)
 {
 	return ResourceManager_GetResourceData(ResourceManagerList_TTFont(), font);
@@ -77,7 +77,7 @@ static TTFont* BmFont_GetTTFont(const char* font)
 
 Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont)
 {
-	#if !DISABLE_TT_FONT
+	#ifndef DISABLE_TT_FONT
 	const FontMapData* replacement = BmFont_GetReplacement(bmf);
 	if ((replacement != NULL) && !doNotReplaceFont)
 	{
@@ -87,7 +87,7 @@ Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont)
 		}
 		else
 		{
-			return RenderTtFont_GetBounds(replacement, text);
+			return RenderTTFont_GetBounds(replacement, text);
 		}
 	}
 	#endif

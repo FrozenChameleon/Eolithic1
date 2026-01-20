@@ -76,7 +76,7 @@ void IStringMap_Load(IStringMap* sm, BufferReader* br)
 		MString* value = NULL;
 		BufferReader_ReadMString(&key, br);
 		BufferReader_ReadMString(&value, br);
-		IStringMap_Add(sm, MString_GetText(key), MString_GetText(value));
+		IStringMap_Add(sm, MString_Text(key), MString_Text(value));
 		MString_Dispose(&key);
 		MString_Dispose(&value);
 	}

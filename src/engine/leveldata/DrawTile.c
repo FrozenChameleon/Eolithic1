@@ -1,5 +1,6 @@
 #include "DrawTile.h"
 
+#include "../utils/Macros.h"
 #include "../math/Points.h"
 #include "../globals/Globals.h"
 #include "../render/SpriteBatch.h"
@@ -9,7 +10,6 @@
 #include "../resources/Resource.h"
 #include "../render/DrawTool.h"
 #include "../render/Color.h"
-#include "../../GlobalDefs.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 

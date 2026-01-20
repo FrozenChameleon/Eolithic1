@@ -125,7 +125,7 @@ bool Input_IsRecordingMasterRecording();
 bool Input_IsPlayingMasterRecording();
 bool Input_IsRecordingOrPlayingMasterRecording();
 void Input_SetMasterRecordingState(int32_t state);
-#if EDITOR || CHEATS
+#ifdef EDITOR_MODE
 bool Input_IsKeyTapped(int32_t key);
 bool Input_IsKeyReleased(int32_t key);
 bool Input_IsKeyPressed(int32_t key);

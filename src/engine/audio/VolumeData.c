@@ -50,16 +50,16 @@ void VolumeData_Load(VolumeData* vd)
 		File_PathCombine2(&path, "data", "sfxvolume.bin");
 	}
 
-	if (File_Exists(MString_GetText(path)))
+	if (File_Exists(MString_Text(path)))
 	{
-		BufferReader* br = BufferReader_CreateFromPath(MString_GetText(path));
+		BufferReader* br = BufferReader_CreateFromPath(MString_Text(path));
 		int32_t count = BufferReader_ReadI32(br);
 		for (int32_t i = 0; i < count; i += 1)
 		{
 			MString* key = NULL;
 			BufferReader_ReadMString(&key, br);
 			int32_t volume = BufferReader_ReadI32(br);
-			shput(vd->sh_volume_map, MString_GetText(key), volume);
+			shput(vd->sh_volume_map, MString_Text(key), volume);
 		}
 		BufferReader_Dispose(br);
 	}
@@ -68,3 +68,5 @@ void VolumeData_Load(VolumeData* vd)
 }
 
 #endif
+
+typedef int compiler_warning_compliance;

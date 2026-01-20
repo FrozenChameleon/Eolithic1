@@ -39,9 +39,9 @@ void MovieOperationText_NormalUpdate(MovieOperationText* text)
 					char newChar = text->mTotalString[text->mIndex];
 
 					MString* tempString = NULL;
-					MString_Assign(&tempString, text->mCurrentString);
+					MString_AssignString(&tempString, text->mCurrentString);
 					MString_AddAssignChar(&tempString, newChar);
-					Utils_strlcpy(text->mCurrentString, MString_GetText(tempString), EE_FILENAME_MAX);
+					Utils_strlcpy(text->mCurrentString, MString_Text(tempString), EE_FILENAME_MAX);
 					MString_Dispose(&tempString);
 
 					text->mIndex += 1;
@@ -136,11 +136,11 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 			MString* total = NULL;
 			MString_AssignSubString(&total, text->mTotalString, off, end - off);
 
-			if (Utils_StringStartsWith(MString_GetText(total), "&"))
+			if (Utils_StringStartsWith(MString_Text(total), "&"))
 			{
-				int32_t totalLen = MString_GetLength(total);
+				int32_t totalLen = MString_Length(total);
 				MString* sound = NULL;
-				MString_AssignSubString(&sound, MString_GetText(total), 1, totalLen - 1);
+				MString_AssignSubString(&sound, MString_Text(total), 1, totalLen - 1);
 				bool wasFound = false;
 				for (int32_t i = 0; i < PLAY_SOUNDS_LEN; i += 1)
 				{
@@ -148,7 +148,7 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 					if (!ps->mIsLoaded)
 					{
 						ps->mPoint = begin;
-						Utils_strlcpy(ps->mSound, MString_GetText(sound), EE_FILENAME_MAX);
+						Utils_strlcpy(ps->mSound, MString_Text(sound), EE_FILENAME_MAX);
 						ps->mIsLoaded = true;
 						wasFound = true;
 						break;
@@ -160,12 +160,12 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 				}
 				MString_Dispose(&sound);
 			}
-			else if (Utils_StringStartsWith(MString_GetText(total), "^"))
+			else if (Utils_StringStartsWith(MString_Text(total), "^"))
 			{
-				int32_t totalLen = MString_GetLength(total);
+				int32_t totalLen = MString_Length(total);
 				MString* number = NULL;
-				MString_AssignSubString(&number, MString_GetText(total), 1, totalLen - 1);
-				int32_t pauseTime = Utils_ParseInt(MString_GetText(number));
+				MString_AssignSubString(&number, MString_Text(total), 1, totalLen - 1);
+				int32_t pauseTime = Utils_ParseInt(MString_Text(number));
 				bool wasFound = false;
 				for (int32_t i = 0; i < TEXT_PAUSES_LEN; i += 1)
 				{
@@ -195,7 +195,7 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 			MString* finalResult = NULL;
 			MString_AssignMString(&finalResult, strFirstNew);
 			MString_AddAssignMString(&finalResult, strSecondNew);
-			Utils_strlcpy(text->mTotalString, MString_GetText(finalResult), EE_FILENAME_MAX);
+			Utils_strlcpy(text->mTotalString, MString_Text(finalResult), EE_FILENAME_MAX);
 
 			MString_Dispose(&total);
 			MString_Dispose(&strFirstNew);

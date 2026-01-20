@@ -6,6 +6,7 @@
 
 #include "Line.h"
 
+#include "../utils/Macros.h"
 #include "../math/Vectors.h"
 #include "../math/PointRectangle.h"
 #include "../math/Points.h"
@@ -14,7 +15,6 @@
 #include "../globals/Align.h"
 #include "../utils/Utils.h"
 #include "../math/Math.h"
-#include "../../GlobalDefs.h"
 #include "../io/BufferReader.h"
 #include "../render/SpriteBatch.h"
 
@@ -131,7 +131,7 @@ void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, i
 		textPos.Y -= HALF_TILE_SIZE;
 		MString* tempString = NULL;
 		MString_Combine2(&tempString, "Override Speed From Player: ", Utils_IntToStringGlobalBuffer(line->mOverrideSpeedFromPlayer));
-		SpriteBatch_DrawString2(spriteBatch, font, MString_GetText(tempString), textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, MString_Text(tempString), textColor, depth, textPos, align, align);
 		MString_Dispose(&tempString);
 	}
 	if (line->mOverrideSpeedFromMinecart != 0)
@@ -139,7 +139,7 @@ void Line_DrawLineText(Line* line, SpriteBatch* spriteBatch, const char* font, i
 		textPos.Y -= HALF_TILE_SIZE;
 		MString* tempString = NULL;
 		MString_Combine2(&tempString, "Override Speed From Minecart: ", Utils_IntToStringGlobalBuffer(line->mOverrideSpeedFromMinecart));
-		SpriteBatch_DrawString2(spriteBatch, font, MString_GetText(tempString), textColor, depth, textPos, align, align);
+		SpriteBatch_DrawString2(spriteBatch, font, MString_Text(tempString), textColor, depth, textPos, align, align);
 		MString_Dispose(&tempString);
 	}
 }

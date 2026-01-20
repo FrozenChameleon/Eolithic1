@@ -1,11 +1,11 @@
 #include "TilesetOffset.h"
 
+#include "../utils/Macros.h"
 #include "../io/File.h"
 #include "../math/Point.h"
 #include "../leveldata/DrawTile.h"
 #include "../utils/Logger.h"
 #include "../utils/Utils.h"
-#include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
 #include "../utils/IStringArray.h"
 

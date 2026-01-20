@@ -13,8 +13,11 @@
   * See monoxna.LICENSE for details.
   */
 
+#ifdef CONTROLLER_SDL
+
 #include "ControllerState.h"
 
+#include "../utils/Macros.h"
 #include "../../third_party/stb_ds.h"
 #include "SDL3/SDL.h"
 #include "Buttons.h"
@@ -25,12 +28,11 @@
 #include "../math/MathHelper.h"
 #include "../utils/Logger.h"
 #include "../utils/Utils.h"
-#include "../utils/Macros.h"
+#include "../utils/MString.h"
 
 #define DEVICES_ARRAY_LENGTH 4
 
 //static std::vector<OeInputAction> _mDummyAction;
-static const char* _mGlyphDummy = EE_STR_EMPTY;
 static SDL_Gamepad* INTERNAL_devices[DEVICES_ARRAY_LENGTH];
 static struct { int32_t key; int32_t value; } *hm_INTERNAL_instanceList = NULL; //Map of SDL device # to internal devices array index ^
 
@@ -199,7 +201,15 @@ int32_t ControllerState_AddControllerInstance(int32_t dev)
 
 	hmput(hm_INTERNAL_instanceList, thisInstance, which);
 
-	Logger_printf("Added device #%d, %s", which, SDL_GetGamepadName(INTERNAL_devices[which]));
+
+	{
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Added device #");
+		MString_AddAssignInt(&tempString, which);
+		MString_AddAssignString(&tempString, SDL_GetGamepadName(INTERNAL_devices[which]));
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 
 	return which;
 }
@@ -226,7 +236,13 @@ int32_t ControllerState_RemoveControllerInstance(int32_t dev)
 		return -1;
 	}
 
-	Logger_printf("Removed Device #%d, %s", output, SDL_GetGamepadName(INTERNAL_devices[output]));
+	{
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Removed Device #");
+		MString_AddAssignInt(&tempString, output);
+		MString_AddAssignString(&tempString, SDL_GetGamepadName(INTERNAL_devices[output]));
+		MString_Dispose(&tempString);
+	}
 
 	hmdel(hm_INTERNAL_instanceList, dev);
 	SDL_CloseGamepad(INTERNAL_devices[output]);
@@ -267,5 +283,9 @@ bool ControllerState_IsUsingControllerPrompt()
 }
 const char* ControllerState_PlatformGetForcedSpecificGlyphAsString()
 {
-	return _mGlyphDummy;
+	return EE_STR_EMPTY;
 }
+
+#endif
+
+typedef int compiler_warning_compliance;

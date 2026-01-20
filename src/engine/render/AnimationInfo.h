@@ -1,7 +1,7 @@
 #pragma once
 
-#include "stdbool.h"
 #include "../utils/Macros.h"
+#include "stdbool.h"
 
 typedef struct AnimationInfo
 {

@@ -1,12 +1,12 @@
 #include "Tile.h"
 
+#include "../utils/Macros.h"
 #include "../components/Camera.h"
 #include "../utils/Cvars.h"
 #include "../render/DrawTool.h"
 #include "../core/GameHelper.h"
 #include "../io/BufferReader.h"
 #include "../utils/Utils.h"
-#include "../../GlobalDefs.h"
 #include "../../third_party/stb_ds.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
@@ -117,7 +117,7 @@ Tile* Tile_GetClone2(Tile* t, bool limited)
 	bool copyProps = false;
 	bool copyThings = false;
 
-#if EDITOR
+#ifdef EDITOR_MODE
 	copyCollision = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_COLLISION);
 	copyTiles = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_TILES);
 	copyLayerOnly = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_LAYER_ONLY);
