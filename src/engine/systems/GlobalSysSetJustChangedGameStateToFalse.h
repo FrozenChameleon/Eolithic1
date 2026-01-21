@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysSetJustChangedGameStateToFalse_CreateSystem();
+System* GlobalSysSetJustChangedGameStateToFalse_CreateSystem(void);

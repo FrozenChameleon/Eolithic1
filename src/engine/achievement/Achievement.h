@@ -20,11 +20,11 @@ typedef struct Achievement
 	char mName[EE_FILENAME_MAX];
 	char mDescription[EE_FILENAME_MAX];
 	char mLockedDescription[EE_FILENAME_MAX];
-	bool (*mCondition)();
+	bool (*mCondition)(void);
 	Sheet* mSheet;
 } Achievement;
 
-void Achievement_Init(Achievement* achievement, bool (*condition)(), const char* name, const char* description, const char* lockedDescription, const char* image, bool isHidden);
+void Achievement_Init(Achievement* achievement, bool (*condition)(void), const char* name, const char* description, const char* lockedDescription, const char* image, bool isHidden);
 void Achievement_Update(bool doNotCertify, Achievement* achievement, int32_t index);
 void Achievement_UnlockAchievement(bool doNotCertify, Achievement* achievement, int32_t index);
 void Achievement_CertifyAchievement(Achievement* achievement, int32_t index);

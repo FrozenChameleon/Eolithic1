@@ -26,19 +26,7 @@ typedef struct Tile
 } Tile;
 
 void Tile_Init(Tile* t);
-void Tile_Write(Tile* t, BufferWriter* writer);
 void Tile_Read(Tile* t, int32_t version, BufferReader* reader);
-void Tile_DeleteCollision(Tile* t);
-void Tile_DeleteDrawTiles(Tile* t);
-void Tile_DeleteDrawTiles2(Tile* t, int32_t layer);
-void Tile_DeleteThings(Tile* t);
-void Tile_DeleteProps(Tile* t);
-Tile* Tile_GetClone(Tile* t);
-Tile* Tile_GetClone2(Tile* t, bool limited);
-bool Tile_IsEqualTo(Tile* t, Tile* tile2);
-void Tile_DrawThis(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, LevelData* level, bool overrideDepth, Texture* wrapper);
-void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth);
 Rectangle Tile_GetCollisionRectangle(Tile* t, int32_t gridX, int32_t gridY);
-void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth);
 void Tile_DrawProps(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth);
 void Tile_DrawProps2(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth, bool drawInfo);

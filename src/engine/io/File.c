@@ -70,7 +70,7 @@ bool File_Exists(const char* path)
 		return false;
 	}
 }
-const char* File_GetBasePath()
+const char* File_GetBasePath(void)
 {
 	if (_mBasePath == NULL)
 	{
@@ -79,7 +79,7 @@ const char* File_GetBasePath()
 
 	return _mBasePath;
 }
-const char* File_GetPrefPath()
+const char* File_GetPrefPath(void)
 {
 	if (_mPrefPath == NULL)
 	{

@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysUpdateManagers_CreateSystem();
+System* GlobalSysUpdateManagers_CreateSystem(void);

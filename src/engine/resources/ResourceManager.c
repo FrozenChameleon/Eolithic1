@@ -4,8 +4,6 @@
  * See LICENSE for details.
  */
  
-//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
-
 #include "ResourceManager.h"
 
 #include "../../third_party/stb_ds.h"

@@ -37,16 +37,15 @@ typedef struct CollisionEngine CollisionEngine;
 typedef struct EntitySearch EntitySearch;
 
 //REGION DO
-void Do_DrawCameraData(SpriteBatch* spriteBatch);
 Entity Do_CreatePlayer(float x, float y, const char* name);
-int32_t Get_AmountOfPlayers();
-bool Has_Players();
-Entity Get_FirstPlayer();
+int32_t Get_AmountOfPlayers(void);
+bool Has_Players(void);
 Entity Get_Player(void);
+//Unused, so just returns first player.
 Entity Get_ClosestPlayer(float x, float y);
-Entity Get_Player2(int32_t number);
-LevelCameraDataInstance* Get_CameraDataInstances();
-SceneCameraData* Get_SceneCameraData();
+Entity Get_PlayerByNumber(int32_t givenPlayerNumber);
+LevelCameraDataInstance* Get_CameraDataInstances(void);
+SceneCameraData* Get_SceneCameraData(void);
 //private
 void Do_HandleNormalCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCameraDataInstance* instance);
 void Do_HandleTransitionCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCameraDataInstance* instance);
@@ -54,13 +53,13 @@ void Do_HandleTransitionCamera(bool useAutoHingeCamera, bool forceCameraPosition
 LevelCameraDataInstance* Do_HandleCamera(bool useAutoHingeCamera, bool forceCameraPosition);
 LevelCameraDataInstance* Do_HandleCamera2(bool useAutoHingeCamera, bool forceCameraPosition, bool manualSize, int32_t size);
 void Do_LoadCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCameraDataInstance* instance);
-void Do_ResetCollisionGrid();
+void Do_ResetCollisionGrid(void);
 void Do_LoadCameraNumber(bool useAutoHingeCamera, bool forceCameraPosition, int32_t number);
-void Do_ResetCameraDataFullyNoMatterWhat();
-void Do_ResetCameraDataIfNotCompletePermanently();
-void Do_SetCompleteCameraDataToPermanentlyComplete();
+void Do_ResetCameraDataFullyNoMatterWhat(void);
+void Do_ResetCameraDataIfNotCompletePermanently(void);
+void Do_SetCompleteCameraDataToPermanentlyComplete(void);
 Vector2 Do_FindThingPositionInTileData(const char* name);
-void Do_InitAllPermanentThings();
+void Do_InitAllPermanentThings(void);
 void Do_InitPermanentThingsByRealCoordinates(float realX1, float realY1, float realX2, float realY2, bool startThings);
 void Do_InitPermanentThingsByRoomBounds(LevelCameraDataInstance* instance, bool startThings);
 void Do_InitPermanentThingsByGridCoordinates(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
@@ -69,9 +68,7 @@ void Do_InitPermanentThingsByGridCoordinates3(int32_t x, int32_t y, const char* 
 //private
 Entity Do_BuildThingFromData(int32_t i, int32_t j, ThingInstance* data);
 //
-void Do_FlipGameState(int32_t nextState);
-void Do_FlipGameStateBack();
-Entity Do_BuildNewEntity();
+Entity Do_BuildNewEntity(void);
 Entity Do_BuildNewEntityWithName(const char* name);
 void Do_FreezeEntityTillOnScreen(Entity entity);
 void Do_FreezeEntityTillOnScreen2(Entity entity, bool facesPlayer, bool isFacingFlipped);
@@ -94,7 +91,6 @@ int32_t Get_AmountOfBounces(Entity entity);
 bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityIncrease, bool fallFirstBounce);
 void Do_ResetStepTimer(Entity entity);
 Timer* Get_StepTimer(Entity entity);
-bool Do_UpdateStepTimer2(Entity entity, const char* tuning);
 bool Do_UpdateStepTimer(Entity entity, int32_t limit);
 void Do_SetBodyFramesInAir(Entity entity, int32_t value);
 void Do_SetBodyIgnoreGravityY(Entity entity, bool value);
@@ -112,7 +108,6 @@ void Do_SetBodyType(Entity entity, int32_t type);
 void Do_SetBodyIgnoreAllCollision(Entity entity, bool value);
 void Do_SetBodyStatic(Entity entity, bool value);
 void Do_SetBodyDisabled(Entity entity, bool value);
-void Do_SetBodyDisabled2(Entity entity, bool value, int32_t number);
 EntitySearch* Do_SearchForEntitiesWithName(const char* name);
 EntitySearch* Do_SearchForEntitiesWithName2(const char* name, bool isReverse);
 EntitySearch* Do_SearchForEntitiesWithIntTag(int32_t value);
@@ -124,14 +119,13 @@ EntitySearch* Do_SearchForChildrenWithName2(Entity entity, const char* name, boo
 EntitySearch* Do_SearchForChildrenWithIntTag(Entity entity, int32_t value);
 EntitySearch* Do_SearchForChildrenWithIntTag2(Entity entity, int32_t value, bool isReverse);
 void Do_SetIsBlockingLineOfSight(Entity entity, bool value);
-void Do_DestroyAllEnemies();
+void Do_DestroyAllEnemies(void);
 MoveGetter* Do_InitMoveGetter(Entity entity, const char* name, int32_t movesToRemember);
 NodeMovingKit* Do_InitNodeMovingKit(Entity entity, int32_t type, bool moveContacts);
 HitFlashKit* Do_InitHitFlashKit(Entity entity, int32_t time);
 MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int32_t depth);
 void Do_SetRotate(Entity entity, float value);
 void Do_Rotate(Entity entity, float value);
-void DeprecatedDo_SetTag(Entity entity, int32_t whatever, int32_t whatever2);
 void Do_IdleCircle(Entity entity, float radius, bool useX, bool useY, int32_t idleDegreeIncrease);
 void Do_SetAsUsingBulletCollisionEngine(Entity entity);
 bool Do_FloatyMoveSomewhere(Entity entity, float destX, float destY, float speedAccel, float speedLimit);
@@ -157,10 +151,6 @@ void Do_SetAnimationTimeLimit(Entity entity, int32_t state, int32_t phase, int32
 void Do_SetShader(Entity entity, ShaderProgram* program);
 void Do_SetShader2(Entity entity, int32_t state, ShaderProgram* program);
 void Do_SetShaderAsWhiteFlash(Entity entity);
-void Do_SetupShaderSingleColorReplace(ShaderProgram* program, uint8_t targetR, uint8_t targetG, uint8_t targetB,
-	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB);
-void Do_SetupShaderSingleColorReplace2(ShaderProgram* program, uint8_t targetR, uint8_t targetG, uint8_t targetB,
-	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB, uint8_t alpha);
 void Do_SetupShaderMultiColorLength(ShaderProgram* program, int32_t length);
 ShaderProgram* Do_CreateShader(const char* name);
 void Do_SetupShaderMultiColor(ShaderProgram* program, int32_t i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
@@ -180,7 +170,6 @@ DrawActor* Get_DrawActor(Entity entity);
 //private
 void Do_SetNodes(Entity entity, Point* nodes);
 //
-void Do_CopyGridNodesFromParent(Entity entity);
 void Do_SetStringSettings(Entity entity, StringPair* stringSettings);
 void Do_SetComplete(Entity entity);
 void Do_SetGridPosition(Entity entity, int32_t x, int32_t y);
@@ -258,11 +247,11 @@ void Do_PlaySoundWithForcedVolume(const char* name, float forcedVolume);
 void Do_StopSound(const char* name);
 void Do_PauseMusic(int32_t priority);
 void Do_ResumeMusic(int32_t priority);
-void Do_StopMusic();
+void Do_StopMusic(void);
 void Do_PlayMusic(const char* name);
 void Do_PlayMusic2(const char* nextTrack, bool isLooping, bool isForced);
 void Do_PlayMusic3(const char* name, bool isLooping, bool isForced, bool isFadeIn, int32_t fadeInTime, bool isFadeOut, int32_t fadeOutTime);
-void Do_PlayPreviousTrack();
+void Do_PlayPreviousTrack(void);
 void Do_FadeOutMusic(int32_t time);
 void Do_DestroyChildren(Entity entity);
 void Do_DestroyChildrenByName(Entity entity, const char* name);
@@ -290,7 +279,6 @@ void Do_SetImage(Entity entity, int32_t state, int32_t phase);
 void Do_SetImage2(Entity entity, int32_t state, int32_t phase, bool carry);
 void Do_SetImageForced(Entity entity, int32_t state, int32_t phase);
 void Do_SetImageForced2(Entity entity, int32_t state, int32_t phase, bool carry);
-Entity Do_AddAnimation(Entity entity, float x, float y, int32_t timeLimit, const char* name);
 void Do_RestrictOnSides(Entity entity);
 void Do_SetColor(Entity entity, Color color);
 void Do_MovePoint(Entity entity, Point move, float speed);
@@ -300,13 +288,10 @@ void Do_MovePointAbsolute(Entity entity, Point move);
 void Do_MoveVector2Absolute(Entity entity, Vector2 move);
 void Do_MoveAbsolute(Entity entity, float x, float y);
 void Do_MoveAtAngle(Entity entity, double angle, float speed);
-void Do_AddBrDeathEffect(Entity entity, int32_t state, int32_t phase);
-void Do_AddNdDeathEffect(Entity entity, int32_t state, int32_t phase);
-void Do_DestroyIfDuplicate(Entity entity);
 //ENDREGION
 
 //REGION GET
-Random32* Get_SharedRandom();
+Random32* Get_SharedRandom(void);
 void Do_SetDebugForcedMove(Entity entity);
 int32_t Get_DebugForcedMove(Entity entity);
 int32_t Get_AmountOfBodies(Entity entity);
@@ -314,35 +299,27 @@ MirrorEffect* Get_MirrorEffect(Entity entity);
 Random32* Get_Random(Entity entity);
 NodeMovingKit* Get_NodeMovingKit(Entity entity);
 HitFlashKit* Get_HitFlashKit(Entity entity);
-int32_t DeprecatedGet_Tag(Entity entity, int32_t whatever);
 MoveGetter* Get_MoveGetter(Entity entity);
 float Get_Rotate(Entity entity);
-int32_t Get_AttackId();
-int32_t Get_LengthUntilTiles(int32_t xPos, int32_t yPos, int32_t directionX, int32_t directionY);
-int32_t Get_ClosestTileUp(Entity entity);
-int32_t Get_ClosestTileDown(Entity entity);
-int32_t Get_ClosestTileRight(Entity entity);
-int32_t Get_ClosestTileLeft(Entity entity);
-int32_t Get_ClosestTile(Entity entity);
+int32_t Get_AttackId(void);
 float Get_ScaleX(Entity entity);
 float Get_ScaleY(Entity entity);
-Entity* Get_EntitiesInPlay();
-GameSaveData* Get_CurrentSaveData();
+EntitySearch* Get_EntitiesInPlay(void);
 double Get_CurrentCircleX(float degree, float degreeOffset, float radius);
 double Get_CurrentCircleY(float degree, float degreeOffset, float radius);
 int32_t Get_DirectionFromBool(bool value);
 int32_t Get_DirectionFromBool2(bool value, bool flip);
-int32_t Get_TileSize();
-int32_t Get_HalfTileSize();
+int32_t Get_TileSize(void);
+int32_t Get_HalfTileSize(void);
 float Get_InterpolatedX(Entity entity, double delta);
 float Get_InterpolatedY(Entity entity, double delta);
-Vector2 Get_AdjustedMouse();
-float Get_AdjustedMouseX();
-float Get_AdjustedMouseY();
-float Get_MouseX();
-float Get_MouseY();
+Vector2 Get_AdjustedMouse(void);
+float Get_AdjustedMouseX(void);
+float Get_AdjustedMouseY(void);
+float Get_MouseX(void);
+float Get_MouseY(void);
 Color Get_Color(Entity entity);
-CollisionEngine* Get_CollisionEngine();
+CollisionEngine* Get_CollisionEngine(void);
 Point Get_Node(Entity entity, int32_t i);
 Point Get_NodeAsGrid(Entity entity, int32_t i);
 int32_t Get_IndexOfRandomNode(Entity entity, Random32* random);
@@ -364,25 +341,24 @@ Point Get_InitialPositionAsPoint(Entity entity);
 Vector2 Get_FakePosition(Entity entity);
 Point Get_GridPosition(Entity entity);
 int32_t Get_CurrentImagePhase(Entity entity, int32_t state);
-Camera* Get_Camera();
-Rectangle Get_CameraRectangle();
-Rectangle Get_CameraRectangleExtended();
-float Get_CenterOfCameraX();
-float Get_CenterOfCameraY();
-float Get_TopOfCamera();
-float Get_RightOfCamera();
-float Get_BottomOfCamera();
-float Get_LeftOfCamera();
+Camera* Get_Camera(void);
+Rectangle Get_CameraRectangle(void);
+Rectangle Get_CameraRectangleExtended(void);
+float Get_CenterOfCameraX(void);
+float Get_CenterOfCameraY(void);
+float Get_TopOfCamera(void);
+float Get_RightOfCamera(void);
+float Get_BottomOfCamera(void);
+float Get_LeftOfCamera(void);
 int32_t Get_EntityNumber(Entity entity);
 int32_t Get_PlayerNumber(Entity entity);
 void Do_SetPlayerNumber(Entity entity, int32_t playerNumber);
-GameState* Get_ActiveGameState();
-LevelData* Get_LevelData();
-Resource* Get_LevelDataResource();
-const char* Get_LevelFileName();;
+GameState* Get_ActiveGameState(void);
+LevelData* Get_LevelData(void);
+Resource* Get_LevelDataResource(void);
+const char* Get_LevelFileName(void);
 Rectangle Get_BodyRectangle(Entity entity);
 Body* Get_Body(Entity entity);
-Body* Get_Body2(Entity entity, int32_t number);
 float Get_X(Entity entity);
 float Get_Y(Entity entity);
 Vector2 Get_PositionFromBody(Entity entity);
@@ -390,58 +366,26 @@ Vector2 Get_Position(Entity entity);
 Vector2 Get_LastRenderPosition(Entity entity);
 float Get_InitialX(Entity entity);
 float Get_InitialY(Entity entity);
-StringPair* Get_InitialStringSettingsFromMap(ComponentType componentType);
-const char* Get_TypeName(void* anyObject);
 int32_t Get_FacingDirection(Entity entity);
-int32_t Get_RandomValidSpot(Entity entity, Random32* random, Vector2* spotTo);
-int32_t Get_RandomValidSpot2(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY);
-int32_t Get_RandomValidSpot3(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile);
-int32_t Get_RandomValidSpot4(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX, float anchorY, float minLimitToAnchor, float maxLimitToAnchor);
-int32_t Get_RandomValidSpot5(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX,
-	float anchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot);
-int32_t Get_RandomValidSpot6(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX,
-	float anchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int32_t validityCondition);
-int32_t Get_RandomValidSpot7(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float distAnchorX,
-	float distAnchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int32_t validityCondition, float lineOfSightAnchorX, float lineOfSightAnchorY);
 int32_t Get_ValueLockedToTileSize(float value);
 int32_t Get_TuningAsInt(Entity entity, const char* dataName);
-float Get_TuningAsFloat(Entity entity, const char* dataName);
-int32_t Get_GlobalTuningAsInt(Entity entity, const char* dataName);
-float Get_GlobalTuningAsFloat(Entity entity, const char* dataName);
-int32_t Get_Global777TuningAsInt(Entity entity, const char* dataName);
-float Get_Global777TuningAsFloat(Entity entity, const char* dataName);
-int32_t Get_System777TuningAsInt(Entity entity, const char* dataName);
-float Get_System777TuningAsFloat(Entity entity, const char* dataName);
-//private
-const char* Get_TuningNameAsInt(Entity entity, const char* dataName);
-const char* Get_TuningName(Entity entity, const char* dataType, const char* dataName);
-//
-const char* Get_TuningNameAsFloat(Entity entity, const char* dataName);
 int32_t Get_ClampedValueAsInt(int32_t value, int32_t limit);
 float Get_ClampedValueAsFloat(float value, float limit);
 double Get_ClampedValueAsDouble(double value, double limit);
-int32_t Get_AmountOfTiles(float x, float y, int32_t directionX, int32_t directionY, const int32_t* types);
-int32_t Get_AmountOfTiles2(float x, float y, int32_t directionX, int32_t directionY, const int32_t* types, int32_t returnOnFailure);
-int32_t Get_NearestTileDirection(float x, float y, const int32_t* types);
-void Get_NearestTileDirectionAsPoint(Point* point, float x, float y, const int32_t* types);
-int32_t Get_AmountOfTilesInDirection(float x, float y, int32_t direction, int32_t outOfBoundsExtra, const int32_t* types);
-int32_t Get_AmountOfTilesInDirection2(float x, float y, int32_t direction, int32_t outOfBoundsExtra, const int32_t* types, int32_t returnValue);
-int32_t Get_LengthUntilTiles2(int32_t x, int32_t y, int32_t directionX, int32_t directionY, int32_t outOfBoundsExtra, const int32_t* types);
-int32_t Get_LengthUntilTiles3(int32_t x, int32_t y, int32_t directionX, int32_t directionY, int32_t outOfBoundsExtra, const int32_t* types, int32_t returnValue);
 Animation* Get_Animation(Entity entity, int32_t state, int32_t phase);
 Animation* Get_CurrentAnimation(Entity entity, int32_t state);
 void Get_PointDirectionFromEightWayIntegerDirection(Point* point, int32_t value);
-Body* Get_PlayerBody();
+Body* Get_PlayerBody(void);
 Entity Get_ClosestPlayer2(Entity entity);
-Vector2 Get_PlayerPosition();
-float Get_PlayerX();
-float Get_PlayerY();
-float Get_PlayerX2(int32_t i);
-float Get_PlayerY2(int32_t i);
+Vector2 Get_PlayerPosition(void);
+float Get_PlayerX(void);
+float Get_PlayerY(void);
+float Get_PlayerXByNumber(int32_t playerNumber);
+float Get_PlayerYByNumber(int32_t playerNumber);
 float Get_ClosestPlayerX(Entity entity);
 float Get_ClosestPlayerY(Entity entity);
 double Get_AngleToPlayer(Entity entity);
-double Get_AngleToPlayer2(Entity entity, int32_t i);
+double Get_AngleToPlayerByNumber(Entity entity, int32_t playerNumber);
 double Get_AngleToClosestPlayer(Entity entity);
 double Get_AngleToThing(Entity entity, Entity target);
 double Get_AngleToSomewhere(Entity entity, float otherX, float otherY);
@@ -504,7 +448,7 @@ int32_t Get_RandomBinaryDirection(Random32* random);
 int32_t Get_RandomDirection(Random32* random);
 float Get_ArcVelocityX(float targetPosX, float throwPosX, int32_t travelTime, float mul);
 float Get_ArcVelocityY(float targetPosY, float throwPosY, float grav, int32_t travelTime, float mul);
-int32_t Get_LevelFrameCount();
+int32_t Get_LevelFrameCount(void);
 int32_t Get_CollisionBit(float posX, float posY, int32_t tileOffsetX, int32_t tileOffsetY);
 int32_t Get_CollisionBitSafe(float posX, float posY, int32_t tileOffsetX, int32_t tileOffsetY, int32_t returnValue);
 int32_t Get_DirectionFromCameraSideX(Entity entity);
@@ -520,16 +464,16 @@ void Do_SendBroadcast(int32_t type);
 void Do_SendBroadcast2(int32_t type, int32_t packet1);
 void Do_SendBroadcast3(int32_t type, int32_t packet1, int32_t packet2);
 void Do_SendBroadcast4(int32_t type, int32_t packet1, int32_t packet2, int32_t packet3);
-int32_t Get_CameraHingeBottom();
-void Do_SaveGame();
-void Do_SaveUserConfig();
+int32_t Get_CameraHingeBottom(void);
+void Do_SaveGame(void);
+void Do_SaveUserConfig(void);
 //ENDREGION
 
 //REGION IS
 bool Is_IntersectingCameraExtended(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered);
 bool Is_IntersectingCamera(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered);
 bool Is_IntersectingCamera2(Camera* camera, int32_t posX, int32_t posY, int32_t width, int32_t height, bool isCentered, float mul);
-Rectangle Get_LevelBoundsRectangle();
+Rectangle Get_LevelBoundsRectangle(void);
 bool Is_InLevelBounds(Entity entity);
 bool Is_ThisBodyThePlayerBody(Body* body);
 bool Is_TouchingUp(Entity entity);
@@ -686,11 +630,6 @@ template<class TIgnoreThisTag, class TCheckForThisTag, class TSetThisTag> void D
 		Do_SetBoolTag<TSetThisTag>(checkForSearch->mList[i], value);
 	}
 }
-
-
-
-
-
 
 int32_t Get_AmountOfEntitiesWithComponent()
 {

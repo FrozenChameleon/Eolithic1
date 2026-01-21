@@ -10,7 +10,7 @@
 
 #define DIVIDER_FOR_SECONDS 1000.0
 
-uint64_t Stopwatch_GetTicks()
+uint64_t Stopwatch_GetTicks(void)
 {
 	return SDL_GetTicks();
 }

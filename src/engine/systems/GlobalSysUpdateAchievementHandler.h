@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysUpdateAchievementHandler_CreateSystem();
+System* GlobalSysUpdateAchievementHandler_CreateSystem(void);

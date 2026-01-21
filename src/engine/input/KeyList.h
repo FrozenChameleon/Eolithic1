@@ -8,5 +8,5 @@
 
 #include "stdint.h"
 
-const int32_t* KeyList_GetArray();
-int32_t KeyList_GetArrayLength();
+const int32_t* KeyList_GetArray(void);
+int32_t KeyList_GetArrayLength(void);

@@ -6,12 +6,12 @@
 
 #pragma once
 
-#include "stdint.h"
-#include "stdbool.h"
+#include "../utils/Macros.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"
 #include "../math/Rectangle.h"
 #include "../collections/FixedListEightInt.h"
+#include "../render/Color.h"
 
 enum
 {
@@ -19,6 +19,7 @@ enum
 };
 
 typedef struct Body Body;
+typedef struct SpriteBatch SpriteBatch;
 
 typedef bool (*Body_BeforeCollideWithBodyFunc)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
 typedef void (*Body_CollideWithBodyFunc)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
@@ -78,7 +79,7 @@ typedef struct Body
 	bool mTouchedCollision;
 	bool mTouchedTransition;
 	bool mWasPushedByOneWayCollision;
-	const char* mPushesThisThing;
+	char mPushesThisThing[EE_FILENAME_MAX];
 	Point mDirection;
 	Point mLastDirection;
 	Vector2 mOffset;
@@ -102,7 +103,7 @@ bool Body_DefaultColliderCollision(Body* myBody, int32_t x, int32_t y, int32_t w
 void Body_Setup(Body* body, int32_t width, int32_t height, bool isParticle);
 void Body_UpdateLastRenderPosition(Body* body);
 bool Body_IsPushesThisThingSet(Body* body);
-//void DrawBody(Body* body, OeSpriteBatch* spriteBatch, double delta, int32_t depth, Color color);
+void Body_DrawBody(Body* body, SpriteBatch* spriteBatch, double delta, int32_t depth, Color color);
 void Body_ResetCollideWithCollision(Body* body);
 void Body_ResetCollideWithBody(Body* body);
 void Body_ResetBeforeCollideWithBody(Body* body);

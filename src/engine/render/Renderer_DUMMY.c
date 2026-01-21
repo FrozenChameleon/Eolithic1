@@ -17,10 +17,10 @@
 
 #include "Renderer.h"
 
-void Renderer_BeforeRender()
+void Renderer_BeforeRender(void)
 {
 }
-void Renderer_AfterRender()
+void Renderer_AfterRender(void)
 {
 }
 void Renderer_DrawTtText(Texture* texture, const float* verts, const float* tcoords, const unsigned int* colors, int32_t nverts)
@@ -49,37 +49,37 @@ int32_t Renderer_Init(void* deviceWindowHandle)
 {
 	return 0;
 }
-void Renderer_BeforeCommit()
+void Renderer_BeforeCommit(void)
 {
 }
-void Renderer_AfterCommit()
+void Renderer_AfterCommit(void)
 {
 }
-void Renderer_FlushBatch()
+void Renderer_FlushBatch(void)
 {
 }
-void Renderer_EnableDepthBufferWrite()
+void Renderer_EnableDepthBufferWrite(void)
 {
 }
-void Renderer_DisableDepthBufferWrite()
+void Renderer_DisableDepthBufferWrite(void)
 {
 }
-void Renderer_UpdateVsync()
+void Renderer_UpdateVsync(void)
 {
 }
-void Renderer_ApplyChanges()
+void Renderer_ApplyChanges(void)
 {
 }
-void Renderer_UpdateViewport()
+void Renderer_UpdateViewport(void)
 {
 }
-void Renderer_UpdateScissor()
+void Renderer_UpdateScissor(void)
 {
 }
-void Renderer_ResetBackBuffer()
+void Renderer_ResetBackBuffer(void)
 {
 }
-Rectangle Renderer_GetDrawableSize()
+Rectangle Renderer_GetDrawableSize(void)
 {
 	return Rectangle_Empty;
 }

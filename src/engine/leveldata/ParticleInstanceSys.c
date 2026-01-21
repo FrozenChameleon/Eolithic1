@@ -27,7 +27,7 @@ static float ReturnOppositeSign(float newValue, float oldValue)
 {
 	return -ReturnSameSign(newValue, oldValue);
 }
-static int32_t GetDirection()
+static int32_t GetDirection(void)
 {
 	return Random32_NextInt(Globals_GetSharedRandom(), 2) == 1 ? -1 : 1;
 }
@@ -334,7 +334,7 @@ bool ParticleInstanceSys_UpdateRoutine(ParticleInstance* data)
 		}
 	}
 
-	data->mCounter++;
+	data->mCounter += 1;
 
 	return data->mIsComplete;
 }
@@ -386,7 +386,7 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 	}
 }
 
-System* ParticleInstanceSys_CreateSystem()
+System* ParticleInstanceSys_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

@@ -10,7 +10,7 @@ void HitFlashKitSys_InitRoutine(Entity owner, HitFlashKit* data)
 {
 	if (_mShaderProgram == NULL)
 	{
-		//TODO C99 _mShaderProgram = ShaderProgram_GetShaderWhiteHitFlash();
+		_mShaderProgram = ShaderProgram_GetShaderWhiteHitFlash();
 	}
 	data->mState = -1;
 }
@@ -55,7 +55,7 @@ void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data)
 	}
 }
 
-System* HitFlashKitSys_CreateSystem()
+System* HitFlashKitSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_HitFlashKit);
 	ss->_mInitRoutine = HitFlashKitSys_InitRoutine;

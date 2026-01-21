@@ -21,7 +21,7 @@ static struct { char* key; HmInnerMap* value; }*sh_draw_tile_offset;
 static struct { char* key; Point value; }*sh_draw_tile_original;
 
 static bool _mHasInit;
-static void Init()
+static void Init(void)
 {
 	if (_mHasInit)
 	{

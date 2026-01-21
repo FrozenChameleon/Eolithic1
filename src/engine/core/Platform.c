@@ -7,7 +7,7 @@
 static bool _mHasTriedToGetPreferredLocale;
 static char _mPreferredLocale[EE_FILENAME_MAX];
 
-const char* Platform_GetPreferredLocalesEFIGS()
+const char* Platform_GetPreferredLocalesEFIGS(void)
 {
 	if (_mHasTriedToGetPreferredLocale)
 	{

@@ -34,11 +34,11 @@ static LeakTest* _mLeakTest;
 static bool _mHasLeakTestBegun;
 #endif
 
-static void ClearNumberBuffer()
+static void ClearNumberBuffer(void)
 {
 	Utils_memset(_mNumberBuffer, 0, NUMBER_BUFFER_LEN * sizeof(char));
 }
-static void ClearStringBuffer()
+static void ClearStringBuffer(void)
 {
 	Utils_memset(_mStringBuffer, 0, STRING_BUFFER_LEN * sizeof(char));
 }
@@ -134,7 +134,7 @@ static void ClearMString(MString* str)
 	str->len = 0;
 }
 
-uint64_t MString_GetRefs()
+uint64_t MString_GetRefs(void)
 {
 	return _mRefs;
 }
@@ -365,7 +365,7 @@ void MString_Combine8(MString** str, const char* str1, const char* str2, const c
 	MString_Combine7(str, str1, str2, str3, str4, str5, str6, str7);
 	MString_AddAssignString(str, str8);
 }
-void MString_DebugPrintLeakInfo()
+void MString_DebugPrintLeakInfo(void)
 {
 #ifdef FIND_THE_LEAKS
 	_mHasLeakTestBegun = true;

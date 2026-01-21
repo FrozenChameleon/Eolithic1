@@ -51,5 +51,5 @@ typedef struct ParticleInstance
 	ShaderProgram* mShaderProgram;
 } ParticleInstance;
 
-ParticleInstance* ParticleInstance_Dummy();
-const ParticleInstance* ParticleInstance_Empty();
+ParticleInstance* ParticleInstance_Dummy(void);
+const ParticleInstance* ParticleInstance_Empty(void);

@@ -71,22 +71,6 @@ static char Animation_GetNumber(int32_t i)
 	return 'N';
 }
 
-void Animation_DebugTest()
-{
-	Animation_BuildAnimations();
-
-	Animation anim;
-	Animation_Init(&anim, "demonDeath_00", 3);
-	const char* sheetName = anim.mSheets[15]->mSheetName;
-	int32_t hello = 0;
-
-	Animation_BuildAnimations();
-
-	Animation_Init(&anim, "demonDeath_00", 3);
-	sheetName = anim.mSheets[15]->mSheetName;
-	hello = 0;
-}
-
 //public
 void Animation_Init(Animation* data, const char* spriteSheet, int32_t flipTimer)
 {
@@ -283,7 +267,7 @@ void Animation_CheckForAnimation(const char* textureName)
 
 	MString_Dispose(&baseName);
 }
-void Animation_BuildAnimations()
+void Animation_BuildAnimations(void)
 {
 	shfree(sh_animation_string_map);
 	shfree(sh_conversion_map);

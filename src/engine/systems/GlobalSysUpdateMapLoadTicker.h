@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysUpdateMapLoadTicker_CreateSystem();
+System* GlobalSysUpdateMapLoadTicker_CreateSystem(void);

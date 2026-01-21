@@ -2,14 +2,12 @@
 
 #include "../utils/Macros.h"
 
-void GameSaveManager_Init();
-bool GameSaveManager_HasInit();
-void* GameSaveManager_GetCurrentSaveData();
-void GameSaveManager_ResetSaveData();
-void GameSaveManager_Save();
-void GameSaveManager_Load();
-bool GameSaveManager_HasLoaded();
-//TODO C99 void GameSaveManager_WriteAllForRecording(std::shared_ptr<OeIniWriter> writer);
-//TODO C99 void GameSaveManager_ResetSaveDataAndReadAllForRecording(std::shared_ptr<OeIniReader> reader);
-void GameSaveManager_ResetWasSaveDataJustLoaded();
-bool GameSaveManager_WasSaveDataJustLoaded();
+void GameSaveManager_Init(void);
+bool GameSaveManager_HasInit(void);
+void* GameSaveManager_GetCurrentSaveData(void);
+void GameSaveManager_ResetSaveData(void);
+void GameSaveManager_Save(void);
+void GameSaveManager_Load(void);
+bool GameSaveManager_HasLoaded(void);
+void GameSaveManager_ResetWasSaveDataJustLoaded(void);
+bool GameSaveManager_WasSaveDataJustLoaded(void);

@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysHideMouse_CreateSystem();
+System* GlobalSysHideMouse_CreateSystem(void);

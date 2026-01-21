@@ -21,7 +21,7 @@ typedef struct RewindTesterData
 
 static RewindTesterData _mData;
 
-static bool IsActive()
+static bool IsActive(void)
 {
 #ifdef DEBUG_DEF_USE_REWIND_TESTER
 	return true;
@@ -30,7 +30,7 @@ static bool IsActive()
 #endif
 }
 
-bool DebugRewindTester_NeedToRewind()
+bool DebugRewindTester_NeedToRewind(void)
 {
 	if (!IsActive())
 	{
@@ -39,13 +39,11 @@ bool DebugRewindTester_NeedToRewind()
 
 	return _mData.mIsRewinding;
 }
-
-void DebugRewindTester_Reset()
+void DebugRewindTester_Reset(void)
 {
 	Utils_memset(&_mData, 0, sizeof(RewindTesterData));
 }
-
-void DebugRewindTester_Update()
+void DebugRewindTester_Update(void)
 {
 	if (!IsActive())
 	{

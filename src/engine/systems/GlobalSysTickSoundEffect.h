@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysTickSoundEffect_CreateSystem();
+System* GlobalSysTickSoundEffect_CreateSystem(void);

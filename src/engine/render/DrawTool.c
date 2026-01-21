@@ -12,7 +12,7 @@ static BmFont* GetFont(const char* font)
 	return ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 }
 
-Texture* DrawTool_GetSinglePixel()
+Texture* DrawTool_GetSinglePixel(void)
 {
 	if (_mSinglePixel == NULL)
 	{

@@ -22,5 +22,6 @@ typedef struct ShaderProgram
 	uint8_t mMultiColorReplaceAlpha;
 } ShaderProgram;
 
-ShaderProgram* ShaderProgram_GetShaderFullRed();
-ShaderProgram* ShaderProgram_GetShaderFullRed2();
+ShaderProgram* ShaderProgram_GetShaderFullRed(void);
+ShaderProgram* ShaderProgram_GetShaderFullRed2(void);
+ShaderProgram* ShaderProgram_GetShaderWhiteHitFlash(void);

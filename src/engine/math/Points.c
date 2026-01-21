@@ -21,11 +21,11 @@ const Point Points_DownLeft = {-1, 1};
 const Point Points_Left = {-1, 0};
 const Point Points_UpLeft = {-1, -1};
 
-Point Points_TileSize()
+Point Points_TileSize(void)
 {
 	return Points_ToPointFromInt(TILE_SIZE);
 }
-Point Points_HalfTileSize()
+Point Points_HalfTileSize(void)
 {
 	return Points_ToPointFromInt(HALF_TILE_SIZE);
 }

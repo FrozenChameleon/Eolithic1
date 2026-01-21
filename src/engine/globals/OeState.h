@@ -29,7 +29,7 @@ typedef struct DrawStateMap
 	int32_t value;
 } DrawStateMap;
 
-DrawStateMap* OeState_GetShDrawStateMap();
+DrawStateMap* OeState_GetShDrawStateMap(void);
 
 /*
 const std::vector<std::string>& OeState_GetDrawStateArray();

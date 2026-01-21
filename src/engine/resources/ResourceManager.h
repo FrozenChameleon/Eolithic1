@@ -4,8 +4,6 @@
  * See LICENSE for details.
  */
  
-//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!
-
 #pragma once
 
 #include "../utils/Macros.h"

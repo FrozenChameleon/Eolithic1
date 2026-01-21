@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* SysDebugDrawMenuAnchorNames_CreateSystem();
+System* SysDebugDrawMenuAnchorNames_CreateSystem(void);

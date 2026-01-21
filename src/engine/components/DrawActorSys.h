@@ -17,9 +17,7 @@ enum
 	DRAWACTORSYS_NOTHING = INT_MIN
 };
 
-//void SetupSystem() override;
 void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_graphics_data, const char* defaultDrawState, const char* defaultDrawPhase);
-void DrawActorSys_CreateExplosionModules(Entity owner, int32_t state, int32_t phase, int32_t time, int32_t type);
 void DrawActorSys_InitRoutine(Entity owner, DrawActor* data);
 void DrawActorSys_UpdateLastRenderPositionRoutine(DrawActor* data);
 void DrawActorSys_BeforeUpdateRoutine(void);

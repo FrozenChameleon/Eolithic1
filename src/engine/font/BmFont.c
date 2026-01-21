@@ -10,7 +10,6 @@
 #include "../font/TTFont.h"
 
 #define FONT_EXTENSION ".fnt"
-//TODO C99 static const std_vector<std_string> FONT_DIRECTORY = { OeFile_PathCombine("data", "fonts") };
 
 int32_t BmFont_GetBaseHeight(BmFont* bmf)
 {
@@ -94,16 +93,6 @@ Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont)
 	return Renderer_RenderBmFont(false, bmf, text, COLOR_WHITE, Vector2_Zero);
 }
 
-/*
-const char* BmFont_GetFontExtension()
-{
-	return FONT_EXTENSION;
-}
-const std_vector<std_string>& BmFont_GetFontDirectories()
-{
-	return FONT_DIRECTORY;
-}
-*/
 BmFont* BmFont_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	BmFont* bmf = Utils_malloc(sizeof(BmFont));
@@ -113,5 +102,5 @@ BmFont* BmFont_FromStream(const char* path, const char* filenameWithoutExtension
 
 void BmFont_Dispose(BmFont* bmf)
 {
-
+	//UNUSED FOR NOW
 }

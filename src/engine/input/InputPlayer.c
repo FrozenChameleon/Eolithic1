@@ -180,7 +180,7 @@ bool InputPlayer_IsPlayerPressingAnything(InputPlayer* ip)
 	for (int32_t i = 0; i < ACTIONLIST_LENGTH; i += 1)
 	{
 		InputAction* action = &currentActions[i];
-		for (int32_t j = 0; j < INPUTCHECKS_LENGTH; j++)
+		for (int32_t j = 0; j < INPUTCHECKS_LENGTH; j += 1)
 		{
 			if (action->mIsPressed)
 			{
@@ -204,7 +204,7 @@ void InputPlayer_Update(InputPlayer* ip)
 
 	if (ip->_mCounterRumble > 0)
 	{
-		ip->_mCounterRumble--;
+		ip->_mCounterRumble -= 1;
 
 		if (ip->_mCounterRumble <= 0)
 		{

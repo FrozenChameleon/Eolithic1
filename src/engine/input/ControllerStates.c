@@ -21,7 +21,7 @@ static bool _mIsReading;
 //static std::shared_ptr<BinaryReader> _mReader;
 static ControllerState _mControllerStates[INPUT_MAXIMUM_PLAYER_COUNT];
 
-static void init() //DONT FORGET THIS TODO C99
+static void init(void) //DONT FORGET THIS TODO C99
 {
 	/*
 	static OeInputPlayer _mPlayers[OeInput::MAXIMUM_PLAYER_COUNT] =
@@ -34,23 +34,23 @@ static void init() //DONT FORGET THIS TODO C99
 	*/
 }
 
-void ControllerStates_Init()
+void ControllerStates_Init(void)
 {
 	//TODO C99
 }
-void ControllerStates_Dispose()
+void ControllerStates_Dispose(void)
 {
 	//TODO C99
 }
-void ControllerStates_Read()
+void ControllerStates_Read(void)
 {
 	//TODO C99
 }
-void ControllerStates_Write()
+void ControllerStates_Write(void)
 {
 	//TODO C99
 }
-void ControllerStates_Poll()
+void ControllerStates_Poll(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -61,7 +61,7 @@ ControllerState* ControllerStates_GetController(int32_t number)
 {
 	return &_mControllerStates[number];
 }
-bool ControllerStates_IsAnyButtonPressedOnAnyController()
+bool ControllerStates_IsAnyButtonPressedOnAnyController(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -72,7 +72,7 @@ bool ControllerStates_IsAnyButtonPressedOnAnyController()
 	}
 	return false;
 }
-bool ControllerStates_IsAnyButtonTappedOnAnyController()
+bool ControllerStates_IsAnyButtonTappedOnAnyController(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -94,7 +94,7 @@ bool ControllerStates_IsButtonPressedOnAnyController(int32_t button)
 	}
 	return false;
 }
-int32_t ControllerStates_GetControllerNumberIfAnyButtonReleased()
+int32_t ControllerStates_GetControllerNumberIfAnyButtonReleased(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -105,7 +105,7 @@ int32_t ControllerStates_GetControllerNumberIfAnyButtonReleased()
 	}
 	return -1;
 }
-int32_t ControllerStates_GetControllerNumberIfAnyButtonTapped()
+int32_t ControllerStates_GetControllerNumberIfAnyButtonTapped(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -116,7 +116,7 @@ int32_t ControllerStates_GetControllerNumberIfAnyButtonTapped()
 	}
 	return -1;
 }
-void ControllerStates_MuteInput()
+void ControllerStates_MuteInput(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -138,11 +138,11 @@ float ControllerStates_GetHighestAnalogDataValue(int32_t loc)
 	}
 	return ControllerState_GetAnalogData(&_mControllerStates[index], loc);
 }
-int32_t ControllerStates_GetMasterRecordingReadFrame()
+int32_t ControllerStates_GetMasterRecordingReadFrame(void)
 {
 	return _mMasterRecordingReadFrame;
 }
-int32_t ControllerStates_GetCurrentMasterRecordingVersion()
+int32_t ControllerStates_GetCurrentMasterRecordingVersion(void)
 {
 	if (!Input_IsPlayingMasterRecording())
 	{

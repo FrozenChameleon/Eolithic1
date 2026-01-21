@@ -171,7 +171,7 @@ typedef struct DrawPhaseMap
 	int32_t value;
 } DrawPhaseMap;
 
-DrawPhaseMap* OePhase_GetShDrawPhaseMap();
+DrawPhaseMap* OePhase_GetShDrawPhaseMap(void);
 
 /*
 const std::string& GetDefaultPhase();

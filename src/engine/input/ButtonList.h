@@ -10,5 +10,5 @@
 #include "stdbool.h"
 
 int32_t ButtonList_GetButton(int32_t index);
-const int32_t* ButtonList_GetArray();
-int32_t ButtonList_GetArrayLength();
+const int32_t* ButtonList_GetArray(void);
+int32_t ButtonList_GetArrayLength(void);

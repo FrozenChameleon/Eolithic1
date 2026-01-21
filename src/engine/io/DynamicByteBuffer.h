@@ -30,6 +30,6 @@ uint8_t* DynamicByteBuffer_GetBuffer(const DynamicByteBuffer* dbb);
 uint64_t DynamicByteBuffer_GetLength(const DynamicByteBuffer* dbb);
 void DynamicByteBuffer_SetLength(DynamicByteBuffer* dbb, uint64_t value);
 FixedByteBuffer* DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(DynamicByteBuffer* dbb);
-DynamicByteBuffer* DynamicByteBuffer_Create();
+DynamicByteBuffer* DynamicByteBuffer_Create(void);
 void DynamicByteBuffer_Dispose(DynamicByteBuffer* dbb);
-uint64_t DynamicByteBuffer_GetRefs();
+uint64_t DynamicByteBuffer_GetRefs(void);

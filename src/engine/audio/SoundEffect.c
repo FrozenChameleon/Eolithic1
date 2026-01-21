@@ -194,7 +194,7 @@ void SoundEffect_Tick(void)
 		SoundEffectInstance_SetVolume(instance, GetVolumeForSoundEffect(SoundEffectInstance_GetName(instance)));
 	}
 
-	_mCurrentFrame++;
+	_mCurrentFrame += 1;
 }
 void SoundEffect_PauseAllSounds(int32_t priority)
 {

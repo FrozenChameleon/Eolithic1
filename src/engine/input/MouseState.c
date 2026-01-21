@@ -39,9 +39,9 @@ void MouseData_ClearOnlyButtonData(MouseData* md)
 }
 void MouseData_Poll(MouseData* md)
 {
-	Uint32 mouseButtonState = SDL_GetMouseState(&md->_mMousePosition.X, &md->_mMousePosition.Y); //TODO MAKE MOUSE ALL FLOATS
+	Uint32 mouseButtonState = SDL_GetMouseState(&md->_mMousePosition.X, &md->_mMousePosition.Y);
 
-	//_mScrollWheelValue = _mScrollWheelValue;
+	//_mScrollWheelValue = _mScrollWheelValue; //TODO
 
 	md->_mIsButtonDown[MOUSEBUTTONS_MOUSE_LEFTBUTTON] = (mouseButtonState & SDL_BUTTON_MASK(SDL_BUTTON_LEFT));
 	md->_mIsButtonDown[MOUSEBUTTONS_MOUSE_RIGHTBUTTON] = (mouseButtonState & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT));
@@ -81,7 +81,7 @@ bool MouseData_IsButtonPressed(const MouseData* md, int32_t button)
 	return md->_mIsButtonDown[button];
 }
 
-void MouseState_Init()
+void MouseState_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -92,7 +92,7 @@ void MouseState_Init()
 
 	_mHasInit = true;
 }
-void MouseState_MuteInput()
+void MouseState_MuteInput(void)
 {
 	Utils_ResetArrayAsBool(_mIsButtonMuted, MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS, true);
 }
@@ -108,7 +108,7 @@ bool MouseState_IsButtonReleased(int32_t button)
 {
 	return (MouseData_IsButtonPressed(&_mLastFrame, button) && !MouseData_IsButtonPressed(&_mThisFrame, button));
 }
-bool MouseState_IsAnyButtonReleased()
+bool MouseState_IsAnyButtonReleased(void)
 {
 	int32_t len = MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS;
 	for (int32_t i = 0; i < len; i += 1)
@@ -120,7 +120,7 @@ bool MouseState_IsAnyButtonReleased()
 	}
 	return false;
 }
-bool MouseState_IsAnyButtonTapped()
+bool MouseState_IsAnyButtonTapped(void)
 {
 	int32_t len = MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS;
 	for (int32_t i = 0; i < len; i += 1)
@@ -132,17 +132,17 @@ bool MouseState_IsAnyButtonTapped()
 	}
 	return false;
 }
-void MouseState_ClearEverything()
+void MouseState_ClearEverything(void)
 {
 	MouseData_Clear(&_mThisFrame);
 	MouseData_Clear(&_mLastFrame);
 }
-void MouseState_ClearOnlyButtonData()
+void MouseState_ClearOnlyButtonData(void)
 {
 	MouseData_ClearOnlyButtonData(&_mThisFrame);
 	MouseData_ClearOnlyButtonData(&_mLastFrame);
 }
-void MouseState_Poll()
+void MouseState_Poll(void)
 {
 	MouseData_CopyFrom(&_mLastFrame, &_mThisFrame);
 
@@ -156,31 +156,31 @@ void MouseState_Poll()
 
 	MouseData_Poll(&_mThisFrame);
 }
-int32_t MouseState_GetScrollWheelValue()
+int32_t MouseState_GetScrollWheelValue(void)
 {
 	return MouseData_GetScrollWheelValue(&_mThisFrame);
 }
-float MouseState_GetMouseX()
+float MouseState_GetMouseX(void)
 {
 	return MouseData_GetMouseX(&_mThisFrame);
 }
-float MouseState_GetMouseY()
+float MouseState_GetMouseY(void)
 {
 	return MouseData_GetMouseY(&_mThisFrame);
 }
-float MouseState_GetDifferenceMouseX()
+float MouseState_GetDifferenceMouseX(void)
 {
 	return MouseState_GetMouseX() - MouseData_GetMouseX(&_mLastFrame);
 }
-float MouseState_GetDifferenceMouseY()
+float MouseState_GetDifferenceMouseY(void)
 {
 	return MouseState_GetMouseY() - MouseData_GetMouseY(&_mLastFrame);
 }
-bool MouseState_JustScrolledUp()
+bool MouseState_JustScrolledUp(void)
 {
 	return MouseData_GetScrollWheelValue(&_mLastFrame) < MouseState_GetScrollWheelValue();
 }
-bool MouseState_JustScrolledDown()
+bool MouseState_JustScrolledDown(void)
 {
 	return MouseData_GetScrollWheelValue(&_mLastFrame) > MouseState_GetScrollWheelValue();
 }

@@ -49,7 +49,7 @@ static void SetDebugAutoSpeed(bool value)
 	Renderer_ApplyChanges();
 	_mIsDebugAutoSpeedOn = value;
 }
-static void HandleAltEnterCheck()
+static void HandleAltEnterCheck(void)
 {
 	if (Input_IsAltPressed())
 	{
@@ -70,7 +70,7 @@ static void HandleAltEnterCheck()
 }
 #ifdef EDITOR_MODE
 static int32_t _mDebugTimeHeld;
-static void DebugLogGameSpeed()
+static void DebugLogGameSpeed(void)
 {
 	MString* tempString = NULL;
 	MString_AssignString(&tempString, "Game Speed: ");
@@ -86,16 +86,8 @@ static void DebugLogBoolHelper(const char* info, bool value)
 	Logger_LogInformation(MString_Text(tempString));
 	MString_Dispose(&tempString);
 }
-static void Cheats()
+static void Cheats(void)
 {
-	//WILLNOTDO 05152023
-	/*
-	if (OeConsole.IsPresent())
-	{
-		return;
-	}
-	*/
-
 	if (Input_IsCtrlPressed())
 	{
 		if (Input_IsKeyTapped(KEYS_NumPad0))
@@ -115,7 +107,7 @@ static void Cheats()
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad3))
 		{
-			//WILLNOTDO 05152023 ResourceManagers.SoundEffectManager.Dispose();
+			//UNUSED
 			Logger_LogInformation("Reloaded Audio");
 		}
 		if (Input_IsKeyTapped(KEYS_NumPad4))
@@ -246,16 +238,16 @@ static void Cheats()
 		}
 		if (Input_IsKeyTapped(KEYS_F12))
 		{
-			//GameUpdater_ToggleEditor();
+			//GameUpdater_ToggleEditor(); //UNUSED
 		}
 		if (Input_IsKeyTapped(KEYS_OemComma))
 		{
-			//TODO C99 Utils_ToggleNextUserLanguage(true);
+			//Utils_ToggleNextUserLanguage(true); //UNUSED
 		}
 	}
 }
 #endif
-static void Tick()
+static void Tick(void)
 {
 	Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
 
@@ -280,7 +272,7 @@ static void Tick()
 			Do_ResumeMusic(0);
 		}
 		GameStateManager_Tick();
-		_mGlobalTicks++;
+		_mGlobalTicks += 1;
 		_mWasShowingControllerLostConnectionMessage = false;
 	}
 
@@ -291,13 +283,13 @@ static void Tick()
 #endif
 }
 #ifdef EDITOR_MODE
-static bool HandleDebugPauseAndStep()
+static bool HandleDebugPauseAndStep(void)
 {
 	/*
 	int32_t readFrame = OeControllerStates_GetMasterRecordingReadFrame(); //For specific frame stops
 	if (readFrame == 137600)
 	{
-		OeGlobals_DEBUG_IS_PAUSED = true;
+		GLOBALS_DEBUG_IS_PAUSED = true;
 	}
 	*/
 
@@ -318,13 +310,13 @@ static bool HandleDebugPauseAndStep()
 
 	if (Input_IsKeyTapped(KEYS_OemComma))
 	{
-		//TODO C99 Utils_ToggleNextUserLanguage(true);
+		//Utils_ToggleNextUserLanguage(true); //UNUSED
 		return true;
 	}
 
 	if (Input_IsKeyTapped(KEYS_OemPeriod))
 	{
-		//TODO C99 Utils_ToggleNextUserLanguage(true);
+		//Utils_ToggleNextUserLanguage(true); //UNUSED
 		Tick();
 		Renderer_SetupRenderState();
 		Logger_LogInformation("Step");
@@ -333,12 +325,12 @@ static bool HandleDebugPauseAndStep()
 
 	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_LS)->mIsTapped)
 	{
-		//TODO C99 GameStateManager_ActiveGameState()->CreateDebugSaveState();
+		GameState_CreateDebugSaveState(GameStateManager_GetGameState());
 	}
 
 	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_RS)->mIsTapped)
 	{
-		//TODO C99 GameStateManager_ActiveGameState()->UseDebugSaveState();
+		GameState_UseDebugSaveState(GameStateManager_GetGameState());
 	}
 
 	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_LB)->mIsTapped)
@@ -353,12 +345,11 @@ static bool HandleDebugPauseAndStep()
 	return true;
 }
 #endif
-static bool IsPaused()
+static bool IsPaused(void)
 {
 #ifdef DEBUG_DEF_MAKE_GAME_ALWAYS_ACTIVE
 	return false;
-#endif
-
+#else
 	if (Service_PlatformDoesNotDoNormalPausing())
 	{
 		return false;
@@ -385,16 +376,6 @@ static bool IsPaused()
 
 			SoundEffect_SetSfxMuted(false);
 			Music_SetMusicMuted(false);
-
-#ifdef EDITOR_MODE
-			//WILLNOTDO 05152023
-			/*
-			if (OeGlobals_DEBUG_IS_EDITOR_MODE)
-			{
-				OeEditor.OnWindowFocus();
-			}
-			*/
-#endif
 
 			_mWasNotInFocus = false;
 			_mPausedMusic = false;
@@ -437,6 +418,7 @@ static bool IsPaused()
 	}
 
 	return false;
+#endif
 }
 /*
 static void UpdateFixedTimeStep()
@@ -529,7 +511,7 @@ static void UpdateLoop(double delta)
 		{
 			if (ticked)
 			{
-				_mSkippedFrames++;
+				_mSkippedFrames += 1;
 			}
 			Tick();
 			_mDeltaAccumulator -= stepLength;
@@ -543,7 +525,7 @@ static void UpdateLoop(double delta)
 	}
 }
 
-const char* GameUpdater_GetFpsString()
+const char* GameUpdater_GetFpsString(void)
 {
 	int32_t number;
 	if (_mIsDebugAutoSpeedOn)
@@ -559,15 +541,15 @@ const char* GameUpdater_GetFpsString()
 	Utils_IntToString(number, _mBufferForFPSString, EE_SAFE_BUFFER_LEN_FOR_INT);
 	return _mBufferForFPSString;
 }
-float GameUpdater_GetAutoSpeedUpdateSpeed()
+float GameUpdater_GetAutoSpeedUpdateSpeed(void)
 {
 	return GameUpdater_GetFPS() / 60.0f;
 }
-int32_t GameUpdater_GetFPS()
+int32_t GameUpdater_GetFPS(void)
 {
 	return _mFpsToolUpdate.mCurrentFps;
 }
-bool GameUpdater_IsInterpolated()
+bool GameUpdater_IsInterpolated(void)
 {
 	if (_mIsDebugAutoSpeedOn)
 	{
@@ -614,7 +596,7 @@ void GameUpdater_Update(double delta)
 		UpdateLoop(delta);
 	}
 }
-void GameUpdater_DebugReloadMap()
+void GameUpdater_DebugReloadMap(void)
 {
 	//TODO C99
 	/*
@@ -629,19 +611,11 @@ void GameUpdater_DebugReloadMap()
 	GLOBALS_DEBUG_QUICK_PLAYER_POSITION = Vector2_Zero;
 	GameStateManager_SetupReloadMap();
 }
-void GameUpdater_DebugSaveMap()
+void GameUpdater_DebugSaveMap(void)
 {
-	//WILLNOTDO 05152023
-	/*
-#ifdef EDITOR_MODE
-	Get_LevelDataResource().SaveAsIni();
-	OeEditor.Save();
-	Do_PlaySound("editorSave", 1f);
-	Logger.LogInformation("Map Saved");
-#endif
-*/
+	//UNUSED
 }
-void GameUpdater_FastReset()
+void GameUpdater_FastReset(void)
 {
 	GLOBALS_DEBUG_QUICK_PLAYER_POSITION = Vector2_Zero;
 	GameStateManager_DebugForceReloadMapNow();
@@ -649,76 +623,50 @@ void GameUpdater_FastReset()
 	GLOBALS_DEBUG_IS_EDITOR_MODE = false;
 	//TODO C99 Logger_LogInformation("Map Reloaded (Fast) [" + Get_LevelDataResource()->GetPath() + "][" +Get_LevelData()->mLevelName + "]");
 }
-void GameUpdater_FastResetPlusMove()
+void GameUpdater_FastResetPlusMove(void)
 {
-	//WILLNOTDO 05152023
-	/*
-#ifdef EDITOR_MODE
-	OeGlobals_DEBUG_QUICK_PLAYER_POSITION = Input_GetCameraAdjustedMouse(ref OeEditor.Camera);
-	OeGameStateManager.DebugForceReloadMapNow();
-	OeGameStateManager.SetGameState(OeGameStateManager.GAME_STATE_NORMAL);
-	OeGlobals_DEBUG_IS_EDITOR_MODE = false;
-	Logger.LogInformation("Map Reloaded (Fast+Move) [" + Get_LevelDataResource().GetPath() + "][" +
-		Get_LevelData().mLevelName + "]");
-	OeGame.GetHelper().OnDebugFastResetPlusMove();
-#endif
-*/
+	//UNUSED
 }
-void GameUpdater_ToggleEditor()
+void GameUpdater_ToggleEditor(void)
 {
-	//WILLNOTDO 05152023
-	//OeGlobals_DEBUG_IS_EDITOR_MODE = !OeGlobals_DEBUG_IS_EDITOR_MODE;
-	//Logger.LogInformation("Editor Toggle");
+	//UNUSED
 }
-void GameUpdater_ToggleDebugAutoSpeed()
+void GameUpdater_ToggleDebugAutoSpeed(void)
 {
 	SetDebugAutoSpeed(!_mIsDebugAutoSpeedOn);
 }
-void GameUpdater_DebugReloadGraphics()
+void GameUpdater_DebugReloadGraphics(void)
 {
-	//WILLNOTDO 05152023
-	/*
-	OeResourceManagers.TextureManager.Reload();
-	OeSheet.BuildSheets();
-	OeAnimation.BuildAnimations();
-	bool isEditor = OeGlobals_DEBUG_IS_EDITOR_MODE;
-	FastReset();
-	if (isEditor)
-	{
-		OeGlobals_DEBUG_IS_EDITOR_MODE = true;
-	}
-	OeGlobals_DEBUG_EDITOR_JUST_RELOADED_GRAPHICS = true;
-	Logger.LogInformation("Reloaded all graphics");
-	*/
+	//UNUSED
 }
-void GameUpdater_CycleDebugShowInfo()
+void GameUpdater_CycleDebugShowInfo(void)
 {
 	//TODO C99
 	/*
-	GLOBALS_DEBUG_SHOW_INFO++;
+	GLOBALS_DEBUG_SHOW_INFO += 1;
 	if (GLOBALS_DEBUG_SHOW_INFO > GAMESTATEMANAGER_DEBUG_INFO_SHOW_THING_VIEWER)
 	{
 		GLOBALS_DEBUG_SHOW_INFO = GAMESTATEMANAGER_DEBUG_INFO_SHOW_NOTHING;
 	}
 	Logger_LogInformation("Debug Info: " + std_to_string(OeGlobals_DEBUG_SHOW_INFO), true);*/
 }
-uint64_t GameUpdater_GetGlobalTicks()
+uint64_t GameUpdater_GetGlobalTicks(void)
 {
 	return _mGlobalTicks;
 }
-bool GameUpdater_IsDebugAutoSpeedOn()
+bool GameUpdater_IsDebugAutoSpeedOn(void)
 {
 	return _mIsDebugAutoSpeedOn;
 }
-double GameUpdater_GetLastDelta()
+double GameUpdater_GetLastDelta(void)
 {
 	return _mLastDelta;
 }
-double GameUpdater_GetDeltaAccumulator()
+double GameUpdater_GetDeltaAccumulator(void)
 {
 	return _mDeltaAccumulator;
 }
-uint64_t GameUpdater_GetSkippedFrames()
+uint64_t GameUpdater_GetSkippedFrames(void)
 {
 	return _mSkippedFrames;
 }

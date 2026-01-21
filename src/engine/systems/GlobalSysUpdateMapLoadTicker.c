@@ -7,7 +7,7 @@ static void Update(void* givenData)
 	GameStateManager_IncrementTicksSinceMapLoad();
 }
 
-System* GlobalSysUpdateMapLoadTicker_CreateSystem()
+System* GlobalSysUpdateMapLoadTicker_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

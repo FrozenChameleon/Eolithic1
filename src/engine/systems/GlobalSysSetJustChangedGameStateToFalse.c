@@ -7,7 +7,7 @@ static void Update(void* givenData)
 	GameStateManager_HandleJustChangedGameStateThisFrame();
 }
 
-System* GlobalSysSetJustChangedGameStateToFalse_CreateSystem()
+System* GlobalSysSetJustChangedGameStateToFalse_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

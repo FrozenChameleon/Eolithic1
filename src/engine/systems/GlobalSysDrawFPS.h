@@ -4,5 +4,5 @@
 
 void GlobalSysDrawFPS_SetOffsetFromCorner(int32_t offset);
 void GlobalSysDrawFPS_SetFont(const char* font);
-void GlobalSysDrawFPS_DoNotDrawThisRightNow();
-System* GlobalSysDrawFPS_CreateSystem();
+void GlobalSysDrawFPS_DoNotDrawThisRightNow(void);
+System* GlobalSysDrawFPS_CreateSystem(void);

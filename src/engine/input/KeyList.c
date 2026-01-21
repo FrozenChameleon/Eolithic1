@@ -13,7 +13,7 @@
 static bool _mHasInit;
 static int32_t _mArray[KEYS_AMOUNT_OF_KEYS];
 
-static void Init()
+static void Init(void)
 {
 	if (_mHasInit)
 	{
@@ -184,13 +184,13 @@ static void Init()
 	_mHasInit = true;
 }
 
-const int32_t* KeyList_GetArray()
+const int32_t* KeyList_GetArray(void)
 {
 	Init();
 
 	return _mArray;
 }
-int32_t KeyList_GetArrayLength()
+int32_t KeyList_GetArrayLength(void)
 {
 	return KEYS_AMOUNT_OF_KEYS;
 }

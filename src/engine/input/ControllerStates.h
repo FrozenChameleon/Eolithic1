@@ -10,18 +10,18 @@
 #include "stdbool.h"
 #include "ControllerState.h"
 
-void ControllerStates_Init();
-void ControllerStates_Dispose();
-void ControllerStates_Read();
-void ControllerStates_Write();
-void ControllerStates_Poll();
+void ControllerStates_Init(void);
+void ControllerStates_Dispose(void);
+void ControllerStates_Read(void);
+void ControllerStates_Write(void);
+void ControllerStates_Poll(void);
 ControllerState* ControllerStates_GetController(int32_t number);
-bool ControllerStates_IsAnyButtonPressedOnAnyController();
-bool ControllerStates_IsAnyButtonTappedOnAnyController();
+bool ControllerStates_IsAnyButtonPressedOnAnyController(void);
+bool ControllerStates_IsAnyButtonTappedOnAnyController(void);
 bool ControllerStates_IsButtonPressedOnAnyController(int32_t button);
-int32_t ControllerStates_GetControllerNumberIfAnyButtonReleased();
-int32_t ControllerStates_GetControllerNumberIfAnyButtonTapped();
-void ControllerStates_MuteInput();
+int32_t ControllerStates_GetControllerNumberIfAnyButtonReleased(void);
+int32_t ControllerStates_GetControllerNumberIfAnyButtonTapped(void);
+void ControllerStates_MuteInput(void);
 float ControllerStates_GetHighestAnalogDataValue(int32_t loc);
-int32_t ControllerStates_GetMasterRecordingReadFrame();
-int32_t ControllerStates_GetCurrentMasterRecordingVersion();
+int32_t ControllerStates_GetMasterRecordingReadFrame(void);
+int32_t ControllerStates_GetCurrentMasterRecordingVersion(void);

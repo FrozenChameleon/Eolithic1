@@ -36,7 +36,7 @@ EntitySearch* EntitySearch_CreateNewBlankSearchSetCapacity(int32_t cap)
 	search->len = 0;
 	return search;
 }
-EntitySearch* EntitySearch_CreateNewBlankSearch()
+EntitySearch* EntitySearch_CreateNewBlankSearch(void)
 {
 	GameState* activeGameState = Get_ActiveGameState();
 	int32_t amountOfEntitiesInPlay = GameState_GetAmountOfEntitiesInPlay(activeGameState);
@@ -93,7 +93,7 @@ EntitySearch* EntitySearch_SearchForEntitiesWithThisComponent(ComponentType ctyp
 	return addToThis;
 }
 
-EntitySearch* EntitySearch_CreateNewAllEntitySearch()
+EntitySearch* EntitySearch_CreateNewAllEntitySearch(void)
 {
 	GameState* activeGameState = Get_ActiveGameState();
 	int32_t amountOfEntitiesInPlay = GameState_GetAmountOfEntitiesInPlay(activeGameState);

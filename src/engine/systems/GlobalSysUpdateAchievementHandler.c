@@ -7,7 +7,7 @@ static void Update(void* givenData)
 	AchievementHandler_Update();
 }
 
-System* GlobalSysUpdateAchievementHandler_CreateSystem()
+System* GlobalSysUpdateAchievementHandler_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

@@ -20,7 +20,7 @@
 static bool _mHasCalculatedMachineEpsilonFloat;
 static float _mMachineEpsilonFloat;// = GetMachineEpsilonFloat();
 
-static float GetMachineEpsilonFloat()
+static float GetMachineEpsilonFloat(void)
 {
 	float machineEpsilon = 1.0f;
 	float comparison;
@@ -44,7 +44,7 @@ float MathHelper_ToRadians(float degrees)
 {
 	return (float)(degrees * 0.017453292519943295769236907684886);
 }
-float MathHelper_GetMachineEpsilonFloat()
+float MathHelper_GetMachineEpsilonFloat(void)
 {
 	if (!_mHasCalculatedMachineEpsilonFloat)
 	{

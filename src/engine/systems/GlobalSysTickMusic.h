@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysTickMusic_CreateSystem();
+System* GlobalSysTickMusic_CreateSystem(void);

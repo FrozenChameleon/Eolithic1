@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* SysDrawTiles_CreateSystem();
+System* SysDrawTiles_CreateSystem(void);

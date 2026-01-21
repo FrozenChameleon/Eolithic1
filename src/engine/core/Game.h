@@ -18,13 +18,13 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-int32_t Game_Init();
-int32_t Game_Run();
-void Game_PollEvents();
-bool Game_IsExitingGame();
-void Game_Exit();
-bool Game_IsActive();
+int32_t Game_Init(void);
+int32_t Game_Run(void);
+void Game_PollEvents(void);
+bool Game_IsExitingGame(void);
+void Game_Exit(void);
+bool Game_IsActive(void);
 void Game_Update(double gameTime);
 void Game_Draw(double gameTime);
 void Game_UpdateHelper(double delta);
-void Game_Dispose();
+void Game_Dispose(void);

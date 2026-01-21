@@ -42,22 +42,17 @@ int32_t GAMEHELPER_PLATFORM_DOWN = -1;
 int32_t GAMEHELPER_PLATFORM_RIGHT = -1;
 int32_t GAMEHELPER_PLATFORM_LEFT = -1;
 
-void GameHelper_DoDefaultSetupThingInstanceSettings(ThingInstance* instance, bool ignoreWarnings)
-{
-	//TODO C99 ThingInstance_SetupSettings(instance, ignoreWarnings);
-}
-
-Resource* GameHelper_GetDefaultLevelDataResource()
+Resource* GameHelper_GetDefaultLevelDataResource(void)
 {
 	LevelDataStub* stub = GameState_GetFirstSetComponent(Get_ActiveGameState(), C_LevelDataStub);
 	return LevelDataStubFunc_GetLevelDataResource(stub);
 }
-LevelData* GameHelper_GetDefaultLevelData()
+LevelData* GameHelper_GetDefaultLevelData(void)
 {
 	LevelDataStub* stub = GameState_GetFirstSetComponent(Get_ActiveGameState(), C_LevelDataStub);
 	return LevelDataStubFunc_GetLevelData(stub);
 }
-void GameHelper_UpdateLastRenderPositionNormally()
+void GameHelper_UpdateLastRenderPositionNormally(void)
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
@@ -69,15 +64,15 @@ void GameHelper_UpdateLastRenderPositionNormally()
 		stateSys->_mUpdateLastRenderPosition(stateSys->_mData, gameState);
 	}
 }
-Camera* GameHelper_GetDefaultCameraForRender()
+Camera* GameHelper_GetDefaultCameraForRender(void)
 {
 	return GameStateManager_GetFirstSetComponent(C_Camera);
 }
-float GameHelper_GetDefaultPostGameBrightness()
+float GameHelper_GetDefaultPostGameBrightness(void)
 {
 	return 1;
 }
-void GameHelper_UpdateGlobalSystemsNormally()
+void GameHelper_UpdateGlobalSystemsNormally(void)
 {
 	int32_t globalSystemsLen = GameStateManager_GetGlobalSystemsLen();
 	System** globalSystems = GameStateManager_GetGlobalSystems();
@@ -117,7 +112,7 @@ void GameHelper_DrawDebugHudGlobalSystemsNormally(SpriteBatch* spriteBatch)
 		globalSys->_mDrawDebugHud(globalSys->_mData, spriteBatch);
 	}
 }
-void GameHelper_UpdateStateSystemsNormally()
+void GameHelper_UpdateStateSystemsNormally(void)
 {
 	int32_t stateSystemsLen = GameStateManager_GetStateSystemsLen();
 	System** stateSystems = GameStateManager_GetStateSystems();
@@ -157,20 +152,7 @@ void GameHelper_DrawDebugHudStateSystemsNormally(SpriteBatch* spriteBatch)
 		stateSys->_mDrawDebugHud(stateSys->_mData, spriteBatch);
 	}
 }
-void GameHelper_CreateDefaultGameStates()
-{
-	/* //TODO C99?
-	OeGameStateManager_GameStates = std_vector<OeGameState*>(2);
-	OeGameStateManager_GameStates[OeGameStateManager_GAME_STATE_NORMAL] = new OeGameState("normal", false);
-	OeGameStateManager_GameStates[OeGameStateManager_GAME_STATE_PAUSED] = new OeGameState("paused", true);
-
-	GameStateManager_SetCurrentGameState(0);
-	GameStateManager_InitDefaultNormalState();
-
-	GameStateManager_SetCurrentGameState(1);
-	GameStateManager_InitDefaultPauseState();*/
-}
-void GameHelper_CreateDefaultGlobalSystems()
+void GameHelper_CreateDefaultGlobalSystems(void)
 {
 #ifdef EDITOR_MODE
 	/* //WILLNOTDO 06242023 DEBUG STUFF
@@ -286,56 +268,7 @@ void GameHelper_InitGameStateData(const char* name, GameStateData* initThis)
 
 	//CreateGameStateDataHelper(temp, _mComponentSizes[name]);
 }
-void GameHelper_InitPoolsForEngine()
-{
-	//NOTE 2024 - THIS IS REALLY NOT EVER NECESSARY IN C += 1
-	//WILLNOTDO 06242023 FOR MUTE CRIMSON DX?
-	/*
-	OePool.InitPool<OeLevelCameraDataInstance>(new OeLevelCameraDataInstance());
-
-	OeAutoPool.InitPool<OeEntitySearch>(new OeEntitySearch());
-	OeAutoPool.InitPool<OePathNode>(new OePathNode());
-	*/
-}
-IStringArray* GameHelper_GetControllerComponentStringArray()
-{
-	//WILLNOTDO 06242023 FOR MUTE CRIMSON DX?
-	/*
-	if (_mControllerComponentStrArray == null)
-	{
-		_mControllerComponentStrArray = new List<string>();
-
-		OeDictionary<int32_t, Type> map = GetControllerComponentTypeMap();
-		for (int32_t i = 0; i < map.Values.Count; i += 1)
-		{
-			Type o = map.Values[i];
-			_mControllerComponentStrArray.Add(o.Name);
-		}
-	}
-		*/
-	return _mControllerComponentStrArray;
-}
-IntIntPair* GameHelper_GetControllerComponentTypeMap()
-{
-	return NULL;
-	//WILLNOTDO 06242023 FOR MUTE CRIMSON DX?
-	/*
-	if (_mControllerComponentTypeMap == null)
-	{
-		_mControllerComponentTypeMap = new OeDictionary<int32_t, Type>();
-		for (int32_t i = 0; i < COMPONENT_SCAN_RANGE; i += 1)
-		{
-			Type type = BuildControllerComponent(i, OeEntity.Nothing);
-			if (type != null)
-			{
-				_mControllerComponentTypeMap.Add(i, type);
-			}
-		}
-	}
-	*/
-	//TODO C99 return _mControllerComponentTypeMap;
-}
-void GameHelper_AddStrings()
+void GameHelper_AddStrings(void)
 {
 	GameHelper_AddStringsHelper();
 }

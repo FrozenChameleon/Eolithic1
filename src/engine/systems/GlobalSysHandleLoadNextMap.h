@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysHandleLoadNextMap_CreateSystem();
+System* GlobalSysHandleLoadNextMap_CreateSystem(void);

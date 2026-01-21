@@ -16,7 +16,7 @@ static void Update(void* givenData)
 	}
 }
 
-System* LevelFrameCounterSys_CreateSystem()
+System* LevelFrameCounterSys_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

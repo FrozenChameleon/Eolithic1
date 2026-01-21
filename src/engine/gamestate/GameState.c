@@ -12,6 +12,10 @@
 #include "../leveldata/ParticleInstance.h"
 #include "../leveldata/ParticleInstanceSys.h"
 #include "../utils/Logger.h"
+#include "../input/Keys.h"
+#include "../input/KeyList.h"
+#include "../input/Input.h"
+#include "../input/ActionList.h"
 
 void GameState_SaveComponentSizesHelper(bool isBinary)
 {
@@ -38,18 +42,16 @@ void GameState_Ctor(GameState* gs, const char* name, bool disableRewinding)
 
 	gs->_mCurrentReplayFrame = 0;
 	gs->_mDisableRewindingPermanently = disableRewinding;
-	gs->_mName = name;
+	Utils_strlcpy(gs->_mName, name, EE_FILENAME_MAX);
 	GameStateData_Ctor(&gs->_mData);
 	GameStateData_Ctor(&gs->_mForGameState);
 	if (!disableRewinding)
 	{
 		gs->_mReplayDataManager = ReplayDataManager_Create(name);
 	}
-/*#ifdef EDITOR_MODE
-	_mHasSavedDebugSaveState = false;
-	_mDebugSaveState = OeGameHelper::CreateGameStateData(name);
-	_mIsRewindLooping = false;
-#endif*/
+#ifdef EDITOR_MODE
+	GameStateData_Ctor(&gs->_mDebugSaveState);
+#endif
 }
 
 GameStateData* GameState_GetGameStateData(GameState* gs)
@@ -314,3 +316,63 @@ void* GameState_TryGetFirstSetComponent(GameState* gs, ComponentType ctype, bool
 {
 	return GameStateData_TryGetFirstSetComponent(&gs->_mData, ctype, wasSuccessful);
 }
+#if EDITOR_MODE
+bool GameState_HandleDebugRewindLooping(GameState* gs)
+{
+	bool rewindLoopJustStarted = false;
+	if (Input_IsKeyTapped(KEYS_F5))
+	{
+		gs->_mIsRewindLooping = !gs->_mIsRewindLooping;
+		if (gs->_mIsRewindLooping)
+		{
+			rewindLoopJustStarted = true;
+		}
+		else
+		{
+			GameState_ClearReplayCache(gs);
+		}
+	}
+
+	if (!gs->_mIsRewindLooping)
+	{
+		return false;
+	}
+
+	//We are rewind looping now...
+	gs->_mIsRewinding = true;
+
+	ReplayDataManager_RewindLoop(gs->_mReplayDataManager, rewindLoopJustStarted, &gs->_mData);
+
+	return true;
+}
+bool GameState_HandleDebugSaveStates(GameState* gs)
+{
+	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_LS)->mIsTapped)
+	{
+		GameState_CreateDebugSaveState(gs);
+	}
+
+	if (Input_GetPlayerOneAction(ACTIONLIST_GAME_RS)->mIsTapped)
+	{
+		GameState_UseDebugSaveState(gs);
+		return true;
+	}
+
+	return false;
+}
+void GameState_CreateDebugSaveState(GameState* gs)
+{
+	gs->_mHasSavedDebugSaveState = true;
+	GameStateData_CopyTo(&gs->_mData, &gs->_mDebugSaveState);
+	Logger_LogInformation("Debug Quicksave");
+}
+void GameState_UseDebugSaveState(GameState* gs)
+{
+	if (!gs->_mHasSavedDebugSaveState)
+	{
+		return;
+	}
+	GameStateData_CopyTo(&gs->_mDebugSaveState, &gs->_mData);
+	Logger_LogInformation("Debug Quickload");
+}
+#endif

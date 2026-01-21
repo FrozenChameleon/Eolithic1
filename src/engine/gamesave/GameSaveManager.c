@@ -12,7 +12,7 @@
 #include "../io/DynamicByteBuffer.h"
 #include "../io/BufferReader.h"
 
-#define SAVE_FILE_NAME "mcdcsave.bin"
+#define SAVE_FILE_NAME "mcdcsave.bin" //TODO
 #define CONTAINER_DISPLAY_NAME "GameSave"
 #define CONTAINER_NAME "GameSaveContainer"
 
@@ -21,7 +21,7 @@ static bool _mWasDataJustLoaded;
 static bool _mHasLoaded;
 static bool _mHasInit;
 
-void GameSaveManager_Init()
+void GameSaveManager_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -32,24 +32,21 @@ void GameSaveManager_Init()
 
 	_mHasInit = true;
 }
-
-bool GameSaveManager_HasInit()
+bool GameSaveManager_HasInit(void)
 {
 	return _mHasInit;
 }
-
-static FixedByteBuffer* CreateBufferFromSaveData()
+static FixedByteBuffer* CreateBufferFromSaveData(void)
 {
 	DynamicByteBuffer* dbb = DynamicByteBuffer_Create();
 	GameHelper_WriteGameSaveData(_mData, dbb);
 	return DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(dbb);
 }
-
-void* GameSaveManager_GetCurrentSaveData()
+void* GameSaveManager_GetCurrentSaveData(void)
 {
 	return _mData;
 }
-void GameSaveManager_ResetSaveData()
+void GameSaveManager_ResetSaveData(void)
 {
 	if (_mData != NULL)
 	{
@@ -59,7 +56,7 @@ void GameSaveManager_ResetSaveData()
 
 	_mData = GameHelper_CreateGameSaveData();
 }
-void GameSaveManager_Save()
+void GameSaveManager_Save(void)
 {
 	if (Globals_IsSavingUserDataDisabled())
 	{
@@ -74,7 +71,7 @@ void GameSaveManager_Save()
 
 	Logger_LogInformation("Save file saved to save0.bin");
 }
-void GameSaveManager_Load()
+void GameSaveManager_Load(void)
 {
 	_mWasDataJustLoaded = false;
 
@@ -106,28 +103,15 @@ void GameSaveManager_Load()
 		}
 	}
 }
-bool GameSaveManager_HasLoaded()
+bool GameSaveManager_HasLoaded(void)
 {
 	return _mHasLoaded;
 }
-/*
-void GameSaveManager_WriteAllForRecording(std_shared_ptr<OeIniWriter> writer)
-{
-	writer->WriteInt32(0); //Was currentSaveSlot, now unused.
-	_mData.Write(writer);
-}
-void GameSaveManager_ResetSaveDataAndReadAllForRecording(std_shared_ptr<OeIniReader> reader)
-{
-	ResetSaveData();
-	reader->ReadInt32(); //Was currentSaveSlot, now unused.
-	_mData.Read(reader);
-}
-*/
-void GameSaveManager_ResetWasSaveDataJustLoaded()
+void GameSaveManager_ResetWasSaveDataJustLoaded(void)
 {
 	_mWasDataJustLoaded = false;
 }
-bool GameSaveManager_WasSaveDataJustLoaded()
+bool GameSaveManager_WasSaveDataJustLoaded(void)
 {
 	return _mWasDataJustLoaded;
 }

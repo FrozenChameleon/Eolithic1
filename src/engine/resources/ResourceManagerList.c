@@ -192,7 +192,7 @@ void ResourceManagerList_Init(void)
 
 	_mHasInit = true;
 }
-void ResourceManagerList_LoadAllFromDat()
+void ResourceManagerList_LoadAllFromDat(void)
 {
 	for (int32_t i = 0; i < MANAGERS_LEN; i += 1)
 	{
@@ -202,67 +202,67 @@ void ResourceManagerList_LoadAllFromDat()
 		}
 	}
 }
-ResourceManager* ResourceManagerList_AnimTile()
+ResourceManager* ResourceManagerList_AnimTile(void)
 {
 	return &_mManagers[MANAGERS_INDEX_ANIM_TILE];
 }
-ResourceManager* ResourceManagerList_Prop()
+ResourceManager* ResourceManagerList_Prop(void)
 {
 	return &_mManagers[MANAGERS_INDEX_PROP];
 }
-ResourceManager* ResourceManagerList_Texture()
+ResourceManager* ResourceManagerList_Texture(void)
 {
 	return &_mManagers[MANAGERS_INDEX_TEXTURE];
 }
-ResourceManager* ResourceManagerList_FontTexture()
+ResourceManager* ResourceManagerList_FontTexture(void)
 {
 	return &_mManagers[MANAGERS_INDEX_FONT_TEXTURE];
 }
-ResourceManager* ResourceManagerList_MovieTexture()
+ResourceManager* ResourceManagerList_MovieTexture(void)
 {
 	return &_mManagers[MANAGERS_INDEX_MOVIE_TEXTURE];
 }
-ResourceManager* ResourceManagerList_SoundEffect()
+ResourceManager* ResourceManagerList_SoundEffect(void)
 {
 	return &_mManagers[MANAGERS_INDEX_SOUND_EFFECT];
 }
-ResourceManager* ResourceManagerList_Music()
+ResourceManager* ResourceManagerList_Music(void)
 {
 	return &_mManagers[MANAGERS_INDEX_MUSIC];
 }
-ResourceManager* ResourceManagerList_LevelData()
+ResourceManager* ResourceManagerList_LevelData(void)
 {
 	return &_mManagers[MANAGERS_INDEX_LEVEL_DATA];
 }
-ResourceManager* ResourceManagerList_TilesetOffset()
+ResourceManager* ResourceManagerList_TilesetOffset(void)
 {
 	return &_mManagers[MANAGERS_INDEX_TILESET_OFFSET];
 }
-ResourceManager* ResourceManagerList_TextureOffset()
+ResourceManager* ResourceManagerList_TextureOffset(void)
 {
 	return &_mManagers[MANAGERS_INDEX_TEXTURE_OFFSET];
 }
-ResourceManager* ResourceManagerList_Font()
+ResourceManager* ResourceManagerList_Font(void)
 {
 	return &_mManagers[MANAGERS_INDEX_FONT];
 }
-ResourceManager* ResourceManagerList_Particle()
+ResourceManager* ResourceManagerList_Particle(void)
 {
 	return &_mManagers[MANAGERS_INDEX_PARTICLE];
 }
-ResourceManager* ResourceManagerList_MovieTiming()
+ResourceManager* ResourceManagerList_MovieTiming(void)
 {
 	return &_mManagers[MANAGERS_INDEX_MOVIE_TIMING];
 }
-ResourceManager* ResourceManagerList_Movie()
+ResourceManager* ResourceManagerList_Movie(void)
 {
 	return &_mManagers[MANAGERS_INDEX_MOVIE];
 }
-ResourceManager* ResourceManagerList_TTFont()
+ResourceManager* ResourceManagerList_TTFont(void)
 {
 	return &_mManagers[MANAGERS_INDEX_TTFONT];
 }
-ResourceManager* ResourceManagerList_ThingSettings()
+ResourceManager* ResourceManagerList_ThingSettings(void)
 {
 	return &_mManagers[MANAGERS_INDEX_THING_SETTINGS];
 }

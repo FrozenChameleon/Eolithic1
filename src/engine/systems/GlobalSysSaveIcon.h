@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysSaveIcon_CreateSystem();
+System* GlobalSysSaveIcon_CreateSystem(void);

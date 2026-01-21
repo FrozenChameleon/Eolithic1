@@ -29,7 +29,6 @@ typedef struct DrawTile
 } DrawTile;
 
 void DrawTile_Init(DrawTile* drawTile);
-void DrawTile_Write(DrawTile* drawTile, BufferWriter* writer);
 void DrawTile_Read(DrawTile* drawTile, int32_t version, BufferReader* reader);
 void DrawTile_LoadSheet(DrawTile* drawTile, int32_t x, int32_t y);
 void DrawTile_LoadAnimation(DrawTile* drawTile, const char* animation);

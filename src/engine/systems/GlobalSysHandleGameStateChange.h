@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysHandleGameStateChange_CreateSystem();
+System* GlobalSysHandleGameStateChange_CreateSystem(void);

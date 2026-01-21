@@ -14,39 +14,11 @@
 
 void Tile_Init(Tile* t)
 {
-	/*tile->mCollisionType = 0;
-	tile->mInstances = {};
-	tile->mProps = {};
+	Utils_memset(t, 0, sizeof(Tile));
 	for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
 	{
-		DrawTile_Init(&tile->mDrawTiles[i]);
-	}*/
-}
-void Tile_Write(Tile* t, BufferWriter* writer)
-{
-	/*
-	writer->WriteInt32(1); //
-	writer->WriteInt32(1); //Unused - Multi Array Collision
-	writer->WriteInt32(mCollisionType);
-
-	writer->WriteInt32(DRAW_LAYER_LENGTH);
-	for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
-	{
-		OeDrawTile_Write(&mDrawTiles[i], writer);
+		DrawTile_Init(&t->mDrawTiles[i]);
 	}
-
-	writer->WriteInt32(mInstances.size());
-	for (int32_t i = 0; i < mInstances.size(); i += 1)
-	{
-		mInstances[i].Write(writer);
-	}
-
-	writer->WriteInt32(mProps.size());
-	for (int32_t i = 0; i < mProps.size(); i += 1)
-	{
-		OePropInstance_Write(&mProps[i], writer);
-	}
-	*/
 }
 void Tile_Read(Tile* t, int32_t version, BufferReader* reader)
 {
@@ -77,140 +49,7 @@ void Tile_Read(Tile* t, int32_t version, BufferReader* reader)
 		arrput(t->arr_props, instance);
 	}
 }
-void Tile_DeleteCollision(Tile* t)
-{
-	t->mCollisionType = 0;
-}
-void Tile_DeleteDrawTiles(Tile* t)
-{
-	for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
-	{
-		Tile_DeleteDrawTiles2(t, i);
-	}
-}
-void Tile_DeleteDrawTiles2(Tile* t, int32_t layer)
-{
-	//TODO C99 DrawTile_Init(&mDrawTiles[layer]);
-}
-void Tile_DeleteThings(Tile* t)
-{
-	//TODO C99mInstances.clear();
-}
-void Tile_DeleteProps(Tile* t)
-{
-	//TODO C99mProps.clear();
-}
-Tile* Tile_GetClone(Tile* t)
-{
-	return NULL;
-	//TODO C99 return GetClone(false);
-}
-Tile* Tile_GetClone2(Tile* t, bool limited)
-{
-	return NULL;
-	/*Tile newTile = Tile();
 
-	bool copyCollision = false;
-	bool copyTiles = false;
-	bool copyLayerOnly = false;
-	int32_t currentLayer = -1;
-	bool copyProps = false;
-	bool copyThings = false;
-
-#ifdef EDITOR_MODE
-	copyCollision = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_COLLISION);
-	copyTiles = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_TILES);
-	copyLayerOnly = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_LAYER_ONLY);
-	currentLayer = OeCvars_GetAsInt(OeCvars_EDITOR_CURRENT_LAYER);
-	copyProps = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_PROPS);
-	copyThings = OeCvars_GetAsBool(OeCvars_EDITOR_COPY_THINGS);
-#endif
-
-	if (!limited || copyCollision)
-	{
-		newTile.mCollisionType = mCollisionType;
-	}
-
-	if (!limited || copyTiles)
-	{
-		for (int32_t i = 0; i < DRAW_LAYER_LENGTH; i += 1)
-		{
-			if (!limited || !copyLayerOnly || i == currentLayer)
-			{
-				newTile.mDrawTiles[i] = mDrawTiles[i];
-			}
-		}
-	}
-
-	if (!limited || copyProps)
-	{
-		for (int32_t i = 0; i < mProps.size(); i += 1)
-		{
-			newTile.mProps.push_back(mProps[i]);
-		}
-	}
-
-	if (!limited || copyThings)
-	{
-		for (int32_t i = 0; i < mInstances.size(); i += 1)
-		{
-			newTile.mInstances.push_back(mInstances[i]); //WILLNOTDO 05152023 CHECK THIS, ORIGINALLY IT USED "GETCLONE".. SHOULD NOT NEED IT NOW
-		}
-	}
-
-	return newTile;*/
-}
-bool Tile_IsEqualTo(Tile* t, Tile* tile2)
-{
-	return false;
-	//WILLNOTDO 05152023
-	//if (mCollisionType != tile->mCollisionType)
-	//{
-	//	return false;
-	//}
-
-	//for (int32_t i = 0; i < LAYER_AMOUNT; i += 1)
-	//{
-	//	if (!OeDrawTile_IsEqualTo(ref mDrawTiles[i], ref tile.mDrawTiles[i]))
-	//	{
-	//		return false;
-	//	}
-	//}
-
-	//if (!OeUtils_IsArrayEqualTo(mProps, tile->mProps))
-	//{
-	//	return false;
-	//}
-
-	//if (!OeUtils.IsArrayEqualTo(mInstances, tile->mInstances))
-	//{
-	//	return false;
-	//}
-
-	//return true;
-}
-void Tile_DrawThis(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, LevelData* level, bool overrideDepth, Texture* wrapper)
-{
-	//WILLNOTDO 05152023
-}
-void Tile_DrawCollision(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth)
-{
-	//TODO C99
-	/*if (tile->mCollisionType == 0)
-	{
-		return;
-	}
-
-	int32_t depth = 100;
-	if (overrideDepth)
-	{
-		depth = OVERRIDE_DEPTH;
-	}
-
-	Rectangle rect = Tile_GetCollisionRectangle(gridX, gridY);
-	Color color = Utils_GetCollisionColor(mCollisionType);
-	DrawTool_DrawRectangle(spriteBatch, color, depth, rect, 0, false);*/
-}
 Rectangle Tile_GetCollisionRectangle(Tile* t, int32_t gridX, int32_t gridY)
 {
 	int32_t rectX = gridX * TILE_SIZE;
@@ -234,26 +73,6 @@ Rectangle Tile_GetCollisionRectangle(Tile* t, int32_t gridX, int32_t gridY)
 		}
 	}
 	return Rectangle_Create(rectX, rectY, rectWidth, rectHeight);
-}
-void Tile_DrawThings(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth)
-{
-	/*if (mInstances.size() == 0)
-	{
-		return;
-	}
-
-	Color thingColor = Color(255, 0, 0, 127);
-	for (int32_t k = 0; k < mInstances.size(); k++)
-	{
-		if (!overrideDepth)
-		{
-			mInstances[k].Draw(spriteBatch, thingColor, Point(gridX * TILE_SIZE, gridY * TILE_SIZE), false);
-		}
-		else
-		{
-			mInstances[k].Draw(spriteBatch, thingColor, OVERRIDE_DEPTH, Point(gridX * TILE_SIZE, gridY * TILE_SIZE), false);
-		}
-	}*/
 }
 void Tile_DrawProps(Tile* t, SpriteBatch* spriteBatch, const Camera* camera, int32_t gridX, int32_t gridY, bool overrideDepth)
 {

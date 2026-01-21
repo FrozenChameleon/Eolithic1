@@ -113,7 +113,7 @@ const char* ActionList_GetAction(int32_t index)
 
 static IStringArray* _mActionNames;
 
-IStringArray* ActionList_GetArray()
+IStringArray* ActionList_GetArray(void)
 {
 	if (_mActionNames == NULL)
 	{

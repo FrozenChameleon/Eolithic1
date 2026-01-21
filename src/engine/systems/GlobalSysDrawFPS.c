@@ -22,7 +22,7 @@ void GlobalSysDrawFPS_SetFont(const char* font)
 {
 	_mFont = font;
 }
-void GlobalSysDrawFPS_DoNotDrawThisRightNow()
+void GlobalSysDrawFPS_DoNotDrawThisRightNow(void)
 {
 	_mDoNotDrawThisCounter = TIME_TO_STOP_DRAWING;
 }
@@ -54,7 +54,7 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 	SpriteBatch_DrawString(spriteBatch, _mFont, stringToDraw, COLOR_WHITE, 200, Vector2_Create(x, y));
 }
 
-System* GlobalSysDrawFPS_CreateSystem()
+System* GlobalSysDrawFPS_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mDrawHud = DrawHud;

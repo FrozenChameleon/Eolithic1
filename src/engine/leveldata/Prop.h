@@ -33,6 +33,6 @@ const char* Prop_ToString(Prop* p);
 Animation* Prop_GetAnimation(Prop* p);
 void Prop_WriteIni(Prop* p, BufferWriter* writer);
 void Prop_ReadIni(Prop* p, BufferReader* reader);
-IStringArray* Prop_GetDirectories();
+IStringArray* Prop_GetDirectories(void);
 Prop* Prop_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void Prop_Dispose(Prop* prop);

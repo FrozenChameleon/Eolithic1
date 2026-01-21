@@ -40,7 +40,7 @@ enum Step
 	STEP_WAIT_ON_SERVICE = 4
 };
 
-typedef bool (*JobFunc)();
+typedef bool (*JobFunc)(void);
 
 static int32_t _mFps;
 static int32_t _mStep;
@@ -57,21 +57,21 @@ static Texture* _mPreloaderTextureFinalB;
 static Texture** arr_preloader_textures;
 static JobFunc* arr_loading_jobs;
 
-static void DisposeTextures()
+static void DisposeTextures(void)
 {
 	_mPreloaderTextureFinalToDisplay = NULL;
 	_mPreloaderTextureFinal = NULL;
 	_mPreloaderTextureFinalB = NULL;
 	arrsetlen(arr_preloader_textures, 0);
 }
-static void UpdateLoadingJob()
+static void UpdateLoadingJob(void)
 {
 	if (arr_loading_jobs[0]())
 	{
 		arrdel(arr_loading_jobs, 0);
 	}
 }
-static void FinishLoading()
+static void FinishLoading(void)
 {
 #ifdef EDITOR_MODE
 	//WILLNOTDO 06142023
@@ -89,7 +89,7 @@ static void FinishLoading()
 
 	_mIsLoading = false;
 }
-static void QuickStart()
+static void QuickStart(void)
 {
 	while (arrlen(arr_loading_jobs) > 0)
 	{
@@ -97,7 +97,7 @@ static void QuickStart()
 	}
 	FinishLoading();
 }
-static void FindTextureFiles()
+static void FindTextureFiles(void)
 {
 	int32_t counter = 0;
 	bool needToStop = false;
@@ -132,7 +132,7 @@ static void FindTextureFiles()
 		counter += 1;
 	}
 }
-static void LoadTextures()
+static void LoadTextures(void)
 {
 	FindTextureFiles();
 
@@ -155,7 +155,7 @@ static void LoadTextures()
 	MString_Dispose(&fileFinalPath);
 	MString_Dispose(&fileFinalBPath);
 }
-static bool LoadStart()
+static bool LoadStart(void)
 {
 	GameHelper_CreateGlobalSystems();
 	GameHelper_CreateStateSystems();
@@ -171,34 +171,32 @@ static bool LoadStart()
 	Logger_LogInformation("Loading started");
 	return true;
 }
-static bool LoadResources()
+static bool LoadResources(void)
 {
 	ResourceManagerList_LoadAllFromDat();
 	return true;
 }
-static bool LoadAfterResources()
+static bool LoadAfterResources(void)
 {
 	Sheet_BuildSheets();
 	Animation_BuildAnimations();
 	GameHelper_BuildAchievementList();
-	GameHelper_InitPoolsForEngine();
 	GameHelper_InitPoolsForGame();
 	GameHelper_OnLoadingAfterResources();
 	return true;
 }
-static bool LoadGameStates()
+static bool LoadGameStates(void)
 {
 	GameHelper_CreateGameStates();
 	Logger_LogInformation("Game states loaded");
 	return true;
 }
-static bool LoadEnd()
+static bool LoadEnd(void)
 {
-	//TODO C99 Game_RunServiceCheckRoutine();
 	Logger_LogInformation("Loading complete");
 	return true;
 }
-static void SetupLoadingJobs()
+static void SetupLoadingJobs(void)
 {
 	arrput(arr_loading_jobs, LoadStart);
 	arrput(arr_loading_jobs, LoadResources);
@@ -206,7 +204,7 @@ static void SetupLoadingJobs()
 	arrput(arr_loading_jobs, LoadGameStates);
 	arrput(arr_loading_jobs, LoadEnd);
 }
-static void HandleFps()
+static void HandleFps(void)
 {
 	{
 		MString* tempString = NULL;
@@ -452,7 +450,7 @@ void GameLoader_Draw(SpriteBatch* spriteBatch)
 		DrawTool_DrawRectangle2(spriteBatch, tempColor, 100, destRect, 0, false);
 	}
 }
-bool GameLoader_IsLoading()
+bool GameLoader_IsLoading(void)
 {
 	return _mIsLoading;
 }

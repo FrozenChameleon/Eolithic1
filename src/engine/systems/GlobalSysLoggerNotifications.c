@@ -13,7 +13,7 @@ static void Update(void* givenData)
 	Logger_Update();
 };
 
-System* GlobalSysLoggerNotifications_CreateSystem()
+System* GlobalSysLoggerNotifications_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mDrawHud = DrawHud;

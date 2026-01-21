@@ -7,7 +7,7 @@ static const char* STR_DEFAULT = "DEFAULT";
 
 static DrawStateMap* sh_draw_state_map;
 
-DrawStateMap* OeState_GetShDrawStateMap()
+DrawStateMap* OeState_GetShDrawStateMap(void)
 {
 	if (sh_draw_state_map == NULL)
 	{

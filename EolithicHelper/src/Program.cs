@@ -17,6 +17,7 @@ namespace EolithicHelper
         private const string DIR_HELPER_RESOURCES = "helper_resources";
         private const string DIR_SRC = "src";
         private const string DIR_ENGINE = "engine";
+        private const string DIR_GAME = "game";
         private const string DIR_RESOURCES = "resources";
         private const string DIR_GAMESTATE = "gamestate";
         private const string KEYWORD_INCLUDE_PATH = "%strIncludePath%";
@@ -141,13 +142,21 @@ namespace EolithicHelper
                     }
 
                     string fileLocation = fileWithStruct.Replace('\\', '/');
-                    if (fileLocation.StartsWith("src/game/"))
+                    /*if (fileLocation.StartsWith("src/game/")) //Old location
                     {
                         fileLocation = fileLocation.Replace("src/game/", "../../game/");
                     }
                     else
                     {
                         fileLocation = fileLocation.Replace("src/engine/", "../");
+                    }*/
+                    if (fileLocation.StartsWith("src/engine/")) //New location
+                    {
+                        fileLocation = fileLocation.Replace("src/engine/", "../engine/");
+                    }
+                    else
+                    {
+                        fileLocation = fileLocation.Replace("src/game/", "");
                     }
                     includeThese += "#include " + '"' + fileLocation + '"' + '\n';
 
@@ -179,14 +188,10 @@ namespace EolithicHelper
             componentTypeHeaderList[3] = "#define COMPONENT_TYPE_UNUSED_COMPONENT_RANGE " + UNUSED_COMPONENT_RANGE.ToString() + "\n#define COMPONENT_TYPE_LEN " + componentTypeLen + "\n";
 
             gameStateDataHelperList.Add("}\n");
-            gameStateDataHelperList.Insert(0, "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n#include \"GameStateDataHelper.h\"\n#include \"ComponentType.h\"\n\n" + includeThese);
+            gameStateDataHelperList.Insert(0, "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n#include \"../engine/gamestate/GameStateDataHelper.h\"\n#include \"../engine/gamestate/ComponentType.h\"\n\n" + includeThese);
 
             componentTypeHeaderList.Add("} ComponentType;\n\n");
             componentTypeHeaderList.Add("const char* ComponentType_GetComponentName(ComponentType ctype);");
-
-            {
-            
-            }
 
             {
                 string componentTypeHeaderPath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "ComponentType.h");
@@ -228,7 +233,8 @@ namespace EolithicHelper
 
 
             {
-                string gameStateDataHelperPath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "GameStateDataHelper.c");
+                //string gameStateDataHelperPath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "GameStateDataHelper.c"); //OLD LOCATION
+                string gameStateDataHelperPath = Path.Combine(DIR_SRC, DIR_GAME, "GameStateDataHelper.c");
                 string gameStateDataHelperString = "";
                 for (int i = 0; i < gameStateDataHelperList.Count; i += 1)
                 {

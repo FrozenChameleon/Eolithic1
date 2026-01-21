@@ -1,3 +1,3 @@
 #pragma once
 
-const char* Platform_GetPreferredLocalesEFIGS();
+const char* Platform_GetPreferredLocalesEFIGS(void);

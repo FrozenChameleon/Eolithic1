@@ -3,4 +3,4 @@
 #include "../systems/System.h"
 #include "LevelFrameCounter.h"
 
-System* LevelFrameCounterSys_CreateSystem();
+System* LevelFrameCounterSys_CreateSystem(void);

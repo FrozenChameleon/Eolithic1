@@ -6,4 +6,4 @@
 void HitFlashKitSys_InitRoutine(Entity owner, HitFlashKit* data);
 void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data);
 
-System* HitFlashKitSys_CreateSystem();
+System* HitFlashKitSys_CreateSystem(void);

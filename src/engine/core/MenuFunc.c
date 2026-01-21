@@ -31,7 +31,7 @@ static int32_t _mTempWindowSizeMultiple;
 static Rectangle _mTempWindowSize;
 
 static bool _mHasInit;
-void MenuFunc_Init()
+void MenuFunc_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -43,7 +43,7 @@ void MenuFunc_Init()
 	_mHasInit = true;
 }
 
-Rectangle MenuFunc_GetTempWindowSize()
+Rectangle MenuFunc_GetTempWindowSize(void)
 {
 	return _mTempWindowSize;
 }
@@ -51,7 +51,7 @@ void MenuFunc_SetTempWindowSize(Rectangle value)
 {
 	_mTempWindowSize = value;
 }
-int32_t MenuFunc_GetTempWindowSizeMultiple()
+int32_t MenuFunc_GetTempWindowSizeMultiple(void)
 {
 	return _mTempWindowSizeMultiple;
 }
@@ -59,22 +59,22 @@ void MenuFunc_SetTempWindowSizeMultiple(int32_t value)
 {
 	_mTempWindowSizeMultiple = value;
 }
-void MenuFunc_GameResetAllOptionsToDefaults()
+void MenuFunc_GameResetAllOptionsToDefaults(void)
 {
 	Cvars_CopyFromUserDefaults();
 	Window_UpdateFullscreen();
 	Renderer_UpdateVsync();
 	Renderer_ApplyChanges();
 }
-void MenuFunc_DebugGodModeToggle()
+void MenuFunc_DebugGodModeToggle(void)
 {
 	Globals_ToggleGodMode();
 }
-void MenuFunc_DebugResetAchievements()
+void MenuFunc_DebugResetAchievements(void)
 {
 	Service_ResetAchievements();
 }
-void MenuFunc_DebugUnlockNextAchievement()
+void MenuFunc_DebugUnlockNextAchievement(void)
 {
 	AchievementHandler_DebugUnlockNextAchievement();
 }
@@ -84,14 +84,13 @@ void MenuFunc_DebugUnlockNextAchievement()
 }*/
 /*const char* MenuFunc_GetUserLanguageName() //UNUSED
 {
-	return NULL;
-	//TODO C99 return Utils_GetUserLanguageName();
+	return Utils_GetUserLanguageName();
 }*/
 /*bool MenuFunc_WentBackThisFrame() //UNUSED
 {
 	return WENT_BACK_FRAME == GameUpdater_GetGlobalTicks();
 }*/
-void MenuFunc_SoundStopSoundTestMusic()
+void MenuFunc_SoundStopSoundTestMusic(void)
 {
 	Do_StopMusic();
 }
@@ -124,20 +123,20 @@ void MenuFunc_SoundChangeSoundTextSfx(int32_t direction)
 {
 	HandleSoundTestDirectionLogic(&_mSoundTestCurrentSound, direction, (int32_t)arrlen(arr_sound_list));
 }
-void MenuFunc_SoundPlaySoundTestSfx()
+void MenuFunc_SoundPlaySoundTestSfx(void)
 {
 	Do_StopAllSounds();
 	Do_PlaySound(arr_sound_list[_mSoundTestCurrentSound].mValue);
 }
-void MenuFunc_SoundPlaySoundTestMusic()
+void MenuFunc_SoundPlaySoundTestMusic(void)
 {
 	Do_PlayMusic2(arr_music_list[_mSoundTestCurrentMusic].mValue, true, true);
 }
-const char* MenuFunc_GetCurrentSoundTestMusic()
+const char* MenuFunc_GetCurrentSoundTestMusic(void)
 {
 	return arr_music_list[_mSoundTestCurrentMusic].mKey;
 }
-const char* MenuFunc_GetCurrentSoundTestMusicAsNumber()
+const char* MenuFunc_GetCurrentSoundTestMusicAsNumber(void)
 {
 #ifdef EDITOR_MODE
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
@@ -147,11 +146,11 @@ const char* MenuFunc_GetCurrentSoundTestMusicAsNumber()
 #endif
 	return Utils_GetStringFromNumberWithZerosTens(_mSoundTestCurrentMusic);
 }
-const char* MenuFunc_GetCurrentSoundTestSfx()
+const char* MenuFunc_GetCurrentSoundTestSfx(void)
 {
 	return arr_sound_list[_mSoundTestCurrentSound].mKey;
 }
-const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
+const char* MenuFunc_GetCurrentSoundTestSfxAsNumber(void)
 {
 #ifdef EDITOR_MODE
 	if (GLOBALS_DEBUG_IS_GOD_MODE)
@@ -275,7 +274,7 @@ const char* MenuFunc_GetCurrentSoundTestSfxAsNumber()
 	}
 	return strToDraw;
 }*/
-const char* MenuFunc_GetChangeWindowSizeMultipleString()
+const char* MenuFunc_GetChangeWindowSizeMultipleString(void)
 {
 	MString_AssignString(&_mTempString, "<");
 	MString_AddAssignInt(&_mTempString, _mTempWindowSizeMultiple);
@@ -286,7 +285,7 @@ const char* MenuFunc_GetChangeWindowSizeMultipleString()
 	MString_AddAssignString(&_mTempString, ">");
 	return  MString_Text(_mTempString);
 }
-const char* MenuFunc_GetChangeWindowSizeString()
+const char* MenuFunc_GetChangeWindowSizeString(void)
 {
 	MString_AssignString(&_mTempString, "<");
 	MString_AddAssignInt(&_mTempString, _mTempWindowSize.Width);
@@ -295,7 +294,7 @@ const char* MenuFunc_GetChangeWindowSizeString()
 	MString_AddAssignString(&_mTempString, ">");
 	return  MString_Text(_mTempString);
 }
-const char* MenuFunc_GetInternalResolutionMultipleString()
+const char* MenuFunc_GetInternalResolutionMultipleString(void)
 {
 	int32_t mul = Cvars_GetAsInt(CVARS_USER_INTERNAL_RESOLUTION_MULTIPLE);
 	MString_AssignString(&_mTempString, "");
@@ -316,15 +315,15 @@ const char* MenuFunc_GetInternalResolutionMultipleString()
 	MString_AddAssignString(&_mTempString, ">");
 	return MString_Text(_mTempString);
 }
-void MenuFunc_SoundStopSoundTestSfx()
+void MenuFunc_SoundStopSoundTestSfx(void)
 {
 	Do_StopAllSounds();
 }
-void MenuFunc_VideoFixedTimeStepToggle()
+void MenuFunc_VideoFixedTimeStepToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_FIXED_TIMESTEP_ENABLED);
 }
-void MenuFunc_VideoApplyWindowSizeMultiple()
+void MenuFunc_VideoApplyWindowSizeMultiple(void)
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, false);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, _mTempWindowSizeMultiple);
@@ -332,7 +331,7 @@ void MenuFunc_VideoApplyWindowSizeMultiple()
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_HEIGHT, -1);
 	Utils_InvokeWindowedMode();
 }
-void MenuFunc_VideoApplyWindowSize()
+void MenuFunc_VideoApplyWindowSize(void)
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, false);
 	Cvars_SetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE, 1);
@@ -553,11 +552,11 @@ int32_t MenuFunc_VolumeToggle(const char* cvar, int32_t direction, int32_t force
 	}
 	return returnValue;
 }
-void MenuFunc_VideoVsyncToggle()
+void MenuFunc_VideoVsyncToggle(void)
 {
 	Utils_ToggleVsyncButton();
 }
-void MenuFunc_InputRumbleToggle()
+void MenuFunc_InputRumbleToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_RUMBLE_DISABLED);
 	if (!Cvars_GetAsBool(CVARS_USER_IS_RUMBLE_DISABLED))
@@ -565,11 +564,11 @@ void MenuFunc_InputRumbleToggle()
 		InputPlayer_Vibrate(Input_GetPlayerOne(), 0, 10, 0.5f, 0.5f);
 	}
 }
-void MenuFunc_VideoShowFpsToggle()
+void MenuFunc_VideoShowFpsToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_SHOWING_FPS);
 }
-void MenuFunc_VideoShowInGameTimerToggle()
+void MenuFunc_VideoShowInGameTimerToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_SHOWING_IN_GAME_TIMER);
 }
@@ -612,7 +611,7 @@ void MenuFunc_VideoInternalResolutionMultipleToggle(int32_t direction, int32_t f
 		Renderer_ApplyChanges();
 	}
 }
-int32_t MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
+int32_t MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue(void)
 {
 	int32_t value = MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue();
 	value += 1;
@@ -623,7 +622,7 @@ int32_t MenuFunc_GetVideoInternalResolutionMultipleToggleMaxValue()
 	}
 	return value;
 }
-int32_t MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue()
+int32_t MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue(void)
 {
 	Rectangle displayBounds = Window_GetDisplayBounds();
 	int32_t width = Utils_GetWindowSizeMulWidth();
@@ -641,37 +640,37 @@ int32_t MenuFunc_GetVideoChangeWindowSizeMultipleMaxValue()
 	}
 	return maxValue;
 }
-void MenuFunc_VideoLinearFilterToggle()
+void MenuFunc_VideoLinearFilterToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_LINEAR_FILTER_ALLOWED);
 }
-void MenuFunc_SoundMuteOnFocusToggle()
+void MenuFunc_SoundMuteOnFocusToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_MUTE_ON_FOCUS_LOSS);
 }
-void MenuFunc_GamePauseOnFocusToggle()
+void MenuFunc_GamePauseOnFocusToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_PAUSE_ON_FOCUS_LOSS);
 }
-void MenuFunc_GameTurboModeToggle()
+void MenuFunc_GameTurboModeToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_TURBO_MODE);
 }
-void MenuFunc_GameToggleAltFont()
+void MenuFunc_GameToggleAltFont(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_USING_ALT_FONT);
 }
-void MenuFunc_InputResetBindings()
+void MenuFunc_InputResetBindings(void)
 {
 	InputBindings_ResetAllPlayerBindingsToDefaultAndSave();
 }
-void MenuFunc_ActionResumeGame()
+void MenuFunc_ActionResumeGame(void)
 {
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
 	Do_ResumeMusic(1);
 	Do_ResumeAllSounds(1);
 }
-void MenuFunc_ActionExitGame()
+void MenuFunc_ActionExitGame(void)
 {
 	Game_Exit();
 }
@@ -679,11 +678,11 @@ void MenuFunc_ActionLoadLevel(const char* level)
 {
 	GameStateManager_SetupLoadMap(level);
 }
-void MenuFunc_GameBorderFrameToggle()
+void MenuFunc_GameBorderFrameToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_BORDER_FRAME_ON);
 }
-void MenuFunc_GameScreenshakeToggle()
+void MenuFunc_GameScreenshakeToggle(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_SCREENSHAKE_DISABLED);
 }
@@ -693,7 +692,7 @@ void MenuFunc_GameScreenshakeToggle()
 	//OeGameSaveManager_SetSaveSlot(saveSlot);
 	GameStateManager_SetupLoadMap(level);
 }*/
-void MenuFunc_VideoRefreshSyncToggle()
+void MenuFunc_VideoRefreshSyncToggle(void)
 {
 }
 void MenuFunc_VideoDrawModeToggle(int32_t direction)
@@ -710,7 +709,7 @@ void MenuFunc_VideoDrawModeToggle(int32_t direction)
 	}
 	Cvars_SetAsInt(CVARS_USER_DRAW_MODE, current);
 }
-void MenuFunc_InputControllerTypeToggle()
+void MenuFunc_InputControllerTypeToggle(void)
 {
 	int32_t current = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
 	current += 1;
@@ -720,7 +719,7 @@ void MenuFunc_InputControllerTypeToggle()
 	}
 	Cvars_SetAsInt(CVARS_USER_CONTROLLER_TYPE, current);
 }
-void MenuFunc_GameBorderToggle()
+void MenuFunc_GameBorderToggle(void)
 {
 	int32_t current = Cvars_GetAsInt(CVARS_USER_BORDER_TYPE);
 	current += 1;
@@ -730,31 +729,31 @@ void MenuFunc_GameBorderToggle()
 	}
 	Cvars_SetAsInt(CVARS_USER_BORDER_TYPE, current);
 }
-void MenuFunc_VideoFullscreenToggle()
+void MenuFunc_VideoFullscreenToggle(void)
 {
 	Utils_ToggleFullscreenButton();
 }
-void MenuFunc_PlayMenuSoundSelect()
+void MenuFunc_PlayMenuSoundSelect(void)
 {
 	MenuFunc_PlayMenuSoundHelper(Cvars_Get(CVARS_ENGINE_DEFAULT_MENU_SELECT_SOUND));
 }
-void MenuFunc_PlayMenuSoundDeny()
+void MenuFunc_PlayMenuSoundDeny(void)
 {
 	MenuFunc_PlayMenuSoundHelper(Cvars_Get(CVARS_ENGINE_DEFAULT_MENU_DENY_SOUND));
 }
-void MenuFunc_PlayMenuSoundUp()
+void MenuFunc_PlayMenuSoundUp(void)
 {
 	MenuFunc_PlayMenuSoundHelper(Cvars_Get(CVARS_ENGINE_DEFAULT_MENU_UP_SOUND));
 }
-void MenuFunc_PlayMenuSoundRight()
+void MenuFunc_PlayMenuSoundRight(void)
 {
 	MenuFunc_PlayMenuSoundHelper(Cvars_Get(CVARS_ENGINE_DEFAULT_MENU_RIGHT_SOUND));
 }
-void MenuFunc_PlayMenuSoundDown()
+void MenuFunc_PlayMenuSoundDown(void)
 {
 	MenuFunc_PlayMenuSoundHelper(Cvars_Get(CVARS_ENGINE_DEFAULT_MENU_DOWN_SOUND));
 }
-void MenuFunc_PlayMenuSoundLeft()
+void MenuFunc_PlayMenuSoundLeft(void)
 {
 	MenuFunc_PlayMenuSoundHelper(Cvars_Get(CVARS_ENGINE_DEFAULT_MENU_LEFT_SOUND));
 }
@@ -770,7 +769,7 @@ void MenuFunc_PlayMenuSoundHelper(const char* soundToPlay)
 		Do_PlaySound(soundToPlay);
 	}
 }
-void MenuFunc_SaveIfLoadedOptionsMenu()
+void MenuFunc_SaveIfLoadedOptionsMenu(void)
 {
 	if (_mLoadedOptionsMenu)
 	{

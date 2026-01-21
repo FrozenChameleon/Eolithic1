@@ -9,7 +9,7 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 	LevelData_DrawProps(Get_LevelData(), spriteBatch, Get_Camera());
 }
 
-System* SysDrawProps_CreateSystem()
+System* SysDrawProps_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mDraw = Draw;

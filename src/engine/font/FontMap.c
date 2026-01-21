@@ -5,9 +5,6 @@
 #include "../utils/Cvars.h"
 #include "../../third_party/stb_ds.h"
 
-//static int64_t _mLastWriteTime = 0;
-//static int32_t _mReadCounter = 0;
-
 static FontMapData* arr_data;
 static char _mPath[EE_FILENAME_MAX];
 static bool _mHasInit;
@@ -28,8 +25,9 @@ static void FillWithFigs(IStringArray* fillThis)
 	IStringArray_Add(fillThis, "es");
 }
 
+//Normally these are filled in by reading an external file...
 #ifdef GLOBAL_DEF_GAME_IS_MUTE_CRIMSON_DX
-static void BuildMuteCrimsonFontReplacements()
+static void BuildMuteCrimsonFontReplacements(void)
 {
 	arrsetlen(arr_data, 0);
 
@@ -93,96 +91,7 @@ static void BuildMuteCrimsonFontReplacements()
 }
 #endif
 
-/*#ifdef GLOBAL_DEF_GAME_IS_COMETSTRIKER_DX
-static void BuildCometStrikerFontReplacements()
-{
-	_mData.clear();
-
-	//Originals in comments
-	OeFontMapData fontEditor = OeFontMapData();
-	fontEditor.mNote = "Editor";
-	fontEditor.mFontName = "AnekLatin-Regular";
-	fontEditor.mReplace = "editor";
-	fontEditor.mFontSize = 24;
-	_mData.push_back(fontEditor);
-
-	OeFontMapData fontNormalText = OeFontMapData();
-	fontNormalText.mNote = "Normal Text";
-	fontNormalText.mFontName = "Silkscreen-Regular";
-	fontNormalText.mScaleFactor = 4;
-	fontNormalText.mReplace = "6x6";
-	FillWithFigs(fontNormalText.mLanguages);
-	fontNormalText.mFontSize = 10;
-	fontNormalText.mLineSpacing = -8;
-	fontNormalText.mCharacterSpacing = -5; //-4
-	fontNormalText.mOffset.Y = -2;
-	fontNormalText.mOverrideBoundsHeight = 8;
-	_mData.push_back(fontNormalText);
-
-	OeFontMapData fontHUD = OeFontMapData();
-	fontHUD.mNote = "HUD";
-	fontHUD.mFontName = "Silkscreen-Regular";
-	fontHUD.mScaleFactor = 4;
-	fontHUD.mReplace = "6x6hud";
-	FillWithFigs(fontHUD.mLanguages);
-	fontHUD.mFontSize = 12;
-	fontHUD.mCharacterSpacing = -6; //-5
-	fontHUD.mOffset.X = -1;
-	fontHUD.mOffset.Y = -1;
-	fontHUD.mOverrideBoundsHeight = 9;
-	_mData.push_back(fontHUD);
-
-	OeFontMapData fontComboText = OeFontMapData();
-	fontComboText.mNote = "Combo Text";
-	fontComboText.mFontName = "Silkscreen-Bold";
-	fontComboText.mScaleFactor = 4;
-	fontComboText.mReplace = "6x6Outline";
-	FillWithFigs(fontComboText.mLanguages);
-	fontComboText.mFontSize = 10;
-	fontComboText.mEffect = 2;
-	fontComboText.mEffectAmount = 2;
-	fontComboText.mCharacterSpacing = -6;
-	fontComboText.mOffset.Y = -4;
-	_mData.push_back(fontComboText);
-
-	OeFontMapData fontCutscene = OeFontMapData();
-	fontCutscene.mNote = "Cutscene";
-	fontCutscene.mFontName = "Silkscreen-Regular";
-	fontCutscene.mScaleFactor = 4;
-	fontCutscene.mReplace = "12x12";
-	FillWithFigs(fontCutscene.mLanguages);
-	fontCutscene.mFontSize = 23;
-	fontCutscene.mLineSpacing = -8;
-	fontCutscene.mOffset.Y = -6;
-	fontCutscene.mOverrideBoundsHeight = 21;
-	_mData.push_back(fontCutscene);
-
-	OeFontMapData fontGrading = OeFontMapData();
-	fontGrading.mNote = "Grading";
-	fontGrading.mFontName = "Silkscreen-Regular";
-	fontGrading.mScaleFactor = 4;
-	fontGrading.mReplace = "game";
-	FillWithFigs(fontGrading.mLanguages);
-	fontGrading.mFontSize = 14;
-	fontGrading.mCharacterSpacing = -5; //-4
-	fontGrading.mOffset.Y = -4;
-	_mData.push_back(fontGrading);
-
-	OeFontMapData fontFinalGrading = OeFontMapData();
-	fontGrading.mNote = "Final Grading";
-	fontFinalGrading.mFontName = "Silkscreen-Regular";
-	fontFinalGrading.mScaleFactor = 4;
-	fontFinalGrading.mReplace = "finalGrading";
-	FillWithFigs(fontFinalGrading.mLanguages);
-	fontFinalGrading.mFontSize = 24;
-	fontFinalGrading.mCharacterSpacing = -7; //-6
-	fontFinalGrading.mOffset.Y = -4;
-	fontFinalGrading.mOverrideBoundsHeight = 20;
-	_mData.push_back(fontFinalGrading);
-}
-#endif*/
-
-void FontMap_Init()
+void FontMap_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -192,10 +101,6 @@ void FontMap_Init()
 #ifdef GLOBAL_DEF_GAME_IS_MUTE_CRIMSON_DX
 	BuildMuteCrimsonFontReplacements();
 #endif
-
-/*#ifdef GLOBAL_DEF_GAME_IS_COMETSTRIKER_DX
-	BuildCometStrikerFontReplacements();
-#endif*/
 
 	_mHasInit = true;
 }
@@ -228,43 +133,3 @@ const FontMapData* FontMap_GetReplacement(const char* fontName)
 
 	return NULL;
 }
-/*#ifdef EDITOR_MODE
-void FontMap_Update()
-{
-#ifdef GLOBAL_DEF_GAME_IS_MUTE_CRIMSON_DX
-	BuildMuteCrimsonFontReplacements();
-#endif
-
-#ifdef GLOBAL_DEF_GAME_IS_COMETSTRIKER_DX
-	BuildCometStrikerFontReplacements();
-#endif
-
-	//WILLNOTDO 2023
-	//if (!OeGlobals.IsDebugFileMode())
-	//{
-	//return;
-	//}
-	//if (OeCvars.GetAsBool(OeCvars.ENGINE_DISABLE_ASSET_REFRESH))
-	//{
-	//return;
-	//}
-	//if (OeGameUpdater.IsDebugAutoSpeedOn())
-	//{
-	//return;
-	//}
-
-	//if (_mReadCounter == 60 * 2)
-	//{
-	//int64_t currentWriteTime = OeFile.GetLastWriteTimeUtc(_mPath);
-	//if (currentWriteTime != _mLastWriteTime)
-	//{
-	//Read();
-	//}
-	//_mReadCounter = 0;
-	//}
-	//else
-	//{
-	//_mReadCounter++;
-	//}
-}
-#endif*/

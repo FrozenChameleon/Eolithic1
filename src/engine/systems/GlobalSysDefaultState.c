@@ -56,7 +56,7 @@ static void Update(void* givenData)
 #endif
 }
 
-System* GlobalSysDefaultState_CreateSystem()
+System* GlobalSysDefaultState_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mDraw = Draw;

@@ -2,6 +2,6 @@
 
 #include "stdbool.h"
 
-bool DebugRewindTester_NeedToRewind();
-void DebugRewindTester_Reset();
-void DebugRewindTester_Update();
+bool DebugRewindTester_NeedToRewind(void);
+void DebugRewindTester_Reset(void);
+void DebugRewindTester_Update(void);

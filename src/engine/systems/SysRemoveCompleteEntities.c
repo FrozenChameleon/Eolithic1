@@ -6,7 +6,7 @@
 #include "../gamestate/GameStateManager.h"
 #include "../gamestate/GameState.h"
 
-static void RemoveCompleteEntities()
+static void RemoveCompleteEntities(void)
 {
 	ComponentPack* pack = Get_ComponentPack(C_TagIsComplete);
 
@@ -22,7 +22,7 @@ static void Update(void* givenData)
 	RemoveCompleteEntities();
 }
 
-System* SysRemoveCompleteEntities_CreateSystem()
+System* SysRemoveCompleteEntities_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

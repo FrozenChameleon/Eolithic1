@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysDefaultState_CreateSystem();
+System* GlobalSysDefaultState_CreateSystem(void);

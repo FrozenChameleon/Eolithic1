@@ -13,7 +13,7 @@ static struct { const char* key; FONScontext* value; }*_mContexts;
 static FixedByteBuffer** _mPinnedPointers;
 
 static bool _mHasInit;
-static void Init()
+static void Init(void)
 {
 	if (_mHasInit)
 	{

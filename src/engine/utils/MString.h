@@ -6,7 +6,7 @@
 typedef struct MString MString;
 typedef struct BufferReader BufferReader;
 
-uint64_t MString_GetRefs();
+uint64_t MString_GetRefs(void);
 char* MString_Text(const MString* str);
 int32_t MString_Length(const MString* str);
 int32_t MString_Capacity(const MString* str);
@@ -36,4 +36,4 @@ void MString_Combine5(MString** str, const char* str1, const char* str2, const c
 void MString_Combine6(MString** str, const char* str1, const char* str2, const char* str3, const char* str4, const char* str5, const char* str6);
 void MString_Combine7(MString** str, const char* str1, const char* str2, const char* str3, const char* str4, const char* str5, const char* str6, const char* str7);
 void MString_Combine8(MString** str, const char* str1, const char* str2, const char* str3, const char* str4, const char* str5, const char* str6, const char* str7, const char* str8);
-void MString_DebugPrintLeakInfo();
+void MString_DebugPrintLeakInfo(void);

@@ -17,8 +17,8 @@ void File_AppendPathSeparator(MString** str);
 FixedByteBuffer* File_ReadAll(const char* path);
 void File_ReadAllToBigString(MString** assignToThis, BufferReader* br);
 bool File_Exists(const char* path);
-const char* File_GetBasePath();
-const char* File_GetPrefPath();
+const char* File_GetBasePath(void);
+const char* File_GetPrefPath(void);
 
 void File_GetFileName(MString** assignToThis, const char* path);
 void File_GetFileNameWithoutExtension(MString** assignToThis, const char* path);

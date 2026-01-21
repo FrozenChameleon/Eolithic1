@@ -48,7 +48,7 @@ bool Timer_UpdateWithLimit(Timer* timer, int32_t limit)
 }
 bool Timer_Update(Timer* timer)
 {
-	timer->mCurrent++;
+	timer->mCurrent += 1;
 	if (timer->mCurrent >= timer->mLimit)
 	{
 		Timer_Reset(timer);

@@ -44,7 +44,7 @@ void FixedByteBuffer_Dispose(FixedByteBuffer* fbb)
 	Utils_free(fbb->mBuffer);
 	Utils_free(fbb);
 }
-uint64_t FixedByteBuffer_GetRefs()
+uint64_t FixedByteBuffer_GetRefs(void)
 {
 	return _mRefs;
 }

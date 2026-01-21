@@ -54,7 +54,7 @@ static MString* _mLastReadRecordingFilename;
 static bool _mGoFastFlag;
 static int32_t _mFromArgumentsPlaybackState;
 
-static void InitData()
+static void InitData(void)
 {
 	if (_mData != NULL)
 	{
@@ -68,7 +68,7 @@ static void InitData()
 	_mDisplayReadout = IStringArray_Create();
 }
 
-static void DisposeWriter()
+static void DisposeWriter(void)
 {
 	/*
 	if (_mWriter == null)
@@ -80,7 +80,7 @@ static void DisposeWriter()
 	_mWriter = null;
 	*/
 }
-static int32_t GetAmountInUse()
+static int32_t GetAmountInUse(void)
 {
 	int32_t counter = 0;
 	for (int32_t i = 0; i < TOOL_DATA_LENGTH; i += 1)
@@ -97,18 +97,18 @@ static int32_t GetAmountInUse()
 	}
 	return counter;
 }
-static bool IsSoakTesting()
+static bool IsSoakTesting(void)
 {
 	return (_mFromArgumentsPlaybackState == RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SOAK_NORMAL) || 
 		(_mFromArgumentsPlaybackState == RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_SOAK_FAST);
 }
-static void ResetRecordingData()
+static void ResetRecordingData(void)
 {
 	_mPlayerSwitchCounter = 0;
 	Utils_memset(&_mDummy, 0, sizeof(RecordingData));
 	Utils_memset(_mData, 0, sizeof(RecordingData) * TOOL_DATA_LENGTH);
 }
-static void ResetAllData()
+static void ResetAllData(void)
 {
 	_mToolState = TOOL_STATE_OFF;
 	_mCurrentPriority = 0;
@@ -117,7 +117,7 @@ static void ResetAllData()
 	Utils_memset(&_mReaderData, 0, sizeof(ReaderData));
 	DisposeWriter();
 }
-static RecordingData* GetNext()
+static RecordingData* GetNext(void)
 {
 	if (!RecordingTool_IsRunning())
 	{
@@ -135,7 +135,7 @@ static RecordingData* GetNext()
 	return &_mDummy;
 }
 //bool toDataDirectory, const char* recordingFilenameWithoutExtension
-static void WriteData()
+static void WriteData(void)
 {
 	/*
 	if (_mWriter == null)
@@ -290,7 +290,7 @@ static void WriteData()
 
 	*/
 }
-static void FinishPreviousWritingSession()
+static void FinishPreviousWritingSession(void)
 {
 	if (_mToolState != TOOL_STATE_WRITING)
 	{
@@ -396,8 +396,7 @@ static void ContinueReadSession(bool isFirst)
 	}
 
 	ResetAllData();
-	//TODO GameSaveManager_ResetAllData();
-	//TODO GameSaveManager_SetSaveSlotToNothing();
+	GameSaveManager_ResetSaveData();
 	GameStateManager_LoadMap("777");
 	GLOBALS_DEBUG_IS_GOD_MODE = false;
 	_mGoFastFlag = false;
@@ -417,7 +416,7 @@ static RecordingPlayerData* GetPlayerData(RecordingData* recordingData, int32_t 
 	}
 	return &_mDummy.mPlayerOne;
 }
-static void WriteHeader()
+static void WriteHeader(void)
 {
 	/*
 	_mWriter = OeIniWriter(true, new MemoryStream());
@@ -445,7 +444,7 @@ static void Read(const char* recordingFilenameWithoutExtension)
 
 	GLOBALS_DEBUG_IS_GOD_MODE = BufferReader_ReadBoolean(br);
 	GameStateManager_SetUniqueMapSeed(BufferReader_ReadI32(br));
-	BufferReader_ReadI32(br); //TODO C99 OeTuning_SetCurrentDifficulty(BufferReader_ReadI32()); 
+	BufferReader_ReadI32(br); //Tuning_SetCurrentDifficulty(BufferReader_ReadI32()); //ORIGINALLY WAS THIS, NOW UNUSED
 	BufferReader_ReadString(br, _mHeaderData.mLevelFileName, EE_FILENAME_MAX);
 #ifndef GLOBAL_DEF_RECORDING_TOOL_DO_NOT_WRITE_SAVE_FILES
 	OeGameSaveManager_ResetAllDataAndReadAllForRecording(reader);
@@ -558,11 +557,11 @@ static void Read(const char* recordingFilenameWithoutExtension)
 	}
 }
 
-const char* RecordingTool_GetCurrentRecordingName()
+const char* RecordingTool_GetCurrentRecordingName(void)
 {
 	return MString_Text(_mLastReadRecordingFilename);
 }
-bool RecordingTool_IsFromArgumentsPlaybackEnabled()
+bool RecordingTool_IsFromArgumentsPlaybackEnabled(void)
 {
 	return _mFromArgumentsPlaybackState != RECORDINGTOOL_FROM_ARGUMENTS_PLAYBACK_OFF;
 }
@@ -571,7 +570,7 @@ void RecordingTool_EnableFromArgumentsPlayback(int32_t state)
 	Globals_DisableSavingAndLoadingAndAchievementsAndLeaderboards();
 	_mFromArgumentsPlaybackState = state;
 }
-bool RecordingTool_IsDisplayingSessionReadout()
+bool RecordingTool_IsDisplayingSessionReadout(void)
 {
 	if (_mToolState == TOOL_STATE_READING || IStringArray_Length(_mDisplayReadout) > 0)
 	{
@@ -630,7 +629,7 @@ void RecordingTool_DrawReadSessionReadout(SpriteBatch* spriteBatch, const char* 
 		}
 	}
 }
-void RecordingTool_CheckForDebugReadSessionCode()
+void RecordingTool_CheckForDebugReadSessionCode(void)
 {
 	if (_mToolState == TOOL_STATE_READING)
 	{
@@ -647,11 +646,11 @@ void RecordingTool_CheckForDebugReadSessionCode()
 		RecordingTool_SetupReadSession(NULL, INT_MAX, false);
 	}
 }
-bool RecordingTool_IsWriting()
+bool RecordingTool_IsWriting(void)
 {
 	return _mToolState == TOOL_STATE_WRITING;
 }
-bool RecordingTool_IsReading()
+bool RecordingTool_IsReading(void)
 {
 	return _mToolState == TOOL_STATE_READING;
 }
@@ -710,7 +709,7 @@ RecordingPlayerData* RecordingTool_Get(int32_t amountOfPlayers, int32_t playerNu
 	}
 	return &_mDummy.mPlayerOne;
 }
-int32_t RecordingTool_GetPlayerReadCounter()
+int32_t RecordingTool_GetPlayerReadCounter(void)
 {
 	if (_mToolState != TOOL_STATE_READING)
 	{
@@ -728,7 +727,7 @@ void RecordingTool_SetPlayerReadCounter(int32_t value)
 
 	_mReaderData.mPerLevelData.mPlayerReadCounter = value;
 }
-bool RecordingTool_IsRunning()
+bool RecordingTool_IsRunning(void)
 {
 	return _mToolState != TOOL_STATE_OFF;
 }
@@ -873,7 +872,7 @@ void RecordingTool_SetupReadSession(IStringArray* givenRecordings, int32_t prior
 	Logger_LogInformation("Read session has begun");
 	ContinueReadSession(true);
 }
-bool RecordingTool_IsGoFastFlagSet()
+bool RecordingTool_IsGoFastFlagSet(void)
 {
 	return _mGoFastFlag;
 }
@@ -905,7 +904,7 @@ void RecordingTool_TickReadSessionSuccessCounter(int32_t successNumber)
 		_mHeaderData.mSuccessNumber = successNumber;
 	}
 }
-void RecordingTool_RewriteAllRecordings()
+void RecordingTool_RewriteAllRecordings(void)
 {
 	/*
 	  InitData();
@@ -920,7 +919,7 @@ void RecordingTool_RewriteAllRecordings()
 	}
 	*/
 }
-int32_t RecordingTool_GetCurrentRecordingVersion()
+int32_t RecordingTool_GetCurrentRecordingVersion(void)
 {
 	if (!RecordingTool_IsReading())
 	{

@@ -13,7 +13,7 @@
 typedef struct IStringArray IStringArray;
 
 const char* ActionList_GetAction(int32_t index);
-IStringArray* ActionList_GetArray();
+IStringArray* ActionList_GetArray(void);
 
 extern const char* ACTIONLIST_GAME_A;
 extern const char* ACTIONLIST_GAME_B;

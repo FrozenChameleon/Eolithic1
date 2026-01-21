@@ -34,15 +34,15 @@ static int32_t _mLeaderboardSendStatus;
 static int32_t _mLeaderboardSendStatusFrames;
 
 //private
-bool Service_IsLeaderboardRequestQueued()
+bool Service_IsLeaderboardRequestQueued(void)
 {
 	return (_mLeaderboardRequestQueueState != SERVICE_LEADERBOARD_QUEUE_STATE_NOTHING);
 }
-bool Service_IsLeaderboardRateLimited()
+bool Service_IsLeaderboardRateLimited(void)
 {
 	return _mLeaderboardRequestDelayCounter < Service_GetPlatformLeaderboardDelayTime();
 }
-int32_t Service_GetPageThatYouAreOn()
+int32_t Service_GetPageThatYouAreOn(void)
 {
 	int32_t adjustedLowerRank = Service_GetCurrentLowestRank() - 1;
 	int32_t page = adjustedLowerRank / Service_GetLeaderboardAmountOfRowsToRetrieve();
@@ -50,16 +50,16 @@ int32_t Service_GetPageThatYouAreOn()
 }
 
 //protected
-void Service_NullLeaderboardEntries()
+void Service_NullLeaderboardEntries(void)
 {
 	_mIsTheLeaderboardReady = false;
 	arrsetlen(arr_leaderboard_entries, 0);
 }
-void Service_CreateLeaderboardEntries()
+void Service_CreateLeaderboardEntries(void)
 {
 	//TODO ?_mLeaderboardEntries = std_vector<OeLeaderboardEntry>();
 }
-int32_t Service_GetLeaderboardAmountOfRowsToRetrieve()
+int32_t Service_GetLeaderboardAmountOfRowsToRetrieve(void)
 {
 	return _mLeaderboardAmountOfRowsToRetrieve;
 }
@@ -77,27 +77,27 @@ void Service_SetLeaderboardSendStatus2(int32_t status, int32_t frames)
 	_mLeaderboardSendStatus = status;
 	_mLeaderboardSendStatusFrames = frames;
 }
-const int32_t* Service_GetAchievementMap()
+const int32_t* Service_GetAchievementMap(void)
 {
 	return _mAchievementMap;
 }
-const char* Service_GetCurrentLeaderboardName()
+const char* Service_GetCurrentLeaderboardName(void)
 {
 	return _mLeaderboardRequest.mName;
 }
-int32_t Service_GetCurrentLeaderboardScope()
+int32_t Service_GetCurrentLeaderboardScope(void)
 {
 	return _mLeaderboardRequest.mScopeType;
 }
-bool Service_IsCurrentLeaderboardAscending()
+bool Service_IsCurrentLeaderboardAscending(void)
 {
 	return _mLeaderboardRequest.mIsAscending;
 }
-bool Service_IsCurrentLeaderboardMilliseconds()
+bool Service_IsCurrentLeaderboardMilliseconds(void)
 {
 	return _mLeaderboardRequest.mIsMilliseconds;
 }
-int32_t Service_GetHighestPossiblePage()
+int32_t Service_GetHighestPossiblePage(void)
 {
 	return Service_GetMaximumRank() / Service_GetLeaderboardAmountOfRowsToRetrieve();
 }
@@ -110,7 +110,7 @@ void Service_ReadyLeaderboard(const LeaderboardEntry* entries, size_t entries_le
 	}
 	_mIsTheLeaderboardReady = true;
 }
-const LeaderboardRequestData* Service_GetLeaderboardRequestData()
+const LeaderboardRequestData* Service_GetLeaderboardRequestData(void)
 {
 	return &_mLeaderboardRequest;
 }
@@ -183,11 +183,11 @@ int32_t Service_SaveBufferForPC(bool isPurelyGameSaveData, const char* container
 }
 
 //public
-bool Service_IsPlatformSteam()
+bool Service_IsPlatformSteam(void)
 {
 	return (Service_GetPlatformType() == PLATFORM_STEAM);
 }
-void Service_ResetLeaderboardRequestStuff()
+void Service_ResetLeaderboardRequestStuff(void)
 {
 	_mIsTheLeaderboardReady = false;
 	arrsetlen(arr_leaderboard_entries, 0);
@@ -233,7 +233,7 @@ void Service_Update(double delta)
 
 	Service_UpdateHelper(delta);
 }
-void Service_DisableLeaderboards()
+void Service_DisableLeaderboards(void)
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_LEADERBOARDS
 	//DO NOTHING
@@ -241,7 +241,7 @@ void Service_DisableLeaderboards()
 	_mAreLeaderboardDisabled = true;
 #endif
 }
-bool Service_AreLeaderboardDisabled()
+bool Service_AreLeaderboardDisabled(void)
 {
 	return _mAreLeaderboardDisabled;
 }
@@ -311,7 +311,7 @@ void Service_SimulateSendingLeaderboardStatus(int32_t frames, int32_t status)
 	_mLeaderboardSendStatusFrames = frames;
 	_mLeaderboardSendStatus = status;
 }
-LeaderboardEntry* Service_GetLeaderboardEntries()
+LeaderboardEntry* Service_GetLeaderboardEntries(void)
 {
 	return arr_leaderboard_entries;
 }
@@ -319,7 +319,7 @@ LeaderboardEntry Service_GetLeaderboardEntry(int32_t i)
 {
 	return arr_leaderboard_entries[i];
 }
-bool Service_IsLeaderboardReady()
+bool Service_IsLeaderboardReady(void)
 {
 	if (!_mIsTheLeaderboardReady)
 	{
@@ -339,11 +339,11 @@ bool Service_IsLeaderboardReady()
 	}
 	return true;
 }
-int64_t Service_GetLeaderboardEntryCount()
+int64_t Service_GetLeaderboardEntryCount(void)
 {
 	return arrlen(arr_leaderboard_entries);
 }
-int32_t Service_GetCurrentHighestRank()
+int32_t Service_GetCurrentHighestRank(void)
 {
 	if (!_mIsTheLeaderboardReady)
 	{
@@ -361,7 +361,7 @@ int32_t Service_GetCurrentHighestRank()
 	}
 	return highest;
 }
-int32_t Service_GetCurrentLowestRank()
+int32_t Service_GetCurrentLowestRank(void)
 {
 	if (!_mIsTheLeaderboardReady)
 	{
@@ -379,7 +379,7 @@ int32_t Service_GetCurrentLowestRank()
 	}
 	return lowest;
 }
-bool Service_IsLeaderboardNullOrEmpty()
+bool Service_IsLeaderboardNullOrEmpty(void)
 {
 	if (!_mIsTheLeaderboardReady)
 	{
@@ -393,7 +393,7 @@ bool Service_IsLeaderboardNullOrEmpty()
 
 	return false;
 }
-bool Service_CanLeaderboardGoLeft()
+bool Service_CanLeaderboardGoLeft(void)
 {
 	if ((_mLeaderboardRequest.mScopeType == SERVICE_LEADERBOARD_SCOPE_FRIENDS) && Service_PlatformDoesNotAllowLeaderboardScrollingForFriendScope())
 	{
@@ -412,7 +412,7 @@ bool Service_CanLeaderboardGoLeft()
 
 	return true;
 }
-bool Service_CanLeaderboardGoRight()
+bool Service_CanLeaderboardGoRight(void)
 {
 	if ((_mLeaderboardRequest.mScopeType == SERVICE_LEADERBOARD_SCOPE_FRIENDS) && Service_PlatformDoesNotAllowLeaderboardScrollingForFriendScope())
 	{
@@ -431,7 +431,7 @@ bool Service_CanLeaderboardGoRight()
 
 	return true;
 }
-void Service_LeaderboardGoRight()
+void Service_LeaderboardGoRight(void)
 {
 	if (!Service_CanLeaderboardGoRight())
 	{
@@ -439,7 +439,7 @@ void Service_LeaderboardGoRight()
 	}
 
 	int32_t leaderboardPage = Service_GetPageThatYouAreOn();
-	leaderboardPage++;
+	leaderboardPage += 1;
 	int32_t highestPossiblePage = Service_GetHighestPossiblePage();
 	if (leaderboardPage > highestPossiblePage)
 	{
@@ -450,7 +450,7 @@ void Service_LeaderboardGoRight()
 	_mLeaderboardRequestQueueState = SERVICE_LEADERBOARD_QUEUE_STATE_NEXT_PAGE;
 	_mLeaderboardRequestDirection = 1;
 }
-void Service_LeaderboardGoLeft()
+void Service_LeaderboardGoLeft(void)
 {
 	if (!Service_CanLeaderboardGoLeft())
 	{
@@ -476,7 +476,7 @@ void Service_TellServiceIfOnLeaderboardMenuRightNow(bool isOnLeaderboardMenuRigh
 {
 	_mIsOnLeaderboardMenuRightNow = isOnLeaderboardMenuRightNow;
 }
-bool Service_IsOnLeaderboardMenuRightNow()
+bool Service_IsOnLeaderboardMenuRightNow(void)
 {
 	return _mIsOnLeaderboardMenuRightNow;
 }

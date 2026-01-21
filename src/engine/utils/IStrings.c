@@ -10,7 +10,7 @@ typedef struct IStrings
 
 static uint64_t _mRefs;
 
-IStrings* IStrings_Create()
+IStrings* IStrings_Create(void)
 {
 	_mRefs += 1;
 	IStrings* is = Utils_calloc(1, sizeof(IStrings));
@@ -37,7 +37,7 @@ const char* IStrings_GetByIndex(IStrings* is, int32_t index)
 {
 	return is->sh_values[index].key;
 }
-uint64_t IStrings_GetRefs()
+uint64_t IStrings_GetRefs(void)
 {
 	return _mRefs;
 }

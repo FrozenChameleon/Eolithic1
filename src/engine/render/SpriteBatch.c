@@ -28,7 +28,7 @@ static void ClampDepth(int32_t* depth)
 	}
 }
 
-void SpriteBatch_DisposePinnedStrings()
+void SpriteBatch_DisposePinnedStrings(void)
 {
 	for (int32_t i = 0; i < arrlen(arr_pinned_strings); i += 1)
 	{

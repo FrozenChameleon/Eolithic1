@@ -6,7 +6,7 @@
 typedef struct IStringMap IStringMap;
 typedef struct BufferReader BufferReader;
 
-IStringMap* IStringMap_Create();
+IStringMap* IStringMap_Create(void);
 void IStringMap_Clear(IStringMap* sm);
 void IStringMap_Dispose(IStringMap* sm);
 void IStringMap_Add(IStringMap* sm, const char* key, const char* value);
@@ -15,5 +15,5 @@ bool IStringMap_Contains(IStringMap* sm, const char* key);
 int64_t IStringMap_Length(IStringMap* sm);
 const char* IStringMap_GetKeyByIndex(IStringMap* sm, int32_t index);
 const char* IStringMap_GetValueByIndex(IStringMap* sm, int32_t index);
-uint64_t IStringMap_GetRefs();
+uint64_t IStringMap_GetRefs(void);
 void IStringMap_Load(IStringMap* sm, BufferReader* br);

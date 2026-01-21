@@ -6,7 +6,9 @@
 
 #include "Body.h"
 
+#include "../render/DrawTool.h"
 #include "../math/Math.h"
+#include "../utils/Utils.h"
 
 bool Body_DefaultBeforeColliderBody(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical)
 {
@@ -34,7 +36,7 @@ void Body_UpdateLastRenderPosition(Body* body)
 }
 bool Body_IsPushesThisThingSet(Body* body)
 {
-	if (body->mPushesThisThing == NULL)
+	if (Utils_StringEqualTo(body->mPushesThisThing, EE_STR_EMPTY))
 	{
 		return false;
 	}
@@ -43,7 +45,10 @@ bool Body_IsPushesThisThingSet(Body* body)
 		return true;
 	}
 }
-//void DrawBody(Body* body, OeSpriteBatch* spriteBatch, double delta, int32_t depth, Color color);
+void Body_DrawBody(Body* body, SpriteBatch* spriteBatch, double delta, int32_t depth, Color color)
+{
+	DrawTool_DrawRectangle2(spriteBatch, color, depth, Body_GetRect(body), 0, false);
+}
 void Body_ResetCollideWithCollision(Body* body)
 {
 	body->mCollideWithCollision = NULL;

@@ -40,8 +40,8 @@ extern const Point Points_DownLeft;
 extern const Point Points_Left;
 extern const Point Points_UpLeft;
 
-Point Points_TileSize();
-Point Points_HalfTileSize();
+Point Points_TileSize(void);
+Point Points_HalfTileSize(void);
 Point Points_ToPointFromInt(int32_t value);
 Point Points_ToPointFromVector2(Vector2 value);
 Point Points_GetEightWay(int32_t direction);

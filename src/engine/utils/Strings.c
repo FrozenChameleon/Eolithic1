@@ -18,7 +18,7 @@ static MappingInfo* arr_info_list;
 
 static bool _mHasInit;
 
-void Strings_Init()
+void Strings_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -32,21 +32,6 @@ void Strings_Init()
 	_mHasInit = true;
 }
 
-/*
-static const char* GetTextToReturn(const char* key, std_unordered_map<std_string, std_string>& map)
-{
-	auto it = map.find(key);
-	if (it == map.end())
-	{
-		return key;
-	}
-	else
-	{
-		return it->second;
-	}
-}
-*/
-
 const char* Strings_Get(const char* key)
 {
 	if (!IStringMap_Contains(_mMap, key))
@@ -55,42 +40,6 @@ const char* Strings_Get(const char* key)
 	}
 
 	return IStringMap_Get(_mMap, key);
-	/*
-if (OeGlobals.DEBUG_IS_GOD_MODE)
-{
-string debugString = "";
-for (int32_t i = 0; i < returnValue.Length; i += 1)
-{
-debugString += "-";
-}
-return debugString;
-}
-*/
-	//TODO C99
-	/*
-	std_string textToReturn = GetTextToReturn(key, _mMap);
-
-	std_string language = OeUtils_GetCurrentUserLanguageCode();
-	if (language != "en")
-	{
-		if (OeResourceManagers_StringsTextManager.HasResource(language))
-		{
-			OeStringsText* languageText = OeResourceManagers_StringsTextManager.GetResourceData(language);
-			if (!languageText->IsDictionaryReady())
-			{
-				languageText->CreateDictionary(_mOrderedKeys);
-			}
-			if (!languageText->IsDictionaryReady())
-			{
-				OeLogger_LogInformation("Mismatched language string size");
-				return textToReturn;
-			}
-
-			textToReturn = GetTextToReturn(key, languageText->mDictionary);
-		}
-	}*/
-
-	//return textToReturn;
 }
 void Strings_Add(const char* key, const char* val)
 {

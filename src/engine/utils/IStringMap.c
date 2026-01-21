@@ -14,7 +14,7 @@ typedef struct IStringMap
 	struct { const char* key; const char* value; } *sh_values;
 } IStringMap;
 
-IStringMap* IStringMap_Create()
+IStringMap* IStringMap_Create(void)
 {
 	_mRefs += 1;
 	IStringMap* sa = Utils_calloc(1, sizeof(IStringMap));
@@ -64,7 +64,7 @@ const char* IStringMap_GetValueByIndex(IStringMap* sm, int32_t index)
 {
 	return sm->sh_values[index].value;
 }
-uint64_t IStringMap_GetRefs()
+uint64_t IStringMap_GetRefs(void)
 {
 	return _mRefs;
 }

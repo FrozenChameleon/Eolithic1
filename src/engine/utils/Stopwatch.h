@@ -13,7 +13,7 @@ typedef struct Stopwatch
 	uint64_t mBegin;
 } Stopwatch;
 
-uint64_t Stopwatch_GetTicks();
+uint64_t Stopwatch_GetTicks(void);
 double Stopwatch_GetElapsedSeconds(uint64_t startingTicks, uint64_t endingTicks);
 uint64_t Stopwatch_Start(Stopwatch* data);
 double Stopwatch_GetElapsedSecondsFromData(const Stopwatch* data);

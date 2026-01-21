@@ -20,11 +20,11 @@
 static Animation EmptyAnimation;
 static ImageDataInstance EmptyRender;
 
-static ComponentPack* GetDrawStateInfos()
+static ComponentPack* GetDrawStateInfos(void)
 {
 	return Get_ComponentPack(C_DrawStateInfo);
 }
-static ComponentPack* GetDrawRenderInfos()
+static ComponentPack* GetDrawRenderInfos(void)
 {
 	return Get_ComponentPack(C_DrawRenderInfo);
 }
@@ -69,30 +69,6 @@ void DrawActorSys_Setup(Entity owner, DrawActor* data, ThingGraphicsData* sh_gra
 	}
 
 	DrawActorSys_SetImageState(owner, data, data->mDefaultDrawState, data->mDefaultDrawPhase);
-}
-void DrawActorSys_CreateExplosionModules(Entity owner, int32_t state, int32_t phase, int32_t time, int32_t type)
-{
-	//Vector2 position = Get_Position(owner);
-	ComponentPack* drawRenderInfos = GetDrawRenderInfos();
-	for (int32_t i = 0; i < ComponentPack_Length(drawRenderInfos); i += 1)
-	{
-		if (drawRenderInfos->Entities[i] == owner)
-		{
-			DrawRenderInfo* component = ComponentPack_GetComponentAtIndex(drawRenderInfos, i);
-			if ((component->mState == state) && (component->mPhase == phase))
-			{
-				switch (type)
-				{
-				case 0:
-					//TODO2024OeComSpecialNdDeathEffectSys_Create(owner, time, ImageDataInstance.GetCurrentSheet(ref drawRenderInfos.Components[i].mRender), position.X, position.Y);
-					break;
-				case 1:
-					//TODO2024OeComSpecialDrawExplosionSys_Create(owner, time, ImageDataInstance.GetCurrentSheet(ref drawRenderInfos.Components[i].mRender), position.X, position.Y);
-					break;
-				}
-			}
-		}
-	}
 }
 void DrawActorSys_InitRoutine(Entity owner, DrawActor* data)
 {

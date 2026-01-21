@@ -25,11 +25,11 @@ typedef struct Sheet
 	Resource* mTextureResource;
 } Sheet;
 
-Sheet* Sheet_GetDefaultSheet();
+Sheet* Sheet_GetDefaultSheet(void);
 Sheet* Sheet_GetSheet(const char* name);
-void Sheet_BuildSheets();
+void Sheet_BuildSheets(void);
 bool Sheet_HasSheet(const char* name);
-IStringArray* Sheet_CreateListOfSheetNames();
+IStringArray* Sheet_CreateListOfSheetNames(void);
 Resource* Sheet_GetTextureResource(Sheet* sheet);
 Texture* Sheet_GetTexture(Sheet* sheet);
 

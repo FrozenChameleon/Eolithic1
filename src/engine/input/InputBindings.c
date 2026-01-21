@@ -91,7 +91,7 @@ void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, ISt
 			{
 				InputAction* currentAction = &pbd->_mBindings[i];
 				InputAction* defaultAction = &defaultActions[i];
-				for (int32_t k = indexStart; k < indexStart + length; k++)
+				for (int32_t k = indexStart; k < indexStart + length; k += 1)
 				{
 					InputCheck* defaultCheck = InputChecks_Get(&defaultAction->mChecks, k);
 					InputChecks_Set(&currentAction->mChecks, k, *defaultCheck);
@@ -110,7 +110,7 @@ bool PlayerBindingData_DoBindingsExistFor(PlayerBindingData* pbd, const char* ac
 		if (Utils_StringEqualTo(pbd->_mBindings[i].mName, action))
 		{
 			InputAction* currentAction = &pbd->_mBindings[i];
-			for (int32_t j = indexStart; j < indexStart + length; j++)
+			for (int32_t j = indexStart; j < indexStart + length; j += 1)
 			{
 				InputCheck* check = InputChecks_Get(&currentAction->mChecks, j);
 				if (check->mType == INPUTCHECK_TYPE_DUMMY)
@@ -198,11 +198,11 @@ void PlayerBindingData_Save(PlayerBindingData* pbd)
 	Utils_JustSaved();
 }
 
-static bool IsMirroringBindingsDisabled()
+static bool IsMirroringBindingsDisabled(void)
 {
 	return Cvars_GetAsBool(CVARS_ENGINE_DISABLE_PLAYER_BINDING_MIRRORING);
 }
-static void ResetAllPlayerBindingsToDefault()
+static void ResetAllPlayerBindingsToDefault(void)
 {
 	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
@@ -225,7 +225,7 @@ static void CopyActions(const InputAction* copyFrom, InputAction* copyTo)
 		copyTo[i] = copyFrom[i];
 	}
 }
-static void UpdateAllBindingsToMatchPlayerOne()
+static void UpdateAllBindingsToMatchPlayerOne(void)
 {
 	InputAction* playerOneBindings = PlayerBindingData_GetBindings(&_mPlayerBindings[0]);
 	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
@@ -237,7 +237,7 @@ static void UpdateAllBindingsToMatchPlayerOne()
 	}
 }
 
-void InputBindings_Init()
+void InputBindings_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -255,11 +255,11 @@ void InputBindings_Init()
 
 	_mHasInit = true;
 }
-InputAction* InputBindings_GetDefaultActions()
+InputAction* InputBindings_GetDefaultActions(void)
 {
 	return _mDefaultBindings;
 }
-void InputBindings_ResetAllPlayerBindingsToDefaultAndSave()
+void InputBindings_ResetAllPlayerBindingsToDefaultAndSave(void)
 {
 	ResetAllPlayerBindingsToDefault();
 	InputBindings_SaveAllBindings();
@@ -292,7 +292,7 @@ void InputBindings_SetupAxis(InputAction* data, int32_t place, const char* s, co
 		InputChecks_Set(&data->mChecks, place, InputCheck_CreateCheckAxis(axis, direction));
 	}
 }
-bool InputBindings_HaveAllPlayersLoadedBindings()
+bool InputBindings_HaveAllPlayersLoadedBindings(void)
 {
 	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{
@@ -303,7 +303,7 @@ bool InputBindings_HaveAllPlayersLoadedBindings()
 	}
 	return true;
 }
-void InputBindings_LoadAllPlayerBindings()
+void InputBindings_LoadAllPlayerBindings(void)
 {
 	bool bindingsAreMirrored = !IsMirroringBindingsDisabled();
 
@@ -353,7 +353,7 @@ void InputBindings_LoadAllPlayerBindings()
 		InputBindings_SyncAllBindingsToAllPlayers();
 	}
 }
-void InputBindings_SaveAllBindings()
+void InputBindings_SaveAllBindings(void)
 {
 	if (Cvars_GetAsBool(CVARS_ENGINE_SAVING_SAVES_DISABLED) || Globals_IsSavingUserDataDisabled())
 	{
@@ -391,7 +391,7 @@ bool InputBindings_DoBindingsExistFor(int32_t player, const char* action, int32_
 {
 	return PlayerBindingData_DoBindingsExistFor(&_mPlayerBindings[player], action, indexStart, length);
 }
-void InputBindings_SyncAllBindingsToAllPlayers()
+void InputBindings_SyncAllBindingsToAllPlayers(void)
 {
 	for (int32_t i = 0; i < PLAYERBINDINGS_LEN; i += 1)
 	{

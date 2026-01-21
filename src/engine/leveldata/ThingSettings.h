@@ -43,9 +43,3 @@ void ThingSettings_Init(ThingSettings* ts);
 void ThingSettings_Read(ThingSettings* ts, BufferReader* br);
 ThingSettings* ThingSettings_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void ThingSettings_Dispose(ThingSettings* ts);
-
-//OeResourceData* ThingSettings_CreateNewInstance() override;
-//static OeThingSettings* ThingSettings_CreateNew();
-//void ThingSettings_WriteIni(std::shared_ptr<OeIniWriter> writer) override;
-//void ThingSettings_ReadIni(std::shared_ptr<OeIniReader> reader) override;
-//static const std::vector<std::string>& ThingSettings_GetDirectories();

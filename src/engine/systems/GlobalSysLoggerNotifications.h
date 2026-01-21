@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysLoggerNotifications_CreateSystem();
+System* GlobalSysLoggerNotifications_CreateSystem(void);

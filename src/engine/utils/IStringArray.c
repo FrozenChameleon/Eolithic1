@@ -13,7 +13,7 @@ typedef struct IStringArray
 	struct { int64_t key; const char* value; } *hm_values;
 } IStringArray;
 
-IStringArray* IStringArray_Create()
+IStringArray* IStringArray_Create(void)
 {
 	_mRefs += 1;
 	IStringArray* sa = Utils_calloc(1, sizeof(IStringArray));
@@ -75,7 +75,7 @@ const char* IStringArray_Get(IStringArray* sa, int32_t index)
 
 	return sa->hm_values[index].value;
 }
-uint64_t IStringArray_GetRefs()
+uint64_t IStringArray_GetRefs(void)
 {
 	return _mRefs;
 }

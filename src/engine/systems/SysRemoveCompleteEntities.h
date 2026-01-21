@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* SysRemoveCompleteEntities_CreateSystem();
+System* SysRemoveCompleteEntities_CreateSystem(void);

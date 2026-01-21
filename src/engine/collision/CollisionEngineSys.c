@@ -133,7 +133,7 @@ bool CollisionEngineSys_ResolvePush(CollisionEngine* data, Body* pushingBody, Bo
 		{
 			return false;
 		}
-		if (pushingBody->mPushesThisThing != (Get_Name(Get_Entity(pushedBody->mOwner))))
+		if (!Utils_StringEqualTo(pushingBody->mPushesThisThing, (Get_Name(Get_Entity(pushedBody->mOwner)))))
 		{
 			return false;
 		}
@@ -632,19 +632,6 @@ void CollisionEngineSys_ImprintToCollisionGrid(CollisionEngine* data, float pixe
 	imprintData->mType = type;
 	CollisionEngineSys_ImprintToCollisionGridHelper(data, imprintData);
 }
-void CollisionEngineSys_ImprintChunkToCollisionGridWithSolid(CollisionEngine* data, MetaMapChunk* chunk)
-{
-	//Point position = chunk->GetRealPosition();
-	//ImprintToCollisionGrid(data, position.X, position.Y, chunk.GetTilesWidth(), chunk.GetTilesHeight(), OeObjectTypes.SOLID);
-}
-void CollisionEngineSys_ImprintChunkToCollisionGrid(CollisionEngine* data, MetaMapChunk* chunk)
-{
-	//TODO LATER
-	/*
-	chunk.ImprintToCollisionArray(data.mCollisionGridPristine);
-	chunk.ImprintToCollisionArray(data.mCollisionGrid);
-	*/
-}
 int32_t CollisionEngineSys_GetCollisionBit(CollisionEngine* data, float x, float y)
 {
 	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
@@ -840,9 +827,6 @@ bool CollisionEngineSys_HasLineOfSight(CollisionEngine* data, float x1, float y1
 }
 bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, SpriteBatch* spriteBatch, float x1, float y1, float x2, float y2, bool respectOneWays)
 {
-	return false;
-	//TODO
-	/*
 	int32_t directionX = x2 - x1 > 0 ? 1 : -1;
 	int32_t directionY = y2 - y1 > 0 ? 1 : -1;
 
@@ -860,7 +844,7 @@ bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, Sprite
 		float x = x1 + (i * seg);
 		float y = (m * x) + b;
 
-		int32_t collision = GetCollisionBitSafe(data, x, y, 0);
+		int32_t collision = CollisionEngineSys_GetCollisionBitSafe(data, x, y, 0);
 		if (collision == CollisionEngineSys_GetPlatformUp() && respectOneWays)
 		{
 			if (directionY == 1)
@@ -902,11 +886,11 @@ bool CollisionEngineSys_HasLineOfSight2(CollisionEngine* data, bool draw, Sprite
 
 		if (draw)
 		{
-			OeDrawTool_DrawRectangle(spriteBatch, COLOR_RED, 100, Rectangle((int32_t)x, (int32_t)y, 2, 2), 0, true);
+			DrawTool_DrawRectangle2(spriteBatch, COLOR_RED, 100, Rectangle_Create((int32_t)x, (int32_t)y, 2, 2), 0, true);
 		}
 	}
 
-	return true;*/
+	return true;
 }
 int32_t CollisionEngineSys_GetPlatformDown(void)
 {
@@ -923,167 +907,6 @@ int32_t CollisionEngineSys_GetPlatformRight(void)
 int32_t CollisionEngineSys_GetPlatformUp(void)
 {
 	return GAMEHELPER_PLATFORM_UP;
-}
-Vector2 CollisionEngineSys_GetBestPathNode(CollisionEngine* data, bool returnPosition, bool disableDiagonals, float currentX, float currentY, float targetX, float targetY, int32_t hardLimit)
-{
-	return Vector2_Zero;
-	/*
-	data.mLastNode = null;
-	data.mOpenNodes.Clear();
-	data.mClosedNodes.Clear();
-
-	Point pathCurrent = GetCollisionGridPosition(currentX, currentY); //initial
-	Point pathTarget = GetCollisionGridPosition(targetX, targetY); //target
-
-	OePathNode initialNode = OePathNode.Obtain(null, pathCurrent.X, pathCurrent.Y, pathTarget.X, pathTarget.Y); //first node
-	OePathNode targetNode = null;
-
-	data.mOpenNodes.Add(initialNode); //add to open list
-
-	int32_t counter = 0;
-	while (targetNode == null && counter <= hardLimit)
-	{
-		counter += 1;
-
-		if (data.mOpenNodes.Count == 0) //out of space
-		{
-			break;
-		}
-
-		SortPathNodes(ref data, data.mOpenNodes); //sort by total distance
-
-		OePathNode currentNode = OeListTools.RemoveAt(data.mOpenNodes, 0); //get least distance node
-
-		data.mClosedNodes.Insert(0, currentNode); //add to closed list
-
-		for (int32_t i = 0; i < 8; i += 1) //setup booleans for valid corner checks, corners are not valid with adjacent collision
-		{
-			_mCornerChecks[i] = false;
-		}
-
-		for (int32_t i = 0; i < 8; i += 1) //check 8 way
-		{
-			int32_t addX = 0;
-			int32_t addY = 0;
-
-			switch (i)
-			{
-			case 0:
-				addY = -1;
-				break;
-			case 1:
-				addX = 1;
-				break;
-			case 2:
-				addY = 1;
-				break;
-			case 3:
-				addX = -1;
-				break;
-			case 4:
-				if (!_mCornerChecks[0] || !_mCornerChecks[1] || disableDiagonals)
-				{
-					continue;
-				}
-				addX = 1;
-				addY = -1;
-				break;
-			case 5:
-				if (!_mCornerChecks[1] || !_mCornerChecks[2] || disableDiagonals)
-				{
-					continue;
-				}
-				addX = 1;
-				addY = 1;
-				break;
-			case 6:
-				if (!_mCornerChecks[2] || !_mCornerChecks[3] || disableDiagonals)
-				{
-					continue;
-				}
-				addX = -1;
-				addY = 1;
-				break;
-			case 7:
-				if (!_mCornerChecks[3] || !_mCornerChecks[0] || disableDiagonals)
-				{
-					continue;
-				}
-				addX = -1;
-				addY = -1;
-				break;
-			}
-
-			int32_t currentGridX = currentNode.mGridX;
-			int32_t currentGridY = currentNode.mGridY;
-			int32_t newGridX = currentNode.mGridX + addX;
-			int32_t newGridY = currentNode.mGridY + addY;
-			int32_t collision = GetCollisionBitSafeGrid(ref data, newGridX, newGridY, 1);
-			if (!OeGame.GetHelper().IsCollisionSolidForPathFinding(collision, currentGridX, currentGridY, newGridX, newGridY)) //see if current adjacent square is valid
-			{
-				_mCornerChecks[i] = true; //if so corner check is good...
-
-				OePathNode newNode = OePathNode.Obtain(currentNode, currentNode.mGridX + addX, currentNode.mGridY + addY, pathTarget.X, pathTarget.Y); //create node
-
-				if (newNode.mGridX == pathTarget.X && newNode.mGridY == pathTarget.Y) //if we are at target stop
-				{
-					targetNode = newNode;
-					data.mClosedNodes.Add(newNode);
-					break;
-				}
-
-				if (GetIndexOfNode(newNode, data.mClosedNodes) != -1) //if its in the closed nodes for some reason stop
-				{
-					continue;
-				}
-
-				int32_t index = GetIndexOfNode(newNode, data.mOpenNodes); //see if open nodes has this node..
-				if (index != -1)
-				{
-					OePathNode problemNode = data.mOpenNodes[index]; //we have a problem
-					if (problemNode.mPathDistance > problemNode.GetPathDistance(currentNode)) //if path distance is greater then set problem node parent to current
-					{
-						problemNode.mParent = currentNode;
-					}
-				}
-				else
-				{
-					data.mOpenNodes.Add(newNode); //add otherwise
-				}
-			}
-		}
-	}
-
-	Vector2 vec;
-	if (targetNode != null)
-	{
-		OePathNode rootNode = targetNode.GetRoot();
-		vec = new Vector2();
-		if (returnPosition)
-		{
-			vec.X = rootNode.GetRealX();
-			vec.Y = rootNode.GetRealY();
-		}
-		else
-		{
-			vec.X = rootNode.GetDirectionToHereX();
-			vec.Y = rootNode.GetDirectionToHereY();
-		}
-	}
-	else //failure
-	{
-		vec = OeVectors.MaxValue;
-	}
-
-#ifdef EDITOR_MODE
-	if (OeGlobals.DEBUG_SHOW_INGAME_COLLISION)
-	{
-		DebugDrawNodes(ref data);
-	}
-#endif
-
-	return vec;
-	*/
 }
 float CollisionEngineSys_GetCurrentDeceleration(float maxDecel, int32_t framesInAir)
 {
@@ -1274,24 +1097,6 @@ void CollisionEngineSys_ApplyBodyVelocity(CollisionEngine* data, Body* body, boo
 		}
 	}
 }
-void CollisionEngineSys_InitRoutine(Entity owner, CollisionEngine* data)
-{
-	//data.mTempArray =  std_vector<Body>();
-	//TODO C99data->mTempNodes = std_vector<std_shared_ptr<OePathNode>>();
-	//TODO C99data->mOpenNodes = std_vector<std_shared_ptr<OePathNode>>();
-	//TODO C99data->mClosedNodes = std_vector<std_shared_ptr<OePathNode>>();
-	//data.mDebugArrayBodiesToDraw =  std_vector<Body>();
-	//TODO C99data->mDebugNodeRectangles = std_vector<OeDrawRectangle>();
-	//TODO C99data->mDebugManyRectangles = std_vector<OeDrawRectangle>();
-	//
-
-	//data.mTempArray.clear();
-	//TODO C99data->mTempNodes.clear();
-	//TODO C99data->mOpenNodes.clear();
-	//TODO C99data->mClosedNodes.clear();
-	//data.mDebugArrayBodiesToDraw.clear();
-	//TODO C99data->mDebugManyRectangles.clear();
-}
 void CollisionEngineSys_DrawRoutine(Entity owner, CollisionEngine* data, SpriteBatch* spriteBatch)
 {
 	if (arrlen(arr_debug_many_rectangles) <= 0)
@@ -1344,7 +1149,7 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 				continue;
 			}
 
-			Color color = COLOR_BLUE; //TODOUtils_GetCollisionColor(type);
+			Color color = Utils_GetCollisionColor(type);
 
 			int32_t rectX = i * TILE_SIZE;
 			int32_t rectY = j * TILE_SIZE;
@@ -1385,7 +1190,6 @@ System* CollisionEngineSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_CollisionEngine);
 	ss->_mUpdateRoutine = CollisionEngineSys_UpdateRoutine;
-	ss->_mInitRoutine = CollisionEngineSys_InitRoutine;
 	ss->_mDrawRoutine = CollisionEngineSys_DrawRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

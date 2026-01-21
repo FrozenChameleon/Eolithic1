@@ -37,7 +37,7 @@ typedef struct Matrix
 	float M44;
 } Matrix;
 
-Matrix Matrix_Identity();
+Matrix Matrix_Identity(void);
 
 void Matrix_Init(Matrix* value,
 	float m11, float m12, float m13, float m14,

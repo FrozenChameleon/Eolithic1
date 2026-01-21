@@ -357,7 +357,7 @@ void KeyboardData_CopyFrom(KeyboardData* kd, const KeyboardData* otherData)
 	}
 }
 
-void KeyboardState_Init()
+void KeyboardState_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -368,16 +368,16 @@ void KeyboardState_Init()
 
 	_mHasInit = true;
 }
-void KeyboardState_MuteInput()
+void KeyboardState_MuteInput(void)
 {
 	Utils_ResetArrayAsBool(_mIsKeyMuted, KEYS_AMOUNT_OF_KEYS, true);
 }
-void KeyboardState_ClearEverything()
+void KeyboardState_ClearEverything(void)
 {
 	KeyboardData_Clear(&_mLastFrame);
 	KeyboardData_Clear(&_mThisFrame);
 }
-void KeyboardState_Poll()
+void KeyboardState_Poll(void)
 {
 	KeyboardData_CopyFrom(&_mLastFrame, &_mThisFrame);
 
@@ -407,7 +407,7 @@ bool KeyboardState_IsKeyReleased(int32_t key)
 {
 	return KeyboardData_IsKeyPressed(&_mLastFrame, key) && !KeyboardData_IsKeyPressed(&_mThisFrame, key);
 }
-bool KeyboardState_IsAnyKeyReleased()
+bool KeyboardState_IsAnyKeyReleased(void)
 {
 	int32_t len = KEYS_AMOUNT_OF_KEYS;
 	for (int32_t i = 0; i < len; i += 1)
@@ -419,7 +419,7 @@ bool KeyboardState_IsAnyKeyReleased()
 	}
 	return false;
 }
-bool KeyboardState_IsAnyKeyTapped()
+bool KeyboardState_IsAnyKeyTapped(void)
 {
 	int32_t len = KEYS_AMOUNT_OF_KEYS;
 	for (int32_t i = 0; i < len; i += 1)
@@ -431,7 +431,7 @@ bool KeyboardState_IsAnyKeyTapped()
 	}
 	return false;
 }
-bool KeyboardState_IsAnyKeyPressed()
+bool KeyboardState_IsAnyKeyPressed(void)
 {
 	int32_t len = KEYS_AMOUNT_OF_KEYS;
 	for (int32_t i = 0; i < len; i += 1)

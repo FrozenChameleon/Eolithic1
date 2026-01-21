@@ -83,12 +83,12 @@ static SpriteBatch _mOrangeSpriteBatch;
 static SpriteBatch _mOrangeSpriteBatchHud;
 static SpriteBatch _mOrangeSpriteBatchFinal;
 
-static float GetCurrentDepthForRender()
+static float GetCurrentDepthForRender(void)
 {
 	return (1.0f - ((float)(_mCurrentDepth) / 200.0f)); //Max layers is 200
 }
 
-int32_t Renderer_InitSpriteBatch()
+int32_t Renderer_InitSpriteBatch(void)
 {
 	if (_mHasInitSpriteBatch)
 	{
@@ -107,7 +107,7 @@ void Renderer_SetGlobalShaderProgram(ShaderProgram* value)
 {
 	_mGlobalShaderProgram = value;
 }
-ShaderProgram* Renderer_GetGlobalShaderProgram()
+ShaderProgram* Renderer_GetGlobalShaderProgram(void)
 {
 	return _mGlobalShaderProgram;
 }
@@ -115,7 +115,7 @@ void Renderer_INTERNAL_SetCurrentShaderProgram(ShaderProgram* value)
 {
 	_mCurrentShaderProgram = value;
 }
-ShaderProgram* Renderer_INTERNAL_GetCurrentShaderProgram()
+ShaderProgram* Renderer_INTERNAL_GetCurrentShaderProgram(void)
 {
 	return _mCurrentShaderProgram;
 }
@@ -123,7 +123,7 @@ void Renderer_INTERNAL_SetCurrentBlendState(BlendState value)
 {
 	_mCurrentBlendState = value;
 }
-BlendState Renderer_INTERNAL_GetCurrentBlendState()
+BlendState Renderer_INTERNAL_GetCurrentBlendState(void)
 {
 	return _mCurrentBlendState;
 }
@@ -131,7 +131,7 @@ void Renderer_INTERNAL_SetCurrentCameraPosition(Vector2 value)
 {
 	_mCurrentCameraPosition = value;
 }
-Vector2 Renderer_INTERNAL_GetCurrentCameraPosition()
+Vector2 Renderer_INTERNAL_GetCurrentCameraPosition(void)
 {
 	return _mCurrentCameraPosition;
 }
@@ -139,11 +139,11 @@ void Renderer_INTERNAL_SetCurrentDepth(int32_t value)
 {
 	_mCurrentDepth = value;
 }
-int32_t Renderer_INTERNAL_GetCurrentDepth()
+int32_t Renderer_INTERNAL_GetCurrentDepth(void)
 {
 	return _mCurrentDepth;
 }
-Rectangle Renderer_GetWantedBackBufferBounds()
+Rectangle Renderer_GetWantedBackBufferBounds(void)
 {
 	Rectangle forcedBackBuffer = Service_PlatformGetForcedBackBufferSize();
 	if (!Rectangle_IsEmpty(&forcedBackBuffer))
@@ -188,7 +188,7 @@ void Renderer_SetupVerticesForTTFont(VertexPositionColorTexture* vertices, Color
 		vertice->Color = colorToUse;
 	}
 }
-const TTFontState* Renderer_GetTTFontState()
+const TTFontState* Renderer_GetTTFontState(void)
 {
 	return &_mFontState;
 }
@@ -706,9 +706,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 
 				if (animTile->mIsWrap)
 				{
-					//TODO C99
-					/*
-					Rectangle source = Rectangle_Create(0 + animTile->_mWrapOffset.X, 0 + animTile->_mWrapOffset.Y, TILE_SIZE, TILE_SIZE);
+					/*Rectangle source = Rectangle_Create(0 + animTile->_mWrapOffset.X, 0 + animTile->_mWrapOffset.Y, TILE_SIZE, TILE_SIZE); //UNUSED
 					Vector2 halfRect = Vector2_Create(TILE_SIZE / 2, TILE_SIZE / 2);
 					Draw(OeSheet_GetTexture(animTile->_mWrapSheet), position + origin - halfRect + halfRect, source, draw->mColor,
 						OeMath_ToRadians(animTile->mRotation + drawTile->mRotation), halfRect, animTile->mScaler, effects, depth);*/
@@ -952,7 +950,7 @@ void Renderer_Render(double delta)
 
 	Renderer_AfterRender();
 }
-uint16_t* Renderer_GetDefaultIndexBufferData()
+uint16_t* Renderer_GetDefaultIndexBufferData(void)
 {
 	if (_mIndexBufferDataSet)
 	{
@@ -973,11 +971,11 @@ uint16_t* Renderer_GetDefaultIndexBufferData()
 
 	return _mIndexBufferData;
 }
-bool Renderer_IsVsync()
+bool Renderer_IsVsync(void)
 {
 	return Cvars_GetAsBool(CVARS_USER_IS_VSYNC);
 }
-void Renderer_UpdateDisplayDimensions()
+void Renderer_UpdateDisplayDimensions(void)
 {
 	float width = 0;
 	float height = 0;
@@ -1046,15 +1044,15 @@ void Renderer_UpdateDisplayDimensions()
 	_mScreenBounds.Width = (int32_t)(width);
 	_mScreenBounds.Height = (int32_t)(height);
 }
-Point Renderer_GetScreenOffset()
+Point Renderer_GetScreenOffset(void)
 {
 	return _mScreenOffset;
 }
-Vector2 Renderer_GetScreenScale()
+Vector2 Renderer_GetScreenScale(void)
 {
 	return _mScreenScale;
 }
-Rectangle Renderer_GetScreenBounds()
+Rectangle Renderer_GetScreenBounds(void)
 {
 	return _mScreenBounds;
 }
@@ -1086,7 +1084,7 @@ void Renderer_SetupCommit(double delta)
 	Renderer_Commit(&_mOrangeSpriteBatchHud, hud, drawDelta);
 }
 
-void Renderer_SetupRenderState()
+void Renderer_SetupRenderState(void)
 {
 	SpriteBatch_DisposePinnedStrings();
 
@@ -1103,11 +1101,11 @@ void Renderer_SetupRenderState()
 	SpriteBatch_Clear(&_mOrangeSpriteBatchHud);
 	GameStateManager_DrawHud(&_mOrangeSpriteBatchHud);
 }
-int32_t Renderer_GetFPS()
+int32_t Renderer_GetFPS(void)
 {
 	return _mFpsToolDraw.mCurrentFps;
 }
-int32_t Renderer_GetRenderTargetScale()
+int32_t Renderer_GetRenderTargetScale(void)
 {
 	int32_t internalRenderWidth = Utils_GetInternalRenderWidth();
 	int32_t internalRenderHeight = Utils_GetInternalRenderHeight();

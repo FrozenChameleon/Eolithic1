@@ -4,9 +4,9 @@
 
 typedef struct IStrings IStrings;
 
-IStrings* IStrings_Create();
+IStrings* IStrings_Create(void);
 void IStrings_Dispose(IStrings* is);
 const char* IStrings_Get(IStrings* is, const char* str);
 size_t IStrings_Length(IStrings* is);
 const char* IStrings_GetByIndex(IStrings* is, int32_t index);
-uint64_t IStrings_GetRefs();
+uint64_t IStrings_GetRefs(void);

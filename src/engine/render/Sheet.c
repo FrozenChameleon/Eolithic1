@@ -21,7 +21,7 @@ static struct { const char* key; Sheet* value; } *sh_sheet_map;
 static Sheet** arr_sheet_list;
 static bool _mHasInit;
 
-static void Init()
+static void Init(void)
 {
 	if (_mHasInit)
 	{
@@ -42,7 +42,7 @@ static void InitSheet(Sheet* sheet)
 	sheet->mTextureResource = NULL;
 }
 
-Sheet* Sheet_GetDefaultSheet()
+Sheet* Sheet_GetDefaultSheet(void)
 {
 	Init();
 
@@ -54,7 +54,7 @@ Sheet* Sheet_GetSheet(const char* name)
 
 	return shget(sh_sheet_map, name);
 }
-void Sheet_BuildSheets()
+void Sheet_BuildSheets(void)
 {
 	arrsetlen(arr_sheet_list, 0);
 	shfree(sh_sheet_map);
@@ -122,7 +122,7 @@ bool Sheet_HasSheet(const char* name)
 	}
 	return true;
 }
-IStringArray* Sheet_CreateListOfSheetNames()
+IStringArray* Sheet_CreateListOfSheetNames(void)
 {
 	IStringArray* sa = IStringArray_Create();
 	ptrdiff_t len = shlen(sh_sheet_map);

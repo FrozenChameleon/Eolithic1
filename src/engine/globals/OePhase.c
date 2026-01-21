@@ -6,7 +6,7 @@ static const char* STR_DEFAULT = "DEFAULT";
 
 static DrawPhaseMap* sh_draw_phase_map;
 
-DrawPhaseMap* OePhase_GetShDrawPhaseMap()
+DrawPhaseMap* OePhase_GetShDrawPhaseMap(void)
 {
 	if (sh_draw_phase_map == NULL)
 	{

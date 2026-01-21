@@ -14,7 +14,6 @@
 #include "../components/DrawActor.h"
 #include "../components/IntTag.h"
 #include "../components/SpecialShakeCameraSys.h"
-#include "../components/MoveGetterSys.h"
 #include "../components/PlayerNumber.h"
 #include "../components/MoveGetter.h"
 #include "../components/Name.h"
@@ -61,7 +60,6 @@
 #include "../audio/Music.h"
 #include "../gamesave/GameSaveManager.h"
 #include "../core/GameHelper.h"
-//#include "../utils/Tuning.h"
 #include "../leveldata/LevelData.h"
 #include "../globals/Directions.h"
 #include "../leveldata/ThingSettings.h"
@@ -72,18 +70,13 @@
 #include "../../third_party/stb_ds.h"
 #include "../gamestate/EntitySearch.h"
 #include "../resources/ResourceManagerList.h"
+//#include "../components/MoveGetterSys.h" //UNUSED
+//#include "../utils/Tuning.h" //UNUSED
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 #define HALF_TILE_SIZE GLOBAL_DEF_HALF_TILE_SIZE
 
-static int32_t _mFlippedGameState = -1;
 static int32_t _mAttackIdCounter;
-//static OeDictionary<std_string, OeDictionary<std_string, std_string>> _mTuningsMap;
-//static OeDictionary<std_type_index, std_vector<OeStringPair>> _mControllerComponentStringSettingsMap;
-//static std_string _mBuilder;
-//static const std_string STR_NOTHING;
-//static std_vector<Point> DUMMY_NODES;
-//static std_vector<OeStringPair> DUMMY_STRING_PAIRS;
 
 static Point* Get_PointerToGridNodes(Entity entity)
 {
@@ -118,29 +111,6 @@ static Point* Get_GridNodes(Entity entity)
 }
 
 //REGION DO
-void Do_DrawCameraData(SpriteBatch* spriteBatch)
-{
-	/* TODO C99
-	if (!GLOBALS_DEBUG_SHOW_INGAME_COLLISION)
-	{
-		return;
-	}
-
-	std_vector<LevelCameraDataInstance>& array = Get_CameraDataInstances();
-	for (int32_t i = 0; i < array.size(); i += 1)
-	{
-		LevelCameraDataInstance* cameraInstance = &array[i];
-		Camera* camera = Get_Camera();
-		if (Camera_IntersectsCamera(camera, PointRectangle_GetRectangle(&cameraInstance->mData.mVolumeTrigger), 2))
-		{
-			if (!cameraInstance->IsComplete())
-			{
-				cameraInstance->mData.Draw(spriteBatch, false, false);
-			}
-		}
-	}
-	*/
-}
 Entity Do_CreatePlayer(float x, float y, const char* name)
 {
 	Entity player = Do_BuildActor2(x, y, NULL, name);
@@ -149,24 +119,20 @@ Entity Do_CreatePlayer(float x, float y, const char* name)
 	Do_SetBoolTag(C_TagIsPlayer, player, true);
 	return player;
 }
-int32_t Get_AmountOfPlayers()
+int32_t Get_AmountOfPlayers(void)
 {
-	return 0;
-	//TODO
-	/*
 	int32_t count = 0;
-	std_vector<Entity>& entitiesInPlay = Get_EntitiesInPlay();
-	for (int32_t i = 0; i < entitiesInPlay.size(); i += 1)
+	EntitySearch* search = Get_EntitiesInPlay();
+	for (int32_t i = 0; i < search->len; i += 1)
 	{
-		if (Get_PlayerNumber(entitiesInPlay[i]) != -1)
+		if (Get_PlayerNumber(search->entities[i]) != -1)
 		{
-			count++;
+			count += 1;
 		}
 	}
 	return count;
-	*/
 }
-bool Has_Players()
+bool Has_Players(void)
 {
 	if (Get_AmountOfPlayers() > 0)
 	{
@@ -174,29 +140,15 @@ bool Has_Players()
 	}
 	return false;
 }
-Entity Get_FirstPlayer()
-{
-	return Get_Player2(0);
-}
 Entity Get_Player(void)
 {
-	return Get_FirstPlayer();
+	return Get_PlayerByNumber(0);
 }
 Entity Get_ClosestPlayer(float x, float y)
 {
-	return Get_FirstPlayer();
-	//IF GAME EVER NEEDS THIS AGAIN, DO IT!
-	/*
-	* double distance = Double.MAX_VALUE;
-	*
-	* int32_t player = -1;
-	*
-	* //TODO for (int32_t i = 0; i < _mPlayers.Count; i += 1) { if (!_mPlayers[i].mIsDisabled) { //TODO double currentDistance = GeneralTools.getDistance(x, y, _mPlayers[i].getCurrentPositionX(), _mPlayers[i].getCurrentPositionY()); if (currentDistance < distance) { player = i; distance = currentDistance; } } }
-	*
-	* return _mPlayers.get(player);
-	*/
+	return Get_PlayerByNumber(0);
 }
-Entity Get_Player2(int32_t number)
+Entity Get_PlayerByNumber(int32_t givenPlayerNumber)
 {
 	ComponentPack* pack = Get_ComponentPack(C_PlayerNumber);
 
@@ -204,7 +156,7 @@ Entity Get_Player2(int32_t number)
 	while (ComponentPack_Next(pack, &iter))
 	{
 		PlayerNumber* playerNumber = iter.mComponent;
-		if (playerNumber->mTag == number)
+		if (playerNumber->mTag == givenPlayerNumber)
 		{
 			return iter.mEntity;
 		}
@@ -212,11 +164,11 @@ Entity Get_Player2(int32_t number)
 
 	return ENTITY_NOTHING;
 }
-LevelCameraDataInstance* Get_CameraDataInstances()
+LevelCameraDataInstance* Get_CameraDataInstances(void)
 {
 	return Get_SceneCameraData()->mCameraData;
 }
-SceneCameraData* Get_SceneCameraData()
+SceneCameraData* Get_SceneCameraData(void)
 {
 	return ((SceneCameraData*)Get_FirstSetComponent(C_SceneCameraData));
 }
@@ -224,123 +176,12 @@ SceneCameraData* Get_SceneCameraData()
 //private
 void Do_HandleNormalCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCameraDataInstance* instance)
 {
-	Camera* camera = Get_Camera();
-
-	if (useAutoHingeCamera)
-	{
-		Camera_SetIsHingedCamera(camera, true);
-
-		PointRectangle* pointRect = LevelCameraData_GetActiveBoundsPointRectangle(&instance->mData);
-
-		if (!instance->mData.mIsUpFrozen)
-		{
-			Camera_SetHingeGateTop(camera, pointRect->mPointOne.Y);
-		}
-		else
-		{
-			Camera_SetHingeGateTop(camera, Camera_GetTop(camera));
-		}
-
-		if (!instance->mData.mIsRightFrozen)
-		{
-			Camera_SetHingeGateRight(camera, pointRect->mPointTwo.X);
-		}
-		else
-		{
-			Camera_SetHingeGateRight(camera, Camera_GetRight(camera));
-		}
-
-		if (!instance->mData.mIsDownFrozen)
-		{
-			Camera_SetHingeGateBottom(camera, pointRect->mPointTwo.Y);
-		}
-		else
-		{
-			Camera_SetHingeGateBottom(camera, Camera_GetBottom(camera));
-		}
-
-		if (!instance->mData.mIsLeftFrozen)
-		{
-			Camera_SetHingeGateLeft(camera, pointRect->mPointOne.X);
-		}
-		else
-		{
-			Camera_SetHingeGateLeft(camera, Camera_GetLeft(camera));
-		}
-
-		Camera_SetHingeDirectionX(camera, instance->mData.mDirectionX);
-
-		Camera_SetHingeDirectionY(camera, instance->mData.mDirectionY);
-
-		Camera_SetHingeDualDirectionX(camera, instance->mData.mIsDualX);
-
-		Camera_SetHingeDualDirectionY(camera, instance->mData.mIsDualY);
-	}
-
-	if (forceCameraPosition)
-	{
-		Rectangle tempRect = PointRectangle_GetRectangle(&instance->mData.mVolumeTrigger);
-		Camera_SetPosition(camera, (float)Rectangle_Center(&tempRect).X, (float)Rectangle_Center(&tempRect).Y);
-	}
-
-	SceneCameraData* sceneCameraData = Get_SceneCameraData();
-	LevelCameraDataInstance_SetComplete(instance);
-	sceneCameraData->mLastCamera = instance;
+	//UNUSED
 }
 void Do_HandleTransitionCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCameraDataInstance* instance)
 {
-	//TODO
-	/*
-	std_vector<LevelCameraDataInstance>& array = Get_CameraDataInstances();
-
-	LevelCameraDataInstance* to = NULL;
-	LevelCameraDataInstance* from = NULL;
-
-	for (int32_t i = 0; i < array.size(); i += 1)
-	{
-		LevelCameraDataInstance* check = &array[i];
-		if (instance->mData.mNumberTransitionTo != -1)
-		{
-			if (instance->mData.mNumberTransitionTo == check->mData.mId)
-			{
-				to = check;
-			}
-		}
-		if (instance->mData.mNumberTransitionFrom != -1)
-		{
-			if (instance->mData.mNumberTransitionFrom == check->mData.mId)
-			{
-				from = check;
-			}
-		}
-	}
-
-	if (to == NULL)
-	{
-		instance->SetComplete();
-	}
-	else
-	{
-		LevelCameraDataInstance* destination = to;
-		if (from != NULL)
-		{
-			SceneCameraData* sceneCameraData = Get_SceneCameraData();
-			if (sceneCameraData->mLastCamera != NULL)
-			{
-				if (sceneCameraData->mLastCamera->mData.mId == instance->mData.mNumberTransitionTo)
-				{
-					destination = from;
-				}
-			}
-		}
-
-		Do_HandleNormalCamera(useAutoHingeCamera, forceCameraPosition, destination);
-
-		instance->SetComplete();
-	}
-	*/
+	//UNUSED
 }
-
 //
 LevelCameraDataInstance* Do_HandleCamera(bool useAutoHingeCamera, bool forceCameraPosition)
 {
@@ -348,34 +189,8 @@ LevelCameraDataInstance* Do_HandleCamera(bool useAutoHingeCamera, bool forceCame
 }
 LevelCameraDataInstance* Do_HandleCamera2(bool useAutoHingeCamera, bool forceCameraPosition, bool manualSize, int32_t size)
 {
-	return NULL;
-	//TODO
-	/*
-	int32_t half = size / 2;
-	std_vector<LevelCameraDataInstance>& array = Get_CameraDataInstances();
-	Entity player = Get_Player();
-	Rectangle playerRect = Body_GetRect(Get_Body(player));
-	for (int32_t i = 0; i < array.size(); i += 1)
-	{
-		LevelCameraDataInstance* instance = &array[i];
-		if (!instance->IsComplete())
-		{
-			Rectangle triggerRect = PointRectangle_GetRectangle(&instance->mData.mVolumeTrigger);
-			if (playerRect.Intersects(triggerRect))
-			{
-				Rectangle testRect = Rectangle(playerRect.Center().X - half, playerRect.Center().Y - half, size, size);
-				if (!manualSize || triggerRect.Intersects(testRect))
-				{
-					Do_LoadCamera(useAutoHingeCamera, forceCameraPosition, instance);
-					return instance;
-				}
-			}
-		}
-	}
-	return NULL;
-	*/
+	return NULL; //UNUSED
 }
-
 void Do_LoadCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCameraDataInstance* instance)
 {
 	if (instance->mData.mIsTransition)
@@ -387,8 +202,7 @@ void Do_LoadCamera(bool useAutoHingeCamera, bool forceCameraPosition, LevelCamer
 		Do_HandleNormalCamera(useAutoHingeCamera, forceCameraPosition, instance);
 	}
 }
-
-void Do_ResetCollisionGrid()
+void Do_ResetCollisionGrid(void)
 {
 	if (!Is_ComponentPackPresent(C_CollisionEngine))
 	{
@@ -397,7 +211,6 @@ void Do_ResetCollisionGrid()
 
 	CollisionEngineSys_SetupCollisionGrid(Get_CollisionEngine(), Get_LevelData());
 }
-
 void Do_LoadCameraNumber(bool useAutoHingeCamera, bool forceCameraPosition, int32_t number)
 {
 	/*
@@ -413,8 +226,7 @@ void Do_LoadCameraNumber(bool useAutoHingeCamera, bool forceCameraPosition, int3
 	}
 	*/
 }
-
-void Do_ResetCameraDataFullyNoMatterWhat()
+void Do_ResetCameraDataFullyNoMatterWhat(void)
 {
 	/*
 	std_vector<LevelCameraDataInstance>& array = Get_CameraDataInstances();
@@ -424,8 +236,7 @@ void Do_ResetCameraDataFullyNoMatterWhat()
 	}
 	*/
 }
-
-void Do_ResetCameraDataIfNotCompletePermanently()
+void Do_ResetCameraDataIfNotCompletePermanently(void)
 {
 	/*
 	std_vector<LevelCameraDataInstance>& array = Get_CameraDataInstances();
@@ -435,8 +246,7 @@ void Do_ResetCameraDataIfNotCompletePermanently()
 	}
 	*/
 }
-
-void Do_SetCompleteCameraDataToPermanentlyComplete()
+void Do_SetCompleteCameraDataToPermanentlyComplete(void)
 {
 	/*
 	std_vector<LevelCameraDataInstance>& array = Get_CameraDataInstances();
@@ -450,7 +260,6 @@ void Do_SetCompleteCameraDataToPermanentlyComplete()
 	}
 	*/
 }
-
 Vector2 Do_FindThingPositionInTileData(const char* name)
 {
 	LevelData* levelData = Get_LevelData();
@@ -481,13 +290,11 @@ Vector2 Do_FindThingPositionInTileData(const char* name)
 
 	return Vectors_NegativeOne;
 }
-
-void Do_InitAllPermanentThings()
+void Do_InitAllPermanentThings(void)
 {
 	LevelData* levelData = Get_LevelData();
 	Do_InitPermanentThingsByGridCoordinates(0, 0, LevelData_GetGridSizeWidth(levelData), LevelData_GetGridSizeHeight(levelData));
 }
-
 void Do_InitPermanentThingsByRealCoordinates(float realX1, float realY1, float realX2, float realY2, bool startThings)
 {
 	int32_t x1 = (int32_t)(realX1 / TILE_SIZE);
@@ -496,14 +303,12 @@ void Do_InitPermanentThingsByRealCoordinates(float realX1, float realY1, float r
 	int32_t y2 = (int32_t)(realY2 / TILE_SIZE);
 	Do_InitPermanentThingsByGridCoordinates(x1, y1, x2, y2);
 }
-
 void Do_InitPermanentThingsByRoomBounds(LevelCameraDataInstance* instance, bool startThings)
 {
 	PointRectangle* pointRect = LevelCameraData_GetActiveBoundsPointRectangle(&instance->mData);
 	Do_InitPermanentThingsByRealCoordinates((float)pointRect->mPointOne.X, (float)pointRect->mPointOne.Y, 
 		(float)pointRect->mPointTwo.X, (float)pointRect->mPointTwo.Y, startThings);
 }
-
 void Do_InitPermanentThingsByGridCoordinates(int32_t x1, int32_t y1, int32_t x2, int32_t y2)
 {
 	LevelData* levelData = Get_LevelData();
@@ -519,18 +324,16 @@ void Do_InitPermanentThingsByGridCoordinates(int32_t x1, int32_t y1, int32_t x2,
 		}
 	}
 }
-
 void Do_InitPermanentThingsByGridCoordinates2(int32_t x, int32_t y)
 {
 	//Do_InitPermanentThingsByGridCoordinates(x, y, STR_NOTHING);
 }
-
 void Do_InitPermanentThingsByGridCoordinates3(int32_t x, int32_t y, const char* onlyWithThisName)
 {
 	/*
 	OeLevelData* levelData = Get_LevelData();
 	std_vector<ThingInstance>& dataArray = levelData->GetTile(x, y)->mInstances;
-	for (int32_t k = 0; k < dataArray.size(); k++)
+	for (int32_t k = 0; k < dataArray.size(); k += 1)
 	{
 		ThingInstance* instance = &dataArray[k];
 		if (Utils_StringEqualTo(onlyWithThisName, STR_NOTHING))
@@ -558,37 +361,46 @@ Entity Do_BuildThingFromData(int32_t i, int32_t j, ThingInstance* data)
 
 	Point buildOffset = Point_Zero;
 	bool buildThing = true;
-	StringPair pairOffsetX = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_DTN_OFFSET_X);
-	if ((pairOffsetX.mKey != NULL) && !Utils_StringEqualTo(pairOffsetX.mKey, EE_STR_EMPTY))
+
+	//OFFSET
 	{
-		buildOffset.X = Utils_ParseDirection(pairOffsetX.mValue) * HALF_TILE_SIZE;
-		StringPair pairOffsetY = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_DTN_OFFSET_Y);
-		if ((pairOffsetY.mKey != NULL) && !Utils_StringEqualTo(pairOffsetY.mKey, EE_STR_EMPTY))
+		StringPair pairOffsetX = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_DTN_OFFSET_X);
+		if ((pairOffsetX.mKey != NULL) && !Utils_StringEqualTo(pairOffsetX.mKey, EE_STR_EMPTY))
 		{
-			buildOffset.Y = Utils_ParseDirection(pairOffsetY.mValue) * HALF_TILE_SIZE;
+			buildOffset.X = Utils_ParseDirection(pairOffsetX.mValue) * HALF_TILE_SIZE;
+			StringPair pairOffsetY = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_DTN_OFFSET_Y);
+			if ((pairOffsetY.mKey != NULL) && !Utils_StringEqualTo(pairOffsetY.mKey, EE_STR_EMPTY))
+			{
+				buildOffset.Y = Utils_ParseDirection(pairOffsetY.mValue) * HALF_TILE_SIZE;
+			}
 		}
 	}
-	StringPair pairDifficulty = StringPair_Empty;
-	int32_t currentDifficulty = 0; //TODO Tuning_GetCurrentDifficulty()
-	switch (currentDifficulty)
+
+	//DIFFICULTY
 	{
-	case 0:
-		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_EASY);
-		break;
-	case 1:
-		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_NORMAL);
-		break;
-	case 2:
-		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_HARD);
-		break;
-	case 3:
-		pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD);
-		break;
+		/*StringPair pairDifficulty = StringPair_Empty; //UNUSED
+		int32_t currentDifficulty = Tuning_GetCurrentDifficulty()
+		switch (currentDifficulty)
+		{
+		case 0:
+			pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_EASY);
+			break;
+		case 1:
+			pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_NORMAL);
+			break;
+		case 2:
+			pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_HARD);
+			break;
+		case 3:
+			pairDifficulty = ThingInstance_GetSetting(data, THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD);
+			break;
+		}
+		if (!Utils_StringEqualTo(pairDifficulty.mKey, EE_STR_EMPTY) && !Utils_StringEqualTo(pairDifficulty.mKey, EE_STR_NOT_SET))
+		{
+			buildThing = Utils_ParseBooleanFromChar(pairDifficulty.mValue);
+		}*/
 	}
-	if (!Utils_StringEqualTo(pairDifficulty.mKey, EE_STR_EMPTY) && !Utils_StringEqualTo(pairDifficulty.mKey, EE_STR_NOT_SET))
-	{
-		buildThing = Utils_ParseBooleanFromChar(pairDifficulty.mValue);
-	}
+
 	buildOffset.X += HALF_TILE_SIZE;
 	buildOffset.Y += HALF_TILE_SIZE;
 	if (buildThing)
@@ -603,37 +415,21 @@ Entity Do_BuildThingFromData(int32_t i, int32_t j, ThingInstance* data)
 		return ENTITY_NOTHING;
 	}
 }
-
 //
-void Do_FlipGameState(int32_t nextState)
-{
-	//TODO C99_mFlippedGameState = OeGameStateManager_GetCurrentGameState();
-	//OeGameStateManager_SetCurrentGameState(nextState);
-}
-
-void Do_FlipGameStateBack()
-{
-	//OeGameStateManager_SetCurrentGameState(_mFlippedGameState);
-	_mFlippedGameState = -1;
-}
-
-Entity Do_BuildNewEntity()
+Entity Do_BuildNewEntity(void)
 {
 	return GameState_BuildNewEntity(Get_ActiveGameState());
 }
-
 Entity Do_BuildNewEntityWithName(const char* name)
 {
 	Entity temp = Do_BuildNewEntity();
 	Do_SetName(temp, name);
 	return temp;
 }
-
 void Do_FreezeEntityTillOnScreen(Entity entity)
 {
 	Do_FreezeEntityTillOnScreen2(entity, false, false);
 }
-
 void Do_FreezeEntityTillOnScreen2(Entity entity, bool facesPlayer, bool isFacingFlipped)
 {
 	Do_SetBodyDisabled(entity, true);
@@ -643,41 +439,34 @@ void Do_FreezeEntityTillOnScreen2(Entity entity, bool facesPlayer, bool isFacing
 	data->mFacesPlayer = facesPlayer;
 	data->mIsFacingFlipped = isFacingFlipped;
 }
-
 void Do_TurnOnMirrorEffect(Entity entity)
 {
 	MirrorEffect* mirrorEffect = Get_Component(C_MirrorEffect, entity);
 	MirrorEffect_SetOn(mirrorEffect);
 }
-
 void Do_TurnOffMirrorEffect(Entity entity)
 {
 	MirrorEffect* mirrorEffect = Get_Component(C_MirrorEffect, entity);
 	MirrorEffect_SetOff(mirrorEffect);
 }
-
 void Do_ActivateHitFlashKit(Entity entity)
 {
 	((HitFlashKit*)Get_Component(C_HitFlashKit, entity))->mShowHitFlash = true;
 }
-
 void Do_SetBodyMaxDecelerationToInfinite(Entity entity)
 {
 	Do_SetBodyMaxDeceleration(entity, FLT_MAX);
 }
-
 void Do_SetBodyMaxDeceleration(Entity entity, float value)
 {
 	Get_Body(entity)->mMaxDeceleration = value;
 }
-
 int32_t Get_NextBossMove(Entity entity)
 {
 	return 0;/*
 	MoveGetter* getter = Get_Component(C_MoveGetter, entity);
 	return MoveGetterSys_GetMove(getter, Get_Random(entity));*/
 }
-
 int32_t Get_IntTag(Entity entity)
 {
 	bool wasSuccessful;
@@ -691,44 +480,37 @@ int32_t Get_IntTag(Entity entity)
 		return component->mTag;
 	}
 }
-
 void Do_SetIntTag(Entity entity, int32_t value)
 {
 	IntTag* component = Get_Component(C_IntTag, entity);
 	component->mTag = value;
 }
-
 int32_t Get_StepCounter(Entity entity)
 {
 	StepCounter* component = Get_Component(C_StepCounter, entity);
 	return component->mCounter;
 }
-
 void Do_IncrementStepCounter(Entity entity)
 {
 	StepCounter* component = Get_Component(C_StepCounter, entity);
-	component->mCounter++;
+	component->mCounter += 1;
 }
-
 void Do_ResetStepCounter(Entity entity)
 {
 	StepCounter* component = Get_Component(C_StepCounter, entity);
 	component->mCounter = 0;
 }
-
 void Do_SetMove(Entity entity, int32_t value)
 {
 	Move* component = Get_Component(C_Move, entity);
 	component->mMove = value;
 	Do_SetStep(entity, 0);
 }
-
 int32_t Get_Move(Entity entity)
 {
 	Move* component = Get_Component(C_Move, entity);
 	return component->mMove;
 }
-
 void Do_SetStep(Entity entity, int32_t value)
 {
 	Step* component = Get_Component(C_Step, entity);
@@ -736,19 +518,16 @@ void Do_SetStep(Entity entity, int32_t value)
 	Do_ResetStepCounter(entity);
 	Do_ResetStepTimer(entity);
 }
-
 int32_t Get_Step(Entity entity)
 {
 	Step* component = Get_Component(C_Step, entity);
 	return component->mStep;
 }
-
 int32_t Get_AmountOfBounces(Entity entity)
 {
 	BounceData* data = Get_Component(C_BounceData, entity);
 	return data->mBounces;
 }
-
 bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityIncrease, bool fallFirstBounce)
 {
 	BounceData* data = Get_Component(C_BounceData, entity);
@@ -757,7 +536,7 @@ bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityInc
 	{
 		if (Is_TouchingCollision(entity) && Is_TouchingDown(entity))
 		{
-			data->mBounces++;
+			data->mBounces += 1;
 			data->mVelocity = 0;
 			returnValue = true;
 		}
@@ -779,174 +558,132 @@ bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityInc
 	data->mWasUsed = true;
 	return returnValue;
 }
-
 void Do_ResetStepTimer(Entity entity)
 {
 	StepTimer* data = Get_Component(C_StepTimer, entity);
 	data->mTimer = Timer_Zero;
 }
-
 Timer* Get_StepTimer(Entity entity)
 {
 	StepTimer* data = Get_Component(C_StepTimer, entity);
 	return &data->mTimer;
 }
-
-bool Do_UpdateStepTimer2(Entity entity, const char* tuning)
-{
-	return false;
-	//TODOC99return Do_UpdateStepTimer2(entity, Get_TuningAsInt(entity, tuning));
-}
-
 bool Do_UpdateStepTimer(Entity entity, int32_t limit)
 {
 	StepTimer* data = Get_Component(C_StepTimer, entity);
 	data->mTimer.mLimit = limit;
 	return Timer_Update(&data->mTimer);
 }
-
 void Do_SetBodyFramesInAir(Entity entity, int32_t value)
 {
 	Get_Body(entity)->mFramesInAir = value;
 }
-
 void Do_SetBodyIgnoreGravityY(Entity entity, bool value)
 {
 	Get_Body(entity)->mIgnoreGravityY = value;
 }
-
 void Do_SetBodyIsOneWayPlatform(Entity entity, bool value)
 {
 	Get_Body(entity)->mIsOneWayPlatform = value;
 }
-
 void Do_SetBodyIsMovingPlatform(Entity entity, bool value)
 {
 	Get_Body(entity)->mIsMovingPlatform = value;
 }
-
 void Do_SetBodyCannotBePushed(Entity entity, bool value)
 {
 	Get_Body(entity)->mCannotBePushed = value;
 }
-
 void Do_SetBodyPushes(Entity entity, bool value)
 {
 	Get_Body(entity)->mPushes = value;
 }
-
 void Do_SetBodyCollideWithBody(Entity entity, void (*colliderBody)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical))
 {
 	Get_Body(entity)->mCollideWithBody = colliderBody;
 }
-
 void Do_SetBodyCollideWithCollision(Entity entity, bool (*colliderCollision)(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical))
 {
 	Get_Body(entity)->mCollideWithCollision = colliderCollision;
 }
-
 void Do_SetBodyIsBullet(Entity entity, bool value)
 {
 	Get_Body(entity)->mIsBullet = value;
 }
-
 void Do_SetBodyIgnoreEverythingExceptPlayer(Entity entity, bool value)
 {
 	Get_Body(entity)->mIgnoreEverythingExceptPlayer = value;
 }
-
 void Do_SetBodyIgnoreBullets(Entity entity, bool value)
 {
 	Get_Body(entity)->mIgnoreBullets = value;
 }
-
 void Do_SetBodyIgnoreBakedCollision(Entity entity, bool value)
 {
 	Get_Body(entity)->mIgnoreBakedCollision = value;
 }
-
 void Do_SetBodyType(Entity entity, int32_t type)
 {
 	Get_Body(entity)->mType = type;
 }
-
 void Do_SetBodyIgnoreAllCollision(Entity entity, bool value)
 {
 	Get_Body(entity)->mIgnoreAllCollision = value;
 }
-
 void Do_SetBodyStatic(Entity entity, bool value)
 {
 	Get_Body(entity)->mIsStatic = value;
 }
-
 void Do_SetBodyDisabled(Entity entity, bool value)
 {
-	Do_SetBodyDisabled2(entity, value, 0);
+	Get_Body(entity)->mIsDisabled = value;
 }
-
-void Do_SetBodyDisabled2(Entity entity, bool value, int32_t number)
-{
-	Get_Body2(entity, number)->mIsDisabled = value;
-}
-
 EntitySearch* Do_SearchForEntitiesWithName(const char* name)
 {
 	return Do_SearchForEntitiesWithName2(name, false);
 }
-
 EntitySearch* Do_SearchForEntitiesWithName2(const char* name, bool isReverse)
 {
 	return EntitySearch_SearchForEntitiesWithThisName(EntitySearch_CreateNewAllEntitySearch(), EntitySearch_CreateNewBlankSearch(), name, isReverse);
 }
-
 EntitySearch* Do_SearchForEntitiesWithIntTag(int32_t value)
 {
 	return Do_SearchForEntitiesWithIntTag2(value, false);
 }
-
 EntitySearch* Do_SearchForEntitiesWithIntTag2(int32_t value, bool isReverse)
 {
 	return EntitySearch_SearchForEntitiesWithThisIntTag(EntitySearch_CreateNewAllEntitySearch(), EntitySearch_CreateNewBlankSearch(), value, isReverse);
 }
-
 EntitySearch* Do_SearchForChildren(Entity entity)
 {
 	return Do_SearchForChildren2(entity, false);
 }
-
 EntitySearch* Do_SearchForChildren2(Entity entity, bool isReverse)
 {
 	return EntitySearch_SearchForEntitiesWithThisParentNumber(EntitySearch_CreateNewAllEntitySearch(), 
 		EntitySearch_CreateNewBlankSearch(), Get_EntityNumber(entity), isReverse);
 }
-
 EntitySearch* Do_SearchForChildrenWithName(Entity entity, const char* name)
 {
 	return Do_SearchForChildrenWithName2(entity, name, false);
 }
-
 EntitySearch* Do_SearchForChildrenWithName2(Entity entity, const char* name, bool isReverse)
 {
 	return EntitySearch_SearchForEntitiesWithThisName(Do_SearchForChildren2(entity, isReverse), EntitySearch_CreateNewBlankSearch(), name, isReverse);
 }
-
 EntitySearch* Do_SearchForChildrenWithIntTag(Entity entity, int32_t value)
 {
 	return Do_SearchForChildrenWithIntTag2(entity, value, false);
 }
-
 EntitySearch* Do_SearchForChildrenWithIntTag2(Entity entity, int32_t value, bool isReverse)
 {
 	return EntitySearch_SearchForEntitiesWithThisIntTag(Do_SearchForChildren2(entity, isReverse), EntitySearch_CreateNewBlankSearch(), value, isReverse);
 }
-
 void Do_SetIsBlockingLineOfSight(Entity entity, bool value)
 {
 	Do_SetBoolTag(C_TagIsBlockingLineOfSight, entity, true);
 }
-
-void Do_DestroyAllEnemies()
+void Do_DestroyAllEnemies(void)
 {
 	EntitySearch* search = Do_SearchForEntitiesWithComponent(C_TagIsEnemy);
 	for (int32_t i = 0; i < search->len; i += 1)
@@ -954,28 +691,24 @@ void Do_DestroyAllEnemies()
 		Do_SetComplete(search->entities[i]);
 	}
 }
-
 MoveGetter* Do_InitMoveGetter(Entity entity, const char* name, int32_t movesToRemember)
 {
 	MoveGetter* moveGetter = Do_InitComponent(C_MoveGetter, entity);
 	//moveGetter->Setup(name, movesToRemember);
 	return moveGetter;
 }
-
 NodeMovingKit* Do_InitNodeMovingKit(Entity entity, int32_t type, bool moveContacts)
 {
 	NodeMovingKit* kit = Do_InitComponent(C_NodeMovingKit, entity);
 	//kit->Setup(entity, type, moveContacts);
 	return kit;
 }
-
 HitFlashKit* Do_InitHitFlashKit(Entity entity, int32_t time)
 {
 	HitFlashKit* kit = Do_InitComponent(C_HitFlashKit, entity);
 	//kit->Setup(time);
 	return kit;
 }
-
 MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int32_t depth)
 {
 	MirrorEffect* effect = Do_InitComponent(C_MirrorEffect, entity);
@@ -983,41 +716,28 @@ MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int32_t depth)
 	effect->mDepth = depth;
 	return effect;
 }
-
 void Do_SetRotate(Entity entity, float value)
 {
 	Get_DrawActor(entity)->mRotation = value;
 }
-
 void Do_Rotate(Entity entity, float value)
 {
 	Get_DrawActor(entity)->mRotation += value;
 }
-
-void DeprecatedDo_SetTag(Entity entity, int32_t whatever, int32_t whatever2)
-{
-	//WILLNOTDO20240323//TODO
-}
-
-
-
 void Do_IdleCircle(Entity entity, float radius, bool useX, bool useY, int32_t idleDegreeIncrease)
 {
 	IdleCircleData* data = Get_Component(C_IdleCircleData, entity);
 	Do_MoveCircle2(entity, (float)data->mIdleDegree, 0, radius, useX, useY);
 	data->mIdleDegree += idleDegreeIncrease;
 }
-
 void Do_SetAsUsingBulletCollisionEngine(Entity entity)
 {
 	//WILLNOTDO20240323//entity._mUsesBulletCollisionEngine = true;
 }
-
 bool Do_FloatyMoveSomewhere(Entity entity, float destX, float destY, float speedAccel, float speedLimit)
 {
 	return Do_FloatyMoveSomewhere2(entity, destX, destY, speedAccel, speedLimit, false);
 }
-
 bool Do_FloatyMoveSomewhere2(Entity entity, float destX, float destY, float speedAccel, float speedLimit, bool doNotResetMovementAtEnd)
 {
 	FloatyMovementData* data = Get_Component(C_FloatyMovementData, entity);
@@ -1049,7 +769,6 @@ bool Do_FloatyMoveSomewhere2(Entity entity, float destX, float destY, float spee
 	}
 	return false;
 }
-
 bool Do_FloatyMoveSomewhere3(float* currentSpeed, Vector2* moveThis, Vector2 destination, float speedAccel, float speedLimit, bool doNotResetMovementAtEnd)
 {
 	return false;
@@ -1082,7 +801,6 @@ bool Do_FloatyMoveSomewhere3(float* currentSpeed, Vector2* moveThis, Vector2 des
 	return false;
 	*/
 }
-
 void Do_FloatyMove(Entity entity, float directionX, float directionY, float speedAccel, float speedLimit)
 {
 	FloatyMovementData* data = Get_Component(C_FloatyMovementData, entity);
@@ -1091,12 +809,10 @@ void Do_FloatyMove(Entity entity, float directionX, float directionY, float spee
 	data->mCurrentSpeed = Math_MinFloat(data->mCurrentSpeed, speedLimit);
 	Do_Move(entity, directionX, directionY, data->mCurrentSpeed);
 }
-
 void Do_InitRandom(Entity entity)
 {
 	Do_InitComponent(C_Random32, entity);
 }
-
 void Do_InitBossRandom(Entity entity)
 {
 	Do_InitRandom(entity);
@@ -1112,14 +828,12 @@ void Do_InitBossRandom(Entity entity)
 	}
 	Random32_SetSeed(Get_Random(entity), (uint32_t)(seed));
 }
-
 void Do_SetScale(Entity entity, float x, float y)
 {
 	DrawActor* drawActor = Get_DrawActor(entity);
 	drawActor->mScale.X = x;
 	drawActor->mScale.Y = y;
 }
-
 bool Do_DestroyIfUnderCameraHinge(Entity entity)
 {
 	if (Is_UnderCameraHinge(entity))
@@ -1129,7 +843,6 @@ bool Do_DestroyIfUnderCameraHinge(Entity entity)
 	}
 	return false;
 }
-
 bool Do_DestroyIfOffScreen(Entity entity)
 {
 	if (!Is_OnScreen(entity))
@@ -1139,52 +852,42 @@ bool Do_DestroyIfOffScreen(Entity entity)
 	}
 	return false;
 }
-
 void Do_SetIgnoringTransitions(Entity entity, bool value)
 {
 	Do_SetBoolTag(C_TagIsIgnoringTransitions, entity, value);
 }
-
 void Do_DrawBodyRectangle(Entity entity, SpriteBatch* spriteBatch, double delta, int32_t depth, Color color)
 {
-	//TODO C99Body_DrawBody(Get_Body(entity), spriteBatch, delta, depth, color);
+	Body_DrawBody(Get_Body(entity), spriteBatch, delta, depth, color);
 }
-
 void Do_SetDepthOverride(Entity entity, int32_t value)
 {
 	Get_DrawActor(entity)->mUniversalDepthOverride = value;
 }
-
 void Do_ResetDepthOverride(Entity entity)
 {
 	Do_SetDepthOverride(entity, -1);
 }
-
 void Do_SetDepthOverride2(Entity entity, int32_t state, int32_t value)
 {
 	DrawActorSys_SetDepthOverride(entity, state, value);
 }
-
 void Do_ResetDepthOverride2(Entity entity, int32_t state)
 {
 	Do_SetDepthOverride2(entity, state, -1);
 }
-
 void Do_SetDrawExtraPasses(Entity entity, int32_t extra)
 {
 	Get_DrawActor(entity)->mExtraPasses = extra;
 }
-
 void Do_SetBlendStateAdditive(Entity entity)
 {
 	Get_DrawActor(entity)->mIsBlendStateAdditive = true;
 }
-
 void Do_SetBlendStateNormal(Entity entity)
 {
 	Get_DrawActor(entity)->mIsBlendStateAdditive = false;
 }
-
 void Do_DrawFullscreenRectangle(SpriteBatch* spriteBatch, Color color)
 {
 	/*
@@ -1193,59 +896,38 @@ void Do_DrawFullscreenRectangle(SpriteBatch* spriteBatch, Color color)
 		0, false);
 		*/
 }
-
 void Do_SetAnimationTimeLimit(Entity entity, int32_t state, int32_t phase, int32_t time)
 {
 	Get_Animation(entity, state, phase)->mFlipTimer.mLimit = time;
 }
-
 void Do_SetShader(Entity entity, ShaderProgram* program)
 {
 	Get_DrawActor(entity)->mShaderProgram = program;
 }
-
 void Do_SetShader2(Entity entity, int32_t state, ShaderProgram* program)
 {
 	DrawActorSys_SetShaderProgram(entity, state, program);
 }
-
 void Do_SetShaderAsWhiteFlash(Entity entity)
 {
-	//Do_SetShader(entity, ShaderProgram_GetShaderWhiteHitFlash());
+	Do_SetShader(entity, ShaderProgram_GetShaderWhiteHitFlash());
 }
-
-void Do_SetupShaderSingleColorReplace(ShaderProgram* program, uint8_t targetR, uint8_t targetG, uint8_t targetB,
-	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB)
-{
-	Do_SetupShaderSingleColorReplace2(program, targetR, targetG, targetB, replaceR, replaceG, replaceB, 255);
-}
-
-void Do_SetupShaderSingleColorReplace2(ShaderProgram* program, uint8_t targetR, uint8_t targetG, uint8_t targetB,
-	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB, uint8_t alpha)
-{
-	//TODO2024program.mEffect.Parameters["ColorTarget"].SetValue(new Vector3(targetR, targetG, targetB));
-	//TODO2024program.mEffect.Parameters["ColorReplace"].SetValue(new Vector4(replaceR, replaceG, replaceB, alpha));
-}
-
 void Do_SetupShaderMultiColorLength(ShaderProgram* program, int32_t length)
 {
 	program->mShaderType = RENDERER_SHADER_TYPE_MULTI_COLOR_REPLACE;
 	program->mMultiColorReplaceLength = length;
 	Utils_memset(program->mMultiColorReplace, 0, sizeof(uint8_t) * SHADER_PROGRAM_MAX_REPLACE_LENGTH);
 }
-
 ShaderProgram* Do_CreateShader(const char* name)
 {
 	return NULL;
 	//return ShaderProgram_LoadShader(name);
 }
-
 void Do_SetupShaderMultiColor(ShaderProgram* program, int32_t i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
 	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB)
 {
 	Do_SetupShaderMultiColor2(program, i, targetR, targetG, targetB, replaceR, replaceG, replaceB, 255);
 }
-
 void Do_SetupShaderMultiColor2(ShaderProgram* program, int32_t i, uint8_t targetR, uint8_t targetG, uint8_t targetB,
 	uint8_t replaceR, uint8_t replaceG, uint8_t replaceB, uint8_t alpha)
 {
@@ -1259,7 +941,6 @@ void Do_SetupShaderMultiColor2(ShaderProgram* program, int32_t i, uint8_t target
 	program->mMultiColorReplace[off + 5] = replaceB;
 	program->mMultiColorReplaceAlpha = alpha;
 }
-
 Body* Do_InitBody(Entity entity, int32_t width, int32_t height)
 {
 	Body* body = Do_InitComponent(C_Body, entity);
@@ -1267,7 +948,6 @@ Body* Do_InitBody(Entity entity, int32_t width, int32_t height)
 	Body_ForcePosition(body, Get_InitialX(entity), Get_InitialY(entity));
 	return body;
 }
-
 Body* Do_InitExtraBody(Entity entity, int32_t width, int32_t height, bool isFollower)
 {
 	Entity newBodyEntity = Do_BuildNewEntity();
@@ -1280,44 +960,36 @@ Body* Do_InitExtraBody(Entity entity, int32_t width, int32_t height, bool isFoll
 	body->mIsExtraBodyThatFollows = isFollower;
 	return body;
 }
-
 void Do_SetDrawDisabled(Entity entity, bool value)
 {
 	Do_SetBoolTag(C_TagIsDrawDisabled, entity, value);
 }
-
 void Do_SetDrawActorUpdateDisabled(Entity entity, bool value)
 {
 	Get_DrawActor(entity)->mIsUpdateDisabled = value;
 }
-
 void Do_TagAsEnemy(Entity entity)
 {
 	Do_SetBoolTag(C_TagIsEnemy, entity, true);
 }
-
 void Do_SetUpdateDisabled(Entity entity, bool value)
 {
 	Do_SetBoolTag(C_TagIsUpdateDisabled, entity, value);
 }
-
 void Do_SetUpdateAndDrawDisabled(Entity entity, bool value)
 {
 	Do_SetUpdateDisabled(entity, value);
 	Do_SetDrawDisabled(entity, value);
 }
-
 void Do_SetStunFrames(Entity entity, int32_t value)
 {
 	StunFrames* component = Get_Component(C_StunFrames, entity);
 	component->mTag = value;
 }
-
 void Do_SetStateRotation(Entity entity, int32_t state, float rotation)
 {
 	DrawActorSys_SetStateRotation(entity, state, rotation);
 }
-
 DrawActor* Get_DrawActor(Entity entity)
 {
 	return Get_Component(C_DrawActor, entity);
@@ -1328,10 +1000,6 @@ void Do_SetNodes(Entity entity, Point* nodes)
 {
 	((Nodes*)Get_Component(C_Nodes, entity))->mNodes = nodes;
 }
-void Do_CopyGridNodesFromParent(Entity entity)
-{
-	Do_SetNodes(entity, Get_PointerToGridNodes(Get_ParentEntity(entity)));
-}
 void Do_SetStringSettings(Entity entity, StringPair* stringSettings)
 {
 	((StringSettings*)Get_Component(C_StringSettings, entity))->mSettings = stringSettings;
@@ -1340,7 +1008,6 @@ void Do_SetComplete(Entity entity)
 {
 	Do_SetBoolTag(C_TagIsComplete, entity, true);
 }
-
 void Do_SetGridPosition(Entity entity, int32_t x, int32_t y)
 {
 	GridPosition* gridPosition = Get_Component(C_GridPosition, entity);
@@ -1385,7 +1052,8 @@ void Do_DrawLineOfSight(Entity entity, SpriteBatch* spriteBatch, float offsetX, 
 		}
 	}
 
-	//TODOC99 CollisionEngineSys_HasLineOfSight(Get_CollisionEngine(), true, spriteBatch, Get_X(entity) + offsetX, Get_Y(entity) + offsetY, Get_PlayerX(), Get_PlayerY(), true);
+	Vector2 position = Get_Position(entity);
+	CollisionEngineSys_HasLineOfSight2(Get_CollisionEngine(), true, spriteBatch, position.X + offsetX, position.Y + offsetY, position.X, position.Y, true);
 }
 void Do_MoveCircle(Entity entity, float degree, float degreeOffset, float radius)
 {
@@ -1448,7 +1116,7 @@ void Do_SynchronizeAnimation2(Animation* anim)
 }
 void Do_Vibrate(int32_t player, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
-	InputPlayer_Vibrate(Input_GetPlayerOne(player), priority, frames, leftMotor, rightMotor);
+	InputPlayer_Vibrate(Input_GetPlayer(player), priority, frames, leftMotor, rightMotor);
 }
 void Do_Vibrate2(Entity entity, int32_t priority, int32_t frames, float leftMotor, float rightMotor)
 {
@@ -1669,15 +1337,6 @@ void Do_FaceSomewhere2(Entity entity, float x, bool reverse)
 		Do_SetFlipXBool(entity, reverse ? true : false);
 	}
 }
-/*
-void Do_ResetFrameTimers(std_vector<Timer>& timers, int32_t time)
-{
-	for (int32_t i = 0; i < timers.size(); i += 1)
-	{
-		Do_ResetFrameTimer(&timers[i], time);
-	}
-}
-*/
 void Do_ResetFrameTimer(Timer* timer, int32_t time)
 {
 	Timer_Reset(timer);
@@ -1766,7 +1425,7 @@ void Do_ResumeMusic(int32_t priority)
 {
 	Music_ResumeMusic(priority);
 }
-void Do_StopMusic()
+void Do_StopMusic(void)
 {
 	Music_StopMusic();
 }
@@ -1782,7 +1441,7 @@ void Do_PlayMusic3(const char* name, bool isLooping, bool isForced, bool isFadeI
 {
 	Music_PlayMusic(name, isLooping, isForced, isFadeIn, fadeInTime, isFadeOut, fadeOutTime);
 }
-void Do_PlayPreviousTrack()
+void Do_PlayPreviousTrack(void)
 {
 	Music_PlayPreviousTrack();
 }
@@ -1798,7 +1457,6 @@ void Do_DestroyChildren(Entity entity)
 		Do_SetComplete(search->entities[i]);
 	}
 }
-
 void Do_DestroyChildrenByName(Entity entity, const char* name)
 {
 	Do_DestroyChildrenByName2(entity, name, EE_STR_EMPTY);
@@ -1987,11 +1645,6 @@ void Do_SetImageForced2(Entity entity, int32_t state, int32_t phase, bool carry)
 {
 	DrawActorSys_SetImageState2(entity, Get_DrawActor(entity), state, phase, carry);
 }
-Entity Do_AddAnimation(Entity entity, float x, float y, int32_t timeLimit, const char* name)
-{
-	//TODO
-	return ENTITY_NOTHING;
-}
 void Do_RestrictOnSides(Entity entity)
 {
 	if (Is_LeftOfCamera(entity))
@@ -2049,40 +1702,9 @@ void Do_MoveAtAngle(Entity entity, double angle, float speed)
 	float moveY = (float)tempY;
 	Do_MoveAbsolute(entity, moveX, moveY);
 }
-void Do_AddBrDeathEffect(Entity entity, int32_t state, int32_t phase)
-{
-	//DrawActorSys_CreateExplosionModules(entity, state, phase, 60, 1);
-}
-void Do_AddNdDeathEffect(Entity entity, int32_t state, int32_t phase)
-{
-	//DrawActorSys_CreateExplosionModules(entity, state, phase, 240, 0);
-}
-void Do_DestroyIfDuplicate(Entity entity)
-{
-	/*
-	std_vector<Entity>& things = Get_EntitiesInPlay();
-	for (int32_t i = 0; i < things.size(); i += 1)
-	{
-		Entity target = things[i];
-		if (target != entity)
-		{
-			//int32_t myId = Get_InstanceId(entity);
-			//if (myId != -1 && myId == Get_InstanceId(target))
-			//{
-			//	if (Get_Name(entity).Equals(Get_Name(target)))
-			//	{
-			//		//TODO
-			//		//Do_SetCompletePermanently();
-			//	}
-			//}
-		}
-	}
-	*/
-}
-
 
 //GETS
-Random32* Get_SharedRandom()
+Random32* Get_SharedRandom(void)
 {
 	return Globals_GetSharedRandom();
 }
@@ -2116,7 +1738,7 @@ int32_t Get_AmountOfBodies(Entity entity)
 	int32_t counter = 0;
 	if (Is_BodyPresent(entity))
 	{
-		counter++;
+		counter += 1;
 	}
 	std_shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<OeTagIsExtraBody>(entity);
 	counter += search->mList.size();
@@ -2139,11 +1761,6 @@ HitFlashKit* Get_HitFlashKit(Entity entity)
 {
 	return Get_Component(C_HitFlashKit, entity);
 }
-int32_t DeprecatedGet_Tag(Entity entity, int32_t whatever)
-{
-	//TODO
-	return -1;
-}
 MoveGetter* Get_MoveGetter(Entity entity)
 {
 	return Get_Component(C_MoveGetter, entity);
@@ -2152,100 +1769,11 @@ float Get_Rotate(Entity entity)
 {
 	return Get_DrawActor(entity)->mRotation;
 }
-int32_t Get_AttackId()
+int32_t Get_AttackId(void)
 {
 	int32_t returnValue = _mAttackIdCounter;
-	_mAttackIdCounter++;
+	_mAttackIdCounter += 1;
 	return returnValue;
-}
-int32_t Get_LengthUntilTiles(int32_t xPos, int32_t yPos, int32_t directionX, int32_t directionY)
-{
-	return 0;
-	/*
-	CollisionEngine* collisionEngine = Get_CollisionEngine();
-	int32_t HARD_LIMIT = 26;
-	for (int32_t i = 0; i < HARD_LIMIT; i += 1)
-	{
-		int32_t gridX = xPos + i * directionX;
-		if ((gridX < 0) || (gridX > (collisionEngine->mCollisionGridSize.Width - 1)))
-		{
-			return -1;
-		}
-		int32_t gridY = yPos + i * directionY;
-		if ((gridY < 0) || (gridY > (collisionEngine->mCollisionGridSize.Height - 1)))
-		{
-			return -1;
-		}
-		int32_t collision = CollisionEngineSys_GetCollisionBitGrid(collisionEngine, gridX, gridY);
-		if (collision != 0)
-		{
-			return i;
-		}
-		//TODO (OLD)
-		//if (collision == OeObjectTypes.SOLID || collision == OeObjectTypes.INSTANT_DEATH || collision == OeObjectTypes.HURT || directionY == 1 && collision == OeObjectTypes.PLATFORM)
-		//{
-		//	return i;
-		//}
-	}
-	return -1;
-	*/
-}
-int32_t Get_ClosestTileUp(Entity entity)
-{
-	return Get_LengthUntilTiles(Get_BodyCollisionGridPositionX(entity), Get_BodyCollisionGridPositionY(entity), 0, -1);
-}
-int32_t Get_ClosestTileDown(Entity entity)
-{
-	return Get_LengthUntilTiles(Get_BodyCollisionGridPositionX(entity), Get_BodyCollisionGridPositionY(entity), 0, 1);
-}
-int32_t Get_ClosestTileRight(Entity entity)
-{
-	return Get_LengthUntilTiles(Get_BodyCollisionGridPositionX(entity), Get_BodyCollisionGridPositionY(entity), 1, 0);
-}
-int32_t Get_ClosestTileLeft(Entity entity)
-{
-	return Get_LengthUntilTiles(Get_BodyCollisionGridPositionX(entity), Get_BodyCollisionGridPositionY(entity), -1, 0);
-}
-int32_t Get_ClosestTile(Entity entity)
-{
-	int32_t tileUp = Get_ClosestTileUp(entity);
-	int32_t tileRight = Get_ClosestTileRight(entity);
-	int32_t tileDown = Get_ClosestTileDown(entity);
-	int32_t tileLeft = Get_ClosestTileLeft(entity);
-
-	if (tileUp == -1)
-	{
-		tileUp = 255;
-	}
-	if (tileRight == -1)
-	{
-		tileRight = 255;
-	}
-	if (tileDown == -1)
-	{
-		tileDown = 255;
-	}
-	if (tileLeft == -1)
-	{
-		tileLeft = 255;
-	}
-
-	if (tileUp < tileRight && tileUp < tileDown && tileUp < tileLeft)
-	{
-		return 0;
-	}
-	else if (tileRight < tileDown && tileRight < tileLeft && tileRight < tileUp)
-	{
-		return 1;
-	}
-	else if (tileDown < tileLeft && tileDown < tileUp && tileDown < tileRight)
-	{
-		return 2;
-	}
-	else
-	{
-		return 3;
-	}
 }
 float Get_ScaleX(Entity entity)
 {
@@ -2255,15 +1783,9 @@ float Get_ScaleY(Entity entity)
 {
 	return Get_DrawActor(entity)->mScale.Y;
 }
-Entity* Get_EntitiesInPlay()
+EntitySearch* Get_EntitiesInPlay(void)
 {
-	return 0;
-	//TODO return Get_ActiveGameState()->GetEntitiesInPlay();
-}
-GameSaveData* Get_CurrentSaveData()
-{
-	return NULL;
-	//TODO return OeGameSaveManager_GetCurrentSaveData();
+	return EntitySearch_CreateNewAllEntitySearch();
 }
 double Get_CurrentCircleX(float degree, float degreeOffset, float radius)
 {
@@ -2290,11 +1812,11 @@ int32_t Get_DirectionFromBool2(bool value, bool flip)
 	}
 	return temp;
 }
-int32_t Get_TileSize()
+int32_t Get_TileSize(void)
 {
 	return TILE_SIZE;
 }
-int32_t Get_HalfTileSize()
+int32_t Get_HalfTileSize(void)
 {
 	return HALF_TILE_SIZE;
 }
@@ -2310,26 +1832,26 @@ float Get_InterpolatedY(Entity entity, double delta)
 	//double temp = Utils_GetInterpolated(delta, Body_GetPosition(Get_Body(entity)).Y, Body_GetLastRenderPosition(Get_Body(entity)).Y);
 	//return (float)temp;
 }
-Vector2 Get_AdjustedMouse()
+Vector2 Get_AdjustedMouse(void)
 {
 	return Vector2_Zero;
 	// return Input_GetCameraAdjustedMouseForRetroScreen(Get_Camera());
 }
-float Get_AdjustedMouseX()
+float Get_AdjustedMouseX(void)
 {
 	return 0;
 	//return Input_GetCameraAdjustedMouseForRetroScreenX(Get_Camera());
 }
-float Get_AdjustedMouseY()
+float Get_AdjustedMouseY(void)
 {
 	return 0;
 	//return Input_GetCameraAdjustedMouseForRetroScreenY(Get_Camera());
 }
-float Get_MouseX()
+float Get_MouseX(void)
 {
 	return (float)Input_GetMouseX();
 }
-float Get_MouseY()
+float Get_MouseY(void)
 {
 	return (float)Input_GetMouseY();
 }
@@ -2337,7 +1859,7 @@ Color Get_Color(Entity entity)
 {
 	return Get_DrawActor(entity)->mTintColor;
 }
-CollisionEngine* Get_CollisionEngine()
+CollisionEngine* Get_CollisionEngine(void)
 {
 	return Get_FirstSetComponent(C_CollisionEngine);
 }
@@ -2589,39 +2111,39 @@ int32_t Get_CurrentImagePhase(Entity entity, int32_t state)
 {
 	return DrawActorSys_GetCurrentPhase(entity, state);
 }
-Camera* Get_Camera()
+Camera* Get_Camera(void)
 {
 	return ((Camera*)Get_FirstSetComponent(C_Camera));
 }
-Rectangle Get_CameraRectangle()
+Rectangle Get_CameraRectangle(void)
 {
 	return Camera_GetRectangle(Get_Camera(), 1.0f);
 }
-Rectangle Get_CameraRectangleExtended()
+Rectangle Get_CameraRectangleExtended(void)
 {
 	return Camera_GetRectangle(Get_Camera(), CAMERA_EXTENDED_CAMERA);
 }
-float Get_CenterOfCameraX()
+float Get_CenterOfCameraX(void)
 {
 	return Camera_GetCenterXFloat(Get_Camera());
 }
-float Get_CenterOfCameraY()
+float Get_CenterOfCameraY(void)
 {
 	return Camera_GetCenterYFloat(Get_Camera());
 }
-float Get_TopOfCamera()
+float Get_TopOfCamera(void)
 {
 	return Camera_GetTopFloat(Get_Camera());
 }
-float Get_RightOfCamera()
+float Get_RightOfCamera(void)
 {
 	return Camera_GetRightFloat(Get_Camera());
 }
-float Get_BottomOfCamera()
+float Get_BottomOfCamera(void)
 {
 	return Camera_GetBottomFloat(Get_Camera());
 }
-float Get_LeftOfCamera()
+float Get_LeftOfCamera(void)
 {
 	return Camera_GetLeftFloat(Get_Camera());
 }
@@ -2647,19 +2169,19 @@ void Do_SetPlayerNumber(Entity entity, int32_t playerNumber)
 	PlayerNumber* component = Get_Component(C_PlayerNumber, entity);
 	component->mTag = playerNumber;
 }
-GameState* Get_ActiveGameState()
+GameState* Get_ActiveGameState(void)
 {
 	return GameStateManager_GetGameState();
 }
-LevelData* Get_LevelData()
+LevelData* Get_LevelData(void)
 {
 	return GameHelper_GetLevelData();
 }
-Resource* Get_LevelDataResource()
+Resource* Get_LevelDataResource(void)
 {
 	return GameHelper_GetLevelDataResource();
 }
-const char* Get_LevelFileName()
+const char* Get_LevelFileName(void)
 {
 	return Get_LevelDataResource()->mFileNameWithoutExtension;
 }
@@ -2670,25 +2192,6 @@ Rectangle Get_BodyRectangle(Entity entity)
 Body* Get_Body(Entity entity)
 {
 	return Get_Component(C_Body, entity);
-}
-Body* Get_Body2(Entity entity, int32_t number)
-{
-	//TODO
-	/*
-	if (number != 0)
-	{
-		std_shared_ptr<EntitySearch> search = Do_SearchForChildrenWithComponent<OeTagIsExtraBody>(entity);
-		for (int32_t i = 0; i < search->mList.size(); i += 1)
-		{
-			Entity extraBody = search->mList[i];
-			if (i == (number - 1))
-			{
-				return Get_Body(extraBody);
-			}
-		}
-	}
-	*/
-	return Get_Body(entity);
 }
 float Get_X(Entity entity)
 {
@@ -2736,20 +2239,6 @@ float Get_InitialY(Entity entity)
 {
 	return Get_InitialPosition(entity).Y;
 }
-/*
-std_vector<OeStringPair> Get_InitialStringSettingsFromMap(std_type_index componentType)
-{
-	if (!Is_InitialStringSettingsMapPresent(componentType))
-	{
-		_mControllerComponentStringSettingsMap.Add(componentType, std_vector<OeStringPair>());
-	}
-	return _mControllerComponentStringSettingsMap[componentType];
-}
-*/
-const char* Get_TypeName(void* anyObject)
-{
-	return "DOES NOT WORK";
-}
 int32_t Get_FacingDirection(Entity entity)
 {
 	if (Is_FlipX(entity))
@@ -2761,176 +2250,6 @@ int32_t Get_FacingDirection(Entity entity)
 		return 1;
 	}
 }
-int32_t Get_RandomValidSpot(Entity entity, Random32* random, Vector2* spotTo)
-{
-	return 0;
-	//return Get_RandomValidSpot(entity, random, spotTo, false, false);
-}
-int32_t Get_RandomValidSpot2(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY)
-{
-	return 0;
-	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, false);
-}
-int32_t Get_RandomValidSpot3(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile)
-{
-	return 0;
-	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, lockToTile, -1, -1, -1, -1);
-}
-int32_t Get_RandomValidSpot4(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX, float anchorY, float minLimitToAnchor, float maxLimitToAnchor)
-{
-	return 0;
-	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, lockToTile, anchorX, anchorY, minLimitToAnchor, maxLimitToAnchor, -1, -1);
-}
-int32_t Get_RandomValidSpot5(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX,
-	float anchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot)
-{
-	return 0;
-	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, lockToTile, anchorX, anchorY, minLimitToAnchor, maxLimitToAnchor, minLimitToCurrentSpot, maxLimitToCurrentSpot, 0);
-}
-int32_t Get_RandomValidSpot6(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float anchorX,
-	float anchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int32_t validityCondition)
-{
-	return 0;
-	//return Get_RandomValidSpot(entity, random, spotTo, lockX, lockY, lockToTile, anchorX, anchorY, minLimitToAnchor, maxLimitToAnchor,
-	//	minLimitToCurrentSpot, maxLimitToCurrentSpot, validityCondition, -1, -1);
-}
-int32_t Get_RandomValidSpot7(Entity entity, Random32* random, Vector2* spotTo, bool lockX, bool lockY, bool lockToTile, float distAnchorX,
-	float distAnchorY, float minLimitToAnchor, float maxLimitToAnchor, float minLimitToCurrentSpot, float maxLimitToCurrentSpot, int32_t validityCondition, float lineOfSightAnchorX, float lineOfSightAnchorY)
-{
-	float currentSpotX = spotTo->X;
-	float currentSpotY = spotTo->Y;
-
-	int32_t counterLimit = 0;
-
-	if (lineOfSightAnchorX == -1)
-	{
-		lineOfSightAnchorX = Get_X(entity);
-	}
-	if (lineOfSightAnchorY == -1)
-	{
-		lineOfSightAnchorY = Get_Y(entity);
-	}
-
-	if (distAnchorX == -1)
-	{
-		distAnchorX = Get_X(entity);
-	}
-	if (distAnchorY == -1)
-	{
-		distAnchorY = Get_Y(entity);
-	}
-
-	Camera* camera = Get_Camera();
-	float left = (float)Camera_GetLeft(camera);
-	float top = (float)Camera_GetTop(camera);
-
-	float newX = -1;
-	float newY = -1;
-
-	bool isValid = true;
-	do
-	{
-		isValid = true;
-
-		int32_t limit = 200;
-		if (counterLimit >= limit)
-		{
-			spotTo->X = Get_X(entity);
-			spotTo->Y = Get_Y(entity);
-			//TODO C99Logger_LogWarning("Unable to find valid spot for " + Get_Name(entity) + " in " + Utils_ToString(limit) + " tries");
-			return -1;
-		}
-		else
-		{
-			counterLimit++;
-		}
-
-		if (lockX)
-		{
-			newX = Get_X(entity);
-		}
-		else
-		{
-			newX = left + Random32_NextInt(random, Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH));
-		}
-
-		if (lockY)
-		{
-			newY = Get_Y(entity);
-		}
-		else
-		{
-			newY = top + Random32_NextInt(random, Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT));
-		}
-
-		if (lockToTile)
-		{
-			newX = (float)Get_ValueLockedToTileSize(newX);
-			newY = (float)Get_ValueLockedToTileSize(newY);
-
-			newX += TILE_SIZE / 2;
-			newY += TILE_SIZE / 2;
-		}
-
-		if (validityCondition == 0)
-		{
-			if (!Is_LineOfSight2(lineOfSightAnchorX, lineOfSightAnchorY, newX, newY))
-			{
-				isValid = false;
-			}
-		}
-		else if (validityCondition == 1)
-		{
-			if (Get_CollisionBit(newX, newY, 0, 0) != 0)
-			{
-				isValid = false;
-			}
-		}
-
-		if (minLimitToCurrentSpot != -1 || maxLimitToCurrentSpot != -1)
-		{
-			double dist = Get_Distance6(currentSpotX, currentSpotY, newX, newY);
-			if (minLimitToCurrentSpot != -1)
-			{
-				if (dist < minLimitToCurrentSpot)
-				{
-					isValid = false;
-				}
-			}
-			if (maxLimitToCurrentSpot != -1)
-			{
-				if (dist >= maxLimitToCurrentSpot)
-				{
-					isValid = false;
-				}
-			}
-		}
-
-		if (minLimitToAnchor != -1 || maxLimitToAnchor != -1)
-		{
-			double dist = Get_Distance6(distAnchorX, distAnchorY, newX, newY);
-			if (minLimitToAnchor != -1)
-			{
-				if (dist < minLimitToAnchor)
-				{
-					isValid = false;
-				}
-			}
-			if (maxLimitToAnchor != -1)
-			{
-				if (dist >= maxLimitToAnchor)
-				{
-					isValid = false;
-				}
-			}
-		}
-	} while (!isValid);
-
-	spotTo->X = newX;
-	spotTo->Y = newY;
-
-	return 0;
-}
 int32_t Get_ValueLockedToTileSize(float value)
 {
 	int32_t tiles = (int32_t)(value / TILE_SIZE);
@@ -2940,81 +2259,6 @@ int32_t Get_TuningAsInt(Entity entity, const char* dataName)
 {
 	return 0;
 }
-/*
-int32_t Get_TuningAsInt(Entity entity, const char* dataName)
-{
-	return OeTuning_GetTuningAsInt(Get_Name(entity), Get_TuningNameAsInt(entity, dataName));
-}
-float Get_TuningAsFloat(Entity entity, const char* dataName)
-{
-	return OeTuning_GetTuning(Get_Name(entity), Get_TuningNameAsFloat(entity, dataName));
-}
-int32_t Get_GlobalTuningAsInt(Entity entity, const char* dataName)
-{
-	return OeTuning_GetGlobalTuningAsInt(Get_Name(entity), Get_TuningNameAsInt(entity, dataName));
-}
-float Get_GlobalTuningAsFloat(Entity entity, const char* dataName)
-{
-	return OeTuning_GetGlobalTuning(Get_Name(entity), Get_TuningNameAsFloat(entity, dataName));
-}
-int32_t Get_Global777TuningAsInt(Entity entity, const char* dataName)
-{
-	return OeTuning_GetGlobal777TuningAsInt(Get_TuningNameAsInt(entity, dataName));
-}
-float Get_Global777TuningAsFloat(Entity entity, const char* dataName)
-{
-	return OeTuning_GetGlobal777Tuning(Get_TuningNameAsFloat(entity, dataName));
-}
-int32_t Get_System777TuningAsInt(Entity entity, const char* dataName)
-{
-	return OeTuning_GetSystem777TuningAsInt(Get_TuningNameAsInt(entity, dataName));
-}
-float Get_System777TuningAsFloat(Entity entity, const char* dataName)
-{
-	return OeTuning_GetSystem777Tuning(Get_TuningNameAsFloat(entity, dataName));
-}
-//private
-const char* Get_TuningNameAsInt(Entity entity, const char* dataName)
-{
-	return Get_TuningName(entity, "INT", dataName);
-}
-const char* Get_TuningName(Entity entity, const char* dataType, const char* dataName)
-{
-	return "";
-	//TODO SOMEDAY 2024
-	//std_string thingName = Get_Name(entity);
-	//
-	//Dictionary<string, string> subMap;
-	//bool tuningsSuccess = _mTuningsMap.TryGetValue(thingName, out subMap);
-	//if (!tuningsSuccess)
-	//{
-	//	subMap = new Dictionary<string, string>();
-	//	_mTuningsMap.Add(thingName, subMap);
-	//}
-	//
-	//string tuningToReturn;
-	//bool tuningSuccess = _mTuningsMap[thingName].TryGetValue(dataName, out tuningToReturn);
-	//if (!tuningSuccess)
-	//{
-	//	_mBuilder.Clear();
-	//	_mBuilder.Append('[');
-	//	_mBuilder.Append(dataType);
-	//	_mBuilder.Append(']');
-	//	_mBuilder.Append('[');
-	//	_mBuilder.Append(dataName);
-	//	_mBuilder.Append(']');
-	//	tuningToReturn = _mBuilder.ToString();
-	//	subMap.Add(dataName, tuningToReturn);
-	//}
-	//
-	//return tuningToReturn;
-}
-//
-const char* Get_TuningNameAsFloat(Entity entity, const char* dataName)
-{
-	return Get_TuningName(entity, "FLT", dataName);
-}
-*/
 int32_t Get_ClampedValueAsInt(int32_t value, int32_t limit)
 {
 	int32_t signum = Math_SignumInt(value);
@@ -3048,160 +2292,6 @@ double Get_ClampedValueAsDouble(double value, double limit)
 	double returnValue = abs * signum;
 	return returnValue;
 }
-/*
-int32_t Get_AmountOfTiles(float x, float y, int32_t directionX, int32_t directionY, std_vector<int32_t> types)
-{
-	return Get_AmountOfTiles(x, y, directionX, directionY, types, -1);
-}
-int32_t Get_AmountOfTiles(float x, float y, int32_t directionX, int32_t directionY, std_vector<int32_t> types, int32_t returnOnFailure)
-{
-	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
-
-	int32_t HARD_LIMIT = 50;
-	for (int32_t i = 0; i < HARD_LIMIT; i += 1)
-	{
-		int32_t newX = point.X + i * directionX;
-		int32_t newY = point.Y + i * directionY;
-		int32_t bit = CollisionEngineSys_GetCollisionBitSafeGrid(Get_CollisionEngine(), newX, newY, -1);
-
-		for (int32_t j = 0; j < types.size(); j++)
-		{
-			if (bit == types[j])
-			{
-				return i;
-			}
-		}
-	}
-
-	return returnOnFailure;
-}
-int32_t Get_NearestTileDirection(float x, float y, std_vector<int32_t> types)
-{
-	int32_t returnDirection = -1;
-
-	int32_t up = Get_AmountOfTiles(x, y, 0, -1, types, 999);
-	int32_t down = Get_AmountOfTiles(x, y, 0, 1, types, 999);
-	int32_t left = Get_AmountOfTiles(x, y, -1, 0, types, 999);
-	int32_t right = Get_AmountOfTiles(x, y, 1, 0, types, 999);
-
-	if (left <= right && left <= down && left <= up)
-	{
-		returnDirection = OeDirections_LEFT;
-	}
-	if (right <= left && right <= down && right <= up)
-	{
-		returnDirection = OeDirections_RIGHT;
-	}
-	if (up <= down && up <= left && up <= right)
-	{
-		returnDirection = OeDirections_UP;
-	}
-	if (down <= up && down <= left && down <= right)
-	{
-		returnDirection = OeDirections_DOWN;
-	}
-
-	return returnDirection;
-}
-void Get_NearestTileDirectionAsPoint(Point* point, float x, float y, std_vector<int32_t> types)
-{
-	int32_t direction = Get_NearestTileDirection(x, y, types);
-
-	if (direction == OeDirections_UP)
-	{
-		*point = OePoints_Up;
-	}
-	else if (direction == OeDirections_RIGHT)
-	{
-		*point = OePoints_Right;
-	}
-	else if (direction == OeDirections_DOWN)
-	{
-		*point = OePoints_Down;
-	}
-	else if (direction == OeDirections_LEFT)
-	{
-		*point = OePoints_Left;
-	}
-}
-int32_t Get_AmountOfTilesInDirection(float x, float y, int32_t direction, int32_t outOfBoundsExtra, std_vector<int32_t> types)
-{
-	return Get_AmountOfTilesInDirection(x, y, direction, outOfBoundsExtra, types, -1);
-}
-int32_t Get_AmountOfTilesInDirection(float x, float y, int32_t direction, int32_t outOfBoundsExtra, std_vector<int32_t> types, int32_t returnValue)
-{
-	Point point = CollisionEngineSys_GetCollisionGridPosition(x, y);
-
-	int32_t top = Get_LengthUntilTiles(point.X, point.Y, 0, -1, outOfBoundsExtra, types, returnValue);
-	int32_t bottom = Get_LengthUntilTiles(point.X, point.Y, 0, 1, outOfBoundsExtra, types, returnValue);
-	int32_t left = Get_LengthUntilTiles(point.X, point.Y, -1, 0, outOfBoundsExtra, types, returnValue);
-	int32_t right = Get_LengthUntilTiles(point.X, point.Y, 1, 0, outOfBoundsExtra, types, returnValue);
-
-	if (direction == OeDirections_UP)
-	{
-		return top;
-	}
-	else if (direction == OeDirections_RIGHT)
-	{
-		return right;
-	}
-	else if (direction == OeDirections_DOWN)
-	{
-		return bottom;
-	}
-	else if (direction == OeDirections_LEFT)
-	{
-		return left;
-	}
-
-	return -1;
-}
-int32_t Get_LengthUntilTiles(int32_t x, int32_t y, int32_t directionX, int32_t directionY, int32_t outOfBoundsExtra, std_vector<int32_t> types)
-{
-	return Get_LengthUntilTiles(x, y, directionX, directionY, outOfBoundsExtra, types, -1);
-}
-int32_t Get_LengthUntilTiles(int32_t x, int32_t y, int32_t directionX, int32_t directionY, int32_t outOfBoundsExtra, std_vector<int32_t> types, int32_t returnValue)
-{
-	int32_t HARD_LIMIT = 100;
-
-	CollisionEngine* collisionEngine = Get_CollisionEngine();
-
-	int32_t upperLimitX = collisionEngine->mCollisionGridSize.Width;
-	int32_t upperLimitY = collisionEngine->mCollisionGridSize.Height;
-
-	for (int32_t i = 0; i < HARD_LIMIT; i += 1)
-	{
-		int32_t positionX = x + i * directionX;
-		int32_t positionY = y + i * directionY;
-
-		if ((positionX < 0) || (positionX > (upperLimitX - 1)) || (positionY < 0) || (positionY > (upperLimitY - 1)))
-		{
-			return i + outOfBoundsExtra;
-		}
-
-		int32_t collision = CollisionEngineSys_GetCollisionBitGrid(collisionEngine, positionX, positionY);
-		if (types.size() == 0)
-		{
-			if (collision != 0)
-			{
-				return i;
-			}
-		}
-		else
-		{
-			for (int32_t j = 0; j < types.size(); j++)
-			{
-				if (collision == types[j])
-				{
-					return i;
-				}
-			}
-		}
-	}
-
-	return returnValue;
-}
-*/
 Animation* Get_Animation(Entity entity, int32_t state, int32_t phase)
 {
 	return DrawActorSys_GetAnimation(entity, state, phase);
@@ -3248,7 +2338,7 @@ void Get_PointDirectionFromEightWayIntegerDirection(Point* point, int32_t value)
 		break;
 	}
 }
-Body* Get_PlayerBody()
+Body* Get_PlayerBody(void)
 {
 	return Get_Body(Get_Player());
 }
@@ -3256,7 +2346,7 @@ Entity Get_ClosestPlayer2(Entity entity)
 {
 	return Get_ClosestPlayer(Get_X(entity), Get_Y(entity));
 }
-Vector2 Get_PlayerPosition()
+Vector2 Get_PlayerPosition(void)
 {
 	Entity player = Get_Player();
 	if (player == ENTITY_NOTHING)
@@ -3267,21 +2357,21 @@ Vector2 Get_PlayerPosition()
 
 	return Get_Position(player);
 }
-float Get_PlayerX()
+float Get_PlayerX(void)
 {
 	return Get_PlayerPosition().X;
 }
-float Get_PlayerY()
+float Get_PlayerY(void)
 {
 	return Get_PlayerPosition().Y;
 }
-float Get_PlayerX2(int32_t i)
+float Get_PlayerXByNumber(int32_t playerNumber)
 {
-	return Get_X(Get_Player2(i));
+	return Get_X(Get_PlayerByNumber(playerNumber));
 }
-float Get_PlayerY2(int32_t i)
+float Get_PlayerYByNumber(int32_t playerNumber)
 {
-	return Get_Y(Get_Player2(i));
+	return Get_Y(Get_PlayerByNumber(playerNumber));
 }
 float Get_ClosestPlayerX(Entity entity)
 {
@@ -3295,9 +2385,9 @@ double Get_AngleToPlayer(Entity entity)
 {
 	return Get_AngleToThing(entity, Get_Player());
 }
-double Get_AngleToPlayer2(Entity entity, int32_t i)
+double Get_AngleToPlayerByNumber(Entity entity, int32_t playerNumber)
 {
-	return Get_AngleToThing(entity, Get_Player2(i));
+	return Get_AngleToThing(entity, Get_PlayerByNumber(playerNumber));
 }
 double Get_AngleToClosestPlayer(Entity entity)
 {
@@ -3695,7 +2785,7 @@ float Get_ArcVelocityY(float targetPosY, float throwPosY, float grav, int32_t tr
 	startVelY = (diffY - 0.5f * grav * travelTime * travelTime) / travelTime;
 	return startVelY * mul;
 }
-int32_t Get_LevelFrameCount()
+int32_t Get_LevelFrameCount(void)
 {
 	return ((LevelFrameCounter*)Get_FirstSetComponent(C_LevelFrameCounter))->mCounter;
 }
@@ -3841,15 +2931,15 @@ void Do_SendBroadcast4(int32_t type, int32_t packet1, int32_t packet2, int32_t p
 {
 	GameState_Do_SendBroadcast(Get_ActiveGameState(), type, packet1, packet2, packet3);
 }
-int32_t Get_CameraHingeBottom()
+int32_t Get_CameraHingeBottom(void)
 {
 	return Get_Camera()->mHingeGateBottom;
 }
-void Do_SaveGame()
+void Do_SaveGame(void)
 {
 	GameSaveManager_Save();
 }
-void Do_SaveUserConfig()
+void Do_SaveUserConfig(void)
 {
 	Cvars_SaveUserConfig();
 }
@@ -3880,7 +2970,7 @@ bool Is_IntersectingCamera2(Camera* camera, int32_t posX, int32_t posY, int32_t 
 	}
 	return Camera_IntersectsCameraRectMul(camera, &rect, mul);
 }
-Rectangle Get_LevelBoundsRectangle()
+Rectangle Get_LevelBoundsRectangle(void)
 {
 	return LevelData_GetLevelBoundsRectangle(Get_LevelData());
 }
@@ -4147,8 +3237,7 @@ bool Is_NearCollisionUpperLeft(Entity entity, int32_t xDirection, int32_t yDirec
 }
 bool Is_LineOfSight(float x1, float y1, float x2, float y2, bool respectOneWays)
 {
-	return false;
-	//TODOreturn CollisionEngineSys_HasLineOfSight(Get_CollisionEngine(), x1, y1, x2, y2, respectOneWays);
+	return CollisionEngineSys_HasLineOfSight(Get_CollisionEngine(), x1, y1, x2, y2, respectOneWays);
 }
 bool Is_LineOfSight2(float x1, float y1, float x2, float y2)
 {
@@ -4342,7 +3431,6 @@ bool Is_DrawDisabled(Entity entity)
 {
 	return Is_ComponentPresent(C_TagIsDrawDisabled, entity);
 }
-
 void* Get_Component(ComponentType ctype, Entity entity)
 {
 	return GameStateManager_Set(ctype, entity);
@@ -4353,8 +3441,15 @@ void* Do_InitComponent(ComponentType ctype, Entity entity)
 }
 Entity Get_ChildByComponent(ComponentType ctype, Entity entity)
 {
-	return ENTITY_NOTHING;
-	//TODO C99return Get_ChildByComponent<T>(entity, 0);
+	EntitySearch* search = Do_SearchForChildrenWithComponent(ctype, entity);
+	if (search->len <= 0)
+	{
+		return ENTITY_NOTHING;
+	}
+	else
+	{
+		return search->entities[0];
+	}
 }
 void Do_SetBoolTag(ComponentType ctype, Entity entity, bool value)
 {
@@ -4454,7 +3549,6 @@ void Do_DestroyChildrenWithComponent2(ComponentType ctype, Entity entity, const 
 		Do_SetComplete(target);
 	}
 }
-
 void Do_UnsetAtIndexAndRemoveDummyEntityIfLast(ComponentPack* pack, int32_t index)
 {
 	Entity dummyEntity = pack->Entities[index];

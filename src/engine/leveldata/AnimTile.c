@@ -96,12 +96,9 @@ void AnimTile_Draw(AnimTile* at, SpriteBatch* spriteBatch, Color color, int32_t 
 
 	if (at->mIsWrap)
 	{
-		//TODO C99
-		/*
-		Sheet_DrawSourceRect(_mWrapSheet, spriteBatch, color, depth, true, nullptr, Vector2(x + (TILE_SIZE / 2), y + (TILE_SIZE / 2)),
+		/*Sheet_DrawSourceRect(_mWrapSheet, spriteBatch, color, depth, true, nullptr, Vector2(x + (TILE_SIZE / 2), y + (TILE_SIZE / 2)),
 			Rectangle(0 + _mWrapOffset.X, 0 + _mWrapOffset.Y, TILE_SIZE, TILE_SIZE),
-			scaler, mRotation + rotation, flippingX, flippingY);
-			*/
+			scaler, mRotation + rotation, flippingX, flippingY);*/ //UNUSED
 	}
 	else
 	{
@@ -124,7 +121,7 @@ void AnimTile_LoadAnimation(AnimTile* at)
 	{
 		if (!Utils_StringEqualTo(at->mWrapTextureName, EE_STR_NOT_SET))
 		{
-			//TODO C99 at->_mWrapSheet = new OeSheet(OeFile::Combine("data", "gfx", "special", "anim", mWrapTextureName + ".png"));
+			//at->_mWrapSheet = new OeSheet(OeFile::Combine("data", "gfx", "special", "anim", mWrapTextureName + ".png")); //UNUSED
 		}
 	}
 	else

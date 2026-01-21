@@ -210,12 +210,11 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 
 	if (isMappedText && !Utils_IsCurrentLanguageEnglish())
 	{
-		//TODO C99
 		/*text->mTotalString = Utils_GetStringWithNewLines(mTotalString, font, OeCvars_GetAsInt(OeCvars_ENGINE_CUTSCENE_INTL_TEXT_WORD_WRAP_WIDTH));
 		if (GetSpeedToIncrease() > 0)
 		{
 			text->mIsSpeedIncreased = true;
-		}*/
+		}*/ //UNUSED
 	}
 
 	Utils_strlcpy(text->mCurrentString, EE_STR_EMPTY, EE_FILENAME_MAX);

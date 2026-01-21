@@ -118,7 +118,7 @@ static void DrawHudRoutine(Entity owner, SpecialMcFinalBossEffect* data, SpriteB
 void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationName, Vector2 bloodOffset, bool disableShaking, 
 	int32_t bloodCutoff, int32_t forcedDirection)
 {
-	Entity entity = Do_BuildNewEntity("MC Final Boss Effect");
+	Entity entity = Do_BuildNewEntityWithName("MC Final Boss Effect");
 	Do_SetPosition(entity, position.X, position.Y);
 	SpecialMcFinalBossEffect* component = Do_InitComponent(C_SpecialMcFinalBossEffect, entity);
 	component->mPosition = position;
@@ -130,7 +130,7 @@ void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationN
 	InitAfterInit(component);
 }
 
-System* SpecialMcFinalBossEffectSys_CreateSystem()
+System* SpecialMcFinalBossEffectSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_SpecialMcFinalBossEffect);
 	ss->_mUpdateRoutine = UpdateRoutine;

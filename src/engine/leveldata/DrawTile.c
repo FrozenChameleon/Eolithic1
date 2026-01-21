@@ -22,14 +22,6 @@ void DrawTile_Init(DrawTile* drawTile)
 	drawTile->mPoint = Points_NegativeOne;
 	drawTile->mOffsetPoint = Points_NegativeOne;
 }
-void DrawTile_Write(DrawTile* drawTile, BufferWriter* writer)
-{
-	/*writer->WriteString(drawTile->mAnimation);
-	OePoints_Write(drawTile->mPoint, writer);
-	writer->WriteBoolean(drawTile->mFlipX);
-	writer->WriteBoolean(drawTile->mFlipY);
-	writer->WriteSingle(drawTile->mRotation);*/
-}
 void DrawTile_Read(DrawTile* drawTile, int32_t version, BufferReader* reader)
 {
 	BufferReader_ReadString(reader, drawTile->mAnimation, EE_FILENAME_MAX);

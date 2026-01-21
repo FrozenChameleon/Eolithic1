@@ -24,46 +24,43 @@ enum GameStateManagerGameState
 //extern std::vector<OeSystem*> StateSystems;
 //extern std::vector<OeGameState*> GameStates;
 
-void GameStateManager_Ctor();
-int32_t GameStateManager_GetGlobalSystemsLen();
-System** GameStateManager_GetGlobalSystems();
+void GameStateManager_Ctor(void);
+int32_t GameStateManager_GetGlobalSystemsLen(void);
+System** GameStateManager_GetGlobalSystems(void);
 void GameStateManager_AddGlobalSystem(System* sys);
-int32_t GameStateManager_GetStateSystemsLen();
-System** GameStateManager_GetStateSystems();
+int32_t GameStateManager_GetStateSystemsLen(void);
+System** GameStateManager_GetStateSystems(void);
 void GameStateManager_AddStateSystem(System* sys);
-GameState* GameStateManager_GetGameState();
+GameState* GameStateManager_GetGameState(void);
 //GameState* GameStateManager_ActiveGameStateForRenderCamera();
-void GameStateManager_UpdateLastRenderPosition();
-void GameStateManager_Tick();
+void GameStateManager_UpdateLastRenderPosition(void);
+void GameStateManager_Tick(void);
 void GameStateManager_Draw(SpriteBatch* spriteBatch);
 void GameStateManager_DrawHud(SpriteBatch* spriteBatch);
 void GameStateManager_DrawDebugHud(SpriteBatch* spriteBatch);
-void GameStateManager_InitDefaultNormalState();
-void GameStateManager_InitDefaultPauseState();
+void GameStateManager_InitDefaultNormalState(void);
 void GameStateManager_SetGameState(int32_t value);
 void GameStateManager_SetGameState2(int32_t value, bool forceNow);
 void GameStateManager_DebugDrawInfoHelper(int32_t* counter, SpriteBatch* spriteBatch, const char* text);
-InputPlayer* GameStateManager_GetPlayerInput(Entity thing);
-Camera* GameStateManager_GetCurrentRenderCamera();
+Camera* GameStateManager_GetCurrentRenderCamera(void);
 void GameStateManager_DebugForceLoadMapNow(const char* map);
 void GameStateManager_SetupLoadMap(const char* s);
-void GameStateManager_SetupReloadMap();
-const char* GameStateManager_GetCurrentFileName();
-void GameStateManager_DebugForceReloadMapNow();
-void GameStateManager_SetupLoadMapWithRecording(const char* recordingName);
+void GameStateManager_SetupReloadMap(void);
+const char* GameStateManager_GetCurrentFileName(void);
+void GameStateManager_DebugForceReloadMapNow(void);
 void GameStateManager_LoadMap(const char* mapToLoad);
-bool GameStateManager_IsNormalState();
-bool GameStateManager_IsPausedState();
-void GameStateManager_HandleGameStateChange();
-void GameStateManager_HandleLoadNextMap();
-bool GameStateManager_JustChangedGameStateThisFrame();
-void GameStateManager_HandleJustChangedGameStateThisFrame();
+bool GameStateManager_IsNormalState(void);
+bool GameStateManager_IsPausedState(void);
+void GameStateManager_HandleGameStateChange(void);
+void GameStateManager_HandleLoadNextMap(void);
+bool GameStateManager_JustChangedGameStateThisFrame(void);
+void GameStateManager_HandleJustChangedGameStateThisFrame(void);
 void GameStateManager_SetCurrentGameStateForRenderCamera(int32_t value);
-int32_t GameStateManager_GetCurrentGameState();
+int32_t GameStateManager_GetCurrentGameState(void);
 void GameStateManager_SetCurrentGameState(int32_t value);
-void GameStateManager_IncrementTicksSinceMapLoad();
-uint64_t GameStateManager_GetTicksSinceMapLoad();
-int32_t GameStateManager_GetUniqueMapSeed();
+void GameStateManager_IncrementTicksSinceMapLoad(void);
+uint64_t GameStateManager_GetTicksSinceMapLoad(void);
+int32_t GameStateManager_GetUniqueMapSeed(void);
 void GameStateManager_SetUniqueMapSeed(int32_t value);
 
 ComponentPack* GameStateManager_GetComponentPack(ComponentType ctype);
@@ -81,5 +78,5 @@ void* GameStateManager_TryGetComponent(ComponentType ctype, Entity entity, bool*
 void* GameStateManager_TryGetFirstSetComponent(ComponentType ctype, bool* wasSuccessful);
 
 #ifdef EDITOR_MODE
-void GameStateManager_SaveComponentSizes();
+void GameStateManager_SaveComponentSizes(void);
 #endif

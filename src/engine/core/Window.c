@@ -29,12 +29,12 @@ static bool _mHasLoadedIcon;
 static bool _mIsWindowActive;
 static SDL_Window* _mWindowContext;
 
-static SDL_DisplayID GetCurrentDisplayID()
+static SDL_DisplayID GetCurrentDisplayID(void)
 {
 	return SDL_GetDisplayForWindow(_mWindowContext);
 }
 
-static bool IsFullscreenRightNow()
+static bool IsFullscreenRightNow(void)
 {
 #ifdef DEBUG_DEF_FORCE_FULLSCREEN_OFF
 	return false;
@@ -56,7 +56,7 @@ static bool IsFullscreenRightNow()
 	return isFullscreen;
 #endif
 }
-static uint32_t GetWindowFlagForFullscreen()
+static uint32_t GetWindowFlagForFullscreen(void)
 {
 	if (IsFullscreenRightNow())
 	{
@@ -68,7 +68,7 @@ static uint32_t GetWindowFlagForFullscreen()
 	}
 }
 
-static Rectangle GetProposedWindowBounds()
+static Rectangle GetProposedWindowBounds(void)
 {
 	Rectangle returnRect = { 0 };
 
@@ -103,7 +103,7 @@ static Rectangle GetProposedWindowBounds()
 	}
 }
 
-int32_t Window_Init()
+int32_t Window_Init(void)
 {
 	if (_mHasWindowInit)
 	{
@@ -136,30 +136,30 @@ int32_t Window_Init()
 
 	return 0;
 }
-bool Window_IsFullscreen()
+bool Window_IsFullscreen(void)
 {
 	return Cvars_GetAsBool(CVARS_USER_IS_FULLSCREEN);
 }
-void Window_UpdateFullscreen()
+void Window_UpdateFullscreen(void)
 {
 	Rectangle proposedWindowBounds = GetProposedWindowBounds();
 	SDL_SetWindowSize(_mWindowContext, proposedWindowBounds.Width, proposedWindowBounds.Height);
 	SDL_SetWindowFullscreen(_mWindowContext, IsFullscreenRightNow());
 }
-void Window_SetWindowPositionToCentered()
+void Window_SetWindowPositionToCentered(void)
 {
 	SDL_SetWindowPosition(_mWindowContext, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
-void* Window_GetWindowContext()
+void* Window_GetWindowContext(void)
 {
 	return _mWindowContext;
 }
-void Window_Dispose()
+void Window_Dispose(void)
 {
 	SDL_DestroyWindow(_mWindowContext);
 	_mWindowContext = NULL;
 }
-bool Window_IsTheMouseVisible()
+bool Window_IsTheMouseVisible(void)
 {
 	return SDL_CursorVisible();
 }
@@ -174,13 +174,13 @@ void Window_SetTheMouseVisible(bool isVisible)
 		SDL_HideCursor();
 	}
 }
-Rectangle Window_GetWindowSize()
+Rectangle Window_GetWindowSize(void)
 {
 	Rectangle rect = Rectangle_Empty;
 	SDL_GetWindowSize(_mWindowContext, &rect.Width, &rect.Height);
 	return rect;
 }
-Rectangle Window_GetDisplayBounds()
+Rectangle Window_GetDisplayBounds(void)
 {
 	Rectangle returnRect = { 0 };
 	SDL_Rect displayBounds = { 0 };
@@ -224,7 +224,7 @@ Rectangle* Window_GetAllDisplayModeBounds(int32_t* length)
 	*length = (int32_t)arrlen(arr_display_modes_bounds);
 	return arr_display_modes_bounds;
 }
-bool Window_IsWindowActive()
+bool Window_IsWindowActive(void)
 {
 	return _mIsWindowActive;
 }
@@ -232,7 +232,7 @@ void Window_SetWindowActive(bool value)
 {
 	_mIsWindowActive = value;
 }
-void Window_LoadIcon()
+void Window_LoadIcon(void)
 {
 	if (_mHasLoadedIcon)
 	{

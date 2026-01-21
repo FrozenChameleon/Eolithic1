@@ -42,7 +42,7 @@ bool GLOBALS_DEBUG_IS_EDITOR_MODE;
 bool GLOBALS_DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD;
 bool GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS;
 
-bool Globals_DebugIsRenderDisabled()
+bool Globals_DebugIsRenderDisabled(void)
 {
 	return _mIsRenderDisabled;
 }
@@ -50,11 +50,11 @@ void Globals_DebugSetRenderDisabled(bool value)
 {
 	_mIsRenderDisabled = value;
 }
-bool Globals_IsAutoMode()
+bool Globals_IsAutoMode(void)
 {
 	return _mIsAutoMode;
 }
-bool Globals_IsAutoModeFixed()
+bool Globals_IsAutoModeFixed(void)
 {
 	return _mIsAutoModeFixed;
 }
@@ -64,15 +64,15 @@ void Globals_TurnOnAutoMode(bool isFixed)
 	_mIsAutoMode = true;
 	_mIsAutoModeFixed = isFixed;
 }
-Random32* Globals_GetSharedRandom()
+Random32* Globals_GetSharedRandom(void)
 {
 	return &_mSharedRandom;
 }
-bool Globals_IsAudioDisabledPermanently()
+bool Globals_IsAudioDisabledPermanently(void)
 {
 	return _mIsAudioDisabled;
 }
-void Globals_DisableAudioPermanently()
+void Globals_DisableAudioPermanently(void)
 {
 	if (_mIsAudioDisabled)
 	{
@@ -82,7 +82,7 @@ void Globals_DisableAudioPermanently()
 	Logger_LogError("Disabling all audio");
 	_mIsAudioDisabled = true;
 }
-void Globals_DisableAudioPermanentlyBecauseOfNoAudioHardware()
+void Globals_DisableAudioPermanentlyBecauseOfNoAudioHardware(void)
 {
 	if (_mIsAudioDisabled)
 	{
@@ -102,35 +102,35 @@ void Globals_SetDebugFileMode(bool value)
 	_mDebugFileModeWasSet = true;
 	_mIsDebugFileMode = value;
 }
-bool Globals_IsDebugFileMode()
+bool Globals_IsDebugFileMode(void)
 {
 	return _mIsDebugFileMode;
 }
-void Globals_SetAsExceptionUnsafe()
+void Globals_SetAsExceptionUnsafe(void)
 {
 	_mIsExceptionUnsafe = true;
 }
-bool Globals_IsExceptionUnsafe()
+bool Globals_IsExceptionUnsafe(void)
 {
 	return _mIsExceptionUnsafe;
 }
-void Globals_SetAsNeedToTestFrameRate()
+void Globals_SetAsNeedToTestFrameRate(void)
 {
 	_mNeedToTestFrameRate = true;
 }
-bool Globals_NeedToTestFrameRate()
+bool Globals_NeedToTestFrameRate(void)
 {
 	return _mNeedToTestFrameRate;
 }
-void Globals_SetAsGameLoaded()
+void Globals_SetAsGameLoaded(void)
 {
 	_mIsGameLoaded = true;
 }
-bool Globals_IsGameLoaded()
+bool Globals_IsGameLoaded(void)
 {
 	return _mIsGameLoaded;
 }
-void Globals_DisableSavingUserData()
+void Globals_DisableSavingUserData(void)
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_SAVING
 	return;
@@ -138,7 +138,7 @@ void Globals_DisableSavingUserData()
 	_mIsSavingUserDataDisabled = true;
 #endif
 }
-bool Globals_IsSavingUserDataDisabled()
+bool Globals_IsSavingUserDataDisabled(void)
 {
 #ifdef DEBUG_DEF_DISABLE_SAVING
 	return true;
@@ -146,7 +146,7 @@ bool Globals_IsSavingUserDataDisabled()
 	return _mIsSavingUserDataDisabled;
 #endif
 }
-void Globals_DisableAchievements()
+void Globals_DisableAchievements(void)
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_ACHIEVEMENTS
 	return;
@@ -154,11 +154,11 @@ void Globals_DisableAchievements()
 	_mAreAchievementsDisabled = true;
 #endif
 }
-bool Globals_AreAchievementsDisabled()
+bool Globals_AreAchievementsDisabled(void)
 {
 	return _mAreAchievementsDisabled;
 }
-void Globals_DisableLoadingUserData()
+void Globals_DisableLoadingUserData(void)
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_LOADING
 	return;
@@ -166,7 +166,7 @@ void Globals_DisableLoadingUserData()
 	_mIsLoadingUserDataDisabled = true;
 #endif
 }
-bool Globals_IsLoadingUserDataDisabled()
+bool Globals_IsLoadingUserDataDisabled(void)
 {
 #ifdef DEBUG_DEF_DISABLE_LOADING
 	return true;
@@ -174,7 +174,7 @@ bool Globals_IsLoadingUserDataDisabled()
 	return _mIsLoadingUserDataDisabled;
 #endif
 }
-void Globals_DisableLeaderboards()
+void Globals_DisableLeaderboards(void)
 {
 #ifdef DEBUG_DEF_DISABLE_RECORDING_SAFETY_LEADERBOARDS
 	return;
@@ -182,15 +182,15 @@ void Globals_DisableLeaderboards()
 	Service_DisableLeaderboards();
 #endif
 }
-bool Globals_AreLeaderboardDisabled()
+bool Globals_AreLeaderboardDisabled(void)
 {
 	return Service_AreLeaderboardDisabled();
 }
-double Globals_GetDebugGameSpeedAsMul()
+double Globals_GetDebugGameSpeedAsMul(void)
 {
 	return (double)GLOBALS_DEBUG_GAME_LOGIC_SPEED / GLOBALS_DEFAULT_DEBUG_GAME_LOGIC_SPEED;
 }
-bool Globals_IsDebugGameSpeedSet()
+bool Globals_IsDebugGameSpeedSet(void)
 {
 	if (GLOBALS_DEBUG_GAME_LOGIC_SPEED == GLOBALS_DEFAULT_DEBUG_GAME_LOGIC_SPEED)
 	{
@@ -202,18 +202,18 @@ bool Globals_IsDebugGameSpeedSet()
 	}
 	return true;
 }
-void Globals_DisableSavingAndLoadingAndAchievementsAndLeaderboards()
+void Globals_DisableSavingAndLoadingAndAchievementsAndLeaderboards(void)
 {
 	Globals_DisableSavingUserData();
 	Globals_DisableLoadingUserData();
 	Globals_DisableAchievements();
 	Globals_DisableLeaderboards();
 }
-int32_t Globals_GetNewestRecordingVersion()
+int32_t Globals_GetNewestRecordingVersion(void)
 {
 	return GLOBALS_RECORDING_VERSION_2_CS_THING_ID_FIX;
 }
-int32_t Globals_GetCurrentRecordingVersion()
+int32_t Globals_GetCurrentRecordingVersion(void)
 {
 	if (Input_IsPlayingMasterRecording())
 	{
@@ -228,13 +228,13 @@ int32_t Globals_GetCurrentRecordingVersion()
 		return Globals_GetNewestRecordingVersion();
 	}
 }
-int64_t Globals_GetTime()
+int64_t Globals_GetTime(void)
 {
 	time_t currentTime;
 	currentTime = time(NULL);
 	return (int64_t)currentTime;
 }
-uint32_t Globals_GetTimeForRandomSeed()
+uint32_t Globals_GetTimeForRandomSeed(void)
 {
 	int64_t source = Globals_GetTime();
 	uint64_t dest;
@@ -242,7 +242,7 @@ uint32_t Globals_GetTimeForRandomSeed()
 	uint32_t returnValue = (uint32_t)dest;
 	return returnValue;
 }
-void Globals_ToggleGodMode()
+void Globals_ToggleGodMode(void)
 {
 	GLOBALS_DEBUG_IS_GOD_MODE = !GLOBALS_DEBUG_IS_GOD_MODE;
 	{

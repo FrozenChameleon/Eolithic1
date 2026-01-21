@@ -138,7 +138,7 @@ void Prop_ReadIni(Prop* p, BufferReader* reader)
 	BufferReader_ReadString(reader, p->mTextureName, EE_FILENAME_MAX);
 	BufferReader_ReadString(reader, p->mTilesetFilter, EE_FILENAME_MAX);
 }
-IStringArray* Prop_GetDirectories()
+IStringArray* Prop_GetDirectories(void)
 {
 	return NULL;
 }

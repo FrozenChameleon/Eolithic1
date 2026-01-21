@@ -26,7 +26,7 @@ static Matrix _mIdentity =
 	0.0f, 0.0f, 0.0f, 1.0f
 };
 
-Matrix Matrix_Identity()
+Matrix Matrix_Identity(void)
 {
 	return _mIdentity;
 }

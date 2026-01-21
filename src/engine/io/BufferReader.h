@@ -47,4 +47,4 @@ BufferReader* BufferReader_Create(FixedByteBuffer* fbb);
 BufferReader* BufferReader_CreateFromPath(const char* path);
 void BufferReader_Dispose(BufferReader* br);
 void BufferReader_Dispose2(BufferReader* br, bool doNotDisposeBuffer);
-uint64_t BufferReader_GetRefs();
+uint64_t BufferReader_GetRefs(void);

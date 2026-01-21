@@ -253,11 +253,11 @@ int32_t ControllerState_RemoveControllerInstance(int32_t dev)
 
 	return output;
 }
-void ControllerState_BeforePollingUpdate()
+void ControllerState_BeforePollingUpdate(void)
 {
 
 }
-bool ControllerState_PlatformUsesControllerPrompt()
+bool ControllerState_PlatformUsesControllerPrompt(void)
 {
 	return false;
 }
@@ -273,15 +273,15 @@ bool ControllerState_PlatformIsForcingCustomInputActions(int32_t player)
 //{
 //	return _mDummyAction;
 //}
-bool ControllerState_IsUsingControllerForbiddenToFullRebinding()
+bool ControllerState_IsUsingControllerForbiddenToFullRebinding(void)
 {
 	return false;
 }
-bool ControllerState_IsUsingControllerPrompt()
+bool ControllerState_IsUsingControllerPrompt(void)
 {
 	return false;
 }
-const char* ControllerState_PlatformGetForcedSpecificGlyphAsString()
+const char* ControllerState_PlatformGetForcedSpecificGlyphAsString(void)
 {
 	return EE_STR_EMPTY;
 }

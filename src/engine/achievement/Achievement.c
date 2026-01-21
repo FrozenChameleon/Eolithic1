@@ -13,7 +13,7 @@
 #include "../globals/Globals.h"
 #include "../utils/Cvars.h"
 
-void Achievement_Init(Achievement* achievement, bool (*condition)(), const char* name, const char* description, const char* lockedDescription, const char* image, bool isHidden)
+void Achievement_Init(Achievement* achievement, bool (*condition)(void), const char* name, const char* description, const char* lockedDescription, const char* image, bool isHidden)
 {
 	Utils_memset(achievement, 0, sizeof(Achievement));
 

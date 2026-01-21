@@ -166,7 +166,7 @@ bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
 		//Color[, ] colors2d = new Color[texture.Width, texture.Height];
 		//for (int32_t i = 0; i < texture.Width; i += 1)
 		//{
-		//	for (int32_t j = 0; j < texture.Height; j++)
+		//	for (int32_t j = 0; j < texture.Height; j += 1)
 		//	{
 		//		colors2d[i, j] = colors1d[i + j * texture.Width];
 		//	}

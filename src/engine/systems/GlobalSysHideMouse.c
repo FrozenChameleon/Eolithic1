@@ -36,7 +36,7 @@ static void Update(void* givenData)
 	}
 }
 
-System* GlobalSysHideMouse_CreateSystem()
+System* GlobalSysHideMouse_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

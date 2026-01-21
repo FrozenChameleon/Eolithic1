@@ -16,7 +16,7 @@ typedef struct GameState
 	bool _mDisableRewindTemporarily;
 	bool _mDisableRewindingPermanently;
 	bool _mClearReplayCacheNextFrame;
-	const char* _mName;
+	char _mName[EE_FILENAME_MAX];
 	GameStateData _mData;
 	GameStateData _mForGameState;
 	ReplayDataManager* _mReplayDataManager;
@@ -75,9 +75,9 @@ void* GameState_GetFirstSetComponent(GameState* gs, ComponentType ctype);
 Entity GameState_GetFirstSetEntity(GameState* gs, ComponentType ctype);
 void* GameState_TryGetComponent(GameState* gs, ComponentType ctype, Entity entity, bool* wasSuccessful);
 void* GameState_TryGetFirstSetComponent(GameState* gs, ComponentType ctype, bool* wasSuccessful);
-/*#ifdef EDITOR_MODE
+#ifdef EDITOR_MODE
 bool GameState_HandleDebugRewindLooping(GameState* gs);
 bool GameState_HandleDebugSaveStates(GameState* gs);
 void GameState_CreateDebugSaveState(GameState* gs);
 void GameState_UseDebugSaveState(GameState* gs);
-#endif*/
+#endif

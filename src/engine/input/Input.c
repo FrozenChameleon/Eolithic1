@@ -45,8 +45,8 @@ static bool _mHasInit;
 static InputPlayer _mPlayers[INPUT_MAXIMUM_PLAYER_COUNT];
 static DoubleClickData _mLeftDoubleClick;
 static OverrideDeadzoneData _mOverrideDeadzoneData;
-static int32_t _mBlockMKBInputForFrames = 0;
-static int32_t _mMasterRecordingState = 0;
+static int32_t _mBlockMKBInputForFrames;
+static int32_t _mMasterRecordingState;
 
 static void HandleDoubleClickData(DoubleClickData* data, bool tapValue)
 {
@@ -62,7 +62,7 @@ static void HandleDoubleClickData(DoubleClickData* data, bool tapValue)
 	}
 	else
 	{
-		data->mTimeSinceLastTap++;
+		data->mTimeSinceLastTap += 1;
 	}
 }
 static bool IsStickBeyondOuterDeadzone(Vector2 stick, float outerDeadzone)
@@ -93,7 +93,7 @@ static Vector2 ProcessStickAxialDeadzone(Vector2 stick, float axialDeadzone)
 	return stick;
 }
 
-void Input_Init()
+void Input_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -115,18 +115,18 @@ void Input_Init()
 
 	_mHasInit = true;
 }
-bool Input_HasInit()
+bool Input_HasInit(void)
 {
 	return _mHasInit;
 }
 
-void Input_MuteAllInput()
+void Input_MuteAllInput(void)
 {
 	ControllerStates_MuteInput();
 	KeyboardState_MuteInput();
 	MouseState_MuteInput();
 }
-bool Input_IsAnythingPressedByAnyPlayer()
+bool Input_IsAnythingPressedByAnyPlayer(void)
 {
 	int32_t amountOfActiveInput = Input_GetAmountOfActivePlayers();
 	for (int32_t i = 0; i < amountOfActiveInput; i += 1)
@@ -200,7 +200,7 @@ int32_t Input_GetLongestTimeHeldByAnyPlayer(const char* action)
 	}
 	return longestTimeHeld;
 }
-int32_t Input_GetAmountOfActivePlayers()
+int32_t Input_GetAmountOfActivePlayers(void)
 {
 	int32_t amount = 1;
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
@@ -233,12 +233,12 @@ void Input_Update(bool doNotUpdateMasterRecording)
 	{
 		if (Input_IsPlayingMasterRecording())
 		{
-			//TODO C99?OeControllerStates_Read(); //Overwrite polled controller input with master recording if reading it
+			//ControllerStates_Read(); //Overwrite polled controller input with master recording if reading it //UNUSED
 		}
 
 		if (Input_IsRecordingMasterRecording())
 		{
-			//TODO C99?OeControllerStates_Write();
+			//ControllerStates_Write(); //UNUSED
 		}
 	}
 
@@ -272,7 +272,7 @@ bool Input_IsAnyPlayerUsingThisDeviceNumber(int32_t deviceNumber)
 	}
 	return false;
 }
-bool Input_IsSimultaneousInputForKeyboard()
+bool Input_IsSimultaneousInputForKeyboard(void)
 {
 	if (!Input_IsSinglePlayerInputMode())
 	{
@@ -281,7 +281,7 @@ bool Input_IsSimultaneousInputForKeyboard()
 
 	return true;
 }
-bool Input_IsSimultaneousInputForController()
+bool Input_IsSimultaneousInputForController(void)
 {
 	if (!Input_IsSinglePlayerInputMode())
 	{
@@ -295,7 +295,7 @@ bool Input_IsSimultaneousInputForController()
 
 	return true;
 }
-bool Input_IsSinglePlayerInputMode()
+bool Input_IsSinglePlayerInputMode(void)
 {
 	if (INPUT_FLAG_IS_ON_MULTIPLAYER_SETUP_MENU)
 	{
@@ -309,7 +309,7 @@ bool Input_IsSinglePlayerInputMode()
 
 	return true;
 }
-bool Input_IsMultiplayerInputMode()
+bool Input_IsMultiplayerInputMode(void)
 {
 	return !Input_IsSinglePlayerInputMode();
 }
@@ -317,7 +317,7 @@ void Input_BlockMKBInputForFrames(int32_t frames)
 {
 	_mBlockMKBInputForFrames = frames;
 }
-InputPlayer* Input_GetPlayerOne()
+InputPlayer* Input_GetPlayerOne(void)
 {
 	return &_mPlayers[0];
 }
@@ -344,38 +344,38 @@ Vector2 Input_GetCameraAdjustedMouse(const Camera* camera)
 	temp.Y = (Input_GetMouseY() * camera->mWorldZoom) + Camera_GetTopFloat(camera);
 	return temp;
 }
-bool Input_JustScrolledUp()
+bool Input_JustScrolledUp(void)
 {
 	return MouseState_JustScrolledUp();
 }
-bool Input_JustScrolledDown()
+bool Input_JustScrolledDown(void)
 {
 	return MouseState_JustScrolledDown();
 }
-float Input_GetDifferenceMouseX()
+float Input_GetDifferenceMouseX(void)
 {
 	return MouseState_GetDifferenceMouseX();
 }
-float Input_GetDifferenceMouseY()
+float Input_GetDifferenceMouseY(void)
 {
 	return MouseState_GetDifferenceMouseY();
 }
-float Input_GetMouseX()
+float Input_GetMouseX(void)
 {
 	return MouseState_GetMouseX();
 }
-float Input_GetMouseY()
+float Input_GetMouseY(void)
 {
 	return MouseState_GetMouseY();
 }
-Vector2 Input_GetMouse()
+Vector2 Input_GetMouse(void)
 {
 	Vector2 temp;
 	temp.X = Input_GetMouseX();
 	temp.Y = Input_GetMouseY();
 	return temp;
 }
-Vector2 Input_GetScaledMouseForRetroScreen()
+Vector2 Input_GetScaledMouseForRetroScreen(void)
 {
 	float mouseX = Input_GetMouseX();
 	float mouseY = Input_GetMouseY();
@@ -384,11 +384,11 @@ Vector2 Input_GetScaledMouseForRetroScreen()
 	return Vector2_Create((mouseX - screenOffset.X) * retroScreenScale.X,
 		(mouseY - screenOffset.Y) * retroScreenScale.Y);
 }
-float Input_GetScaledMouseForRetroScreenX()
+float Input_GetScaledMouseForRetroScreenX(void)
 {
 	return Input_GetScaledMouseForRetroScreen().X;
 }
-float Input_GetScaledMouseForRetroScreenY()
+float Input_GetScaledMouseForRetroScreenY(void)
 {
 	return Input_GetScaledMouseForRetroScreen().X;
 }
@@ -409,7 +409,7 @@ float Input_GetCameraAdjustedMouseForRetroScreenY(const Camera* camera)
 	Vector2 cameraAdjustedMouseForRetroScreen = Input_GetCameraAdjustedMouseForRetroScreen(camera);
 	return cameraAdjustedMouseForRetroScreen.Y;
 }
-bool Input_MouseHasChangedPosition()
+bool Input_MouseHasChangedPosition(void)
 {
 	if ((Input_GetDifferenceMouseX() == 0) && (Input_GetDifferenceMouseY() == 0))
 	{
@@ -417,103 +417,103 @@ bool Input_MouseHasChangedPosition()
 	}
 	return true;
 }
-bool Input_IsLeftMousePressed()
+bool Input_IsLeftMousePressed(void)
 {
 	return MouseState_IsButtonPressed(MOUSEBUTTONS_MOUSE_LEFTBUTTON);
 }
-bool Input_IsLeftMouseTapped()
+bool Input_IsLeftMouseTapped(void)
 {
 	return MouseState_IsButtonTapped(MOUSEBUTTONS_MOUSE_LEFTBUTTON);
 }
-bool Input_IsLeftMouseReleased()
+bool Input_IsLeftMouseReleased(void)
 {
 	return MouseState_IsButtonReleased(MOUSEBUTTONS_MOUSE_LEFTBUTTON);
 }
-bool Input_IsLeftMouseDoubleClicked()
+bool Input_IsLeftMouseDoubleClicked(void)
 {
 	return _mLeftDoubleClick.mIsDoubleClicked;
 }
-bool Input_IsRightMousePressed()
+bool Input_IsRightMousePressed(void)
 {
 	return MouseState_IsButtonPressed(MOUSEBUTTONS_MOUSE_RIGHTBUTTON);
 }
-bool Input_IsRightMouseTapped()
+bool Input_IsRightMouseTapped(void)
 {
 	return MouseState_IsButtonTapped(MOUSEBUTTONS_MOUSE_RIGHTBUTTON);
 }
-bool Input_IsRightMouseReleased()
+bool Input_IsRightMouseReleased(void)
 {
 	return MouseState_IsButtonReleased(MOUSEBUTTONS_MOUSE_RIGHTBUTTON);
 }
-bool Input_IsMiddleMousePressed()
+bool Input_IsMiddleMousePressed(void)
 {
 	return MouseState_IsButtonPressed(MOUSEBUTTONS_MOUSE_MIDDLEBUTTON);
 }
-bool Input_IsMiddleMouseTapped()
+bool Input_IsMiddleMouseTapped(void)
 {
 	return MouseState_IsButtonTapped(MOUSEBUTTONS_MOUSE_MIDDLEBUTTON);
 }
-bool Input_IsMiddleMouseReleased()
+bool Input_IsMiddleMouseReleased(void)
 {
 	return MouseState_IsButtonReleased(MOUSEBUTTONS_MOUSE_MIDDLEBUTTON);
 }
-bool Input_IsCtrlPressed()
+bool Input_IsCtrlPressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_LeftControl) || KeyboardState_IsKeyPressed(KEYS_RightControl);
 }
-bool Input_IsTabPressed()
+bool Input_IsTabPressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_Tab);
 }
-bool Input_IsShiftPressed()
+bool Input_IsShiftPressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_LeftShift) || KeyboardState_IsKeyPressed(KEYS_RightShift);
 }
-bool Input_IsShiftTapped()
+bool Input_IsShiftTapped(void)
 {
 	return KeyboardState_IsKeyTapped(KEYS_LeftShift) || KeyboardState_IsKeyTapped(KEYS_RightShift);
 }
-bool Input_IsAltPressed()
+bool Input_IsAltPressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_LeftAlt) || KeyboardState_IsKeyPressed(KEYS_RightAlt);
 }
-bool Input_IsDeletePressed()
+bool Input_IsDeletePressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_Delete);
 }
-bool Input_IsDeleteTapped()
+bool Input_IsDeleteTapped(void)
 {
 	return KeyboardState_IsKeyTapped(KEYS_Delete);
 }
-bool Input_IsDeleteReleased()
+bool Input_IsDeleteReleased(void)
 {
 	return KeyboardState_IsKeyReleased(KEYS_Delete);
 }
-bool Input_IsTildePressed()
+bool Input_IsTildePressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_OemTilde);
 }
-bool Input_IsTildeReleased()
+bool Input_IsTildeReleased(void)
 {
 	return KeyboardState_IsKeyReleased(KEYS_OemTilde);
 }
-bool Input_IsEscapePressed()
+bool Input_IsEscapePressed(void)
 {
 	return KeyboardState_IsKeyPressed(KEYS_Escape);
 }
-bool Input_IsEscapeTapped()
+bool Input_IsEscapeTapped(void)
 {
 	return KeyboardState_IsKeyTapped(KEYS_Escape);
 }
-bool Input_IsEnterTapped()
+bool Input_IsEnterTapped(void)
 {
 	return KeyboardState_IsKeyTapped(KEYS_Enter);
 }
-bool Input_IsModifierPressed()
+bool Input_IsModifierPressed(void)
 {
 	return Input_IsCtrlPressed() || Input_IsShiftPressed() || Input_IsAltPressed();
 }
-void Input_StopAllRumble()
+void Input_StopAllRumble(void)
 {
 	for (int32_t i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
 	{
@@ -555,7 +555,7 @@ void Input_OverrideDeadzones(int32_t radial, int32_t outer, int32_t axial)
 	_mOverrideDeadzoneData.mOuterDeadzone = outer;
 	_mOverrideDeadzoneData.mAxialDeadzone = axial;
 }
-int32_t Input_GetRadialDeadzone()
+int32_t Input_GetRadialDeadzone(void)
 {
 	if (_mOverrideDeadzoneData.mIsOverriding)
 	{
@@ -563,7 +563,7 @@ int32_t Input_GetRadialDeadzone()
 	}
 	return Cvars_GetAsInt(CVARS_ENGINE_CONTROLLER_RADIAL_DEADZONE);
 }
-int32_t Input_GetOuterDeadzone()
+int32_t Input_GetOuterDeadzone(void)
 {
 	if (_mOverrideDeadzoneData.mIsOverriding)
 	{
@@ -571,7 +571,7 @@ int32_t Input_GetOuterDeadzone()
 	}
 	return Cvars_GetAsInt(CVARS_ENGINE_CONTROLLER_OUTER_DEADZONE);
 }
-int32_t Input_GetAxialDeadzone()
+int32_t Input_GetAxialDeadzone(void)
 {
 	if (_mOverrideDeadzoneData.mIsOverriding)
 	{
@@ -579,35 +579,35 @@ int32_t Input_GetAxialDeadzone()
 	}
 	return Cvars_GetAsInt(CVARS_ENGINE_CONTROLLER_AXIAL_DEADZONE);
 }
-float Input_GetRadialDeadzoneAsFloat()
+float Input_GetRadialDeadzoneAsFloat(void)
 {
 	return (Input_GetRadialDeadzone() / 100.0f);
 }
-float Input_GetOuterDeadzoneAsFloat()
+float Input_GetOuterDeadzoneAsFloat(void)
 {
 	return (Input_GetOuterDeadzone() / 100.0f);
 }
-float Input_GetAxialDeadzoneAsFloat()
+float Input_GetAxialDeadzoneAsFloat(void)
 {
 	return (Input_GetAxialDeadzone() / 100.0f);
 }
-float Input_GetAnalogToPressThresholdForSticks()
+float Input_GetAnalogToPressThresholdForSticks(void)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_CONTROLLER_ANALOG_TO_PRESS_THRESHOLD_FOR_STICKS) / 100.0f;
 }
-float Input_GetAnalogToPressThresholdForTriggers()
+float Input_GetAnalogToPressThresholdForTriggers(void)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_CONTROLLER_ANALOG_TO_PRESS_THRESHOLD_FOR_TRIGGERS) / 100.0f;
 }
-bool Input_IsRecordingMasterRecording()
+bool Input_IsRecordingMasterRecording(void)
 {
 	return _mMasterRecordingState == INPUT_MASTER_RECORDING_STATE_RECORDING;
 }
-bool Input_IsPlayingMasterRecording()
+bool Input_IsPlayingMasterRecording(void)
 {
 	return _mMasterRecordingState == INPUT_MASTER_RECORDING_STATE_PLAYBACK;
 }
-bool Input_IsRecordingOrPlayingMasterRecording()
+bool Input_IsRecordingOrPlayingMasterRecording(void)
 {
 	return Input_IsRecordingMasterRecording() || Input_IsPlayingMasterRecording();
 }
@@ -615,7 +615,7 @@ void Input_SetMasterRecordingState(int32_t state)
 {
 	if (state != INPUT_MASTER_RECORDING_STATE_OFF)
 	{
-		//TODO C99 OeGlobals::DisableSavingAndLoadingAndAchievementsAndLeaderboards();
+		Globals_DisableSavingAndLoadingAndAchievementsAndLeaderboards();
 	}
 
 	_mMasterRecordingState = state;

@@ -9,11 +9,11 @@
 static ParticleInstance _mDummy;
 const static ParticleInstance _mEmpty = { 0 };
 
-ParticleInstance* ParticleInstance_Dummy()
+ParticleInstance* ParticleInstance_Dummy(void)
 {
 	return &_mDummy;
 }
-const ParticleInstance* ParticleInstance_Empty()
+const ParticleInstance* ParticleInstance_Empty(void)
 {
 	return &_mEmpty;
 }

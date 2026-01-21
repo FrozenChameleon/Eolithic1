@@ -27,6 +27,15 @@
 #include "../input/MouseState.h"
 #include "../input/KeyboardState.h"
 
+static Color _mEditorColorDefault = { 255, 255, 255, 127 };
+static Color _mEditorColorOne = { 0, 0, 255, 127 };
+static Color _mEditorColorTwo = { 255, 0, 0, 127 };
+static Color _mEditorColorThree = { 0, 255, 0, 127 };
+static Color _mEditorColorFour = { 127, 255, 204, 127 };
+static Color _mEditorColorFive = { 255, 127, 0, 127 };
+static Color _mEditorColorSix = { 255, 0, 255, 127 };
+static Color _mEditorColorSeven = { 127, 127, 127, 127 };
+static Color _mEditorColorEight = { 255, 255, 255, 127 };
 static bool _mPolled;
 static MString* _mTempString;
 static uint64_t _mMallocRefs;
@@ -43,12 +52,12 @@ static char _mLargeCharBuffer[LARGE_CHAR_BUFFER_LEN];
 
 struct { int32_t key; void** value; }*hm_allocation_arenas;
 
-static void ResetLargeCharBuffer()
+static void ResetLargeCharBuffer(void)
 {
 	Utils_memset(_mLargeCharBuffer, 0, LARGE_CHAR_BUFFER_LEN);
 }
 
-const char* Utils_GetCurrentUserLanguageCode()
+const char* Utils_GetCurrentUserLanguageCode(void)
 {
 	return UTILS_ENGLISH_LANGUAGE_CODE;
 
@@ -124,11 +133,15 @@ const char* Utils_GetCurrentUserLanguageCode()
 	return currentLanguage;*/
 }
 
-bool Utils_IsCurrentLanguageEnglish()
+bool Utils_IsCurrentLanguageEnglish(void)
 {
 	return (Utils_StringEqualTo(Utils_GetCurrentUserLanguageCode(), UTILS_ENGLISH_LANGUAGE_CODE));
 }
-uint64_t Utils_GetMallocRefs()
+bool Utils_IsCurrentlyUsingEnglishFont(void)
+{
+	return true;
+}
+uint64_t Utils_GetMallocRefs(void)
 {
 	return _mMallocRefs;
 }
@@ -365,7 +378,7 @@ void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet)
 		values[i] = valueToSet;
 	}
 }
-void Utils_ToggleFullscreenButton()
+void Utils_ToggleFullscreenButton(void)
 {
 	Utils_ToggleFullscreen();
 
@@ -399,7 +412,7 @@ int32_t Utils_StringLastIndexOf(char findThis, const char* strInThis, size_t max
 {
 	return Utils_StringIndexOf(findThis, strInThis, maxlen, true);
 }
-double Utils_GetNormalStepLength()
+double Utils_GetNormalStepLength(void)
 {
 	return MATH_TICK_60HZ;
 }
@@ -409,38 +422,38 @@ double Utils_GetInterpolated(double delta, float current, float last)
 	double mul = delta / Utils_GetNormalStepLength();
 	return last + (diff * mul);
 }
-Rectangle Utils_GetInternalRectangle()
+Rectangle Utils_GetInternalRectangle(void)
 {
 	Rectangle rect = { 0, 0, Utils_GetInternalWidth(), Utils_GetInternalHeight() };
 	return rect;
 }
-Rectangle Utils_GetInternalRenderRectangle()
+Rectangle Utils_GetInternalRenderRectangle(void)
 {
 	Rectangle rect = { 0, 0, Utils_GetInternalRenderWidth(), Utils_GetInternalRenderHeight() };
 	return rect;
 }
-int32_t Utils_GetInternalWidth()
+int32_t Utils_GetInternalWidth(void)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_WIDTH);
 }
-int32_t Utils_GetInternalHeight()
+int32_t Utils_GetInternalHeight(void)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_HEIGHT);
 }
-int32_t Utils_GetInternalRenderWidth()
+int32_t Utils_GetInternalRenderWidth(void)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
 }
-int32_t Utils_GetInternalRenderHeight()
+int32_t Utils_GetInternalRenderHeight(void)
 {
 	return Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
 }
-float Utils_GetCurrentHardwareRatio()
+float Utils_GetCurrentHardwareRatio(void)
 {
 	Rectangle rect = Renderer_GetDrawableSize();
 	return (float)(rect.Width) / (float)(rect.Height);
 }
-float Utils_GetCurrentInternalRatio()
+float Utils_GetCurrentInternalRatio(void)
 {
 	return (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH)) / (float)(Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT));
 }
@@ -616,7 +629,7 @@ int32_t Utils_ParseDirection(const char* s)
 	}
 	return value;
 }
-const char* Utils_GetGlyphType()
+const char* Utils_GetGlyphType(void)
 {
 	int32_t controllerType = Cvars_GetAsInt(CVARS_USER_CONTROLLER_TYPE);
 	if (Service_PlatformForcesSpecificGlyph())
@@ -704,7 +717,7 @@ bool Utils_CheckSave(bool update)
 	}
 	return false;
 }
-void Utils_JustSaved()
+void Utils_JustSaved(void)
 {
 	if (Globals_IsSavingUserDataDisabled())
 	{
@@ -896,7 +909,7 @@ const char* Utils_GetExtension(bool isBinary)
 		return UTILS_EXTENSION_INI;
 	}
 }
-bool Utils_IsBinaryForDebugFlag()
+bool Utils_IsBinaryForDebugFlag(void)
 {
 	if (Globals_IsDebugFileMode())
 	{
@@ -907,7 +920,7 @@ bool Utils_IsBinaryForDebugFlag()
 		return true;
 	}
 }
-void Utils_ToggleFullscreen()
+void Utils_ToggleFullscreen(void)
 {
 	if (!Window_IsFullscreen())
 	{
@@ -922,27 +935,27 @@ void Utils_SetFullscreenCvar(bool value)
 {
 	Cvars_SetAsBool(CVARS_USER_IS_FULLSCREEN, value);
 }
-void Utils_InvokeWindowedMode()
+void Utils_InvokeWindowedMode(void)
 {
 	Utils_SetFullscreenCvar(false);
 	Window_UpdateFullscreen();
 	Window_SetWindowPositionToCentered();
 	Renderer_ApplyChanges();
 }
-void Utils_InvokeFullscreenMode()
+void Utils_InvokeFullscreenMode(void)
 {
 	Utils_SetFullscreenCvar(true);
 	Window_UpdateFullscreen();
 	Renderer_ApplyChanges();
 }
-void Utils_ToggleVsyncButton()
+void Utils_ToggleVsyncButton(void)
 {
 	Cvars_FlipAsBool(CVARS_USER_IS_VSYNC);
 
 	Renderer_UpdateVsync();
 	Renderer_ApplyChanges();
 }
-Rectangle Utils_GetProposedWindowSize()
+Rectangle Utils_GetProposedWindowSize(void)
 {
 	int32_t windowSizeMul = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_MULTIPLE);
 	int32_t windowSizeWidth = Cvars_GetAsInt(CVARS_USER_WINDOW_SIZE_WIDTH);
@@ -956,7 +969,7 @@ Rectangle Utils_GetProposedWindowSize()
 		return Rectangle_Create(0, 0, windowSizeMul * Utils_GetWindowSizeMulWidth(), windowSizeMul * Utils_GetWindowSizeMulHeight());
 	}
 }
-int32_t Utils_GetWindowSizeMulWidth()
+int32_t Utils_GetWindowSizeMulWidth(void)
 {
 	int32_t width = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_WIDTH);
 	int32_t overrideWidth = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_WIDTH);
@@ -966,7 +979,7 @@ int32_t Utils_GetWindowSizeMulWidth()
 	}
 	return width;
 }
-int32_t Utils_GetWindowSizeMulHeight()
+int32_t Utils_GetWindowSizeMulHeight(void)
 {
 	int32_t height = Cvars_GetAsInt(CVARS_ENGINE_INTERNAL_RENDER_HEIGHT);
 	int32_t overrideHeight = Cvars_GetAsInt(CVARS_ENGINE_OVERRIDE_INTERNAL_WINDOW_HEIGHT);
@@ -1251,7 +1264,7 @@ bool Utils_GetInputCheckForBind(InputCheck* inputCheck, bool isController, bool 
 	Utils_memset(inputCheck, 0, sizeof(InputCheck));
 	return false;
 }
-int32_t Utils_GetKeyboardForBind()
+int32_t Utils_GetKeyboardForBind(void)
 {
 	int32_t keysLength = KeyList_GetArrayLength();
 	const int32_t* keys = KeyList_GetArray();
@@ -1264,7 +1277,7 @@ int32_t Utils_GetKeyboardForBind()
 	}
 	return -1;
 }
-int32_t Utils_GetMouseButtonForBind()
+int32_t Utils_GetMouseButtonForBind(void)
 {
 	int32_t len = MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS;
 	for (int32_t i = 0; i < len; i += 1)
@@ -1313,4 +1326,67 @@ const char* Utils_GetStringFromNumberWithZerosTens(int32_t val)
 		MString_AddAssignInt(&_mTempString, val);
 		return MString_Text(_mTempString);
 	}
+}
+Color Utils_GetCollisionColor(int32_t val)
+{
+	Color color;
+	switch (val)
+	{
+	case 1:
+		color = _mEditorColorOne;
+		break;
+	case 2:
+		color = _mEditorColorTwo;
+		break;
+	case 3:
+		color = _mEditorColorThree;
+		break;
+	case 4:
+		color = _mEditorColorFour;
+		break;
+	case 5:
+		color = _mEditorColorFive;
+		break;
+	case 6:
+		color = _mEditorColorSix;
+		break;
+	case 7:
+		color = _mEditorColorSeven;
+		break;
+	case 8:
+		color = _mEditorColorEight;
+		break;
+	default:
+		color = _mEditorColorDefault;
+		break;
+	}
+	return color;
+}
+int32_t Utils_ConvertFramesToMilliseconds(int32_t val)
+{
+	if (val < 0)
+	{
+		return val;
+	}
+
+	int32_t subseconds = (int32_t)(Utils_GetSubseconds(val));
+	int32_t seconds = Utils_GetSeconds(val);
+	int32_t minutes = Utils_GetMinutes(val);
+	int32_t hours = Utils_GetHours(val);
+	if (hours >= 24)
+	{
+		hours = 23;
+		minutes = 59;
+		seconds = 59;
+		subseconds = 99;
+	}
+
+	int32_t convSubSeconds = subseconds * 10;
+	int32_t convSeconds = seconds * 1000;
+	int32_t convMinutes = minutes * (1000 * 60);
+	int32_t convHours = hours * (1000 * 60 * 60);
+
+	int32_t total = convSubSeconds + convSeconds + convMinutes + convHours;
+
+	return total;
 }

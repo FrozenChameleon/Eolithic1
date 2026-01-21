@@ -46,13 +46,10 @@ static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP ((1.0 / 60.0) * MAX_TIME_STEP_FRAMES)
 
 static bool _mIsFirstPollEvents = true;
-//static bool _mWasGuiDrawMissed = false;
-//static bool _mHasRunFatalExceptionRoutine = false;
-//static bool _mHasRunExitGameRoutine = false;
 static bool _mIsExitingGame;
 static bool _mHasInit;
 
-static bool IsFixedTimeStep()
+static bool IsFixedTimeStep(void)
 {
 	if (GameLoader_IsLoading())
 	{
@@ -78,7 +75,7 @@ static bool IsFixedTimeStep()
 	return Cvars_GetAsBool(CVARS_USER_IS_FIXED_TIMESTEP_ENABLED);
 }
 
-int32_t Game_Init()
+int32_t Game_Init(void)
 {
 	if (_mHasInit)
 	{
@@ -116,12 +113,9 @@ int32_t Game_Init()
 	//WILLNOTDO 06262023
 	/*
 	OeServiceHelper::Init();
-	OeAutoPool.Init();
-	OePool.Init();
 	OeFunc.Init();
 	OeRecordingTool.Init();
 	OeTilesetOffset.Init();
-	OeMusic.Init();
 	*/
 	FontMap_Init();
 	Input_Init();
@@ -136,7 +130,7 @@ int32_t Game_Init()
 
 	return initStatus;
 }
-int32_t Game_Run()
+int32_t Game_Run(void)
 {
 	if (Game_Init() < 0)
 	{
@@ -184,7 +178,7 @@ int32_t Game_Run()
 	Game_Dispose();
 	return 0;
 }
-void Game_PollEvents() //Derived from FNA
+void Game_PollEvents(void) //Derived from FNA
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e) == 1)
@@ -250,63 +244,23 @@ void Game_PollEvents() //Derived from FNA
 
 	_mIsFirstPollEvents = false;
 }
-bool Game_IsExitingGame()
+bool Game_IsExitingGame(void)
 {
 	return _mIsExitingGame;
 }
-void Game_Exit()
+void Game_Exit(void)
 {
 	_mIsExitingGame = true;
 }
-bool Game_IsActive()
+bool Game_IsActive(void)
 {
 	//TODO C99
 	return true;
 }
-
 void Game_Update(double gameTime)
 {
-	//WILLNOTDO 06262023 (EDITOR_MODE)
-	/*
-#ifdef EDITOR_MODE
-	if (_mWasGuiDrawMissed)
-	{
-		OeGui.AfterLayout();
-	}
-	OeGui.BeforeLayout(gameTime);
-	_mWasGuiDrawMissed = true;
-#endif
-*/
-
-	double delta = gameTime;
-
-	if (!Globals_IsExceptionUnsafe())
-	{
-		//try
-		//{
-		Game_UpdateHelper(delta);
-		//}
-		//catch (...)
-		//{
-		//HandleFatalException("Fatal exception in update!");
-		//}
-	}
-	else
-	{
-		Game_UpdateHelper(delta);
-	}
-
-	//WILLNOTDO 06262023 2023
-	/*
-#ifdef EDITOR_MODE
-	if (OeGui.IsAnythingHovered())
-	{
-		OeInput.BlockMKBInputForFrames(10);
-	}
-#endif
-*/
+	Game_UpdateHelper(gameTime);
 }
-
 void Game_Draw(double gameTime)
 {
 #ifdef EDITOR_MODE
@@ -316,31 +270,8 @@ void Game_Draw(double gameTime)
 	}
 #endif
 
-	double delta = gameTime;
-
-	if (!Globals_IsExceptionUnsafe())
-	{
-		//try
-		//{
-		Renderer_Render(delta);
-		//}
-		//catch (...)
-		//{
-		//	HandleFatalException("Fatal exception in draw!");
-		//}
-	}
-	else
-	{
-		Renderer_Render(delta);
-	}
-
-
-#ifdef EDITOR_MODE
-	//WILLNOTDO 05152023 OeGui.AfterLayout();
-	//WILLNOTDO 05152023 _mWasGuiDrawMissed = false;
-#endif
+	Renderer_Render(gameTime);
 }
-
 void Game_UpdateHelper(double delta)
 {
 	ServiceHelper_Update(delta);
@@ -356,8 +287,7 @@ void Game_UpdateHelper(double delta)
 		GameUpdater_Update(delta);
 	}
 }
-
-void Game_Dispose()
+void Game_Dispose(void)
 {
 	Window_Dispose();
 	SDL_Quit();

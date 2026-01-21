@@ -19,7 +19,7 @@ static bool _mPlayerHasLostControllerConnection[PLAYER_LOST_CONTROLLER_CONNECTIO
 static bool _mHasSignedInAtSomePoint;
 static bool _mHasLoadedEverything;
 
-static void UpdateLostControllerConnectionStatus()
+static void UpdateLostControllerConnectionStatus(void)
 {
 	if (RecordingTool_IsDisplayingSessionReadout() || Input_IsRecordingOrPlayingMasterRecording())
 	{
@@ -44,7 +44,7 @@ static void UpdateLostControllerConnectionStatus()
 		}
 	}
 }
-static void TrySignIn()
+static void TrySignIn(void)
 {
 	if (Service_HasSignedIn())
 	{
@@ -53,7 +53,7 @@ static void TrySignIn()
 
 	Service_SignIn(true, false);
 }
-static bool LoadEverythingHelper()
+static bool LoadEverythingHelper(void)
 {
 	bool loadedSaves = false;
 	bool loadedConfig = false;
@@ -108,7 +108,7 @@ static bool LoadEverythingHelper()
 		return false;
 	}
 }
-static void LoadEverything()
+static void LoadEverything(void)
 {
 	if (!Service_HasSignedIn())
 	{
@@ -132,7 +132,7 @@ void ServiceHelper_Update(double delta)
 
 	Service_Update(delta);
 }
-bool ServiceHelper_HasPlayerHasLostControllerConnection()
+bool ServiceHelper_HasPlayerHasLostControllerConnection(void)
 {
 	int32_t playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
 	if (playerThatLostConnection != -1)
@@ -144,7 +144,7 @@ bool ServiceHelper_HasPlayerHasLostControllerConnection()
 		return false;
 	}
 }
-int32_t ServiceHelper_GetPlayerThatLostControllerConnection()
+int32_t ServiceHelper_GetPlayerThatLostControllerConnection(void)
 {
 	for (int32_t i = 0; i < PLAYER_LOST_CONTROLLER_CONNECTION_LENGTH; i += 1)
 	{
@@ -155,7 +155,7 @@ int32_t ServiceHelper_GetPlayerThatLostControllerConnection()
 	}
 	return -1;
 }
-void ServiceHelper_HandlePlayerLostControllerConnection()
+void ServiceHelper_HandlePlayerLostControllerConnection(void)
 {
 	int32_t playerThatLostConnection = ServiceHelper_GetPlayerThatLostControllerConnection();
 	if (playerThatLostConnection == -1)
@@ -169,7 +169,7 @@ void ServiceHelper_HandlePlayerLostControllerConnection()
 		_mPlayerHasLostControllerConnection[playerThatLostConnection] = false;
 	}
 }
-bool ServiceHelper_HasLoadedEverything()
+bool ServiceHelper_HasLoadedEverything(void)
 {
 	return _mHasLoadedEverything;
 }

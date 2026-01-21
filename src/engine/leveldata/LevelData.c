@@ -62,8 +62,7 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 		Utils_strlcpy(ld->mLevelName, EE_STR_NOT_SET, EE_FILENAME_MAX);
 	}
 
-	//TODO C99
-	/*if (ld->_mIsMetaMap)
+	/*if (ld->_mIsMetaMap) //UNUSED
 	{
 		SetupAsMetaMap();
 		_mMetaMap.Read(reader);
@@ -118,7 +117,8 @@ void LevelData_ReadData(LevelData* ld, BufferReader* reader)
 	int32_t saveTileSize = BufferReader_ReadI32(reader);
 	for (int32_t i = 0; i < saveTileSize; i += 1)
 	{
-		Tile* tile = Utils_calloc(1, sizeof(Tile));
+		Tile* tile = Utils_malloc(sizeof(Tile));
+		Tile_Init(tile);
 		Tile_Read(tile, version, reader);
 		arrput(ld->arr_save_tiles, tile);
 	}
@@ -175,12 +175,10 @@ bool LevelData_LoadSetupTileData(LevelData* ld)
 	ld->mTileData = Utils_calloc(tileDataLen, sizeof(LevelData*));
 	for (int32_t i = 0; i < gridWidth; i += 1)
 	{
-		for (int32_t j = 0; j < gridHeight; j++)
+		for (int32_t j = 0; j < gridHeight; j += 1)
 		{
 			int32_t gridPos = LevelData_GetTilePos1D(ld, i, j);
-			//WILLNOTDO 06262023 DEBUG
-			/*
-			if (OeGlobals_IsDebugFileMode())
+			/*if (OeGlobals_IsDebugFileMode()) //UNUSED, DEBUG
 			{
 				if (_mIsMetaMap && OeGlobals_DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD || !_mIsMetaMap) //if debug and editing, we use clones of tiles so they can be manipulated...
 				{
@@ -192,8 +190,7 @@ bool LevelData_LoadSetupTileData(LevelData* ld)
 				}
 			}
 			else
-			{
-			*/
+			{*/
 			int32_t tileLocInSaveTiles = map[gridPos];
 			Tile* tileToSet = tiles[tileLocInSaveTiles];
 			ld->mTileData[gridPos] = tileToSet;
@@ -344,7 +341,7 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 
 		bool showLayer = true;
 #ifdef EDITOR_MODE
-		//TODO C99 showLayer = Cvars_GetAsBool(Cvars_GetEditorShowLayer(i));
+		//showLayer = Cvars_GetAsBool(Cvars_GetEditorShowLayer(i)); //UNUSED
 #endif
 		if (showLayer)
 		{
@@ -353,7 +350,7 @@ void LevelData_DrawTiles(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera
 	}
 
 #ifdef EDITOR_MODE
-	//TODO C99 DrawTileInfo(spriteBatch, preferredLayer, x1, x2, y1, y2);
+	//DrawTileInfo(spriteBatch, preferredLayer, x1, x2, y1, y2); //UNUSED
 #endif
 }
 Texture* LevelData_GetTilesetTexture(LevelData* ld)

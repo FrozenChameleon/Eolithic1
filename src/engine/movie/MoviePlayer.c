@@ -84,7 +84,7 @@ typedef struct MoviePlayer
 
 static MoviePlayer* _mData;
 
-static void WriteTimings()
+static void WriteTimings(void)
 {
 	//WILLNOTDO 05152023
 	/*
@@ -102,7 +102,7 @@ static void WriteTimings()
 	*/
 }
 
-static const char* GetCurrentTextColor()
+static const char* GetCurrentTextColor(void)
 {
 	const char* color = _mData->_mTextData.mColor;
 	if (!Utils_StringEqualTo(_mData->_mNextTextData.mColor, EE_STR_EMPTY))
@@ -255,7 +255,7 @@ static void OperationPan(IStringArray* arguments)
 		arrput(_mData->arr_operations, pan);
 	}
 }
-static void OperationClear()
+static void OperationClear(void)
 {
 	{
 		IStringArray* removeThese = IStringArray_Create();
@@ -463,7 +463,7 @@ static void OperationSetTextColor(IStringArray* arguments)
 
 	Utils_strlcpy(_mData->_mTextData.mColor, IStringArray_Get(arguments, 0), EE_FILENAME_MAX);
 }
-static void OperationRemoveScreen()
+static void OperationRemoveScreen(void)
 {
 	shdel(_mData->sh_images, KEY_SCREEN);
 }
@@ -567,7 +567,7 @@ static void OperationText(const char* operation, IStringArray* arguments)
 		textData.mPosition, textData.mSpeed, textData.mRate, wait, color, false);
 	arrput(_mData->arr_operations, text);
 }
-static void OperationGiveTime()
+static void OperationGiveTime(void)
 {
 	MString* temp = NULL;
 	MString_AddAssignInt(&temp, _mData->_mFrameCounter);
@@ -870,7 +870,6 @@ void MoviePlayer_Init(bool useSwappedImages, int32_t scale, const char* movieNam
 	Utils_memset(_mData, 0, sizeof(MoviePlayer));
 
 	sh_new_arena(_mData->sh_images);
-	//TODO C99 MovieSheetsTool_Init();
 
 	Utils_strlcpy(_mData->_mMovieName, movieName, EE_FILENAME_MAX);
 
@@ -897,20 +896,20 @@ void MoviePlayer_Init(bool useSwappedImages, int32_t scale, const char* movieNam
 	}
 }
 
-void MoviePlayer_DisableSpeedUp()
+void MoviePlayer_DisableSpeedUp(void)
 {
 	_mData->_mDisableSpeedUp = true;
 }
-void MoviePlayer_SetComplete()
+void MoviePlayer_SetComplete(void)
 {
 	_mData->_mIsComplete = true;
 	arrsetlen(_mData->arr_operations, 0);
 }
-bool MoviePlayer_IsComplete()
+bool MoviePlayer_IsComplete(void)
 {
 	return _mData->_mIsComplete;
 }
-void MoviePlayer_Update()
+void MoviePlayer_Update(void)
 {
 	MoviePlayer_Update2(false);
 }
@@ -955,7 +954,7 @@ void MoviePlayer_Update2(bool doNotAllowMovieSkip)
 	{
 		if (!hasLoggedTime)
 		{
-			//TODO C99? _mData->_mTimingsToWrite.push_back(_mFrameCounter);
+			//_mData->_mTimingsToWrite.push_back(_mFrameCounter); //UNUSED, USED FOR WRITING TIMINGS
 			_mData->_mCurrentTiming += 1;
 			hasLoggedTime = true;
 		}
@@ -1088,14 +1087,12 @@ void MoviePlayer_DrawHud(SpriteBatch* spriteBatch)
 		MovieImage_DrawHud(_mData->sh_images[i].value, spriteBatch);
 	}
 #ifdef EDITOR_MODE
-	//TODO C99
-	/*
 	int32_t targetY = 150;
-	spriteBatch->DrawString("game", std_to_string(_mFrameCounter), OeColors_YELLOW, 200, Vector2(0, targetY));
-	spriteBatch->DrawString("game", std_to_string(_mFrameCounter / 60), OeColors_YELLOW, 200, Vector2(0, targetY + 16));
-	if (_mUseStrictTiming)
+	SpriteBatch_DrawString(spriteBatch, "game", Utils_IntToStringGlobalBuffer(_mData->_mFrameCounter), COLOR_YELLOW, 200, Vector2_Create(0, (float)targetY));
+	SpriteBatch_DrawString(spriteBatch, "game", Utils_IntToStringGlobalBuffer(_mData->_mFrameCounter / 60), COLOR_YELLOW, 200, Vector2_Create(0, (float)(targetY + 16)));
+	if (_mData->_mUseStrictTiming)
 	{
-		spriteBatch->DrawString("game", "STRICT", OeColors_YELLOW, 200, Vector2(0, targetY + 32));
-	}*/
+		SpriteBatch_DrawString(spriteBatch, "game", "STRICT", COLOR_YELLOW, 200, Vector2_Create(0, (float)(targetY + 32)));
+	}
 #endif
 }

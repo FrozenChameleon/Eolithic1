@@ -3,12 +3,8 @@
 #include "../utils/MString.h"
 #include "../utils/Utils.h"
 #include "../io/File.h"
-//#include "../utils/OeIniReader.h"
-//#include "../utils/OeIniWriter.h"
 #include "../../third_party/stb_ds.h"
 #include "../io/BufferReader.h"
-
-//TODO C99 static const std::vector<std::string> THINGS_DIRECTORY = { OeFile::Combine("data", "things") };
 
 static const char* TAG_ID = "id";
 static const char* TAG_ROUTINE_ID = "routine_id";
@@ -22,67 +18,6 @@ static const char* TAG_DEFAULT_STATE = "default_state";
 static const char* TAG_DEFAULT_PHASE = "default_phase";
 static const char* TAG_PREVIEW_SHEET = "preview_sheet";
 static const char* TAG_GRAPHICS_STATE_COUNT = "state_count";
-
-/*
-OeResourceData* OeThingSettings::CreateNewInstance()
-{
-	return CreateNew();
-}
-OeThingSettings* OeThingSettings::CreateNew()
-{
-	return new OeThingSettings();
-}
-void OeThingSettings::WriteIni(std::shared_ptr<OeIniWriter> writer)
-{
-	writer->WriteInt32(TAG_ID, 0); //ID has been removed
-	writer->WriteInt32(TAG_ROUTINE_ID, mRoutineId);
-	writer->WriteInt32(TAG_COLLISION_WIDTH, mCollisionWidth);
-	writer->WriteInt32(TAG_COLLISION_HEIGHT, mCollisionHeight);
-	writer->WriteBoolean(TAG_DO_NOT_DISPOSE, mDoNotDispose);
-	writer->WriteBoolean(TAG_HAS_AI, mHasAI);
-	writer->WriteBoolean(TAG_HAS_DRAWING, mHasDrawing);
-	writer->WriteBoolean(TAG_HAS_COLLISION, mHasCollision);
-	writer->WriteString(TAG_DEFAULT_STATE, mDefaultState);
-	writer->WriteString(TAG_DEFAULT_PHASE, mDefaultPhase);
-	writer->WriteString(TAG_PREVIEW_SHEET, mPreviewSheet);
-
-	writer->WriteInt32(TAG_GRAPHICS_STATE_COUNT, mMapGraphicsData.Count());
-	std::vector<std::string>& firstKeys = mMapGraphicsData.Keys;
-	for (int32_t i = 0; i < firstKeys.size(); i += 1)
-	{
-		std::string tempState = "state_" + std::to_string(i) + "_";
-		std::string key1 = firstKeys[i];
-		OeDictionary<std::string, std::vector<OeImageData>>& innerMap = mMapGraphicsData[key1];
-		writer->WriteString(tempState + "name", key1);
-
-		writer->WriteInt32(tempState + "phase_count", innerMap.Count());
-		std::vector<std::string>& secondKeys = mMapGraphicsData[key1].Keys;
-		for (int32_t j = 0; j < secondKeys.size(); j++)
-		{
-			std::string tempPhase = tempState + "phase_" + std::to_string(j) + "_";
-			std::string key2 = secondKeys[j];
-			writer->WriteString(tempPhase + "name", key2);
-
-			std::vector<OeImageData>& arrayOfImages = mMapGraphicsData[key1][key2];
-			writer->WriteInt32(tempPhase + "image_count", arrayOfImages.size());
-			for (int32_t k = 0; k < arrayOfImages.size(); k++)
-			{
-				std::string tempImage = tempPhase + "image_" + std::to_string(k) + "_";
-				arrayOfImages[k].WriteIni(writer, tempImage);
-			}
-		}
-	}
-	writer->WriteEOF();
-}
-void OeThingSettings::ReadIni(std::shared_ptr<OeIniReader> reader)
-{
-
-}
-const std::vector<std::string>& OeThingSettings::GetDirectories()
-{
-	return THINGS_DIRECTORY;
-}
-*/
 
 void ThingSettings_Init(ThingSettings* ts)
 {

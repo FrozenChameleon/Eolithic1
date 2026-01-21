@@ -56,7 +56,7 @@ int32_t AchievementHandler_GetAmountOfAchievements(void)
 {
 	return AchievementHandler_GetAchievementsLength();
 }
-void AchievementHandler_AddAchievement(bool isHidden, const char* name, const char* description, const char* lockedDescription, const char* image, bool (*condition)())
+void AchievementHandler_AddAchievement(bool isHidden, const char* name, const char* description, const char* lockedDescription, const char* image, bool (*condition)(void))
 {
 	int32_t current = AchievementHandler_GetAchievementsLength();
 	MString* nameToUse = NULL;

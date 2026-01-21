@@ -41,10 +41,20 @@
 #include "FNA3D.h"
 #include "FNA3D_Image.h"
 #include "SDL3/SDL.h"
+
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4255 )
+#endif
+
 #define MOJOSHADER_NO_VERSION_INCLUDE
 #define MOJOSHADER_EFFECT_SUPPORT
 #include <mojoshader.h>
 #include <mojoshader_effects.h>
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 #define MULTI_COLOR_REPLACE_LEN SHADER_PROGRAM_MAX_REPLACE_LENGTH
 #define TRANSFORM_DEST_LEN 16
@@ -103,7 +113,7 @@ static bool _mIsDrawingToOffscreenTarget;
 static Rectangle _mVirtualBufferBounds;
 static Rectangle _mActualBufferBounds;
 
-static Rectangle GetCurrentBufferBounds()
+static Rectangle GetCurrentBufferBounds(void)
 {
 	if (_mIsDrawingToOffscreenTarget)
 	{
@@ -115,17 +125,17 @@ static Rectangle GetCurrentBufferBounds()
 	}
 }
 
-static bool IsDepthBufferDisabled()
+static bool IsDepthBufferDisabled(void)
 {
 	return Service_PlatformDisablesDepthBufferForRender();
 }
 
-static bool IsOffscreenTargetNeeded()
+static bool IsOffscreenTargetNeeded(void)
 {
 	return Service_PlatformRequiresOffscreenTargetForRender();
 }
 
-static void InvalidateNextSetupRenderState()
+static void InvalidateNextSetupRenderState(void)
 {
 	_mLastUsedTexture = NULL;
 	_mLastUsedBlendState = BLENDSTATE_INVALID;
@@ -221,7 +231,7 @@ static void ApplyEffect(Effect* effect)
 {
 	FNA3D_ApplyEffect(_mDeviceContext, effect->mHandle, 0, &effect->mStateChanges);
 }
-void Renderer_BeforeRender()
+void Renderer_BeforeRender(void)
 {
 	FNA3D_Clear(_mDeviceContext, FNA3D_CLEAROPTIONS_TARGET, &_mClearColor, 0, 0);
 	if (!IsDepthBufferDisabled())
@@ -243,7 +253,7 @@ void Renderer_BeforeRender()
 		FNA3D_Clear(_mDeviceContext, FNA3D_CLEAROPTIONS_TARGET, &_mClearColor, 0, 0);
 	}
 }
-void Renderer_AfterRender()
+void Renderer_AfterRender(void)
 {
 	_mIsDrawingToOffscreenTarget = false;
 
@@ -277,7 +287,7 @@ void Renderer_AfterRender()
 
 	FNA3D_SwapBuffers(_mDeviceContext, NULL, NULL, _mDeviceWindowHandle);
 }
-static void CreateIndexBuffer()
+static void CreateIndexBuffer(void)
 {
 	if (_mIndexBuffer != NULL)
 	{
@@ -868,19 +878,19 @@ int32_t Renderer_Init(void* deviceWindowHandle)
 
 	return 0;
 }
-void Renderer_BeforeCommit()
+void Renderer_BeforeCommit(void)
 {
 	_mBatchNumber = 0;
 }
-void Renderer_AfterCommit()
+void Renderer_AfterCommit(void)
 {
 	Renderer_FlushBatch();
 }
-void Renderer_FlushBatch()
+void Renderer_FlushBatch(void)
 {
 	NextBatch(false);
 }
-void Renderer_EnableDepthBufferWrite()
+void Renderer_EnableDepthBufferWrite(void)
 {
 	if (IsDepthBufferDisabled())
 	{
@@ -889,7 +899,7 @@ void Renderer_EnableDepthBufferWrite()
 
 	_mDepthStencilState.depthBufferWriteEnable = 1;
 }
-void Renderer_DisableDepthBufferWrite()
+void Renderer_DisableDepthBufferWrite(void)
 {
 	if (IsDepthBufferDisabled())
 	{
@@ -898,7 +908,7 @@ void Renderer_DisableDepthBufferWrite()
 
 	_mDepthStencilState.depthBufferWriteEnable = 0;
 }
-void Renderer_UpdateVsync()
+void Renderer_UpdateVsync(void)
 {
 	bool useVsync = Renderer_IsVsync();
 	if (Service_PlatformForcesVsync())
@@ -923,13 +933,13 @@ void Renderer_UpdateVsync()
 		_mDeviceParams.presentationInterval = FNA3D_PRESENTINTERVAL_IMMEDIATE;
 	}
 }
-void Renderer_ApplyChanges()
+void Renderer_ApplyChanges(void)
 {
 	Renderer_ResetBackBuffer();
 	Renderer_UpdateViewport();
 	Renderer_UpdateScissor();
 }
-void Renderer_UpdateViewport()
+void Renderer_UpdateViewport(void)
 {
 	Rectangle backBufferBounds = GetCurrentBufferBounds();
 	FNA3D_Viewport viewport = { 0 };
@@ -938,7 +948,7 @@ void Renderer_UpdateViewport()
 	viewport.maxDepth = 1;
 	FNA3D_SetViewport(_mDeviceContext, &viewport);
 }
-void Renderer_UpdateScissor()
+void Renderer_UpdateScissor(void)
 {
 	Rectangle backBufferBounds = GetCurrentBufferBounds();
 	FNA3D_Rect scissor = { 0 };
@@ -948,7 +958,7 @@ void Renderer_UpdateScissor()
 	scissor.h = backBufferBounds.Height;
 	FNA3D_SetScissorRect(_mDeviceContext, &scissor);
 }
-void Renderer_ResetBackBuffer()
+void Renderer_ResetBackBuffer(void)
 {
 	Rectangle wantedBackBufferBounds = Renderer_GetWantedBackBufferBounds();
 
@@ -1006,7 +1016,7 @@ void Renderer_ResetBackBuffer()
 		_mOffscreenTarget.mBounds.Height = _mVirtualBufferBounds.Height;
 	}
 }
-Rectangle Renderer_GetDrawableSize()
+Rectangle Renderer_GetDrawableSize(void)
 {
 	Rectangle drawableSize;
 	drawableSize.X = 0;

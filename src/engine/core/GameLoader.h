@@ -6,4 +6,4 @@ typedef struct SpriteBatch SpriteBatch;
 
 void GameLoader_Update(double delta);
 void GameLoader_Draw(SpriteBatch* spriteBatch);
-bool GameLoader_IsLoading();
+bool GameLoader_IsLoading(void);

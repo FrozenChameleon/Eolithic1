@@ -13,9 +13,9 @@ typedef struct EntitySearch
 
 void EntitySearch_AddEntityToSearch(EntitySearch* search, Entity addThis);
 bool EntitySearch_Check(bool isValid, bool isReverse);
-EntitySearch* EntitySearch_CreateNewAllEntitySearch();
+EntitySearch* EntitySearch_CreateNewAllEntitySearch(void);
 EntitySearch* EntitySearch_CreateNewBlankSearchSetCapacity(int32_t cap);
-EntitySearch* EntitySearch_CreateNewBlankSearch();
+EntitySearch* EntitySearch_CreateNewBlankSearch(void);
 EntitySearch* EntitySearch_SearchForEntitiesWithThisName(const EntitySearch* lookThroughThis, EntitySearch* addToThis,
 	const char* name, bool isReverse);
 EntitySearch* EntitySearch_SearchForEntitiesWithThisParentNumber(const EntitySearch* lookThroughThis, EntitySearch* addToThis,

@@ -12,6 +12,7 @@
 #include "../input/RecordingTool.h"
 #include "../utils/Utils.h"
 #include "../core/Func.h"
+#include "../render/SpriteBatch.h"
 
 static int32_t _mUniqueMapSeed;
 static int32_t _mCurrentGameState;
@@ -25,7 +26,7 @@ static System** arr_state_systems;
 static GameState _mGameState;
 static bool _mHasRunCtor;
 
-void GameStateManager_Ctor()
+void GameStateManager_Ctor(void)
 {
 	if (_mHasRunCtor)
 	{
@@ -38,11 +39,11 @@ void GameStateManager_Ctor()
 	_mHasRunCtor = true;
 }
 
-int32_t GameStateManager_GetGlobalSystemsLen()
+int32_t GameStateManager_GetGlobalSystemsLen(void)
 {
 	return (int32_t)arrlen(arr_global_systems);
 }
-System** GameStateManager_GetGlobalSystems()
+System** GameStateManager_GetGlobalSystems(void)
 {
 	return arr_global_systems;
 }
@@ -50,11 +51,11 @@ void GameStateManager_AddGlobalSystem(System* sys)
 {
 	arrput(arr_global_systems, sys);
 }
-int32_t GameStateManager_GetStateSystemsLen()
+int32_t GameStateManager_GetStateSystemsLen(void)
 {
 	return (int32_t)arrlen(arr_state_systems);
 }
-System** GameStateManager_GetStateSystems()
+System** GameStateManager_GetStateSystems(void)
 {
 	return arr_state_systems;
 }
@@ -62,7 +63,7 @@ void GameStateManager_AddStateSystem(System* sys)
 {
 	arrput(arr_state_systems, sys);
 }
-GameState* GameStateManager_GetGameState()
+GameState* GameStateManager_GetGameState(void)
 {
 	return &_mGameState;
 }
@@ -70,11 +71,11 @@ GameState* GameStateManager_GetGameState()
 {
 	return &_mGameState;
 }*/
-void GameStateManager_UpdateLastRenderPosition()
+void GameStateManager_UpdateLastRenderPosition(void)
 {
 	GameHelper_UpdateLastRenderPosition();
 }
-void GameStateManager_Tick()
+void GameStateManager_Tick(void)
 {
 	GameHelper_UpdateGlobalSystems();
 }
@@ -90,27 +91,9 @@ void GameStateManager_DrawDebugHud(SpriteBatch* spriteBatch)
 {
 	GameHelper_DrawDebugHudGlobalSystems(spriteBatch);
 }
-void GameStateManager_InitDefaultNormalState()
+void GameStateManager_InitDefaultNormalState(void)
 {
 	GameStateManager_LoadMap(Cvars_Get(CVARS_ENGINE_DEFAULT_MAP));
-}
-void GameStateManager_InitDefaultPauseState()
-{
-	return;
-	//WILLNOTDO 05152023
-	/*
-	if (OeResourceManagers.LevelDataManager.HasResource(OeCvars::Get(OeCvars::ENGINE_PAUSE_MENU_MAP)))
-	{
-		ActiveGameState.Load(OeCvars::Get(OeCvars::ENGINE_PAUSE_MENU_MAP));
-		OeEntity entity = ActiveGameState.BuildNewEntity();
-		OeFunc.Do_SetBoolTag<OeTagIsPauseScene>(entity, true);
-		Logger.LogInformation("Loaded pause menu map");
-	}
-	else
-	{
-		Logger.LogInformation("No pause menu map present");
-	}
-	*/
 }
 void GameStateManager_SetGameState(int32_t value)
 {
@@ -126,32 +109,13 @@ void GameStateManager_SetGameState2(int32_t value, bool forceNow)
 }
 void GameStateManager_DebugDrawInfoHelper(int32_t* counter, SpriteBatch* spriteBatch, const char* text)
 {
-	//TODO C99
-	/*
 	int32_t dist = 24;
-	std::string font = "editor";
-	spriteBatch->DrawString(font, text, OeColors::YELLOW, 100, Vector2(0, *counter * dist));
+	const char* font = "editor";
+	SpriteBatch_DrawString(spriteBatch, font, text, COLOR_YELLOW, 100, Vector2_Create(0, (float)(*counter * dist)));
 	*counter += 1;
-	* */
 }
-InputPlayer* GameStateManager_GetPlayerInput(Entity thing)
+Camera* GameStateManager_GetCurrentRenderCamera(void)
 {
-	return NULL;
-	//WILLOTDO 05152023
-	//int32_t playerNumber = OeFunc.Get_PlayerNumber(thing);
-	//return OeInput.GetPlayer(playerNumber);
-}
-Camera* GameStateManager_GetCurrentRenderCamera()
-{
-#ifdef EDITOR_MODE
-	//WILLOTDO 05152023
-	/*
-	if (OeGlobals.DEBUG_IS_EDITOR_MODE)
-	{
-		return ref OeEditor.Camera;
-	}
-	*/
-#endif
 	return GameHelper_GetCameraForRender();
 }
 void GameStateManager_DebugForceLoadMapNow(const char* map)
@@ -164,27 +128,19 @@ void GameStateManager_SetupLoadMap(const char* s)
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
 	Utils_strlcpy(_mMapToLoad, s, EE_FILENAME_MAX);
 }
-void GameStateManager_SetupReloadMap()
+void GameStateManager_SetupReloadMap(void)
 {
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
 	Utils_strlcpy(_mMapToLoad, GameStateManager_GetCurrentFileName(), EE_FILENAME_MAX);
 }
-const char* GameStateManager_GetCurrentFileName()
+const char* GameStateManager_GetCurrentFileName(void)
 {
 	return Get_LevelFileName();
 }
-void GameStateManager_DebugForceReloadMapNow()
+void GameStateManager_DebugForceReloadMapNow(void)
 {
 	GameStateManager_SetupLoadMap(GameStateManager_GetCurrentFileName());
 	GameStateManager_HandleLoadNextMap();
-}
-void GameStateManager_SetupLoadMapWithRecording(const char* recordingName)
-{
-	//WILLOTDO 05152023
-/*
-string filename = OeStringTools.JavaSubString(recordingName, recordingName.IndexOf('{') + 1, recordingName.IndexOf('}'));
-_mMapToLoad = filename;
-*/
 }
 void GameStateManager_LoadMap(const char* mapToLoad)
 {
@@ -208,38 +164,28 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 
 	Music_SetDoNotAllowUpdatesWhilePaused(false);
 
-	//TODO 2024, DISABLING THIS COMPLETELY FOR C++? 
-	/*
-	if (!OeCvars::GetAsBool(OeCvars::ENGINE_LOAD_ALL_MOVIES))
+	/*if (!OeCvars::GetAsBool(OeCvars::ENGINE_LOAD_ALL_MOVIES)) //UNUSED, DISABLED FOR C
 	{
 		OeResourceManagers::MovieTextureManager.Dispose();
-	}
-	*/
+	}*/
 
-	//WILLNOTDO 05152023
-	/*if (!OeResourceManagers::LevelDataManager.HasResource(mapToLoad))
+	/*if (!OeResourceManagers::LevelDataManager.HasResource(mapToLoad)) //UNUSED
 	{
 		std::string path = OeFile::Combine(OeLevelData::LEVEL_DATA_DIRECTORY[0], mapToLoad + ".bin");
 		OeResourceManagers.LevelDataManager.CreateResource(path, new OeLevelData());
 		Logger.LogError("Unable to load map " + mapToLoad + ", created new level resource in memory for " + path);
 	}*/
 
-#ifdef EDITOR_MODE
-	GLOBALS_DEBUG_IS_META_MAP_EDIT_TILE_MODE_AT_MAP_LOAD = Cvars_GetAsBool(CVARS_EDITOR_META_MAP_EDIT_TILE_MODE);
-	//WILLNOTDO 05152023 OeConsole.CloseConsole();
-#endif
-
 	_mTicksSinceMapLoad = 0;
-	/*
-	if (!OeRecordingTool::IsReading())
+	
+	/*if (!OeRecordingTool::IsReading()) //UNUSED
 	{
 		_mUniqueMapSeed = SDL_GetTicks64() % INT_MAX;
 		if (!OeCvars::GetAsBool(OeCvars::ENGINE_DISABLE_NORMAL_RECORDINGS))
 		{
 			OeRecordingTool::SetupWriteSession(0, mapToLoad);
 		}
-	}
-	*/
+	}*/
 
 	Utils_FreeArena(UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 
@@ -262,15 +208,15 @@ void GameStateManager_LoadMap(const char* mapToLoad)
 
 	GLOBALS_DEBUG_JUST_LOADED_MAP_NOTIFY_EDITOR = true;
 }
-bool GameStateManager_IsNormalState()
+bool GameStateManager_IsNormalState(void)
 {
 	return _mCurrentGameState == GAMESTATEMANAGER_GAME_STATE_NORMAL;
 }
-bool GameStateManager_IsPausedState()
+bool GameStateManager_IsPausedState(void)
 {
 	return _mCurrentGameState == GAMESTATEMANAGER_GAME_STATE_PAUSED;
 }
-void GameStateManager_HandleGameStateChange()
+void GameStateManager_HandleGameStateChange(void)
 {
 	if (_mNextGameState == -1)
 	{
@@ -285,7 +231,7 @@ void GameStateManager_HandleGameStateChange()
 
 	GameHelper_OnNormalGameStateChange();
 }
-void GameStateManager_HandleLoadNextMap()
+void GameStateManager_HandleLoadNextMap(void)
 {
 	bool isMapLoad = false;
 	if (!Utils_StringEqualTo(_mMapToLoad, EE_STR_EMPTY))
@@ -307,11 +253,11 @@ void GameStateManager_HandleLoadNextMap()
 	GameStateManager_LoadMap(_mMapToLoad);
 	Utils_strlcpy(_mMapToLoad, EE_STR_EMPTY, EE_FILENAME_MAX);
 }
-bool GameStateManager_JustChangedGameStateThisFrame()
+bool GameStateManager_JustChangedGameStateThisFrame(void)
 {
 	return _mJustChangedGameStateThisFrame;
 }
-void GameStateManager_HandleJustChangedGameStateThisFrame()
+void GameStateManager_HandleJustChangedGameStateThisFrame(void)
 {
 	_mJustChangedGameStateThisFrame = false;
 }
@@ -319,7 +265,7 @@ void GameStateManager_SetCurrentGameStateForRenderCamera(int32_t value)
 {
 	_mCurrentGameStateForRenderCamera = value;
 }
-int32_t GameStateManager_GetCurrentGameState()
+int32_t GameStateManager_GetCurrentGameState(void)
 {
 	return _mCurrentGameState;
 }
@@ -327,15 +273,15 @@ void GameStateManager_SetCurrentGameState(int32_t value)
 {
 	_mCurrentGameState = value;
 }
-void GameStateManager_IncrementTicksSinceMapLoad()
+void GameStateManager_IncrementTicksSinceMapLoad(void)
 {
 	_mTicksSinceMapLoad += 1;
 }
-uint64_t GameStateManager_GetTicksSinceMapLoad()
+uint64_t GameStateManager_GetTicksSinceMapLoad(void)
 {
 	return _mTicksSinceMapLoad;
 }
-int32_t GameStateManager_GetUniqueMapSeed()
+int32_t GameStateManager_GetUniqueMapSeed(void)
 {
 	return _mUniqueMapSeed;
 }
@@ -344,7 +290,7 @@ void GameStateManager_SetUniqueMapSeed(int32_t value)
 	_mUniqueMapSeed = value;
 }
 #ifdef EDITOR_MODE
-void GameStateManager_SaveComponentSizes()
+void GameStateManager_SaveComponentSizes(void)
 {
 
 }

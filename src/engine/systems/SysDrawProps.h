@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* SysDrawProps_CreateSystem();
+System* SysDrawProps_CreateSystem(void);

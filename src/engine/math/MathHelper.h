@@ -17,6 +17,6 @@
 
 float MathHelper_ToDegrees(float radians);
 float MathHelper_ToRadians(float degrees);
-float MathHelper_GetMachineEpsilonFloat();
+float MathHelper_GetMachineEpsilonFloat(void);
 float MathHelper_Clamp(float value, float min, float max);
 float MathHelper_Lerp(float value1, float value2, float amount);

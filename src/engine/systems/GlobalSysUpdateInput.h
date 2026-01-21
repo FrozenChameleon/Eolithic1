@@ -2,4 +2,4 @@
 
 #include "System.h"
 
-System* GlobalSysUpdateInput_CreateSystem();
+System* GlobalSysUpdateInput_CreateSystem(void);

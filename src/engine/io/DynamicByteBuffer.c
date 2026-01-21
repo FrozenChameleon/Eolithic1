@@ -134,7 +134,7 @@ FixedByteBuffer* DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(Dynamic
 	DynamicByteBuffer_Dispose(dbb);
 	return fbb;
 }
-DynamicByteBuffer* DynamicByteBuffer_Create()
+DynamicByteBuffer* DynamicByteBuffer_Create(void)
 {
 	_mRefs += 1;
 	DynamicByteBuffer* dbb = Utils_malloc(sizeof(DynamicByteBuffer));
@@ -149,7 +149,7 @@ void DynamicByteBuffer_Dispose(DynamicByteBuffer* dbb)
 	Utils_free(dbb->mBuffer);
 	Utils_free(dbb);
 }
-uint64_t DynamicByteBuffer_GetRefs()
+uint64_t DynamicByteBuffer_GetRefs(void)
 {
 	return _mRefs;
 }

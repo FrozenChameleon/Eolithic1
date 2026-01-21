@@ -27,7 +27,7 @@ const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD = "BLN_DIFFICULTY_VER
 
 //static std_vector<OeStringPair> _mPairs;
 
-static void BuildGlobalThingSettings()
+static void BuildGlobalThingSettings(void)
 {
 	/*
 	_mPairs = {};
@@ -195,7 +195,7 @@ void ThingInstance_RemoveUnrelatedPairs(ThingInstance* instance, StringPair* arr
 				OeLogger_LogWarning("Removed unrelated string pair for " + pair.mKey);
 			}
 			arrayTo.erase(arrayTo.begin() + i);
-			i--;
+			i -= 1;
 		}
 	}*/
 }

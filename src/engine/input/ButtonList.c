@@ -13,7 +13,7 @@
 static bool _mHasInit;
 static int32_t _mArray[AMOUNT_OF_BUTTONS];
 
-static void Init()
+static void Init(void)
 {
 	if (_mHasInit)
 	{
@@ -45,14 +45,13 @@ int32_t ButtonList_GetButton(int32_t index)
 	return _mArray[index];
 }
 
-
-const int32_t* ButtonList_GetArray()
+const int32_t* ButtonList_GetArray(void)
 {
 	Init();
 
 	return _mArray;
 }
-int32_t ButtonList_GetArrayLength()
+int32_t ButtonList_GetArrayLength(void)
 {
 	return AMOUNT_OF_BUTTONS;
 }

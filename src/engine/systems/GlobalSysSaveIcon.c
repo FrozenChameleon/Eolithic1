@@ -9,11 +9,11 @@
 
 static Animation _mSaveIcon;
 
-static bool HasInit()
+static bool HasInit(void)
 {
 	return (_mSaveIcon.mSheetsLen != 0);
 }
-static void InitAnimation()
+static void InitAnimation(void)
 {
 	const char* spriteSheet = Cvars_Get(CVARS_ENGINE_SAVE_ICON);
 	int32_t flipTimer = Cvars_GetAsInt(CVARS_ENGINE_SAVE_ICON_FLIP_SPEED);
@@ -60,7 +60,7 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 	}
 }
 
-System* GlobalSysSaveIcon_CreateSystem()
+System* GlobalSysSaveIcon_CreateSystem(void)
 {
 	System* sys = System_Create();
 	sys->_mUpdate = Update;

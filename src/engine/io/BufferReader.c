@@ -194,7 +194,7 @@ void BufferReader_Dispose2(BufferReader* br, bool doNotDisposeBuffer)
 
 	Utils_free(br);
 }
-uint64_t BufferReader_GetRefs()
+uint64_t BufferReader_GetRefs(void)
 {
 	return _mRefs;
 }
