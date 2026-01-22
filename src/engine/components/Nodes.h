@@ -4,5 +4,5 @@
 
 typedef struct Nodes
 {
-	Point* mNodes;
+	Point* arr_given_nodes;
 } Nodes;

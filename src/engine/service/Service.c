@@ -10,8 +10,6 @@
 
 #define DEFAULT_SEND_STATUS_TIME 180
 
-#define LEADERBOARD_ENTRY_LEN 10
-
 //Achievements
 static bool _mIsOnLeaderboardMenuRightNow;
 static int32_t _mAchievementMapLength;

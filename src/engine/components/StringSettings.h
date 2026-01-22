@@ -4,6 +4,6 @@
 
 typedef struct StringSettings
 {
-	StringPair* mSettings;
+	StringPair* arr_given_settings;
 } StringSettings;
 

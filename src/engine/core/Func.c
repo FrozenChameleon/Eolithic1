@@ -78,7 +78,7 @@
 
 static int32_t _mAttackIdCounter;
 
-static Point* Get_PointerToGridNodes(Entity entity)
+static Point* Get_ArrGridNodes(Entity entity)
 {
 	bool wasSuccessful;
 	Nodes* component = (Nodes*)TryGet_Component(C_Nodes, entity, &wasSuccessful);
@@ -88,25 +88,7 @@ static Point* Get_PointerToGridNodes(Entity entity)
 	}
 	else
 	{
-		return component->mNodes;
-	}
-}
-static Point* Get_GridNodes(Entity entity)
-{
-	bool wasSuccessful;
-	Nodes* component = (Nodes*)TryGet_Component(C_Nodes, entity, &wasSuccessful);
-	if (!wasSuccessful)
-	{
-		return NULL;
-	}
-	else
-	{
-		Point* nodes = component->mNodes;
-		if (nodes == NULL)
-		{
-			return NULL;
-		}
-		return nodes;
+		return component->arr_given_nodes;
 	}
 }
 
@@ -996,13 +978,13 @@ DrawActor* Get_DrawActor(Entity entity)
 }
 
 //private
-void Do_SetNodes(Entity entity, Point* nodes)
+void Do_SetArrNodes(Entity entity, Point* arr_nodes)
 {
-	((Nodes*)Get_Component(C_Nodes, entity))->mNodes = nodes;
+	((Nodes*)Get_Component(C_Nodes, entity))->arr_given_nodes = arr_nodes;
 }
-void Do_SetStringSettings(Entity entity, StringPair* stringSettings)
+void Do_SetArrStringSettings(Entity entity, StringPair* arr_settings)
 {
-	((StringSettings*)Get_Component(C_StringSettings, entity))->mSettings = stringSettings;
+	((StringSettings*)Get_Component(C_StringSettings, entity))->arr_given_settings = arr_settings;
 }
 void Do_SetComplete(Entity entity)
 {
@@ -1865,27 +1847,41 @@ CollisionEngine* Get_CollisionEngine(void)
 }
 Point Get_Node(Entity entity, int32_t i)
 {
-	Point* nodes = Get_GridNodes(entity);
-	if (arrlen(nodes) == 0)
+	Point* arr_nodes = Get_ArrGridNodes(entity);
+	if (arrlen(arr_nodes) == 0)
 	{
 		return Points_NegativeOne;
 	}
 
-	Point* node = &nodes[i]; //TODO 2024 THIS NEEDS SAFETY
-	Point gridPosition = Get_GridPosition(entity);
-	int32_t positionX = (node->X + gridPosition.X) * TILE_SIZE + HALF_TILE_SIZE;
-	int32_t positionY = (node->Y + gridPosition.Y) * TILE_SIZE + HALF_TILE_SIZE;
-	return Point_Create(positionX, positionY);
+	if (arrlen(arr_nodes) > i)
+	{
+		Point* node = &arr_nodes[i];
+		Point gridPosition = Get_GridPosition(entity);
+		int32_t positionX = (node->X + gridPosition.X) * TILE_SIZE + HALF_TILE_SIZE;
+		int32_t positionY = (node->Y + gridPosition.Y) * TILE_SIZE + HALF_TILE_SIZE;
+		return Point_Create(positionX, positionY);
+	}
+	else
+	{
+		return Points_NegativeOne;
+	}
 }
 Point Get_NodeAsGrid(Entity entity, int32_t i)
 {
-	Point* nodes = Get_GridNodes(entity);
-	if (arrlen(nodes) == 0) //TODO 2024 THIS NEEDS SAFETY
+	Point* arr_nodes = Get_ArrGridNodes(entity);
+	if (arrlen(arr_nodes) == 0)
 	{
 		return Points_NegativeOne;
 	}
 
-	return nodes[i];
+	if (arrlen(arr_nodes) > i)
+	{
+		return arr_nodes[i];
+	}
+	else
+	{
+		return Points_NegativeOne;
+	}
 }
 int32_t Get_IndexOfRandomNode(Entity entity, Random32* random)
 {
@@ -1893,12 +1889,13 @@ int32_t Get_IndexOfRandomNode(Entity entity, Random32* random)
 }
 int32_t Get_IndexOfRandomNode2(Entity entity, Random32* random, int32_t ignore)
 {
-	Point* nodes = Get_GridNodes(entity);
-	if (arrlen(nodes) == 0)
+	Point* arr_nodes = Get_ArrGridNodes(entity);
+	if (arrlen(arr_nodes) == 0)
 	{
 		return -1;
 	}
-	int64_t count = arrlen(nodes);
+
+	int64_t count = arrlen(arr_nodes);
 	int32_t index = Random32_NextInt(random, (int32_t)count);
 
 	if (ignore != -1)
@@ -1913,7 +1910,7 @@ int32_t Get_IndexOfRandomNode2(Entity entity, Random32* random, int32_t ignore)
 }
 int32_t Get_AmountOfNodes(Entity entity)
 {
-	return (int32_t)arrlen(Get_GridNodes(entity));
+	return (int32_t)arrlen(Get_ArrGridNodes(entity));
 }
 Point Get_RandomNode(Entity entity, Random32* random)
 {
@@ -2456,15 +2453,15 @@ int32_t Get_AmountOfMyChildren(Entity entity)
 }
 const char* Get_StringSettingAsString(Entity entity, const char* key)
 {
-	StringPair* stringSettings = Get_StringSettings(entity);
-	if (arrlen(stringSettings) == 0)
+	StringPair* arr_settings = Get_ArrStringSettings(entity);
+	if (arrlen(arr_settings) == 0)
 	{
 		return EE_STR_EMPTY;
 	}
 
-	for (int32_t i = 0; i < arrlen(stringSettings); i += 1)
+	for (int32_t i = 0; i < arrlen(arr_settings); i += 1)
 	{
-		StringPair* p = &stringSettings[i];
+		StringPair* p = &arr_settings[i];
 		if (Utils_StringEqualTo(p->mKey, key))
 		{
 			return p->mValue;
@@ -2473,7 +2470,7 @@ const char* Get_StringSettingAsString(Entity entity, const char* key)
 
 	return EE_STR_EMPTY;
 }
-StringPair* Get_StringSettings(Entity entity)
+StringPair* Get_ArrStringSettings(Entity entity)
 {
 	bool wasSuccessful;
 	StringSettings* component = (StringSettings*)TryGet_Component(C_StringSettings, entity, &wasSuccessful);
@@ -2483,12 +2480,7 @@ StringPair* Get_StringSettings(Entity entity)
 	}
 	else
 	{
-		StringPair* pairs = component->mSettings;
-		if (pairs == NULL)
-		{
-			return NULL;
-		}
-		return pairs;
+		return component->arr_given_settings;
 	}
 }
 int32_t Get_StringSettingAsInt(Entity entity, const char* setting)
@@ -2886,8 +2878,8 @@ Entity Do_BuildActor6(int32_t gridPositionX, int32_t gridPositionY, float initia
 		arr_nodes = NULL;
 		arr_settings = NULL;
 	}
-	Do_SetNodes(entity, arr_nodes);
-	Do_SetStringSettings(entity, arr_settings);
+	Do_SetArrNodes(entity, arr_nodes);
+	Do_SetArrStringSettings(entity, arr_settings);
 
 	if (settings->mHasCollision)
 	{
@@ -3166,8 +3158,8 @@ bool Is_InitialStringSettingsMapPresent(ComponentType componentType)
 }
 bool Is_StringSettingsPresent(Entity entity)
 {
-	StringPair* arr_string_settings = Get_StringSettings(entity);
-	return arrlen(arr_string_settings) > 0;
+	StringPair* arr_settings = Get_ArrStringSettings(entity);
+	return arrlen(arr_settings) > 0;
 }
 bool Is_FlipX(Entity entity)
 {

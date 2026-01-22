@@ -209,13 +209,13 @@ void Game_PollEvents(void) //Derived from FNA
 
 			Window_SetActive(true);
 
-			const char* videoDriver = SDL_GetCurrentVideoDriver();
+			/*const char* videoDriver = SDL_GetCurrentVideoDriver(); //UNUSED FOR NOW
 			if (Utils_StringEqualTo(videoDriver, "x11"))
 			{
 				// If we alt-tab away, we lose the 'fullscreen desktop' flag on some WMs
-				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()),
-				//		OeWindow_IsFullscreen() ? SDL_WindowFlags_SDL_WINDOW_FULLSCREEN_DESKTOP : 0);//TODO
-			}
+				SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()),
+						OeWindow_IsFullscreen() ? SDL_WindowFlags_SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+			}*/
 
 			// Disable the screensaver when we're back.
 			SDL_DisableScreenSaver();
@@ -226,11 +226,11 @@ void Game_PollEvents(void) //Derived from FNA
 
 			Window_SetActive(false);
 
-			const char* videoDriver = SDL_GetCurrentVideoDriver();
+			/*const char* videoDriver = SDL_GetCurrentVideoDriver(); //UNUSED FOR NOW
 			if (Utils_StringEqualTo(videoDriver, "x11"))
 			{
-				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()), 0); //TODO
-			}
+				SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()), 0);
+			}*/
 
 			// Give the screensaver back, we're not that important now.
 			SDL_EnableScreenSaver();

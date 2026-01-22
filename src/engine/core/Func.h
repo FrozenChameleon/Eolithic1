@@ -168,9 +168,9 @@ void Do_SetStunFrames(Entity entity, int32_t value);
 void Do_SetStateRotation(Entity entity, int32_t state, float rotation);
 DrawActor* Get_DrawActor(Entity entity);
 //private
-void Do_SetNodes(Entity entity, Point* nodes);
+void Do_SetArrNodes(Entity entity, Point* arr_nodes);
 //
-void Do_SetStringSettings(Entity entity, StringPair* stringSettings);
+void Do_SetArrStringSettings(Entity entity, StringPair* arr_settings);
 void Do_SetComplete(Entity entity);
 void Do_SetGridPosition(Entity entity, int32_t x, int32_t y);
 void Do_SetInitialPosition(Entity entity, float x, float y);
@@ -402,7 +402,7 @@ int32_t Get_BodyCollisionGridPositionY(Entity entity);
 int32_t Get_AmountOfMyChildrenByName(Entity entity, const char* name);
 int32_t Get_AmountOfMyChildren(Entity entity);
 const char* Get_StringSettingAsString(Entity entity, const char* key);
-StringPair* Get_StringSettings(Entity entity);
+StringPair* Get_ArrStringSettings(Entity entity);
 int32_t Get_StringSettingAsInt(Entity entity, const char* setting);
 bool Get_StringSettingAsBooleanByChar(Entity entity, const char* setting);
 float Get_StringSettingAsFloat(Entity entity, const char* setting);
