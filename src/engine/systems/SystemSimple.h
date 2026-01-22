@@ -4,24 +4,39 @@
 
 typedef struct Body Body;
 
+typedef bool (*SystemSimple_BeforeCollideWithBodyFunc)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+typedef void (*SystemSimple_CollideWithBodyFunc)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
+typedef bool (*SystemSimple_CollideWithCollisionFunc)(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical);
+typedef void (*SystemSimple_BeforeUpdateFunc)(void);
+typedef void (*SystemSimple_AfterUpdateFunc)(void);
+typedef void (*SystemSimple_DrawFunc)(Entity owner, void* data, SpriteBatch* spriteBatch);
+typedef void (*SystemSimple_DrawHudFunc)(Entity owner, void* data, SpriteBatch* spriteBatch);
+typedef void (*SystemSimple_DrawDebugHudFunc)(Entity owner, void* data, SpriteBatch* spriteBatch);
+typedef void (*SystemSimple_JustCompletedFunc)(Entity owner, void* data);
+typedef void (*SystemSimple_UpdateLastRenderPositionFunc)(void* data);
+typedef void (*SystemSimple_ReceiveBroadcastFunc)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
+typedef void (*SystemSimple_UpdateFunc)(Entity entity, void* data);
+typedef void (*SystemSimple_InitFunc)(Entity owner, void* data);
+typedef void (*SystemSimple_SetupSystemFunc)(void);
+
 typedef struct SystemSimple
 {
 	ComponentType _mType;
 	bool _mHasBeenInit;
-	bool (*_mBeforeCollideWithBody)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
-	void (*_mCollideWithBody)(Body* myBody, Body* otherBody, int32_t myDirectionX, int32_t myDirectionY, int32_t otherDirectionX, int32_t otherDirectionY, bool isVertical);
-	bool (*_mCollideWithCollision)(Body* myBody, int32_t x, int32_t y, int32_t width, int32_t height, int32_t myDirectionX, int32_t myDirectionY, int32_t collisionBit, bool isVertical);
-	void (*_mBeforeUpdateRoutine)(void);
-	void (*_mAfterUpdateRoutine)(void);
-	void (*_mDrawRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch);
-	void (*_mDrawHudRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch);
-	void (*_mDrawDebugHudRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch);
-	void (*_mJustCompletedRoutine)(Entity owner, void* data);
-	void (*_mUpdateLastRenderPositionRoutine)(void* data);
-	void (*_mReceiveBroadcastRoutine)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
-	void (*_mUpdateRoutine)(Entity entity, void* data);
-	void (*_mInitRoutine)(Entity owner, void* data);
-	void (*_mSetupSystem)(void);
+	SystemSimple_BeforeCollideWithBodyFunc _mBeforeCollideWithBody;
+	SystemSimple_CollideWithBodyFunc _mCollideWithBody;
+	SystemSimple_CollideWithCollisionFunc _mCollideWithCollision;
+	SystemSimple_BeforeUpdateFunc _mBeforeUpdateRoutine;
+	SystemSimple_AfterUpdateFunc _mAfterUpdateRoutine;
+	SystemSimple_DrawFunc _mDrawRoutine;
+	SystemSimple_DrawHudFunc _mDrawHudRoutine;
+	SystemSimple_DrawDebugHudFunc _mDrawDebugHudRoutine;
+	SystemSimple_JustCompletedFunc _mJustCompletedRoutine;
+	SystemSimple_UpdateLastRenderPositionFunc _mUpdateLastRenderPositionRoutine;
+	SystemSimple_ReceiveBroadcastFunc _mReceiveBroadcastRoutine;
+	SystemSimple_UpdateFunc _mUpdateRoutine;
+	SystemSimple_InitFunc _mInitRoutine;
+	SystemSimple_SetupSystemFunc _mSetupSystem;
 } SystemSimple;
 
 SystemSimple* SystemSimple_Create(ComponentType ctype);

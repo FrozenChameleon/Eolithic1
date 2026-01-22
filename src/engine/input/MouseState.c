@@ -12,7 +12,7 @@
 #include "../utils/Cvars.h"
 #include "../core/Game.h"
 
-static int32_t _mScrollWheelValue;
+static int32_t _mGlobalScrollWheelValue;
 static bool _mIsButtonMuted[MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS];
 static MouseData _mThisFrame;
 static MouseData _mLastFrame;
@@ -21,7 +21,7 @@ static bool _mHasInit;
 void MouseData_CopyFrom(MouseData* md, const MouseData* otherData)
 {
 	md->_mMousePosition = otherData->_mMousePosition;
-	_mScrollWheelValue = otherData->_mScrollWheelValue;
+	md->_mScrollWheelValue = otherData->_mScrollWheelValue;
 	for (int32_t i = 0; i < MOUSEBUTTONS_AMOUNT_OF_MOUSE_BUTTONS; i += 1)
 	{
 		md->_mIsButtonDown[i] = otherData->_mIsButtonDown[i];
@@ -41,7 +41,7 @@ void MouseData_Poll(MouseData* md)
 {
 	Uint32 mouseButtonState = SDL_GetMouseState(&md->_mMousePosition.X, &md->_mMousePosition.Y);
 
-	//_mScrollWheelValue = _mScrollWheelValue; //TODO
+	md->_mScrollWheelValue = _mGlobalScrollWheelValue;
 
 	md->_mIsButtonDown[MOUSEBUTTONS_MOUSE_LEFTBUTTON] = (mouseButtonState & SDL_BUTTON_MASK(SDL_BUTTON_LEFT));
 	md->_mIsButtonDown[MOUSEBUTTONS_MOUSE_RIGHTBUTTON] = (mouseButtonState & SDL_BUTTON_MASK(SDL_BUTTON_RIGHT));
@@ -66,7 +66,7 @@ void MouseData_Poll(MouseData* md)
 }
 int32_t MouseData_GetScrollWheelValue(const MouseData* md)
 {
-	return _mScrollWheelValue;
+	return md->_mScrollWheelValue;
 }
 float MouseData_GetMouseX(const MouseData* md)
 {
@@ -186,5 +186,5 @@ bool MouseState_JustScrolledDown(void)
 }
 void MouseState_INTERNAL_SetScrollWheelValue(int32_t value)
 {
-	_mScrollWheelValue = value;
+	_mGlobalScrollWheelValue = value;
 }

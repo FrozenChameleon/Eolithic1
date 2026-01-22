@@ -40,6 +40,7 @@
 #include "GameHelper.h"
 #include "MenuFunc.h"
 #include  "../audio/AudioEngine.h"
+#include "../input/MouseState.h"
 
 static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
@@ -185,27 +186,35 @@ void Game_PollEvents(void) //Derived from FNA
 	{
 		if (e.type == SDL_EVENT_MOUSE_WHEEL)
 		{
+			//Logger_LogInformationSilently("Event: mouse wheel");
+
 			// 120 units per notch. Because reasons.
-			//OeMouseState_INTERNAL_SetScrollWheelValue(e.wheel.y * 120);
+			MouseState_INTERNAL_SetScrollWheelValue((int32_t)(e.wheel.y * 120));
 		}
 		if (e.type == SDL_EVENT_GAMEPAD_ADDED)
 		{
+			Logger_LogInformationSilently("Event: gamepad added");
+
 			ControllerState_AddControllerInstance(e.cdevice.which);
 		}
 		else if (e.type == SDL_EVENT_GAMEPAD_REMOVED)
 		{
+			Logger_LogInformationSilently("Event: gamepad removed");
+
 			ControllerState_RemoveControllerInstance(e.cdevice.which);
 		}
 		else if (e.type == SDL_EVENT_WINDOW_FOCUS_GAINED) // Various Window Events...
 		{
-			//GameWindow_SetWindowActive(true);
+			Logger_LogInformationSilently("Event: window focus gained");
+
+			Window_SetActive(true);
 
 			const char* videoDriver = SDL_GetCurrentVideoDriver();
 			if (Utils_StringEqualTo(videoDriver, "x11"))
 			{
 				// If we alt-tab away, we lose the 'fullscreen desktop' flag on some WMs
 				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()),
-			//		OeWindow_IsFullscreen() ? SDL_WindowFlags_SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+				//		OeWindow_IsFullscreen() ? SDL_WindowFlags_SDL_WINDOW_FULLSCREEN_DESKTOP : 0);//TODO
 			}
 
 			// Disable the screensaver when we're back.
@@ -213,12 +222,14 @@ void Game_PollEvents(void) //Derived from FNA
 		}
 		else if (e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
 		{
-			//OeWindow_SetWindowActive(false);
+			Logger_LogInformationSilently("Event: window focus lost");
+
+			Window_SetActive(false);
 
 			const char* videoDriver = SDL_GetCurrentVideoDriver();
 			if (Utils_StringEqualTo(videoDriver, "x11"))
 			{
-				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()), 0);
+				//SDL_SetWindowFullscreen((SDL_Window*)(OeWindow_GetWindowContext()), 0); //TODO
 			}
 
 			// Give the screensaver back, we're not that important now.
@@ -226,18 +237,26 @@ void Game_PollEvents(void) //Derived from FNA
 		}
 		else if (e.type == SDL_EVENT_WINDOW_RESIZED)
 		{
-			//GameRenderer_ApplyChanges();
+			Logger_LogInformationSilently("Event: window resized");
+
+			Renderer_ApplyChanges();
 		}
 		else if (e.type == SDL_EVENT_WINDOW_MOUSE_ENTER)
 		{
+			//Logger_LogInformationSilently("Event: mouse enter");
+
 			SDL_DisableScreenSaver();
 		}
 		else if (e.type == SDL_EVENT_WINDOW_MOUSE_LEAVE)
 		{
+			//Logger_LogInformationSilently("Event: mouse leave");
+
 			SDL_EnableScreenSaver();
 		}
 		else if (e.type == SDL_EVENT_QUIT)
 		{
+			Logger_LogInformationSilently("Event: quit");
+
 			_mIsExitingGame = true;
 		}
 	}
@@ -254,8 +273,7 @@ void Game_Exit(void)
 }
 bool Game_IsActive(void)
 {
-	//TODO C99
-	return true;
+	return Window_IsActive();
 }
 void Game_Update(double gameTime)
 {

@@ -23,12 +23,12 @@ void SpecialShakeCameraSys_Create(int32_t timerLimit, int32_t minX, int32_t maxX
 {
 	Entity entity = Do_BuildNewEntityWithName("Shake Camera");
 	Do_InitComponent(C_ShakeCamera, entity);
-	SpecialShakeCameraSys_Setup(Get_Component(C_ShakeCamera, entity), timerLimit, minX, maxX, minY, maxY);
+	SpecialShakeCameraSys_Setup((ShakeCamera*)Get_Component(C_ShakeCamera, entity), timerLimit, minX, maxX, minY, maxY);
 }
 
 System* SpecialShakeCameraSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_ShakeCamera);
-	ss->_mUpdateRoutine = SpecialShakeCameraSys_UpdateRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)SpecialShakeCameraSys_UpdateRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

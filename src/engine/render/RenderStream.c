@@ -6,19 +6,19 @@ void RenderStream_Clear(RenderStream* rs)
 }
 RenderCommandTileLayer* RenderStream_GetRenderCommandLayerUninitialized(RenderStream* rs)
 {
-	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandTileLayer));
+	return (RenderCommandTileLayer*)DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandTileLayer));
 }
 RenderCommandManyRectangle* RenderStream_GetRenderCommandManyRectangleUninitialized(RenderStream* rs)
 {
-	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandManyRectangle));
+	return (RenderCommandManyRectangle*)DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandManyRectangle));
 }
 RenderCommandString* RenderStream_GetRenderCommandStringUninitialized(RenderStream* rs)
 {
-	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandString));
+	return (RenderCommandString*)DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandString));
 }
 RenderCommandSheet* RenderStream_GetRenderCommandSheetUninitialized(RenderStream* rs)
 {
-	return DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandSheet));
+	return (RenderCommandSheet*)DynamicByteBuffer_GetUninitializedMemoryBlock(rs->_mBuffer, sizeof(RenderCommandSheet));
 }
 DynamicByteBuffer* RenderStream_GetBuffer(RenderStream* rs)
 {

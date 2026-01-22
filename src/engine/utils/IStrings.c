@@ -13,7 +13,7 @@ static uint64_t _mRefs;
 IStrings* IStrings_Create(void)
 {
 	_mRefs += 1;
-	IStrings* is = Utils_calloc(1, sizeof(IStrings));
+	IStrings* is = (IStrings*)Utils_calloc(1, sizeof(IStrings));
 	sh_new_arena(is->sh_values);
 	return is;
 }
@@ -22,6 +22,14 @@ void IStrings_Dispose(IStrings* is)
 	_mRefs -= 1;
 	shfree(is->sh_values);
 	Utils_free(is);
+}
+void IStrings_Clear(IStrings* is)
+{
+	if (shlen(is->sh_values) > 0)
+	{
+		shfree(is->sh_values);
+		sh_new_arena(is->sh_values);
+	}
 }
 const char* IStrings_Get(IStrings* is, const char* str)
 {

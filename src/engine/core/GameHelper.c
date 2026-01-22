@@ -44,12 +44,12 @@ int32_t GAMEHELPER_PLATFORM_LEFT = -1;
 
 Resource* GameHelper_GetDefaultLevelDataResource(void)
 {
-	LevelDataStub* stub = GameState_GetFirstSetComponent(Get_ActiveGameState(), C_LevelDataStub);
+	LevelDataStub* stub = (LevelDataStub*)GameState_GetFirstSetComponent(Get_ActiveGameState(), C_LevelDataStub);
 	return LevelDataStubFunc_GetLevelDataResource(stub);
 }
 LevelData* GameHelper_GetDefaultLevelData(void)
 {
-	LevelDataStub* stub = GameState_GetFirstSetComponent(Get_ActiveGameState(), C_LevelDataStub);
+	LevelDataStub* stub = (LevelDataStub*)GameState_GetFirstSetComponent(Get_ActiveGameState(), C_LevelDataStub);
 	return LevelDataStubFunc_GetLevelData(stub);
 }
 void GameHelper_UpdateLastRenderPositionNormally(void)
@@ -66,7 +66,7 @@ void GameHelper_UpdateLastRenderPositionNormally(void)
 }
 Camera* GameHelper_GetDefaultCameraForRender(void)
 {
-	return GameStateManager_GetFirstSetComponent(C_Camera);
+	return (Camera*)GameStateManager_GetFirstSetComponent(C_Camera);
 }
 float GameHelper_GetDefaultPostGameBrightness(void)
 {

@@ -112,7 +112,7 @@ DatReader* DatReader_Create(const char* path)
 {
 	_mRefs += 1;
 
-	DatReader* dr = Utils_calloc(1, sizeof(DatReader));
+	DatReader* dr = (DatReader*)Utils_calloc(1, sizeof(DatReader));
 
 	dr->_mReader = BufferReader_CreateFromPath(path);
 	MString_AssignString(&dr->_mPath, path);

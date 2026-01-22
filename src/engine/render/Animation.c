@@ -365,7 +365,7 @@ FixedArray Animation_GetAnimationSheets(const char* animation)
 	int64_t sheetNamesLen = IStringArray_Length(sheetNames);
 	if (sheetNamesLen > 0)
 	{
-		Sheet** sheets = Utils_calloc(sheetNamesLen, sizeof(Sheet*));
+		Sheet** sheets = (Sheet**)Utils_calloc(sheetNamesLen, sizeof(Sheet*));
 		for (int32_t i = 0; i < sheetNamesLen; i += 1)
 		{
 			const char* currentSheetName = IStringArray_Get(sheetNames, i);
@@ -385,8 +385,8 @@ const Sheet** Animation_GetSheets(const Animation* anim)
 {
 	if (anim->mSheets == NULL)
 	{
-		return _mDummyAnimationSheets;
+		return (const Sheet**)_mDummyAnimationSheets;
 	}
 
-	return anim->mSheets;
+	return (const Sheet**)anim->mSheets;
 }

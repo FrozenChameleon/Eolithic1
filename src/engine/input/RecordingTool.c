@@ -61,7 +61,7 @@ static void InitData(void)
 		return;
 	}
 
-	_mData = Utils_calloc(60 * 60 * 60 * 3, sizeof(RecordingData)); //3 hours
+	_mData = (RecordingData*)Utils_calloc(60 * 60 * 60 * 3, sizeof(RecordingData)); //3 hours
 	MString_AssignString(&_mDisplaySuccessCounterStr, "");
 	MString_AssignString(&_mDisplayFailureCounterStr, "");
 	MString_AssignString(&_mLastReadRecordingFilename, "");
@@ -572,7 +572,7 @@ void RecordingTool_EnableFromArgumentsPlayback(int32_t state)
 }
 bool RecordingTool_IsDisplayingSessionReadout(void)
 {
-	if (_mToolState == TOOL_STATE_READING || IStringArray_Length(_mDisplayReadout) > 0)
+	if ((_mToolState == TOOL_STATE_READING) || (IStringArray_Length(_mDisplayReadout) > 0))
 	{
 		return true;
 	}

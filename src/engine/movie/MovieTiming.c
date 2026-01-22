@@ -24,7 +24,7 @@ const std::vector<std::string>& OeMovieTiming::GetDirectories()
 
 MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	MovieTiming* mt = Utils_calloc(1, sizeof(MovieTiming));
+	MovieTiming* mt = (MovieTiming*)Utils_calloc(1, sizeof(MovieTiming));
 	{
 		IStringArray* lotsOfStrings = NULL;
 		{
@@ -35,7 +35,7 @@ MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithou
 			MString_Dispose(&bigString);
 		}
 		int32_t len = (int32_t)IStringArray_Length(lotsOfStrings);
-		mt->timings = Utils_calloc(len, sizeof(int32_t));
+		mt->timings = (int32_t*)Utils_calloc(len, sizeof(int32_t));
 		mt->len = len;
 		for (int32_t i = 0; i < len; i += 1)
 		{

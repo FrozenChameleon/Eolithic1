@@ -691,7 +691,7 @@ void Renderer_DrawTiles(RenderCommandTileLayer* draw)
 			}
 			else if (Utils_strnlen(drawTile->mAnimation, EE_FILENAME_MAX) > 0)
 			{
-				AnimTile* animTile = ResourceManager_GetResourceData(ResourceManagerList_AnimTile(), drawTile->mAnimation);
+				AnimTile* animTile = (AnimTile*)ResourceManager_GetResourceData(ResourceManagerList_AnimTile(), drawTile->mAnimation);
 				if (animTile == NULL)
 				{
 					Renderer_Draw(DrawTool_GetSinglePixel(), Rectangle_Create((int32_t)position.X, (int32_t)position.Y, TILE_SIZE, TILE_SIZE), Color_Red);

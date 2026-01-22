@@ -11,7 +11,7 @@ static void Update(void* givenData)
 		int64_t len = ResourceManager_Length(animTileMan);
 		for (int32_t i = 0; i < len; i += 1)
 		{
-			AnimTile_UpdateResource(ResourceManager_GetResourceDataByIndex(animTileMan, i));
+			AnimTile_UpdateResource((AnimTile*)ResourceManager_GetResourceDataByIndex(animTileMan, i));
 		}
 	}
 
@@ -20,7 +20,7 @@ static void Update(void* givenData)
 		int64_t len = ResourceManager_Length(propMan);
 		for (int32_t i = 0; i < len; i += 1)
 		{
-			Prop_UpdateResource(ResourceManager_GetResourceDataByIndex(propMan, i));
+			Prop_UpdateResource((Prop*)ResourceManager_GetResourceDataByIndex(propMan, i));
 		}
 	}
 }

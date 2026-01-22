@@ -29,7 +29,7 @@ static void DummyReceiveBroadcast(void* givenData, int32_t broadcastType, int32_
 
 System* System_Create(void)
 {
-	System* sys = Utils_calloc(1, sizeof(System));
+	System* sys = (System*)Utils_calloc(1, sizeof(System));
 	sys->_mInitStringSettingsHere = DummyInitStringSettingsHere;
 	sys->_mInit = DummyInit;
 	sys->_mUpdate = DummyUpdate;

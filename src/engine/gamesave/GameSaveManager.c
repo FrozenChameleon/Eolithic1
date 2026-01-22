@@ -12,7 +12,6 @@
 #include "../io/DynamicByteBuffer.h"
 #include "../io/BufferReader.h"
 
-#define SAVE_FILE_NAME "mcdcsave.bin" //TODO
 #define CONTAINER_DISPLAY_NAME "GameSave"
 #define CONTAINER_NAME "GameSaveContainer"
 
@@ -66,7 +65,7 @@ void GameSaveManager_Save(void)
 	Utils_JustSaved();
 
 	FixedByteBuffer* fbb = CreateBufferFromSaveData();
-	Service_SaveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME, fbb);
+	Service_SaveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, GLOBAL_DEF_SAVE_FILE_NAME, fbb);
 	FixedByteBuffer_Dispose(fbb);
 
 	Logger_LogInformation("Save file saved to save0.bin");
@@ -82,7 +81,7 @@ void GameSaveManager_Load(void)
 		return;
 	}
 
-	BufferRequest request = Service_AskToRetrieveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, SAVE_FILE_NAME);
+	BufferRequest request = Service_AskToRetrieveBuffer(true, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, GLOBAL_DEF_SAVE_FILE_NAME);
 	if (request.mIsBufferReady)
 	{
 		_mHasLoaded = true;

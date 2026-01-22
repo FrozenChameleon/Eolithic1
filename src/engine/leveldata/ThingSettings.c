@@ -84,7 +84,7 @@ void ThingSettings_Read(ThingSettings* ts, BufferReader* br)
 
 ThingSettings* ThingSettings_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	ThingSettings* ts = Utils_calloc(1, sizeof(ThingSettings));
+	ThingSettings* ts = (ThingSettings*)Utils_calloc(1, sizeof(ThingSettings));
 	ThingSettings_Init(ts);
 	ThingSettings_Read(ts, br);
 	return ts;

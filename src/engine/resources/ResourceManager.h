@@ -22,10 +22,13 @@ typedef struct ResourceManager
 	ResourceManager_DisposeFunc _mDispose;
 	char _mDatFileName[EE_FILENAME_MAX];
 	char _mResourceType[EE_FILENAME_MAX];
+	char _mDefaultResource[EE_FILENAME_MAX];
 } ResourceManager;
 
 void ResourceManager_Init(ResourceManager* rm);
 bool ResourceManager_HasResource(ResourceManager* rm, const char* filenameWithoutExtension);
+Resource* ResourceManager_GetDefaultResource(ResourceManager* rm);
+void* ResourceManager_GetDefaultResourceData(ResourceManager* rm);
 Resource* ResourceManager_GetResource(ResourceManager* rm, const char* filenameWithoutExtension);
 void* ResourceManager_GetResourceData(ResourceManager* rm, const char* filenameWithoutExtension);
 Resource* ResourceManager_LoadAssetFromStreamAndCreateResource(ResourceManager* rm, BufferReader* br, const char* filenameWithoutExtension, const char* path);

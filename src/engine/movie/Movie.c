@@ -24,7 +24,7 @@ const std::vector<std::string> OeMovie::GetDirectories()
 
 Movie* Movie_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	Movie* movie = Utils_calloc(1, sizeof(Movie));
+	Movie* movie = (Movie*)Utils_calloc(1, sizeof(Movie));
 	movie->mMovieData = File_ReadAllToStrings(br);
 	return movie;
 }

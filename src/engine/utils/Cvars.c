@@ -341,7 +341,7 @@ void Cvars_LoadInitialCvars(void)
 
 	MString* pathToFinalConfigInData = NULL;
 
-	Cvars_Set(CVARS_ENGINE_ORGANIZATION_NAME, GLOBAL_CVARS_ENGINE_ORGANIZATION_NAME);
+	Cvars_Set(CVARS_ENGINE_ORGANIZATION_NAME, GLOBAL_DEF_ORGANIZATION_NAME);
 
 	Cvars_LoadDataDirCvars();
 

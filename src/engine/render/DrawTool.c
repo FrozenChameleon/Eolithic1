@@ -9,7 +9,7 @@ static Resource* _mSinglePixel;
 
 static BmFont* GetFont(const char* font)
 {
-	return ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
+	return (BmFont*)ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 }
 
 Texture* DrawTool_GetSinglePixel(void)
@@ -23,7 +23,7 @@ Texture* DrawTool_GetSinglePixel(void)
 		}
 	}
 
-	return _mSinglePixel->mData;
+	return (Texture*)_mSinglePixel->mData;
 }
 void DrawTool_DrawRectangle(SpriteBatch* spriteBatch, Color color, int32_t depth, int32_t x, int32_t y, int32_t width, int32_t height, float rotation, bool isCenter)
 {

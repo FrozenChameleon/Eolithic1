@@ -3,7 +3,7 @@
 #include "../gamestate/PackIterator.h"
 #include "../core/Func.h"
 
-void SystemFunc_InitHelper(ComponentType ctype, ComponentType givenType, void(*initRoutine)(Entity owner, void* data), Entity owner)
+void SystemFunc_InitHelper(ComponentType ctype, ComponentType givenType, SystemFunc_InitHelperFunc initRoutine, Entity owner)
 {
 	if (ctype != givenType)
 	{
@@ -12,7 +12,7 @@ void SystemFunc_InitHelper(ComponentType ctype, ComponentType givenType, void(*i
 
 	initRoutine(owner, GameStateManager_GetComponent(ctype, owner));
 }
-void SystemFunc_UpdateHelper(ComponentType ctype, void(*updateRoutine)(Entity entity, void* data))
+void SystemFunc_UpdateHelper(ComponentType ctype, SystemFunc_UpdateHelperFunc updateRoutine)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))
@@ -29,7 +29,7 @@ void SystemFunc_UpdateHelper(ComponentType ctype, void(*updateRoutine)(Entity en
 		}
 	}
 }
-void SystemFunc_DrawHelper(ComponentType ctype, void(*drawRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch), SpriteBatch* spriteBatch)
+void SystemFunc_DrawHelper(ComponentType ctype, SystemFunc_DrawHelperFunc drawRoutine, SpriteBatch* spriteBatch)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))
@@ -46,7 +46,7 @@ void SystemFunc_DrawHelper(ComponentType ctype, void(*drawRoutine)(Entity owner,
 		}
 	}
 }
-void SystemFunc_DrawHudHelper(ComponentType ctype, void(*drawHudRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch), SpriteBatch* spriteBatch)
+void SystemFunc_DrawHudHelper(ComponentType ctype, SystemFunc_DrawHudHelperFunc drawHudRoutine, SpriteBatch* spriteBatch)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))
@@ -60,7 +60,7 @@ void SystemFunc_DrawHudHelper(ComponentType ctype, void(*drawHudRoutine)(Entity 
 		drawHudRoutine(iter.mEntity, iter.mComponent, spriteBatch);
 	}
 }
-void SystemFunc_DrawDebugHudHelper(ComponentType ctype, void(*drawDebugHudRoutine)(Entity owner, void* data, SpriteBatch* spriteBatch), SpriteBatch* spriteBatch)
+void SystemFunc_DrawDebugHudHelper(ComponentType ctype, SystemFunc_DrawDebugHudHelperFunc drawDebugHudRoutine, SpriteBatch* spriteBatch)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))
@@ -74,7 +74,7 @@ void SystemFunc_DrawDebugHudHelper(ComponentType ctype, void(*drawDebugHudRoutin
 		drawDebugHudRoutine(iter.mEntity, iter.mComponent, spriteBatch);
 	}
 }
-void SystemFunc_UpdateLastRenderPositionHelper(ComponentType ctype, GameState* gameState, void(*updateLastRenderPositionsRoutine)(void* data))
+void SystemFunc_UpdateLastRenderPositionHelper(ComponentType ctype, GameState* gameState, SystemFunc_UpdateLastRenderPositionFunc updateLastRenderPositionsRoutine)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))
@@ -88,7 +88,8 @@ void SystemFunc_UpdateLastRenderPositionHelper(ComponentType ctype, GameState* g
 		updateLastRenderPositionsRoutine(iter.mComponent);
 	}
 }
-void SystemFunc_ReceiveBroadcastHelper(ComponentType ctype, void(*receiveBroadcastRoutine)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3), int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
+void SystemFunc_ReceiveBroadcastHelper(ComponentType ctype, SystemFunc_ReceiveBroadcastHelperFunc receiveBroadcastRoutine, 
+	int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))

@@ -315,7 +315,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(_mImprintPack, &iter))
 	{
-		CollisionEngineSys_ImprintToCollisionGridHelper(data, iter.mComponent);
+		CollisionEngineSys_ImprintToCollisionGridHelper(data, (CollisionImprintData*)iter.mComponent);
 	}
 	//
 
@@ -323,7 +323,7 @@ void CollisionEngineSys_UpdateRoutine(Entity owner, CollisionEngine* data)
 	iter = PackIterator_Begin;
 	while (ComponentPack_Next(bodyPack, &iter))
 	{
-		Body* body = iter.mComponent;
+		Body* body = (Body*)iter.mComponent;
 		if (!body->mIsDisabled)
 		{
 			CollisionEngineSys_HandleBodiesHousekeepingHelper(data, body);
@@ -625,7 +625,7 @@ void CollisionEngineSys_ImprintToCollisionGrid(CollisionEngine* data, float pixe
 	Entity collisionEntity = Get_FirstSetEntity(C_CollisionEngine);
 	ComponentPack* imprintPack = Get_ComponentPack(C_CollisionImprintData);
 	Point point = CollisionEngineSys_GetCollisionGridPosition(pixelX, pixelY);
-	CollisionImprintData* imprintData = ComponentPack_Set2(imprintPack, collisionEntity, true);
+	CollisionImprintData* imprintData = (CollisionImprintData*)ComponentPack_Set2(imprintPack, collisionEntity, true);
 	imprintData->mPosition = point;
 	imprintData->mWidth = width;
 	imprintData->mHeight = height;
@@ -1189,7 +1189,7 @@ void CollisionEngineSys_DebugGenerateDebugRectangles(CollisionEngine* data)
 System* CollisionEngineSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_CollisionEngine);
-	ss->_mUpdateRoutine = CollisionEngineSys_UpdateRoutine;
-	ss->_mDrawRoutine = CollisionEngineSys_DrawRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)CollisionEngineSys_UpdateRoutine;
+	ss->_mDrawRoutine = (SystemSimple_DrawFunc)CollisionEngineSys_DrawRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

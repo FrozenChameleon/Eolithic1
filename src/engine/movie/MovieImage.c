@@ -15,7 +15,7 @@ static Sheet* CreateNewSheetForMovieImage(const char* image)
 		return NULL;
 	}
 
-	Sheet* temp = Utils_CallocArena(1, sizeof(Sheet), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	Sheet* temp = (Sheet*)Utils_CallocArena(1, sizeof(Sheet), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	temp->mTextureResource = ResourceManager_GetResource(movieTextureMan, internedKey);
 	Utils_strlcpy(temp->mSheetName, internedKey, EE_FILENAME_MAX);
 	Utils_strlcpy(temp->mUnderlyingTextureName, internedKey, EE_FILENAME_MAX);
@@ -44,7 +44,7 @@ void MovieImage_Init2(MovieImage* mi, int32_t scale, const char* baseImage, int3
 		Animation_CreateAnimationStringArray(images, baseImage, frames, Utils_GetAmountOfDigits(frames));
 
 		mi->mSheetsForAnimationLen = frames;
-		mi->mSheetsForAnimation = Utils_CallocArena(mi->mSheetsForAnimationLen, sizeof(Sheet*), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+		mi->mSheetsForAnimation = (Sheet**)Utils_CallocArena(mi->mSheetsForAnimationLen, sizeof(Sheet*), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 
 		for (int32_t i = 0; i < frames; i += 1)
 		{

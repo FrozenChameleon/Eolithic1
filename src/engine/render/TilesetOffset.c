@@ -43,7 +43,7 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 
 	if (shgeti(sh_draw_tile_offset, tilesetName) >= 0)
 	{
-		return Utils_calloc(1, sizeof(TilesetOffset));
+		return (TilesetOffset*)Utils_calloc(1, sizeof(TilesetOffset));
 	}
 
 	IStringArray* strings = File_ReadAllToStrings(br);
@@ -81,7 +81,7 @@ TilesetOffset* TilesetOffset_FromStream(const char* path, const char* filenameWi
 
 	IStringArray_Dispose(strings);
 
-	return Utils_calloc(1, sizeof(TilesetOffset));
+	return (TilesetOffset*)Utils_calloc(1, sizeof(TilesetOffset));
 }
 void TilesetOffset_Dispose(TilesetOffset* to)
 {

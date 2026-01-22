@@ -57,7 +57,7 @@ void Service_NullLeaderboardEntries(void)
 }
 void Service_CreateLeaderboardEntries(void)
 {
-	//TODO ?_mLeaderboardEntries = std_vector<OeLeaderboardEntry>();
+	arrsetlen(arr_leaderboard_entries, 0);
 }
 int32_t Service_GetLeaderboardAmountOfRowsToRetrieve(void)
 {

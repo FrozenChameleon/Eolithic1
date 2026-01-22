@@ -29,7 +29,7 @@ static void CheckLength(DynamicByteBuffer* dbb, size_t size)
 	}
 
 	uint64_t newCapacity = dbb->mCapacity * 2;
-	dbb->mBuffer = Utils_grow(dbb->mBuffer, sizeof(uint8_t) * dbb->mCapacity, sizeof(uint8_t) * newCapacity);
+	dbb->mBuffer = (uint8_t*)Utils_grow(dbb->mBuffer, sizeof(uint8_t) * dbb->mCapacity, sizeof(uint8_t) * newCapacity);
 	dbb->mCapacity = newCapacity;
 }
 
@@ -137,10 +137,10 @@ FixedByteBuffer* DynamicByteBuffer_ConvertToFixedByteBufferAndDisposeDBB(Dynamic
 DynamicByteBuffer* DynamicByteBuffer_Create(void)
 {
 	_mRefs += 1;
-	DynamicByteBuffer* dbb = Utils_malloc(sizeof(DynamicByteBuffer));
+	DynamicByteBuffer* dbb = (DynamicByteBuffer*)Utils_calloc(1, sizeof(DynamicByteBuffer));
 	dbb->mLength = 0;
 	dbb->mCapacity = INITIAL_CAPACITY;
-	dbb->mBuffer = Utils_malloc(sizeof(uint8_t) * INITIAL_CAPACITY);
+	dbb->mBuffer = (uint8_t*)Utils_calloc(INITIAL_CAPACITY, sizeof(uint8_t));
 	return dbb;
 }
 void DynamicByteBuffer_Dispose(DynamicByteBuffer* dbb)

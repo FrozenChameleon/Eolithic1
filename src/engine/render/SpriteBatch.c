@@ -8,6 +8,9 @@
 #include "../resources/ResourceManagerList.h"
 #include "../utils/MString.h"
 #include "../../third_party/stb_ds.h"
+#include "../render/Texture.h"
+
+static RenderCommandString _mDummyRenderCommandString;
 
 static MString** arr_pinned_strings;
 
@@ -56,6 +59,11 @@ void SpriteBatch_Clear(SpriteBatch* sb)
 	}
 }
 
+static Texture* GetDefaultTextureData(void)
+{
+	return (Texture*)ResourceManager_GetDefaultResourceData(ResourceManagerList_Texture());
+}
+
 RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color color, int32_t depth, ShaderProgram* program, Vector2 position, Rectangle sourceRectangle, 
 	Vector2 scale, float rotation, bool flipX, bool flipY, Vector2 origin)
 {
@@ -64,8 +72,7 @@ RenderCommandSheet* SpriteBatch_Draw(SpriteBatch* sb, Texture* texture, Color co
 	if (texture == NULL)
 	{
 		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
-		return NULL;
-		//TODO C99texture = OeSheet_GetDefaultSheet()->mTextureResource->GetData();
+		texture = GetDefaultTextureData();
 	}
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
@@ -98,8 +105,7 @@ RenderCommandSheet* SpriteBatch_DrawInterpolated(SpriteBatch* sb, Texture* textu
 	if (texture == NULL)
 	{
 		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
-		return NULL;
-		//TODO C99 texture = OeSheet_GetDefaultSheet()->mTextureResource->GetData();
+		texture = GetDefaultTextureData();
 	}
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);
@@ -144,8 +150,7 @@ RenderCommandTileLayer* SpriteBatch_DrawLayer(SpriteBatch* sb, Texture* tileset,
 	if (tileset == NULL)
 	{
 		Logger_LogInformation("MISSING TILESET FOR DRAW");
-		return NULL;
-		//TODO C99 tileset = OeSheet_GetDefaultSheet()->mTextureResource->GetData();
+		tileset = GetDefaultTextureData();
 	}
 
 	RenderCommandTileLayer* command = RenderStream_GetRenderCommandLayerUninitialized(&sb->_mRenderStreams[depth]);
@@ -176,13 +181,12 @@ RenderCommandString* SpriteBatch_DrawString3(SpriteBatch* sb, const char* font, 
 {
 	ClampDepth(&depth);
 
-	BmFont* bitmapFont = ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
+	BmFont* bitmapFont = (BmFont*)ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 	if (bitmapFont == NULL)
 	{
 		Logger_LogError("MISSING FONT FOR DRAW: ");
 		Logger_LogError(font);
-		return NULL;
-		//TODO C99 return &_mDummyRenderCommandString;
+		return &_mDummyRenderCommandString;
 	}
 
 	RenderCommandString* command = RenderStream_GetRenderCommandStringUninitialized(&sb->_mRenderStreams[depth]);
@@ -213,7 +217,7 @@ RenderCommandSheet* SpriteBatch_DrawRectangle(SpriteBatch* sb, Texture* texture,
 	if (texture == NULL)
 	{
 		Logger_LogInformation("MISSING TEXTURE FOR DRAW");
-		texture = Sheet_GetDefaultSheet()->mTextureResource->mData;
+		texture = GetDefaultTextureData();
 	}
 
 	RenderCommandSheet* command = RenderStream_GetRenderCommandSheetUninitialized(&sb->_mRenderStreams[depth]);

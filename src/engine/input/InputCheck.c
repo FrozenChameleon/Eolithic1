@@ -306,7 +306,7 @@ const char* InputCheck_GetGlyphStringTypeKey(InputCheck* data)
 	{
 		return "]";
 	}
-	return Keys_GetKeyName(data->mKey);
+	return Keys_GetKeyName((Key)data->mKey);
 }
 //const char* ToString();
 bool InputCheck_IsDummy(InputCheck* data)
@@ -369,7 +369,7 @@ const char* InputCheck_GetName(InputCheck* data)
 	{
 		MString_AssignString(&_mTempString, Strings_Get("GEN_BIND_KEY"));
 		MString_AddAssignString(&_mTempString, ": ");
-		MString_AddAssignString(&_mTempString, Keys_GetKeyName(data->mKey));
+		MString_AddAssignString(&_mTempString, Keys_GetKeyName((Key)data->mKey));
 		return MString_Text(_mTempString);
 	}
 	case INPUTCHECK_TYPE_MOUSEBUTTON:

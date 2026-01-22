@@ -14,6 +14,6 @@ void SysResetFloatyMovementData_UpdateRoutine(Entity owner, FloatyMovementData* 
 System* SysResetFloatyMovementData_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_FloatyMovementData);
-	ss->_mUpdateRoutine = SysResetFloatyMovementData_UpdateRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)SysResetFloatyMovementData_UpdateRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

@@ -70,7 +70,7 @@ void GameState_SaveComponentSizes(GameState* gs)
 
 ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name, float x, float y)
 {
-	Particle* particleData = ResourceManager_GetResourceData(ResourceManagerList_Particle(), name);
+	Particle* particleData = (Particle*)ResourceManager_GetResourceData(ResourceManagerList_Particle(), name);
 	if (particleData == NULL)
 	{
 		Logger_LogInformation("Particle missing:");
@@ -82,10 +82,10 @@ ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name,
 	ComponentPack_SetMaximumCapacity(pack, GLOBAL_DEF_PARTICLE_LIMIT);
 	if (ComponentPack_Length(pack) >= GLOBAL_DEF_PARTICLE_LIMIT)
 	{
-		return ComponentPack_GetDummy(pack);
+		return (ParticleInstance*)ComponentPack_GetDummy(pack);
 	}
 	Entity particleEntity = Get_DummyEntityUniqueToPack2(pack, "Particle Instances");
-	ParticleInstance* particleInstance = ComponentPack_Set2(pack, particleEntity, true);
+	ParticleInstance* particleInstance = (ParticleInstance*)ComponentPack_Set2(pack, particleEntity, true);
 	ParticleInstanceSys_Setup(particleInstance, name, particleData, x, y);
 	return particleInstance;
 }

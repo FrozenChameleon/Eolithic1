@@ -99,7 +99,7 @@ static void fnafons__renderUpdate(void* userPtr, int* rect, const unsigned char*
 
 	int dataLength = w * h * bytes;
 
-	uint8_t* chunk = Utils_calloc(dataLength, sizeof(uint8_t));
+	uint8_t* chunk = (uint8_t*)Utils_calloc(dataLength, sizeof(uint8_t));
 	int counter = 0;
 	for (int j = y; j < (y + h); j += 1)
 	{

@@ -68,8 +68,7 @@ WaveFileData* WaveFileData_FromStream(BufferReader* br)
 
 	int32_t format_chunk_size = BufferReader_ReadI32(br);
 
-	WaveFileData* waveData = Utils_malloc(sizeof(WaveFileData));
-	Utils_memset(waveData, 0, sizeof(WaveFileData));
+	WaveFileData* waveData = (WaveFileData*)Utils_calloc(1, sizeof(WaveFileData));
 	waveData->wFormatTag = BufferReader_ReadU16(br);
 	waveData->nChannels = BufferReader_ReadU16(br);
 	waveData->nSamplesPerSec = BufferReader_ReadU32(br);

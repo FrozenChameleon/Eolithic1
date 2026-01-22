@@ -23,9 +23,3 @@ Texture* Texture_FromStream(const char* path, const char* filenameWithoutExtensi
 int32_t Texture_GetWidth(Texture* tex);
 int32_t Texture_GetHeight(Texture* tex);
 void* Texture_GetTexture2D(Texture* tex);
-/*
-static const std::vector<std::string>& GetUserDirectories();
-static const std::vector<std::string>& GetDebugDirectories();
-static const std::vector<std::string>& GetFontDirectories();
-static const std::vector<std::string>& GetMovieDirectories();
-*/

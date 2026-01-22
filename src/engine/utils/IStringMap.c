@@ -17,7 +17,7 @@ typedef struct IStringMap
 IStringMap* IStringMap_Create(void)
 {
 	_mRefs += 1;
-	IStringMap* sa = Utils_calloc(1, sizeof(IStringMap));
+	IStringMap* sa = (IStringMap*)Utils_calloc(1, sizeof(IStringMap));
 	sa->mStrings = IStrings_Create();
 	return sa;
 }

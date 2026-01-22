@@ -39,13 +39,13 @@ uint64_t Utils_GetMallocRefs(void);
 int32_t Utils_memcmp(const void* s1, const void* s2, size_t len);
 void Utils_memcpy(void* _Dst, const void* _Src, size_t _Size);
 void Utils_memset(void* _Dst, int32_t _Val, size_t _Size);
-void* Utils_MallocArena(size_t size, int32_t allocationArena);
+//void* Utils_realloc(void* mem, size_t size); //UNUSED
+//void* Utils_malloc(size_t size); //UNUSED
+//void* Utils_MallocArena(size_t size, int32_t allocationArena); //UNUSED
+void* Utils_calloc(size_t nmemb, size_t size);
 void* Utils_CallocArena(size_t nmemb, size_t size, int32_t allocationArena);
 void Utils_FreeArena(int32_t allocationArena);
-void* Utils_malloc(size_t size);
-void* Utils_calloc(size_t nmemb, size_t size);
 void Utils_free(void* mem);
-void* Utils_realloc(void* mem, size_t size);
 //Grow mem to newSize if bigger than oldSize, or if mem is NULL. On growth, returns new zero initialized mem. 0 is not valid for newSize, it will be forced to 1.
 void* Utils_grow(void* mem, size_t oldSize, size_t newSize);
 size_t Utils_strlen(const char* str);
@@ -71,6 +71,7 @@ void Utils_ResetArrayAsBool(bool* values, size_t len, bool valueToSet);
 void Utils_ResetArrayAsInt(int32_t* values, size_t len, int32_t valueToSet);
 void Utils_ResetArrayAsFloat(float* values, size_t len, float valueToSet);
 void Utils_ToggleFullscreenButton(void);
+int32_t Utils_StringIndexOfString(const char* findThis, const char* inThis, size_t maxlen);
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex);
 int32_t Utils_StringFirstIndexOf(char findThis, const char* strInThis, size_t maxlen);
 int32_t Utils_StringLastIndexOf(char findThis, const char* strInThis, size_t maxlen);
@@ -127,3 +128,4 @@ const char* Utils_GetStringFromNumberWithZerosHundreds(int32_t val);
 const char* Utils_GetStringFromNumberWithZerosTens(int32_t val);
 Color Utils_GetCollisionColor(int32_t val);
 int32_t Utils_ConvertFramesToMilliseconds(int32_t val);
+void Utils_StringReplaceStr(MString** assignToThis, const char* str, const char* findThis, const char* replaceWithThis);

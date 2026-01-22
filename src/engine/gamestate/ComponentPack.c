@@ -20,8 +20,8 @@ static void GrowComponentPackIfNeeded(ComponentPack* pack, int32_t newCapacity)
 		return;
 	}
 
-	pack->Entities = Utils_grow(pack->Entities, sizeof(Entity) * pack->_mCapacity, sizeof(Entity) * newCapacity);
-	pack->Components = Utils_grow(pack->Components, pack->_mComponentSizeInBytes * pack->_mCapacity, pack->_mComponentSizeInBytes * newCapacity);
+	pack->Entities = (Entity*)Utils_grow(pack->Entities, sizeof(Entity) * pack->_mCapacity, sizeof(Entity) * newCapacity);
+	pack->Components = (uint8_t*)Utils_grow(pack->Components, pack->_mComponentSizeInBytes * pack->_mCapacity, pack->_mComponentSizeInBytes * newCapacity);
 	pack->_mCapacity = newCapacity;
 }
 
@@ -31,7 +31,7 @@ void ComponentPack_Init(ComponentType ctype, ComponentPack* pack, size_t compone
 
 	pack->_mComponentType = ctype;
 	pack->_mComponentSizeInBytes = componentSizeInBytes;
-	pack->_mDummy = Utils_calloc(1, componentSizeInBytes);
+	pack->_mDummy = (uint8_t*)Utils_calloc(1, componentSizeInBytes);
 
 	GrowComponentPackIfNeeded(pack, initialSize);
 }
@@ -302,7 +302,7 @@ void ComponentPack_CopyTo(ComponentPack* from, ComponentPack* to)
 }
 ComponentPack* ComponentPack_CreateCopy(ComponentPack* pack)
 {
-	ComponentPack* copyPack = Utils_calloc(1, sizeof(ComponentPack));
+	ComponentPack* copyPack = (ComponentPack*)Utils_calloc(1, sizeof(ComponentPack));
 	ComponentPack_Init(pack->_mComponentType, copyPack, pack->_mComponentSizeInBytes, 1);
 	ComponentPack_CopyTo(pack, copyPack);
 	return copyPack;

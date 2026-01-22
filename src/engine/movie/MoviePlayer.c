@@ -156,43 +156,43 @@ static MovieTextData GetTextData(IStringArray* arguments)
 static MovieOperationText* CreateNewMovieOperationText(bool isMappedText, const char* str, const char* font, Vector2 position,
 	int32_t speed, int32_t rate, int32_t wait, const char* color, bool isTextCentered)
 {
-	MovieOperationText* text = Utils_MallocArena(sizeof(MovieOperationText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationText* text = (MovieOperationText*)Utils_CallocArena(1, sizeof(MovieOperationText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationText_Init(text, isMappedText, str, font, position, speed, rate, wait, color, isTextCentered);
 	return text;
 }
 static MovieOperationFadeText* CreateNewMovieOperationFadeText(const char* str, const char* font, Vector2 position, int32_t rampSpeed, int32_t holdTime, bool isTextCentered)
 {
-	MovieOperationFadeText* fadeText = Utils_MallocArena(sizeof(MovieOperationFadeText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationFadeText* fadeText = (MovieOperationFadeText*)Utils_CallocArena(1, sizeof(MovieOperationFadeText), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationFadeText_Init(fadeText, str, font, position, rampSpeed, holdTime, isTextCentered);
 	return fadeText;
 }
 static MovieOperationPan* CreateNewMovieOperationPan(MovieImage* image, Vector2 speed, int32_t time)
 {
-	MovieOperationPan* pan = Utils_MallocArena(sizeof(MovieOperationPan), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationPan* pan = (MovieOperationPan*)Utils_CallocArena(1, sizeof(MovieOperationPan), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationPan_Init(pan, image, speed, time);
 	return pan;
 }
 static MovieOperationShake* CreateNewMovieOperationShake(const char* key, MovieImage* image, int32_t min, int32_t max, int32_t time)
 {
-	MovieOperationShake* shake = Utils_MallocArena(sizeof(MovieOperationShake), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationShake* shake = (MovieOperationShake*)Utils_CallocArena(1, sizeof(MovieOperationShake), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationShake_Init(shake, key, image, min, max, time);
 	return shake;
 }
 static MovieOperationWait* CreateNewMovieOperationWait(int32_t timeLimit)
 {
-	MovieOperationWait* wait = Utils_MallocArena(sizeof(MovieOperationWait), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieOperationWait* wait = (MovieOperationWait*)Utils_CallocArena(1, sizeof(MovieOperationWait), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieOperationWait_Init(wait, timeLimit);
 	return wait;
 }
 static MovieImage* CreateNewMovieImage(int32_t scale, const char* image)
 {
-	MovieImage* mi = Utils_MallocArena(sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieImage* mi = (MovieImage*)Utils_CallocArena(1, sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieImage_Init(mi, scale, image);
 	return mi;
 }
 static MovieImage* CreateNewMovieImage2(int32_t scale, const char* baseImage, int32_t frames, int32_t flip)
 {
-	MovieImage* mi = Utils_MallocArena(sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
+	MovieImage* mi = (MovieImage*)Utils_CallocArena(1, sizeof(MovieImage), UTILS_ALLOCATION_ARENA_MOVIE_PLAYER);
 	MovieImage_Init2(mi, scale, baseImage, frames, flip);
 	return mi;
 }
@@ -599,7 +599,7 @@ static void Broadcast(const char* key, const char* value)
 		switch (type)
 		{
 		case MOVIE_OPERATION_TYPE_SHAKE:
-			MovieOperationShake_Broadcast(op, key, value);
+			MovieOperationShake_Broadcast((MovieOperationShake*)op, key, value);
 			break;
 		}
 	}
@@ -794,19 +794,19 @@ static void DoOperationSpeedUp(void* op)
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_WAIT:
-		MovieOperationWait_SpeedUp(op);
+		MovieOperationWait_SpeedUp((MovieOperationWait*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_SHAKE:
-		MovieOperationShake_SpeedUp(op);
+		MovieOperationShake_SpeedUp((MovieOperationShake*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_FADE_TEXT:
-		MovieOperationFadeText_SpeedUp(op);
+		MovieOperationFadeText_SpeedUp((MovieOperationFadeText*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_TEXT:
-		MovieOperationText_SpeedUp(op);
+		MovieOperationText_SpeedUp((MovieOperationText*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_PAN:
-		MovieOperationPan_SpeedUp(op);
+		MovieOperationPan_SpeedUp((MovieOperationPan*)op);
 		break;
 	}
 }
@@ -816,19 +816,19 @@ static void DoOperationUpdate(void* op)
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_WAIT:
-		MovieOperationWait_Update(op);
+		MovieOperationWait_Update((MovieOperationWait*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_SHAKE:
-		MovieOperationShake_Update(op);
+		MovieOperationShake_Update((MovieOperationShake*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_FADE_TEXT:
-		MovieOperationFadeText_Update(op);
+		MovieOperationFadeText_Update((MovieOperationFadeText*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_TEXT:
-		MovieOperationText_Update(op);
+		MovieOperationText_Update((MovieOperationText*)op);
 		break;
 	case MOVIE_OPERATION_TYPE_PAN:
-		MovieOperationPan_Update(op);
+		MovieOperationPan_Update((MovieOperationPan*)op);
 		break;
 	}
 }
@@ -838,7 +838,7 @@ static bool OperationDoesNotBlock(void* op)
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_SHAKE:
-		return MovieOperationShake_DoesNotBlock(op);
+		return MovieOperationShake_DoesNotBlock((MovieOperationShake*)op);
 	}
 	return false;
 }
@@ -848,7 +848,7 @@ static bool OperationForcesWait(void* op)
 	switch (type)
 	{
 	case MOVIE_OPERATION_TYPE_WAIT:
-		return MovieOperationWait_ForcesWait(op);
+		return MovieOperationWait_ForcesWait((MovieOperationWait*)op);
 	}
 	return false;
 }
@@ -857,7 +857,7 @@ void MoviePlayer_Init(bool useSwappedImages, int32_t scale, const char* movieNam
 {
 	if (_mData == NULL)
 	{
-		_mData = Utils_calloc(1, sizeof(MoviePlayer));
+		_mData = (MoviePlayer*)Utils_calloc(1, sizeof(MoviePlayer));
 	}
 	else
 	{
@@ -891,7 +891,7 @@ void MoviePlayer_Init(bool useSwappedImages, int32_t scale, const char* movieNam
 		ResourceManager* movieTimingMan = ResourceManagerList_MovieTiming();
 		if (ResourceManager_HasResource(movieTimingMan, movieName))
 		{
-			_mData->_mTimingsToUse = ResourceManager_GetResourceData(movieTimingMan, movieName);
+			_mData->_mTimingsToUse = (MovieTiming*)ResourceManager_GetResourceData(movieTimingMan, movieName);
 		}
 	}
 }
@@ -1074,10 +1074,10 @@ void MoviePlayer_DrawHud(SpriteBatch* spriteBatch)
 		switch (type)
 		{
 		case MOVIE_OPERATION_TYPE_FADE_TEXT:
-			MovieOperationFadeText_DrawHud(op, spriteBatch);
+			MovieOperationFadeText_DrawHud((MovieOperationFadeText*)op, spriteBatch);
 			break;
 		case MOVIE_OPERATION_TYPE_TEXT:
-			MovieOperationText_DrawHud(op, spriteBatch);
+			MovieOperationText_DrawHud((MovieOperationText*)op, spriteBatch);
 			break;
 		}
 	}

@@ -14,6 +14,6 @@ void SysResetBounceData_UpdateRoutine(Entity owner, BounceData* data)
 System* SysResetBounceData_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_BounceData);
-	ss->_mUpdateRoutine = SysResetBounceData_UpdateRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)SysResetBounceData_UpdateRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

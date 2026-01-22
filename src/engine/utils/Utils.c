@@ -6,9 +6,9 @@
 
 #include "Utils.h"
 
-#include "float.h"
-#include "../../third_party/stb_ds.h"
 #include "SDL3/SDL.h"
+#include "../../third_party/stb_ds.h"
+#include "float.h"
 #include "../math/Math.h"
 #include "Cvars.h"
 #include "../render/Renderer.h"
@@ -26,6 +26,7 @@
 #include "../input/ButtonList.h"
 #include "../input/MouseState.h"
 #include "../input/KeyboardState.h"
+#include "MString.h"
 
 static Color _mEditorColorDefault = { 255, 255, 255, 127 };
 static Color _mEditorColorOne = { 0, 0, 255, 127 };
@@ -180,13 +181,31 @@ static void AddToAllocationArenas(int32_t allocationArena, void* memoryAllocatio
 
 	arrput(hm_allocation_arenas[index].value, memoryAllocation);
 }
-void* Utils_MallocArena(size_t size, int32_t allocationArena)
+/*void* Utils_realloc(void* mem, size_t size) //UNUSED
+{
+	if (mem == NULL)
+	{
+		_mMallocRefs += 1;
+	}
+	return SDL_realloc(mem, size);
+}*/
+/*void* Utils_malloc(size_t size) //UNUSED
+{
+	_mMallocRefs += 1;
+	return SDL_malloc(size);
+}*/
+/*void* Utils_MallocArena(size_t size, int32_t allocationArena) //UNUSED
 {
 	void* mallocToReturn = Utils_malloc(size);
 
 	AddToAllocationArenas(allocationArena, mallocToReturn);
 
 	return mallocToReturn;
+}*/
+void* Utils_calloc(size_t nmemb, size_t size)
+{
+	_mMallocRefs += 1;
+	return SDL_calloc(nmemb, size);
 }
 void* Utils_CallocArena(size_t nmemb, size_t size, int32_t allocationArena)
 {
@@ -216,28 +235,10 @@ void Utils_FreeArena(int32_t allocationArena)
 	}
 	arrsetlen(hm_allocation_arenas[index].value, 0);
 }
-void* Utils_malloc(size_t size)
-{
-	_mMallocRefs += 1;
-	return SDL_malloc(size);
-}
-void* Utils_calloc(size_t nmemb, size_t size)
-{
-	_mMallocRefs += 1;
-	return SDL_calloc(nmemb, size);
-}
 void Utils_free(void* mem)
 {
 	_mMallocRefs -= 1;
 	SDL_free(mem);
-}
-void* Utils_realloc(void* mem, size_t size)
-{
-	if (mem == NULL)
-	{
-		_mMallocRefs += 1;
-	}
-	return SDL_realloc(mem, size);
 }
 void* Utils_grow(void* mem, size_t oldSize, size_t newSize)
 {
@@ -383,6 +384,52 @@ void Utils_ToggleFullscreenButton(void)
 	Utils_ToggleFullscreen();
 
 	Utils_SetFullscreenCvar(Window_IsFullscreen());
+}
+int32_t Utils_StringIndexOfString(const char* findThis, const char* inThis, size_t maxlen)
+{
+	size_t findThisLen = Utils_strnlen(findThis, maxlen);
+	size_t inThisLen = Utils_strnlen(inThis, maxlen);
+	if ((findThisLen == 0) || (inThisLen == 0) || (findThisLen > inThisLen)) //Invalid
+	{
+		return -1;
+	}
+	else if (findThisLen == inThisLen)
+	{
+		if (Utils_StringEqualTo(findThis, inThis))
+		{
+			return 0;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	else
+	{
+		int32_t sequenceIndexStart = -1;
+		int32_t sequenceCounter = 0;
+		for (int32_t i = 0; i < inThisLen; i += 1)
+		{
+			if (inThis[i] != findThis[sequenceCounter])
+			{
+				sequenceIndexStart = -1;
+				sequenceCounter = 0;
+			}
+			if (inThis[i] == findThis[sequenceCounter])
+			{
+				if (sequenceCounter == 0)
+				{
+					sequenceIndexStart = i;
+				}
+				sequenceCounter += 1;
+				if (sequenceCounter == findThisLen)
+				{
+					return sequenceIndexStart;
+				}
+			}
+		}
+		return -1;
+	}
 }
 int32_t Utils_StringIndexOf(char findThis, const char* strInThis, size_t maxlen, bool findLastIndex)
 {
@@ -557,14 +604,14 @@ bool Utils_ArrContainsInt(int32_t* arr_values, int32_t containsThis)
 bool Utils_StringContains(const char* str, const char* containsThis)
 {
 	int32_t len = (int32_t)Utils_strlen(str);
-	char* result = SDL_strnstr(str, containsThis, len);
-	if (result == NULL)
+	int32_t indexOf = Utils_StringIndexOfString(containsThis, str, len);
+	if (indexOf >= 0)
 	{
-		return false;
+		return true;
 	}
 	else
 	{
-		return true;
+		return false;
 	}
 }
 bool Utils_StringEndsWith(const char* str, const char* endsWithThis)
@@ -1389,4 +1436,43 @@ int32_t Utils_ConvertFramesToMilliseconds(int32_t val)
 	int32_t total = convSubSeconds + convSeconds + convMinutes + convHours;
 
 	return total;
+}
+void Utils_StringReplaceStr(MString** assignToThis, const char* str, const char* findThis, const char* replaceWithThis)
+{
+	MString_AssignString(assignToThis, str);
+
+	if (Utils_StringEqualTo(findThis, replaceWithThis)) //INVALID
+	{
+		return;
+	}
+
+	int32_t strLen = (int32_t)Utils_strlen(str);
+	int32_t findThisLen = (int32_t)Utils_strnlen(findThis, strLen);
+
+	int safetyCounter = 0;
+	while (Utils_StringContains(MString_Text(*assignToThis), findThis))
+	{
+		if (safetyCounter >= 10000)
+		{
+			return;
+		}
+		safetyCounter += 1;
+
+		int indexOf = Utils_StringIndexOfString(findThis, MString_Text(*assignToThis), strLen);
+		if (indexOf == -1)
+		{
+			return;
+		}
+
+		MString* firstHalf = NULL;
+		MString* secondHalf = NULL;
+
+		MString_AssignSubString(&firstHalf, str, 0, indexOf);
+		MString_AssignSubString(&secondHalf, str, indexOf + findThisLen, strLen - (indexOf + findThisLen));
+
+		MString_Combine3(assignToThis, MString_Text(firstHalf), replaceWithThis, MString_Text(secondHalf));
+
+		MString_Dispose(&firstHalf);
+		MString_Dispose(&secondHalf);
+	}
 }

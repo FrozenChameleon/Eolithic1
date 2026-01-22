@@ -144,7 +144,7 @@ IStringArray* Prop_GetDirectories(void)
 }
 Prop* Prop_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	Prop* p = Utils_malloc(sizeof(Prop));
+	Prop* p = (Prop*)Utils_calloc(1, sizeof(Prop));
 	Prop_Init(p);
 	Prop_ReadIni(p, br);
 	return p;

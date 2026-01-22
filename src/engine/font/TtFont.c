@@ -26,7 +26,7 @@ OeTTFont* OeTTFont::FromStream(OeTTFont* (*createNew)(), bool loadedFromDat, con
 TTFont* TTFont_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
 	RenderTTFont_Create(filenameWithoutExtension, BufferReader_GetBuffer(br));
-	TTFont* ttf = Utils_calloc(1, sizeof(TTFont));
+	TTFont* ttf = (TTFont*)Utils_calloc(1, sizeof(TTFont));
 	return ttf;
 }
 

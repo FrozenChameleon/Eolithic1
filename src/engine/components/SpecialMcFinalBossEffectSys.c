@@ -120,7 +120,7 @@ void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationN
 {
 	Entity entity = Do_BuildNewEntityWithName("MC Final Boss Effect");
 	Do_SetPosition(entity, position.X, position.Y);
-	SpecialMcFinalBossEffect* component = Do_InitComponent(C_SpecialMcFinalBossEffect, entity);
+	SpecialMcFinalBossEffect* component = (SpecialMcFinalBossEffect*)Do_InitComponent(C_SpecialMcFinalBossEffect, entity);
 	component->mPosition = position;
 	Utils_strlcpy(component->mAnimationName, animationName, EE_FILENAME_MAX);
 	component->mBloodOffset = bloodOffset;
@@ -133,8 +133,8 @@ void SpecialMcFinalBossEffectSys_Create(Vector2 position, const char* animationN
 System* SpecialMcFinalBossEffectSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_SpecialMcFinalBossEffect);
-	ss->_mUpdateRoutine = UpdateRoutine;
-	ss->_mDrawRoutine = DrawRoutine;
-	ss->_mDrawHudRoutine = DrawHudRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)UpdateRoutine;
+	ss->_mDrawRoutine = (SystemSimple_DrawFunc)DrawRoutine;
+	ss->_mDrawHudRoutine = (SystemSimple_DrawHudFunc)DrawHudRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

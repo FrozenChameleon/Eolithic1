@@ -121,7 +121,7 @@ static bool IsDisabledPermanently(void)
 
 SoundEffect* SoundEffect_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	SoundEffect* sfx = Utils_malloc(sizeof(SoundEffect));
+	SoundEffect* sfx = (SoundEffect*)Utils_calloc(1, sizeof(SoundEffect));
 	sfx->_mWaveFileData = WaveFileData_FromStream(br);;
 	return sfx;
 }
@@ -274,7 +274,7 @@ void SoundEffect_PlaySound(const char* sound)
 }
 static SoundEffectInstance* SetupNextInstance(const char* sound)
 {
-	SoundEffect* data = ResourceManager_GetResourceData(ResourceManagerList_SoundEffect(), sound);
+	SoundEffect* data = (SoundEffect*)ResourceManager_GetResourceData(ResourceManagerList_SoundEffect(), sound);
 	if (data == NULL)
 	{
 		return NULL;

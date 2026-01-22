@@ -12,7 +12,12 @@ void MovieOperationFadeText_Init(MovieOperationFadeText* fade, const char* str, 
 	fade->mType = MOVIE_OPERATION_TYPE_FADE_TEXT;
 	fade->mIsCentered = isTextCentered;
 	Utils_strlcpy(fade->mStringToShow, str, EE_FILENAME_MAX);
-	//TODO C99 mStringToShow = OeUtils_StringReplaceStr(mStringToShow, "\\n", "\n");
+	{
+		MString* tempString = NULL;
+		Utils_StringReplaceStr(&tempString, fade->mStringToShow, "\\n", "\n");
+		Utils_strlcpy(fade->mStringToShow, MString_Text(tempString), EE_FILENAME_MAX);
+		MString_Dispose(&tempString);
+	}
 	Utils_strlcpy(fade->mFont, font, EE_FILENAME_MAX);
 	fade->mPosition = position;
 	fade->mTimerRamp = Timer_Create(rampSpeed);

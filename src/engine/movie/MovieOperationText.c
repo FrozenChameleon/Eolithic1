@@ -122,7 +122,12 @@ void MovieOperationText_Init(MovieOperationText* text, bool isMappedText, const 
 
 	Utils_strlcpy(text->mFont, font, EE_FILENAME_MAX);
 	Utils_strlcpy(text->mTotalString, strToUse, EE_FILENAME_MAX);
-	//TODO C99 mTotalString = Utils_StringReplaceStr(mTotalString, "\\n", "\n");
+	{
+		MString* tempString = NULL;
+		Utils_StringReplaceStr(&tempString, text->mTotalString, "\\n", "\n");
+		Utils_strlcpy(text->mTotalString, MString_Text(tempString), EE_FILENAME_MAX);
+		MString_Dispose(&tempString);
+	}
 
 	bool isReady = false;
 	while (!isReady)

@@ -345,7 +345,7 @@ static void Update(void* givenData)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		if (ParticleInstanceSys_UpdateRoutine(iter.mComponent))
+		if (ParticleInstanceSys_UpdateRoutine((ParticleInstance*)iter.mComponent))
 		{
 			Do_UnsetAtIndexAndRemoveDummyEntityIfLast(pack, iter.mIndex);
 		}
@@ -358,7 +358,7 @@ static void UpdateLastRenderPosition(void* givenData, GameState* gameState)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		UpdateLastRenderPositionRoutine(iter.mComponent);
+		UpdateLastRenderPositionRoutine((ParticleInstance*)iter.mComponent);
 	}
 }
 static void Draw(void* givenData, SpriteBatch* spriteBatch)
@@ -375,7 +375,7 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		ParticleInstance* instance = iter.mComponent;
+		ParticleInstance* instance = (ParticleInstance*)iter.mComponent;
 		if ((instance->mPosition.X > left) && (instance->mPosition.Y > top))
 		{
 			if ((instance->mPosition.X < right) && (instance->mPosition.Y < bottom))

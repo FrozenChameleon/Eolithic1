@@ -61,7 +61,7 @@ int32_t ReplayDataManager_GetIndexForLowestFrame2(ReplayDataManager* rdm, bool m
 
 ReplayDataManager* ReplayDataManager_Create(const char* name)
 {
-	ReplayDataManager* rdm = Utils_calloc(1, sizeof(ReplayDataManager));
+	ReplayDataManager* rdm = (ReplayDataManager*)Utils_calloc(1, sizeof(ReplayDataManager));
 	for (int32_t i = 0; i < REPLAYDATAMANAGER_REPLAYGAMESTATEDATA_LEN; i += 1)
 	{
 		GameHelper_InitGameStateData(name, &rdm->_mReplayGameStateData[i]);

@@ -15,6 +15,7 @@ typedef struct MString
 	int32_t capacity;
 } MString;
 
+static char _mEmptyString[1] = "";
 static uint64_t _mRefs;
 
 #define STRING_BUFFER_LEN 4096
@@ -58,14 +59,14 @@ static MString* MString_CreateEmpty(int32_t capacity)
 	}
 
 	_mRefs += 1;
-	MString* m_string = Utils_calloc(1, sizeof(MString));
+	MString* m_string = (MString*)Utils_calloc(1, sizeof(MString));
 #ifdef FIND_THE_LEAKS
 	if (_mHasLeakTestBegun)
 	{
 		hmput(_mLeakTest, mstring, 0);
 	}
 #endif
-	m_string->text = Utils_calloc(1, capacity);
+	m_string->text = (char*)Utils_calloc(1, capacity);
 	m_string->len = 0;
 	m_string->capacity = capacity;
 	return m_string;
@@ -118,7 +119,7 @@ static void GrowMStringIfNeeded(MString* str, size_t newCapacity)
 		return;
 	}
 
-	str->text = Utils_grow(str->text, str->capacity, newCapacity);
+	str->text = (char*)Utils_grow(str->text, str->capacity, newCapacity);
 
 	str->capacity = (int32_t)newCapacity;
 }
@@ -142,7 +143,7 @@ char* MString_Text(const MString* str)
 {
 	if (str == NULL)
 	{
-		return EE_STR_EMPTY;
+		return _mEmptyString;
 	}
 
 	return str->text;

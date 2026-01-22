@@ -21,6 +21,6 @@ void* Window_GetWindowContext(void);
 void Window_Dispose(void);
 void Window_SetTheMouseVisible(bool isVisible);
 bool Window_IsTheMouseVisible(void);
-bool Window_IsWindowActive(void);
-void Window_SetWindowActive(bool value);
+bool Window_IsActive(void);
+void Window_SetActive(bool value);
 void Window_LoadIcon(void);

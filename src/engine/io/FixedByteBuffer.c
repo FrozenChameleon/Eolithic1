@@ -29,14 +29,14 @@ uint64_t FixedByteBuffer_GetLength(const FixedByteBuffer* fbb)
 FixedByteBuffer* FixedByteBuffer_CreateAndTakeOwnership(uint64_t length, uint8_t* buffer)
 {
 	_mRefs += 1;
-	FixedByteBuffer* fbb = Utils_malloc(sizeof(FixedByteBuffer));
+	FixedByteBuffer* fbb = (FixedByteBuffer*)Utils_calloc(1, sizeof(FixedByteBuffer));
 	fbb->mLength = length;
 	fbb->mBuffer = buffer;
 	return fbb;
 }
 FixedByteBuffer* FixedByteBuffer_Create(uint64_t length)
 {
-	return FixedByteBuffer_CreateAndTakeOwnership(length, Utils_malloc(sizeof(uint8_t) * length));
+	return FixedByteBuffer_CreateAndTakeOwnership(length, (uint8_t*)Utils_calloc(length, sizeof(uint8_t)));
 }
 void FixedByteBuffer_Dispose(FixedByteBuffer* fbb)
 {
@@ -51,9 +51,9 @@ uint64_t FixedByteBuffer_GetRefs(void)
 FixedByteBuffer* FixedByteBuffer_Clone(FixedByteBuffer* cloneThis)
 {
 	_mRefs += 1;
-	FixedByteBuffer* fbbToReturn = Utils_malloc(sizeof(FixedByteBuffer));
+	FixedByteBuffer* fbbToReturn = (FixedByteBuffer*)Utils_calloc(1, sizeof(FixedByteBuffer));
 	fbbToReturn->mLength = cloneThis->mLength;
-	fbbToReturn->mBuffer = Utils_malloc(sizeof(uint8_t) * cloneThis->mLength);
+	fbbToReturn->mBuffer = (uint8_t*)Utils_calloc(cloneThis->mLength, sizeof(uint8_t));
 	Utils_memcpy(fbbToReturn->mBuffer, cloneThis->mBuffer, cloneThis->mLength);
 	return fbbToReturn;
 }

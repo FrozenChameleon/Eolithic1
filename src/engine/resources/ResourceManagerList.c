@@ -19,11 +19,13 @@
 
 #define MANAGERS_LEN 50
 
-#define MANAGERS_INDEX_ANIM_TILE 0
-#define MANAGERS_INDEX_PROP 1
-#define MANAGERS_INDEX_TEXTURE 2
-#define MANAGERS_INDEX_FONT_TEXTURE 3
-#define MANAGERS_INDEX_MOVIE_TEXTURE 4
+//THIS ORDER DETERMINES LOAD ORDER
+
+#define MANAGERS_INDEX_TEXTURE 0
+#define MANAGERS_INDEX_FONT_TEXTURE 1
+#define MANAGERS_INDEX_MOVIE_TEXTURE 2
+#define MANAGERS_INDEX_ANIM_TILE 3
+#define MANAGERS_INDEX_PROP 4
 #define MANAGERS_INDEX_SOUND_EFFECT 5
 #define MANAGERS_INDEX_MUSIC 6
 #define MANAGERS_INDEX_TILESET_OFFSET 7
@@ -51,8 +53,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(animTileMan);
 		Utils_strlcpy(animTileMan->_mResourceType, "AnimTile", EE_FILENAME_MAX);
 		Utils_strlcpy(animTileMan->_mDatFileName, "animtile.dat", EE_FILENAME_MAX);
-		animTileMan->_mFromStream = AnimTile_FromStream;
-		animTileMan->_mDispose = AnimTile_Dispose;
+		animTileMan->_mFromStream = (ResourceManager_FromStreamFunc)AnimTile_FromStream;
+		animTileMan->_mDispose = (ResourceManager_DisposeFunc)AnimTile_Dispose;
 	}
 
 	{
@@ -60,8 +62,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(propMan);
 		Utils_strlcpy(propMan->_mResourceType, "Prop", EE_FILENAME_MAX);
 		Utils_strlcpy(propMan->_mDatFileName, "props.dat", EE_FILENAME_MAX);
-		propMan->_mFromStream = Prop_FromStream;
-		propMan->_mDispose = Prop_Dispose;
+		propMan->_mFromStream = (ResourceManager_FromStreamFunc)Prop_FromStream;
+		propMan->_mDispose = (ResourceManager_DisposeFunc)Prop_Dispose;
 	}
 
 	{
@@ -69,8 +71,9 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(textureMan);
 		Utils_strlcpy(textureMan->_mResourceType, "Texture", EE_FILENAME_MAX);
 		Utils_strlcpy(textureMan->_mDatFileName, "gfx.dat", EE_FILENAME_MAX);
-		textureMan->_mFromStream = Texture_FromStream;
-		textureMan->_mDispose = Texture_Dispose;
+		Utils_strlcpy(textureMan->_mDefaultResource, "DEBUG_ERROR_777", EE_FILENAME_MAX);
+		textureMan->_mFromStream = (ResourceManager_FromStreamFunc)Texture_FromStream;
+		textureMan->_mDispose = (ResourceManager_DisposeFunc)Texture_Dispose;
 	}
 
 	{
@@ -78,8 +81,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(fontTextureMan);
 		Utils_strlcpy(fontTextureMan->_mResourceType, "Font Texture", EE_FILENAME_MAX);
 		Utils_strlcpy(fontTextureMan->_mDatFileName, "fontsgfx.dat", EE_FILENAME_MAX);
-		fontTextureMan->_mFromStream = Texture_FromStream;
-		fontTextureMan->_mDispose = Texture_Dispose;
+		fontTextureMan->_mFromStream = (ResourceManager_FromStreamFunc)Texture_FromStream;
+		fontTextureMan->_mDispose = (ResourceManager_DisposeFunc)Texture_Dispose;
 	}
 
 	{
@@ -87,8 +90,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(movieTextureMan);
 		Utils_strlcpy(movieTextureMan->_mResourceType, "Movie Texture", EE_FILENAME_MAX);
 		Utils_strlcpy(movieTextureMan->_mDatFileName, "moviegfx.dat", EE_FILENAME_MAX);
-		movieTextureMan->_mFromStream = Texture_FromStream;
-		movieTextureMan->_mDispose = Texture_Dispose;
+		movieTextureMan->_mFromStream = (ResourceManager_FromStreamFunc)Texture_FromStream;
+		movieTextureMan->_mDispose = (ResourceManager_DisposeFunc)Texture_Dispose;
 	}
 
 	{
@@ -96,8 +99,9 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(soundEffectMan);
 		Utils_strlcpy(soundEffectMan->_mResourceType, "Sound Effect", EE_FILENAME_MAX);
 		Utils_strlcpy(soundEffectMan->_mDatFileName, "sfx.dat", EE_FILENAME_MAX);
-		soundEffectMan->_mFromStream = SoundEffect_FromStream;
-		soundEffectMan->_mDispose = SoundEffect_Dispose;
+		Utils_strlcpy(soundEffectMan->_mDefaultResource, "editorSave", EE_FILENAME_MAX);
+		soundEffectMan->_mFromStream = (ResourceManager_FromStreamFunc)SoundEffect_FromStream;
+		soundEffectMan->_mDispose = (ResourceManager_DisposeFunc)SoundEffect_Dispose;
 	}
 
 	{
@@ -105,8 +109,9 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(musicMan);
 		Utils_strlcpy(musicMan->_mResourceType, "Music", EE_FILENAME_MAX);
 		Utils_strlcpy(musicMan->_mDatFileName, "music.dat", EE_FILENAME_MAX);
-		musicMan->_mFromStream = Music_FromStream;
-		musicMan->_mDispose = Music_Dispose;
+		Utils_strlcpy(musicMan->_mDefaultResource, "default", EE_FILENAME_MAX);
+		musicMan->_mFromStream = (ResourceManager_FromStreamFunc)Music_FromStream;
+		musicMan->_mDispose = (ResourceManager_DisposeFunc)Music_Dispose;
 	}
 
 	{
@@ -114,8 +119,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(levelDataMan);
 		Utils_strlcpy(levelDataMan->_mResourceType, "Level Data", EE_FILENAME_MAX);
 		Utils_strlcpy(levelDataMan->_mDatFileName, "lvl.dat", EE_FILENAME_MAX);
-		levelDataMan->_mFromStream = LevelData_FromStream;
-		levelDataMan->_mDispose = LevelData_Dispose;
+		levelDataMan->_mFromStream = (ResourceManager_FromStreamFunc)LevelData_FromStream;
+		levelDataMan->_mDispose = (ResourceManager_DisposeFunc)LevelData_Dispose;
 	}
 
 	{
@@ -123,8 +128,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(tilesetOffsetMan);
 		Utils_strlcpy(tilesetOffsetMan->_mResourceType, "Tileset Offset", EE_FILENAME_MAX);
 		Utils_strlcpy(tilesetOffsetMan->_mDatFileName, "offsetstile.dat", EE_FILENAME_MAX);
-		tilesetOffsetMan->_mFromStream = TilesetOffset_FromStream;
-		tilesetOffsetMan->_mDispose = TilesetOffset_Dispose;
+		tilesetOffsetMan->_mFromStream = (ResourceManager_FromStreamFunc)TilesetOffset_FromStream;
+		tilesetOffsetMan->_mDispose = (ResourceManager_DisposeFunc)TilesetOffset_Dispose;
 	}
 
 	{
@@ -132,8 +137,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(textureOffsetMan);
 		Utils_strlcpy(textureOffsetMan->_mResourceType, "Texture Offset", EE_FILENAME_MAX);
 		Utils_strlcpy(textureOffsetMan->_mDatFileName, "offsetstex.dat", EE_FILENAME_MAX);
-		textureOffsetMan->_mFromStream = TextureOffset_FromStream;
-		textureOffsetMan->_mDispose = TextureOffset_Dispose;
+		textureOffsetMan->_mFromStream = (ResourceManager_FromStreamFunc)TextureOffset_FromStream;
+		textureOffsetMan->_mDispose = (ResourceManager_DisposeFunc)TextureOffset_Dispose;
 	}
 
 	{
@@ -141,8 +146,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(fontMan);
 		Utils_strlcpy(fontMan->_mResourceType, "Font", EE_FILENAME_MAX);
 		Utils_strlcpy(fontMan->_mDatFileName, "fonts.dat", EE_FILENAME_MAX);
-		fontMan->_mFromStream = BmFont_FromStream;
-		fontMan->_mDispose = BmFont_Dispose;
+		fontMan->_mFromStream = (ResourceManager_FromStreamFunc)BmFont_FromStream;
+		fontMan->_mDispose = (ResourceManager_DisposeFunc)BmFont_Dispose;
 	}
 
 	{
@@ -150,8 +155,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(particleMan);
 		Utils_strlcpy(particleMan->_mResourceType, "Particle", EE_FILENAME_MAX);
 		Utils_strlcpy(particleMan->_mDatFileName, "particles.dat", EE_FILENAME_MAX);
-		particleMan->_mFromStream = Particle_FromStream;
-		particleMan->_mDispose = Particle_Dispose;
+		particleMan->_mFromStream = (ResourceManager_FromStreamFunc)Particle_FromStream;
+		particleMan->_mDispose = (ResourceManager_DisposeFunc)Particle_Dispose;
 	}
 
 	{
@@ -159,8 +164,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(movieTimingMan);
 		Utils_strlcpy(movieTimingMan->_mResourceType, "Movie Timings", EE_FILENAME_MAX);
 		Utils_strlcpy(movieTimingMan->_mDatFileName, "timings.dat", EE_FILENAME_MAX);
-		movieTimingMan->_mFromStream = MovieTiming_FromStream;
-		movieTimingMan->_mDispose = MovieTiming_Dispose;
+		movieTimingMan->_mFromStream = (ResourceManager_FromStreamFunc)MovieTiming_FromStream;
+		movieTimingMan->_mDispose = (ResourceManager_DisposeFunc)MovieTiming_Dispose;
 	}
 
 	{
@@ -168,8 +173,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(movieMan);
 		Utils_strlcpy(movieMan->_mResourceType, "Movies", EE_FILENAME_MAX);
 		Utils_strlcpy(movieMan->_mDatFileName, "movies.dat", EE_FILENAME_MAX);
-		movieMan->_mFromStream = Movie_FromStream;
-		movieMan->_mDispose = Movie_Dispose;
+		movieMan->_mFromStream = (ResourceManager_FromStreamFunc)Movie_FromStream;
+		movieMan->_mDispose = (ResourceManager_DisposeFunc)Movie_Dispose;
 	}
 
 	{
@@ -177,8 +182,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(ttFontMan);
 		Utils_strlcpy(ttFontMan->_mResourceType, "TTFont", EE_FILENAME_MAX);
 		Utils_strlcpy(ttFontMan->_mDatFileName, "ttfonts.dat", EE_FILENAME_MAX);
-		ttFontMan->_mFromStream = TTFont_FromStream;
-		ttFontMan->_mDispose = TTFont_Dispose;
+		ttFontMan->_mFromStream = (ResourceManager_FromStreamFunc)TTFont_FromStream;
+		ttFontMan->_mDispose = (ResourceManager_DisposeFunc)TTFont_Dispose;
 	}
 
 	{
@@ -186,8 +191,8 @@ void ResourceManagerList_Init(void)
 		ResourceManager_Init(thingSettingsMan);
 		Utils_strlcpy(thingSettingsMan->_mResourceType, "Thing Settings", EE_FILENAME_MAX);
 		Utils_strlcpy(thingSettingsMan->_mDatFileName, "things.dat", EE_FILENAME_MAX);
-		thingSettingsMan->_mFromStream = ThingSettings_FromStream;
-		thingSettingsMan->_mDispose = ThingSettings_Dispose;
+		thingSettingsMan->_mFromStream = (ResourceManager_FromStreamFunc)ThingSettings_FromStream;
+		thingSettingsMan->_mDispose = (ResourceManager_DisposeFunc)ThingSettings_Dispose;
 	}
 
 	_mHasInit = true;

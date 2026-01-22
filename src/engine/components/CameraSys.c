@@ -130,8 +130,8 @@ void CameraSys_UpdateCamera(Camera* data)
 System* CameraSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_Camera);
-	ss->_mUpdateLastRenderPositionRoutine = CameraSys_UpdateLastRenderPositionRoutine;
-	ss->_mInitRoutine = CameraSys_InitRoutine;
-	ss->_mUpdateRoutine = CameraSys_UpdateRoutine;
+	ss->_mUpdateLastRenderPositionRoutine = (SystemSimple_UpdateLastRenderPositionFunc)CameraSys_UpdateLastRenderPositionRoutine;
+	ss->_mInitRoutine = (SystemSimple_InitFunc)CameraSys_InitRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)CameraSys_UpdateRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

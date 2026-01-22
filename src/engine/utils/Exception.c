@@ -17,7 +17,7 @@ int32_t Exception_Run(const char* message, bool exitTheGameNow)
 	assert(0);
 	if (exitTheGameNow)
 	{
-		SDL_ShowSimpleMessageBox(0, "Fatal Exception!", message, Window_GetWindowContext());
+		SDL_ShowSimpleMessageBox(0, "Fatal Exception!", message, (SDL_Window*)Window_GetWindowContext());
 		exit(1);
 	}
 	return 1;

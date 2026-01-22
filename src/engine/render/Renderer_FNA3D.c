@@ -201,7 +201,7 @@ typedef struct VertexBufferInstance
 void VertexBufferInstance_Init(VertexBufferInstance* vbi)
 {
 	vbi->mVertexBuffer = FNA3D_GenVertexBuffer(_mDeviceContext, 1, FNA3D_BUFFERUSAGE_WRITEONLY, MAX_VERTICES * sizeof(VertexPositionColorTexture));
-	vbi->mVertices = Utils_malloc(sizeof(VertexPositionColorTexture) * MAX_VERTICES);
+	vbi->mVertices = (VertexPositionColorTexture*)Utils_calloc(MAX_VERTICES, sizeof(VertexPositionColorTexture));
 
 	FNA3D_VertexDeclaration vertexDeclaration = { 0 };
 	vertexDeclaration.elementCount = 3;
@@ -697,14 +697,12 @@ Texture* Renderer_GetNewTextureData(const char* path, int32_t width, int32_t hei
 	if (clearTexture)
 	{
 		int32_t dataLength = width * height * 4;
-		uint8_t* clearData = Utils_malloc(sizeof(uint8_t) * dataLength);
-		memset(clearData, 0, dataLength);
+		uint8_t* clearData = (uint8_t*)Utils_calloc(dataLength, sizeof(uint8_t));
 		FNA3D_SetTextureData2D(_mDeviceContext, texture, 0, 0, width, height, 0, clearData, dataLength);
 		Utils_free(clearData);
 	}
 
-	Texture* tex = Utils_malloc(sizeof(Texture));
-	memset(tex, 0, sizeof(Texture));
+	Texture* tex = (Texture*)Utils_calloc(1, sizeof(Texture));
 	MString_AssignString(&tex->mPath, path);
 	tex->mBounds.Width = width;
 	tex->mBounds.Height = height;
@@ -732,7 +730,7 @@ static void LoadShader(Effect* effect, const char* shaderName)
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_END);
 	int64_t effectCodeLength = SDL_TellIO(effectFile);
 	SDL_SeekIO(effectFile, 0, SDL_IO_SEEK_SET);
-	uint8_t* effectCode = Utils_malloc(sizeof(uint8_t) * effectCodeLength);
+	uint8_t* effectCode = (uint8_t*)Utils_calloc(effectCodeLength, sizeof(uint8_t));
 	SDL_ReadIO(effectFile, effectCode, effectCodeLength);
 	SDL_CloseIO(effectFile);
 	FNA3D_CreateEffect(_mDeviceContext, effectCode, (uint32_t)effectCodeLength, &effect->mHandle, &effect->mData);
@@ -1021,7 +1019,7 @@ Rectangle Renderer_GetDrawableSize(void)
 	Rectangle drawableSize;
 	drawableSize.X = 0;
 	drawableSize.Y = 0;
-	SDL_GetWindowSizeInPixels(_mDeviceWindowHandle, &drawableSize.Width, &drawableSize.Height);
+	SDL_GetWindowSizeInPixels((SDL_Window*)_mDeviceWindowHandle, &drawableSize.Width, &drawableSize.Height);
 	//FNA3D_GetDrawableSize(_mDeviceWindowHandle, &drawableSize.Width, &drawableSize.Height);
 	return drawableSize;
 }

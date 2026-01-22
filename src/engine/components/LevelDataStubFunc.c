@@ -5,7 +5,15 @@
 
 LevelData* LevelDataStubFunc_GetLevelData(const LevelDataStub* data)
 {
-	return LevelDataStubFunc_GetLevelDataResource(data)->mData;
+	Resource* resource = LevelDataStubFunc_GetLevelDataResource(data);
+	if (resource != NULL)
+	{
+		return (LevelData*)resource->mData;
+	}
+	else
+	{
+		return NULL;
+	}
 }
 Resource* LevelDataStubFunc_GetLevelDataResource(const LevelDataStub* data)
 {

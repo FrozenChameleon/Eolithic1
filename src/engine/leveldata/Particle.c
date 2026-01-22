@@ -72,7 +72,7 @@ void Particle_Read(Particle* p, BufferReader* br)
 
 Particle* Particle_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	Particle* p = Utils_calloc(1, sizeof(Particle));
+	Particle* p = (Particle*)Utils_calloc(1, sizeof(Particle));
 	Particle_Read(p, br);
 	return p;
 }

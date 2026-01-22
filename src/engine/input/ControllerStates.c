@@ -10,45 +10,41 @@
 #include "../math/Math.h"
 #include "../globals/Globals.h"
 
-static bool _mHasInit;
-
-//TODO C99 static int32_t _mMasterRecordingCurrentVersion = OeGlobals::GetNewestRecordingVersion();
+//static int32_t _mMasterRecordingCurrentVersion = OeGlobals::GetNewestRecordingVersion(); //UNUSED
 static int32_t _mMasterRecordingCurrentVersion;
 static int32_t _mMasterRecordingReadFrame;
 
-//static BinaryWriter _mWriter;
+//static BinaryWriter _mWriter; //UNUSED
 static bool _mIsReading;
-//static std::shared_ptr<BinaryReader> _mReader;
+//static std::shared_ptr<BinaryReader> _mReader; //UNUSED
 static ControllerState _mControllerStates[INPUT_MAXIMUM_PLAYER_COUNT];
-
-static void init(void) //DONT FORGET THIS TODO C99
-{
-	/*
-	static OeInputPlayer _mPlayers[OeInput::MAXIMUM_PLAYER_COUNT] =
-	{
-		OeInputPlayer(0),
-		OeInputPlayer(1),
-		OeInputPlayer(2),
-		OeInputPlayer(3)
-	};
-	*/
-}
+static bool _mHasInit;
 
 void ControllerStates_Init(void)
 {
-	//TODO C99
+	if (_mHasInit)
+	{
+		return;
+	}
+
+	for (int i = 0; i < INPUT_MAXIMUM_PLAYER_COUNT; i += 1)
+	{
+		ControllerState_Init(&_mControllerStates[i], (PlayerIndex)i);
+	}
+
+	_mHasInit = true;
 }
 void ControllerStates_Dispose(void)
 {
-	//TODO C99
+	//UNUSED
 }
 void ControllerStates_Read(void)
 {
-	//TODO C99
+	//UNUSED
 }
 void ControllerStates_Write(void)
 {
-	//TODO C99
+	//UNUSED
 }
 void ControllerStates_Poll(void)
 {

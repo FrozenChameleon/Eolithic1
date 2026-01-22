@@ -13,10 +13,7 @@
 #include "../collections/FixedListEightInt.h"
 #include "../render/Color.h"
 
-enum
-{
-	BODY_PHYSICS_SCALER = 100
-};
+#define BODY_PHYSICS_SCALER 100
 
 typedef struct Body Body;
 typedef struct SpriteBatch SpriteBatch;

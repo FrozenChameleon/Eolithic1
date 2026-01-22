@@ -30,8 +30,8 @@ bool EntitySearch_Check(bool isValid, bool isReverse)
 }
 EntitySearch* EntitySearch_CreateNewBlankSearchSetCapacity(int32_t cap)
 {
-	EntitySearch* search = Utils_CallocArena(1, sizeof(EntitySearch), UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
-	search->entities = Utils_CallocArena(cap, sizeof(Entity), UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
+	EntitySearch* search = (EntitySearch*)Utils_CallocArena(1, sizeof(EntitySearch), UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
+	search->entities = (Entity*)Utils_CallocArena(cap, sizeof(Entity), UTILS_ALLOCATION_ARENA_JUST_THIS_FRAME);
 	search->cap = cap;
 	search->len = 0;
 	return search;

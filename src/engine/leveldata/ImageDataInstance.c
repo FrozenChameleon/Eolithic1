@@ -99,7 +99,7 @@ Sheet* ImageDataInstance_GetSheet(ImageDataInstance* render, int32_t i)
 {
 	if (render->mData->mCanAnimate)
 	{
-		Sheet** sheets = Animation_GetSheets(&render->mAnimation);
+		Sheet** sheets = (Sheet**)Animation_GetSheets(&render->mAnimation);
 		Sheet* sheetToReturn = sheets[i];
 		return sheetToReturn;
 	}

@@ -46,13 +46,29 @@ Sheet* Sheet_GetDefaultSheet(void)
 {
 	Init();
 
-	return _mDummy;
+	int64_t index = shgeti(sh_sheet_map, "DEBUG_ERROR_777");
+	if (index >= 0)
+	{
+		return sh_sheet_map[index].value;
+	}
+	else
+	{
+		return _mDummy;
+	}
 }
 Sheet* Sheet_GetSheet(const char* name)
 {
 	Init();
 
-	return shget(sh_sheet_map, name);
+	int64_t index = shgeti(sh_sheet_map, name);
+	if (index >= 0)
+	{
+		return sh_sheet_map[index].value;
+	}
+	else
+	{
+		return Sheet_GetDefaultSheet();
+	}
 }
 void Sheet_BuildSheets(void)
 {
@@ -62,8 +78,7 @@ void Sheet_BuildSheets(void)
 	Init();
 
 	ResourceManager* textureMan = ResourceManagerList_Texture();
-	int64_t textureManLen = ResourceManager_Length(textureMan);
-	for (int32_t i = 0; i < textureManLen; i += 1)
+	for (int32_t i = 0; i < ResourceManager_Length(textureMan); i += 1)
 	{
 		Resource* resource = ResourceManager_GetResourceByIndex(textureMan, i);
 		if (resource->mData == NULL)
@@ -71,12 +86,12 @@ void Sheet_BuildSheets(void)
 			continue;
 		}
 
-		Sheet* sheet = Utils_malloc(sizeof(Sheet));
+		Sheet* sheet = (Sheet*)Utils_calloc(1, sizeof(Sheet));
 		InitSheet(sheet);
 		Utils_strlcpy(sheet->mUnderlyingTextureName, resource->mFileNameWithoutExtension, EE_FILENAME_MAX);
 		Utils_strlcpy(sheet->mSheetName, sheet->mUnderlyingTextureName, EE_FILENAME_MAX);
-		sheet->mTextureResource = resource->mData;
-		sheet->mRectangle = ((Texture*)sheet->mTextureResource)->mBounds;
+		sheet->mTextureResource = resource;
+		sheet->mRectangle = ((Texture*)sheet->mTextureResource->mData)->mBounds;
 		arrput(arr_sheet_list, sheet);
 		shput(sh_sheet_map, resource->mPath, sheet);
 	}
@@ -84,8 +99,7 @@ void Sheet_BuildSheets(void)
 	if (!Globals_IsDebugFileMode() || GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS)
 	{
 		ResourceManager* textureOffsetMan = ResourceManagerList_TextureOffset();
-		int64_t textureOffsetLen = ResourceManager_Length(textureOffsetMan);
-		for (int32_t i = 0; i < textureOffsetLen; i += 1)
+		for (int32_t i = 0; i < ResourceManager_Length(textureOffsetMan); i += 1)
 		{
 			Resource* texOffsetResource = ResourceManager_GetResourceByIndex(textureOffsetMan, i);
 			if (texOffsetResource->mData == NULL)
@@ -98,7 +112,7 @@ void Sheet_BuildSheets(void)
 			for (int32_t j = 0; j < infoLen; j += 1)
 			{
 				TextureOffsetInfo* info = &texOffset->arr_offsets[j];
-				Sheet* sheet = Utils_malloc(sizeof(Sheet));
+				Sheet* sheet = (Sheet*)Utils_calloc(1, sizeof(Sheet));
 				InitSheet(sheet);
 				Utils_strlcpy(sheet->mSheetName, info->mVirtualName, EE_FILENAME_MAX);
 				Utils_strlcpy(sheet->mUnderlyingTextureName, info->mFilenameWithoutExtension, EE_FILENAME_MAX);
@@ -146,7 +160,7 @@ Texture* Sheet_GetTexture(Sheet* sheet)
 	}
 	else
 	{
-		return texResource->mData;
+		return (Texture*)texResource->mData;
 	}
 }
 

@@ -38,7 +38,7 @@ void AnimTile_Read(AnimTile* at, BufferReader* br)
 
 AnimTile* AnimTile_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	AnimTile* at = Utils_calloc(1, sizeof(AnimTile));
+	AnimTile* at = (AnimTile*)Utils_calloc(1, sizeof(AnimTile));
 	AnimTile_Read(at, br);
 	return at;
 }

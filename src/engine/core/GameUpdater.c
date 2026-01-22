@@ -598,17 +598,17 @@ void GameUpdater_Update(double delta)
 }
 void GameUpdater_DebugReloadMap(void)
 {
-	//TODO C99
-	/*
-	Get_LevelDataResource()->Reload();
-	*/
+	//Get_LevelDataResource()->Reload(); //UNUSED FOR NOW
+	
 	{
 		MString* tempString = NULL;
 		MString_Combine5(&tempString, "Map Reloaded (Full) [", Get_LevelDataResource()->mFileNameWithoutExtension, "][", Get_LevelFileName(), "]");
 		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
+
 	GLOBALS_DEBUG_QUICK_PLAYER_POSITION = Vector2_Zero;
+
 	GameStateManager_SetupReloadMap();
 }
 void GameUpdater_DebugSaveMap(void)
@@ -621,7 +621,12 @@ void GameUpdater_FastReset(void)
 	GameStateManager_DebugForceReloadMapNow();
 	GameStateManager_SetGameState(GAMESTATEMANAGER_GAME_STATE_NORMAL);
 	GLOBALS_DEBUG_IS_EDITOR_MODE = false;
-	//TODO C99 Logger_LogInformation("Map Reloaded (Fast) [" + Get_LevelDataResource()->GetPath() + "][" +Get_LevelData()->mLevelName + "]");
+	{
+		MString* tempString = NULL;
+		MString_Combine5(&tempString, "Map Reloaded (Fast) [", MString_Text(Get_LevelDataResource()->mPath), "][", Get_LevelData()->mLevelName, "]");
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 }
 void GameUpdater_FastResetPlusMove(void)
 {
@@ -641,14 +646,19 @@ void GameUpdater_DebugReloadGraphics(void)
 }
 void GameUpdater_CycleDebugShowInfo(void)
 {
-	//TODO C99
-	/*
 	GLOBALS_DEBUG_SHOW_INFO += 1;
 	if (GLOBALS_DEBUG_SHOW_INFO > GAMESTATEMANAGER_DEBUG_INFO_SHOW_THING_VIEWER)
 	{
 		GLOBALS_DEBUG_SHOW_INFO = GAMESTATEMANAGER_DEBUG_INFO_SHOW_NOTHING;
 	}
-	Logger_LogInformation("Debug Info: " + std_to_string(OeGlobals_DEBUG_SHOW_INFO), true);*/
+
+	{
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Debug Info: ");
+		MString_AddAssignBool(&tempString, GLOBALS_DEBUG_SHOW_INFO);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 }
 uint64_t GameUpdater_GetGlobalTicks(void)
 {

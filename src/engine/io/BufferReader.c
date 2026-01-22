@@ -30,7 +30,21 @@ int64_t BufferReader_Position(BufferReader* br)
 }
 void BufferReader_Seek(BufferReader* br, int64_t offset, SeekFrom type)
 {
-	SDL_SeekIO(br->mIOStream, offset, type);
+	SDL_IOWhence whence = SDL_IO_SEEK_SET;
+	switch (type)
+	{
+	case BUFFER_READER_SEEK_FROM_BEGIN:
+		whence = SDL_IO_SEEK_SET;
+		break;
+	case 	BUFFER_READER_SEEK_FROM_CURRENT:
+		whence = SDL_IO_SEEK_CUR;
+		break;
+	case BUFFER_READER_SEEK_FROM_END:
+		whence = SDL_IO_SEEK_END;
+		break;
+	}
+
+	SDL_SeekIO(br->mIOStream, offset, whence);
 }
 FixedByteBuffer* BufferReader_GetBuffer(BufferReader* br)
 {
@@ -114,7 +128,7 @@ double BufferReader_ReadDouble(BufferReader* br)
 int32_t* BufferReader_ReadIntArray2D(BufferReader* br, int32_t width, int32_t height)
 {
 	int32_t totalArrayLen = (width * height);
-	int32_t* readToThis = Utils_malloc(totalArrayLen * sizeof(int32_t));
+	int32_t* readToThis = (int32_t*)Utils_calloc(totalArrayLen, sizeof(int32_t));
 	for (int32_t i = 0; i < width; i += 1)
 	{
 		for (int32_t j = 0; j < height; j += 1)
@@ -166,7 +180,7 @@ bool BufferReader_HasNext(BufferReader* br)
 BufferReader* BufferReader_Create(FixedByteBuffer* fbb)
 {
 	_mRefs += 1;
-	BufferReader* br = Utils_malloc(sizeof(BufferReader));
+	BufferReader* br = (BufferReader*)Utils_calloc(1, sizeof(BufferReader));
 	br->mBuffer = fbb;
 	br->mIOStream = SDL_IOFromConstMem(FixedByteBuffer_GetBuffer(fbb), FixedByteBuffer_GetLength(fbb));
 	return br;

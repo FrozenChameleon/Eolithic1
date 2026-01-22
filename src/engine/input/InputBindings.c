@@ -91,7 +91,7 @@ void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, ISt
 			{
 				InputAction* currentAction = &pbd->_mBindings[i];
 				InputAction* defaultAction = &defaultActions[i];
-				for (int32_t k = indexStart; k < indexStart + length; k += 1)
+				for (int32_t k = indexStart; k < (indexStart + length); k += 1)
 				{
 					InputCheck* defaultCheck = InputChecks_Get(&defaultAction->mChecks, k);
 					InputChecks_Set(&currentAction->mChecks, k, *defaultCheck);
@@ -100,7 +100,18 @@ void PlayerBindingData_ResetCertainBindingsToDefault(PlayerBindingData* pbd, ISt
 		}
 	}
 
-	//TODO C99 Logger_LogInformation("Player #" + std_to_string(_mPlayerNumber) + " certain bindings (" + std_to_string(indexStart) + "-" + std_to_string((indexStart + (length - 1))) + ") have been reset to default");
+	{
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Player #");
+		MString_AddAssignInt(&tempString, pbd->_mPlayerNumber);
+		MString_AddAssignString(&tempString, " certain bindings (");
+		MString_AddAssignInt(&tempString, indexStart);
+		MString_AddAssignString(&tempString, "-");
+		MString_AddAssignInt(&tempString, (indexStart + (length - 1)));
+		MString_AddAssignString(&tempString, ") have been reset to default");
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 }
 bool PlayerBindingData_DoBindingsExistFor(PlayerBindingData* pbd, const char* action, int32_t indexStart, int32_t length)
 {

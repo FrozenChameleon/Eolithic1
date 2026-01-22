@@ -8,7 +8,7 @@
 static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
 //#ifdef EDITOR_MODE
-	SystemFunc_DrawHelper(C_DrawLineOfSight, DrawLineOfSightSys_DrawRoutine, spriteBatch);
+	SystemFunc_DrawHelper(C_DrawLineOfSight, (SystemFunc_DrawHelperFunc)DrawLineOfSightSys_DrawRoutine, spriteBatch);
 //#endif
 }
 

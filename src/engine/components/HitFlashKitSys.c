@@ -27,7 +27,7 @@ void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data)
 	}
 
 	bool wasSuccessful;
-	DrawActor* drawActor = TryGet_Component(C_DrawActor, owner, &wasSuccessful);
+	DrawActor* drawActor = (DrawActor*)TryGet_Component(C_DrawActor, owner, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return;
@@ -58,7 +58,7 @@ void HitFlashKitSys_UpdateRoutine(Entity owner, HitFlashKit* data)
 System* HitFlashKitSys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_HitFlashKit);
-	ss->_mInitRoutine = HitFlashKitSys_InitRoutine;
-	ss->_mUpdateRoutine = HitFlashKitSys_UpdateRoutine;
+	ss->_mInitRoutine = (SystemSimple_InitFunc)HitFlashKitSys_InitRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)HitFlashKitSys_UpdateRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

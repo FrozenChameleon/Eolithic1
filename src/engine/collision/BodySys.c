@@ -40,8 +40,8 @@ static void UpdateLastRenderPositionRoutine(Body* data)
 System* BodySys_CreateSystem(void)
 {
 	SystemSimple* ss = SystemSimple_Create(C_Body);
-	ss->_mInitRoutine = BodySys_InitRoutine;
-	ss->_mUpdateRoutine = UpdateRoutine;
-	ss->_mUpdateLastRenderPositionRoutine = UpdateLastRenderPositionRoutine;
+	ss->_mInitRoutine = (SystemSimple_InitFunc)BodySys_InitRoutine;
+	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)UpdateRoutine;
+	ss->_mUpdateLastRenderPositionRoutine = (SystemSimple_UpdateLastRenderPositionFunc)UpdateLastRenderPositionRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

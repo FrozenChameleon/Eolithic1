@@ -23,7 +23,7 @@
 
 LevelData* LevelData_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	LevelData* levelData = Utils_calloc(1, sizeof(LevelData));
+	LevelData* levelData = (LevelData*)Utils_calloc(1, sizeof(LevelData));
 	LevelData_ReadIni(levelData, br);
 	return levelData;
 }
@@ -117,7 +117,7 @@ void LevelData_ReadData(LevelData* ld, BufferReader* reader)
 	int32_t saveTileSize = BufferReader_ReadI32(reader);
 	for (int32_t i = 0; i < saveTileSize; i += 1)
 	{
-		Tile* tile = Utils_malloc(sizeof(Tile));
+		Tile* tile = (Tile*)Utils_calloc(1, sizeof(Tile));
 		Tile_Init(tile);
 		Tile_Read(tile, version, reader);
 		arrput(ld->arr_save_tiles, tile);
@@ -172,7 +172,7 @@ bool LevelData_LoadSetupTileData(LevelData* ld)
 	int32_t gridWidth = LevelData_GetGridSizeWidth(ld);
 	int32_t gridHeight = LevelData_GetGridSizeHeight(ld);
 	int32_t tileDataLen = gridWidth * gridHeight;
-	ld->mTileData = Utils_calloc(tileDataLen, sizeof(LevelData*));
+	ld->mTileData = (Tile**)Utils_calloc(tileDataLen, sizeof(Tile*));
 	for (int32_t i = 0; i < gridWidth; i += 1)
 	{
 		for (int32_t j = 0; j < gridHeight; j += 1)
@@ -265,7 +265,7 @@ int32_t* LevelData_CreateCollisionArray(LevelData* ld)
 }
 int32_t* LevelData_CreateEmptyCollisionArray(LevelData* ld)
 {
-	return Utils_CallocArena(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t), UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
+	return (int32_t*)Utils_CallocArena(ld->_mGridSize.Width * ld->_mGridSize.Height, sizeof(int32_t), UTILS_ALLOCATION_ARENA_JUST_THIS_LEVEL);
 }
 void LevelData_ImprintToCollisionArray(LevelData* ld, int32_t x, int32_t y, int32_t* collisionArray)
 {
@@ -360,7 +360,7 @@ Texture* LevelData_GetTilesetTexture(LevelData* ld)
 	{
 		return NULL;
 	}
-	return resource->mData;
+	return (Texture*)resource->mData;
 }
 void LevelData_DrawProps(LevelData* ld, SpriteBatch* spriteBatch, Camera* camera)
 {

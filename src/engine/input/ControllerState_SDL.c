@@ -206,6 +206,7 @@ int32_t ControllerState_AddControllerInstance(int32_t dev)
 		MString* tempString = NULL;
 		MString_AssignString(&tempString, "Added device #");
 		MString_AddAssignInt(&tempString, which);
+		MString_AddAssignString(&tempString, ", ");
 		MString_AddAssignString(&tempString, SDL_GetGamepadName(INTERNAL_devices[which]));
 		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
@@ -219,8 +220,7 @@ int32_t ControllerState_RemoveControllerInstance(int32_t dev)
 
 	int32_t output = -1;
 
-	int64_t instanceListLen = hmlen(hm_INTERNAL_instanceList);
-	for (int32_t i = 0; i < instanceListLen; i += 1)
+	for (int32_t i = 0; i < hmlen(hm_INTERNAL_instanceList); i += 1)
 	{
 		if (hm_INTERNAL_instanceList->key == dev)
 		{
@@ -240,7 +240,9 @@ int32_t ControllerState_RemoveControllerInstance(int32_t dev)
 		MString* tempString = NULL;
 		MString_AssignString(&tempString, "Removed Device #");
 		MString_AddAssignInt(&tempString, output);
+		MString_AddAssignString(&tempString, ", ");
 		MString_AddAssignString(&tempString, SDL_GetGamepadName(INTERNAL_devices[output]));
+		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
 

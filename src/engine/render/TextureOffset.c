@@ -8,8 +8,7 @@
 
 TextureOffset* TextureOffset_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	TextureOffset* textureOffset = Utils_malloc(sizeof(TextureOffset));
-	Utils_memset(textureOffset, 0, sizeof(TextureOffset));
+	TextureOffset* textureOffset = (TextureOffset*)Utils_calloc(1, sizeof(TextureOffset));
 
 	IStringArray* lines = File_ReadAllToStrings(br);
 	size_t linesLen = IStringArray_Length(lines);

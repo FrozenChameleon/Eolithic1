@@ -105,7 +105,7 @@ void MusicInstance_Play(MusicInstance* mi, const char* nextTrack, bool isLooping
 
 	MusicInstance_Stop(mi);
 
-	Music* data = ResourceManager_GetResourceData(ResourceManagerList_Music(), mi->_mCurrentTrack);
+	Music* data = (Music*)ResourceManager_GetResourceData(ResourceManagerList_Music(), mi->_mCurrentTrack);
 	bool success = SoundEffectInstance_Setup(&mi->_mCurrentMusicInstance, nextTrack, data->_mWaveFileData);
 	if (!success)
 	{

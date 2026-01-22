@@ -224,11 +224,11 @@ Rectangle* Window_GetAllDisplayModeBounds(int32_t* length)
 	*length = (int32_t)arrlen(arr_display_modes_bounds);
 	return arr_display_modes_bounds;
 }
-bool Window_IsWindowActive(void)
+bool Window_IsActive(void)
 {
 	return _mIsWindowActive;
 }
-void Window_SetWindowActive(bool value)
+void Window_SetActive(bool value)
 {
 	_mIsWindowActive = value;
 }

@@ -79,7 +79,7 @@ bool Music_IsPlaying(void)
 }
 Music* Music_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	Music* music = Utils_malloc(sizeof(Music));
+	Music* music = (Music*)Utils_calloc(1, sizeof(Music));
 	music->_mWaveFileData = WaveFileData_FromStream(br);
 	return music;
 }

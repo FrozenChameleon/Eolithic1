@@ -81,7 +81,7 @@ static int32_t _mAttackIdCounter;
 static Point* Get_PointerToGridNodes(Entity entity)
 {
 	bool wasSuccessful;
-	Nodes* component = TryGet_Component(C_Nodes, entity, &wasSuccessful);
+	Nodes* component = (Nodes*)TryGet_Component(C_Nodes, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return NULL;
@@ -94,7 +94,7 @@ static Point* Get_PointerToGridNodes(Entity entity)
 static Point* Get_GridNodes(Entity entity)
 {
 	bool wasSuccessful;
-	Nodes* component = TryGet_Component(C_Nodes, entity, &wasSuccessful);
+	Nodes* component = (Nodes*)TryGet_Component(C_Nodes, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return NULL;
@@ -155,7 +155,7 @@ Entity Get_PlayerByNumber(int32_t givenPlayerNumber)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(pack, &iter))
 	{
-		PlayerNumber* playerNumber = iter.mComponent;
+		PlayerNumber* playerNumber = (PlayerNumber*)iter.mComponent;
 		if (playerNumber->mTag == givenPlayerNumber)
 		{
 			return iter.mEntity;
@@ -434,19 +434,19 @@ void Do_FreezeEntityTillOnScreen2(Entity entity, bool facesPlayer, bool isFacing
 {
 	Do_SetBodyDisabled(entity, true);
 	Do_SetUpdateDisabled(entity, true);
-	FreezeEntityTillOnScreen* data = Get_Component(C_FreezeEntityTillOnScreen, entity);
+	FreezeEntityTillOnScreen* data = (FreezeEntityTillOnScreen*)Get_Component(C_FreezeEntityTillOnScreen, entity);
 	data->mRectangle = Body_GetRect(Get_Body(entity));
 	data->mFacesPlayer = facesPlayer;
 	data->mIsFacingFlipped = isFacingFlipped;
 }
 void Do_TurnOnMirrorEffect(Entity entity)
 {
-	MirrorEffect* mirrorEffect = Get_Component(C_MirrorEffect, entity);
+	MirrorEffect* mirrorEffect = (MirrorEffect*)Get_Component(C_MirrorEffect, entity);
 	MirrorEffect_SetOn(mirrorEffect);
 }
 void Do_TurnOffMirrorEffect(Entity entity)
 {
-	MirrorEffect* mirrorEffect = Get_Component(C_MirrorEffect, entity);
+	MirrorEffect* mirrorEffect = (MirrorEffect*)Get_Component(C_MirrorEffect, entity);
 	MirrorEffect_SetOff(mirrorEffect);
 }
 void Do_ActivateHitFlashKit(Entity entity)
@@ -470,7 +470,7 @@ int32_t Get_NextBossMove(Entity entity)
 int32_t Get_IntTag(Entity entity)
 {
 	bool wasSuccessful;
-	IntTag* component = TryGet_Component(C_IntTag, entity, &wasSuccessful);
+	IntTag* component = (IntTag*)TryGet_Component(C_IntTag, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return -1;
@@ -482,55 +482,55 @@ int32_t Get_IntTag(Entity entity)
 }
 void Do_SetIntTag(Entity entity, int32_t value)
 {
-	IntTag* component = Get_Component(C_IntTag, entity);
+	IntTag* component = (IntTag*)Get_Component(C_IntTag, entity);
 	component->mTag = value;
 }
 int32_t Get_StepCounter(Entity entity)
 {
-	StepCounter* component = Get_Component(C_StepCounter, entity);
+	StepCounter* component = (StepCounter*)Get_Component(C_StepCounter, entity);
 	return component->mCounter;
 }
 void Do_IncrementStepCounter(Entity entity)
 {
-	StepCounter* component = Get_Component(C_StepCounter, entity);
+	StepCounter* component = (StepCounter*)Get_Component(C_StepCounter, entity);
 	component->mCounter += 1;
 }
 void Do_ResetStepCounter(Entity entity)
 {
-	StepCounter* component = Get_Component(C_StepCounter, entity);
+	StepCounter* component = (StepCounter*)Get_Component(C_StepCounter, entity);
 	component->mCounter = 0;
 }
 void Do_SetMove(Entity entity, int32_t value)
 {
-	Move* component = Get_Component(C_Move, entity);
+	Move* component = (Move*)Get_Component(C_Move, entity);
 	component->mMove = value;
 	Do_SetStep(entity, 0);
 }
 int32_t Get_Move(Entity entity)
 {
-	Move* component = Get_Component(C_Move, entity);
+	Move* component = (Move*)Get_Component(C_Move, entity);
 	return component->mMove;
 }
 void Do_SetStep(Entity entity, int32_t value)
 {
-	Step* component = Get_Component(C_Step, entity);
+	Step* component = (Step*)Get_Component(C_Step, entity);
 	component->mStep = value;
 	Do_ResetStepCounter(entity);
 	Do_ResetStepTimer(entity);
 }
 int32_t Get_Step(Entity entity)
 {
-	Step* component = Get_Component(C_Step, entity);
+	Step* component = (Step*)Get_Component(C_Step, entity);
 	return component->mStep;
 }
 int32_t Get_AmountOfBounces(Entity entity)
 {
-	BounceData* data = Get_Component(C_BounceData, entity);
+	BounceData* data = (BounceData*)Get_Component(C_BounceData, entity);
 	return data->mBounces;
 }
 bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityIncrease, bool fallFirstBounce)
 {
-	BounceData* data = Get_Component(C_BounceData, entity);
+	BounceData* data = (BounceData*)Get_Component(C_BounceData, entity);
 	bool returnValue = false;
 	if (data->mIsNotFirstFrame)
 	{
@@ -560,17 +560,17 @@ bool Do_Bounce(Entity entity, float dampener, float jumpSpeed, float velocityInc
 }
 void Do_ResetStepTimer(Entity entity)
 {
-	StepTimer* data = Get_Component(C_StepTimer, entity);
+	StepTimer* data = (StepTimer*)Get_Component(C_StepTimer, entity);
 	data->mTimer = Timer_Zero;
 }
 Timer* Get_StepTimer(Entity entity)
 {
-	StepTimer* data = Get_Component(C_StepTimer, entity);
+	StepTimer* data = (StepTimer*)Get_Component(C_StepTimer, entity);
 	return &data->mTimer;
 }
 bool Do_UpdateStepTimer(Entity entity, int32_t limit)
 {
-	StepTimer* data = Get_Component(C_StepTimer, entity);
+	StepTimer* data = (StepTimer*)Get_Component(C_StepTimer, entity);
 	data->mTimer.mLimit = limit;
 	return Timer_Update(&data->mTimer);
 }
@@ -693,25 +693,25 @@ void Do_DestroyAllEnemies(void)
 }
 MoveGetter* Do_InitMoveGetter(Entity entity, const char* name, int32_t movesToRemember)
 {
-	MoveGetter* moveGetter = Do_InitComponent(C_MoveGetter, entity);
-	//moveGetter->Setup(name, movesToRemember);
+	MoveGetter* moveGetter = (MoveGetter*)Do_InitComponent(C_MoveGetter, entity);
+	//moveGetter->Setup(name, movesToRemember); //UNUSED
 	return moveGetter;
 }
 NodeMovingKit* Do_InitNodeMovingKit(Entity entity, int32_t type, bool moveContacts)
 {
-	NodeMovingKit* kit = Do_InitComponent(C_NodeMovingKit, entity);
-	//kit->Setup(entity, type, moveContacts);
+	NodeMovingKit* kit = (NodeMovingKit*)Do_InitComponent(C_NodeMovingKit, entity);
+	//kit->Setup(entity, type, moveContacts); //UNUSED
 	return kit;
 }
 HitFlashKit* Do_InitHitFlashKit(Entity entity, int32_t time)
 {
-	HitFlashKit* kit = Do_InitComponent(C_HitFlashKit, entity);
-	//kit->Setup(time);
+	HitFlashKit* kit = (HitFlashKit*)Do_InitComponent(C_HitFlashKit, entity);
+	//kit->Setup(time); //UNUSED
 	return kit;
 }
 MirrorEffect* Do_InitMirrorEffect(Entity entity, Color color, int32_t depth)
 {
-	MirrorEffect* effect = Do_InitComponent(C_MirrorEffect, entity);
+	MirrorEffect* effect = (MirrorEffect*)Do_InitComponent(C_MirrorEffect, entity);
 	effect->mColor = color;
 	effect->mDepth = depth;
 	return effect;
@@ -726,7 +726,7 @@ void Do_Rotate(Entity entity, float value)
 }
 void Do_IdleCircle(Entity entity, float radius, bool useX, bool useY, int32_t idleDegreeIncrease)
 {
-	IdleCircleData* data = Get_Component(C_IdleCircleData, entity);
+	IdleCircleData* data = (IdleCircleData*)Get_Component(C_IdleCircleData, entity);
 	Do_MoveCircle2(entity, (float)data->mIdleDegree, 0, radius, useX, useY);
 	data->mIdleDegree += idleDegreeIncrease;
 }
@@ -740,7 +740,7 @@ bool Do_FloatyMoveSomewhere(Entity entity, float destX, float destY, float speed
 }
 bool Do_FloatyMoveSomewhere2(Entity entity, float destX, float destY, float speedAccel, float speedLimit, bool doNotResetMovementAtEnd)
 {
-	FloatyMovementData* data = Get_Component(C_FloatyMovementData, entity);
+	FloatyMovementData* data = (FloatyMovementData*)Get_Component(C_FloatyMovementData, entity);
 	data->mWasUsed = true;
 	float distanceToTarget = (float)Get_Distance2(entity, destX, destY);
 	float timeToTarget = 0;
@@ -803,7 +803,7 @@ bool Do_FloatyMoveSomewhere3(float* currentSpeed, Vector2* moveThis, Vector2 des
 }
 void Do_FloatyMove(Entity entity, float directionX, float directionY, float speedAccel, float speedLimit)
 {
-	FloatyMovementData* data = Get_Component(C_FloatyMovementData, entity);
+	FloatyMovementData* data = (FloatyMovementData*)Get_Component(C_FloatyMovementData, entity);
 	data->mWasUsed = true;
 	data->mCurrentSpeed += speedAccel;
 	data->mCurrentSpeed = Math_MinFloat(data->mCurrentSpeed, speedLimit);
@@ -943,7 +943,7 @@ void Do_SetupShaderMultiColor2(ShaderProgram* program, int32_t i, uint8_t target
 }
 Body* Do_InitBody(Entity entity, int32_t width, int32_t height)
 {
-	Body* body = Do_InitComponent(C_Body, entity);
+	Body* body = (Body*)Do_InitComponent(C_Body, entity);
 	Body_Setup(body, width, height, false);
 	Body_ForcePosition(body, Get_InitialX(entity), Get_InitialY(entity));
 	return body;
@@ -983,7 +983,7 @@ void Do_SetUpdateAndDrawDisabled(Entity entity, bool value)
 }
 void Do_SetStunFrames(Entity entity, int32_t value)
 {
-	StunFrames* component = Get_Component(C_StunFrames, entity);
+	StunFrames* component = (StunFrames*)Get_Component(C_StunFrames, entity);
 	component->mTag = value;
 }
 void Do_SetStateRotation(Entity entity, int32_t state, float rotation)
@@ -992,7 +992,7 @@ void Do_SetStateRotation(Entity entity, int32_t state, float rotation)
 }
 DrawActor* Get_DrawActor(Entity entity)
 {
-	return Get_Component(C_DrawActor, entity);
+	return (DrawActor*)Get_Component(C_DrawActor, entity);
 }
 
 //private
@@ -1010,25 +1010,25 @@ void Do_SetComplete(Entity entity)
 }
 void Do_SetGridPosition(Entity entity, int32_t x, int32_t y)
 {
-	GridPosition* gridPosition = Get_Component(C_GridPosition, entity);
+	GridPosition* gridPosition = (GridPosition*)Get_Component(C_GridPosition, entity);
 	gridPosition->mGridPosition.X = x;
 	gridPosition->mGridPosition.Y = y;
 }
 void Do_SetInitialPosition(Entity entity, float x, float y)
 {
-	InitialPosition* initialPosition = Get_Component(C_InitialPosition, entity);
+	InitialPosition* initialPosition = (InitialPosition*)Get_Component(C_InitialPosition, entity);
 	initialPosition->mInitialPosition.X = x;
 	initialPosition->mInitialPosition.Y = y;
 }
 void Do_SetPosition(Entity entity, float x, float y)
 {
-	FakePosition* position = Get_Component(C_FakePosition, entity);
+	FakePosition* position = (FakePosition*)Get_Component(C_FakePosition, entity);
 	position->mFakePosition.X = x;
 	position->mFakePosition.Y = y;
 }
 void Do_SetName(Entity entity, const char* name)
 {
-	Name* component = Get_Component(C_Name, entity);
+	Name* component = (Name*)Get_Component(C_Name, entity);
 	Utils_strlcpy(component->mName, name, EE_FILENAME_MAX);
 }
 void Do_SetDrawOffset(Entity entity, int32_t x, int32_t y)
@@ -1220,7 +1220,7 @@ void Do_DestroyParticlesByName(const char* name)
 	PackIterator iter = PackIterator_Begin;
 	while (ComponentPack_Next(particles, &iter))
 	{
-		ParticleInstance* particleData = iter.mComponent;
+		ParticleInstance* particleData = (ParticleInstance*)iter.mComponent;
 		if (Utils_StringEqualTo(particleData->mName, name))
 		{
 			particleData->mIsComplete = true;
@@ -1682,11 +1682,11 @@ void Do_MoveVector2Absolute(Entity entity, Vector2 move)
 }
 void Do_MoveAbsolute(Entity entity, float x, float y)
 {
-	FakePosition* position = Get_Component(C_FakePosition, entity);
+	FakePosition* position = (FakePosition*)Get_Component(C_FakePosition, entity);
 	position->mFakePosition.X += x;
 	position->mFakePosition.Y += y;
 	bool wasSuccessful;
-	Body* body = TryGet_Component(C_Body, entity, &wasSuccessful);
+	Body* body = (Body*)TryGet_Component(C_Body, entity, &wasSuccessful);
 	if (wasSuccessful)
 	{
 		Body_Move(body, x, y);
@@ -1747,23 +1747,23 @@ int32_t Get_AmountOfBodies(Entity entity)
 }
 MirrorEffect* Get_MirrorEffect(Entity entity)
 {
-	return Get_Component(C_MirrorEffect, entity);
+	return (MirrorEffect*)Get_Component(C_MirrorEffect, entity);
 }
 Random32* Get_Random(Entity entity)
 {
-	return Get_Component(C_Random32, entity);
+	return (Random32*)Get_Component(C_Random32, entity);
 }
 NodeMovingKit* Get_NodeMovingKit(Entity entity)
 {
-	return Get_Component(C_NodeMovingKit, entity);
+	return (NodeMovingKit*)Get_Component(C_NodeMovingKit, entity);
 }
 HitFlashKit* Get_HitFlashKit(Entity entity)
 {
-	return Get_Component(C_HitFlashKit, entity);
+	return (HitFlashKit*)Get_Component(C_HitFlashKit, entity);
 }
 MoveGetter* Get_MoveGetter(Entity entity)
 {
-	return Get_Component(C_MoveGetter, entity);
+	return (MoveGetter*)Get_Component(C_MoveGetter, entity);
 }
 float Get_Rotate(Entity entity)
 {
@@ -1861,7 +1861,7 @@ Color Get_Color(Entity entity)
 }
 CollisionEngine* Get_CollisionEngine(void)
 {
-	return Get_FirstSetComponent(C_CollisionEngine);
+	return (CollisionEngine*)Get_FirstSetComponent(C_CollisionEngine);
 }
 Point Get_Node(Entity entity, int32_t i)
 {
@@ -2034,7 +2034,7 @@ Entity Get_Entity(int32_t entityNumber)
 int32_t Get_ParentNumber(Entity entity)
 {
 	bool wasSuccessful;
-	ParentNumber* component = TryGet_Component(C_ParentNumber, entity, &wasSuccessful);
+	ParentNumber* component = (ParentNumber*)TryGet_Component(C_ParentNumber, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return -1;
@@ -2046,13 +2046,13 @@ int32_t Get_ParentNumber(Entity entity)
 }
 void Do_SetParentNumber(Entity entity, int32_t value)
 {
-	ParentNumber* component = Get_Component(C_ParentNumber, entity);
+	ParentNumber* component = (ParentNumber*)Get_Component(C_ParentNumber, entity);
 	component->mTag = value;
 }
 const char* Get_Name(Entity entity)
 {
 	bool wasSuccessful;
-	Name* component = TryGet_Component(C_Name, entity, &wasSuccessful);
+	Name* component = (Name*)TryGet_Component(C_Name, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return EE_STR_NOT_SET;
@@ -2065,7 +2065,7 @@ const char* Get_Name(Entity entity)
 Vector2 Get_InitialPosition(Entity entity)
 {
 	bool wasSuccessful;
-	InitialPosition* component = TryGet_Component(C_InitialPosition, entity, &wasSuccessful);
+	InitialPosition* component = (InitialPosition*)TryGet_Component(C_InitialPosition, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return Vector2_Zero;
@@ -2084,7 +2084,7 @@ Point Get_InitialPositionAsPoint(Entity entity)
 Vector2 Get_FakePosition(Entity entity)
 {
 	bool wasSuccessful;
-	FakePosition* component = TryGet_Component(C_FakePosition, entity, &wasSuccessful);
+	FakePosition* component = (FakePosition*)TryGet_Component(C_FakePosition, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return Vector2_Zero;
@@ -2097,7 +2097,7 @@ Vector2 Get_FakePosition(Entity entity)
 Point Get_GridPosition(Entity entity)
 {
 	bool wasSuccessful;
-	GridPosition* component = TryGet_Component(C_GridPosition, entity, &wasSuccessful);
+	GridPosition* component = (GridPosition*)TryGet_Component(C_GridPosition, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return Point_Zero;
@@ -2154,7 +2154,7 @@ int32_t Get_EntityNumber(Entity entity)
 int32_t Get_PlayerNumber(Entity entity)
 {
 	bool wasSuccessful;
-	PlayerNumber* component = TryGet_Component(C_PlayerNumber, entity, &wasSuccessful);
+	PlayerNumber* component = (PlayerNumber*)TryGet_Component(C_PlayerNumber, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return -1;
@@ -2166,7 +2166,7 @@ int32_t Get_PlayerNumber(Entity entity)
 }
 void Do_SetPlayerNumber(Entity entity, int32_t playerNumber)
 {
-	PlayerNumber* component = Get_Component(C_PlayerNumber, entity);
+	PlayerNumber* component = (PlayerNumber*)Get_Component(C_PlayerNumber, entity);
 	component->mTag = playerNumber;
 }
 GameState* Get_ActiveGameState(void)
@@ -2191,7 +2191,7 @@ Rectangle Get_BodyRectangle(Entity entity)
 }
 Body* Get_Body(Entity entity)
 {
-	return Get_Component(C_Body, entity);
+	return (Body*)Get_Component(C_Body, entity);
 }
 float Get_X(Entity entity)
 {
@@ -2208,7 +2208,7 @@ Vector2 Get_PositionFromBody(Entity entity)
 Vector2 Get_Position(Entity entity)
 {
 	bool wasSuccessful;
-	Body* body = TryGet_Component(C_Body, entity, &wasSuccessful);
+	Body* body = (Body*)TryGet_Component(C_Body, entity, &wasSuccessful);
 	if (wasSuccessful)
 	{
 		return Body_GetPosition(body);
@@ -2221,7 +2221,7 @@ Vector2 Get_Position(Entity entity)
 Vector2 Get_LastRenderPosition(Entity entity)
 {
 	bool wasSuccessful;
-	Body* body = TryGet_Component(C_Body, entity, &wasSuccessful);
+	Body* body = (Body*)TryGet_Component(C_Body, entity, &wasSuccessful);
 	if (wasSuccessful)
 	{
 		return Body_GetLastRenderPosition(body);
@@ -2476,7 +2476,7 @@ const char* Get_StringSettingAsString(Entity entity, const char* key)
 StringPair* Get_StringSettings(Entity entity)
 {
 	bool wasSuccessful;
-	StringSettings* component = TryGet_Component(C_StringSettings, entity, &wasSuccessful);
+	StringSettings* component = (StringSettings*)TryGet_Component(C_StringSettings, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		return NULL;
@@ -2847,7 +2847,7 @@ Entity Do_BuildActor5(int32_t gridPositionX, int32_t gridPositionY, float initia
 }
 Entity Do_BuildActor6(int32_t gridPositionX, int32_t gridPositionY, float initialPositionX, float initialPositionY, ThingInstance* instanceData, const char* name, Entity parent)
 {
-	ThingSettings* settings = ResourceManager_GetResourceData(ResourceManagerList_ThingSettings(), name);
+	ThingSettings* settings = (ThingSettings*)ResourceManager_GetResourceData(ResourceManagerList_ThingSettings(), name);
 	if (settings == NULL)
 	{
 		Logger_LogError("Unable to build entity:");
@@ -2896,7 +2896,7 @@ Entity Do_BuildActor6(int32_t gridPositionX, int32_t gridPositionY, float initia
 
 	if (settings->mHasDrawing)
 	{
-		DrawActor* drawActor = Do_InitComponent(C_DrawActor, entity);
+		DrawActor* drawActor = (DrawActor*)Do_InitComponent(C_DrawActor, entity);
 		DrawActorSys_Setup(entity, drawActor, settings->sh_graphics_data, 
 			settings->mDefaultState, settings->mDefaultPhase);
 	}
@@ -2978,7 +2978,7 @@ bool Is_InLevelBounds(Entity entity)
 {
 	Rectangle levelBounds = Get_LevelBoundsRectangle();
 	bool wasSuccessful;
-	Body* body = TryGet_Component(C_Body, entity, &wasSuccessful);
+	Body* body = (Body*)TryGet_Component(C_Body, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		Vector2 temp = Get_FakePosition(entity);
@@ -3117,7 +3117,7 @@ bool Is_OnScreen(Entity entity)
 bool Is_OnScreen2(Entity entity, float mul)
 {
 	bool wasSuccessful;
-	Body* body = TryGet_Component(C_Body, entity, &wasSuccessful);
+	Body* body = (Body*)TryGet_Component(C_Body, entity, &wasSuccessful);
 	if (!wasSuccessful)
 	{
 		Vector2 temp = Get_FakePosition(entity);

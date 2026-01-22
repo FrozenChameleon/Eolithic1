@@ -90,7 +90,7 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	if (init)
 	{
 		sei->_mBufferLength = (sei->_mData->nAvgBytesPerSec / 20); //10 = 100MS BUFFER, 20 = 50MS BUFFER
-		sei->_mBuffer = Utils_malloc(sei->_mBufferLength);
+		sei->_mBuffer = (uint8_t*)Utils_calloc(sei->_mBufferLength, sizeof(uint8_t));
 	}
 
 	sei->_mInternalVolume = 1.0f;
@@ -98,7 +98,7 @@ bool SoundEffectInstance_Setup(SoundEffectInstance* sei, const char* name, WaveF
 	sei->_mSampleRate = waveFileData->nSamplesPerSec;
 	sei->_mChannels = (waveFileData->nChannels == 1) ? AUDIOCHANNELS_MONO : AUDIOCHANNELS_STEREO;
 
-	FAudioWaveFormatEx* format = Utils_malloc(sizeof(FAudioWaveFormatEx));
+	FAudioWaveFormatEx* format = (FAudioWaveFormatEx*)Utils_calloc(1, sizeof(FAudioWaveFormatEx));
 	format->wFormatTag = 1;
 	format->nChannels = (uint16_t)sei->_mChannels;
 	format->nSamplesPerSec = (uint32_t)sei->_mSampleRate;
@@ -167,7 +167,7 @@ void SoundEffectInstance_Play(SoundEffectInstance* sei)
 	FAudioWaveFormatEx* format = GetFormat(sei);
 	/* Create handle */
 	FAudioSourceVoice* handle = NULL;
-	FAudio_CreateSourceVoice(AudioEngine_GetContext(), &handle, format, FAUDIO_VOICE_USEFILTER, FAUDIO_DEFAULT_FREQ_RATIO, NULL, NULL, NULL);
+	FAudio_CreateSourceVoice((FAudio*)AudioEngine_GetContext(), &handle, format, FAUDIO_VOICE_USEFILTER, FAUDIO_DEFAULT_FREQ_RATIO, NULL, NULL, NULL);
 	sei->_mHandleStorage = handle;
 
 	if (handle == NULL)
@@ -505,7 +505,7 @@ void SoundEffectInstance_SubmitBuffer(SoundEffectInstance* sei, uint8_t* buffer,
 		return;
 	}
 
-	uint8_t* next = Utils_malloc(sizeof(uint8_t) * bufferLength);
+	uint8_t* next = (uint8_t*)Utils_calloc(bufferLength, sizeof(uint8_t));
 	Utils_memcpy(next, buffer, sizeof(uint8_t) * bufferLength);
 	arrput(sei->arr_queued_buffers, next);
 

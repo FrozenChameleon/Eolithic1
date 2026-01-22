@@ -33,7 +33,7 @@ bool BmFont_UpdateFontTexture(BmFont* bmf)
 {
 	if (bmf->_mFontTexture == NULL)
 	{
-		Texture* tex = ResourceManager_GetResourceData(ResourceManagerList_FontTexture(), bmf->_mFontName);
+		Texture* tex = (Texture*)ResourceManager_GetResourceData(ResourceManagerList_FontTexture(), bmf->_mFontName);
 		if (tex == NULL)
 		{
 			bmf->_mFontTexture = NULL;
@@ -60,7 +60,7 @@ void BmFont_Init(BmFont* bmf, BufferReader* br, const char* fontName)
 }
 BmFont* BmFont_GetBmFont(BmFont* bmf, const char* font)
 {
-	return ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
+	return (BmFont*)ResourceManager_GetResourceData(ResourceManagerList_Font(), font);
 }
 const FontMapData* BmFont_GetReplacement(BmFont* bmf)
 {
@@ -70,7 +70,7 @@ const FontMapData* BmFont_GetReplacement(BmFont* bmf)
 #ifndef DISABLE_TT_FONT
 static TTFont* BmFont_GetTTFont(const char* font)
 {
-	return ResourceManager_GetResourceData(ResourceManagerList_TTFont(), font);
+	return (TTFont*)ResourceManager_GetResourceData(ResourceManagerList_TTFont(), font);
 }
 #endif
 
@@ -95,7 +95,7 @@ Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont)
 
 BmFont* BmFont_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {
-	BmFont* bmf = Utils_malloc(sizeof(BmFont));
+	BmFont* bmf = (BmFont*)Utils_calloc(1, sizeof(BmFont));
 	BmFont_Init(bmf, br, filenameWithoutExtension);
 	return bmf;
 }

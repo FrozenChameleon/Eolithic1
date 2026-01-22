@@ -9,14 +9,14 @@ static uint64_t _mRefs;
 
 typedef struct IStringArray
 {
-	IStrings* mStrings;
 	struct { int64_t key; const char* value; } *hm_values;
+	IStrings* mStrings;
 } IStringArray;
 
 IStringArray* IStringArray_Create(void)
 {
 	_mRefs += 1;
-	IStringArray* sa = Utils_calloc(1, sizeof(IStringArray));
+	IStringArray* sa = (IStringArray*)Utils_calloc(1, sizeof(IStringArray));
 	sa->mStrings = IStrings_Create();
 	return sa;
 }
@@ -35,8 +35,12 @@ void IStringArray_Dispose(IStringArray* sa)
 }
 void IStringArray_Clear(IStringArray* sa)
 {
-	hmfree(sa->hm_values);
-	sa->hm_values = NULL;
+	if (hmlen(sa->hm_values) > 0)
+	{
+		hmfree(sa->hm_values);
+		sa->hm_values = NULL;
+	}
+	IStrings_Clear(sa->mStrings);
 }
 void IStringArray_Add(IStringArray* sa, const char* str)
 {

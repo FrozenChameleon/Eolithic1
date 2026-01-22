@@ -45,15 +45,38 @@ bool ResourceManager_HasResource(ResourceManager* rm, const char* filenameWithou
 	}
 	return true;
 }
+Resource* ResourceManager_GetDefaultResource(ResourceManager* rm)
+{
+	if (!Utils_StringEqualTo(rm->_mDefaultResource, EE_STR_EMPTY))
+	{
+		return ResourceManager_GetResource(rm, rm->_mDefaultResource);
+	}
+	else
+	{
+		return NULL;
+	}
+}
+void* ResourceManager_GetDefaultResourceData(ResourceManager* rm)
+{
+	Resource* resource = ResourceManager_GetDefaultResource(rm);
+	if (resource != NULL)
+	{
+		return resource->mData;
+	}
+	else
+	{
+		return NULL;
+	}
+}
 Resource* ResourceManager_GetResource(ResourceManager* rm, const char* filenameWithoutExtension)
 {
 	Resource* resource = shget(rm->sh_resources, filenameWithoutExtension);
 	if (resource == NULL)
 	{
 		PrintHelper("Unable to get resource: ", filenameWithoutExtension);
-		return NULL;
+		PrintResourceType(rm);
+		return ResourceManager_GetDefaultResource(rm);
 	}
-	
 	return resource;
 }
 void* ResourceManager_GetResourceData(ResourceManager* rm, const char* filenameWithoutExtension)
@@ -62,14 +85,14 @@ void* ResourceManager_GetResourceData(ResourceManager* rm, const char* filenameW
 	if (resource == NULL)
 	{
 		PrintHelper("Unable to get resource data: ", filenameWithoutExtension);
+		PrintResourceType(rm);
 		return NULL;
 	}
-
 	return resource->mData;
 }
 Resource* ResourceManager_LoadAssetFromStreamAndCreateResource(ResourceManager* rm, BufferReader* br, const char* filenameWithoutExtension, const char* path)
 {
-	Resource* resource = Utils_malloc(sizeof(Resource));
+	Resource* resource = (Resource*)Utils_calloc(1, sizeof(Resource));
 	Utils_memset(resource, 0, sizeof(Resource));
 	MString_AssignString(&resource->mPath, path);
 	Utils_strlcpy(resource->mFileNameWithoutExtension, filenameWithoutExtension, EE_FILENAME_MAX);

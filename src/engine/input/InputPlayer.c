@@ -16,11 +16,11 @@
 #include "../gamestate/GameState.h"
 #include "../utils/Utils.h"
 #include "InputAction.h"
+#include "../utils/MString.h"
 
 InputAction* InputPlayer_GetCurrentActions(InputPlayer* ip)
 {
-	//TODO C99
-	/*if (ControllerState_PlatformIsForcingCustomInputActions(ip->_mPlayerNumber))
+	/*if (ControllerState_PlatformIsForcingCustomInputActions(ip->_mPlayerNumber)) //UNUSED FOR NOW
 	{
 		return ControllerState_GetForcedCustomInputActions(ip->_mPlayerNumber);
 	}*/
@@ -42,7 +42,13 @@ void InputPlayer_SetInputDevice(InputPlayer* ip, int32_t newDeviceNumber)
 
 	if (ip->_mInputDeviceNumber == -1)
 	{
-		//TODO C99 Logger_LogInformation("Input device set for Player #" + std_to_string((_mPlayerNumber + 1)) + ", Device #" + std_to_string((newDeviceNumber)));
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Input device set for Player #");
+		MString_AddAssignInt(&tempString, ip->_mPlayerNumber + 1);
+		MString_AddAssignString(&tempString, ", Device #");
+		MString_AddAssignInt(&tempString, newDeviceNumber);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
 	}
 
 	ip->_mInputDeviceNumber = newDeviceNumber;
@@ -148,7 +154,16 @@ void InputPlayer_RemoveInputDevice(InputPlayer* ip)
 		return;
 	}
 
-	//TODO C99 Logger_LogInformation("Input device removed for Player #" + std_to_string(_mPlayerNumber + 1) + ", Device #" + std_to_string(_mInputDeviceNumber));
+	{
+		MString* tempString = NULL;
+		MString_AssignString(&tempString, "Input device removed for Player #");
+		MString_AddAssignInt(&tempString, ip->_mPlayerNumber + 1);
+		MString_AddAssignString(&tempString, ", Device #");
+		MString_AddAssignInt(&tempString, ip->_mInputDeviceNumber);
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
+
 	InputPlayer_SetInputDevice(ip, -1);
 }
 bool InputPlayer_IsUsingController(InputPlayer* ip)

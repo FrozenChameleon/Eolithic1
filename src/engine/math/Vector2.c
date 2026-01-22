@@ -122,6 +122,13 @@ Vector2 Vector2_Div(Vector2 value1, Vector2 value2)
 	temp.Y = (value1.Y / value2.Y);
 	return temp;
 }
+Vector2 Vector2_DivInt(Vector2 value1, int32_t value2)
+{
+	Vector2 temp;
+	temp.X = (value1.X / value2);
+	temp.Y = (value1.Y / value2);
+	return temp;
+}
 Vector2 Vector2_MulInt(Vector2 value1, int32_t value2)
 {
 	value1.X *= value2;

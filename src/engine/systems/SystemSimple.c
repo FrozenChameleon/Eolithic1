@@ -22,7 +22,7 @@ static void InitSystemSimple(SystemSimple* ss)
 
 static void InitStringSetting(void* givenData, const char* name, const char* value)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -30,7 +30,7 @@ static void InitStringSetting(void* givenData, const char* name, const char* val
 }
 static void Init(void* givenData, ComponentType givenType, Entity owner)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 	
 	InitSystemSimple(ss);
 
@@ -62,7 +62,7 @@ static void Init(void* givenData, ComponentType givenType, Entity owner)
 }
 static void Update(void* givenData)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -81,7 +81,7 @@ static void Update(void* givenData)
 }
 static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -92,7 +92,7 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 }
 static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -103,7 +103,7 @@ static void DrawHud(void* givenData, SpriteBatch* spriteBatch)
 }
 static void DrawDebugHud(void* givenData, SpriteBatch* spriteBatch)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -114,7 +114,7 @@ static void DrawDebugHud(void* givenData, SpriteBatch* spriteBatch)
 }
 static void UpdateLastRenderPosition(void* givenData, GameState* gameState)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -125,7 +125,7 @@ static void UpdateLastRenderPosition(void* givenData, GameState* gameState)
 }
 static void ReceiveBroadcast(void* givenData, int32_t type, int32_t packet1, int32_t packet2, int32_t packet3)
 {
-	SystemSimple* ss = givenData;
+	SystemSimple* ss = (SystemSimple*)givenData;
 
 	InitSystemSimple(ss);
 
@@ -137,7 +137,7 @@ static void ReceiveBroadcast(void* givenData, int32_t type, int32_t packet1, int
 
 SystemSimple* SystemSimple_Create(ComponentType ctype)
 {
-	SystemSimple* ss = Utils_calloc(1, sizeof(SystemSimple));
+	SystemSimple* ss = (SystemSimple*)Utils_calloc(1, sizeof(SystemSimple));
 	ss->_mType = ctype;
 	return ss;
 }

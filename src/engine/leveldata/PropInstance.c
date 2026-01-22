@@ -26,7 +26,7 @@ static Prop* GetThePropData(PropInstance* prop)
 {
 	if (prop->INTERNAL_mCachedPropData == NULL)
 	{
-		prop->INTERNAL_mCachedPropData = ResourceManager_GetResourceData(ResourceManagerList_Prop(), prop->mName);
+		prop->INTERNAL_mCachedPropData = (Prop*)ResourceManager_GetResourceData(ResourceManagerList_Prop(), prop->mName);
 	}
 
 	return prop->INTERNAL_mCachedPropData;
@@ -196,7 +196,7 @@ bool PropInstance_IsEqualTo(PropInstance* pi, PropInstance* instance)
 {
 	if (Vector2_EqualTo(instance->mOffset, pi->mOffset) && (instance->mScale == pi->mScale) && (instance->mDepth == pi->mDepth) &&
 		(instance->mRotation == pi->mRotation) && Vector2_EqualTo(instance->mDrawOffset, pi->mDrawOffset) && (instance->mFlipX == pi->mFlipX) &&
-		(instance->mFlipY == pi->mFlipY) && (instance->mName == pi->mName))
+		(instance->mFlipY == pi->mFlipY) && (Utils_StringEqualTo(instance->mName, pi->mName)))
 	{
 		return true;
 	}
