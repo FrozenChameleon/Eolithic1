@@ -20,10 +20,6 @@ enum GameStateManagerGameState
 	GAMESTATEMANAGER_GAME_STATE_PAUSED = 1
 };
 
-//extern std::vector<OeSystem*> GlobalSystems;
-//extern std::vector<OeSystem*> StateSystems;
-//extern std::vector<OeGameState*> GameStates;
-
 void GameStateManager_Ctor(void);
 int32_t GameStateManager_GetGlobalSystemsLen(void);
 System** GameStateManager_GetGlobalSystems(void);
@@ -32,7 +28,6 @@ int32_t GameStateManager_GetStateSystemsLen(void);
 System** GameStateManager_GetStateSystems(void);
 void GameStateManager_AddStateSystem(System* sys);
 GameState* GameStateManager_GetGameState(void);
-//GameState* GameStateManager_ActiveGameStateForRenderCamera();
 void GameStateManager_UpdateLastRenderPosition(void);
 void GameStateManager_Tick(void);
 void GameStateManager_Draw(SpriteBatch* spriteBatch);
@@ -62,7 +57,6 @@ void GameStateManager_IncrementTicksSinceMapLoad(void);
 uint64_t GameStateManager_GetTicksSinceMapLoad(void);
 int32_t GameStateManager_GetUniqueMapSeed(void);
 void GameStateManager_SetUniqueMapSeed(int32_t value);
-
 ComponentPack* GameStateManager_GetComponentPack(ComponentType ctype);
 bool GameStateManager_HasComponent(ComponentType ctype, Entity entity);
 void* GameStateManager_GetComponent(ComponentType ctype, Entity entity); //Just another name for Set

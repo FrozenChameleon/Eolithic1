@@ -4,6 +4,8 @@
 #include "../math/Math.h"
 #include "../math/Point.h"
 #include "../resources/ResourceManagerList.h"
+#include "../utils/IStrings.h"
+#include "../utils/IStringMap.h"
 
 static Resource* _mSinglePixel;
 
@@ -90,4 +92,67 @@ void DrawTool_DrawLine3(SpriteBatch* spriteBatch, Color color, int32_t depth, in
 		}
 		counter += 1;
 	}
+}
+void DrawTool_DrawDebugInfoHelper(SpriteBatch* spriteBatch, const char* strToDraw, const char* font, Color color, int32_t depth, Vector2 textDiff, int32_t* textOff)
+{
+	SpriteBatch_DrawString(spriteBatch, font, strToDraw, color, depth, Vector2_MulInt(textDiff, *textOff));
+	*textOff += 1;
+}
+void DrawTool_DrawDebugInfoHelperMString(SpriteBatch* spriteBatch, MString* strToDraw, const char* font, Color color, int32_t depth, Vector2 textDiff, int32_t* textOff)
+{
+	DrawTool_DrawDebugInfoHelper(spriteBatch, MString_Text(strToDraw), font, color, depth, textDiff, textOff);
+}
+void DrawTool_DrawDebugRefCounts(SpriteBatch* spriteBatch, const char* font, Color color, int32_t depth, Vector2 textDiff, int32_t* textOff)
+{
+	MString* tempString = NULL;
+
+	{
+		MString_AssignString(&tempString, "MSTRING REFS: ");
+		MString_AddAssignUInt64(&tempString, MString_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "BREADER REFS: ");
+		MString_AddAssignUInt64(&tempString, BufferReader_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "FBB REFS: ");
+		MString_AddAssignUInt64(&tempString, FixedByteBuffer_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "DBB REFS: ");
+		MString_AddAssignUInt64(&tempString, DynamicByteBuffer_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "ISTRINGS REFS: ");
+		MString_AddAssignUInt64(&tempString, IStrings_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "ISTRINGARRAY REFS: ");
+		MString_AddAssignUInt64(&tempString, IStringArray_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "ISTRINGMAP REFS: ");
+		MString_AddAssignUInt64(&tempString, IStringMap_GetRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	{
+		MString_AssignString(&tempString, "MALLOC REFS: ");
+		MString_AddAssignUInt64(&tempString, Utils_GetMallocRefs());
+		DrawTool_DrawDebugInfoHelperMString(spriteBatch, tempString, font, color, depth, textDiff, textOff);
+	}
+
+	MString_Dispose(&tempString);
 }

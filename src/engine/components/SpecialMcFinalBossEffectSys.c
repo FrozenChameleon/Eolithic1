@@ -135,6 +135,6 @@ System* SpecialMcFinalBossEffectSys_CreateSystem(void)
 	SystemSimple* ss = SystemSimple_Create(C_SpecialMcFinalBossEffect);
 	ss->_mUpdateRoutine = (SystemSimple_UpdateFunc)UpdateRoutine;
 	ss->_mDrawRoutine = (SystemSimple_DrawFunc)DrawRoutine;
-	ss->_mDrawHudRoutine = (SystemSimple_DrawHudFunc)DrawHudRoutine;
+	ss->_mDrawHudRoutine = (SystemSimple_DrawFunc)DrawHudRoutine;
 	return SystemSimple_CreateSystem(ss);
 }

@@ -295,7 +295,11 @@ void Cvars_SaveUserConfig2(bool showSavingAnimation)
 		return;
 	}
 
-	Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, USER_CONFIG_FILENAME, Cvars_CreateBufferFromUserConfigs());
+	{
+		FixedByteBuffer* bufferToSave = Cvars_CreateBufferFromUserConfigs();
+		Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, USER_CONFIG_FILENAME, bufferToSave);
+		FixedByteBuffer_Dispose(bufferToSave);
+	}
 
 	if (showSavingAnimation)
 	{

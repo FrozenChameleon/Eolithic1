@@ -10,8 +10,6 @@ typedef bool (*SystemSimple_CollideWithCollisionFunc)(Body* myBody, int32_t x, i
 typedef void (*SystemSimple_BeforeUpdateFunc)(void);
 typedef void (*SystemSimple_AfterUpdateFunc)(void);
 typedef void (*SystemSimple_DrawFunc)(Entity owner, void* data, SpriteBatch* spriteBatch);
-typedef void (*SystemSimple_DrawHudFunc)(Entity owner, void* data, SpriteBatch* spriteBatch);
-typedef void (*SystemSimple_DrawDebugHudFunc)(Entity owner, void* data, SpriteBatch* spriteBatch);
 typedef void (*SystemSimple_JustCompletedFunc)(Entity owner, void* data);
 typedef void (*SystemSimple_UpdateLastRenderPositionFunc)(void* data);
 typedef void (*SystemSimple_ReceiveBroadcastFunc)(Entity owner, void* data, int32_t broadcastType, int32_t packet1, int32_t packet2, int32_t packet3);
@@ -29,8 +27,8 @@ typedef struct SystemSimple
 	SystemSimple_BeforeUpdateFunc _mBeforeUpdateRoutine;
 	SystemSimple_AfterUpdateFunc _mAfterUpdateRoutine;
 	SystemSimple_DrawFunc _mDrawRoutine;
-	SystemSimple_DrawHudFunc _mDrawHudRoutine;
-	SystemSimple_DrawDebugHudFunc _mDrawDebugHudRoutine;
+	SystemSimple_DrawFunc _mDrawHudRoutine;
+	SystemSimple_DrawFunc _mDrawDebugHudRoutine;
 	SystemSimple_JustCompletedFunc _mJustCompletedRoutine;
 	SystemSimple_UpdateLastRenderPositionFunc _mUpdateLastRenderPositionRoutine;
 	SystemSimple_ReceiveBroadcastFunc _mReceiveBroadcastRoutine;

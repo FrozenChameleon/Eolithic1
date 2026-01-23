@@ -46,7 +46,7 @@ void SystemFunc_DrawHelper(ComponentType ctype, SystemFunc_DrawHelperFunc drawRo
 		}
 	}
 }
-void SystemFunc_DrawHudHelper(ComponentType ctype, SystemFunc_DrawHudHelperFunc drawHudRoutine, SpriteBatch* spriteBatch)
+void SystemFunc_DrawHudHelper(ComponentType ctype, SystemFunc_DrawHelperFunc drawHudRoutine, SpriteBatch* spriteBatch)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))
@@ -60,7 +60,7 @@ void SystemFunc_DrawHudHelper(ComponentType ctype, SystemFunc_DrawHudHelperFunc 
 		drawHudRoutine(iter.mEntity, iter.mComponent, spriteBatch);
 	}
 }
-void SystemFunc_DrawDebugHudHelper(ComponentType ctype, SystemFunc_DrawDebugHudHelperFunc drawDebugHudRoutine, SpriteBatch* spriteBatch)
+void SystemFunc_DrawDebugHudHelper(ComponentType ctype, SystemFunc_DrawHelperFunc drawDebugHudRoutine, SpriteBatch* spriteBatch)
 {
 	ComponentPack* pack = GameStateManager_GetComponentPack(ctype);
 	if (!ComponentPack_IsAnyEntityInPack(pack))

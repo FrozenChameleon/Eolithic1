@@ -199,13 +199,20 @@ void PlayerBindingData_Load(PlayerBindingData* pbd)
 void PlayerBindingData_Save(PlayerBindingData* pbd)
 {
 	const char* filename = PlayerBindingData_GetFilePlayerPath(pbd);
-	Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename, PlayerBindingData_CreateBufferFromBindings(pbd));
+
+	{
+		FixedByteBuffer* bufferToSave = PlayerBindingData_CreateBufferFromBindings(pbd);
+		Service_SaveBuffer(false, CONTAINER_DISPLAY_NAME, CONTAINER_NAME, filename, bufferToSave);
+		FixedByteBuffer_Dispose(bufferToSave);
+	}
+
 	{
 		MString* tempString = NULL;
 		MString_Combine4(&tempString, "Bindings have been saved for player #", Utils_IntToStringGlobalBuffer(pbd->_mPlayerNumber), ", ", filename);
 		Logger_LogInformation(MString_Text(tempString));
 		MString_Dispose(&tempString);
 	}
+
 	Utils_JustSaved();
 }
 

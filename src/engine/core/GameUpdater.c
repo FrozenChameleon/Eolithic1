@@ -420,31 +420,6 @@ static bool IsPaused(void)
 	return false;
 #endif
 }
-/*
-static void UpdateFixedTimeStep()
-{
-	bool isFixedTimeStep = false;
-	if (Cvars_GetAsBool(Cvars_USER_IS_FIXED_TIMESTEP_ENABLED))
-	{
-		isFixedTimeStep = true;
-	}
-	if (Service_PlatformForcesRelyOnVsync() || Cvars_GetAsBool(Cvars_ENGINE_RELY_ON_VSYNC))
-	{
-		isFixedTimeStep = false;
-	}
-#ifdef EDITOR_MODE
-	if (OeGlobals_IsDebugGameSpeedSet())
-	{
-		isFixedTimeStep = false;
-	}
-	if (_mIsDebugAutoSpeedOn)
-	{
-		isFixedTimeStep = false;
-	}
-#endif
-	//OeGame_SetTimeStepFixed(isFixedTimeStep);
-}
-*/
 static void UpdateLoop(double delta)
 {
 #ifdef EDITOR_MODE
@@ -581,8 +556,6 @@ void GameUpdater_Update(double delta)
 
 	FPSTool_Update(&_mFpsToolUpdate, delta);
 
-	//UpdateFixedTimeStep();
-
 	if (!Game_IsActive())
 	{
 		if (Input_HasInit() && Service_PlatformMutesInputWhenGameIsNotActive())
@@ -647,7 +620,7 @@ void GameUpdater_DebugReloadGraphics(void)
 void GameUpdater_CycleDebugShowInfo(void)
 {
 	GLOBALS_DEBUG_SHOW_INFO += 1;
-	if (GLOBALS_DEBUG_SHOW_INFO > GAMESTATEMANAGER_DEBUG_INFO_SHOW_THING_VIEWER)
+	if (GLOBALS_DEBUG_SHOW_INFO > GAMESTATEMANAGER_DEBUG_INFO_SHOW_QUICK_STATS)
 	{
 		GLOBALS_DEBUG_SHOW_INFO = GAMESTATEMANAGER_DEBUG_INFO_SHOW_NOTHING;
 	}

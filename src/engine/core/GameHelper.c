@@ -15,7 +15,6 @@
 #include "../systems/GlobalSysTickSoundEffect.h"
 #include "../systems/GlobalSysTickMusic.h"
 #include "../systems/GlobalSysUpdateInput.h"
-//#include "../systems/OeGlobalSysConsole.h"
 #include "../systems/GlobalSysDefaultState.h"
 #include "../systems/GlobalSysUpdateMapLoadTicker.h"
 #include "../systems/GlobalSysSetJustChangedGameStateToFalse.h"
@@ -28,6 +27,8 @@
 #include "../../engine/io/File.h"
 #include "../../engine/utils/Utils.h"
 #include "../leveldata/ThingInstance.h"
+#include "../systems/GlobalSysDrawQuickStats.h"
+//#include "../systems/OeGlobalSysConsole.h"
 
 static struct { int32_t key; int32_t value; } _mControllerComponentTypeMap;
 static IStringArray* _mControllerComponentStrArray;
@@ -158,9 +159,8 @@ void GameHelper_CreateDefaultGlobalSystems(void)
 	/* //WILLNOTDO 06242023 DEBUG STUFF
 	GameStateManager_AddGlobalSystem(GlobalSysMetaMapHack_CreateSystem()));
 	GameStateManager_AddGlobalSystem(GlobalSysUpdateFontMap_CreateSystem()));
-	GameStateManager_AddGlobalSystem(GlobalSysDebugMenu_CreateSystem()));
-	GameStateManager_AddGlobalSystem(GlobalSysDrawQuickStats_CreateSystem()));
-	*/
+	GameStateManager_AddGlobalSystem(GlobalSysDebugMenu_CreateSystem()));	*/
+	GameStateManager_AddGlobalSystem(GlobalSysDrawQuickStats_CreateSystem());
 #endif
 
 	GameStateManager_AddGlobalSystem(GlobalSysHideMouse_CreateSystem());
