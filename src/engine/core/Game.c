@@ -1,7 +1,7 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
  * Released under the zlib License.
- * See LICENSE for details.
+ * See eolithic1.LICENSE for details.
  */
 
 /* Derived from code by Ethan Lee (Copyright 2009-2024).
@@ -46,9 +46,14 @@ static const double FIXED_TIME_STEP_TICK = (1.0 / 60.0);
 #define MAX_TIME_STEP_FRAMES 4
 #define MAX_TIME_STEP ((1.0 / 60.0) * MAX_TIME_STEP_FRAMES)
 
+#define INIT_STATUS_NONE 0
+#define INIT_STATUS_FIRST 1
+#define INIT_STATUS_SECOND 2
+#define INIT_STATUS_COMPLETE 3
+
 static bool _mIsFirstPollEvents = true;
 static bool _mIsExitingGame;
-static bool _mHasInit;
+static int32_t _mInitStatus;
 
 static bool IsFixedTimeStep(void)
 {
@@ -76,9 +81,9 @@ static bool IsFixedTimeStep(void)
 	return Cvars_GetAsBool(CVARS_USER_IS_FIXED_TIMESTEP_ENABLED);
 }
 
-int32_t Game_Init(void)
+int32_t Game_FirstInit(void)
 {
-	if (_mHasInit)
+	if (_mInitStatus >= INIT_STATUS_FIRST)
 	{
 		return 0;
 	}
@@ -86,6 +91,17 @@ int32_t Game_Init(void)
 	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_GAMEPAD))
 	{
 		return Exception_Run("Unable to init SDL!", false);
+	}
+
+	_mInitStatus = INIT_STATUS_FIRST;
+
+	return 0;
+}
+int32_t Game_SecondInit(void)
+{
+	if (_mInitStatus >= INIT_STATUS_SECOND)
+	{
+		return 0;
 	}
 
 	int32_t initStatus = 0;
@@ -127,17 +143,12 @@ int32_t Game_Init(void)
 	Music_Init();
 	SoundEffect_Init();
 
-	_mHasInit = true;
+	_mInitStatus = INIT_STATUS_SECOND;
 
 	return initStatus;
 }
 int32_t Game_Run(void)
 {
-	if (Game_Init() < 0)
-	{
-		return Exception_Run("Unable to init!", true);
-	}
-
 	uint64_t oldTicks = Stopwatch_GetTicks();
 	bool isDone = false;
 	double deltaLeftover = 0;

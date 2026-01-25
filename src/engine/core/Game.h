@@ -1,7 +1,7 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
  * Released under the zlib License.
- * See LICENSE for details.
+ * See eolithic1.LICENSE for details.
  */
 
 /* Derived from code by Ethan Lee (Copyright 2009-2024).
@@ -18,7 +18,8 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-int32_t Game_Init(void);
+int32_t Game_FirstInit(void);
+int32_t Game_SecondInit(void);
 int32_t Game_Run(void);
 void Game_PollEvents(void);
 bool Game_IsExitingGame(void);

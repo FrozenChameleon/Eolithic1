@@ -1,7 +1,7 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
  * Released under the zlib License.
- * See LICENSE for details.
+ * See eolithic1.LICENSE for details.
  */
 
 #include "Globals.h"

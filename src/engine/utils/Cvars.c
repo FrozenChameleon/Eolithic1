@@ -1,7 +1,7 @@
-/* EolithicEngine
- * Copyright 2025 Patrick Derosby
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
  * Released under the zlib License.
- * See LICENSE for details.
+ * See eolithic1.LICENSE for details.
  */
 
 #include "Cvars.h"
@@ -349,8 +349,12 @@ void Cvars_LoadInitialCvars(void)
 
 	Cvars_LoadDataDirCvars();
 
-	Logger_LogInformation("Version:");
-	Logger_LogInformation(Cvars_Get(CVARS_ENGINE_VERSION));
+	{
+		MString* tempString = NULL;
+		MString_Combine2(&tempString, "Version: ", Cvars_Get(CVARS_ENGINE_VERSION));
+		Logger_LogInformation(MString_Text(tempString));
+		MString_Dispose(&tempString);
+	}
 
 	//OeUtils::SetTileSize(GetAsInt(ENGINE_TILE_SIZE)); //Not needed, using defines
 
