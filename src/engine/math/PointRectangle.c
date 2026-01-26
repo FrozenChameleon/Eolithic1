@@ -33,7 +33,6 @@ void PointRectangle_CorrectPoints(PointRectangle* prect)
 		prect->mPointTwo.Y = tempY;
 	}
 }
-// void PointRectangle_Write(OePointRectangle* prect, std::shared_ptr<OeIniWriter> writer);
 void PointRectangle_Read(PointRectangle* prect, BufferReader* reader)
 {
 	Points_Read(&prect->mPointOne, reader);
@@ -65,5 +64,3 @@ void PointRectangle_Add(PointRectangle* prect, int32_t amountX, int32_t amountY)
 	Point_AddAssign(&prect->mPointOne, temp);
 	Point_AddAssign(&prect->mPointTwo, temp);
 }
-// void PointRectangle_Draw(OePointRectangle* prect, OeSpriteBatch* spriteBatch, Color rectangleColor, bool isHollow);
-// void PointRectangle_Draw(OePointRectangle* prect, OeSpriteBatch* spriteBatch, Color rectangleColor, Color pointColor1, Color pointColor2, bool isHollow);

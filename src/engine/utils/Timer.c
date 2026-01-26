@@ -63,7 +63,7 @@ void Timer_Reset(Timer* timer)
 bool Timer_IsAtPercentage(const Timer* timer, float percent)
 {
 	return false;
-	//int32_t goal = OeMath::Round(timer->mLimit * percent);
+	//int32_t goal = OeMath::Round(timer->mLimit * percent); //UNUSED
 	//if (timer->mCurrent == goal)
 	//{
 	//	return true;

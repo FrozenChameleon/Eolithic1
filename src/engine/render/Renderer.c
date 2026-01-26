@@ -29,7 +29,6 @@
 #include "../leveldata/DrawTile.h"
 #include "../leveldata/AnimTile.h"
 #include "../leveldata/Tile.h"
-#include "../render/DrawInstance.h"
 //#include "../render/SpriteBatch.h"
 //#include "../render/DrawTool.h"
 #include "../render/Sheet.h"

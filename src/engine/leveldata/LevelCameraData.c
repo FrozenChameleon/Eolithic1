@@ -10,13 +10,11 @@
 #include "float.h"
 #include "../render/Color.h"
 #include "../io/BufferReader.h"
-//#include "OeMetaMapChunk.h"
+//#include "MetaMapChunk.h"
 #include "../render/SpriteBatch.h"
 #include "../math/PointRectangle.h"
 
 #define DEFAULT_STR_NOT_SET "NOT_SET"
-
-//static std::vector<OeLevelCameraData> _mDummyCameraData = {};
 
 PointRectangle* LevelCameraData_GetActiveBoundsPointRectangle(LevelCameraData* lcd)
 {

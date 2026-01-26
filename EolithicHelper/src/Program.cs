@@ -1,7 +1,7 @@
-﻿/* EolithicEngine
- * Copyright 2025 Patrick Derosby
+﻿/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
  * Released under the zlib License.
- * See LICENSE for details.
+ * See eolithic1.LICENSE for details.
  */
 
 namespace EolithicHelper
@@ -188,13 +188,13 @@ namespace EolithicHelper
             componentTypeHeaderList[3] = "#define COMPONENT_TYPE_UNUSED_COMPONENT_RANGE " + UNUSED_COMPONENT_RANGE.ToString() + "\n#define COMPONENT_TYPE_LEN " + componentTypeLen + "\n";
 
             gameStateDataHelperList.Add("}\n");
-            gameStateDataHelperList.Insert(0, "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n#include \"../engine/gamestate/GameStateDataHelper.h\"\n#include \"../engine/gamestate/ComponentType.h\"\n\n" + includeThese);
+            gameStateDataHelperList.Insert(0, "//THIS CODE IS AUTOMATICALLY GENERATED, DO NOT EDIT!\n\n#include \"../engine/gamestate/GameStateDataHelper.h\"\n#include \"ComponentType.h\"\n\n" + includeThese);
 
             componentTypeHeaderList.Add("} ComponentType;\n\n");
             componentTypeHeaderList.Add("const char* ComponentType_GetComponentName(ComponentType ctype);");
 
             {
-                string componentTypeHeaderPath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "ComponentType.h");
+                string componentTypeHeaderPath = Path.Combine(DIR_SRC, DIR_GAME, "ComponentType.h");
                 string componentTypeHeaderString = "";
                 for(int i = 0; i < componentTypeHeaderList.Count; i += 1)
                 {
@@ -221,7 +221,7 @@ namespace EolithicHelper
                 componentTypeBody.Add("        return " + '"' + "NOT_A_VALID_COMPONENT" + '"' + ";\n");
                 componentTypeBody.Add("    }\n");
                 componentTypeBody.Add("}\n");
-                string componentTypeBodyPath = Path.Combine(DIR_SRC, DIR_ENGINE, DIR_GAMESTATE, "ComponentType.c");
+                string componentTypeBodyPath = Path.Combine(DIR_SRC, DIR_GAME, "ComponentType.c");
                 string componentTypeBodyString = "";
                 for (int i = 0; i < componentTypeBody.Count; i += 1)
                 {

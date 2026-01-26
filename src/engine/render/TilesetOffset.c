@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "TilesetOffset.h"
 
 #include "../utils/Macros.h"
@@ -131,19 +137,3 @@ void TilesetOffset_LoadOffsetPoint(DrawTile* drawTile, const char* tilesetName)
 	Point pointToReturn = hm_offset_map_ref[loc].value;
 	drawTile->mOffsetPoint = pointToReturn;
 }
-
-/*
-
-static const std::string TILESET_OFFSETS_EXTENSION = ".txt";
-static const std::vector<std::string> TILESET_OFFSETS_DIRECTORY = { OeFile::Combine("data", "gfx", "generated_tilesets") };
-
-const std::string& OeTilesetOffset::GetTilesetExtension()
-{
-	return TILESET_OFFSETS_EXTENSION;
-}
-const std::vector<std::string>& OeTilesetOffset::GetDirectories()
-{
-	return TILESET_OFFSETS_DIRECTORY;
-}
-*/
-

@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "GameStateData.h"
@@ -27,7 +33,6 @@ typedef struct GameState
 #endif
 } GameState;
 
-void GameState_SaveComponentSizesHelper(bool isBinary);
 void GameState_ClearReplayCache(GameState* gs);
 
 void GameState_Ctor(GameState* gs, const char* name, bool disableRewinding);

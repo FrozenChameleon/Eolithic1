@@ -1,8 +1,13 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "SysDrawProps.h"
 
 #include "../core/Func.h"
 #include "../leveldata/LevelData.h"
-#include "SysDrawProps.h"
 
 static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {

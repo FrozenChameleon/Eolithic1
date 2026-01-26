@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "../systems/System.h"
@@ -5,7 +11,7 @@
 
 typedef struct SpriteBatch SpriteBatch;
 
-System* DrawLineOfSightSys_CreateSystem(void);
-//#ifdef EDITOR_MODE
+#ifdef EDITOR_MODE
 void DrawLineOfSightSys_DrawRoutine(Entity owner, DrawLineOfSight* data, SpriteBatch* spriteBatch);
-//#endif
+#endif
+System* DrawLineOfSightSys_CreateSystem(void);

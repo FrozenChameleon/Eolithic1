@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #ifdef SERVICE_DUMMY
 
 #include "SDL3/SDL.h"
@@ -88,7 +94,7 @@ bool Service_IsSimplifiedLeaderboard(void)
 {
 	return false;
 }
-void Service_FlushStatsToServiceForXbox(void)
+void Service_FlushStatsToServiceForPlatformX(void)
 {
 }
 bool Service_IsLeaderboardRetrievalInProgress(void)
@@ -155,7 +161,7 @@ int32_t Service_PlatformGetForcedSpecificGlyph(void)
 {
 	return -1;
 }
-bool Service_PlatformForcesNintendoGlyphs(void)
+bool Service_PlatformForcesPlatformNGlyphs(void)
 {
 	return false;
 }

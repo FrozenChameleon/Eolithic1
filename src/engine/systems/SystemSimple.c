@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "SystemSimple.h"
 
 #include "../collision/Body.h"
@@ -26,7 +32,7 @@ static void InitStringSetting(void* givenData, const char* name, const char* val
 
 	InitSystemSimple(ss);
 
-	//OeSystemFunc::InitStringSetting<T>(name, value);
+	//OeSystemFunc::InitStringSetting<T>(name, value); //UNUSED
 }
 static void Init(void* givenData, ComponentType givenType, Entity owner)
 {

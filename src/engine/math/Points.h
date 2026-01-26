@@ -1,10 +1,13 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "Point.h"
 #include "Vector2.h"
-//#include "../utils/OeIniReader.h"
-//#include "../utils/OeIniWriter.h"
-//#include <string>
 
 typedef struct BufferReader BufferReader;
 
@@ -78,6 +81,4 @@ bool Points_IsLeft(Point point);
 bool Points_IsUpLeft(Point point);
 int32_t Points_GetEightWayInt(Point point);
 void Points_SetFromDegree(Point* point, int32_t degree);
-//void Write(Point point, std::shared_ptr<OeIniWriter> writer);
 void Points_Read(Point* point, BufferReader* reader);
-const char* Points_ToString(Point point);

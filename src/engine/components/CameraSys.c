@@ -1,8 +1,13 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "CameraSys.h"
 
 #include "../math/Math.h"
 #include "../utils/Cvars.h"
-#include "CameraSys.h"
 
 void CameraSys_UpdateLastRenderPositionRoutine(Camera* data)
 {

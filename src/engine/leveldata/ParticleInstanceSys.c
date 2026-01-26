@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "ParticleInstanceSys.h"
 
 #include "../render/Sheet.h"
@@ -7,9 +13,9 @@
 #include "Particle.h"
 #include "../components/Camera.h"
 #include "../core/Func.h"
-#include "../render/DrawInstance.h"
 #include "../math/Random32.h"
-
+#include "../render/BlendState.h"
+#include "../utils/Utils.h"
 
 static float ReturnSameSign(float newValue, float oldValue)
 {
@@ -103,9 +109,7 @@ static void GenerateNewConstant(ParticleInstance* data)
 
 static void UpdateAttachedPosition(ParticleInstance* data)
 {
-	//WILLNOTDO 06242023 FOR MUTE CRIMSON DX
-	/*
-	if (OeEntity_Nothing == data->mAttachedEntity)
+	/*if (OeEntity_Nothing == data->mAttachedEntity) //UNUSED
 	{
 		return;
 	}
@@ -120,8 +124,7 @@ static void UpdateAttachedPosition(ParticleInstance* data)
 	{
 		data->mPosition.X = Get_X(entity) + data->mAttachedThingOffset.X;
 	}
-	data->mPosition.Y = Get_Y(entity) + data->mAttachedThingOffset.Y;
-	*/
+	data->mPosition.Y = Get_Y(entity) + data->mAttachedThingOffset.Y;*/
 }
 static void AttachThing(ParticleInstance* data, Entity entity, int32_t offsetX, int32_t offsetY, bool followFlipX)
 {

@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "Camera.h"
 
 #include "../utils/Macros.h"
@@ -8,8 +14,6 @@
 #include "../utils/Cvars.h"
 #include "../utils/Utils.h"
 #include "CameraSys.h"
-
-const float CAMERA_EXTENDED_CAMERA = 1.333f;
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 

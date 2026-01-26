@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "GameState.h"
 
 #include "GameStateManager.h"
@@ -17,10 +23,6 @@
 #include "../input/Input.h"
 #include "../input/ActionList.h"
 
-void GameState_SaveComponentSizesHelper(bool isBinary)
-{
-
-}
 void GameState_ClearReplayCache(GameState* gs)
 {
 	gs->_mCurrentReplayFrame = 0;
@@ -64,8 +66,8 @@ const char* GameState_GetName(GameState* gs)
 }
 void GameState_SaveComponentSizes(GameState* gs)
 {
-	GameState_SaveComponentSizesHelper(true);
-	GameState_SaveComponentSizesHelper(false);
+	//GameState_SaveComponentSizesHelper(true); //UNUSED
+	//GameState_SaveComponentSizesHelper(false); //UNUSED
 }
 
 ParticleInstance* GameState_GetParticleInstance(GameState* gs, const char* name, float x, float y)

@@ -205,7 +205,6 @@ Rectangle* Window_GetAllDisplayModeBounds(int32_t* length)
 		*length = (int32_t)arrlen(arr_display_modes_bounds);
 		return arr_display_modes_bounds;
 	}
-
 	
 	int32_t count;
 	SDL_DisplayMode** modes = SDL_GetFullscreenDisplayModes(GetCurrentDisplayID(), &count);
@@ -265,8 +264,14 @@ void Window_LoadIcon(void)
 		return;
 	}
 
-	SDL_SetWindowIcon(_mWindowContext, icon);
-	SDL_DestroySurface(icon);
+	if (!SDL_SetWindowIcon(_mWindowContext, icon))
+	{
+		Logger_LogWarning("Unable to load window icon");
+	}
+	else
+	{
+		Logger_LogWarning("Successfully loaded window icon");
+	}
 
-	Logger_LogWarning("Successfully loaded window icon");
+	SDL_DestroySurface(icon);
 }

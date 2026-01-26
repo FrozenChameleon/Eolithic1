@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "../math/Point.h"
@@ -34,7 +40,7 @@ typedef struct Camera
 	Vector2 mHingeSpeedLimit;
 } Camera;
 
-extern const float CAMERA_EXTENDED_CAMERA;
+#define CAMERA_EXTENDED_CAMERA 1.333f
 
 void Camera_UpdateLastRenderPosition(Camera* camera);
 bool Camera_IsHorizontalTube(const Camera* camera);

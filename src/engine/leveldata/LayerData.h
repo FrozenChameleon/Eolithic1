@@ -18,8 +18,4 @@ typedef struct LayerData
 	int32_t mDepth;
 } LayerData;
 
-const char* LayerData_GetNameSpeedX(LayerData* layer, int32_t i);
-const char* LayerData_GetNameSpeedY(LayerData* layer, int32_t i);
-const char* LayerData_GetNameDepth(LayerData* layer, int32_t i);
-void LayerData_WriteIni(LayerData* layer, int32_t i, BufferWriter* writer);
 void LayerData_ReadIni(LayerData* layer, int32_t i, BufferReader* reader);

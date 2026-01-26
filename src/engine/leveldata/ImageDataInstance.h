@@ -1,10 +1,15 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "../utils/Macros.h"
 #include "ImageData.h"
 #include "../render/Sheet.h"
 #include "../render/Animation.h"
-#include "../render/DrawInstance.h"
 #include "../render/SpriteBatch.h"
 
 typedef struct ImageDataInstance

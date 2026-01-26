@@ -1,26 +1,13 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "Movie.h"
 
 #include "../io/File.h"
 #include "../utils/Utils.h"
-
-/*
-static const std::string MOVIE_EXTENSION = ".txt";
-static const std::vector<std::string> MOVIE_DIRECTORIES = { OeFile::Combine("data", "movies") };
-
-OeMovie* OeMovie::FromStream(OeMovie* (*createNew)(), bool loadedFromDat, const std::string& path, std::shared_ptr<OeStream> stream)
-{
-
-}
-
-const std::string OeMovie::GetExtension()
-{
-	return MOVIE_EXTENSION;
-}
-const std::vector<std::string> OeMovie::GetDirectories()
-{
-	return MOVIE_DIRECTORIES;
-}
-*/
 
 Movie* Movie_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {

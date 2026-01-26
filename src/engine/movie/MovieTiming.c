@@ -1,26 +1,14 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "MovieTiming.h"
 
 #include "../io/File.h"
 #include "../utils/Utils.h"
 #include "../utils/IStringArray.h"
-
-/*
-static const std::string TIMING_EXTENSION = ".txt";
-static const std::vector<std::string> TIMING_DIRECTORIES = { OeFile::Combine("data", "timings") };
-
-OeMovieTiming* OeMovieTiming::FromStream(OeMovieTiming* (*createNew)(), bool loadedFromDat, const std::string& path, std::shared_ptr<OeStream> stream)
-{
-}
-
-const std::string& OeMovieTiming::GetExtension()
-{
-	return TIMING_EXTENSION;
-}
-const std::vector<std::string>& OeMovieTiming::GetDirectories()
-{
-	return TIMING_DIRECTORIES;
-}
-*/
 
 MovieTiming* MovieTiming_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {

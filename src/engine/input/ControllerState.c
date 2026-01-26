@@ -128,8 +128,6 @@ float ControllerState_GetAnalogData(const ControllerState* cs, int32_t loc)
 {
 	return ControllerData_GetAnalogData(&cs->_mThisFrame, loc);
 }
-//void ControllerState_Write(BinaryWriter* writer);
-//void ControllerState_Read(std::shared_ptr<BinaryReader> reader);
 bool ControllerState_IsButtonPressed(const ControllerState* cs, int32_t button)
 {
 	return ControllerData_IsButtonPressed(&cs->_mThisFrame, button);

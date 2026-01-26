@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "Points.h"
 
 #include "../utils/Macros.h"
@@ -456,15 +462,4 @@ void Points_Read(Point* point, BufferReader* reader)
 {
 	point->X = BufferReader_ReadI32(reader);
 	point->Y = BufferReader_ReadI32(reader);
-}
-const char* Points_ToString(Point point) //FROM FNA
-{
-	return NULL;
-	/*
-	return (
-		"{X:" + std::to_string(point.X) +
-		" Y:" + std::to_string(point.Y) +
-		"}"
-		);
-		*/
 }

@@ -6,7 +6,7 @@
 
 #include "Random32.h"
 
-static const int32_t INITIAL_SHIFTS = 32;
+#define INITIAL_SHIFTS 32
 static const uint32_t DEFAULT_SEED = 777777777;
 
 void Random32_Shift(Random32* data)

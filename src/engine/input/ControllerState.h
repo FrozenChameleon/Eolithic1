@@ -59,8 +59,6 @@ Vector2 ControllerState_GetRightStick(const ControllerState* cs);
 float ControllerState_GetTriggerRight(const ControllerState* cs);
 float ControllerState_GetTriggerLeft(const ControllerState* cs);
 float ControllerState_GetAnalogData(const ControllerState* cs, int32_t loc);
-//void ControllerState_Write(BinaryWriter* writer);
-//void ControllerState_Read(std::shared_ptr<BinaryReader> reader);
 void ControllerState_SetVibration(ControllerState* cs, float leftMotor, float rightMotor);
 bool ControllerState_IsButtonPressed(const ControllerState* cs, int32_t button);
 bool ControllerState_IsButtonTapped(const ControllerState* cs, int32_t button);

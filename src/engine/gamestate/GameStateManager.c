@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "GameStateManager.h"
 
 #include "../utils/Cvars.h"
@@ -67,10 +73,6 @@ GameState* GameStateManager_GetGameState(void)
 {
 	return &_mGameState;
 }
-/*GameState* GameStateManager_ActiveGameStateForRenderCamera()
-{
-	return &_mGameState;
-}*/
 void GameStateManager_UpdateLastRenderPosition(void)
 {
 	GameHelper_UpdateLastRenderPosition();

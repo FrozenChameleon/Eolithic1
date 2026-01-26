@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "RecordingTool.h"
 
 #include "../utils/Macros.h"
@@ -17,11 +23,12 @@
 #include "../service/Service.h"
 #include "../core/Game.h"
 #include "../core/ServiceHelper.h"
-//#include "../utils/Tuning.h"
+//#include "../utils/Tuning.h" //UNUSED
 #include "../utils/MString.h"
 #include "../core/GameHelper.h"
 #include "../../third_party/stb_ds.h"
 #include "../render/Color.h"
+#include "../utils/Utils.h"
 
 enum ToolState
 {
@@ -44,7 +51,7 @@ static RecordingData _mDummy;
 static RecordingData* _mData;
 static HeaderData _mHeaderData;
 static ReaderData _mReaderData;
-//static std_shared_ptr<OeIniWriter> _mWriter;
+//static std_shared_ptr<OeIniWriter> _mWriter; //UNUSED
 static int32_t _mDisplaySuccessCounter;
 static MString* _mDisplaySuccessCounterStr;
 static int32_t _mDisplayFailureCounter;
@@ -70,15 +77,13 @@ static void InitData(void)
 
 static void DisposeWriter(void)
 {
-	/*
-	if (_mWriter == null)
+	/*if (_mWriter == null) //UNUSED
 	{
 		return;
 	}
 
 	_mWriter.Dispose();
-	_mWriter = null;
-	*/
+	_mWriter = null;*/
 }
 static int32_t GetAmountInUse(void)
 {
@@ -134,11 +139,9 @@ static RecordingData* GetNext(void)
 	}
 	return &_mDummy;
 }
-//bool toDataDirectory, const char* recordingFilenameWithoutExtension
 static void WriteData(void)
 {
-	/*
-	if (_mWriter == null)
+	/*if (_mWriter == null) //UNUSED
 	{
 	return;
 	}
@@ -286,9 +289,7 @@ static void WriteData(void)
 	}
 
 
-	DisposeWriter();
-
-	*/
+	DisposeWriter();*/
 }
 static void FinishPreviousWritingSession(void)
 {
@@ -418,16 +419,14 @@ static RecordingPlayerData* GetPlayerData(RecordingData* recordingData, int32_t 
 }
 static void WriteHeader(void)
 {
-	/*
-	_mWriter = OeIniWriter(true, new MemoryStream());
+	/*_mWriter = OeIniWriter(true, new MemoryStream()); //UNUSED
 	_mWriter.WriteBoolean(Globals.DEBUG_IS_GOD_MODE);
 	_mWriter.WriteInt32(OeGameStateManager.GetUniqueMapSeed());
 	_mWriter.WriteInt32(OeTuning.GetCurrentDifficulty());
 	_mWriter.WriteString(_mHeaderData.mLevelFileName);
 	OeGameSaveManager.WriteAllForRecording(_mWriter);
 	OeGame.GetHelper().WriteSessionData(_mWriter);
-	Logger.LogInformation("Writing recording has begun for " + _mHeaderData.mLevelFileName);
-	*/
+	Logger.LogInformation("Writing recording has begun for " + _mHeaderData.mLevelFileName);*/
 }
 static void Read(const char* recordingFilenameWithoutExtension)
 {
@@ -906,8 +905,7 @@ void RecordingTool_TickReadSessionSuccessCounter(int32_t successNumber)
 }
 void RecordingTool_RewriteAllRecordings(void)
 {
-	/*
-	  InitData();
+	/*InitData(); //UNUSED
 	string[] files = OeFile.GetFiles(OeFile.Combine("data", "recordings"));
 	for (int32_t i = 0; i < files.Length; i += 1)
 	{
@@ -916,8 +914,7 @@ void RecordingTool_RewriteAllRecordings(void)
 		Read(fileNameWithoutExtension);
 		WriteHeader();
 		WriteData(true, fileNameWithoutExtension);
-	}
-	*/
+	}*/
 }
 int32_t RecordingTool_GetCurrentRecordingVersion(void)
 {

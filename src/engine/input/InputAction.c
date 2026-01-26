@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "InputAction.h"
 
 #include "Input.h"
@@ -8,6 +14,7 @@
 #include "InputPlayer.h"
 #include "../render/Sheet.h"
 #include "../render/DrawTool.h"
+#include "../utils/Utils.h"
 
 InputAction INPUTACTION_DUMMY_ACTION;
 

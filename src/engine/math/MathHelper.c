@@ -18,7 +18,7 @@
 #include "stdbool.h"
 
 static bool _mHasCalculatedMachineEpsilonFloat;
-static float _mMachineEpsilonFloat;// = GetMachineEpsilonFloat();
+static float _mMachineEpsilonFloat;
 
 static float GetMachineEpsilonFloat(void)
 {

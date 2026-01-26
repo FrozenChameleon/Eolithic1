@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "CollisionEngineSys.h"
 
 #include "../utils/Macros.h"
@@ -12,7 +18,6 @@
 #include "../utils/Utils.h"
 #include "../globals/Globals.h"
 #include "../utils/Logger.h"
-#include "../globals/ObjectTypes.h"
 #include "../../third_party/stb_ds.h"
 #include "../render/SpriteBatch.h"
 
@@ -23,8 +28,8 @@
 
 #define USE_SCREEN_DISTANCE_CULL
 #ifdef USE_SCREEN_DISTANCE_CULL
-static const int32_t SCREEN_DISTANCE_CULL_WIDTH = (1280 * BODY_PHYSICS_SCALER);
-static const int32_t SCREEN_DISTANCE_CULL_HEIGHT = (720 * BODY_PHYSICS_SCALER);
+#define SCREEN_DISTANCE_CULL_WIDTH (1280 * BODY_PHYSICS_SCALER)
+#define SCREEN_DISTANCE_CULL_HEIGHT (720 * BODY_PHYSICS_SCALER)
 #endif
 
 static const Color mDebugColorActive = { 0, 255, 0, 191 };

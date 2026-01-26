@@ -1,4 +1,10 @@
-﻿#pragma once
+﻿/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
+#pragma once
 
 #include "ServiceLeaderboard.h"
 #include "SaveBlobDataRequest.h"
@@ -24,9 +30,9 @@ typedef enum ServicePlatformCrashText
 typedef enum ServicePlatform
 {
 	PLATFORM_STEAM = 0,
-	PLATFORM_XBOX = 1,
-	PLATFORM_PLAYSTATION = 2,
-	PLATFORM_NINTENDO = 3
+	PLATFORM_X = 1,
+	PLATFORM_P5 = 2,
+	PLATFORM_N = 3
 } ServicePlatform;
 
 void Service_Init(void);
@@ -67,7 +73,7 @@ bool Service_PlatformHidesFocusLossToggles(void);
 bool Service_PlatformHidesResetAllData(void);
 bool Service_PlatformForcesSpecificGlyph(void);
 int32_t Service_PlatformGetForcedSpecificGlyph(void);
-bool Service_PlatformForcesNintendoGlyphs(void);
+bool Service_PlatformForcesPlatformNGlyphs(void);
 bool Service_PlatformDisablesWritingRecordings(void);
 bool Service_PlatformUsesLocalStorageForSaveData(void);
 Rectangle Service_PlatformGetForcedWindowSize(void);

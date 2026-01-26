@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "GlobalSysHideMouse.h"
 
 #include "../utils/Cvars.h"
@@ -6,7 +12,7 @@
 #include "../render/Renderer.h"
 #include "../core/Window.h"
 
-static int32_t mCounter = 0;
+static int32_t mCounter;
 
 static void Update(void* givenData)
 {

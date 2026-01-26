@@ -42,7 +42,7 @@ void PropInstance_Init(PropInstance* prop)
 }
 void PropInstance_Write(PropInstance* prop, BufferWriter* writer)
 {
-	/*writer->WriteSingle(prop->mOffset.X);
+	/*writer->WriteSingle(prop->mOffset.X); //UNUSED
 	writer->WriteSingle(prop->mOffset.Y);
 	writer->WriteSingle(prop->mScale);
 	writer->WriteInt32(prop->mDepth);
@@ -154,7 +154,7 @@ bool PropInstance_IsPropActuallyTouched(PropInstance* prop, Point relativeMouse)
 {
 	return false;
 
-	/*OeProp* propData = GetThePropData(prop);
+	/*OeProp* propData = GetThePropData(prop); //UNUSED
 	if (propData != nullptr)
 	{
 		//WILLNOTDO 05152023

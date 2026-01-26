@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "DrawTool.h"
 
 #include "SpriteBatch.h"
@@ -6,6 +12,7 @@
 #include "../resources/ResourceManagerList.h"
 #include "../utils/IStrings.h"
 #include "../utils/IStringMap.h"
+#include "../font/BmFont.h"
 
 static Resource* _mSinglePixel;
 

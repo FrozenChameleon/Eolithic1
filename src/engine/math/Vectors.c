@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "Vectors.h"
 
 #include "limits.h"
@@ -19,9 +25,4 @@ Vector2 Vectors_ToVector2(Point point)
 {
 	Vector2 temp = { (float)point.X, (float)point.Y };
 	return temp;
-}
-const char* Vectors_ToString(Vector2 vec)
-{
-	return NULL;
-	//return ("{X:" + std::to_string(vec.X) + " Y:" + std::to_string(vec.Y) + "}");
 }

@@ -1,4 +1,10 @@
-﻿#pragma once
+﻿/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
+#pragma once
 
 #include "BmFontData.h"
 #include "../utils/MString.h"
@@ -26,7 +32,7 @@ bool BmFont_UpdateFontTexture(BmFont* bmf);
 int32_t BmFont_GetBaseHeight(BmFont* bmf);
 int32_t BmFont_GetLineHeight(BmFont* bmf);
 Rectangle BmFont_GetBounds(BmFont* bmf, const char* text, bool doNotReplaceFont);
-// const std::string& GetFontExtension();
-// const std::vector<std::string>& GetFontDirectories();
+// const std::string& GetFontExtension(); //UNUSED
+// const std::vector<std::string>& GetFontDirectories(); //UNUSED
 BmFont* BmFont_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br);
 void BmFont_Dispose(BmFont* bmf);

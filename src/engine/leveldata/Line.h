@@ -48,8 +48,6 @@ int32_t Line_GetReal(int32_t point);
 Point Line_GetRealPoint(Point point);
 Point Line_GetRealBegin(Line* line);
 Point Line_GetRealEnd(Line* line);
-//void Write(Line* line, std::shared_ptr<OeIniWriter> writer);
+//void Write(Line* line, std::shared_ptr<OeIniWriter> writer); //UNUSED
 void Line_Read(int32_t version, Line* line, BufferReader* reader);
 Rectangle Line_GetTouchBounds(Line* line, int32_t inflation);
-//std::string ToString();
-

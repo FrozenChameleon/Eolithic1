@@ -1,27 +1,15 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "TTFont.h"
 
 #include "../render/RenderTTFont.h"
 #include "../io/File.h"
 #include "../utils/Utils.h"
 #include "../io/BufferReader.h"
-
-/*
-static const std::string TTFONT_EXTENSION = ".ttf";
-static const std::vector<std::string> TTFONT_DIRECTORIES = { OeFile::Combine("data", "ttfonts") };
-
-const std::string& OeTTFont::GetExtension()
-{
-	return TTFONT_EXTENSION;
-}
-const std::vector<std::string>& OeTTFont::GetDirectories()
-{
-	return TTFONT_DIRECTORIES;
-}
-OeTTFont* OeTTFont::FromStream(OeTTFont* (*createNew)(), bool loadedFromDat, const std::string& path, std::shared_ptr<OeStream> stream)
-{
-
-}
-*/
 
 TTFont* TTFont_FromStream(const char* path, const char* filenameWithoutExtension, BufferReader* br)
 {

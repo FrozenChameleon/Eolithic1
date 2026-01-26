@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "GameLoader.h"
 
 #include "../../third_party/stb_ds.h"
@@ -11,7 +17,6 @@
 #include "../globals/Globals.h"
 #include "../render/Sheet.h"
 #include "../render/Animation.h"
-#include "../audio/SoundEffect.h"
 #include "../audio/Music.h"
 #include "../utils/Utils.h"
 #include "../utils/Logger.h"
@@ -20,7 +25,6 @@
 #include "../render/SpriteBatch.h"
 #include "../render/Renderer.h"
 #include "../render/DrawTool.h"
-#include "../utils/Cvars.h"
 #include "../service/Service.h"
 #include "../resources/ResourceManagerList.h"
 
@@ -74,13 +78,10 @@ static void UpdateLoadingJob(void)
 static void FinishLoading(void)
 {
 #ifdef EDITOR_MODE
-	//WILLNOTDO 06142023
-	/*
-	GuiThingViewer.Init();
+	/*GuiThingViewer.Init(); //WILLNOTDO 06142023
 	Editor.Init();
 	EditorPart.Init();
-	Logger.LogInformation("Editor loaded");
-	*/
+	Logger.LogInformation("Editor loaded");*/
 #endif
 
 	GameStateManager_SetGameState2(GAMESTATEMANAGER_GAME_STATE_NORMAL, true);
@@ -159,7 +160,7 @@ static bool LoadStart(void)
 {
 	GameHelper_CreateGlobalSystems();
 	GameHelper_CreateStateSystems();
-	/*for (int32_t i = 0; i < GameStateManager_StateSystems.size(); i += 1)
+	/*for (int32_t i = 0; i < GameStateManager_StateSystems.size(); i += 1) //UNUSED
 	{
 		GameStateManager_StateSystems[i]->InitStringSettingsHere();
 	}*/
@@ -167,7 +168,7 @@ static bool LoadStart(void)
 	GameHelper_SetupPlatformTypes();
 	Strings_Init();
 	ResourceManagerList_Init();
-	//Tuning_SetCurrentDifficulty(Cvars_GetAsInt(CVARS_ENGINE_DEFAULT_DIFFICULTY));
+	//Tuning_SetCurrentDifficulty(Cvars_GetAsInt(CVARS_ENGINE_DEFAULT_DIFFICULTY)); //UNUSED
 	Logger_LogInformation("Loading started");
 	return true;
 }

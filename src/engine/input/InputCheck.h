@@ -58,7 +58,6 @@ const char* InputCheck_GetNameTypeAxis(InputCheck* data);
 const char* InputCheck_GetNameTypeButton(InputCheck* data);
 const char* InputCheck_GetNameTypeMouseButton(InputCheck* data);
 const char* InputCheck_GetGlyphStringTypeKey(InputCheck* data);
-//const char* ToString();
 bool InputCheck_IsDummy(InputCheck* data);
 bool InputCheck_Check(InputPlayer* playerInput, InputCheck* data);
 void InputCheck_UpdateAnalogValue(InputPlayer* playerInput, InputCheck* data);

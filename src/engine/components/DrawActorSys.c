@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "DrawActorSys.h"
 
 #include "../utils/Macros.h"
@@ -14,6 +20,7 @@
 #include "../components/FakePosition.h"
 #include "../../third_party/stb_ds.h"
 #include "../utils/Logger.h"
+#include "../render/BlendState.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 

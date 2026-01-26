@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "Func.h"
 
 #include "../utils/Macros.h"
@@ -2607,38 +2613,31 @@ Entity Get_ChildByName(Entity entity, const char* name)
 }
 Entity Get_ChildByName2(Entity entity, const char* name, int32_t number)
 {
-	return 0;
-	/*
-	std_shared_ptr<EntitySearch> search = Do_SearchForChildrenWithName(entity, name);
-	if (number < search->mList.size())
+	EntitySearch* search = Do_SearchForChildrenWithName(entity, name);
+	if (number < search->len)
 	{
-		return search->mList[number];
+		return search->entities[number];
 	}
 	else
 	{
 		return ENTITY_NOTHING;
 	}
-	*/
 }
 Entity Get_ChildByTag(Entity entity, int32_t value)
 {
-	return 0;
-	//return Get_ChildByTag(entity, value, 0);
+	return Get_ChildByTag2(entity, value, 0);
 }
 Entity Get_ChildByTag2(Entity entity, int32_t value, int32_t number)
 {
-	return 0;
-	/*
-	std_shared_ptr<EntitySearch> search = Do_SearchForChildrenWithIntTag(entity, value);
-	if (number < search->mList.size())
+	EntitySearch* search = Do_SearchForChildrenWithIntTag(entity, value);
+	if (number < search->len)
 	{
-		return search->mList[number];
+		return search->entities[number];
 	}
 	else
 	{
 		return ENTITY_NOTHING;
 	}
-	*/
 }
 int32_t Get_DirectionToPlayerX(Entity entity)
 {
@@ -2783,17 +2782,15 @@ int32_t Get_LevelFrameCount(void)
 }
 int32_t Get_CollisionBit(float posX, float posY, int32_t tileOffsetX, int32_t tileOffsetY)
 {
-	return 0;/*
 	float bitX = posX + (tileOffsetX * TILE_SIZE);
 	float bitY = posY + (tileOffsetY * TILE_SIZE);
-	return CollisionEngineSys_GetCollisionBit(Get_CollisionEngine(), bitX, bitY);*/
+	return CollisionEngineSys_GetCollisionBit(Get_CollisionEngine(), bitX, bitY);
 }
 int32_t Get_CollisionBitSafe(float posX, float posY, int32_t tileOffsetX, int32_t tileOffsetY, int32_t returnValue)
 {
-	return 0;/*
 	float bitX = posX + (tileOffsetX * TILE_SIZE);
 	float bitY = posY + (tileOffsetY * TILE_SIZE);
-	return CollisionEngineSys_GetCollisionBitSafe(Get_CollisionEngine(), bitX, bitY, returnValue);*/
+	return CollisionEngineSys_GetCollisionBitSafe(Get_CollisionEngine(), bitX, bitY, returnValue);
 }
 int32_t Get_DirectionFromCameraSideX(Entity entity)
 {

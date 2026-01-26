@@ -1,11 +1,15 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "../utils/Macros.h"
 #include "../math/Vector2.h"
 #include "../math/Point.h"
 #include "../utils/MString.h"
-//#include "../utils/OeIniReader.h"
-//#include "../utils/OeIniWriter.h"
 
 typedef struct BufferReader BufferReader;
 
@@ -27,7 +31,6 @@ typedef struct ImageData
 
 void ImageData_Init(ImageData* id);
 
-//void ImageData_WriteIni(ImageData* id, std::shared_ptr<OeIniWriter> writer, std::string text);
 void ImageData_Read(ImageData* id, BufferReader* reader);
 const char* ImageData_ToString(ImageData* id);
 bool ImageData_IsOriginSet(ImageData* id);

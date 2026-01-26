@@ -1,6 +1,12 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
-#include "ComponentType.h"
+#include "../../game/ComponentType.h"
 #include "../utils/Macros.h"
 #include "../components/Camera.h"
 #include "PackIterator.h"
@@ -41,13 +47,3 @@ void ComponentPack_UnsetAll(ComponentPack* pack);
 void ComponentPack_CopyTo(ComponentPack* pack, ComponentPack* to);
 ComponentPack* ComponentPack_CreateCopy(ComponentPack* pack);
 void ComponentPack_Dispose(ComponentPack* pack);
-/*
-std::type_index ComponentPack_GetComponentType()
-{
-	return std::type_index(typeid(T));
-}
-std::vector<OeEntity>& ComponentPack_DebugGetEntities()
-{
-	return Entities;
-}
-*/

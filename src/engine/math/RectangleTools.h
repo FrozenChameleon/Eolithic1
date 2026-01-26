@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "Rectangle.h"
@@ -7,5 +13,4 @@ typedef struct BufferReader BufferReader;
 
 extern const Rectangle RectangleTools_NegativeOne;
 
-void RectangleTools_Write(Rectangle rectangle, BufferWriter* writer);
 void RectangleTools_Read(Rectangle* rectangle, BufferReader* reader);

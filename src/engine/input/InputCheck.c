@@ -308,7 +308,6 @@ const char* InputCheck_GetGlyphStringTypeKey(InputCheck* data)
 	}
 	return Keys_GetKeyName((Key)data->mKey);
 }
-//const char* ToString();
 bool InputCheck_IsDummy(InputCheck* data)
 {
 	return data->mType == INPUTCHECK_TYPE_DUMMY;

@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "ServiceHelper.h"
 
 #include "../utils/Macros.h"
@@ -33,8 +39,7 @@ static void UpdateLostControllerConnectionStatus(void)
 
 #ifdef DEBUG_DEF_DISABLE_CONTROLLER_SAFETY_CHECKS
 	return;
-#endif
-
+#else
 	int32_t len = INPUT_MAXIMUM_PLAYER_COUNT;
 	for (int32_t i = 0; i < len; i += 1)
 	{
@@ -43,6 +48,7 @@ static void UpdateLostControllerConnectionStatus(void)
 			_mPlayerHasLostControllerConnection[i] = true;
 		}
 	}
+#endif
 }
 static void TrySignIn(void)
 {

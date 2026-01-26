@@ -34,7 +34,7 @@ int32_t VolumeData_GetVolume(VolumeData* vd, const char* name)
 		return vd->sh_volume_map[loc].value;
 	}
 }
-/*void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume)
+/*void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume) //UNUSED
 {
 	shput(vd->sh_volume_map, name, volume);
 }*/

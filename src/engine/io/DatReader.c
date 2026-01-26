@@ -95,7 +95,7 @@ BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 		}
 		FixedByteBuffer* buffer = BufferReader_ReadBytes(dr->_mReader, length);
 		BufferReader* bufferToReturn = BufferReader_Create(buffer);
-		/*if (OeGlobals.IsDebugFileMode())
+		/*if (OeGlobals.IsDebugFileMode()) //UNUSED
 		{
 			if (OeCvars.GetAsBool(OeCvars.ENGINE_DECOMPRESS_DATS))
 			{
@@ -107,7 +107,6 @@ BufferReader* DatReader_NextStream(DatReader* dr, bool doNotReturnStream)
 		return bufferToReturn;
 	}
 }
-//std::shared_ptr<OeStream> DatReader_Find(const std::string& path);
 DatReader* DatReader_Create(const char* path)
 {
 	_mRefs += 1;

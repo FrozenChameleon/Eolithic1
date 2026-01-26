@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "GameRunner.h"
 
 #include "../utils/Macros.h"
@@ -271,12 +277,16 @@ int GameRunner_Run(int argc, char* args[])
 
 	HandleSpecialArgsFromArgList(argc, args);
 
+#ifdef EDITOR_MODE
 	HandleDebugDefs();
+#endif
 
 	//HandleDebugFlag(); //UNUSED FOR NOW
 	Cvars_LoadInitialCvars();
 	HandleCvarsFromArgList(argc, args);
+#ifdef EDITOR_MODE
 	HandleCvarsFromDebugDefs();
+#endif
 
 	GLOBALS_DEBUG_ENGINE_FORCE_LOAD_DATS = Cvars_GetAsBool(CVARS_ENGINE_FORCE_LOAD_DATS); //UNUSED FOR NOW
 

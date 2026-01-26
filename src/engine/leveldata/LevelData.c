@@ -37,8 +37,7 @@ void LevelData_ReadIni(LevelData* ld, BufferReader* reader)
 
 	if (Globals_IsDebugFileMode())
 	{
-		//WILLNOTDO 05152023
-		
+		// UNUSED
 		//if (mStringData.Length < STRING_DATA_LENGTH) //if debug then correct custom data if wrong size...
 		//{
 		//	OeLogger_LogInformation("Correcting custom data amount...");

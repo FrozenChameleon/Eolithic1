@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "BmFontDataInfo.h"
@@ -5,7 +11,6 @@
 #include "BmFontDataPage.h"
 #include "BmFontDataChar.h"
 #include "BmFontDataKerning.h"
-//#include "../io/OeStream.h"
 #include "../io/File.h"
 #include "../utils/Utils.h"
 #include "../utils/IStringArray.h"

@@ -31,7 +31,6 @@
 #include "SpriteEffects.h"
 #include "../io/FixedByteBuffer.h"
 #include "SpriteBatch.h"
-#include "DrawInstance.h"
 #include "../font/BmFont.h"
 
 typedef struct TTFontState

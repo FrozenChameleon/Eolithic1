@@ -1,11 +1,16 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "SysDebugDrawMenuAnchorNames.h"
 
 #include "../render/SpriteBatch.h"
 
 static void Draw(void* givenData, SpriteBatch* spriteBatch)
 {
-	/*
-	OeLevelData levelData = Get_LevelData();
+	/*OeLevelData levelData = Get_LevelData(); //UNUSED
 	OeTile[, ] tiles = levelData.mTileData;
 	for (int32_t i = 0; i < tiles.GetLength(0); i += 1)
 	{
@@ -24,8 +29,7 @@ static void Draw(void* givenData, SpriteBatch* spriteBatch)
 				}
 			}
 		}
-	}
-	*/
+	}*/
 }
 
 System* SysDebugDrawMenuAnchorNames_CreateSystem(void)

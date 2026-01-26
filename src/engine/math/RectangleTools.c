@@ -1,16 +1,15 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "RectangleTools.h"
 
 #include "../io/BufferReader.h"
 
 const Rectangle RectangleTools_NegativeOne = { -1, -1, 0, 0 };
 
-void RectangleTools_Write(Rectangle rectangle, BufferWriter* writer)
-{
-	/*writer->WriteInt32(rectangle.X);
-	writer->WriteInt32(rectangle.Y);
-	writer->WriteInt32(rectangle.Width);
-	writer->WriteInt32(rectangle.Height);*/
-}
 void RectangleTools_Read(Rectangle* rectangle, BufferReader* reader)
 {
 	rectangle->X = BufferReader_ReadI32(reader);

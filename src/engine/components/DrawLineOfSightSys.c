@@ -1,18 +1,16 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "DrawLineOfSightSys.h"
 
 #include "../systems/SystemFunc.h"
 #include "../core/Func.h"
 #include "../globals/Globals.h"
-#include "DrawLineOfSightSys.h"
 
-static void Draw(void* givenData, SpriteBatch* spriteBatch)
-{
-//#ifdef EDITOR_MODE
-	SystemFunc_DrawHelper(C_DrawLineOfSight, (SystemFunc_DrawHelperFunc)DrawLineOfSightSys_DrawRoutine, spriteBatch);
-//#endif
-}
-
-//#ifdef EDITOR_MODE
+#ifdef EDITOR_MODE
 void DrawLineOfSightSys_DrawRoutine(Entity owner, DrawLineOfSight* data, SpriteBatch* spriteBatch)
 {
 	if (!GLOBALS_DEBUG_SHOW_INGAME_COLLISION)
@@ -25,7 +23,14 @@ void DrawLineOfSightSys_DrawRoutine(Entity owner, DrawLineOfSight* data, SpriteB
 		Do_DrawLineOfSight(owner, spriteBatch, 0, 0, false, 0);
 	}
 }
-//#endif
+#endif
+
+static void Draw(void* givenData, SpriteBatch* spriteBatch)
+{
+#ifdef EDITOR_MODE
+	SystemFunc_DrawHelper(C_DrawLineOfSight, (SystemFunc_DrawHelperFunc)DrawLineOfSightSys_DrawRoutine, spriteBatch);
+#endif
+}
 
 System* DrawLineOfSightSys_CreateSystem(void)
 {

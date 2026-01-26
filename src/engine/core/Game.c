@@ -125,15 +125,13 @@ int32_t Game_SecondInit(void)
 		return Exception_Run("Unable to init platform renderer!", false);
 	}
 
+	Window_LoadIcon();
 
-	//Old "Initialize"
-	//WILLNOTDO 06262023
-	/*
-	OeServiceHelper::Init();
+	/*OeServiceHelper::Init(); //UNUSED
 	OeFunc.Init();
 	OeRecordingTool.Init();
-	OeTilesetOffset.Init();
-	*/
+	OeTilesetOffset.Init();*/
+	
 	FontMap_Init();
 	Input_Init();
 	GameStateManager_Ctor();

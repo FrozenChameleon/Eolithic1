@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "ThingInstance.h"
 
 #include "../utils/Macros.h"
@@ -29,8 +35,7 @@ const char* THINGINSTANCE_SETTING_BLN_DIFFICULTY_VERY_HARD = "BLN_DIFFICULTY_VER
 
 static void BuildGlobalThingSettings(void)
 {
-	/*
-	_mPairs = {};
+	/*_mPairs = {}; //UNUSED
 	_mPairs.push_back(OeStringPair(ThingInstance_SETTING_DTN_OFFSET_X, "0"));
 	_mPairs.push_back(OeStringPair(ThingInstance_SETTING_DTN_OFFSET_Y, "0"));
 	if (OeCvars_GetAsInt(OeCvars_ENGINE_NUMBER_OF_DIFFICULTIES) > 1)
@@ -49,7 +54,7 @@ static void BuildGlobalThingSettings(void)
 	OeGameHelper_AddDefaultThingSettings(_mPairs);*/
 }
 /*
-static std_vector<OeStringPair>& GetGlobalThingSettings()
+static std_vector<OeStringPair>& GetGlobalThingSettings() //UNUSED
 {
 	if (_mPairs.size() == 0)
 	{
@@ -80,7 +85,7 @@ StringPair ThingInstance_GetSetting(ThingInstance* ti, const char* key)
 }
 void ThingInstance_SetSetting(ThingInstance* ti, const char* key, const char* value)
 {
-	/*for (int32_t i = 0; i < mSettings.size(); i += 1)
+	/*for (int32_t i = 0; i < mSettings.size(); i += 1) //UNUSED
 	{
 		OeStringPair* pair = &mSettings[i];
 		if (pair->mKey == key)
@@ -91,6 +96,7 @@ void ThingInstance_SetSetting(ThingInstance* ti, const char* key, const char* va
 }
 void ThingInstance_Write(ThingInstance* ti, BufferWriter* writer)
 {
+	//UNUSED
 	/*writer->WriteInt32(0); //V3 //Unused - Thing Instance ID
 	writer->WriteString(mName);
 
@@ -139,7 +145,7 @@ void ThingInstance_SetupSettings(ThingInstance* instance, bool ignoreWarnings)
 {
 	//WILLNOTDO 05152023
 	/*
-	OeThingSettings* settings = instance->GetThingSettings();
+	OeThingSettings* settings = instance->GetThingSettings(); //UNUSED
 
 	if (settings == nullptr)
 	{
@@ -185,7 +191,7 @@ void ThingInstance_SetupSettings(ThingInstance* instance, bool ignoreWarnings)
 
 void ThingInstance_RemoveUnrelatedPairs(ThingInstance* instance, StringPair* arr_from, StringPair* arr_to, bool ignoreWarnings)
 {
-	/*for (int32_t i = 0; i < instance->mSettings.size(); i += 1)
+	/*for (int32_t i = 0; i < instance->mSettings.size(); i += 1) //UNUSED
 	{
 		OeStringPair& pair = arrayTo[i];
 		if (!Contains(pair, arrayFrom))
@@ -201,7 +207,7 @@ void ThingInstance_RemoveUnrelatedPairs(ThingInstance* instance, StringPair* arr
 }
 void ThingInstance_AddMissingPairs(StringPair* arr_from, StringPair* arr_to, bool ignoreWarnings)
 {
-	/*for (int32_t i = 0; i < arrayFrom.size(); i += 1)
+	/*for (int32_t i = 0; i < arrayFrom.size(); i += 1) //UNUSED
 	{
 		const OeStringPair& pair = arrayFrom[i];
 		if (!Contains(pair, arrayTo))
@@ -216,7 +222,7 @@ void ThingInstance_AddMissingPairs(StringPair* arr_from, StringPair* arr_to, boo
 }
 bool ThingInstance_Contains(StringPair* pair, StringPair* arr_string_pairs)
 {
-	/*for (int32_t i = 0; i < arrayOfStringPairs.size(); i += 1)
+	/*for (int32_t i = 0; i < arrayOfStringPairs.size(); i += 1) //UNUSED
 	{
 		const const char*& keyOne = arrayOfStringPairs[i].mKey;
 		const const char*& keyTwo = pair.mKey;
@@ -231,7 +237,7 @@ bool ThingInstance_Contains(StringPair* pair, StringPair* arr_string_pairs)
 ThingInstance* ThingInstance_GetClone(ThingInstance* ti)
 {
 	return NULL;
-	/*ThingInstance copy = ThingInstance();
+	/*ThingInstance copy = ThingInstance(); //UNUSED
 
 	copy.mName = mName;
 
@@ -251,7 +257,7 @@ bool ThingInstance_IsEqualTo(ThingInstance* ti, ThingInstance* instance)
 {
 	return false;
 
-	//WILLNOTDO 05152023
+	//WILLNOTDO 05152023 //UNUSED
 	/*
 	if (instance->mName != mName)
 	{
@@ -281,15 +287,15 @@ bool ThingInstance_IsEqualTo(ThingInstance* ti, ThingInstance* instance)
 ThingSettings* ThingInstance_GetThingSettings(ThingInstance* ti)
 {
 	return NULL;
-	//return OeResourceManagers_ThingSettingsManager.GetResourceData(mName);
+	//return OeResourceManagers_ThingSettingsManager.GetResourceData(mName); //UNUSED
 }
 void ThingInstance_Draw(ThingInstance* ti, SpriteBatch* spriteBatch, Color color, Point position, bool isSelected)
 {
-	//Draw(spriteBatch, color, 100, position, isSelected);
+	//Draw(spriteBatch, color, 100, position, isSelected); //UNUSED
 }
 void ThingInstance_Draw2(ThingInstance* ti, SpriteBatch* spriteBatch, Color color, int32_t depth, Point position, bool isSelected)
 {
-	//WILLNOTDO 05152023
+	//WILLNOTDO 05152023 //UNUSED
 	/*
 	OeDrawTool.DrawRectangle(spriteBatch, color, depth - 1, new Rectangle(position.X, position.Y, GetWidth(), GetHeight()), 0, false);
 

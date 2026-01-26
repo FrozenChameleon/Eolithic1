@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "DrawTile.h"
 
 #include "../utils/Macros.h"
@@ -10,10 +16,9 @@
 #include "../resources/Resource.h"
 #include "../render/DrawTool.h"
 #include "../render/Color.h"
+#include "../utils/Utils.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
-
-//static const std_string TILE_OFFSET_DIRECTORY = OeFile_PathCombine("data", "gfx", "generated_tilesets");
 
 void DrawTile_Init(DrawTile* drawTile)
 {
@@ -44,7 +49,7 @@ void DrawTile_LoadAnimation(DrawTile* drawTile, const char* animation)
 }
 void DrawTile_Draw(DrawTile* drawTile, SpriteBatch* spriteBatch, Texture* texture, Color color, int32_t depth, int32_t x, int32_t y)
 {
-	/*if (drawTile->mAnimation.size() != 0)
+	/*if (drawTile->mAnimation.size() != 0) //UNUSED
 	{
 		OeAnimTile* tile = OeResourceManagers_AnimTileManager.GetResourceData(drawTile->mAnimation);
 

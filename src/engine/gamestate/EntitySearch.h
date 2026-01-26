@@ -1,7 +1,13 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "../utils/Macros.h"
-#include "../gamestate/ComponentType.h"
+#include "../../game/ComponentType.h"
 
 //EntitySearch's are created on the "Just This Frame" so they do not need to be manually disposed of.
 typedef struct EntitySearch

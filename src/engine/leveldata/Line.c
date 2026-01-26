@@ -224,7 +224,7 @@ Point Line_GetRealEnd(Line* line)
 {
 	return Line_GetRealPoint(line->mEnd);
 }
-/*void Line_Write(Line* line, std_shared_ptr<OeIniWriter> writer)
+/*void Line_Write(Line* line, std_shared_ptr<OeIniWriter> writer) //UNUSED
 {
 	OePoints_Write(line->mBegin, writer);
 	OePoints_Write(line->mEnd, writer);
@@ -275,8 +275,3 @@ Rectangle Line_GetTouchBounds(Line* line, int32_t inflation)
 	Rectangle_Inflate(&rect, inflation, inflation);
 	return rect;
 }
-/*const char* Line_ToString()
-{
-	return "";
-	//WILLNOTDO 05152023 return mBegin.ToString() + "/" + mEnd.ToString();
-}*/

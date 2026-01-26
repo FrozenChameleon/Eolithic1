@@ -152,12 +152,10 @@ void Logger_Update(void)
 	}
 
 	Vector2 initialPosition = Vector2_Zero;
-	/*
-	if (OeGlobals.DEBUG_IS_EDITOR_MODE)
+	/*if (OeGlobals.DEBUG_IS_EDITOR_MODE) //UNUSED
 	{
 		initialPosition = new Vector2(0, 24);
-	}
-	*/
+	}*/
 	for (int32_t i = 0; i < arrlen(arr_notifications); i += 1)
 	{
 		if (UpdateNotification(&arr_notifications[i], initialPosition, i))

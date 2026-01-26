@@ -17,9 +17,6 @@
 #include "SoundEffect.h"
 #include "../gamestate/GameStateManager.h"
 
- //static const std::string MUSIC_EXTENSION = ".wav";
- //static const std::vector<std::string> MUSIC_DIR = { OeFile::Combine("data", "music") };
-
 static VolumeData _mVolumeData;
 static MusicInstance _mCurrentMusic;
 static int32_t _mMusicPausePriority;

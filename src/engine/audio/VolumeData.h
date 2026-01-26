@@ -21,5 +21,5 @@ typedef struct VolumeData
 
 void VolumeData_Init(VolumeData* vd, bool isMusic);
 int32_t VolumeData_GetVolume(VolumeData* vd, const char* name);
-//void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume); //Unused
+//void VolumeData_SetVolume(VolumeData* vd, const char* name, int32_t volume); //UNUSED
 void VolumeData_Load(VolumeData* vd);

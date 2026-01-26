@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "GameHelper.h"
 
 #include "../gamestate/GameStateManager.h"
@@ -26,13 +32,11 @@
 #include "../components/Camera.h"
 #include "../../engine/io/File.h"
 #include "../../engine/utils/Utils.h"
-#include "../leveldata/ThingInstance.h"
 #include "../systems/GlobalSysDrawQuickStats.h"
-//#include "../systems/OeGlobalSysConsole.h"
 
-static struct { int32_t key; int32_t value; } _mControllerComponentTypeMap;
-static IStringArray* _mControllerComponentStrArray;
-//static std_unordered_map<std_string, std_unordered_map<std_string, int32_t>> _mComponentSizes;
+ //static struct { int32_t key; int32_t value; } _mControllerComponentTypeMap; //UNUSED
+//static IStringArray* _mControllerComponentStrArray; //UNUSED
+//static std_unordered_map<std_string, std_unordered_map<std_string, int32_t>> _mComponentSizes; //UNUSED
 
 const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION = 0.233f;
 const float GAMEHELPER_DEFAULT_GRAVITY_DECELERATION_MAX = 5.25f;
@@ -250,9 +254,8 @@ void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input)
 void GameHelper_InitGameStateData(const char* name, GameStateData* initThis)
 {
 	GameStateData_Ctor(initThis);
-
-	/*
-	if (!_mComponentSizes.count(name))
+	
+	/*if (!_mComponentSizes.count(name)) //UNUSED
 	{
 		bool isBinary = true;
 		std_string extension = OeUtils_GetExtension(isBinary);
@@ -264,9 +267,8 @@ void GameHelper_InitGameStateData(const char* name, GameStateData* initThis)
 		std_shared_ptr<OeIniReader> reader = OeIniReader_CreateNewOeIniReader(filePath);
 		_mComponentSizes[name] = reader->ReadAsStringIntDictionary();
 	}
-	*/
-
-	//CreateGameStateDataHelper(temp, _mComponentSizes[name]);
+	
+	CreateGameStateDataHelper(temp, _mComponentSizes[name]);*/
 }
 void GameHelper_AddStrings(void)
 {

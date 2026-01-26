@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #pragma once
 
 #include "Vector2.h"
@@ -16,6 +22,4 @@ const extern Vector2 Vectors_Left;
 const extern Vector2 Vectors_UpLeft;
 
 Vector2 Vectors_ToVector2(Point point);
-const char* Vectors_ToString(Vector2 vec);
-
 

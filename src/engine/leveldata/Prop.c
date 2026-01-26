@@ -1,3 +1,9 @@
+/* Eolithic1
+ * Copyright 2025-2026 Patrick Derosby
+ * Released under the zlib License.
+ * See eolithic1.LICENSE for details.
+ */
+
 #include "Prop.h"
 
 #include "../utils/Macros.h"
@@ -10,6 +16,7 @@
 #include "../render/DrawTool.h"
 #include "../globals/Align.h"
 #include "../utils/Logger.h"
+#include "../render/BlendState.h"
 
 #define TILE_SIZE GLOBAL_DEF_TILE_SIZE
 
@@ -19,8 +26,6 @@ static const char* TAG_FLIP_SPEED = "flip_speed";
 static const char* TAG_IS_ANIMATION = "is_animation";
 static const char* TAG_TEXTURE_NAME = "texture_name";
 static const char* TAG_TILESET_FILTER = "tileset_filter";
-
-//static const std_vector<std_string> PROPS_DIRECTORY = { OeFile_PathCombine("data", "props") };
 
 enum
 {
@@ -120,7 +125,7 @@ Animation* Prop_GetAnimation(Prop* p)
 }
 void Prop_WriteIni(Prop* p, BufferWriter* writer)
 {
-	/*writer->WriteBoolean(TAG_IS_ADDITIVE, mIsAdditive);
+	/*writer->WriteBoolean(TAG_IS_ADDITIVE, mIsAdditive); //UNUSED
 	writer->WriteInt32(TAG_SCALER, mScaler);
 	writer->WriteInt32(TAG_FLIP_SPEED, mFlipSpeed);
 	writer->WriteBoolean(TAG_IS_ANIMATION, mIsAnimation);
