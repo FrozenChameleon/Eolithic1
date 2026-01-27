@@ -7,6 +7,9 @@
 #define STB_DS_IMPLEMENTATION
 #include "../third_party/stb_ds.h"
 
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_main.h"
+
 #include "core/GameRunner.h"
 
 int main(int argc, char* args[])

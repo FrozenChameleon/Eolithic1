@@ -50,7 +50,6 @@ void GameHelper_UpdateStateSystemsNormally(void);
 void GameHelper_DrawStateSystemsNormally(SpriteBatch* spriteBatch);
 void GameHelper_DrawHudStateSystemsNormally(SpriteBatch* spriteBatch);
 void GameHelper_DrawDebugHudStateSystemsNormally(SpriteBatch* spriteBatch);
-void GameHelper_CreateGameStateDataHelper(GameStateData* gameStateData, CharIntPair* sizes);
 void GameHelper_CreateDefaultGlobalSystems(void);
 void GameHelper_CreateDefaultBindings(IStringArray* strings, InputAction* input);
 void GameHelper_AddStringsHelper(void);

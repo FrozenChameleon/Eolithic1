@@ -50,7 +50,6 @@
 #define MOJOSHADER_NO_VERSION_INCLUDE
 #define MOJOSHADER_EFFECT_SUPPORT
 #include <mojoshader.h>
-#include <mojoshader_effects.h>
 
 #ifdef _MSC_VER
 #pragma warning( pop )
